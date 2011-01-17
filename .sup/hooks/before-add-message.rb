@@ -1,1 +1,1 @@
-/home/wael/.private/.sup/hooks/before-add-message.rb
+../../.private/.sup/hooks/before-add-message.rb
