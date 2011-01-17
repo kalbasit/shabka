@@ -1,0 +1,17 @@
+#!/bin/sh
+#
+# Copyright (C) 2006 Kolesnikov Vova
+
+list=`mpc playlist --format "%artist%-%album%-%title%" \
+|tr -d '\`'| \
+tr -t " " "_"`
+g=1
+l=" "
+for i in $list
+do l="$l \"$(echo -n $i)\" "
+l="$l\"mpc play $g;~/.ratmenu/browse\""
+g=$(($g + 1))
+done
+echo $l
+echo "ratmenu -font  *-clean-bold-*-*-*-15-*-*-*-*-*-*-* \
+-back \"~/.ratmenu/playlist\" -label browse $(echo -n $l)"|/bin/bash

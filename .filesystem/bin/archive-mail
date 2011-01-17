@@ -1,0 +1,86 @@
+#!/usr/bin/env bash
+#
+#   vim:ft=sh:fenc=UTF-8:ts=4:sts=4:sw=4:expandtab:foldmethod=marker:foldlevel=0:
+#
+#   $Id: archive-mail 789 2008-03-24 13:02:06Z wael $
+#
+#   A little bash script to move all read messages into the Archive subfolder.
+#   This way I can view new mails without loading the whole INBOX via IMAP
+#
+#   Copyright (c) 2007 Wael Nasreddine <wael.nasreddine@gmail.com>
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
+#   USA.
+#
+
+# Bootstrap{{{
+bootstrap="`dirname $0`/.bootstrap"
+if [ -f "${bootstrap}" ]; then
+    source "${bootstrap}"
+else
+    echo "Cannot bootstrap"
+    exit 54
+fi
+unset bootstrap
+#}}}
+
+MAILDIR="${HOME}/.mail"
+Today=( $(ldate +%Y) )
+
+print_info 0 "Archiving all mails older than this ${Today[0]}."
+
+cd "${MAILDIR}"
+for dir in .??*; do
+    if [ ! -d "${dir}" ]; then
+        # Not a folder.
+        continue
+    fi
+    if echo "${dir}" | grep -q "Spam\|Drafts\|Trash\|List\|Forum\|Archive"; then
+        continue
+    fi
+    if [ "$(ls "${dir}/cur" | wc -l)" -eq "0" ]; then
+        # empty folder
+        continue
+    fi
+    unset mail_date num name destmail destdir
+    print_info 2 "Working on ${dir}... " false
+    # The use of ls below is to prevent No such file/folder error.
+    for mail in $(ls ${dir}/cur/*,S 2> /dev/null) $(ls ${dir}/cur/*,SR 2> /dev/null) $(ls ${dir}/cur/*,RS 2> /dev/null); do
+        mail_date="$( grep "^Date: " "${mail}" | head -n 1 | sed -e "s@Date: @@g" )"
+        if ! ldate -d "${mail_date}" &> /dev/null; then
+            # Something is wrong, I can't parse the date of this email.
+            continue
+        fi
+        mail_date=( $(ldate -d "${mail_date}" +%Y) )
+        if [ "${mail_date[0]}" = "${Today[0]}" ]; then
+            continue
+        fi
+        if [ ! -d ".Archive${dir}" ]; then
+            mkdir -p ".Archive${dir}"/{new,cur,tmp}
+        fi
+        destmail="$(basename "${mail}")"
+        destdir=".Archive${dir}/cur"
+        while [ -f "${destdir}/${destmail}" ]; do
+            # The mail file already exists.
+            num="$(echo ${destmail} | sed -e "s@\([0-9]*\)\(\..*\)@\1@g")"
+            name="$(echo ${destmail} | sed -e "s@\([0-9]*\)\(\..*\)@\2@g")"
+            (( num++ ))
+            destmail="${num}.${name}"
+        done
+        mv -- "${mail}" "${destdir}/${destmail}"
+    done
+    print_info 2 "Done." true false
+done
+print_info 1 "Done."

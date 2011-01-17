@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+#
+#   vim:ft=sh:fenc=UTF-8:ts=4:sts=4:sw=4:expandtab:foldmethod=marker:foldlevel=0:
+#
+#   $Id: RetrainSpambayes 789 2008-03-24 13:02:06Z wael $
+#
+#   Copyright (c) 2007 Wael Nasreddine <wael.nasreddine@gmail.com>
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
+#   USA.
+#
+
+# Bootstrap{{{
+bootstrap="`dirname $0`/.bootstrap"
+if [ -f "${bootstrap}" ]; then
+    source "${bootstrap}"
+else
+    echo "Cannot bootstrap"
+    exit 54
+fi
+unset bootstrap
+#}}}
+
+if [ "${1}" = "-d" ]; then
+    quiet=""
+else
+    quiet="-q"
+fi
+
+print_info 0 "Retraining spambayes, continue [y/n] : " false
+read -sn 1 answer; echo
+
+if ! isTrue "${answer}"; then
+    exit 0
+fi
+
+MAILDIR="/home/wael/.mail"
+HAMMIEDB="/home/wael/.hammie.db"
+
+rm -f "${HAMMIEDB}"
+
+# Train Spam Messages
+for i in .Spam .Spam.Missed; do
+    print_info 2 "Training Spam folder '${i}'."
+    sb_mboxtrain.py -f -n ${quiet} -d "${HAMMIEDB}" -s "${MAILDIR}/${i}"
+done
+
+# Train Ham Messages
+for i in $MAILDIR/.??*; do
+    for j in .Spam .Spam.Missed .Spam.Unsure .Sent .Drafts .Trash; do
+        if [ "$i" == "$MAILDIR/${j}" ]; then
+            continue 2
+        fi
+    done
+    print_info 2 "Training Ham folder '${i}'."
+    sb_mboxtrain.py -f -n ${quiet} -d "${HAMMIEDB}" -g "${i}"
+done

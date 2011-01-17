@@ -1,0 +1,22 @@
+! .Xmodmap: Wael Nasreddine
+!
+
+! Multimedia keys
+!keycode 121 = XF86AudioMute
+!keycode 174 = XF86AudioLowerVolume
+!keycode 176 = XF86AudioRaiseVolume
+!keycode 153 = XF86AudioNext
+!keycode 144 = XF86AudioPrev
+!keycode 164 = XF86AudioStop
+!keycode 162 = XF86AudioPlay
+!keycode 223 = XF86Sleep
+!keycode 178 = XF86WWW
+!keycode 254 = XF86Music
+!keycode 255 = XF86Pictures
+
+! Remote Control
+! keycode 222 = XF86PowerOff
+keycode 222 = XF86Launch0
+
+! Put a Mod4 on the right too
+keycode 135 = Super_L

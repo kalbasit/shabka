@@ -1,0 +1,39 @@
+#!/bin/zsh
+
+source "${HOME}/.zkbd/${TERM}-${VENDOR}-${OSTYPE}"
+
+# F1->F12
+[[ -n ${key[Backspace]} ]] && bindkey "${key[Backspace]}" backward-delete-char
+[[ -n ${key[Insert]} ]] && bindkey "${key[Insert]}" overwrite-mode
+[[ -n ${key[Home]} ]] && bindkey "${key[Home]}" beginning-of-line
+[[ -n ${key[PageUp]} ]] && bindkey "${key[PageUp]}" history-search-backward
+[[ -n ${key[Delete]} ]] && bindkey "${key[Delete]}" delete-char
+[[ -n ${key[End]} ]] && bindkey "${key[End]}" end-of-line
+[[ -n ${key[PageDown]} ]] && bindkey "${key[PageDown]}" history-search-forward
+[[ -n ${key[Up]} ]] && bindkey "${key[Up]}" up-line-or-history
+[[ -n ${key[Left]} ]] && bindkey "${key[Left]}" backward-char
+[[ -n ${key[Down]} ]] && bindkey "${key[Down]}" down-line-or-history
+[[ -n ${key[Right]} ]] && bindkey "${key[Right]}" forward-char
+[[ -n ${key[Menu]} ]] && bindkey "${key[Menu]}" menu-complete
+
+#bindkey -v "^[[5~" backward-word
+#bindkey -v "^[[6~" forward-word
+#
+#bindkey -v "^K" kill-line
+#bindkey -v "^L" clear-screen
+#bindkey -v "^R" history-incremental-search-backward
+#bindkey -v "^U" kill-whole-line
+#bindkey -v "^V" quoted-insert
+#bindkey -v "^W" backward-kill-word
+#
+#bindkey -v "^N" down-history
+#bindkey -v "^P" up-history
+#
+#bindkey -v "^[H" run-help
+#bindkey -v "^[h" run-help
+#
+## alow for editing of the command line
+## http://zshwiki.org/home/examples/zlewidgets
+#autoload -U    edit-command-line
+#zle -N         edit-command-line
+#bindkey -a 'v' edit-command-line

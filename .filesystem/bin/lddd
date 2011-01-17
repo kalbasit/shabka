@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+#
+# vim:ft=sh:fenc=UTF-8:ts=4:sts=4:sw=4:expandtab:foldmethod=marker:foldlevel=0:
+#
+# $Id: lddd 783 2008-03-24 12:20:18Z wael $
+#
+#  2004/08/22  K. Piche  Find missing library references.
+# modified by Tobias Powalowski <tpowa@archlinux.org>
+
+ifs=$IFS
+IFS=':'
+
+libdirs="/lib:/usr/lib:/opt/gnome/lib:/opt/qt/lib:/opt/kde/lib:/opt/xfce/lib:/usr/lib/libfakeroot:/opt/NX/lib"
+extras=
+
+TEMPDIR=$(mktemp /tmp/lddd-script.XXXX)
+rm $TEMPDIR
+mkdir -p $TEMPDIR
+
+echo " Go out drink some tea, this will take a while :) ..."
+#  Check ELF binaries in the PATH and specified dir trees.
+for tree in $PATH $libdirs $extras
+do
+        echo DIR $tree
+
+        #  Get list of files in tree.
+        files=$(find $tree -type f ! -name '*.a' ! -name '*.la' ! -name '*.py*' ! -name '*.txt' ! -name '*.h' ! -name '*.ttf' ! -name '*.rb' ! -name '*.ko' ! -name '*.pc' ! -name '*.enc' ! -name '*.cf' ! -name '*.def' ! -name '*.rules' ! -name '*.cmi' ! -name  '*.mli' ! -name '*.ml' ! -name '*.cma' ! -name '*.cmx' ! -name '*.cmxa' ! -name '*.pod' ! -name '*.pm' ! -name '*.pl' ! -name '*.al' ! -name '*.tcl' ! -name '*.bs' ! -name '*.o' ! -name '*.png' ! -name '*.gif' ! -name '*.cmo' ! -name '*.cgi' ! -name '*.defs' ! -name '*.conf' ! -name '*_LOCALE' ! -name 'Compose' ! -name '*_OBJS' ! -name '*.msg' ! -name '*.mcopclass' ! -name '*.mcoptype')
+        IFS=$ifs
+        for i in $files
+        do
+                if [ `file $i | grep -c 'ELF'` -ne 0 ]; then
+                        #  Is an ELF binary.
+                        if [ `ldd $i 2>/dev/null | grep -c 'not found'` -ne 0 ]; then
+                                #  Missing lib.
+                                echo "$i:" >> $TEMPDIR/raw.txt
+                                ldd $i 2>/dev/null | grep 'not found' >> $TEMPDIR/raw.txt
+                         fi
+                 fi
+         done
+done
+grep '^/' $TEMPDIR/raw.txt | sed -e 's/://g' >> $TEMPDIR/affected-files.txt
+# invoke pacman
+for i in $(cat $TEMPDIR/affected-files.txt); do
+    pacman -Qo $i | awk '{print $5}' >> $TEMPDIR/pacman.txt
+done
+# clean list
+sort -u $TEMPDIR/pacman.txt >> $TEMPDIR/possible-rebuilds.txt
+
+echo "Files saved to $TEMPDIR"
+
+exit

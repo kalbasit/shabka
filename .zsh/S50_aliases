@@ -1,0 +1,72 @@
+# vim: set ft=sh ts=4 sts=4 sw=4 expandtab:
+
+# some global aliases for redirection
+alias -g ...='../..'
+alias -g ....='../../..'
+alias -g .....='../../../..'
+alias -g DN='&>/dev/null'
+alias -g DN1='1>/dev/null'
+alias -g DN2='2>/dev/null'
+alias -g NULL='>/dev/null 2>&1'
+alias -g 21='2>&1'
+alias -g PI='|'
+alias -g L='| less'
+alias -g LL='|& less'
+alias -g G='| grep'
+alias -g GI='| grep -i'
+alias -g GRI='| grep -ri'
+alias -g GV='| grep -v'
+alias -g GVI='| grep -vi'
+alias -g GVRI='| grep -vri'
+alias -g EG='| egrep'
+alias -g EGI='| egrep -i'
+alias -g EGRI='| egrep -ri'
+alias -g H='| head'
+alias -g HH='|& head'
+alias -g M='| most'
+alias -g MM='|& most'
+alias -g T='| tail'
+alias -g TT='|& tail'
+alias -g WC='| wc'
+alias -g WCB='| wc -c'
+alias -g WCC='| wc -m'
+alias -g WCW='| wc -w'
+alias -g WCL='| wc -l'
+alias -g SO='| sort'
+alias -g SU='| sort -u'
+alias -g A='| awk'
+alias -g A1="| awk '{print \$1}'"
+alias -g A2="| awk '{print \$2}'"
+alias -g A3="| awk '{print \$3}'"
+alias -g A4="| awk '{print \$4}'"
+alias -g A5="| awk '{print \$5}'"
+alias -g A6="| awk '{print \$6}'"
+alias -g A7="| awk '{print \$7}'"
+alias -g A8="| awk '{print \$8}'"
+alias -g A9="| awk '{print \$9}'"
+alias -g CA='|& cat -A'
+alias -g X='| xargs'
+alias -g XX='|& xargs'
+
+# Filetype aliases
+
+# auto open images
+alias -s {jpg,JPG,jpeg,JPEG,png,PNG,gif,GIF}="gliv"
+
+# auto open movies
+alias -s {mpg,mpeg,avi,ogm,wmv,m4v,mp4,mov}="vlc"
+
+# auto open audio
+alias -s {mp3,ogg,wav,flac}="audacious"
+
+# auto open web addresses
+alias -s {html,php,com,net,org,gov}="firefox"
+
+# auto open regular files
+alias -s txt="vim"
+alias -s pdf="evince"
+
+# These 3 aliases open up a website in a browser
+alias -s com="${BROWSER}"
+alias -s net="${BROWSER}"
+alias -s org="${BROWSER}"

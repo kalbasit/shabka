@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+#
+# vim:ft=sh:fenc=UTF-8:ts=4:sts=4:sw=4:expandtab:foldmethod=marker:foldlevel=0:
+#
+# $Id: cadmus 858 2008-04-01 13:16:11Z wael $
+
+TERM=xterm ssh -l wael -p 22 users.nasreddine.com

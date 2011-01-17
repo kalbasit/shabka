@@ -1,0 +1,133 @@
+#!/usr/bin/env bash
+#
+#   vim:ft=sh:fenc=UTF-8:ts=4:sts=4:sw=4:expandtab:foldmethod=marker:foldlevel=0:
+#
+#   $Id: DownloadFolder 1446 2009-09-09 20:01:08Z wael $
+#
+#   Copyright (c) 2007 Wael Nasreddine <wael.nasreddine@gmail.com>
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
+#   USA.
+#
+
+# Bootstrap{{{
+bootstrap="`dirname $0`/.bootstrap"
+if [ -f "${bootstrap}" ]; then
+    source "${bootstrap}"
+else
+    echo "Cannot bootstrap"
+    exit 54
+fi
+unset bootstrap
+#}}}
+
+if [ "${#}" -lt "2" -o "${#}" -gt "3" ]; then
+    print_error 0 "Usage: ${0} <URL> <FOLDER> [FILTER]"
+    exit 1
+fi
+
+####
+# Functions
+
+function download_folder()
+{
+    local progress marker last_marker
+    local URL="${1}"
+    if [ ${#} -lt 2 ]; then
+        local LEVEL=2
+    else
+        local LEVEL=${2}
+    fi
+    # Determing the folder name
+    # TODO: Try to filter all html entities, perhaps a complete function...
+    local FOLDER="$(basename "${URL}" | sed -e "s@%20@_@g" -e "s@ @_@g")"
+    local LIST=( $(lynx -dump "${URL}" | tac | sed -e '/References/,//d' | grep -v '=[AD]$' | grep -v "$(dirname "${URL}")/$" | grep "${FILTER}" | sed -e "s@^[ \t]*[0-9]*[ \t\.]*@@g") )
+
+    mkdir -p "${FOLDER}"
+    pushd "${FOLDER}" > /dev/null
+    for i in ${LIST[@]}; do
+        # If the url ends with / then it's a folder
+        # So just pass it on again to download folder...
+        if [ "${i:${#i}-1:${#i}}" = "/" ]; then
+            print_info ${LEVEL} "Downloading folder '${i}'..."
+            local NEXT_LEVEL="$( echo "$LEVEL + 1" | bc )"
+            download_folder "${i}" ${NEXT_LEVEL}
+        else
+            local msg="Downloading file '$(basename ${i})'..."
+            print_info ${LEVEL} "${msg}"
+            #print_info ${LEVEL} "${msg}" false
+            aria2c -s 5 "${i}" &> "${TEMP}" &
+
+#            while true; do
+                # Print the progress...
+#                progress="$(cat "${TEMP}" | head -n 1 | sed -e "s@.*Bytes \([0-9]*\)%.*@\1@g")"
+#                if ! isNumber "${progress}"; then
+#                    continue
+#                fi
+                # Make progress a number composed of 3 digits
+                # progress="$(printf "%.3d" ${progress})"
+#                case "${last_marker}" in
+#                    "\\ ")
+#                        marker="| "
+#                        ;;
+#                    "| ")
+#                         marker="/ "
+#                         ;;
+#                    "/ ")
+#                         marker="--"
+#                         ;;
+#                    "--")
+#                         marker="\\ "
+#                         ;;
+#                    *)
+#                         marker="| "
+#                         ;;
+#                esac
+#                if [ "${progress}" -ge "0" -a "${progress}" -lt 10 ]; then
+#                    print_coloumn $[ ${#msg} + 9 ] "${progress}%"
+#                elif [ "${progress}" -ge "10" -a "${progress}" -lt 100 ]; then
+#                    print_coloumn $[ ${#msg} + 8 ] "${progress}%"
+#                else
+#                    print_coloumn $[ ${#msg} + 7 ] "${progress}%"
+#                fi
+#                print_coloumn $[ ${#msg} + 12 ] "${marker}"
+#                last_marker="${marker}"
+#                if [ "${progress}" -ge "100" ]; then
+#                    echo
+#                    break
+#                fi
+#                sleep 0.1
+#            done
+
+        fi
+    done
+    popd > /dev/null
+}
+
+#
+####
+
+URL="${1}"
+FOLDER="${2}"
+FILTER="${3}"
+TEMP="$(mktemp /tmp/DownloadFolder.XXXXXXXX)"
+
+mkdir -p "${FOLDER}"
+cd "${FOLDER}"
+
+print_info 0 "Downloading the content of ${URL} into ${FOLDER}..."
+download_folder "${URL}"
+
+rm -f "${TEMP}"

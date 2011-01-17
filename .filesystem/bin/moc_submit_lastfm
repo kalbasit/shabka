@@ -1,0 +1,79 @@
+#!/usr/bin/env python
+
+# A wrapper script that interfaces between MOC (Music on console) and
+# lastfmsubmit.  The problem with just usnig OnSongChange is that it
+# will be triggered even if you listen to only one second of a song.
+# This script will wait for half the length of the track, checking
+# whether MOC is still playing it, before submitting the track to
+# last.fm.  This way, skipping through a list of tracks will not
+# result in lots of tracks submitted.
+
+#  To use, put this in your ~/.moc/config file:
+# OnSongChange = "/path/to/moc_submit_lastfm --artist %a --title %t --length %d --album %r"
+
+# Author: Luke Plant  < http://lukeplant.me.uk/ >
+# License: public domain
+
+from datetime import datetime
+from optparse import OptionParser
+from subprocess import call, Popen, PIPE
+import time
+
+parser = OptionParser()
+parser.add_option("-a", "--artist", dest="artist")
+parser.add_option("-t", "--title", dest="title")
+parser.add_option("-A", "--album", dest="album")
+parser.add_option("-l", "--length", dest="length")
+
+# Treating everything as bytestrings throughout seems to work OK even
+# with non-ASCII characters in song titles etc (at least with a UTF-8
+# locale).
+
+def still_playing(artist, album, title):
+    p = Popen(["mocp", "-i"], stdout=PIPE)
+    out, err = p.communicate()
+    lines = out.split("\n")
+    for s in ["Artist: %s" % artist, "Album: %s" % album, "SongTitle: %s" % title]:
+        if not s in lines:
+            return False
+    return True
+
+def submit_to_lastfm(artist, album, title, length):
+    args = ["/usr/lib/lastfmsubmitd/lastfmsubmit", "--artist", artist, "--title", title, "--length", length]
+    if album is not None:
+        args.extend(["--album", album])
+    call(args)
+
+def submit_to_awesome(artist, album, title):
+    args = ["mochg", "artist", artist, "title", title, "album", album]
+    call(args)
+
+def main():
+    options, args = parser.parse_args()
+    if any(not options.__dict__.get(k) for k in ["artist", "title", "length"]):
+        print "All of artist, album, length must be specified"
+        exit(1)
+    if ":" in options.length:
+        mins, secs = options.length.split(":")
+        length = int(mins) * 60 + int(secs)
+    else:
+        length = int(options.length)
+    # wait until song is half played
+    wait = length/2
+
+    # Update awesome
+    submit_to_awesome(options.artist, options.album, options.title)
+
+    start = datetime.now()
+    while True:
+        time.sleep(5)
+        if not still_playing(options.artist, options.album, options.title):
+            print "The song is no longer being played, not submitting it to last.fm"
+            exit(1)
+        if (datetime.now() - start).seconds > wait:
+            submit_to_lastfm(options.artist, options.album, options.title, options.length)
+            exit(0)
+
+if __name__ == '__main__':
+    import sys
+    main()

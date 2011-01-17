@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+#
+#  vim:ft=sh:fenc=UTF-8:ts=2:sts=2:sw=2:expandtab:foldmethod=marker:foldlevel=0:
+#
+#  Copyright (c) 2010 Wael Nasreddine <wael.nasreddine@gmail.com>
+#
+#  This file is part of Bckup.
+#
+#  Bckup is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  Bckup is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with Bckup.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+####
+# Determine the location of the functions file and source it.
+####
+
+DIRS=(
+  ${HOME}/bin/functions/scripts ${HOME}/lib/functions/scripts
+  ${HOME}/lib/bash/functions/scripts ${HOME}/.filesystem/lib/bash/functions/scripts
+  $(dirname "${0}")/functions/scripts $(dirname "${0}")/../bin/functions/scripts
+  $(dirname "${0}")/../lib/functions/scripts $(dirname "${0}")/../lib/bash/functions/scripts
+  ./functions/scripts ./scripts
+)
+
+# Export my local bin directory
+# export it at first, so it will be checked first!
+if ! echo $PATH | grep -q "${HOME}/.filesystem/bin"; then
+  export PATH="${HOME}/.filesystem/bin:${HOME}/.filesystem/usr/bin:${PATH}"
+fi
+
+result=1
+for file in ${DIRS[@]}; do
+  if [ -f "${file}" ]; then
+    source "${file}"
+    result=0
+    break
+  fi
+done
+
+if [ "${result}" -gt 0 ]; then
+  echo "The required functions file could not be found, Aborting..."
+  exit 54
+fi
+
+unset file DIRS result

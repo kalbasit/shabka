@@ -1,0 +1,134 @@
+#!/usr/bin/env bash
+#
+#   vim:ft=sh:fenc=UTF-8:ts=4:sts=4:sw=4:expandtab:foldmethod=marker:foldlevel=0:
+#
+#   $Id: IrssiNotify 947 2008-04-09 16:53:41Z wael $
+#
+#   Copyright (c) 2007 Wael Nasreddine <wael.nasreddine@gmail.com>
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
+#   USA.
+#
+
+# Bootstrap{{{
+bootstrap="`dirname $0`/.bootstrap"
+if [ -f "${bootstrap}" ]; then
+    source "${bootstrap}"
+else
+    echo "Cannot bootstrap"
+    exit 54
+fi
+unset bootstrap
+#}}}
+
+####
+# Main
+
+# Source/Create the configurations file.#{{{
+if [ -f ${HOME}/.irssinotifyrc ]; then
+    source ${HOME}/.irssinotifyrc
+else
+    cat <<EOF > ${HOME}/.irssinotifyrc
+#
+# Configurations for IrssiNotify.
+#
+# You should fill the required configurations entry below,
+# The HOST entry is the hostname/ip of the server you want
+# to connect to...
+#
+# The USER entry specifies the remote user you are trying
+# to connect to...
+#
+# The PORT is the SSH Port of the remote server...
+#
+# The TTL is the Time To Live for the notify message, this
+# is specified in milliseconds !!! The default is 300000
+# which is 5 minutes, which gives you enough time to notice
+# the message...
+#
+# The SOUND entry is the location of a wav file, that you
+# would like to be played when a message is received...
+# make sure it is a wav file and aplay is able to play it!!
+#
+
+# HOST/IP of the destination server
+HOST="example.com"
+
+# Remote user.
+USER="guest"
+
+# The SSH port of the remote server.
+PORT="22"
+
+# Time to live of the message
+TTL="300000"
+
+# The sound to play upon connecting...
+SOUND="\${HOME}/lib/sounds/IrssiNotify.wav"
+EOF
+    print_error 0 "Please edit ~/.irssinotifyrc and try again."
+    exit 1
+fi
+#}}}
+# Remove the disable file, it's enabled by default actually...#{{{
+rm -f "${HOME}/.disableIrssiNotify"
+#}}}
+# Sanity checks#{{{
+if [ -f "${HOME}/.irssinotify.pid" ]; then
+    OldPID="$( cat "${HOME}/.irssinotify.pid" )"
+    if ps aux | grep -v grep | awk '{print $2}' | grep -q "${OldPID}"; then
+        print_error 0 "IrssiNotify already running, aborting..."
+        exit 1
+    else
+        rm -f "${HOME}/.irssinotify.pid"
+    fi
+fi
+#}}}
+# Launch the notification loop.#{{{
+# This loop will wait untill a connection is available
+# and will connect and begin notifying you...
+# It also reconnects if for some reason the connection
+# has been lost...
+(
+    while true; do
+        if ping -c 1 "${HOST}" &> /dev/null; then
+            ssh -l "${USER}" -p "${PORT}" "${HOST}" \
+                "tail -n 10 ~/.irssi/fnotify ; : > ~/.irssi/fnotify ; tail -f ~/.irssi/fnotify " |\
+                sed -u 's/[<@&]//g' |\
+                while read heading message; do
+                    if [ ! -f "${HOME}/.disableIrssiNotify" ]; then
+                        notify-send -i gtk-dialog-info -t "${TTL}" -- "${heading}" "${message}"
+                        if [ -f "${SOUND}" ]; then
+                            aplay "${SOUND}" &> /dev/null
+                        fi
+                    fi
+                done
+            # If we reach this step, this mean the connection has been lost,
+            # sleep for 5 minutes before looping back...
+            sleep 5m
+        else #* We couldn't connect, print a warning and sleep for 5 mins... *#
+            print_warning 0 "I couldn't ping ${HOST}, retrying in 5 minutes..."
+            sleep 5m
+        fi
+    done
+) &
+NewPID="$!"
+#}}}
+# Record the PID#{{{
+echo "${NewPID}" > "${HOME}/.irssinotify.pid"
+#}}}
+
+#
+####

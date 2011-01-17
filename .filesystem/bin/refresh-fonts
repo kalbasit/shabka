@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+#
+#   vim:ft=sh:fenc=UTF-8:ts=4:sts=4:sw=4:expandtab:foldmethod=marker:foldlevel=0:
+#
+#   $Id: refresh-fonts 1436 2009-06-14 16:37:54Z wael $
+#
+#   Copyright (c) 2007 Wael Nasreddine <wael.nasreddine@gmail.com>
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
+#   USA.
+#
+
+# Bootstrap{{{
+bootstrap="`dirname $0`/.bootstrap"
+if [ -f "${bootstrap}" ]; then
+    source "${bootstrap}"
+else
+    echo "Cannot bootstrap"
+    exit 54
+fi
+unset bootstrap
+#}}}
+
+#####
+# TODO: FIX ME!!
+print_error 0 "The last time I ran this script, xserver stoped working... TODO: FIX"
+QuitScript 1
+#
+####
+
+xconfig="/etc/X11/xorg.conf"
+
+# We need root
+need_root
+
+print_info 0 "Refresh fonts..."
+print_info 2 "Rebuilding font cache..."
+fc-cache -fv
+
+# Grab the font paths from command line (for specific install)
+# or xserver config (for general refresh)
+if [ -z $1 ] ; then
+   FontPath=`cat $xconfig | grep "FontPath .*/" | sed "s|#FontPath .*||g" | \
+   sed "s|FontPath||g" | sed "s|\"||g" | sed "s|.*:unscaled||g" | sed -e 's@#.*@@g'`
+else
+   FontPath="$1"
+fi
+
+for dir in $FontPath ; do
+   print_info 2 "Rebuilding font index in $dir..."
+   [ ! -d $dir ] && continue
+   cd $dir
+   mkfontscale
+   mkfontdir
+   rm -f encodings.dir
+   ln -s /usr/share/fonts/encodings/encodings.dir encodings.dir
+   [ ! -z $DISPLAY ] && xset fp rehash
+done
+
+print_info 0 "Fonts refreshed!"

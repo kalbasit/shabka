@@ -1,0 +1,5 @@
+#!/bin/bash
+#
+# Copyright (C) 2006 Kolesnikov Vova
+
+ratmenu -label Applications Shell urxvt Opera opera Sopera sopera

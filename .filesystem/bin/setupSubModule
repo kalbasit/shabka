@@ -1,0 +1,173 @@
+#!/usr/bin/env bash
+#
+#   vim:ft=sh:fenc=UTF-8:ts=4:sts=4:sw=4:expandtab:foldmethod=marker:foldlevel=0:
+#
+#   $Id$
+#
+#   Copyright (c) 2007 Wael Nasreddine <wael.nasreddine@gmail.com>
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
+#   USA.
+#
+
+####
+# Notes
+
+# Don't use the following variables in your script, they are reserved
+#   to the Functions uses
+# 'LOCK': This is a variable used by the functions 'lock_script' and
+#   'free_lock'
+# 'TempFiles': This is a variable containing a list of Files to remove
+#   when the script exits.
+# Make sure you always use $ARGS instead of $1, Note that $ARGS[0]
+#   correspond to $1, and $ARGS[1] correspong to $2 ...
+
+#
+####
+
+####
+# Options
+
+# Change this option to true to enable options parsing
+ParseOptions=false
+
+#
+####
+
+# Bootstrap{{{
+bootstrap="`dirname $0`/.bootstrap"
+if [ -f "${bootstrap}" ]; then
+    source "${bootstrap}"
+else
+    echo "Cannot bootstrap"
+    exit 54
+fi
+unset bootstrap
+#}}}
+
+####
+# Functions
+
+# If you want to define a specific help for this script
+#function help()
+#{
+#    # print_info goes here
+#}
+
+#
+####
+
+####
+# Main
+
+# Determine if it's a git folder, if yes go to the root.
+git_dir=$(git rev-parse --git-dir 2> /dev/null)
+if [[ -z ${git_dir} ]]; then
+    print_error 0 "The current folder is not within a git repository, please go inside the repository you wish to checkout git modules into"
+    exit 1
+else
+    cd `dirname $git_dir`
+fi
+
+# Check if we have a .submodules, if not complain!
+if [[ ! -f ".submodules" ]]; then
+    print_error 0 "Please create a .submodules file, where you should specify the properties of the submodules to checkout, the format of this file is as follows:"
+    print_error 2 "Path/To/Submodule_:_Url/To/Private/Repo_:_Url/To/Public/Repo"
+    print_warning 0 "If you don't want to specify an Url please replace it with NULL"
+    exit 1
+fi
+
+# Parse the submodules file
+publicRepos=()
+privateRepos=()
+while read line; do
+    submodule=(`echo ${line} | sed -e 's@_:_@ @g'`)
+    path="${submodule[0]}"
+    private="${submodule[1]}"
+    public="${submodule[2]}"
+
+    # Register the private repo is found
+    if [ -n "${private}" -a "${private}" != "NULL" ]; then
+        privateRepos=(${privateRepos[@]} "${path}_:_${private}")
+    fi
+
+    # Register the public repo if found
+    if [ -n "${public}" -a "${public}" != "NULL" ]; then
+        publicRepos=(${publicRepos[@]} "${path}_:_${public}")
+    fi
+done < .submodules
+
+# If nothing found complain and exit
+if [ "${#publicRepos}" -eq 0 -o "${#privateRepos}" -eq 0 ]; then
+    print_info 0 "No submodules found in .submodules file or incorrect format, cannot continue..."
+    exit 1
+fi
+
+# Display each repo in both the private and public ones.
+print_info 0 "I have found the following repositories, each followed by a number please enter the number that corresponds to the submodule you want to checkout."
+echo
+if [ "${#publicRepos}" -ne 0 ]; then
+    print_info 2 "Here goes the public repositories:"
+    globalCount=0
+    for i in ${publicRepos[@]}; do
+        submodule=(`echo ${i} | sed -e 's@_:_@ @g'`)
+        print_info 3 "${globalCount}: Path=${submodule[0]} Url=${submodule[1]}"
+        ((globalCount++))
+    done
+fi
+echo
+if [ "${#privateRepos}" -ne 0 ]; then
+    print_info 2 "Here goes the private repositories:"
+    for i in ${privateRepos[@]}; do
+        submodule=(`echo ${i} | sed -e 's@_:_@ @g'`)
+        print_info 3 "${globalCount}: Path=${submodule[0]} Url=${submodule[1]}"
+        ((globalCount++))
+    done
+fi
+((globalCount--))
+
+# Ask the user which he wants to checkout.
+echo
+print_info 0 "Which repository would you like to checkout?"
+read choice
+
+# Determine wich repo to checkout
+if [ ${choice} -gt ${globalCount} ]; then
+    print_error 0 "The repository you choose does not exist, are you blind?"
+    exit 1
+fi
+
+# Calulate the repo number and get the repo
+if [ ${choice} -gt ${#publicRepos} ]; then
+    # He chose a private repo
+    repoNumber=$[ ${choice} - ${#publicRepos} ]
+    repo=${privateRepos[$repoNumber]}
+else
+    # He chose a public repo
+    repoNumber="${choice}"
+    repo=${publicRepos[$repoNumber]}
+fi
+
+# Get the repo path, url
+submodule=(`echo ${repo} | sed -e 's@_:_@ @g'`)
+path="${submodule[0]}"
+url="${submodule[1]}"
+
+# Finally initialize the submodule
+git submodule add ${url} ${path}
+git update --init
+
+#
+####

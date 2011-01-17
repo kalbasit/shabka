@@ -1,0 +1,29 @@
+# vim: set ft=sh ts=4 sts=4 sw=4 expandtab: opts alias
+#
+# $Id: functions 66 2007-05-18 17:55:14Z wael $
+
+# Determine the location of the functions file and source it.
+if [ -f "${HOME}/bin/functions/environment" ]; then
+    source "${HOME}/bin/functions/environment"
+elif [ -f "${HOME}/lib/functions/environment" ]; then
+    source "${HOME}/lib/functions/environment"
+elif [ -f "${HOME}/lib/bash/functions/environment" ]; then
+    source "${HOME}/lib/bash/functions/environment"
+elif [ -f "${HOME}/.filesystem/lib/bash/functions/environment" ]; then
+    source "${HOME}/.filesystem/lib/bash/functions/environment"
+elif [ -f "$(dirname "${0}")/functions/environment" ]; then
+    source "$(dirname "${0}")/functions/environment"
+elif [ -f "$(dirname "${0}")/../bin/functions/environment" ]; then
+    source "$(dirname "${0}")/../bin/functions/environment"
+elif [ -f "$(dirname "${0}")/../lib/functions/environment" ]; then
+    source "$(dirname "${0}")/../lib/functions/environment"
+elif [ -f "$(dirname "${0}")/../lib/bash/functions/environment" ]; then
+    source "$(dirname "${0}")/../lib/bash/functions/environment"
+elif [ -f "./functions/environment" ]; then
+    source "./functions/environment"
+elif [ -f "./environment" ]; then
+    source "./environment"
+else
+    echo "$0: The required functions file could not be found, Aborting..."
+    exit 54
+fi

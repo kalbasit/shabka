@@ -1,0 +1,1 @@
+system "xdg-open #{filename}"

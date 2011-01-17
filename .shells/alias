@@ -1,0 +1,334 @@
+# vim: set ft=sh ts=4 sts=4 sw=4 expandtab:
+#
+# $Id: alias 1413 2009-05-26 20:40:30Z wael $
+
+# usefull change dirs
+alias ..='cd ..'
+alias cd..='cd ..'
+alias ..2='cd ../../'
+alias ..3='cd ../../../'
+alias ..4='cd ../../../../'
+alias ..5='cd ../../../../../'
+alias ..6='cd ../../../../../../'
+alias ..7='cd ../../../../../../../'
+alias ..8='cd ../../../../../../../../'
+alias ..9='cd ../../../../../../../../../'
+alias ..10='cd ../../../../../../../../../../'
+alias 1-='cd +1'
+alias 2-='cd +2'
+alias 3-='cd +3'
+alias 4-='cd +4'
+alias 5-='cd +5'
+alias 6-='cd +6'
+alias 7-='cd +7'
+alias 7-='cd +8'
+alias 9-='cd +9'
+
+# usefull listing
+alias ls="$(${W} ls 2> /dev/null) \$LS_OPTIONS"
+alias ll='ls -ahl | more; echo -e "${FG_GREEN_B} --[${FG_BLUE_B} Dirs:${FG_CYAN_B} `ls -al | egrep \"^drw\" | wc -l` ${FG_GREEN_B}|${FG_MAGNETA_B} Files: ${FG_RED_B}`ls -al | egrep -v \"^drw\" | grep -v total | wc -l` ${FG_GREEN_B}]--"'
+alias la='ls -ahl'
+alias lgrep='ls -al | grep'
+alias lad='ls -d .*(/)'                 # only show dot-directories
+alias laa='ls -a .*(.)'                 # only show dot-files
+alias lsd='ls -d *(/)'                  # only show directories
+alias lse='ls -d *(/^F)'                # only show empty directories
+alias lss='ls -l *(s,S,t)'              # only files with setgid/setuid/sticky flag
+alias lsl='ls -l *(@)'                  # only symlinks
+alias lsx='ls -l *(*)'                  # only executables
+alias lsw='ls -ld *(R,W,X.^ND/)'        # world-{readable,writable,executable} files
+alias lsnew='ls -rl *(D.om)'            # display the newest files
+alias lsold='ls -rtlh *(D.om)'          # display the oldest files
+alias lsbig='ls -flh *(.OL)'            # display the biggest files
+alias lssmall='ls -Srl *(.oL)'          # display the smallest files
+
+# Don't let VІM launch in compatible mode.
+if which vim &> /dev/null; then
+    alias vi='vim'
+fi
+
+# Always use colors with grep
+alias grep='grep --color=auto'
+
+# zmv
+alias zcp='zmv -C'
+alias zln='zmv -L'
+
+# Make sure we're safe.
+alias cp='cp -b'
+alias rm='rm -I --interactive=once'
+
+# Darcs aliases
+if [ -x "$(${W} darcs 2> /dev/null)" ]; then
+    alias re='darcs record -m'
+    alias rea='darcs record -am'
+    alias ws='darcs w -s'
+    alias wls='darcs w -ls'
+    alias di='darcs diff -u'
+    alias pa='darcs push -a'
+fi
+
+# Svn aliases
+if [ -x "$(${W} svn 2> /dev/null)" ]; then
+    alias sst="svn st | grep -v '^\(?\|X\|Performing\)' | sed -e '/^$/d'"
+    alias sstw="svn st | grep --color=never '?'"
+    alias sci='svn ci -m'
+    alias sco='svn co --ignore-externals'
+    alias scoe='svn co'
+    alias supie='svn update --ignore-externals'
+    alias supe='svn update'
+    alias supf='svn update; svnfix'
+    alias sdi='svn diff'
+    alias slog='svn log'
+fi
+
+# Bazaar aliases
+if [ -x "$(${W} bzr 2> /dev/null)" ]; then
+    alias bst='bzr st'
+    alias bci='bzr ci -m'
+    alias bco='bzr branch'
+    alias bup='bzr pull'
+    alias bdi='bzr diff'
+    alias blog='bzr log'
+    alias bslog='blog -r -10..'
+    alias bp='bzr push'
+fi
+
+# Emerge aliases
+if [ -x "$(${W} emerge 2> /dev/null)" ]; then
+    if [ -x "$(${W} sudo 2> /dev/null)" ]; then
+        alias emerge='sudo emerge'
+    fi
+    alias i='emerge -av --keep-going'
+    alias ip='emerge -vp'
+    alias iu='emerge -auvDN --keep-going world'
+    alias re='emerge -C'
+    alias ru='emerge --depclean'
+    if [ -x "$(${W} eix 2> /dev/null)" ]; then
+        alias s='eix'
+    else
+        alias s='emerge -s'
+    fi
+    Sync_Command="emerge --sync"
+    if [ -x "$(${W} layman 2> /dev/null)" -a -x "$(${W} sudo 2> /dev/null)" ]; then
+        Sync_Command="${Sync_Command}; sudo layman -S"
+        if [ -x "$(${W} eix 2> /dev/null)" ]; then
+            Sync_Command="${Sync_Command}; sudo update-eix; sudo update-eix-remote update"
+        fi
+    fi
+    alias S="${Sync_Command}"
+    alias Su='S && iu'
+fi
+
+# Paludis aliases
+if [ -x "$(${W} paludis 2> /dev/null)" ]; then
+    unset PALUDIS_CMD
+    if [ -x "$(${W} _paludis_wrapper.bash 2> /dev/null)" ]; then
+        PALUDIS_CMD='/usr/bin/_paludis_wrapper.bash'
+    else
+        PALUDIS_CMD='/usr/bin/paludis'
+    fi
+    if [ -x "$(${W} sudo 2> /dev/null)" ]; then
+        PALUDIS_CMD="sudo ${PALUDIS_CMD}"
+    fi
+    PaludisOptions="--log-level warning --continue-on-failure if-satisfied --dl-reinstall if-use-changed --show-use-descriptions all --show-package-descriptions all"
+    alias paludis="${PALUDIS_CMD} ${PaludisOptions} --dl-upgrade as-needed"
+    alias paludisworld="${PALUDIS_CMD} -i ${PaludisOptions} --dl-upgrade always world"
+    alias paludiseverything="${PALUDIS_CMD} -i ${PaludisOptions} --dl-upgrade always everything"
+    unset PALUDIS_CMD PaludisOptions
+    alias i='paludis -i --ask'
+    alias ip='paludis -ip'
+    alias iu='paludiseverything --ask'
+    alias re='paludis -u'
+    alias ru='paludis --uninstall-unused'
+    if [ -x "/usr/bin/eix" ]; then
+        alias s='eix'
+    else
+        alias s='paludis -s'
+    fi
+    alias S='paludis --sync'
+    alias Su='S && iu'
+fi
+
+# Pacman
+if [ -x "$(${W} pacman 2> /dev/null)" ]; then
+    if [ -x "$(${W} clyde)" ]; then
+        alias pacman='sudo clyde'
+    elif [ -x "$(${W} tupac 2> /dev/null)" ]; then
+        alias pacman='tupac'
+    elif [ -x "$(${W} yaourt 2> /dev/null)" ]; then
+        alias pacman='yaourt'
+    elif [ -x "$(${W} sudo 2> /dev/null)" ]; then
+        alias pacman='sudo pacman'
+    fi
+    alias i='pacman -S --needed'
+    alias ip='yes "n" | pacman -S'
+    alias iu='pacman -Su'
+    alias re='pacman -R'
+    alias ru='pacman -cs'
+    alias s='pacman -Ss'
+    alias S='pacman -Sy'
+    alias Su='S && iu'
+fi
+
+# apt-get
+if [ -x "$(${W} apt-get 2> /dev/null)" ]; then
+    if [ -x "$(${W} sudo 2> /dev/null)" ]; then
+        alias apt-get='sudo apt-get'
+    else
+        alias apt-get='apt-get'
+    fi
+    alias i='apt-get install'
+    alias ip='apt-get install -s'
+    alias iu='apt-get dist-upgrade'
+    alias re='apt-get remove'
+    alias ru='apt-get autoremove'
+    alias s='apt-cache search'
+    alias S='apt-get update'
+    alias Su='S && iu'
+fi
+
+# Twitter
+if [ -x "$(${W} twitter 2> /dev/null)" ]; then
+    alias twp='twitter post'
+    alias twf='twitter timeline'
+fi
+
+# Some aliases to help me with Sabayon developement.
+if [ -x "$(${W} ebuild 2> /dev/null)" ]; then
+    alias emanifest='for i in *.ebuild; do ebuild ${i} manifest; done'
+fi
+
+# xclip
+if [ -x "$(${W} xclip 2> /dev/null)" ]; then
+    alias copy='xclip -selection clipboard -i'
+fi
+
+# giggle
+if [ -x "$(${W} giggle 2> /dev/null)" ]; then
+    alias giggle='giggle &> /dev/null &'
+fi
+
+# Stuff that use sudo.
+if [ -x "$(${W} sudo 2> /dev/null)" ]; then
+    alias shutdown='sudo shutdown'
+    alias reboot='sudo reboot'
+    alias poweroff='sudo poweroff'
+    alias svi='sudo vim'
+    alias svim='sudo vim'
+    alias mount='sudo mount'
+    alias umount='sudo umount'
+    alias etc-update='sudo etc-update'
+    alias etc-paludis='sudo etc-paludis'
+    alias sudosu="sudo su -c \"HOME=${HOME} $(grep ${USER} /etc/passwd | cut -d':' -f7 )\""
+fi
+
+# Printer options
+alias haweem='PRINTER=Brother_HL2150N lpr'
+alias hapdf='PRINTER=Virtual_PDF_Printer lpr'
+
+# Common mistakes
+alias xs='cd'
+alias vf='cd'
+alias ms='ls'
+alias vu='vi'
+alias sl='ls'
+alias gti='git'
+
+# Readlink on FreeBSD is better on /usr/local/bin/readlink
+if [ -x "/usr/local/bin/readlink" ]; then
+    alias readlink="/usr/local/bin/readlink"
+fi
+
+# alias for programs in UTF8 (always use UTF8)
+alias xterm='xterm -u8'
+alias screen='screen -U'
+
+# for 'cire' we have to be in .diary and run it with ncurses interface.
+alias cire='cd "${HOME}/.diary/"; cire --ncurses ; cd ~-'
+
+# Weather info
+if which weatherget &> /dev/null; then
+    case "${HOSTNAME}" in
+        *.nasreddine.info)
+            alias outside="weatherget -s FRXX0114 -m"
+        ;;
+        *)
+            alias outside="print_error 0 \"Unknown hostname, couldn't determine yout current location.\""
+        ;;
+    esac
+fi
+
+# Others
+#if [ -x "$(${W} mplayer 2> /dev/null)" ]; then
+#    alias mplayer="$(${W} mplayer 2> /dev/null) -quiet -really-quiet -geometry 0:0 -xy 448 -slave -input file='${HOME}/.mplayer/input.fifo'"
+#    alias mplayer-light="mplayer -vfm ffmpeg -lavdopts lowres=1:fast:skiploopfilter=all"
+#    alias playlist="mplayer -playlist"
+#fi
+if [ -x "$(${W} cdrecord 2> /dev/null)" ]; then
+    if [ "${SYSTEM}" = "FreeBSD" ]; then
+        alias cdrecord='sudo cdrecord -v dev=2,0,0 -eject driveropts=burnfree'
+    else
+        alias cdrecord='sudo cdrecord -v dev=/dev/scd0 -eject driveropts=burnfree'
+    fi
+fi
+if [ -d "${HOME}/Projects/php/weem" ]; then
+    alias cdw="cd ${HOME}/Projects/php/weem"
+fi
+alias host='hostx -G -S -C -A -L 1'
+alias cweem="cd ${HOME}/Projects/php/weem"
+alias pg="pg -n -p 'page %d:'"
+alias startx='xsession'
+alias pw='ps aux | grep -v grep | grep -e'
+alias tf='tail -f'
+alias euses='euses -Saci --'
+alias asdf="if [ -n \"\${DISPLAY}\" ]; then setxkbmap -variant dvorak; else sudo loadkeys dvorak; fi"
+alias aoeu="if [ -n \"\${DISPLAY}\" ]; then setxkbmap -variant euro; else sudo loadkeys en_US; fi"
+alias aria2c="dumpcookies -i '${HOME}/.mozilla/firefox/eMxyzptlk/cookies.sqlite' -o '/tmp/cookies.txt' &> /dev/null; chmod 600 '/tmp/cookies.txt' &> /dev/null; aria2c --file-allocation=none --load-cookies='/tmp/cookies.txt' --ftp-pasv -c -m 3"
+alias genisoimage="genisoimage -allow-leading-dots -joliet-long -iso-level 3 -l -J -r -f -v -copyright \"GNU GENERAL PUBLIC LICENSE\" -A \"Burnt by Wael Nasreddine on $(uname -r -v -m -s).\" -p \"Wael Nasreddine\" -publisher \"Wael Nasreddine\" -V"
+alias webshare='python -c "import SimpleHTTPServer;SimpleHTTPServer.test()"'
+if [ -x "$(${W} devtodo 2> /dev/null)" ]; then
+    alias tdg="todo -G"
+fi
+alias vimtips="grep -v '^#' ${HOME}/.vim/vimtips | ${PAGER}"
+alias evimtips="${EDITOR} ${HOME}/.vim/vimtips"
+
+# xrandr aliases depending on the hostname
+#if [ "${HOSTNAME}" = "localhost" ]; then
+    #alias xrandron='xrandr --output LVDS --mode 1280x800 --pos 0x0 --output VGA --mode 1280x800_60.00 --pos 0x800'
+    alias xrandronbottom='xrandr --output LVDS --mode 1280x800 --pos 0x800 --output VGA --mode 1024x768 --pos 0x0'
+    alias xrandrontop='xrandr --output LVDS --mode 1280x800 --pos 0x0 --output VGA --mode 1024x768 --pos 0x768'
+    alias xrandronleft='xrandr --output LVDS --mode 1280x800 --pos 0x0 --output VGA --mode 1024x768 --pos 1024x0'
+    alias xrandronright='xrandr --output LVDS --mode 1280x800 --pos 1280x0 --output VGA --mode 1024x768 --pos 0x0'
+    alias xrandron='xrandr --output LVDS --mode 1280x800 --pos 1280x0 --output VGA --mode 1280x960 --pos 0x0'
+#fi
+alias xrandroff='xrandr --output VGA --off'
+
+# Qemu + TinyXp
+if [ -x "$(${W} qemu-system-x86_64 2> /dev/null)" -a -f "${HOME}/.qemu/TinyXp.img" ]; then
+    # alias qxp='qemu-system-x86_64 -hda /home/wael/.qemu/TinyXp.img -boot c -m 1024 -localtime -usb -net nic -net user -soundhw ac97 -ctrl-grab'
+    alias qxp="qemu-system-x86_64 -hda ${HOME}/.qemu/TinyXp.img -boot c -m 1024 -localtime -usb -net nic,model=e1000 -net tap,name=tap0,script=no -soundhw ac97 -ctrl-grab"
+fi
+
+# Clean source files
+alias clean='sed -e "s@@@g" -e "s/[ ]*\t/\t/g" -e "s/[ \t]*$//g" -i'
+
+alias storageMount='mount /media/Whd160; mount /media/Whd500; mount /media/Whd750'
+
+# This is a security alias,
+# If you quit your X session (or X server was killed)
+# You get a login and not a shell
+# This is disabled by default
+# Uncomment it to enable it.
+#alias startx='exec startx'
+
+# Wine32 on Freebsd64
+if [ -x /compat/i386/usr/local/bin/winecfg ]; then
+    alias winecfg="LD_32_LIBRARY_PATH=/compat/i386/usr/local/lib PATH=/compat/i386/usr/local/bin:$PATH /compat/i386/usr/local/bin/winecfg"
+    alias wine32="LD_32_LIBRARY_PATH=/compat/i386/usr/local/lib PATH=/compat/i386/usr/local/bin:$PATH /compat/i386/usr/local/bin/wine"
+fi
+
+alias playIphone='sudo rm /var/lib/mpd/playlists/iPhone.m3u; sudo touch /var/lib/mpd/playlists/iPhone.m3u; sudo chown wael:wael /var/lib/mpd/playlists/iPhone.m3u; for i in /mnt/storage/wael/Files/Downloads/iPhone\ Music/*; do readlink -f "$i" | sed -e "s@.*/\(Mp3z/.*\)@\1@g" >> /var/lib/mpd/playlists/iPhone.m3u; done; sudo chown mpd:mpd /var/lib/mpd/playlists/iPhone.m3u'
+
+# Ruby / Ruby on Rails
+alias r='rails'

@@ -1,0 +1,85 @@
+#!/usr/bin/env bash
+#
+#   vim:ft=sh:fenc=UTF-8:ts=4:sts=4:sw=4:expandtab:foldmethod=marker:foldlevel=0:
+#
+#   $Id: mplayer-resume 783 2008-03-24 12:20:18Z wael $
+#
+#   A little script to record/resume playback postition of a file
+#   This script assume output to $HOME/.mplayer/output.txt
+#
+#   Copyright (c) 2007 Wael Nasreddine <wael.nasreddine@gmail.com>
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
+#   USA.
+#
+
+Playback="${HOME}/.mplayer/playback"
+Fifo="${HOME}/.mplayer/input.fifo"
+Output="${HOME}/.mplayer/output.txt"
+Mplayer="$(which mplayer)"
+Bc="$(which bc)"
+
+# Sanity checks
+if [ ! -d "${Playback}" ]; then
+    mkdir -p "${Playback}"
+fi
+if [ ! -x "${Mplayer}" ]; then
+    echo -e "${FG_RED_B}Mplayer is not installed, Aborting...${FG_CLEAR}"
+    exit 1
+fi
+if [ ! -x "${Bc}" ]; then
+    echo -e "${FG_RED_B}bc is not installed, Aborting...${FG_CLEAR}"
+    exit 1
+fi
+if [ ! -e "${Fifo}" ]; then
+    mkfifo "${Fifo}"
+fi
+
+( while true; do
+    sleep 1
+    if pidof %PPID "${Mplayer}" > /dev/null; then
+        echo "get_file_name" > "${Fifo}"
+        echo "get_time_pos" > "${Fifo}"
+        echo "get_percent_pos" > "${Fifo}"
+        Filename="$(grep "ANS_FILENAME=" "${Output}" | tail -n 1 | sed -e "s@ANS_FILENAME='\(.*\)'@\1@g")"
+        CurrentTime="$(grep "ANS_TIME_POSITION=" "${Output}" | tail -n 1 | cut -d'=' -f2)"
+        CurrentPercent="$(grep "ANS_PERCENT_POSITION=" "${Output}" | tail -n 1 | cut -d'=' -f2)"
+        # Sanity check
+        if [ -z "${Filename}" -o -z "${CurrentTime}" -o -z "${CurrentPercent}" ]; then
+            continue
+        fi
+        if [ "${CurrentPercent}" -ge "95" ]; then
+            # The movie is about to finish so just remove the pos file
+            # if it does exist
+            [ -e "${Playback}/${Filename}.pos" ] && rm -f "${Playback}/${Filename}.pos"
+            continue
+        fi
+        # Does the playback already exist?
+        if [ -e "${Playback}/${Filename}.pos" ]; then
+            OldCurrentTime="$(cat "${Playback}/${Filename}.pos")"
+        else
+            OldCurrentTime="0"
+        fi
+        # Ok now the play part, We only resume if the current time is below 5 seconds if not we just write the postition
+        if [ "$(echo ${CurrentTime} | cut -d'.' -f1)" -lt "5" -a "$(echo ${OldCurrentTime} | cut -d'.' -f1)" -gt "5" ]; then
+            # Seek to the Old position - 2.5 seconds
+            echo "seek $(echo "${OldCurrentTime} - 2.5" | "${Bc}")" > "${Fifo}"
+        else
+            echo "${CurrentTime}" > "${Playback}/${Filename}.pos"
+        fi
+    else
+        continue
+    fi
+done & )

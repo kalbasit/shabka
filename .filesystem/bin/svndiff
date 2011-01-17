@@ -1,0 +1,685 @@
+#!/usr/bin/perl -w
+
+#=======================================================================
+# $Id: svndiff 53 2007-05-18 01:42:39Z wael $
+# Uses a specified diff program for viewing differences in a Subversion
+# versioned directory tree.
+#
+# Character set: UTF-8
+# License: GNU General Public License, see end of file for legal stuff.
+# ©opyleft 2004– Øyvind A. Holm <sunny@sunbase.org>
+# This file is part of the svnutils project — http://svnutils.tigris.org
+#=======================================================================
+
+use strict;
+
+$| = 1;
+
+use Getopt::Long;
+our ($opt_conflict, $opt_create_rc, $opt_diffcmd, $opt_svncmd, $opt_help) =
+    (            0,              0,           "",          "",         0);
+our ($opt_diffargs, $opt_revision) =
+    (           "",            "");
+
+my $Debug = 0;
+
+# Default value, can be overridden in ~/.svndiffrc
+my $Cmd = "vimdiff";
+
+# Change this if the svn executable is non-standard and you don’t want
+# to use the -e option all the time:
+my $CMD_SVN = "svn";
+
+my $ST_CONFLICT = 'C';
+my $ST_MODIFIED = 'M';
+my $valid_rev = '\d+|HEAD|{\d+[^}]*?[Z\d]}'; # Used in regexps
+
+our $progname = $0;
+$progname =~ s#^(.*)/(.+?)$#$2#;
+
+my %rev_diff = ();
+
+my $rc_file = defined($ENV{SVNDIFFRC}) ? $ENV{SVNDIFFRC} : "";
+
+unless (length($rc_file)) {
+    if (defined($ENV{HOME})) {
+        $rc_file = "$ENV{HOME}/.svndiffrc";
+    } else {
+        warn("Both SVNDIFFRC and HOME environment variables not defined, " .
+             "unable to read rc file.\n" .
+             "Using default values. To override, " .
+             "define the SVNDIFFRC variable.\n"
+        );
+    }
+}
+
+length($rc_file) && (-e $rc_file) && read_rcfile($rc_file);
+
+Getopt::Long::Configure("bundling");
+GetOptions(
+    "conflict|C"   => \$opt_conflict,
+    "create-rc"    => \$opt_create_rc,
+    "diffcmd|c=s"  => \$opt_diffcmd,
+    "svncmd|e=s"   => \$opt_svncmd,
+    "help|h"       => \$opt_help,
+    "diffargs|p=s" => \$opt_diffargs,
+    "revision|r=s" => \$opt_revision
+) || die("$progname: Option error. Use -h for help.\n");
+
+$opt_help && usage(0);
+
+if ($opt_create_rc) {
+    print(<<END);
+<svndiffrc>
+  <diffprog>vimdiff</diffprog>
+  <svnclient>svn</svnclient>
+  <reversediffs>
+    <program>
+      <name>vimdiff</name>
+      <reverse>1</reverse>
+    </program>
+    <program>
+      <name>meld</name>
+      <reverse>1</reverse>
+    </program>
+    <program>
+      <name>kompare</name>
+      <reverse>1</reverse>
+    </program>
+    <program>
+      <name>xxdiff</name>
+      <reverse>1</reverse>
+    </program>
+  </reversediffs>
+</svndiffrc>
+END
+    exit(0);
+}
+
+length($opt_diffcmd)  && ($Cmd = $opt_diffcmd);
+length($opt_diffargs) && ($Cmd .= " $opt_diffargs");
+length($opt_svncmd)   && ($CMD_SVN = $opt_svncmd);
+
+my $stat_chars = "$ST_CONFLICT$ST_MODIFIED";
+$opt_conflict && ($stat_chars = "$ST_CONFLICT");
+
+my @mod_array = ();
+
+if (scalar(@ARGV)) {
+    # Filename(s) specified on command line. {{{
+    @mod_array = @ARGV;
+    for my $Curr (@mod_array) {
+        D("ARG = \"$Curr\"\n");
+        if ((-f $Curr && !-l $Curr) || is_url($Curr)) {
+            D("$Curr is a file or URL.");
+            my $has_conflict;
+            if (!is_url($Curr)) {
+                D("Before PipeFP 1: CMD_SVN = \"$CMD_SVN\"");
+                if (open(PipeFP, "$CMD_SVN stat $Curr -q |")) {
+                    $has_conflict = (<PipeFP> =~ /^$ST_CONFLICT/) ? 1 : 0;
+                } else {
+                    warn("$progname: Error opening " .
+                         "\"$CMD_SVN $Curr stat -q\" pipe: $!");
+                }
+            } else {
+                if (!length($opt_revision)) {
+                    die("$progname: Need to specify the --revision option " .
+                        "when diffing an URL\n");
+                }
+                $has_conflict = 0;
+            }
+            diff_file($Curr, $has_conflict, $opt_revision);
+        } else {
+            D("$Curr is NOT a file.");
+            warn("$progname: \"$Curr\" is not a file or doesn't exist\n");
+        }
+    }
+    # }}}
+} else {
+    # {{{
+    length($opt_revision) && die("Need to specify one or more " .
+                                 "files when using the -r option\n");
+    D("Before PipeFP 2: CMD_SVN = \"$CMD_SVN\"");
+    if (open(PipeFP, "$CMD_SVN stat -q |")) {
+        my %has_conflict = ();
+        while (<PipeFP>) {
+            chomp();
+            D("<PipeFP> = \"$_\"\n");
+            if (/^([$stat_chars])......(.*)/) {
+                my ($Stat, $File) =
+                   (   $1,    $2);
+                D("\$Stat = \"$Stat\", \$File = \"$File\"\n");
+                push(@mod_array, $File);
+                $has_conflict{$File} = ($Stat =~ /^$ST_CONFLICT/) ? 1 : 0;
+                D("\$has_conflict{$File} = \"$has_conflict{$File}\"\n");
+            }
+        }
+        close(PipeFP);
+        for (sort @mod_array) {
+            my $File = $_;
+            (-f $File && !-l $File) && diff_file($File, $has_conflict{$File});
+        }
+    } else {
+        warn("$progname: Error opening \"$CMD_SVN stat -q\" pipe: $!");
+    }
+    # }}}
+}
+
+sub diff_file {
+    # {{{
+    my ($File1, $has_conflict, $Revs) = @_;
+    my $Path = "";
+    my $File = $File1;
+    defined($Revs) || ($Revs = "");
+
+    D("diff_file(\"$File1\", \"$has_conflict\", \"$Revs\");\n");
+
+    if ($File =~ m#^(.*/)(.+?)$#) {
+        $Path = $1;
+        $File = $2;
+    }
+
+    my $File2 = "";
+    my @rm_files = ();
+
+    D("opt_revision = \"$opt_revision\"");
+    if (length($opt_revision)) {
+        my ($Rev1, $Rev2);
+        my ($tmp1, $tmp2);
+        if ($opt_revision =~ /^($valid_rev)$/) {
+            $Rev1 = $1;
+            $Rev2 = "";
+            $tmp1 = "$File1.r$Rev1.tmp";
+        } elsif ($opt_revision =~ /^($valid_rev):($valid_rev)$/) {
+            $Rev1 = $1;
+            $Rev2 = $2;
+            $tmp1 = "$File1.r$Rev1.tmp";
+            $tmp2 = "$File1.r$Rev2.tmp";
+        } else {
+            die("$progname: Revision format error in --revision argument, " .
+                "use -h for help\n");
+        }
+        if (is_url($File1)) {
+            $tmp1 =~ s#^(\S+/)(\S+?)$#$2#;
+            length($Rev2) || ($Rev2 = "HEAD");
+            $tmp2 = "$File1.r$Rev2.tmp";
+            $tmp2 =~ s#^(\S+/)(\S+?)$#$2#;
+        } else {
+            $tmp2 = "$File1.r$Rev2.tmp";
+        }
+        D("Rev1 = \"$Rev1\", Rev2 = \"$Rev2\"\n");
+        (-e $tmp1)
+            && (die("$progname: $tmp1: Temporary file already exists\n"));
+        (length($Rev2) && -e $tmp2)
+            && (die("$progname: $tmp2: Temporary file already exists\n"));
+        D("tmp1 = \"$tmp1\"");
+        D("tmp2 = \"$tmp2\"");
+        if ($tmp1 eq $tmp2) {
+            warn("$progname: $File1: Start and end revisions are the same\n");
+            return;
+        }
+        mysyst("$CMD_SVN cat -r$Rev1 $File1 >$tmp1");
+        mysyst("$CMD_SVN cat -r$Rev2 $File1 >$tmp2") if (length($Rev2));
+        if (length($Rev2)) {
+            $File2 = "$tmp2";
+            $File1 = "$tmp1";
+            push(@rm_files, $tmp1, $tmp2);
+        } else {
+            $File2 = "$tmp1";
+            push(@rm_files, $tmp1);
+        }
+    } else {
+        $File2 = "$Path.svn/text-base/$File.svn-base";
+    }
+
+    D("File1 = \"$File1\"\n");
+    D("File2 = \"$File2\"\n");
+
+    if (!is_url($File1)) {
+        (-e $File1) || (warn("$File1: File not found\n"), return);
+        (-e $File2) || (warn("$File2: File not found" .
+                             length($opt_revision) ? ""
+                                                   : ", is not under version " .
+                                                     "control\n"
+                            ),
+                            return
+                       );
+    }
+
+    my $use_reverse = 0;
+
+    if (defined($rev_diff{$Cmd})) {
+        ($rev_diff{$Cmd} eq "1") && ($use_reverse = 1);
+    }
+
+    if ($use_reverse) {
+        mysyst("$Cmd $File1 $File2");
+    } else {
+        mysyst("$Cmd $File2 $File1");
+    }
+
+    for my $curr_rm (@rm_files) {
+        D("Removing tempfile \"$curr_rm\"...");
+        unlink($curr_rm) || warn("$progname: $curr_rm: " .
+                                 "Can't delete temporary file: $!\n");
+    }
+
+    if (!length($opt_revision) && $has_conflict) {
+        print("$progname: Write y and press ENTER if the conflict " .
+              "in $File1 is resolved: ");
+        if (<STDIN> =~ /^y$/i) {
+            print("$progname: OK, marking $File1 as resolved.\n");
+            mysyst("$CMD_SVN resolved $File1");
+        }
+    }
+
+    # Sleep one second after $Cmd is done to make it easier to interrupt
+    # the thing with CTRL-C if there are many files
+    sleep(1) if (scalar(@mod_array) > 1);
+    # }}}
+} # diff_file()
+
+sub D {
+    # {{{
+    $Debug || return;
+    my @call_info = caller;
+    chomp(my $Txt = shift);
+    my $File = $call_info[1];
+    $File =~ s#\\#/#g;
+    $File =~ s#^.*/(.*?)$#$1#;
+    print(STDERR "$File:$call_info[2] $$ $Txt\n");
+    return("");
+    # }}}
+} # D()
+
+sub deb_wait {
+    # {{{
+    $Debug || return;
+    print("debug: Press ENTER...");
+    <STDIN>;
+    # }}}
+} # deb_wait()
+
+sub is_url {
+    # {{{
+    my $Url = shift;
+
+    my $Retval = ($Url =~ m#^\S+://\S+/#) ? 1 : 0;
+    D("is_url(\"$Url\") returns \"$Retval\".");
+    return($Retval);
+    # }}}
+} # is_url()
+
+sub mysyst {
+    # {{{
+    my @Args = @_;
+    my $system_txt = sprintf("system(\"%s\");", join("\", \"", @Args));
+    D("$system_txt");
+    deb_wait();
+    system(@_);
+    # }}}
+} # mysyst()
+
+sub read_rcfile {
+    # {{{
+    my $File = shift;
+
+    D("read_rcfile(\"$File\")");
+    if (open(RcFP, "<$File")) {
+        my $all_rc = join("", <RcFP>);
+        close(RcFP);
+        D("\$all_rc \x7B\x7B\x7B\n$all_rc\n\x7D\x7D\x7D");
+
+        my $el_top = $all_rc;
+        $el_top =~ s/<!--.*?-->//gsx;
+
+        $el_top =~
+        s{
+            <svndiffrc\b(.*?)>(.*?)</svndiffrc>
+        }
+        {
+            my $el_svndiffrc = $2;
+            D("Inside <svndiffrc></svndiffrc>");
+            D("\$el_svndiffrc \x7B\x7B\x7B\n$el_svndiffrc\n\x7D\x7D\x7D");
+            $el_svndiffrc =~
+            s{
+                <diffprog\b(.*?)>(.*?)</diffprog>
+            }
+            {
+                $Cmd = xml_to_txt($2);
+                D("read_rcfile(): \$Cmd = \"$Cmd\"");
+                "";
+            }sex;
+
+            $el_svndiffrc =~
+            s{
+                <svnclient\b(.*?)>(.*?)</svnclient>
+            }
+            {
+                $CMD_SVN = xml_to_txt($2);
+                D("read_rcfile(): \$CMD_SVN = \"$CMD_SVN\"");
+                "";
+            }sex;
+
+            $el_svndiffrc =~
+            s{
+                <reversediffs\b(.*?)>(.*?)</reversediffs>
+            }
+            {
+                my $el_reversediffs = $2;
+                D("Inside <reversediffs></reversediffs>");
+
+                $el_reversediffs =~
+                s{
+                    <program\b(.*?)>(.*?)</program>
+                }
+                {
+                    my $el_program = $2;
+                    D("Inside <program></program>");
+
+                    my ($Name, $Reverse) =
+                       (   "",       "");
+
+                    $el_program =~
+                    s{
+                        <name\b(.*?)>(.*?)</name>
+                    }
+                    {
+                        $Name = xml_to_txt($2);
+                        D("Name = \"$Name\"");
+                        "";
+                    }sex;
+
+                    $el_program =~
+                    s{
+                        <reverse\b(.*?)>(.*?)</reverse>
+                    }
+                    {
+                        $Reverse = xml_to_txt($2);
+                        D("Reverse = \"$Reverse\"");
+                        "";
+                    }sex;
+
+                    if (length($Name)) {
+                        $rev_diff{$Name} = ($Reverse eq "1" ? 1 : 0);
+                        D("\$rev_diff{$Name} = \"$rev_diff{$Name}\"");
+                    } else {
+                        warn("$progname: $File: Found empty " .
+                             "<name></name> element.\n");
+                    }
+                    "";
+                }gsex;
+                "";
+            }sex;
+            print_leftover($el_svndiffrc, "svndiffrc");
+        }sex;
+        print_leftover($el_top, "top");
+    } else {
+        warn("$progname: $File: Can't open rc file for read: $!\n");
+    }
+    # }}}
+} # read_rcfile()
+
+sub print_leftover {
+    # Print all non-whitespace in a string, used to spot erroneous XML. {{{
+    $Debug || return("");
+    my ($Txt, $Element) = @_;
+    $Txt =~ s/^\s+//gs;
+    $Txt =~ s/\s+$//gs;
+    $Txt =~ s/\s+/ /g;
+    defined($Element) || ($Element = "[unknown]");
+    if ($Txt =~ /\S/) {
+        warn("$progname: Leftover: $Element: \"$Txt\"\n");
+    }
+    return("");
+    # }}}
+} # print_leftover()
+
+sub txt_to_xml {
+    # {{{
+    my $Txt = shift;
+    $Txt =~ s/&/&amp;/gs;
+    $Txt =~ s/</&lt;/gs;
+    $Txt =~ s/>/&gt;/gs;
+    return($Txt);
+    # }}}
+} # txt_to_xml()
+
+sub xml_to_txt {
+    # {{{
+    my $Txt = shift;
+    $Txt =~ s/&lt;/</gs;
+    $Txt =~ s/&gt;/>/gs;
+    $Txt =~ s/&amp;/&/gs;
+    return($Txt);
+    # }}}
+} # xml_to_txt()
+
+sub usage {
+    # Send the help message to stdout {{{
+    my $Retval = shift;
+    print(<<END);
+
+Usage: $progname [options] [file [...]]
+
+"file" can also be an URL, but then the --revision option has to be
+specified.
+
+Options:
+
+-C, --conflict    Only run diff on conflicted files.
+    --create-rc   Send a configuration file example to stdout. To create
+                  a new ~/.svndiffrc file, write
+                    $progname --create-rc >~/.svndiffrc
+-c, --diffcmd x   Use x as the diff command. Default: "$Cmd".
+-e, --svncmd x    Use x as the svn executable. Default: "$CMD_SVN".
+-h, --help        Show this help.
+-p, --diffargs x  Use x as parameters to the diff program.
+-r, --revision x  Run a $Cmd command against previous revisions:
+                    111:222
+                      Compare r111 and r222.
+                    123
+                      Compare your working file against r123. If the
+                      file is an URL, the second revision is set to
+                      HEAD.
+                    {2001-05-17T18:12:16Z}:900
+                      Compare between a specific point in time with
+                      r900.
+
+END
+    exit($Retval);
+    # }}}
+} # usage()
+
+__END__
+
+# Plain Old Documentation (POD) {{{
+
+=pod
+
+=head1 NAME
+
+svndiff
+
+=head1 REVISION
+
+$Id: svndiff 53 2007-05-18 01:42:39Z wael $
+
+=head1 SYNOPSIS
+
+svndiff [options] [file [...]]
+
+=head1 DESCRIPTION
+
+Run the specified diff program on every modified file in current
+directory and all subdirectories or on the files specified on the
+command line.
+An URL to a file can also be specified, but then the --revision option
+has to be specified.
+
+The program needs the L<svn(1)> commandline client to run.
+
+=over 4
+
+=item B<-C>, B<--conflict>
+
+Only run diff on conflicted files.
+
+=item B<--create-rc>
+
+Send a configuration file example to stdout. To create a new
+F<~/.svndiffrc> file, write
+
+  $progname --create-rc >~/.svndiffrc
+
+=item B<-c>, B<--diffcmd> x
+
+Use x as the diff command.
+Default: "svndiff".
+
+=item B<-e>, B<--svncmd> x
+
+Use x as the svn executable.
+Example:
+
+  svndiff -e /usr/local/bin/svn-1.0
+
+=item B<-p>, B<--diffargs> x
+
+Use x as parameters to the diff program.
+
+=item B<-h>, B<--help>
+
+Print a brief help summary.
+
+=item B<-r>, B<--revision> x
+
+Run the external diff command against previous revisions:
+
+  111:222
+    Compare r111 and r222.
+  123
+    Compare your working file against r123. If the file is an URL, the
+    second revision is set to HEAD.
+
+=back
+
+=head1 FILES
+
+=over 4
+
+=item F<~/.svndiffrc>
+
+A configuration file where you can store your own settings.
+It is a standard XML file with this structure:
+
+  <svndiffrc>
+    <diffprog>vimdiff</diffprog>
+    <svnclient>svn</svnclient>
+    <reversediffs>
+      <program>
+        <name>vimdiff</name>
+        <reverse>1</reverse>
+      </program>
+      <!-- Several "program" element groups can be specified -->
+    </reversediffs>
+  </svndiffrc>
+
+(Whitespace and linebreaks are optional.)
+
+The string inside the C<diffprog> elements can be set to whatever your
+diff program is called as, the default string is "vimdiff".
+
+You can also define an alternative svn(1) client to use inside the
+C<svnclient> elements.
+The default value here is of course "svn".
+
+When using visual diff viewers (for example B<vimdiff>), the program
+sometimes expects the file names to be switched on the command line so
+your modified file appears in the correct window.
+By creating a C<E<lt>programE<gt>E<lt>/programE<gt>> section, programs
+can be instructed to take arguments the opposite way.
+If you for example use the B<meld> program and you want your modified
+file to be in the left window, add this to the file (I<inside> the
+C<E<lt>reversediffsE<gt>E<lt>/reversediffsE<gt>> elements):
+
+  <program>
+    <name>meld</name>
+    <reverse>1</reverse>
+  </program>
+
+The value in the C<reverse> element have to be B<1>, all other values
+will count as B<0>.
+
+=back
+
+=head1 ENVIRONMENT VARIABLES
+
+=over 4
+
+=item I<SVNDIFFRC>
+
+Path to a configuration file in another location than F<~/.svndiffrc> .
+
+=back
+
+=head1 USAGE TIPS
+
+=head2 vimdiff mappings
+
+The standard diff program used in this script is L<vimdiff(1)> which in
+fact is the Vim editor called with another name.
+The main reasons for this are because Vim is Free and widely available,
+portable, console based and an effective diff tool.
+The following macros makes moving differences between windows easier
+(can also be put into F<~/.vimrc>):
+
+  " F1: Move differences from the other window to the current window.
+  map <f1> :diffget<cr>]cz.
+
+  " F2: Move differences from the current window to the other window.
+  map <f2> :diffput<cr>]c
+
+  " F12: Update the syntax highlighting and the diffs. Use this if your
+  "      diff isn’t properly updated.
+  noremap <f12> :syntax sync fromstart<cr>:diffu<cr>
+  inoremap <f12> <esc>:syntax sync fromstart<cr>:diffu<cr>a
+
+=head1 AUTHOR
+
+Made by Øyvind A. Holm S<E<lt>sunny _AT_ sunbase.orgE<gt>>.
+
+=head1 COPYRIGHT
+
+Copyleft © Øyvind A. Holm &lt;sunny@sunbase.org&gt;
+This is free software; see the file F<COPYING> for legalese stuff.
+
+This file is part of the svnutils project —
+L<http://svnutils.tigris.org>
+
+=head1 LICENCE
+
+This program is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the
+Free Software Foundation; either version 2 of the License, or (at your
+option) any later version.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along
+with this program; if not, write to the Free Software Foundation, Inc.,
+59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+=head1 SEE ALSO
+
+L<svn(1)>
+
+=cut
+
+# }}}
+
+# vim: set fenc=UTF-8 ft=perl fdm=marker ts=4 sw=4 sts=4 et fo+=w :
+# End of file $Id: svndiff 53 2007-05-18 01:42:39Z wael $

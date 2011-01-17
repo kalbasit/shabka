@@ -1,0 +1,27 @@
+#!/bin/zsh
+
+if [ "$PS1" ]; then
+
+        export PSSH_PWD="$HOME/.ssh/pssh_pwd"
+        alias pssh="fc -A ; pwd > ${PSSH_PWD} ; ssh"
+
+        if [ -f "${PSSH_PWD}" -a x"${SSH_TTY}" != x ] ; then
+                dir=$(cat ${PSSH_PWD})
+                cd $dir
+                rm -f "${PSSH_PWD}"
+                export PWD="$dir"
+                exec ${SHELL:-/bin/zsh}
+                echo "##### failed pssh thingy" >&2
+        fi
+
+        _real_ssh=$(which ssh)
+        if [ -n "$_real_ssh" ] ; then
+                function ssh() {
+                        if ( echo "$@" | grep -q "^\([^-]* \)\?\<tau\>" ) ; then
+                                TERM=rxvt $_real_ssh $@
+                        else
+                                $_real_ssh $@
+                        fi
+                }
+        fi
+fi

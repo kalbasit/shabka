@@ -1,0 +1,64 @@
+#!/bin/zsh
+
+if [ "$PS1" ]; then
+
+        #
+        # http://www.jukie.net/~bart/blog/screen-ssh-agent
+        # http://lists.netisland.net/archives/plug/plug-2003-09/msg00133.html
+        #
+
+        # need the host name set sometimes
+        [ -z "$HOSTNAME" ] && export HOSTNAME=$(hostname)
+
+        # preserve the X environment variables
+        store_display() {
+                store_env
+        }
+
+        # read out the X environment variables
+        update_display() {
+                update_env
+        }
+
+        # WINDOW is set when we are in a screen session
+        if [ -n "$WINDOW" ] ; then
+                update_display
+        fi
+
+        # this will reset the ssh-auth-sock link and screen display file before we run screen
+        _screen_prep() {
+                if [ -n "$SSH_AUTH_SOCK" -a "$SSH_AUTH_SOCK" != "$HOME/.screen/ssh-auth-sock.$HOSTNAME" ] ; then
+                        ln -fs "$SSH_AUTH_SOCK" "$HOME/.screen/ssh-auth-sock.$HOSTNAME"
+                fi
+                store_display
+        }
+
+        REAL_SCREEN=$(/usr/bin/which screen)
+        #REAL_SCREEN=$(/usr/bin/which --skip-alias screen)
+
+        # wrapper fixing the screen -c bug
+        # http://savannah.gnu.org/bugs/?18890
+        screen() {
+                _screen_prep
+
+#               echo "screen..."
+                local max=$((${#argv}-1))
+#               echo "  max=$max"
+                for (( x=1 ; x<=$max ; x++ )) ; do
+                        local flag="${argv[$x]}"
+                        if [[ "x$flag" = "x-c" ]] ; then
+                                local y=$(($x+1))
+                                local word="${argv[$y]}"
+#                               echo "   [$x] $flag $word"
+                                if [[ "x${word[1]}" != 'x/' ]] ; then
+#                                       echo "       ... relative path: $word"
+                                        argv[$y]="$PWD/$word"
+                                fi
+                        fi
+                done
+
+                echo ${REAL_SCREEN} ${1+"$argv"}
+                ${REAL_SCREEN} ${1+"$@"}
+        }
+
+fi

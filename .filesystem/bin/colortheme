@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+#
+# vim:ft=sh:fenc=UTF-8:ts=4:sts=4:sw=4:expandtab:foldmethod=marker:foldlevel=0:
+#
+# $Id: colortheme 789 2008-03-24 13:02:06Z wael $
+# Original: http://frexx.de/xterm-256-notes/
+#           http://frexx.de/xterm-256-notes/data/colortable16.sh
+# Modified by Aaron Griffin
+
+# Bootstrap{{{
+bootstrap="`dirname $0`/.bootstrap"
+if [ -f "${bootstrap}" ]; then
+    source "${bootstrap}"
+else
+    echo "Cannot bootstrap"
+    exit 54
+fi
+unset bootstrap
+#}}}
+
+FGNAMES=(' black' '   red' ' green' 'yellow' '  blue' 'magnta' '  cyan' ' white')
+BGNAMES=('BLK' 'RED' 'GRN' 'YEL' 'BLU' 'MAG' 'CYN' 'WHT')
+for b in $(fseq 0 7); do
+    bg=$(($b+40))
+
+    echo -en "\033[0m ${BGNAMES[$b]} :: "
+    for f in $(fseq 0 7); do
+        echo -en "\033[${bg}m\033[$(($f+30))m ${FGNAMES[$f]} "
+    done
+
+    echo -en "\033[0m\n\033[0m     :: "
+    for f in $(fseq 0 7); do
+        echo -en "\033[${bg}m\033[1;$(($f+30))m ${FGNAMES[$f]} "
+    done
+    echo -e "\033[0m"
+
+    if [ "$b" -lt 7 ]; then
+        echo "     -------------------------------------------------------------------"
+    fi
+done
+
+echo
+echo

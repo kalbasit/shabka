@@ -1,0 +1,41 @@
+background        no
+update_interval        1.0
+double_buffer        yes
+
+use_xft			yes
+xftfont            Bitstream Vera Sans Mono:size=7
+xftalpha        0.8
+
+own_window        yes
+own_window_transparent    yes
+own_window_type        override
+own_window_hints    undecorated,below,sticky,skip_taskbar,skip_pager
+#on_bottom        yes
+
+minimum_size        300 50
+draw_shades        no
+draw_outline        yes
+draw_borders        yes
+draw_graph_borders    no
+stippled_borders    0
+border_margin        3
+border_width        0
+
+default_color        white
+default_shade_color    black
+default_outline_color    black
+
+alignment        bottom_left
+gap_x            795
+gap_y            165
+
+no_buffers        yes
+
+TEXT
+${alignc}File Systems${color #707070}
+${hr}
+${color white}/ ${alignr}${color #707070}${fs_used /}${color white}/${color #707070}${fs_size /} ${color white}${fs_bar 6,100 /}
+${color white}/home ${alignr}${color #707070}${fs_used /home}${color white}/${color #707070}${fs_size /home} ${color white}${fs_bar 6,100 /home}
+${color white}/media/whd160 ${alignr}${color #707070}${fs_used /media/whd160}${color white}/${color #707070}${fs_size /media/whd160} ${color white}${fs_bar 6,100 /media/whd160}
+${color white}/media/whd500 ${alignr}${color #707070}${fs_used /media/whd500}${color white}/${color #707070}${fs_size /media/whd500} ${color white}${fs_bar 6,100 /media/whd500}
+${color white}/media/whd750 ${alignr}${color #707070}${fs_used /media/whd750}${color white}/${color #707070}${fs_size /media/whd750} ${color white}${fs_bar 6,100 /media/whd750}

@@ -1,0 +1,70 @@
+!---------------------------------------------- file: .Xdefaults author: Chris
+!Borrrell http://borrellstudios.com/scripts/.Xdefaults modified: 24 Dec 09
+!vim:fenc=UTF-8:nu:ai:si:et:ts=4:sw=4:ft=xdefaults:
+!----------------------------------------------
+
+Xft.dpi:		    96
+Xft.antialias:		true
+Xft.hinting:		full
+Xft.hintstyle:		hintslight
+Xft.rgba:		    rgb
+
+URxvt.transparent:	true
+URxvt.inheritPixmap:true
+URxvt.imLocale:		en_AU.UTF-8
+URxvt.scrollBar:	false
+URxvt.saveLines:	32767
+URxvt.cursorBlink:	true
+URxvt.cursorColor:	#FFFFFF
+URxvt.color:		#FFFFFF
+URxvt.shading:		30
+URxvt.tintcolor:	#151515
+URxvt.depth:		24
+URxvt.visualBall:	true
+
+URxvt*font:		        xft:DejaVu Sans Mono:pixelsize=11:antialias=true:hinting=true
+URxvt*boldFont:		    xft:DejaVu Sans Mono:pixelsize=11:antialias=true:hinting=true:bold
+URxvt*italicFont:	    xft:DejaVu Sans Mono:pixelsize=11:antialias=true:hinting=true:italic
+URxvt*bolditalicFont:	xft:DejaVu Sans Mono:pixelsize=11:antialias=true:hinting=true:bold:italic
+
+URxvt*perl-ext-common:  default,matcher,clipboard
+URxvt*urlLauncher:      google-chrome
+URxvt.matcher.button:   1
+
+
+! http://github.com/DaisukeAramaki/configs/blob/master/.Xdefaults @ July 15 2009
+
+!Thayer Colors
+
+*background:    #262626
+*foreground:    #FFFFFF
+
+!black
+!*color0:    #1B1D1E
+!*color8:    #505354
+*color0:     #262729
+*color8:     #554444
+
+!red
+ *color1:    #F92672
+ *color9:    #FF669D
+!green
+ *color2:    #A6E22E
+ *color10:   #BEED5F
+!yellow
+ *color3:    #FD971F
+ *color11:   #E6DB74
+!blue
+! *color4:    #66D9EF
+! *color12:   #66D9EF
+ *color4:   #395573
+ *color12:  #447AB3
+!magenta
+ *color5:    #9E6FFE
+ *color13:   #9E6FFE
+!cyan
+ *color6:    #5E7175
+ *color14:   #A3BABF
+!white
+ *color7:    #CCCCC6
+ *color15:   #F8F8F2

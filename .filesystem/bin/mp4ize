@@ -1,0 +1,219 @@
+#!/usr/bin/ruby -w
+#
+# Copyright (C) 2007-2009 Thomer M. Gil [http://thomer.com/]
+#
+# Thanks to Brian Moore, Justin Payne, Matt Spitz, Martyn Parker,
+# Jean-Francois Macaud, Thomas Hannigan, Anisse Astier, Juanma Hernández,
+# Trung Huynh, and Mark Ryan for bugfixes and suggestions.
+#
+# Oct. 14, 2008: show percentage progress. add -t and -w flags.
+# Jan. 11, 2009: switch to bit/s bitrates for newer ffmpeg versions.
+#                add --iphone option.
+#                add -y option to ffmpeg (overwrite).
+# Jan. 20, 2009: don't exit early when processing multiple files.
+# Feb. 17, 2009: deal with "Invalid pixel aspect ratio" error.
+# Apr.  1, 2009: new --outdir parameter.
+# May  22, 2009: handle filenames with quotes and whitespace.
+# Oct   6, 2009: fix bug where we forget to read stderr
+# Nov.  5, 2009: fix -v, -t, and -w command line options
+#                removed bogus 'here' debug statement
+#
+# This program is free software. You may distribute it under the terms of
+# the GNU General Public License as published by the Free Software
+# Foundation, version 2.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+# Public License for more details.
+#
+# This program converts video files to mp4, suitable to be played on an iPod
+# or an iPhone. It is careful about maintaining the proper aspect ratio.
+#
+
+require 'getoptlong'
+require 'open3'
+
+# will automatically try with -vcoded libxvid, also.
+# will automatically try with -acodec libfaac, also.
+DEFAULT_ARGS = "-strict experimental -f mp4 -y -vcodec xvid -maxrate 1000 -qmin 3 -qmax 5 -g 300 -acodec aac"
+DEFAULT_BUFSIZE = 4096
+DEFAULT_AUDIO_BITRATE = 128 # will be automatically multiplied with 1024 for newer ffmpeg versions
+DEFAULT_VIDEO_BITRATE = 400 # will be automatically multiplied with 1024 for newer ffmpeg versions
+IPOD_WIDTH = 320.0
+IPOD_HEIGHT = 240.0
+IPHONE_WIDTH = 480.0
+IPHONE_HEIGHT = 320.0
+
+$options = {}
+opts = GetoptLong.new(*[
+  [ "--audio", "-a", GetoptLong::REQUIRED_ARGUMENT ],  # audio bitrate
+  [ "--help", "-h", GetoptLong::NO_ARGUMENT ],         # help
+  [ "--video", "-b", GetoptLong::REQUIRED_ARGUMENT ],  # video bitrate
+  [ "--verbose", "-v", GetoptLong::NO_ARGUMENT ],      # verbose
+  [ "--width", "-w", GetoptLong::REQUIRED_ARGUMENT ],  # override width
+  [ "--height", "-t", GetoptLong::REQUIRED_ARGUMENT ], # override height
+  [ "--iphone", "-i", GetoptLong::NO_ARGUMENT ],       # set width/height
+  [ "--outdir", "-o", GetoptLong::REQUIRED_ARGUMENT ], # dir where to write files
+])
+opts.each { |opt, arg| $options[opt] = arg }
+
+if $options['--help']
+  puts <<EOF
+mp4ize - encode videos to mp4 for an iPod or an iPhone
+
+Usage: mp4ize file1.avi [file2.mpg [file3.asf [...]]]
+
+
+Options:
+
+  -h/--help          : this help
+  -v/--verbose       : verbose
+
+  -a/--audio RATE    : override default audio bitrate (#{DEFAULT_AUDIO_BITRATE})
+  -b/--video RATE    : override default video bitrate (#{DEFAULT_VIDEO_BITRATE})
+
+  -w/--width WIDTH   : over default width (#{IPOD_WIDTH.to_i})
+  -t/--height HEIGHT : over default height (#{IPOD_HEIGHT.to_i})
+  -i/--iphone        : same as --width #{IPHONE_WIDTH.to_i} --height #{IPHONE_HEIGHT.to_i}
+
+  -o/--outdir O      : write files to given directory
+EOF
+  exit
+end
+
+# --iphone sets --width and --height
+if $options['--iphone']
+  if $options['--width'] || $options['--height']
+    warn "You can't use --iphone with --width or --height."
+    exit 1
+  else
+    $options['--width'] = $options['-w'] = IPHONE_WIDTH
+    $options['--height'] = $options['-t'] = IPHONE_HEIGHT
+  end
+end
+
+audio_bitrate = $options['--audio'] || DEFAULT_AUDIO_BITRATE
+video_bitrate = $options['--video'] || DEFAULT_VIDEO_BITRATE
+
+ARGV.each do |infile|
+  outfile = infile.dup
+  ext = File.extname(outfile)
+  outfile.sub!(/#{ext}$/, '.mp4')
+  if $options['--outdir']
+    if !File.directory?($options['--outdir'])
+      warn "#{$options['--outdir']} does not exist or is not a directory. exiting."
+      exit 1
+    end
+    outfile = File.join($options['--outdir'], File.basename(outfile))
+  end
+
+  # open the file to figure out the aspect ratio
+  duration, w, h = 0.0, nil, nil
+  Open3.popen3("/usr/bin/ffmpeg", "-i", infile) do |stdin, stdout, stderr|
+    [stdout, stderr].each do |io|
+      io.each_line do |line|
+        if line.match(/Video:.+ (\d+)x(\d+)/)
+          w, h = $1.to_f, $2.to_f
+        elsif line.match(/Duration:\s+(\d+):(\d+):(\d+)\.(\d+)/)
+          duration += $1.to_f * 3600
+          duration += $2.to_f * 60
+          duration += $3.to_f
+          duration += $4.to_f / 10
+        end
+      end
+    end
+  end
+
+  begin
+    aspect = w/h
+  rescue
+    puts "Couldn't figure out aspect ratio."
+    exit
+  end
+
+  user_width = $options['--width'] ? $options['--width'].to_i : IPOD_WIDTH
+  user_height = $options['--height'] ? $options['--height'].to_i : IPOD_HEIGHT
+
+  width = user_width.to_i
+  height = (width / aspect.to_f).to_i
+  height -= (height % 2)
+  pad = ((user_height - height.to_f) / 2.0).to_i
+  pad -= (pad % 2)
+  padarg1, padarg2 = "padtop", "padbottom"
+
+  # recalculate using the height as the baseline rather than the width
+  if pad < 0
+    height = user_height.to_i
+    width = (height * aspect.to_f).to_i
+    width -= (width % 2)
+    pad = ((user_width - width.to_f)/2.0).to_i
+    pad -= (pad % 2)
+    padarg1, padarg2 = "padleft", "padright"
+  end
+
+  File.unlink(outfile) if File.exists?(outfile)
+
+  # use %infile% and %outfile% and replace those after the split() so that we
+  # don't split() a filename that has spaces in it.
+  cmd = "/usr/bin/ffmpeg -i %infile% #{DEFAULT_ARGS} -bufsize #{DEFAULT_BUFSIZE} -s #{width}x#{height} -#{padarg1} #{pad} -#{padarg2} #{pad} -ab #{audio_bitrate} -b #{video_bitrate} %outfile%"
+  puts cmd if $options['--verbose']
+
+  # We could just call "system cmd" here, but we want the exit code of mp4ize
+  # to tell us whether the duration of the generated mp4 equals the duration
+  # of the original movie.  Exits with a non-zero code if the two are not
+  # within 1% of each other.
+
+  time = 0
+  STDOUT.sync = true
+
+  # try with -vcodec libxvid and -vcodec xvid
+  # try with -acodec libfaac and -acodec aac
+  catch(:done) do
+    5.times do
+      catch(:retry) do
+        puts "cmdline: #{cmd}" if $options['--verbose']
+        cmd_array = cmd.split(/\s+/)
+        cmd_array.collect! {|s| s.sub(/^%infile%$/, infile)}
+        cmd_array.collect! {|s| s.sub(/^%outfile%$/, outfile)}
+        Open3.popen3(*cmd_array) do |stdin, stdout, stderr|
+          io = select([stdout, stderr], nil, nil, 10)
+          2.times do |std| # both stdout and stderr
+            next if io[0][std].nil?
+            io[0][std].each_line("\r") do |line|
+              puts "the line is #{line}"
+              printf("\r%.2f%% | ", time / duration * 100.0)
+              print line
+              if line.match(/Invalid pixel aspect ratio/)
+                cmd.sub!("-s #{width}x#{height}", "-s #{width}x#{height} -aspect #{aspect}")
+                throw :retry
+              elsif line.match(/Unknown.*code.*xvid/)
+                cmd.sub!('-vcodec xvid', '-vcodec libxvid')
+                throw :retry
+              elsif line.match(/Unknown.*code.*aac/)
+                cmd.sub!('-acodec aac', '-acodec libfaac')
+                throw :retry
+              # newer ffmpeg versions want bit/s, not kbit/s.
+              elsif line.match(/The bitrate parameter is set too low/)
+                cmd.sub!(/-ab \d+/, "-ab #{audio_bitrate}k")
+                cmd.sub!(/-b \d+/, "-b #{video_bitrate}k")
+                cmd.sub!(/-bufsize \d+/, "-bufsize #{DEFAULT_BUFSIZE}k")
+                throw :retry
+              elsif line.match(/time=([^\s]+)/)
+                time = $1.to_f
+              end
+            end
+          end
+        end
+        throw :done
+      end
+    end
+  end
+
+  # return completeness of mp4 file
+  puts "expected duration: #{duration}" if $options['--verbose']
+  puts "encoded duration: #{time}" if $options['--verbose']
+  if ARGV.size == 1
+    exit((time <= duration * 1.01) && (time >= duration * 0.99))
+  end
+end

@@ -1,0 +1,132 @@
+#!/usr/bin/env python
+#   vim:ft=python:fenc=UTF-8:ts=4:sts=4:sw=4:expandtab:foldmethod=marker:foldlevel=0:
+#
+#   $Id: smsfix 1389 2008-12-03 20:13:15Z wael $
+
+"""
+###########################################################################
+#   Copyright (C) 2008 by SukkoPera                                       #
+#   software@sukkology.net                                                #
+#                                                                         #
+#   This program is free software; you can redistribute it and/or modify  #
+#   it under the terms of the GNU General Public License as published by  #
+#   the Free Software Foundation; either version 2 of the License, or     #
+#   (at your option) any later version.                                   #
+#                                                                         #
+#   This program is distributed in the hope that it will be useful,       #
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of        #
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         #
+#   GNU General Public License for more details.                          #
+#                                                                         #
+#   You should have received a copy of the GNU General Public License     #
+#   along with this program; if not, write to the                         #
+#   Free Software Foundation, Inc.,                                       #
+#   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
+###########################################################################
+
+This program can fix a "corrupt" SMS database on an iPhone, which always
+shows an unread message count of 1 (or possibly more).
+
+See the README for more information.
+"""
+
+from sqlite3 import dbapi2 as sqlite
+import platform
+
+def runningOniPhone ():
+	"""Returns true if we are running on an iPhone, false otherwise."""
+	return platform.machine ().lower ().startswith ("iphone")
+
+class SmsDB:
+	IPHONE_DB_PATH = '/var/mobile/Library/SMS/sms.db'
+	FIX_NONE = 0
+	FIX_DELETE = 1
+	FIX_MARKASREAD = 2
+
+	@staticmethod
+	def __ReadTrigger (flags):
+		"""reimplementation of an sqlite user defined function called by a trigger
+		on the messages table.
+
+		the trigger checks the message flags to see if a message has been read to
+		see if the counter of unread messages in another needs to be updated when
+		a message is deleted.
+
+		Taken from http://blog.eugeneoden.com/2008/07/28/script-to-delete-all-iphone-sms-messages/.
+		"""
+
+		# second bit is the "was read" flag
+		return (int (flags) & 0x02) >> 1
+
+        def __query (self, qcode, params = ()):
+		"""Executes a query on the database."""
+
+		cursor = self.dbConn.cursor ()
+		cursor.execute (qcode, params)
+		return cursor
+
+	def __init__ (self, database = None):
+		if database is None or database == "":
+			if runningOniPhone ():
+				database = self.IPHONE_DB_PATH
+			else:
+				raise Exception ("Database not specified")
+		self.dbConn = sqlite.connect (database)
+
+		# register the user-defined function used by delete trigger
+		self.dbConn.create_function ('read', 1, SmsDB.__ReadTrigger)
+
+	def __deleteMessage (self, smsId):
+		self.__query ("DELETE from `message` WHERE ROWID = ?", [smsId])
+		self.dbConn.commit ()
+
+	def __fixMessage (self, smsId):
+		self.__query ("UPDATE `message` SET flags = 2 WHERE ROWID = ?", [smsId])
+		self.__query ("UPDATE `message` SET replace = 0 WHERE ROWID = ?", [smsId])
+		self.dbConn.commit ()
+
+	def fixUnreadCount (self, fixMode = FIX_NONE):
+		query = ('SELECT * from `message` WHERE flags != 2 and flags != 3')
+		#query = ('SELECT * from `message` WHERE replace != 0')
+		crsr = self.__query (query)
+		n = 0
+		for row in crsr:
+			print "%04d -> %s" % (row[0], row[3])
+			if fixMode == self.FIX_DELETE:
+				self.__deleteMessage (row[0])
+			elif fixMode == self.FIX_MARKASREAD:
+				self.__fixMessage (row[0])
+			n += 1
+		return n
+
+if __name__ == '__main__':
+	from optparse import OptionParser
+	PROGRAM_VERSION = "0.1.0"
+
+	def main ():
+		cmdline_parser = OptionParser (usage = "Usage: %prog [options]", description = "Fix wrong unread SMS count on an iPhone", version = "%s" % PROGRAM_VERSION)
+		cmdline_parser.add_option ("-d", "--delete", action = "store_true", dest = "delete", help = "Delete problematic messages", default = None)
+		cmdline_parser.add_option ("-f", "--fix", action = "store_true", dest = "fix", help = "Fix problematic messages", default = None)
+		cmdline_parser.add_option ("-b", "--database", action = "store", type = "string", dest = "database", help = "Specify database file (Default: SMS DB if running on iPhone)", default = None)
+		(options, args) = cmdline_parser.parse_args ()
+
+		try:
+			smsdb = SmsDB (options.database)
+		except Exception, ex:
+			print "ERROR: %s" % ex.message
+			exit (1)
+
+		if options.fix:
+			n = smsdb.fixUnreadCount (SmsDB.FIX_MARKASREAD)
+		elif options.delete:
+			n = smsdb.fixUnreadCount (SmsDB.FIX_DELETE)
+		else:
+			n = smsdb.fixUnreadCount ()
+
+		if n <= 0:
+			print "No problematic message(s) found"
+		else:
+			print "%d problematic message(s) found" % n
+
+
+	main ()

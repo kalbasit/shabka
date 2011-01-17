@@ -1,0 +1,201 @@
+#!/bin/zsh
+#
+# vi-mode colour changing
+#   http://www.zsh.org/mla/users/2006/msg01196.html
+
+setopt prompt_subst
+autoload colors
+colors
+
+rst="%{%b%s%u$reset_color%}"
+bgc="%{%(?.$rst.%S)%}"
+
+function lprompt {
+    local col1 col2 ch1 ch2
+    col1="%{%b$fg[$2]%}"
+    col2="%{$4$fg[$3]%}"
+    ch1=$col1${1[1]}
+    ch2=$col1${1[2]}
+
+    local git_b git_s col_b col_s
+    git_b='$(get_git_prompt_info '%b')'
+    git_s='$(get_git_prompt_info '%s')'
+    col_b="%{$fg[green]%}"
+    col_s="%{$fg[red]%}"
+
+    local col3 vimode
+    vimode='${ZLE_VIMODE}'
+    col3='%{%S$fg[$ZLE_COLOR]%}'
+
+    PROMPT="\
+$bgc$ch1\
+$col_b$git_b\
+$col_s$git_s\
+$bgc$col2%B%1~%b\
+$ch2$rst \
+$col3$vimode$rst "
+}
+
+function _rprompt_dir {
+    local col_b col_s
+    git_p=${$(get_git_prompt_info '%p')%% }
+    col_p="%{$fg[yellow]%}"
+
+    local short
+    short="${PWD/$HOME/~}"
+
+    if [[ -z "$git_p" ]] ; then
+            echo -n "$short"
+            return
+    fi
+
+    local lead rest
+    lead=$git_p
+    rest=${${short#$lead}#/}
+
+    echo -n "$lead$col_p/$rest"
+}
+
+function rprompt {
+    local col1 col2 ch1 ch2
+    col1="%{$fg[$2]%}"
+    col2="%{$4$fg[$3]%}"
+    ch1=$col1${1[1]}
+    ch2=$col1${1[2]}
+
+    local _dir='$(_rprompt_dir)'
+
+    RPROMPT="\
+$_vimode\
+$rst$ch1\
+$col2%n@%m\
+$col1:\
+$col2%B$_dir%b\
+$ch2$rst"
+}
+
+if [ $UID -eq 0 ]; then
+    lprompt '<>' red red
+    rprompt '<>' red red
+else
+    case $HOST in
+        'phoenix')
+            lprompt '[]' bold blue
+            rprompt '()' yellow white
+            ;;
+        'r16270.ovh.net')
+            lprompt '[]' white green
+            rprompt '<>' red white
+            ;;
+        *)
+            if [ ${HOSTNAME#*.} = "nasreddine.info" ]; then
+                lprompt '[]' bold white
+                rprompt '()' bold white
+            else
+                lprompt '{}' white grey
+                rprompt '()' white grey
+            fi
+            ;;
+    esac
+fi
+
+if [ -n "$debian_chroot" ]; then
+    PROMPT="$bgc%{$fg[yellow]%}%B${debian_chroot}%b ${PROMPT}"
+fi
+
+# ------------------------------
+# handle vi NORMAL/INSERT mode change
+ZLE_VIMODE="I"
+ZLE_COLOR="green"
+if ( zle -l reset-prompt ) ; then
+        function zle-line-init zle-keymap-select {
+                ZLE_VIMODE="${${KEYMAP/vicmd/N}/(main|viins)/I}"
+                ZLE_COLOR="${${KEYMAP/vicmd/red}/(main|viins)/green}"
+                zle reset-prompt
+        }
+        zle -N zle-line-init
+        zle -N zle-keymap-select
+fi
+
+unset rst bgc
+
+# ------------------------------
+# http://dotfiles.org/~frogb/.zshrc
+
+case $TERM in
+    xterm* | rxvt* | urxvt*)
+        precmd() {
+                print -Pn "\e]0;%n@%m: %~\a"
+        }
+        preexec() {
+                #print -Pn "\e]0;$1\a"
+                print -Pn "\e]0;%n@%m: %~  $1\a"
+        }
+        ;;
+    screen*)
+        precmd() {
+                print -nR $'\033k'"zsh"$'\033'\\\
+
+                print -nR $'\033]0;'"zsh"$'\a'
+        }
+        preexec() {
+                update_env
+
+                print -nR $'\033k'"$1"$'\033'\\\
+
+                print -nR $'\033]0;'"$1"$'\a'
+        }
+        ;;
+esac
+
+
+
+
+
+#       # -n "$WINDOW" ... that doesn't work
+#       if [ "${TERM%-*}" = "screen" ]; then
+#           PROMPT="${PROMPT}%{kzsh\\%}"
+#
+#           preexec () {
+#               local CMD=${1[(wr)^(*=*|sudo|-*)]}
+#               echo -ne "\ek$CMD\e\\"
+#               update_display
+#           }
+#       fi
+#
+#       if [[ "$TERM" != "linux" ]]; then
+#
+#           # this updates title bar before prompt is printed
+#           precmd () {
+#             echo  -n \\033\]2\;$USER@$HOST:$_\\07;
+#           }
+#
+#           # this updates title bar while command is running
+#           xterm-accept-line () {
+#               local cmd=$BUFFER
+#               echo "=== $BUFFER ==="
+#               print -nr -- "]2;$cmd"
+#               zle .accept-line
+#           }
+#           zle -N accept-line xterm-accept-line
+#
+#       fi #TERM
+
+# ------------------------
+#       PS1=$'%{\e[34;1m%}%20>..>%1~%>>>%{\e[0m%}'
+#
+#       function zle-keymap-select {
+#               PS1=${${1/vicmd/$'%{\e[31;1m%}'}/(viins|main)/$'%{\e[34;1m%}'}${PS1#*%\}}
+#               zle reset-prompt
+#       }
+
+
+# ------------------------
+#       function zle-line-init zle-keymap-select {
+#               RPS1="${${KEYMAP/vicmd/-- NORMAL --}/(main|viins)/-- INSERT --}"
+#               RPS2=$RPS1
+#               RPS3=$RPS1
+#               RPS4=$RPS1
+#               zle reset-prompt
+#       }
+#       zle -N zle-line-init

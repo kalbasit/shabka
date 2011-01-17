@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+if [[ -z $1 ]]; then
+    exit 1
+fi
+
+temp=$(mktemp -d /tmp/initramfs.XXXXXX)
+if [ ! "${temp}" ]; then
+    exit 1
+fi
+
+mkdir -p $temp
+(cd $temp; gunzip -c $1 | cpio -H newc --extract --quiet --no-absolute-filenames --no-preserve-owner --dot)
+
+echo "Initramfs extracted to $temp"

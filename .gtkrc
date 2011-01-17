@@ -1,0 +1,10 @@
+#style "user-font"
+#    fontset = "-misc-fixed-*-*-*-*-12-*-*-*-*-*-iso10646-1"
+#
+#widget_class "*" style "user-font"
+
+style "default-text" {
+           fontset = "-*-helvetica-medium-r-normal--*-120-*-*-p-*-*-*"
+}
+
+class "GtkWidget" style "default-text"

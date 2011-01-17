@@ -1,0 +1,116 @@
+#!/usr/bin/env bash
+#
+#   vim:ft=sh:fenc=UTF-8:ts=4:sts=4:sw=4:expandtab:foldmethod=marker:foldlevel=0:
+#
+#   $Id: low-batt 789 2008-03-24 13:02:06Z wael $
+#
+#   Copyright (c) 2007 Wael Nasreddine <wael.nasreddine@gmail.com>
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
+#   USA.
+#
+
+####
+# Notes
+
+# Don't use the following variables in your script, they are reserved
+#   to the Functions uses
+# 'LOCK': This is a variable used by the functions 'lock_script' and
+#   'free_lock'
+# 'TempFiles': This is a variable containing a list of Files to remove
+#   when the script exits.
+# Make sure you always use $ARGS instead of $1, Note that $ARGS[0]
+#   correspond to $1, and $ARGS[1] correspong to $2 ...
+
+#
+####
+
+####
+# Options
+
+# Change this option to true to enable options parsing
+ParseOptions=false
+
+#
+####
+
+# Bootstrap{{{
+bootstrap="`dirname $0`/.bootstrap"
+if [ -f "${bootstrap}" ]; then
+    source "${bootstrap}"
+else
+    echo "Cannot bootstrap"
+    exit 54
+fi
+unset bootstrap
+#}}}
+
+####
+# Functions
+
+# If you want to define a specific help for this script
+#function help()
+#{
+#    # print_info goes here
+#}
+
+#
+####
+
+####
+# Main
+
+need_root
+
+LIMIT="100" ## Suspend if battery level drops below this (in mAh/mWh)
+SLEEP="60"  ## Seconds between each battery level check
+BAT="BAT1" ## Part of path: /proc/acpi/battery/BAT/
+HIBERNATE="/usr/sbin/hibernate" ## command used to suspend
+#HIBERNATE="echo 4 > /proc/acpi/sleep"
+
+while [ true ]; do
+  if [ -e "/proc/acpi/battery/$BAT/state" ]; then
+     PRESENT=$(/bin/sed -ne "/present:/{s/^present:[ ]*\([a-z]*\)$/\1/p;q}" /proc/acpi/battery/$BAT/state)
+     #echo $PRESENT
+     if [ "$PRESENT" = "yes" ]; then
+        STATE=$(/bin/sed -ne "/charging state:/{s/^charging state:[ ]*\([a-zA-Z]*\)$/\1/p;q}" /proc/acpi/battery/$BAT/state)
+        BATTERY=$(/bin/sed -ne "/remaining capacity:/{s/^remaining capacity:[ ]*\([0-9]*\) m[WA]h$/\1/p;q}" /proc/acpi/battery/$BAT/state)
+        #echo $BATTERY
+        #echo $STATE
+        if [ "$BATTERY" -lt "$LIMIT" ] && [ "$STATE" = "discharging" ]; then
+
+           ## Comment out the following line if you don't
+           ## want to log the event to system log:
+           logger "Battery at ${BATTERY} mWh. Suspending to disk."
+           #echo "Battery at ${BATTERY} mWh. Suspending to disk."
+
+           ## Suspend:
+           exec "$HIBERNATE"
+       fi
+     fi
+  fi
+#  echo "Checking lid state:"
+#  if [ -e "/proc/acpi/button/lid/LID0/state" ]; then
+#        LIDSTATE=$(/bin/sed -ne "/state:/{s/^state:[ ]*\([a-zA-Z]*\)$/\1/p;q}" /proc/acpi/button/lid/LID/state)
+#        echo $LIDSTATE
+#        if [ "$LIDSTATE" = "closed" ]; then
+#                exec "$HIBERNATE"
+#        fi
+#  fi
+  sleep ${SLEEP}s
+done
+
+#
+####

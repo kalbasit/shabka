@@ -1,0 +1,7 @@
+#!/bin/zsh
+
+export DEBEMAIL="${EMAIL}"
+
+alias i386='DEB_BUILD_ARCH=i386 linux32'
+alias dpkg-buildpackage="dpkg-buildpackage -k5BB44177 -rfakeroot -ISCCS -ICVS"
+alias dpkg-buildpackage32="i386 dpkg-buildpackage -k5BB44177 -rfakeroot -ISCCS -ICVS"

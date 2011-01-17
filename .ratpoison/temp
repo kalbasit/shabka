@@ -1,0 +1,2 @@
+#! /bin/bash
+echo "Temp: $( acpi -t -c | grep Thermal | awk '{print $4}' )C"

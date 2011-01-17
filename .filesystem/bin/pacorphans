@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+#
+# vim:ft=sh:fenc=UTF-8:ts=4:sts=4:sw=4:expandtab:foldmethod=marker:foldlevel=0:
+#
+# $Id: pacorphans 783 2008-03-24 12:20:18Z wael $
+
+allpkgs=`pacman -Q | cut -d' ' -f1`
+for i in $allpkgs; do
+    reqs=`pacman -Qi $i | grep "Required By" | cut -d: -f2`
+    if [ "$reqs" = " None" ]; then
+        echo -n "[$i] not required"
+        inst=`pacman -Qi $i | grep "Reason:" | cut -d: -f3`
+        if [ "$inst" != " explicitly installed" ]; then
+            echo -n " - implicitly installed"
+        fi
+        echo ""
+    fi
+done

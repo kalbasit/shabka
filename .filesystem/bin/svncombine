@@ -1,0 +1,245 @@
+#!/usr/bin/env bash
+#
+#   vim:ft=sh:fenc=UTF-8:ts=4:sts=4:sw=4:expandtab:foldmethod=marker:foldlevel=0:
+#
+#   $Id: svncombine 1193 2008-06-24 04:08:34Z wael $
+#
+#   Uses symlinks to merge the files contained in a set of subversion
+#   checkouts to into a single directory. Keeps track of when files are
+#   removed from the merged directories and removes the symlinks.
+#
+#   Only merges files that match the specified pattern.
+#
+#   Note that the directories given to merge should be paths that will work
+#   for symlink targets from the destination directory (so either full paths,
+#   or they should be right inside the destination directory).
+#
+#   Note that other files in the destination directory will be left as-is.
+#
+#   Copyright (c) 2007 Wael Nasreddine <wael.nasreddine@gmail.com>
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
+#   USA.
+#
+
+# Bootstrap{{{
+bootstrap="`dirname $0`/.bootstrap"
+if [ -f "${bootstrap}" ]; then
+    source "${bootstrap}"
+else
+    echo "Cannot bootstrap"
+    exit 54
+fi
+unset bootstrap
+#}}}
+
+####
+#
+
+function link_nonrec()
+{
+    [ "${#}" -lt "1" ] && return 1
+    local i
+
+    local Dir="${1}"
+    local Dest="${2}"
+
+    if isTrue "${DEBUG}"; then
+        print_info 2 "Working on ${Dir} to ${Dest}"
+    fi
+
+    # SVN ls Dir
+    local TempSVNls="$(mktemp /tmp/svncombine.link_nonrec.XXXXXXXXX)"
+    svn ls "${Dir}/" > "${TempSVNls}"
+
+    for i in $( cat "${TempSVNls}" ); do
+        local HardLink=false
+        local file="${Dir}/${i%%/}"
+        if [ ! -e "${file}" -o "${i}" = "svnfix" -o "${i}" = ".customfileperms" -o "${i}" = ".hardlinks" -o "${i}" = ".symlinks" -o "${i}" = ".ignorefiles" ]; then
+            continue
+        fi
+        if [ ! -d "${Dest}" ]; then
+            mkdir -p "${Dest}"
+        fi
+        if inArray "${Dest}/${i%%/}" ${HardLinks[@]} && [ ! -d "${file}" ]; then
+            HardLink=true
+        fi
+        if ! isTrue "${HardLink}" && [ -f "${Dest}/${i%%/}" -a ! -L "${Dest}/${i%%/}" ]; then
+           print_warning 3 "The file ${Dest}/${i%%/} already exists."
+           continue
+        fi
+        if inArray "${Dest}/${i%%/}" ${IgnoreFiles[@]}; then
+            print_warning 3 "Ignoring the file '${Dest}/${i%%/}."
+           continue
+        fi
+        Known_Files=(${Known_Files[@]} "${file}")
+        if isTrue "${DEBUG}"; then
+            print_info 3 "${file} -> ${Dest}/${i%%/}"
+        fi
+        if isTrue "${HardLink}"; then
+            ln -nf "${file}" "${Dest}/${i%%/}"
+        else
+            ln -snf "${file}" "${Dest}/${i%%/}"
+        fi
+    done
+    rm -f "${TempSVNls}"
+}
+
+function link_rec()
+{
+    [ "${#}" -lt "1" ] && return 1
+    local i
+
+    local Dir="${1}"
+    local Dest="${2}"
+
+    if isTrue "${DEBUG}"; then
+        print_info 2 "Working on ${Dir} to ${Dest}"
+    fi
+
+    # SVN ls Dir
+    local TempSVNls="$(mktemp /tmp/svncombine.link_rec.XXXXXXXXX)"
+    svn ls "${Dir}/" > "${TempSVNls}"
+
+    for i in ${Dir}/.??* ${Dir}/*; do
+        local HardLink=false
+        if [ "$(basename "${i}")" = "." -o "$(basename "${i}")" = ".." -o "$(basename "${i}")" = ".svn" -o "$(basename "${i}")" = "known" -o "$(basename "${i}")" = "svnfix" -o "$(basename "${i}")" = ".customfileperms" -o "$(basename "${i}")" = ".hardlinks" -o "$(basename "${i}")" = ".symlinks" -o "$(basename "${i}")" = ".ignorefiles" ]; then
+            continue
+        fi
+        # If we don't have a record of this file in svn in this folder then skip it.
+        if ! grep -q "$(basename "${i}")" "${TempSVNls}"; then
+            continue
+        fi
+        if [ ! -d "${Dest}" -a ! -L "${Dest}" ]; then
+            mkdir -p "${Dest}"
+        fi
+        if inArray "${Dest}/$(basename "${i}")" ${SymLinks[@]} && [ -d "${i}" ]; then
+            ln -snf "${i}" "${Dest}/$(basename "${i}")"
+            continue
+        fi
+        if [ -f "${i}" ]; then
+            if inArray "${Dest}/$(basename "${i}")" ${HardLinks[@]} && [ ! -d "${i}" ]; then
+                HardLink=true
+            fi
+            if ! isTrue "${HardLink}" && [ -f "${Dest}/$(basename "${i}")" -a ! -L "${Dest}/$(basename "${i}")" ]; then
+                print_warning 3 "The file ${Dest}/$(basename "${i}") already exists."
+                continue
+            fi
+            if inArray "${Dest}/$(basename "${i}")" ${IgnoreFiles[@]}; then
+                print_warning 3 "Ignoring the file '${Dest}/$(basename "${i}")'."
+                continue
+            fi
+            Known_Files=(${Known_Files[@]} "${i}")
+            if isTrue "${DEBUG}"; then
+                print_info 3 "${i} -> ${Dest}/$(basename "${i}")"
+            fi
+            if isTrue "${HardLink}"; then
+                ln -nf "${i}" "${Dest}/$(basename "${i}")"
+            else
+                ln -snf "${i}" "${Dest}/$(basename "${i}")"
+            fi
+            continue
+        elif [ -d "${i}" ]; then
+            link_rec "${i}" "${Dest}/$(basename "${i}")"
+            continue
+        fi
+    done
+    rm -f "${TempSVNls}"
+}
+
+#
+####
+
+if [ "${#}" -lt "2" ]; then
+    print_error 0 "USAGE: ${0} [-R] Dest dir [dir...]"
+    exit 1
+fi
+
+if [ "${1}" = "-R" ]; then
+    LinkRecursive=true
+    shift
+else
+    LinkRecursive=false
+fi
+
+Dest="${1}"
+shift
+
+# Make that sure Dest is an absolute path.
+Dest="$(cd "${Dest}" && pwd)"
+
+# Constructing the HardLinks array
+HardLinks=()
+if [ -f "${HOME}/.etc/.hardlinks" ]; then
+    TempFile="$(mktemp /tmp/svncombine.hardlinks.XXXXXX)"
+    grep -v "^[ \t]*#\|^$" "${HOME}/.etc/.hardlinks" | sed -e "s@#.*@@g" > "${TempFile}"
+    while read line; do
+        HardLinks=(${HardLinks[@]} "${Dest}/${line}")
+    done < "${TempFile}"
+    rm -f "${TempFile}"
+fi
+
+# Constructing the SymLinks array
+SymLinks=()
+if [ -f "${HOME}/.etc/.symlinks" ]; then
+    TempFile="$(mktemp /tmp/svncombine.symlinks.XXXXXX)"
+    grep -v "^[ \t]*#\|^$" "${HOME}/.etc/.symlinks" | sed -e "s@#.*@@g" > "${TempFile}"
+    while read line; do
+        SymLinks=(${SymLinks[@]} "${Dest}/${line}")
+    done < "${TempFile}"
+    rm -f "${TempFile}"
+fi
+
+# Constructing the IgnoreFiles array
+IgnoreFiles=()
+if [ -f "${HOME}/.etc/.ignorefiles" ]; then
+    TempFile="$(mktemp /tmp/svncombine.ignorefiles.XXXXXX)"
+    grep -v "^[ \t]*#\|^$" "${HOME}/.etc/.ignorefiles" | sed -e "s@#.*@@g" > "${TempFile}"
+    while read line; do
+        IgnoreFiles=(${IgnoreFiles[@]} "${Dest}/${line}")
+    done < "${TempFile}"
+    rm -f "${TempFile}"
+fi
+
+# Loop through folders...
+for i in ${@}; do
+    # Make sure dir is an absolute path
+    dir="$(cd "${i}" && pwd )"
+
+    # First remove non-existing links
+    if [ -f "${dir}/known" ]; then
+        for i in $(cat "${dir}/known"); do
+            if [ -L "${Dest}/${i}" -a ! -e "$(readlink "${Dest}/${i}")" ]; then
+                print_warning 2 "Removing inexistant ${Dest}/${i}"
+                rm -f "${Dest}/${i}"
+            fi
+        done
+    fi
+
+    # Now start link_rec.
+    Known_Files=()
+    rm -f "${dir}/known"
+
+    if isTrue "${LinkRecursive}"; then
+        link_rec "${dir}" "${Dest}"
+    else
+        link_nonrec "${dir}" "${Dest}"
+    fi
+
+    touch "${dir}/known"
+    for j in ${Known_Files[@]}; do
+        echo "$( echo ${j} | sed -e "s@${dir}/@@")" >> "${dir}/known"
+    done
+done

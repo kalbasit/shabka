@@ -1,0 +1,105 @@
+#!/usr/bin/env bash
+#
+#   vim:ft=sh:fenc=UTF-8:ts=4:sts=4:sw=4:expandtab:foldmethod=marker:foldlevel=0:
+#
+#   $Id$
+#
+#   Copyright (c) 2007 Wael Nasreddine <wael.nasreddine@gmail.com>
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
+#   USA.
+#
+
+####
+# Notes
+
+# Don't use the following variables in your script, they are reserved
+#   to the Functions uses
+# 'LOCK': This is a variable used by the functions 'lock_script' and
+#   'free_lock'
+# 'TempFiles': This is a variable containing a list of Files to remove
+#   when the script exits.
+# Make sure you always use $ARGS instead of $1, Note that $ARGS[0]
+#   correspond to $1, and $ARGS[1] correspong to $2 ...
+
+#
+####
+
+####
+# Options
+
+# Change this option to true to enable options parsing
+ParseOptions=false
+
+#
+####
+
+# Bootstrap{{{
+bootstrap="`dirname $0`/.bootstrap"
+if [ -f "${bootstrap}" ]; then
+    source "${bootstrap}"
+else
+    echo "Cannot bootstrap"
+    exit 54
+fi
+unset bootstrap
+#}}}
+
+####
+# Functions
+
+# If you want to define a specific help for this script
+#function help()
+#{
+#    # print_info goes here
+#}
+function stop_eggdrop()
+{
+    PID="${HOME}/.eggdrop/Cadmus/var/eggdrop.pid"
+    print_info 1 "Killing eggdrop with PID '${PID}'"
+    kill "$( cat "${PID}" )"
+    sleep 2
+    while ps aux | grep -v grep | grep eggdrop &> /dev/null; do
+        print_info 2 "eggdrop is still not dying trying to force it"
+        kill -9 "$( cat "${PID}" )"
+        sleep 2
+    done
+}
+
+function start_eggdrop()
+{
+    print_info 1 "Ok the process has died, turning it back on."
+    ${HOME}/.eggdrop/Cadmus/start
+}
+
+function restart_eggdrop()
+{
+    stop_eggdrop
+    start_eggdrop
+}
+
+#
+####
+
+####
+# Main
+
+print_info 0 "This script will hard restart the bot Cadmus designed to work and serve the sabayon linux irc rooms."
+print_info 1 "This script is to be used as a last resort."
+
+restart_eggdrop
+
+#
+####

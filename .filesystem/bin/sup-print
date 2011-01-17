@@ -1,0 +1,72 @@
+#! /usr/bin/env python
+
+'''
+sup-print:  A wrapper for muttprint designed to work with the sup email
+client.  It replaces binary attachments with a "# Attachment: filename (type)"
+line, uses w3m to convert html into text, and then pipes the modified email
+into muttprint.
+'''
+
+import email
+import sys
+from subprocess import Popen,PIPE
+
+# read in the email message from an arg or stdin
+def get_message():
+    try:
+        fp = open(sys.argv[1])
+    except IndexError:
+        fp = sys.stdin
+    return email.message_from_file(fp)
+
+# open a pipe to muttprint
+def open_muttprint():
+    try:
+        mutt = Popen("muttprint",shell=True,stdin=PIPE)
+    except OSError, e:
+        print "popen muttprint failed:", e
+        sys.exit()
+    return mutt
+
+# write all the headers to muttprint
+def write_header( msg, mutt ):
+    for key in msg.keys( ):
+        val = msg.__getitem__(key)
+        pipe_mutt( "%s: %s\n" % ( key, val ), mutt )
+    pipe_mutt( "\n", mutt ) # one extra newline in case text abuts headers
+
+# utility for piping text to mutt
+# useful for debugging, select sys.stdout instead of mutt.stdin
+def pipe_mutt( text, mutt ):
+    mutt.stdin.write(text)
+    #sys.stdout.write(text)
+
+# write all the text or html parts to muttprint
+# otherwise write an attachment notation
+def write_part( part, mutt ):
+    type = part.get_content_type()
+    if part.get_filename() is not None:
+        pipe_mutt("# Attachment: %s (%s)\n" % (part.get_filename(),type),mutt)
+    if type == "text/plain" or type == "text/html":
+        command = "w3m -dump -T %s" % type
+        try:
+            ch = Popen(command,shell=True,stdin=PIPE,stdout=PIPE,stderr=PIPE)
+        except OSError, e:
+            print >>sys.stderr, "Execution failed:", e
+            sys.exit()
+        ch.stdin.write(str(part.get_payload(decode=True)))
+        ch.stdin.close()
+        out = ch.stdout.read().strip()
+        err = ch.stderr.read()
+        ch.wait()
+        if len(err):
+            print "Error with w3m: %s" % err
+            sys.exit()
+        pipe_mutt( out + "\n", mutt )
+
+if __name__ == '__main__':
+    msg  = get_message( )
+    mutt = open_muttprint()
+    write_header( msg, mutt )
+    for part in msg.walk(): write_part( part, mutt )
+    mutt.stdin.close()

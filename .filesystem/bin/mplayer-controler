@@ -1,0 +1,85 @@
+#!/usr/bin/env bash
+#
+#   vim:ft=sh:fenc=UTF-8:ts=4:sts=4:sw=4:expandtab:foldmethod=marker:foldlevel=0:
+#
+#   $Id: mplayer-controler 783 2008-03-24 12:20:18Z wael $
+#
+#   Copyright (c) 2007 Wael Nasreddine <wael.nasreddine@gmail.com>
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
+#   USA.
+#
+
+handle_interrupt() {
+    echo ""
+    exit 0
+}
+
+Fifo="$HOME/.mplayer/input.fifo"
+
+clear
+echo -e "${FG_CYAN_B}Mplayer controler script, make sure mplayer takes .mplayer/input.fifo.${FG_CLEAR}"
+echo -e "${FG_YELLOW_B}p\t${FG_BLUE_B}Play/Pause${FG_CLEAR}"
+echo -e "${FG_YELLOW_B}6 and 4\t${FG_BLUE_B}Seek 10 seconds forward/backward.${FG_CLEAR}"
+echo -e "${FG_YELLOW_B}8 and 2\t${FG_BLUE_B}Seek 30 seconds forward/backward.${FG_CLEAR}"
+echo -e "${FG_YELLOW_B}7 and 1\t${FG_BLUE_B}Seek 300 seconds forward/backward.${FG_CLEAR}"
+echo -e "${FG_YELLOW_B}9 and 3\t${FG_BLUE_B}Seek 600 seconds forward/backward.${FG_CLEAR}"
+echo -e "${FG_YELLOW_B}.\t${FG_BLUE_B}Forward frame by frame.${FG_CLEAR}"
+echo -e "${FG_YELLOW_B}* and /\t${FG_BLUE_B}Volume up/down.${FG_CLEAR}"
+echo -e "${FG_YELLOW_B}m\t${FG_BLUE_B}Mute/Unmute Sound.${FG_CLEAR}"
+echo -e "${FG_YELLOW_B}v\t${FG_BLUE_B}Turn Subtitles on/off.${FG_CLEAR}"
+echo -e "${FG_YELLOW_B}b\t${FG_BLUE_B}Cycle through available subtitles.${FG_CLEAR}"
+echo -e "${FG_YELLOW_B}z and x\t${FG_BLUE_B}Substract/Add 100ms delay from subs.${FG_CLEAR}"
+echo -e "${FG_YELLOW_B}f\t${FG_BLUE_B}Fullscreen.${FG_CLEAR}"
+echo -e "${FG_YELLOW_B}o\t${FG_BLUE_B}Toggle osd.${FG_CLEAR}"
+echo -e "${FG_YELLOW_B}< and >\t${FG_BLUE_B}Previous/Next in playlist.${FG_CLEAR}"
+echo -e "${FG_YELLOW_B}q\t${FG_BLUE_B}Quit Mplayer.${FG_CLEAR}"
+echo -e "${FG_YELLOW_B}Ctrl+c\t${FG_BLUE_B}Exit this script.${FG_CLEAR}"
+echo
+
+#trap handle_interrupt 2 15
+
+while true; do
+    unset key action
+    read -sn 1 key
+    case "${key}" in
+        "p") action="pause" ;;
+        "6") action="seek +10" ;;
+        "4") action="seek -10" ;;
+        "8") action="seek +30" ;;
+        "2") action="seek -30" ;;
+        "7") action="seek +300" ;;
+        "1") action="seek -300" ;;
+        "9") action="seek +600" ;;
+        "3") action="seek -600" ;;
+        ".") action="frame_step" ;;
+        "*") action="volume 1" ;;
+        "/") action="volume -1" ;;
+        "m") action="mute" ;;
+        "v") action="sub_visibility" ;;
+        "b") action="sub_select" ;;
+        "z") action="sub_delay -0.1" ;;
+        "x") action="sub_delay +0.1" ;;
+        "f") action="vo_fullscreen" ;;
+        "o") action="osd" ;;
+        "<") action="pt_step -1" ;;
+        ">") action="pt_step 1" ;;
+        "q") action="quit" ;;
+        "*") continue ;;
+    esac
+    if [ ! -z "${action}" ]; then
+        ( echo "${action}" > "${Fifo}" &) &> /dev/null
+    fi
+done

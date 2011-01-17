@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+#
+#   vim:ft=sh:fenc=UTF-8:ts=4:sts=4:sw=4:expandtab:foldmethod=marker:foldlevel=0:
+#
+#   $Id: TrainSpamDB 789 2008-03-24 13:02:06Z wael $
+#
+#   Copyright (c) 2007 Wael Nasreddine <wael.nasreddine@gmail.com>
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
+#   USA.
+#
+
+# Bootstrap{{{
+bootstrap="`dirname $0`/.bootstrap"
+if [ -f "${bootstrap}" ]; then
+    source "${bootstrap}"
+else
+    echo "Cannot bootstrap"
+    exit 54
+fi
+unset bootstrap
+#}}}
+
+HAMMIEDB="${HOME}/.hammie.db"
+HAMFOLDER="${HOME}/.mail/.Spam.Ham"
+SPAMFOLDER="${HOME}/.mail/.Spam.Missed"
+
+# Determine which spam protection is in use.
+UsedProgram="$(clean_comments "${HOME}/.procmailrc" | grep "rc\.spam" | sed -e "s@.*rc\.@@g")"
+
+print_info 0 "Training spamDB."
+
+case "${UsedProgram}" in
+    "spambayes")
+        print_info 2 "Spambayes detected."
+        sb_mboxtrain.py -q -r -n -d "${HAMMIEDB}" -g "${HAMFOLDER}" -s "${SPAMFOLDER}"
+        ;;
+    "spamassassin")
+        print_info 2 "Spamassassin detected."
+        for i in cur new; do
+            sa-learn --spam "${SPAMFOLDER}/${i}"
+            rm -f "${SPAMFOLDER}/${i}"/*
+            sa-learn --ham "${HAMFOLDER}/${i}"
+            rm -f "${HAMFOLDER}/${i}"/*
+        done
+        ;;
+    *)
+        print_error 0 "I couldn't detect which program is in use, aborting..."
+        exit 1
+        ;;
+esac

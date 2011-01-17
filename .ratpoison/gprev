@@ -1,0 +1,11 @@
+#!/bin/bash
+#
+# Copyright (C) 2006 Kolesnikov Vova
+
+var=group`ratpoison -c groups| grep '^[[:digit:]]\*'|cut -d '*' -f1`
+eval ${var}='`ratpoison -c fdump`'
+ratpoison -c "setenv ${var} ${!var}"
+ratpoison -c gprev
+var=group`ratpoison -c groups| grep '^[[:digit:]]\*'|cut -d '*' -f1`
+eval ${var}='`ratpoison -c "getenv ${var}"`'
+ratpoison -c "frestore ${!var}"

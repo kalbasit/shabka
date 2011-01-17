@@ -1,0 +1,4 @@
+#!/bin/zsh
+if which  xrem >/dev/null 2>&1 ; then
+        rem | grep -v '^No reminders.$' || true
+fi

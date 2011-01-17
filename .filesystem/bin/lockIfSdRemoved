@@ -1,0 +1,135 @@
+#!/usr/bin/env bash
+#
+#   vim:ft=sh:fenc=UTF-8:ts=4:sts=4:sw=4:expandtab:foldmethod=marker:foldlevel=0:
+#
+#   $Id$
+#
+#   Copyright (c) 2007 Wael Nasreddine <wael.nasreddine@gmail.com>
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
+#   USA.
+#
+
+####
+# Notes
+
+# Don't use the following variables in your script, they are reserved
+#   to the Functions uses
+# 'LOCK': This is a variable used by the functions 'lock_script' and
+#   'free_lock'
+# 'TempFiles': This is a variable containing a list of Files to remove
+#   when the script exits.
+# Make sure you always use $ARGS instead of $1, Note that $ARGS[0]
+#   correspond to $1, and $ARGS[1] correspong to $2 ...
+
+#
+####
+
+####
+# Options
+
+# Change this option to true to enable options parsing
+ParseOptions=false
+
+#
+####
+
+# Bootstrap{{{
+bootstrap="`dirname $0`/.bootstrap"
+if [ -f "${bootstrap}" ]; then
+    source "${bootstrap}"
+else
+    echo "Cannot bootstrap"
+    exit 54
+fi
+unset bootstrap
+#}}}
+
+####
+# Functions
+
+# If you want to define a specific help for this script
+#function help()
+#{
+#    # print_info goes here
+#}
+
+function lockX()
+{
+    # Check if a lock is already running
+    if ps -edf | grep -v grep | grep -q 'xlock -mode matrix'; then
+        return
+    fi
+
+    if RunningX; then
+        echo "Starting xlock"
+        ( DISPLAY=:0 su -l wael -c '/usr/bin/xlock -mode matrix' & ) &> /dev/null
+    fi
+}
+
+function unlockX()
+{
+    killall -9 xlock > /dev/null 2>&1
+}
+
+#
+####
+
+####
+# Main
+
+need_root ${@}
+
+DEVICE=/dev/mmcblk0
+OFFSET=131072
+SIZE=5120
+SECRET_FILE=${HOME}/.secret.key
+PID_FILE=/tmp/xlock.pid
+SHA512="db5fddfa816dcf7620c13816337e236042103d58e01ec7bb05c6ae61e0a51eabdf7605f16f6681fe8a988823f2ff7f6361c9bd845dc0d1f87bb098463209b5d9"
+
+# Make sure the sd modules
+for i in sdhci sdhci_pci mmc_core mmc_block; do
+    modprobe ${i} > /dev/null 2>&1
+done
+
+# Start the loop
+(
+    while true; do
+        if [ ! -e "${DEVICE}" ]; then
+            # The device isn't event here lock!!
+            lockX
+        fi
+
+        TEMP=`mktemp /tmp/secret.XXXX`
+
+        # Read the secret key
+        dd if=${DEVICE} of=${TEMP} bs=1 skip=${OFFSET} count=${SIZE} > /dev/null 2>&1
+
+        NEW_SHA=`sha512sum ${TEMP} | awk '{print $1}'`
+
+        shred --remove --zero ${TEMP}
+
+        if [ "${SHA512}" != "${NEW_SHA}" ]; then
+            lockX
+        else
+            unlockX
+        fi
+
+        sleep 10
+    done
+) &
+
+#
+####

@@ -1,0 +1,18 @@
+#!/bin/bash
+# a helper script to update my awesome mocp widget
+#
+# this script accepts key value pairs and passes them to the mocp module via awesome-client
+#
+# uncomment below for debugging output
+# echo "mochg called: " $(date) " args: $@"
+. $HOME/.dbus_session_bus_address
+if [ "$#" -lt "2" ] ; then
+  # echo 'setting stop' >> ~/mocdbg
+  echo 'mocp.update("state","STOP")' | awesome-client
+else
+  while [ "$#" -ge "2" ] ; do
+    # echo $1 $2 >> ~/mocdbg
+    echo 'mocp.update("'$1'","'$2'")' | awesome-client
+    shift 2
+  done
+fi

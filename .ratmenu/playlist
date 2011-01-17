@@ -1,0 +1,9 @@
+#!/bin/bash
+#
+# Copyright (C) 2006 Kolesnikov Vova
+
+ratmenu -label playlist \
+-back   "~/.ratmenu/player" \
+next "mpc next;~/.ratmenu/playlist" previous "mpc prev;~/.ratmenu/playlist" \
+browse "~/.ratmenu/browse"
+#add "~/.ratmenu/add" TODO :))

@@ -1,0 +1,73 @@
+background yes
+use_xft yes
+xftfont Bitstream Vera Sans Mono:size=10
+#xftalpha 0.8
+mail_spool $HOME/.mail
+update_interval 5.0
+total_run_times 0
+own_window no
+own_window_transparent no
+own_window_colour black
+double_buffer yes
+minimum_size 250 5
+draw_shades yes
+draw_outline no
+draw_borders no
+border_margin 4
+border_width 1
+default_color white
+default_shade_color white
+default_outline_color black
+alignment top_right
+#gap_x 765
+gap_x 22
+gap_y 32
+no_buffers yes
+uppercase no
+cpu_avg_samples 2
+net_avg_samples 2
+override_utf8_locale no
+use_spacer no
+
+#${color lightgrey}Temperature: $color${acpitemp}C  ${color lightgrey}Power: $acpiacadapter (${battery BAT0})
+#$stippled_hr
+
+TEXT
+$nodename - $sysname $kernel on $machine
+$stippled_hr
+${color grey}${time %A - %B %d, %l:%M:%s%p}
+${color lightgrey}Uptime:$color $uptime ${color lightgrey}- Load:$color $loadavg
+$stippled_hr
+${color lightgrey}CPU Usage:${color #cc2222} $cpu% ${cpubar}
+$color${cpugraph 00ff00 ff0000}
+$stippled_hr
+${color lightgrey}RAM:$color $mem/$memmax ($memperc%) ${membar}
+${color lightgrey}Swap:$color $swap/$swapmax ($swapperc%) ${swapbar}
+${color lightgrey}Procs:$color $processes ($running_processes)
+$stippled_hr
+${color lightgrey}Networking: ${addr eth0} (${linkstatus eth0}%)
+${color green}DN: ${downspeedgraph eth0 32,200 00ff00 ffffff}
+${color red}UP: ${upspeedgraph eth0 32,200 ffff00 ffffff}
+$stippled_hr
+${color lightgrey}File systems:
+ /     $color${fs_used /}/${fs_size /} ${fs_bar /}
+ /home $color${fs_used /home}/${fs_size /home} ${fs_bar /home}
+ /media/whd160 $color${fs_used /media/whd160}/${fs_size /media/whd160} ${fs_bar /media/whd160}
+ /media/whd500 $color${fs_used /media/whd500}/${fs_size /media/whd500} ${fs_bar /media/whd500}
+$stippled_hr
+${color}CPU Usage         PID     CPU%
+${color orange} ${top name 1} ${top pid 1} ${top cpu 1}
+${color lightgrey} ${top name 2} ${top pid 2} ${top cpu 2}
+${color lightgrey} ${top name 3} ${top pid 3} ${top cpu 3}
+${color lightgrey} ${top name 4} ${top pid 4} ${top cpu 4}
+${color lightgrey} ${top name 5} ${top pid 5} ${top cpu 5}
+$stippled_hr
+${color}Mem Usage         PID     MEM%
+${color orange} ${top_mem name 1} ${top_mem pid 1} ${top_mem mem 1}
+${color lightgrey} ${top_mem name 2} ${top_mem pid 2} ${top_mem mem 2}
+${color lightgrey} ${top_mem name 3} ${top_mem pid 3} ${top_mem mem 3}
+${color lightgrey} ${top_mem name 4} ${top_mem pid 4} ${top_mem mem 4}
+${color lightgrey} ${top_mem name 5} ${top_mem pid 5} ${top_mem mem 5}
+$stippled_hr
+${color lightgrey}Local Mail:
+${color orange}${exec newmail}

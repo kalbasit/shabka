@@ -1,0 +1,171 @@
+#!/usr/bin/env bash
+#
+#   vim:ft=sh:fenc=UTF-8:ts=4:sts=4:sw=4:expandtab:foldmethod=marker:foldlevel=0:
+#
+#   $Id: svnfix 1334 2008-08-10 14:25:39Z wael $
+#
+#   I run this manually after checking out or updating subversion.
+#   It fixes various things up that cannot be handled by subversion.
+#
+#   Copyright (c) 2007 Wael Nasreddine <wael.nasreddine@gmail.com>
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
+#   USA.
+#
+
+# Bootstrap{{{
+bootstrap="`dirname $0`/.bootstrap"
+if [ -f "${bootstrap}" ]; then
+    source "${bootstrap}"
+else
+    echo "Cannot bootstrap"
+    exit 54
+fi
+unset bootstrap
+#}}}
+
+# Go to $HOME
+cd "${HOME}"
+
+####
+#
+
+function svn_combine()
+{
+    [ "${#}" -eq "0" ] && return 1
+    local Dir="${@}"
+    if [ -x "${Dir}/svnfix" ]; then
+        DEBUG="${DEBUG}" ${Dir}/svnfix
+    fi
+}
+
+function svnfix_global()
+{
+    [ "${#}" -eq "0" ] && return 1
+    local Folders="${@}"
+    local globdir
+    for globdir in ${Folders[@]}; do
+        if [ -d ".${globdir}" ]; then
+            print_info 0 "Working on '.${globdir}'..."
+            svn_combine ".${globdir}"
+        fi
+    done
+}
+
+function svnfix_normal()
+{
+    [ "${#}" -eq "0" ] && return 1
+    local Folders="${@}"
+    local dir subdir
+    for dir in ${Folders[@]}; do
+        if [ -d ".${dir}" ]; then
+            # If it's one of the Global folders, then skip it.
+            if ! inArray ".${dir}" ${GlobalFolders[@]}; then
+                print_info 0 "Working on '.${dir}'..."
+                svn_combine ".${dir}"
+            fi
+        fi
+        if ls -d .${dir}.* &> /dev/null; then
+            for subdir in .${dir}.*; do
+                if ! inArray "${subdir}" ${GlobalFolders[@]}; then
+                    print_info 0 "Working on '${subdir}'..."
+                    svn_combine "${subdir}"
+                fi
+            done
+        fi
+    done
+}
+
+#
+####
+
+if [ "${1}" = "-d" ]; then
+    DEBUG=true
+    shift
+else
+    DEGUG=false
+fi
+
+# If it's a new checkout, I won't have $HOME/.ssh nor the private id_rsa(s)
+# so I have to fix this.
+if [ -d "${HOME}/.ssh" -a ! -L "${HOME}/.ssh" ]; then
+    # This should be a symlink not a folder, fix it
+    print_warning 0 "The folder '${HOME}/.ssh', is not a symlink, you'll find the contents in '${HOME}/tmp/ssh'"
+    mv "${HOME}/.ssh" "${HOME}/tmp/ssh"
+fi
+if [ ! -L "${HOME}/.ssh" ]; then
+    # The symlink .ssh does not exist.
+    print_warning 0 "The symlink '${HOME}/.ssh' does not exist, creating it..."
+    ln -snf "${HOME}/.etc/.ssh" "${HOME}/.ssh"
+fi
+if [ ! -e "${HOME}/.ssh/id_rsa" ]; then
+    # The id_rsa file does not exist.
+    print_warning 0 "The file '${HOME}/.ssh/id_rsa' does not exist. fixing it..."
+    if [ -e "${HOME}/.hide.etc.plus/.ssh/id_rsa" ]; then
+        ln -snf "${HOME}/.hide.etc.plus/.ssh/id_rsa" "${HOME}/.ssh/id_rsa"
+        chmod 600 "${HOME}/.hide.etc.plus/.ssh/id_rsa"
+    else
+        print_warning 2 "The file '${HOME}/.hide.etc.plus/.ssh/id_rsa' does not exist, skipping..."
+    fi
+fi
+if [ ! -e "${HOME}/.ssh/id_rsa.subversion" ]; then
+    # The id_rsa.subversion file does not exist.
+    print_warning 0 "The file '${HOME}/.ssh/id_rsa.subversion' does not exist. fixing it..."
+    if [ -e "${HOME}/.hide.etc.plus/.ssh/id_rsa.subversion" ]; then
+        ln -snf "${HOME}/.hide.etc.plus/.ssh/id_rsa.subversion" "${HOME}/.ssh/id_rsa.subversion"
+        chmod 600 "${HOME}/.hide.etc.plus/.ssh/id_rsa.subversion"
+    else
+        print_warning 2 "The file '${HOME}/.hide.etc.plus/.ssh/id_rsa.subversion' does not exist, skipping..."
+    fi
+fi
+if [ -z "${SVN_SSH}" ]; then
+    print_warning 0 "SVN_SSH envirement variable is not. fixing it..."
+    export SVN_SSH="ssh -i ${HOME}/.ssh/id_rsa.subversion"
+fi
+
+# This holds the global folders.
+GlobalFolders=".etc .etc.plus .hide.etc.plus"
+
+# First start with the global etc folders.
+svnfix_global "etc" "etc.plus"
+
+# The start with the normal etc folders
+svnfix_normal "etc"
+
+# Now do the same with hide folders
+svnfix_global "hide" "hide.etc.plus"
+svnfix_normal "hide"
+
+# Check for .svnfix
+if [ -x ".svnfix" ]; then
+    DEBUG="${DEBUG}" ./.svnfix
+fi
+
+# Custom permissions
+print_info 0 "Applying custom permissions... " false
+if [ "${HOME}/.etc/.customfileperms" ]; then
+    TempFile="$(mktemp /tmp/svnfix.customfileperms.XXXXXX)"
+    grep -v "^#\|^$" "${HOME}/.etc/.customfileperms" | sed -e "s@#.*@@g" > "${TempFile}"
+    while read line; do
+        perm="$(echo "${line}" | cut -d':' -f1)"
+        file="$(echo "${line}" | cut -d':' -f2)"
+        if [ -f "${HOME}/${file}" -o -d "${HOME}/${file}" ]; then
+            chmod "${perm}" "${HOME}/${file}"
+        fi
+        unset perm file
+    done < "${TempFile}"
+    rm -f "${TempFile}"
+fi
+print_info 0 "Done." true false

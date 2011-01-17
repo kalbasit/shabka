@@ -1,0 +1,151 @@
+#!/usr/bin/env bash
+#
+#   vim:ft=sh:fenc=UTF-8:ts=4:sts=4:sw=4:expandtab:foldmethod=marker:foldlevel=0:
+#
+#   $Id: storage 789 2008-03-24 13:02:06Z wael $
+#
+#   Copyright (c) 2007 Wael Nasreddine <wael.nasreddine@gmail.com>
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
+#   USA.
+#
+
+# Bootstrap{{{
+bootstrap="`dirname $0`/.bootstrap"
+if [ -f "${bootstrap}" ]; then
+    source "${bootstrap}"
+else
+    echo "Cannot bootstrap"
+    exit 54
+fi
+unset bootstrap
+#}}}
+
+###
+# Functions
+
+function interrupt()
+{
+    free_lock
+    exit 130
+}
+
+#
+###
+
+# We need root!
+need_root
+
+LOCK="/tmp/storage.script"
+lock_file
+
+if [ ! -e "${HOME}/.storage.conf" ]; then
+    die "'${HOME}/.storage.conf' does not exist, Aborting..."
+else
+    source "${HOME}/.storage.conf"
+fi
+
+# Clean up, fix permission on storage Hard Drives
+for storage in $( ls -d /media/[wW][hH][dD]* /media/[wW][mM][cC]* /media/[wW][uU][sS][bB]* /mnt/storage/wael 2> /dev/null ); do
+    if [ "${storage}" = "/media/whd20" ]; then
+        # Skip it.
+        continue
+    fi
+    Name="$( basename "${storage}" )"
+    Name="$(echo "${Name}" | sed -e 's@\(^[a-zA-Z]\).*@\1@g' | tr 'a-z' 'A-Z')$(echo "${Name}" | sed -e 's@^[a-zA-Z]\(.*\)@\1@g')"
+    print_info 0 "Working on ${Name}."
+
+    # First let's check if it's already mounted...
+    if ! grep -q "${storage}" /proc/mounts; then
+        # Oops it is not mounted... move on
+        print_warning 2 "${Name} is not mounted, Skipping..."
+        continue
+    fi
+
+    # Removing Thumbs.db files
+    print_info 2 "Removing Thumbs.db files... " false
+    find "${storage}" -name "Thumbs.db" -exec rm -f {} \;
+    print_info 2 "Done." true false
+
+    # Setting the user to wael and the group to storage
+    print_info 2 "Changing ownerchip of all files... " false
+    chown -R wael:storage "${storage}"
+    print_info 2 "Done." true false
+
+    # Fixing permissions
+    print_info 2 "Fixing permissions on all folders/files... " false
+    find "${storage}" \( -type d -a ! -perm 750 \) -exec chmod 750 {} \;
+    find "${storage}" \( -type f -a ! -perm 640 \) -exec chmod 640 {} \;
+    print_info 2 "Done." true false
+
+    # Fixing the permission of the trash folder (Thunar)
+    print_info 2 "Fixing permissions on trash folders... " false
+    for Trash in $( find "${storage}" -mindepth 1 -maxdepth 1 -name '.Trash-*' -type d ); do
+        uid="$( echo "${Trash}" | sed -e "s@.*\.Trash-\([0-9]*\)@\1@g" )"
+        chown -R ${uid}:${uid} ${Trash}
+        chmod -R 700 ${Trash}
+    done
+    print_info 2 "Done." true false
+done
+unset storage Name Trash
+
+# Ok External Hard disks are done, Working on Internal /home now
+print_info 0 "Working on /home"
+
+print_info 2 "Applying custom ownership... "
+for i in ${CustomOwn[@]}; do
+    user="$(echo "${i}" | cut -d':' -f1)"
+    recursive="$(echo "${i}" | cut -d':' -f2)"
+    dir="$(echo "${i}" | cut -d':' -f3)"
+    print_info 3 "Proceeding the folder '${dir}' with the owner '${user}'..."
+    if isTrue "${recursive}"; then
+        find -O3 "${dir}" \( ! -user "${user}" -a ! -type l \) -exec chown "${user}" {} \; 2> /dev/null
+    else
+        chown "${user}" "${dir}"
+    fi
+done
+for i in ${CustomGrp[@]}; do
+    grp="$(echo "${i}" | cut -d':' -f1)"
+    recursive="$(echo "${i}" | cut -d':' -f2)"
+    dir="$(echo "${i}" | cut -d':' -f3)"
+    print_info 3 "Proceeding the folder '${dir}' with the group '${grp}'..."
+    if isTrue "${recursive}"; then
+        find -O3 "${dir}" \( ! -group "${grp}" -a ! -type l \) -exec chgrp "${grp}" {} \; 2> /dev/null
+    else
+        chgrp "${grp}" "${dir}"
+    fi
+done
+
+print_info 2 "Applying custom permissons... "
+for i in ${CustomFilPerm[@]}; do
+    mod="$(echo "${i}" | cut -d':' -f1)"
+    dir="$(echo "${i}" | cut -d':' -f2)"
+    print_info 3 "Proceeding the folder '${dir}'..."
+    find ${dir} \( -type f -a ! -perm ${mod} \) -exec chmod ${mod} {} \;
+done
+for i in ${CustomDirPerm[@]}; do
+    mod="$(echo "${i}" | cut -d':' -f1)"
+    dir="$(echo "${i}" | cut -d':' -f2)"
+    print_info 3 "Proceeding the folder '${dir}'..."
+    find ${dir} \( -type d -a ! -perm ${mod} \) -exec chmod ${mod} {} \;
+done
+for i in ${CustomSinglePerm[@]}; do
+    mod="$(echo "${i}" | cut -d':' -f1)"
+    dir="$(echo "${i}" | cut -d':' -f2)"
+    print_info 3 "Proceeding the folder '${dir}'..."
+    chmod "${mod}" "${dir}"
+done
+
+free_lock

@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+#
+# vim:ft=sh:fenc=UTF-8:ts=4:sts=4:sw=4:expandtab:foldmethod=marker:foldlevel=0:
+#
+# $Id: abook_wrapper 783 2008-03-24 12:20:18Z wael $
+#
+# Simple wrapper script for calling abook/mail2abook.py/abook2mutt.py
+#
+# Usage: abook_wrapper [--mail|--update]"
+#
+#    --mail:   Create a new abook entry from the mail on standard input
+#              instead of running abook itself.
+#
+#    --update: Update mutt's config file from abook's database.
+#
+# Thanks to Jean-Sebastien Morisset <jsmoriss@mvlan.net> for this.
+
+
+MUTTCFG="$HOME/.mutt/abook"
+ADDRESSBOOK="$HOME/.abook/addressbook"
+ABOOK2MUTT="/usr/bin/abook2mutt -a -p -d -c cyan"
+MAIL2ABOOK="/usr/bin/mail2abook"
+ABOOK="abook"
+
+# Comment out if you're not using SpamAssassin
+#SPAMASSASSIN="$HOME/.spamassassin/user_prefs"
+
+# Comment out if you don't want a white-list
+#WHITELIST="-w $HOME/.whitelist"
+###
+
+TMP=/tmp/abook_wrapper.$$.tmp
+
+case "$1" in
+        --mail)
+                $MAIL2ABOOK $ADDRESSBOOK && exec $0 --update
+                ;;
+        --update)
+                if [ "$SPAMASSASSIN" != "" ]; then
+                    ABOOK2MUTT="$ABOOK2MUTT -s $TMP"
+                fi
+
+                $ABOOK2MUTT $WHITELIST < $ADDRESSBOOK > $MUTTCFG
+
+                if [ "$SPAMASSASSIN" != "" ]; then
+                    grep -q ABOOK_START $SPAMASSASSIN
+                    if [ "$?" = "0" ]; then
+                        sed "/ABOOK_START/,/ABOOK_END/{
+                            /ABOOK_START/ r $TMP
+                            d
+                            }" <$SPAMASSASSIN >$SPAMASSASSIN.tmp && mv $SPAMASSASSIN.tmp $SPAMASSASSIN
+                    else
+                        cat $TMP >>$SPAMASSASSIN
+                    fi
+                fi
+                rm -f $TMP
+                ;;
+        *)      $ABOOK && exec $0 --update
+                ;;
+esac

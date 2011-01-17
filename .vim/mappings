@@ -1,0 +1,303 @@
+" mappings need to be sourced only once per session
+if exists("s:loaded_personal_mappings")
+  finish
+endif
+let s:loaded_personal_mappings = 1
+
+"" ----------------------------------------------------------------------------
+""  Mappings
+"" ----------------------------------------------------------------------------
+
+"" ----------------------------------------------------------------------------
+"" :h digraphs
+"" :dig
+"" i ctrl_k EC  --> ^[  ==  meta(alt) on my system
+"" ----------------------------------------------------------------------------
+
+
+" Normal mode mappings.
+nmap <silent> <F1> <ESC>:bprev<CR>
+nmap <silent> <F2> <ESC>:bnext<CR>
+nmap <silent> <F3> <ESC>:tabprev<CR>
+nmap <silent> <F4> <ESC>:tabnext<CR>
+nmap <silent> <F5> <ESC>:Tlist<CR><C-W>l
+nmap <silent> <F6> <ESC>:ToggleQFix<CR>
+nmap <silent> <F7> <ESC>:ShowMarksToggle<CR>
+nmap <silent> <F8> <ESC>:YRShow<CR>
+nmap <silent> <F9> <ESC>:set invlist<CR>
+nmap <silent> <F10> <ESC>:set invspell<CR>
+nmap <silent> <F11> <ESC>:NERDTree<CR>
+" nmap <silent> <F11> <ESC>:w !xclip<CR><CR>
+
+" use :w!! to write to a file using sudo if you forgot to 'sudo vim file'
+" (it will prompt for sudo password when writing)
+cmap w!! %!sudo tee > /dev/null %
+
+" ---------------------------------------------------------------------------
+" dealing with merge conflicts
+
+" find merge conflict markers
+map <silent> ,fc <ESC>/\v^[<=>]{7}( .*\|$)<CR>
+
+nmap <silent> <S-F11> <ESC>:r!xclip -o<CR>
+
+" Visual mode mappings
+" vmap <silent> <F11> "*y
+
+vmap <silent> <F11> <ESC>:VSTreeExplore<CR>
+
+" Insert mode mappings
+imap <silent> <F1> <ESC>:bprev<CR>
+imap <silent> <F2> <ESC>:bnext<CR>
+imap <silent> <F3> <ESC>:tabprev<CR>
+imap <silent> <F4> <ESC>:tabnext<CR>
+imap <silent> <F5> <ESC>:Tlist<CR><C-W>l
+imap <silent> <F6> <ESC>:ToggleQFix<CR>
+imap <silent> <F7> <ESC>:ShowMarksToggle<CR>
+imap <silent> <F8> <ESC>:YRShow<CR>
+imap <silent> <F9> <ESC>:set invlist<CR>a
+imap <silent> <F10> <ESC>:set invspell<CR>a
+imap <silent> <F11> <ESC>:VSTreeExplore<CR>
+
+" Make shift-insert work like in Xterm
+map <S-Insert> <MiddleMouse>
+map! <S-Insert> <MiddleMouse>
+
+" map <silent> <F6> <ESC>:vnew<CR>:read !svn diff<CR>:set syntax=diff buftype=nofile<CR>gg
+" imap <silent> <F6> <ESC>:vnew<CR>:read !svn diff<CR>:set syntax=diff buftype=nofile<CR>gg
+
+" Paste toggle on key F12!
+set pastetoggle=<F12>
+
+" Center screen on next/previous selection.
+nnoremap n nzz
+nnoremap N Nzz
+
+" Avoid using the ESC key, use ;; instead
+"map! ;; <Esc>
+
+" Save Session.
+map ,S <ESC>:call MakeSession()<CR>
+map ,L <ESC>:call LoadSession()<CR>
+
+" change mail subject
+map ,ms 1G/^Subject: <CR>yypIX-Old-<ESC>-W
+
+" make-letter-urgent
+map ,mp 1G}OPriority: urgent<ESC>
+
+" remove supercite-quotes
+vmap ,msq :s/^> *[a-zA-Z]*>/> >/<C-M>
+
+" cursor mappings solaris
+map <ESC>OA <Up>
+map <ESC>OB <Down>
+map <ESC>OC <Right>
+map <ESC>OD <Left>
+imap <ESC>OA <Up>
+imap <ESC>OB <Down>
+imap <ESC>OC <Right>
+imap <ESC>OD <Left>
+
+" cursor mappings x-terminal
+map <ESC>[A <Up>
+map <ESC>[B <Down>
+map <ESC>[C <Right>
+map <ESC>[D <Left>
+imap <ESC>[A <Up>
+imap <ESC>[B <Down>
+imap <ESC>[C <Right>
+imap <ESC>[D <Left>
+
+" Formatting the current paragraph according to
+" the current 'textwidth' with ^J (control-j):
+imap <C-J> <C-O>gqap
+nmap <C-J> gqap
+vmap <C-J> gq
+
+" footnotes
+ab ~0 [0]<esc>m`:/^--\s*/-2/<CR>o<CR>Footnotes:<CR>----------<CR>[0]
+ab ~1 [1]<esc>m`:/^Footnotes\:/+2/<CR>o[1]
+ab ~2 [2]<esc>m`:/^Footnotes\:/+3/<CR>o[2]
+ab ~3 [3]<esc>m`:/^Footnotes\:/+4/<CR>o[3]
+ab ~4 [4]<esc>m`:/^Footnotes\:/+5/<CR>o[4]
+ab ~5 [5]<esc>m`:/^Footnotes\:/+6/<CR>o[5]
+ab ~6 [6]<esc>m`:/^Footnotes\:/+7/<CR>o[6]
+ab ~7 [7]<esc>m`:/^Footnotes\:/+8/<CR>o[7]
+ab ~8 [8]<esc>m`:/^Footnotes\:/+9/<CR>o[8]
+ab ~9 [9]<esc>m`:/^Footnotes\:/+10/<CR>o[9]
+
+" Make CTRL-^ rebound to the *column* in the previous file
+noremap <C-^> <C-^>`"
+
+" Make "gf" rebound to last cursor position (line *and* column)
+noremap gf gf`"
+
+" X soll x sein
+cabbrev X x
+
+" comment settings and keys
+vmap ,C <plug>VisualComment
+nmap ,C <plug>Comment
+vmap ,c <plug>VisualTraditional
+nmap ,c <plug>Traditional
+
+" block quote keys
+vmap ,b :call VBlockquote()<CR>
+
+" better block shifting
+vnoremap < <gv
+vnoremap > >gv
+
+" search selected text
+vnoremap * y/<C-R>"<CR>
+vnoremap # y?<C-R>"<CR>
+
+" upper/lower word
+nmap ,u mQviwU`Q
+nmap ,l mQviwu`Q
+" upper/lower first char of word
+nmap ;U mQgewvU`Q
+nmap ;L mQgewvu`Q
+
+" . behaviour
+nmap . .`[
+
+" format the entire file
+nmap ,fef ggVG=
+
+" word under cursor will be swapped with the next word
+nmap <silent> gw "_yiw:s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3\2\1/<CR><c-o>
+
+" direct select first 10 buffers
+noremap <unique> 1 :tabnext 1<CR>
+noremap <unique> 2 :tabnext 2<CR>
+noremap <unique> 3 :tabnext 3<CR>
+noremap <unique> 4 :tabnext 4<CR>
+noremap <unique> 5 :tabnext 5<CR>
+noremap <unique> 6 :tabnext 6<CR>
+noremap <unique> 7 :tabnext 7<CR>
+noremap <unique> 8 :tabnext 8<CR>
+noremap <unique> 9 :tabnext 9<CR>
+noremap <unique> 0 :tabnext 10<CR>
+inoremap <unique> 1 <esc>:tabnext 1<CR>:<BS>a
+inoremap <unique> 2 <esc>:tabnext 2<CR>:<BS>a
+inoremap <unique> 3 <esc>:tabnext 3<CR>:<BS>a
+inoremap <unique> 4 <esc>:tabnext 4<CR>:<BS>a
+inoremap <unique> 5 <esc>:tabnext 5<CR>:<BS>a
+inoremap <unique> 6 <esc>:tabnext 6<CR>:<BS>a
+inoremap <unique> 7 <esc>:tabnext 7<CR>:<BS>a
+inoremap <unique> 8 <esc>:tabnext 8<CR>:<BS>a
+inoremap <unique> 9 <esc>:tabnext 9<CR>:<BS>a
+inoremap <unique> 0 <esc>:tabnext 10<CR>:<BS>a
+
+" spelling
+nmap ,sn ]s
+nmap ,sp [s
+nmap ,s= z=
+nmap ,sg zG
+nmap ,sm zW
+nmap ,sd :set spelllang=de_20<CR>
+nmap ,se :set spelllang=en<CR>
+nmap ,sf :set spelllang=fr<CR>
+nmap <C-X>s wi<C-X>s
+
+" aspell spell check
+map ,a :!aspell --master=en check  %
+map ;a :!aspell --master=fr check  %
+
+" brings up file explorer
+map <C-e> <ESC>:Expl<RETURN><ESC><C-W><C-W>
+
+" omni completion c++
+"map <silent> <C-t> :execute "!ctags -a -R --c++-kinds=+p --fields=+iaS --extra=+q --languages=c++ -o ~/.vim/ctags " . getcwd()<CR>
+"map <silent> ;G :!ctags -a -R --c++-kinds=+p --fields=+iaS --extra=+q --languages=c++ -o ~/.vim/ctags /workspace/src<CR>
+"let OmniCpp_ShowScopeInAbbr = 1
+"let OmniCpp_MayCompleteScope = 1
+
+" html/unhtml special chars like ae, ue, oe, ???
+nmap ;H :%s/?/\&auml;/egI<CR>
+      \ :%s/?/\&uuml;/egI<CR>
+      \ :%s/?/\&ouml;/egI<CR>
+      \ :%s/?/\&Auml;/egI<CR>
+      \ :%s/?/\&Uuml;/egI<CR>
+      \ :%s/?/\&Ouml;/egI<CR>
+nmap ,h :%s/&auml;/?/egI<CR>
+      \ :%s/&uuml;/?/egI<CR>
+      \ :%s/&ouml;/?/egI<CR>
+      \ :%s/&Auml;/?/egI<CR>
+      \ :%s/&Uuml;/?/egI<CR>
+      \ :%s/&Ouml;/?/egI<CR>
+
+" move a line of text up or down
+nmap ,j mz:m+<CR>`z
+nmap ,k mz:m-2<CR>`z
+vmap ,j :m'>+<CR>`<my`>mzgv`yo`z
+vmap ,k :m'<-2<CR>`>my`<mzgv`yo`z
+
+" better paste
+"noremap p <esc>:set paste<CR>"*p:set nopaste<CR>
+"inoremap p <esc>:set paste<CR>"*p:set nopaste<CR>li
+"noremap P <esc>:set paste<CR>h"*p:set nopaste<CR>
+"inoremap P <esc>:set paste<CR>h"*p:set nopaste<CR>li
+
+" center text
+nmap ;C :center<CR>
+vmap ;C :center<CR>
+
+" bracket expanding and completion
+vnoremap ( <esc>`>a)<esc>`<i(<esc>
+vnoremap [ <esc>`>a]<esc>`<i[<esc>
+vnoremap { <esc>`>a}<esc>`<i{<esc>
+vnoremap ,< <esc>`>a><esc>`<i<<esc>
+vnoremap ' <esc>`>a'<esc>`<i'<esc>
+vnoremap " <esc>`>a"<esc>`<i"<esc>
+
+" better omni completion mappings
+"inoremap <expr> <cr> pumvisible() ? "\<cr>" : "\<c-g>u\<cr>"
+"inoremap <expr> <c-n> pumvisible() ? "\<lt>c-n>" : "\<lt>c-n>\<lt>c-r>=pumvisible() ? \"\\<lt>down>\" : \"\"\<lt>cr>"
+"inoremap <expr> <c-l> pumvisible() ? "\<lt>c-n>" : "\<lt>c-x>\<lt>c-o>\<lt>c-n>\<lt>c-p>\<lt>c-r>=pumvisible() ? \"\\<lt>down>\" : \"\"\<lt>cr>"
+
+" Bind Ctrl+B to paste (must be in view mode)
+nmap <silent> <C-B> :set paste<CR>"*p:set nopaste<CR>
+
+" Bind Ctrl+C to copy (must be in visual mode)
+vmap <C-c> y: call system("xclip -i -selection clipboard", getreg("\""))<CR>
+
+" ,----
+" | Twitter
+" `----
+map <unique> <Leader>twp <Esc>:execute 'TwitterStatusUpdate ' . inputdialog('Enter a Twitter status message:')<cr>
+map <unique> <Leader>twf <Esc>:TwitterFriendsTimeline<cr><cr>
+
+" ,----
+" | PhpDoc
+" `----
+inoremap <C-D> <ESC>:call PhpDocSingle()<CR>i
+nnoremap <C-D> :call PhpDocSingle()<CR>
+vnoremap <C-D> :call PhpDocRange()<CR>
+
+" ,----
+" | neocomplcache
+" `----
+" Recommended key-mappings.
+" <CR>: close popup and save indent.
+"inoremap <expr><CR>  (pumvisible() ? "\<C-y>":'') . "\<C-f>\<CR>X\<BS>"
+" <TAB>: completion.
+"inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+" <C-h>, <BS>: close popup and delete backword char.
+"inoremap <expr><C-h> pumvisible() ? neocomplcache#close_popup()."\<C-h>" : "\<C-h>"
+"inoremap <expr><BS> pumvisible() ? neocomplcache#close_popup()."\<C-h>" : "\<C-h>"
+"inoremap <expr><C-y>  neocomplcache#close_popup()
+"inoremap <expr><C-e>  neocomplcache#cancel_popup()
+
+" ,----
+" | fugitive
+" `----
+map ,gb :Gblame<CR>
+map ,gs :Gstatus<CR>
+map ,gd :Gdiff<CR>
+map ,gl :Glog<CR>
+map ,gc :Gcommit<CR>
+
+" vim:syntax=vim sw=4 ts=4 expandtab

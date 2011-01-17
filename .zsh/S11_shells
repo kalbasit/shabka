@@ -1,0 +1,9 @@
+#!/bin/zsh
+
+# Load shared configs
+source ${HOME}/.shells/colors
+source ${HOME}/.shells/exports
+source ${HOME}/.shells/alias
+source ${HOME}/.shells/functions
+source ${HOME}/.shells/opts
+source ${HOME}/.shells/proxy

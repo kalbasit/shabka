@@ -1,0 +1,22 @@
+#!/bin/sh
+# Volume script for ratpoison
+# based on rat-volume by Stephan Walter <stephan@walter.name>, License: BSD
+# http://stephan.walter.name/Ratpoison
+
+if [ $# -eq 2 ]; then
+    if [ "${2}" = "switch" ]; then
+        state="$(amixer get ${1} | grep Left: | sed 's/^.*\[.*%\].*\[.*dB\].*\[\(.*\)\]/\1/')"
+        [ "${state}" = "on" ] && \
+            amixer set $1 mute 2>&1 > /dev/null
+        [ "${state}" = "off" ] && \
+            amixer set $1 unmute 2>&1 > /dev/null
+    else
+        amixer set $1 $2 2>&1 > /dev/null
+    fi
+
+    value=$(amixer get $1 | grep Left: | sed 's/^.*\[\(.*\)%\].*/\1/')
+    state="$(amixer get ${1} | grep Left: | sed 's/^.*\[.*%\].*\[.*dB\].*\[\(.*\)\]/\1/')"
+    graph=$(echo $value | awk '{ for(i=0;i<$1/3;i++) printf ":"; for(;i<100/3;i++) printf " ";}')
+
+    ratpoison -c "echo $1($state) $value% |$graph|"
+fi

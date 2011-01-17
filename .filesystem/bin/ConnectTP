@@ -1,0 +1,181 @@
+#!/usr/bin/env bash
+#
+#   vim:ft=sh:fenc=UTF-8:ts=4:sts=4:sw=4:expandtab:foldmethod=marker:foldlevel=0:
+#
+#   $Id$
+#
+#   Copyright (c) 2007 Wael Nasreddine <wael.nasreddine@gmail.com>
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
+#   USA.
+#
+
+####
+# Notes
+
+# Don't use the following variables in your script, they are reserved
+#   to the Functions uses
+# 'LOCK': This is a variable used by the functions 'lock_script' and
+#   'free_lock'
+# 'TempFiles': This is a variable containing a list of Files to remove
+#   when the script exits.
+# Make sure you always use $ARGS instead of $1, Note that $ARGS[0]
+#   correspond to $1, and $ARGS[1] correspong to $2 ...
+
+#
+####
+
+####
+# Options
+
+# Change this option to true to enable options parsing
+ParseOptions=false
+
+#
+####
+
+# Bootstrap{{{
+bootstrap="`dirname $0`/.bootstrap"
+if [ -f "${bootstrap}" ]; then
+    source "${bootstrap}"
+else
+    echo "Cannot bootstrap"
+    exit 54
+fi
+unset bootstrap
+#}}}
+
+####
+# Functions
+
+# If you want to define a specific help for this script
+#function help()
+#{
+#    # print_info goes here
+#}
+
+AvailablePostes()
+{
+    print_error 1 "Available postes are:"
+    for i in ${Postes[@]}; do
+        print_error 2 "${i}"
+    done
+}
+
+#
+####
+
+####
+# Main
+
+# Available Postes.
+Postes=("d020m01" "d020m04")
+
+# Do we have Poste??
+if [ ${#} -ne 1 ]; then
+    print_error 0 "Usage: ${0} Poste."
+    AvailablePostes
+    QuitScript 1
+fi
+
+# We need root for this script to work
+need_root ${@}
+
+Poste="${1}"
+
+if ! inArray ${Poste} ${Postes[@]}; then
+    print_error 0 "Poste '${Poste}' does not exist."
+    AvailablePostes
+    QuitScript 1
+fi
+
+case "${Poste}" in
+    d020m01)
+        IP="148.60.1.1"
+        NETMASK="255.255.248.0"
+        ETHER="00:12:3F:37:46:14"
+        ROUTE="148.60.7.254"
+        DNS=("212.27.53.252" "212.27.54.252")
+        ;;
+    d020m04)
+        IP="148.60.1.4"
+        NETMASK="255.255.248.0"
+        ETHER="00:0F:1F:D6:2F:08"
+        ROUTE="148.60.7.254"
+        DNS=("212.27.53.252" "212.27.54.252")
+        ;;
+    *)
+        print_error 0 "Poste '${Poste}' does not exist."
+        AvailablePostes
+        QuitScript 1
+        ;;
+esac
+
+print_info 0 "Connecting to '${Poste}' with the IP='${IP}' and the MAC Address '${ETHER}'."
+print_warning 0 "Don't connect the cable just yet."
+
+# Make sure NetworkManager is turned off.
+print_info 2 "Turn off NetworkManager."
+/etc/init.d/NetworkManager stop &> /dev/null
+
+# Put down eth0
+print_info 2 "Taking eth0 down."
+ifconfig eth0 down
+
+# Spoofing the Address Mac.
+print_info 2 "Changing our address MAC"
+ifconfig eth0 hw ether "${ETHER}"
+
+# Configuring eth0
+print_info 2 "Configuring eth0."
+ifconfig eth0 inet ${IP} netmask ${NETMASK}
+
+# Default Router.
+print_info 2 "Configuring default router."
+route add default gw "${ROUTE}"
+
+# DNS
+print_info 2 "Configuring DNS NameServer"
+rm -rf /etc/resolv.conf
+touch /etc/resolv.conf
+for i in ${DNS[@]}; do
+    echo "nameserver ${i}" >> /etc/resolv.conf
+done
+
+# It's time to connect the cable
+print_info 2 "Connect the cable and press enter when ready."
+read enter
+
+# Time to bring up eth0
+print_info 2 "Bringing eth0 up."
+ifconfig eth0 up
+
+# Test the connection.
+print_info 2 "Verifying the connection"
+
+# Pinging google.com
+if ! ping -c 1 google.com &> /dev/null; then
+    # Pinging google.com failed but maybe the DNS is faulty, trying an IP
+    if ! ping -c 1 72.14.207.99 &> /dev/null; then
+        print_error 3 "The connection is not working, something is wrong. I will leave you to it."
+        QuitScript 1
+    fi
+else # Pinging google.com worked.
+    print_info 3 "The connection is working properly, enjoy."
+    QuitScript 0
+fi
+
+#
+####

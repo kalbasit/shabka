@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+#
+# vim:ft=sh:fenc=UTF-8:ts=4:sts=4:sw=4:expandtab:foldmethod=marker:foldlevel=0:
+#
+# $Id: pacremove 783 2008-03-24 12:20:18Z wael $
+#
+# wain@gmx.net
+# pacremove is a pacman's wrapper that can look for orphans after removing packages
+
+BEFORE=/tmp/before.$$
+AFTER=/tmp/after.$$
+VERSION='0.1.0'
+
+if (( $# < 2 ))
+then
+cat << EOF
+pacremove version $VERSION
+usage:  pacremove {-R --remove} [options] <package>
+options:
+  -c, --cascade       remove packages and all packages that depend on them
+  -d, --nodeps        skip dependency checks
+  -k, --dbonly        only remove database entry, do not remove files
+  -n, --nosave        remove configuration files as well
+  -s, --recursive     remove dependencies also (that won't break packages)
+      --config <path> set an alternate configuration file
+      --noconfirm     do not ask for any confirmation
+      --noprogressbar do not show a progress bar when downloading files
+  -v, --verbose       be verbose
+  -r, --root <path>   set an alternate installation root
+  -b, --dbpath <path> set an alternate database locationthen
+EOF
+exit 0
+fi
+
+# search orphans before removing
+pacman -Qe | awk '{print $1}' > $BEFORE
+
+# remove with pacman
+pacman $@
+
+# search orphans after removing
+pacman -Qe | awk '{print $1}' > $AFTER
+
+# show new orphans
+neworphans=$(comm -1 -3 $BEFORE $AFTER)
+[ ! -z $neworphans ] && { echo "This packages are no longer used and can be removed:"; echo $neworphans; }
+
+# remove tmp files
+rm $BEFORE $AFTER
+
+exit 0

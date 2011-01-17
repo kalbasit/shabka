@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+#
+#   vim:ft=sh:fenc=UTF-8:ts=4:sts=4:sw=4:expandtab:foldmethod=marker:foldlevel=0:
+#
+#   $Id: Tag-darcs-repos 785 2008-03-24 12:42:13Z wael $
+
+# Get last month name/year
+year="$(date +%Y)"
+cur_month="$(date +%m)"
+if [ "${cur_month}" = "01" ]; then
+    prev_month="12"
+    year="$[ ${year} - 1 ]"
+else
+    prev_month="$[ ${cur_month} - 1 ]"
+fi
+prev_month_name="$(date -d "${prev_month}/01/2000" +%B)"
+
+# Tag the repos
+for i in ${HOME}/Repos/*; do
+    if [ -d "${i}" ]; then
+        cd ${i}
+        darcs tag "${prev_month_name} ${year}"
+        darcs optimize
+    fi
+done

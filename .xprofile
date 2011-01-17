@@ -1,0 +1,46 @@
+#  .xprofile
+#
+#   vim:ft=sh:fenc=UTF-8:ts=4:sts=4:sw=4:expandtab:foldmethod=marker:foldlevel=0:
+#
+#   Wael Nasreddine
+
+# Are we using awesome ?
+(
+    count=0
+    while true; do
+        if [ -S "${HOME}/.awesome_ctl.0" ]; then
+            # We are using awesome, okay we need to launch some stuff now
+
+            # First sleep for a couple of seconds to allow awesome to load.
+            sleep 2
+
+            # Start the programs that don't need internet connection.
+            if [ -f "${HOME}/.fehbg" ]; then
+                eval `cat "${HOME}/.fehbg"`
+            fi
+            xbindkeys &
+            mail-notification --sm-disable &
+            nm-applet --sm-disable &
+
+            # Sleep 5 seconds to allow Network Manager to connect to the internet,
+            # I don't want to make a loop to test if connected, if it ain't connected,
+            # well I'll close it manually
+            sleep 5
+
+            # Start programs requiring an internet connection.
+            pidgin &
+
+            # Finally just end the loop :)
+            break
+        else
+            if [ "${count}" -gt 120 ]; then
+                # we have wated for 2 minutes, as of now we don't need to continue the loop
+                # coz we aren't using awesome, so just end the loop.
+                break
+            fi
+            ((count++))
+            sleep 1
+        fi
+    done
+    unset count
+) &

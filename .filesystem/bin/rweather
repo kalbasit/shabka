@@ -1,0 +1,453 @@
+#!/usr/bin/env ruby
+#
+# vim:ft=perl:fenc=UTF-8:ts=4:sts=4:sw=4:expandtab:foldmethod=marker:foldlevel=0:
+#
+# $Id: rweather 783 2008-03-24 12:20:18Z wael $
+#
+#############################################################
+# author:  mathias gumz
+# date  :  04/08/03 19:35:12
+# file  :  rweather
+# about :  weather fetcher
+
+PRG_VERSION = "0.4"
+
+#############################################################
+# Copyright (c) 2004 Mathias Gumz <gumz at cs.uni-magdeburg.de>
+#
+# Permission is hereby granted, free of charge, to any person obtaining
+# a copy of this software and associated documentation files (the
+# "Software"), to deal in the Software without restriction, including
+# without limitation the rights to use, copy, modify, merge, publish,
+# distribute, sublicense, and/or sell copies of the Software, and to
+# permit persons to whom the Software is furnished to do so, subject to
+# the following conditions:
+#
+# The above copyright notice and this permission notice shall be
+# included in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+# IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+# CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+# TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+# SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+#############################################################
+# Help along with functions to call certain parts of this message
+
+ABOUT_TEXT = <<EOF
+ABOUT
+
+  rweather is a small program that provides the user with the weather
+  on the command line.  Based off of gdesklets, this program makes it
+  easy to check the weather while doing your work, no matter which
+  environment you are in.
+
+EOF
+
+USAGE_TEXT = <<EOF
+USAGE
+
+  rweather [-mainoptions] -- [options for module]
+  rweather [-hv] [-c <config file>] [-z <zip code>]
+           [-u <unit>] [-s <location>] [-m <module>]
+
+
+OPTIONS
+
+  --help        -h      display help
+  --version     -v      display version
+  --list-colors -l      display colors
+  --zip         -z      zip code
+  --unit        -u      unit of measurement
+  --search      -s      search for your location
+  --config      -c      config file
+  --module      -m      select the style of output
+                        'list' for a list of available
+                        modules
+
+EOF
+
+ADVANCED_TEXT = <<EOF
+EXAMPLES
+
+  shell $> rweather -z 48910 -u us -m advanced
+  shell $> rweather -s Detroit
+  shell $> rweather -m list
+
+AUTHOR
+
+  mathias gumz < gumz at dot cs minus magdeburg.de >
+  falk feuersenger < feuersen at dot cs minus magdeburg.de >
+  curt micol < asenchi at dot asenchi.com >
+
+EOF
+
+
+
+def display_help
+  puts ABOUT_TEXT
+  puts USAGE_TEXT
+  puts ADVANCED_TEXT
+end
+
+def display_usage
+  puts USAGE_TEXT
+end
+
+#############################################################
+# Dependencies
+
+begin
+  require 'pstore'
+  require 'getoptlong'
+  require 'net/http'
+  require 'uri/common'
+  require 'rexml/document'
+rescue
+  puts "rweather: Error: Missing dependencies. Exit."
+  exit 1
+end
+
+#############################################################
+#  COLORS
+
+module Colors
+
+COLORS = {
+  "none" => "",
+  "off" =>  "\e[0m",
+
+  "black"   => "\e[0;30m",
+  "red"     => "\e[0;31m",
+  "green"   => "\e[0;32m",
+  "yellow"  => "\e[0;33m",
+  "blue"    => "\e[0;34m",
+  "magenta" => "\e[0;35m",
+  "cyan"    => "\e[0;36m",
+  "white"   => "\e[0;37m",
+
+  "bold-black"   => "\e[1;30m",
+  "bold-red"     => "\e[1;31m",
+  "bold-green"   => "\e[1;32m",
+  "bold-yellow"  => "\e[1;33m",
+  "bold-blue"    => "\e[1;34m",
+  "bold-magenta" => "\e[1;35m",
+  "bold-cyan"    => "\e[1;36m",
+  "bold-white"   => "\e[1;37m",
+
+  "bg-black" => "\e[0;40m",
+  "bg-red" => "\e[0;41m",
+  "bg-green" => "\e[0;42m",
+  "bg-yellow" => "\e[0;43m",
+  "bg-blue" => "\e[0;44m",
+  "bg-magenta" => "\e[0;45m",
+  "bg-cyan" => "\e[0;46m",
+  "bg-white" => "\e[0;47m"
+}
+
+def display_colors
+  COLORS.sort.each { |key| puts "#{key[0]}" }
+end
+
+end
+
+#############################################################
+# Cache file
+
+module HTTPCache
+
+  class CacheEntry
+    attr_accessor :timestamp, :data
+    def initialize(timestamp, data)
+      @timestamp, @data = timestamp, data
+    end
+  end
+
+  def fetch(host, uri, cachetimeout = 600, cachefile = ENV['HOME'] + "/cache")
+    data = ""
+
+    return data if !cachefile
+
+    cache = PStore.new(cachefile)
+    cache.transaction {
+      if !cache[uri] or cachetimeout < 1
+        begin
+          data = Net::HTTP.new(host, 80).get(uri).body
+        rescue
+          puts "rweather: Error: URL [#{host}#{uri}] not accessable."
+          return nil
+        end
+        return data if cachetimeout < 1
+        cache[uri] = CacheEntry.new(Time.new, data)
+      else
+        cache_entry = cache[uri]
+        if (Time.now - cache_entry.timestamp).to_f > cachetimeout
+          begin
+            data = Net::HTTP.new(host, 80).get(uri).body
+          rescue
+            puts "rweather: Error: URL [#{host}#{uri}] not accessable."
+            return nil
+          end
+          cache_entry.timestamp = Time.now
+          cache_entry.data = data
+          cache[uri] = cache_entry
+        else
+          data = cache_entry.data
+        end
+      end
+    }
+    return data
+  end
+
+end
+
+#############################################################
+
+include Colors
+include HTTPCache
+include REXML
+
+#############################################################
+# WeatherOut Module
+module WeatherOut
+
+  def mod_mini(xml)
+
+    coff = Colors::COLORS["off"]
+    cloc = Colors::COLORS["bold-green"]
+    ctmp = Colors::COLORS["bold-yellow"]
+    ctext = Colors::COLORS["white"]
+    chum = Colors::COLORS["bold-red"]
+
+    rcxml = RC["rcxml"]
+    if rcxml then
+      rcxml.elements.each("rweather/modules/mini") { |mini|
+        mini.elements.each("colors/*") { |color|
+          next if color.text == nil
+          case color.name
+          when "location" then cloc = Colors::COLORS[color.text]
+          when "temperature" then ctmp = Colors::COLORS[color.text]
+          when "humidity" then chum = Colors::COLORS[color.text]
+          end
+        }
+      }
+    end
+
+    opts = GetoptLong.new(
+      [ "--no-color", "-n", GetoptLong::NO_ARGUMENT],
+      [ "--version",  "-v", GetoptLong::NO_ARGUMENT],
+      [ "--help",     "-h", GetoptLong::NO_ARGUMENT]
+    )
+
+    opts.each { |opt, arg|
+      case opt
+      when "--help"
+        puts <<EOF
+MINI-MODULE
+
+  --help         -h
+  --no-color     -n
+  --version      -v
+EOF
+        exit 0
+      when "--no-color" then coff, ctext, ctmp, chum, cloc = ""
+      when "--version" then
+        puts "MINI-MODULE version 0.1"
+        exit 0
+      end
+    }
+
+    loc, tmp, desc, hmid = xml.elements["weather/loc/dnam"].text,
+                           xml.elements["weather/cc/tmp"].text,
+                           xml.elements["weather/cc/t"].text,
+                           xml.elements["weather/cc/hmid"].text
+
+    UNITS["temp"] = "°" + xml.elements["weather/head/ut"].text
+
+    puts <<EOF
+#{cloc}#{loc}#{coff} [#{ctmp} #{tmp}#{UNITS['temp']} #{chum}#{hmid}%#{coff} ]
+#{ctext}#{desc}#{coff}
+EOF
+  end
+
+  def mod_funny(xml)
+    puts "hi, i am the funny output .. just for fun :)"
+  end
+
+  def mod_rawdata(xml)
+    weather = "/weather/local/%s?cc=*&dayf=%d&unit=%s" % [
+      RC["zip"],
+      RC["forecast"],
+      RC["unit"]]
+
+    data = HTTPCache::fetch("xoap.weather.com",
+                          weather,
+                          RC["timeout"],
+                          RC["cachefile"])
+    puts data
+    exit 0
+  end
+
+end # WeatherOut
+
+#############################################################
+# Settings
+
+RC = {
+  "zip" => "GMXX0079",
+#  "license" => "7392ac66b4e27671",
+  "forecast" => 5,
+  "timeout" => 600,
+  "cachefile" => ENV['HOME'] + "/.rweather/cache",
+  "rcdir" => ENV['HOME'] + "/.rweather",
+  "rcfile" => ENV['HOME'] + "/.rweather/rc.xml",
+  "rcmoddirs" => [ "./modules/", ENV['HOME'] + "/.rweather/modules" ],
+  "rcxml" => nil,
+  "unit" => "m",
+  "module" => "mini"
+}
+
+UNITS = {
+  "temp" => "°C",
+  "speed" => "km/h",
+  "distance" => "km"
+}
+
+def read_config(rc)
+
+  if (FileTest.exists?(rc))
+    rcfile = File.new(rc)
+    rcxml = REXML::Document.new(rcfile)
+    RC["rcxml"] = rcxml
+    RC["zip"] = rcxml.elements["rweather/options/zip"].text
+    RC["module"] = rcxml.elements["rweather/options/module"].text
+  end
+end
+
+opts = GetoptLong.new(
+  [ "--search",     "-s", GetoptLong::REQUIRED_ARGUMENT ],
+  [ "--zip",        "-z", GetoptLong::REQUIRED_ARGUMENT ],
+  [ "--unit",       "-u", GetoptLong::REQUIRED_ARGUMENT ],
+  [ "--config",     "-c", GetoptLong::REQUIRED_ARGUMENT ],
+  [ "--list-color", "-l", GetoptLong::NO_ARGUMENT],
+  [ "--module",     "-m", GetoptLong::REQUIRED_ARGUMENT ],
+  [ "--module-path","-M", GetoptLong::REQUIRED_ARGUMENT ],
+  [ "--help",       "-h", GetoptLong::NO_ARGUMENT],
+  [ "--version",    "-v", GetoptLong::NO_ARGUMENT]
+)
+
+read_config(RC["rcfile"])
+
+begin
+  opts.each { |opt, arg|
+    case opt
+    when /--help$/
+      display_help
+      exit 0
+    when "--zip" then RC["zip"] = arg.strip
+    when "--config"
+      RC["rcfile"] = arg.strip
+      read_config(RC["rcfile"])
+    when "--unit"
+      if arg.strip == "metric"
+        then RC["unit"] = "m"
+      elsif arg.strip == "us"
+        then RC["unit"] = "s"
+      else
+        puts "rweather: Error: No such unit-system. Exit."
+      end
+    when "--list-color"
+      display_colors
+      exit 0
+    when "--module" then RC["module"] = arg.strip
+    when "--module-path" then RC["rcmoddirs"] += arg.split(/:/)
+    when /--version$/
+      puts "rweather version #{PRG_VERSION} (c) by m.gumz"
+      exit 0
+    when "--search"
+      data = HTTPCache::fetch("xoap.weather.com",
+              "/search/search?where=%s" % arg.strip, -1, RC['cachefile'])
+
+      found = 0
+      if (data)
+        weatherxml = REXML::Document.new(data)
+        weatherxml.elements.each("search/loc") { |loc|
+          puts "#{loc.attributes['id']} #{loc.text}"
+          found += 1
+        }
+      end
+      if (found <= 0)
+        puts "rweather: Error: No zip code found. Exit."
+        exit 1
+      end
+      exit 0
+    end
+  }
+rescue
+  display_usage
+  exit 1
+end
+
+include WeatherOut
+RC["rcmoddirs"].each { |dir| $: << dir }
+
+if RC["module"] =~ /list/
+  RC["rcmoddirs"].each { |dir|
+    if dir != "." and FileTest.exists?(dir) and FileTest.directory?(dir)
+      Dir.foreach(dir) { |file|
+        begin
+          require file if FileTest.file?(dir + "/" + file)
+        rescue
+        end
+      }
+    end
+  }
+  WeatherOut.methods.each { |m|
+    puts $1 if m =~ /^mod_(.*)/
+  }
+  exit 0
+end
+
+
+# load modules, if necessary
+if ! WeatherOut.methods.include?("mod_" + RC["module"])
+  begin
+    require RC["module"]
+  rescue
+    puts "rweather: Error: no such module [#{RC['module']}]. Exit."
+    exit 1
+  end
+end
+
+output = WeatherOut.method("mod_" + RC["module"])
+if output then
+  #
+  # cc       =>  current conditions
+  # unit=    =>  m | s
+  # dayf=x   =>  x days of forecast
+  #
+  #####################################
+  # xoap
+  # key=x    =>  x is the license
+  # par=x    =>  x is the partner number
+  weather = "/weather/local/%s?cc=*&dayf=%d&unit=%s" % [
+    RC["zip"],
+    RC["forecast"],
+    RC["unit"]]
+
+
+    data = HTTPCache::fetch("xoap.weather.com",
+                          weather,
+                          RC["timeout"],
+                          RC["cachefile"])
+  if data then
+    output.call(REXML::Document.new(data))
+  else
+    puts "rweather: No report returned. Exit."
+    exit 1
+  end
+else
+  puts "rweather: Error. No such module available. Exit."
+end

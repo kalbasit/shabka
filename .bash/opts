@@ -1,0 +1,22 @@
+# vim: set ft=sh ts=4 sts=4 sw=4 expandtab: alias
+
+# $Id: opts 573 2006-09-05 11:27:01Z wael $
+# $Revision: 648 $
+# $Date: 2007-01-13 06:01:47 +0100 (Sat, 13 Jan 2007) $
+
+# Disable ^S/^Q flow control (does anyone like/use this at all?)
+stty -ixon
+stty -ixoff
+
+# shopt stuff
+# see http://linux.about.com/library/cmd/blcmdl1_shopt.htm
+shopt -s cdspell
+shopt -s extglob
+shopt -s cmdhist
+shopt -s checkwinsize
+shopt -s no_empty_cmd_completion
+#shopt -u promptvars  # Don't disable promptvars, we use them in PS1
+
+# Prevent '>' from overwriting files...
+#set -o noclobber
+#set -o functrace
