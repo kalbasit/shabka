@@ -219,6 +219,16 @@ grab "A-F4" do
   clients[index].kill
 end
 
+# System
+grab "XF86Sleep" do
+  system "xlock &"
+  system "sudo pm-suspend &"
+end
+
+grab "XF86ScreenSaver" do
+  system "xlock &"
+end
+
 # Launcher
 grab modkey + "-x" do
   Subtle::Contrib::Launcher.run
@@ -232,7 +242,12 @@ tag "terms" do
 end
 
 tag "browser" do
-  match "navigator|(google\-)?chrom[e|ium]"
+  match "(google\-)?chrom[e|ium]"
+  gravity :center
+end
+
+tag "browser_dev" do
+  match "navigator"
   gravity :center
 end
 
@@ -379,8 +394,8 @@ end
 # }}}
 
 # Views {{{
-www_re    = "browser"
-test_re   = "android|xephyr|seven$|one$"
+www_re    = "^browser$"
+test_re   = "browser_dev|android|xephyr|seven$|one$"
 editor_re = "editor"
 icons     = false
 
@@ -428,5 +443,6 @@ on :start do
   system "nm-applet --sm-disable &"
   system "urxvt -e /bin/zsh -c 'Screen Default' &"
   system "dropbox start"
+  system "killall gnome-screensaver"
 end
 # }}}
