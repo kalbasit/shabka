@@ -16,3 +16,6 @@
 [submodule ".vim/bundle/rails"]
 	path = .vim/bundle/rails
 	url = git://github.com/tpope/vim-rails.git
+[submodule ".vim/bundle/vimshell"]
+	path = .vim/bundle/vimshell
+	url = git://github.com/Shougo/vimshell.git
