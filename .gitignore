@@ -15,6 +15,7 @@ yankring_history_v2.txt
 drafts/*
 .vim/_temp/*
 .vim/_backup/*
+.vim/.netrwhist
 
 
 
