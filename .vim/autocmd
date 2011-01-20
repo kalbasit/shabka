@@ -7,7 +7,7 @@ if has("autocmd")
         au!
         au FileType mail set tw=70
         au FileType mail set expandtab
-        au FileType mail set tabstop=3
+        au FileType mail set tabstop=2
         au FileType mail set comments+=n:\|  " '|' is a quote char.
         au FileType mail set comments+=n:%   " '%' as well.
         au FileType mail set noautoindent
@@ -40,7 +40,7 @@ if has("autocmd")
         au FileType php setlocal noeol
         au FileType php setlocal binary
         au FileType php set expandtab
-        au FileType php set tabstop=4
+        au FileType php set tabstop=2
         au FileType php set softtabstop=2
         au FileType php set shiftwidth=2
         au FileType php set comments=sl:/**,mb:*,elx:*
@@ -60,7 +60,7 @@ if has("autocmd")
         au!
         au FileType news set tw=60
         au FileType news set expandtab
-        au FileType news set tabstop=3
+        au FileType news set tabstop=2
         au FileType news set dict=~/News/active
         autocmd BufNewFile,BufRead  .followup,.article  iab Yme <cr>Wael Nasreddine
     augroup end

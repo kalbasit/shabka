@@ -134,7 +134,7 @@ set noautoindent
 "  > using it.
 set nosmartindent
 " set cindent             " do c-style indenting
-set tabstop=4           " tab spacing (settings below are just to unify it)
+set tabstop=2           " tab spacing (settings below are just to unify it)
 set softtabstop=2       " unify
 set shiftwidth=2        " unify
 set expandtab           " no real tabs please!
