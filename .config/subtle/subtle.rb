@@ -47,38 +47,40 @@ end
 # }}}
 
 # Colors {{{
-color :title_fg,        "#ffffff"
-color :title_bg,        "#1a1a1a"
-color :title_border,    "#1a1a1a"
+color :title_fg,          "#f0dfaf"
+color :title_bg,          "#1e2320"
+color :title_border,      "#3f3f3f"
 
-color :focus_fg,        "#ffffff"
-color :focus_bg,        "#595959"
-color :focus_border,    "#1a1a1a"
+color :focus_bg,          "#1e2320"
+color :focus_border,      "#3f3f3f"
+color :focus_fg,          "#f0dfaf"
 
-color :urgent_fg,       "#850000"
-#color :urgent_bg,       "#404040"
-#color :urgent_border,   "#1a1a1a"
+color :urgent_fg,         "#cc9393"
+color :urgent_bg,         "#3f3f3f"
+color :urgent_border,     "#3f3f3f"
 
-color :occupied_fg,     "#777777"
-color :occupied_bg,     "#404040"
-color :occupied_border, "#1a1a1a"
+color :occupied_fg,       "#cc9393"
+color :occupied_border,   "#3f3f3f"
+color :occupied_bg,       "#3f3f3f"
 
-color :views_fg,        "#a8a8a8"
-color :views_bg,        "#1a1a1a"
-color :views_border,    "#1a1a1a"
+color :views_border,      "#3f3f3f"
+color :views_bg,          "#3f3f3f"
+color :views_fg,          "#dcdccc"
 
-color :sublets_fg,      "#595959"
-color :sublets_bg,      "#1a1a1a"
-color :sublets_border,  "#1a1a1a"
+color :sublets_bg,        "#3f3f3f"
+color :sublets_border,    "#3f3f3f"
+color :sublets_fg,        "#dcdccc"
 
-color :client_active,   "#595959"
-color :client_inactive, "#404040"
+color :client_inactive,   "#3f3f3f"
+color :client_active,     "#6f6f6f"
 
-color :panel,           "#1a1a1a"
-#color :background,     "#404040"
+color :panel,             "#3f3f3f"
 
-color :stipple,        "#595959"
-color :separator,       "#850000"
+color :background,        "#3d3d3d"
+
+color :stipple,           "#dcdccc"
+
+color :separator,         "#dcdccc"
 # }}}
 
 # Gravities {{{
