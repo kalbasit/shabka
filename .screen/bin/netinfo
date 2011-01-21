@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+# netinfo <delay> <interface>
+
+# Network information
+# Made by phrakture (http://phraktured.net/config/screen/batinfo)
+# Modified by Wael Nasreddine
+
+last_rx=0
+last_tx=0
+
+# Is it a wireless Interface ??
+if cat /proc/net/wireless | grep -q ${2}; then
+    wireless="yes"
+else
+    wireless="no"
+fi
+
+while true; do
+    ipaddr="$( /sbin/ifconfig ${2} | awk '/inet addr/{ split($2,s,/:/); print s[2]; }' )"
+    ipaddr="${ipaddr}" # Trim Spaces
+    if [ "x${ipaddr}" != "x" ]; then
+
+        if [ "x${wireless}" = "xyes" ]; then
+            link="($( cat /proc/net/wireless | grep ${2} | awk '{print $3}' | sed -e "s@\([0-9]*\)\.@\1%@g" ))"
+            prefix="${2}[{kc}${ipaddr}{-}${link}]"
+        else
+            prefix="${2}[{kc}${ipaddr}{-}]"
+        fi
+
+        stats=$( cat /proc/net/dev | grep ${2} | tr : \ )
+
+        rx=$( echo ${stats} | cut -d' ' -f2 )
+        tx=$( echo ${stats} | cut -d' ' -f10 )
+
+        up=$(( ( ${tx} - ${last_tx} ) / ${1} ))
+        dn=$(( ( ${rx} - ${last_rx} ) / ${1} ))
+
+        echo -n "${prefix} "
+        # note: 8/1024 == 128 >> bytes to kilobits
+        echo "${dn} ${up}" | awk '{printf "{kg}%06.2f{kw}/{kr}%06.2f{kw}\n",$1/128,$2/128}'
+
+        last_tx="${tx}"
+        last_rx="${rx}"
+        sleep ${1}
+    else
+        echo "${2} not connected"
+        sleep 15
+    fi
+done
