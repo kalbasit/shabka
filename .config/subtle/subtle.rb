@@ -255,7 +255,8 @@ end
 
 tag "pdf" do
   match    "apvlv|evince"
-  stick    true
+  stick    false
+  float    false
 end
 
 tag "editor" do
@@ -291,7 +292,7 @@ tag "vlc" do
 end
 
 tag "stick" do
-  match  "dialog|subtly|python|gtk.rb|display|pychrom|skype|xev"
+  match  "dialog|subtly|python|gtk.rb|display|pychrom|xev"
   stick  true
   float  true
 end
