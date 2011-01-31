@@ -134,7 +134,7 @@ gravkeys = [ "KP_7", "KP_8", "KP_9", "KP_4", "KP_5", "KP_6", "KP_1", "KP_2", "KP
 (1..6).each do |i|
   grab modkey + "-#{i}",   "ViewSwitch#{i}".to_sym
   grab modkey + "-S-#{i}", "ViewJump#{i}".to_sym
-  #grab modkey + "-F#{i}",  "ScreenJump#{i}".to_sym
+  grab modkey + "-F#{i}",  "ScreenJump#{i}".to_sym
 end
 
 # Windows
