@@ -260,8 +260,9 @@ tag "pdf" do
 end
 
 tag "editor" do
-  match   "[g]?vim"
-  resize  true
+  match   "[g]?vim|scribes"
+  resize  false
+  float   false
   gravity :center
 end
 
