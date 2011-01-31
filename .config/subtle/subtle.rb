@@ -468,5 +468,6 @@ on :start do
   system "killall gnome-screensaver"
   system "myskype &"
   system "pidgin &"
+  system "/opt/Klok2/bin/Klok2 &"
 end
 # }}}
