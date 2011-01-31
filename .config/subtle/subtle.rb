@@ -223,8 +223,8 @@ end
 
 # System
 grab "XF86Sleep" do
-  system "xlock &"
   system "sudo pm-suspend &"
+  system "xlock &"
 end
 
 grab "XF86ScreenSaver" do
