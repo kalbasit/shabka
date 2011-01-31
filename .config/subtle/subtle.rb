@@ -305,6 +305,12 @@ tag "urgent" do
   urgent true
 end
 
+tag "im" do
+  match  "pidgin|skype"
+  float  true
+  urgent true
+end
+
 tag "void" do
   match   "jd-Main|Virtualbox"
 end
@@ -400,6 +406,7 @@ end
 # Views {{{
 www_re    = "^browser$"
 test_re   = "browser_dev|android|xephyr|seven$|one$"
+im_re     = "im"
 editor_re = "editor"
 icons     = false
 
@@ -420,6 +427,12 @@ end
 view "void" do
   match     "default|void"
   icon      "#{iconpath}/quote.xbm"
+  icon_only icons
+end
+
+view "im" do
+  match     im_re
+  icon      "#{iconpath}/chat.xbm"
   icon_only icons
 end
 
