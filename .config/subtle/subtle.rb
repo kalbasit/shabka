@@ -466,7 +466,7 @@ on :start do
   system "urxvt -e /bin/zsh -c 'Screen Default' &"
   system "dropbox start"
   system "killall gnome-screensaver"
-  system "skype &"
+  system "myskype &"
   system "pidgin &"
 end
 # }}}
