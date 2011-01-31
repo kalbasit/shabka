@@ -12,6 +12,9 @@ configure :tasks do |s| # {{{
     :separator => s.config[:color_separator] || colors[:sublets_fg]
   }
 
+  # Use client modes
+  s.use_modes = s.config[:modes] || true
+
   # Create separator
   s.separator = "%s%s" % [
     s.colors[:separator], s.config[:separator] || " | "
@@ -19,10 +22,25 @@ configure :tasks do |s| # {{{
 end # }}}
 
 helper do |s| # {{{
+  def client2name(c) # {{{
+    ret = ""
+
+    if(self.use_modes)
+      ret << "+" if(c.is_full?)
+      ret << "^" if(c.is_float?)
+      ret << "*" if(c.is_stick?)
+    end
+
+    ret << c.instance
+
+    ret
+  end # }}}
+
   def makelist(list) # {{{
     buttons = list.map do |c|
       "%s%s" % [
-        self.colors[c.has_focus? ? :active : :inactive], c.instance
+        self.colors[c.has_focus? ? :active : :inactive],
+        client2name(c)
       ]
     end
 
@@ -39,6 +57,10 @@ end # }}}
 
 on :client_focus do |s| # {{{
   s.makelist(s.clients)
+end # }}}
+
+on :client_mode do |s| # {{{
+  s.makelist(Subtlext::Client.visible)
 end # }}}
 
 on :mouse_down do |s, x, y, b| # {{{

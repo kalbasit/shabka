@@ -22,8 +22,8 @@ Following layouts are available in given order:
   top        = Tile top, master bottom
   bottom     = Tile bottom, master top
 NOTES
-  s.version     = "0.11"
-  s.tags        = [ "Layout", "Tiling", "Testing" ]
+  s.version     = "0.12"
+  s.tags        = [ "Layout", "Tiling", "Automatic", "Icon" ]
   s.files       = [ "layout.rb" ]
   s.icons       = [
     "icons/tb.xbm",
@@ -35,4 +35,7 @@ NOTES
     "icons/tt.xbm",
     "icons/tv.xbm"
   ]
+
+  # Need specific version
+  s.required_version = "0.9.2565"
 end

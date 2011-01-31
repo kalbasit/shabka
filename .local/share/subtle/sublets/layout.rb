@@ -4,6 +4,10 @@ configure :layout do |s| # {{{
   s.interval = 9999
   s.current  = Subtlext::View.current.name.to_sym
   s.mode     = Hash[*Subtlext::View.all.collect { |v| [ v.name.to_sym, :grav ] }.flatten]
+
+  s.border   = s.config[:border] || 2
+
+  # Icon for modes
   s.modes    = {
     :grav   => Subtlext::Icon.new("tg.xbm"),
     :vert   => Subtlext::Icon.new("tv.xbm"),
@@ -21,7 +25,6 @@ helper do |s| # {{{
 
     unless(clients.empty?)
       geometry = Subtlext::Screen.current.geometry
-      border   = 2 #< Hardcoded
 
       # Tiling now
       case self.mode[self.current]
@@ -37,9 +40,8 @@ helper do |s| # {{{
 
           # Update clients
           clients.each do |c|
-            c.resize   = false
             c.geometry = [
-              g.x, g.y, g.width - 2 * border, g.height - 2 * border
+              g.x, g.y, g.width - 2 * self.border, g.height - 2 * self.border
             ]
 
             # Steps
@@ -57,9 +59,8 @@ helper do |s| # {{{
               g.width  += geometry.width - (clients.size + 1) * g.width
           end
 
-          last.resize   = false
           last.geometry = [
-            g.x, g.y, g.width - 2 * border, g.height - 2 * border
+            g.x, g.y, g.width - 2 * self.border, g.height - 2 * self.border
           ]
           # }}}
         when :left, :right, :top, :bottom # {{{
@@ -87,9 +88,8 @@ helper do |s| # {{{
           end
 
           # Set first client
-          first.resize   = false
           first.geometry = [
-            g.x, g.y, g.width - 2 * border, g.height - 2 * border
+            g.x, g.y, g.width - 2 * self.border, g.height - 2 * self.border
           ]
 
           case self.mode[self.current]
@@ -113,9 +113,8 @@ helper do |s| # {{{
 
           # Update clients
           clients.each do |c|
-            c.resize   = false
             c.geometry = [
-              g.x, g.y, g.width - 2 * border, g.height - 2 * border
+              g.x, g.y, g.width - 2 * self.border, g.height - 2 * self.border
             ]
 
             if(:left == self.mode[self.current] or

@@ -2,22 +2,75 @@
 # Created with sur-0.1
 require "socket"
 
+# Pointer {{{
+class Pointer
+  attr_accessor :value
+
+  def initialize(value = nil)
+    @value = value
+  end
+
+  def to_s
+    value.to_s
+  end
+end # }}}
+
 configure :mpd do |s| # {{{
   # Icons
   s.icons = {
-    :play  => Subtlext::Icon.new("play.xbm"),
-    :pause => Subtlext::Icon.new("pause.xbm"),
-    :stop  => Subtlext::Icon.new("stop.xbm"),
-    :prev  => Subtlext::Icon.new("prev.xbm"),
-    :next  => Subtlext::Icon.new("next.xbm"),
-    :note  => Subtlext::Icon.new("note.xbm")
+    :play    => Subtlext::Icon.new("play.xbm"),
+    :pause   => Subtlext::Icon.new("pause.xbm"),
+    :stop    => Subtlext::Icon.new("stop.xbm"),
+    :prev    => Subtlext::Icon.new("prev.xbm"),
+    :next    => Subtlext::Icon.new("next.xbm"),
+    :note    => Subtlext::Icon.new("note.xbm"),
+    :repeat  => Subtlext::Icon.new("repeat.xbm"),
+    :random  => Subtlext::Icon.new("shuffle.xbm"),
+    :update  => Subtlext::Icon.new("diskette.xbm")
   }
 
   # Options
-  s.host     = "localhost"
-  s.port     = 6600
-  s.debug    = false
-  s.interval = 999
+  s.host          = s.config[:host]  || ENV["MPD_HOST"] || "localhost"
+  s.port          = s.config[:port]  || ENV["MPD_PORT"] || 6600
+  s.debug         = s.config[:debug] || false
+  s.def_action    = s.config[:def_action]
+  s.wheel_up      = s.config[:wheel_up]
+  s.wheel_down    = s.config[:wheel_down]
+  s.format_string = s.config[:format_string] || "%note%%artist% - %title%"
+  s.interval      = 999
+
+  # Sanitize actions
+  valid = [ "play", "pause 0", "pause 1", "stop", "previous", "next", "stop" ]
+
+  s.def_action = "next"     unless(valid.include?(s.def_action))
+  s.wheel_up   = "next"     unless(valid.include?(s.wheel_up))
+  s.wheel_down = "previous" unless(valid.include?(s.wheel_down))
+
+  # Parse format string once
+  fields = [ "%note%", "%artist%", "%album%", "%title%", "%track%", "%id%" ]
+
+  s.format_values = {}
+
+  s.format_string.gsub!(/%[^%]+%/) do |f|
+    if(fields.include?(f))
+      name = f.delete("%")
+
+      if("%note%" == f)
+        format_values[name] = self.icons[:note]
+      else
+        format_values[name] = Pointer.new
+      end
+
+      "%s"
+    else
+      ""
+    end
+  end
+
+  # Modes
+  s.repeat  = false
+  s.shuffle = false
+  s.update  = false
 
   # Connect
   if(s.connect(s.host, s.port))
@@ -43,8 +96,8 @@ helper do |s| # {{{
 
   ## connect {{{
   # Open connection to mpd
-  # @param [String, #read]  host  Hostname
-  # @param [Fixnum, #read]  port  Port
+  # @param [String]  host  Hostname
+  # @param [Fixnum]  port  Port
   # @return [Bool] Whether connection succeed
   ##
 
@@ -83,7 +136,7 @@ helper do |s| # {{{
 
   ## safe_read {{{
   # Read data from socket
-  # @param [Fixnum, #read]  timeout  Timeout in seconds
+  # @param [Fixnum]  timeout  Timeout in seconds
   # @return [String] Read data
   ##
 
@@ -107,10 +160,12 @@ helper do |s| # {{{
 
   ## safe_write {{{
   # Write dats to socket
-  # @param [String, #read]  str  String to write
+  # @param [String]  str  String to write
   ##
 
   def safe_write(str)
+    return if(str.empty?)
+
     begin
       self.socket.write("%s\n" % [ str ]) unless(self.socket.nil?)
 
@@ -125,7 +180,7 @@ helper do |s| # {{{
   ##
 
   def idle
-    safe_write("idle player")
+    safe_write("idle player options update")
   end # }}}
 
   ## noidle {{{
@@ -138,7 +193,7 @@ helper do |s| # {{{
 
   ## get_reply {{{
   # Send command and return reply as hash
-  # @oaran [String, #read]  command  Command to send
+  # @oaran [String]  command  Command to send
   # return [Hash] Data hash
   ###
 
@@ -192,6 +247,11 @@ helper do |s| # {{{
         else :off
       end
 
+      # Set modes
+      self.repeat = (0 == status["repeat"].to_i) ? false : true
+      self.random = (0 == status["random"].to_i) ? false : true
+      self.update = !status["updating_db"].nil?
+
       puts "mpd status: %s" % [ status["state"] ] if(self.debug)
 
       status
@@ -200,7 +260,7 @@ helper do |s| # {{{
 
   ## get_ok {{{
   # Get ok or error
-  # @param [Fixnum, #read]  timeout  Timeout in seconds
+  # @param [Fixnum]  timeout  Timeout in seconds
   # @return [Bool] Whether mpd return ok
   ##
 
@@ -213,17 +273,16 @@ helper do |s| # {{{
       if(line.match(/^OK/))
         true
       elsif((match = line.match(/^ACK \[(.*)\] \{(.*)\} (.*)/)))
-        s.state = :error
-
         puts "mpd error: %s" % [ match[3] ]
 
         safe_write("clearerror")
 
-        false
+        true
       else
+        # Probably non-recoverable
         puts "mpd error: expected ok - got: %s" % [ line ] if(self.debug)
 
-        false
+        shutdown
       end
     end
   end # }}}
@@ -233,8 +292,9 @@ helper do |s| # {{{
   ##
 
   def update_status
-    mesg = "mpd not running"
-    icon = :play
+    mesg  = "mpd not running"
+    modes = ""
+    icon  = :play
 
     unless(self.socket.nil?)
       get_status
@@ -249,18 +309,29 @@ helper do |s| # {{{
         end
 
         # Sanity?
-        artist = song["artist"] || "unknown"
-        title  = song["title"]  || File.basename(song["file"])
+        self.format_values.each do |k, v|
+          if(song.include?(k))
+            self.format_values[k].value = song[k] || "n/a"
+          end
+        end
 
-        mesg = " %s%s - %s" % [ self.icons[:note], artist, title ]
+        # Assemble format
+        mesg = self.format_string % self.format_values.values
       elsif(:stop == self.state)
         mesg = "mpd stopped"
         icon = :play
       end
     end
 
-    self.data = "%s%s%s%s %s" % [
-      self.icons[icon], self.icons[:stop], self.icons[:prev], self.icons[:next], mesg
+    # Mode
+    modes << self.icons[:repeat] if(self.repeat)
+    modes << self.icons[:random] if(self.random)
+    modes << self.icons[:update] if(self.update)
+    modes = " %s" % [ modes ] unless(modes.empty?)
+
+    self.data = "%s%s%s%s%s %s" % [
+      self.icons[icon], self.icons[:stop], self.icons[:prev], self.icons[:next],
+      modes, mesg
     ]
   end # }}}
 end # }}}
@@ -290,9 +361,10 @@ on :mouse_down do |s, x, y, b| # {{{
             when 15..28 then "stop"
             when 29..42 then "previous"
             when 43..56 then "next"
+            else s.def_action
           end
-        when 4 then "next"
-        when 5 then "previous"
+        when 4 then self.wheel_up
+        when 5 then self.wheel_down
       end
     )
   end

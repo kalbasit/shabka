@@ -14,10 +14,14 @@ NOTES
     { :name => "color_active",    :type => "string",  :description => "Color of active window (#rrggbb)"    },
     { :name => "color_inactive",  :type => "string",  :description => "Color of inactive window (#rrggbb)"  },
     { :name => "color_separator", :type => "string",  :description => "Color of separator (#rrggbb)"        },
-    { :name => "separator",       :type => "string",  :description => "Separator between windows"           }
+    { :name => "separator",       :type => "string",  :description => "Separator between windows"           },
+    { :name => "modes",           :type => "bool",    :description => "Display client modes like float"     }
   ]
-  s.version     = "0.32"
+  s.version     = "0.33"
   s.tags        = [ "Mouse", "Config" ]
   s.files       = [ "tasks.rb" ]
   s.icons       = [ ]
+
+  # Version requirements
+  s.required_version = "0.9.2500"
 end

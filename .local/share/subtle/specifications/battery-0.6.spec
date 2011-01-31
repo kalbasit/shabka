@@ -6,8 +6,15 @@ Sur::Specification.new do |s|
   s.date        = "Wed Mar 24 21:42 CET 2020"
   s.contact     = "unexist@dorfelite.net"
   s.description = "Show the battery state"
-  s.version     = "0.5"
-  s.tags        = [ "Sys", "Icon" ]
+  s.notes       = <<NOTES
+This sublet displays the remaining battery power (percent) and the
+state of the power adapter. (icon)
+NOTES
+  s.config      = [
+    { :name => "path", :type => "string", :description => "Path of the battery" }
+  ]
+  s.version     = "0.6"
+  s.tags        = [ "Sys", "Icon", "Config" ]
   s.files       = [ "battery.rb" ]
   s.icons       = [
     "icons/ac.xbm",

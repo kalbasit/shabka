@@ -3,7 +3,7 @@
 require "socket"
 
 # Copied from wireless.h
-SIOCGIWESSID      = 0x8B1B
+SIOCGIWESSID      = 0x8B1B  
 IW_ESSID_MAX_SIZE = 32
 
 configure :wifi do |s|
