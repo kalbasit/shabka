@@ -34,15 +34,15 @@ set :gap,        0
 # Screens {{{
 screen 1 do
   stipple false
-  top     [:tray, :seperator, :views, :spacer, :battery, :clock]
+  top     [:tray, :seperator, :views, :spacer, :title, :battery, :clock]
   bottom  [:sublets]
-  view    0
+  view    1
 end
 
 screen 2 do
   stipple false
-  top     [:views, :spacer, :title, :center, :mpd, :separator, :volume, :center]
-  bottom  []
+  top     [:views, :spacer, :title, :battery, :clock]
+  bottom  [:sublets]
   view    0
 end
 # }}}
