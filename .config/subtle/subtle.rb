@@ -42,7 +42,7 @@ end
 screen 2 do
   stipple false
   top     [:views, :spacer, :title, :battery, :clock]
-  bottom  [:sublets]
+  bottom  []
   view    0
 end
 # }}}
