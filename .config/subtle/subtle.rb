@@ -9,6 +9,7 @@ require "socket"
 
 begin
   require "#{ENV["HOME"]}/Projects/TechnoGate/subtle-contrib/ruby/launcher.rb"
+  require "#{ENV["HOME"]}/Projects/TechnoGate/subtle-contrib/ruby/selector.rb"
 rescue LoadError => e
   puts e
 end
@@ -210,6 +211,10 @@ grab "A-Tab" do
   index = 0 if index > clients.size - 1
 
   clients[index].focus
+end
+
+grab modkey + "-Tab" do
+  Subtle::Contrib::Selector.run
 end
 
 grab "A-F4" do
