@@ -19,3 +19,6 @@
 [submodule ".vim/bundle/vimshell"]
 	path = .vim/bundle/vimshell
 	url = git://github.com/Shougo/vimshell.git
+[submodule ".filesystem/lib/bash"]
+	path = .filesystem/lib/bash
+	url = git://github.com/eMxyzptlk/bashlib.git
