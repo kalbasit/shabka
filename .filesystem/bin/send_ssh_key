@@ -2,9 +2,7 @@
 #
 #   vim:ft=sh:fenc=UTF-8:ts=4:sts=4:sw=4:expandtab:foldmethod=marker:foldlevel=0:
 #
-#   $Id$
-#
-#   Copyright (c) 2007 Wael Nasreddine <wael.nasreddine@gmail.com>
+#   Copyright (c) 2010 Wael Nasreddine <wael.nasreddine@gmail.com>
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -72,21 +70,13 @@ unset bootstrap
 ####
 # Main
 
-if [ "${#}" -ne 1 ]; then
-    print_error 0 "Usage: $0 <server>"
-    exit 1
+Host="${1}"
+
+if [ -z "${Host}" ]; then
+    echo "You need to tell me which host should I ssh to"
 fi
 
-Server="${1}"
-
-case "${Server}" in
-    'nasreddine.com')
-        LANG=en_US.utf8 LC_ALL=en_US.utf8 ssh "${Server}"
-        ;;
-    *)
-        TERM=linux LANG=en_US.utf8 LC_ALL=en_US.utf8 ssh ${Server}
-        ;;
-esac
+cat "${HOME}/.ssh/id_rsa.pub" | ssh "${Host}" "mkdir -p ~/.ssh; cat >> ~/.ssh/authorized_keys"
 
 #
 ####
