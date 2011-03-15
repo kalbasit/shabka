@@ -22,10 +22,10 @@ URxvt.tintcolor:	#151515
 URxvt.depth:		24
 URxvt.visualBall:	true
 
-URxvt*font:		        xft:DejaVu Sans Mono:pixelsize=11:antialias=true:hinting=true
-URxvt*boldFont:		    xft:DejaVu Sans Mono:pixelsize=11:antialias=true:hinting=true:bold
-URxvt*italicFont:	    xft:DejaVu Sans Mono:pixelsize=11:antialias=true:hinting=true:italic
-URxvt*bolditalicFont:	xft:DejaVu Sans Mono:pixelsize=11:antialias=true:hinting=true:bold:italic
+URxvt*font:		        xft:DejaVu Sans Mono:pixelsize=12:antialias=true:hinting=true
+URxvt*boldFont:		    xft:DejaVu Sans Mono:pixelsize=12:antialias=true:hinting=true:bold
+URxvt*italicFont:	    xft:DejaVu Sans Mono:pixelsize=12:antialias=true:hinting=true:italic
+URxvt*bolditalicFont:	xft:DejaVu Sans Mono:pixelsize=12:antialias=true:hinting=true:bold:italic
 
 URxvt*perl-ext-common:  default,matcher,clipboard
 URxvt*urlLauncher:      google-chrome
