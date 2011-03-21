@@ -1,0 +1,40 @@
+# SESSION NAME=Default
+
+  source $HOME/.screen/config
+
+# Overwrite default escape
+  escape ^aa
+
+# Overwrite default shell.
+  shell -zsh
+
+# Status bar
+  backtick 1 0 0 $HOME/.screen/bin/netinfo 2 eth0
+  backtick 2 5 5 $HOME/.screen/bin/batinfo
+  backtick 3 5 5 $HOME/.screen/bin/meminfo
+  backtick 4 600 600 $HOME/.screen/bin/weatherinfo
+  caption always "%{=bu kb} %=< %?%-Lw%?%{kc}[:%n %t:]%{kb}%?%+Lw%? >%= "
+  hardstatus alwayslastline "%{+b bw}[%H :: $USER]%{=b kw} %=[[ %1` | %2` | %3` | %4` ]]%=%{=b bw}[%m.%d.%y %0C%a]"
+# backtick 1 0 0 $HOME/.screen/bin/wireless 2 Gandalf
+# backtick 4 5 5 $HOME/.screen/bin/cpuinfo
+# hardstatus alwayslastline "%{+b bw}[%H :: $USER]%{=b kw} %=[[ %1` | %2` | %3` | %5` ]]%=%{=b bw}[%m.%d.%y %0C%a]"
+
+ # Apps
+  bind M screen -t 'Mysql'      8 mysql -u meatball -pXxX
+  bind P screen -t 'Psql'       9 psql
+
+  # SSH Sessions
+  bind N screen -t 'Server'     20 sshTo nasreddine.com
+  bind W screen -t 'Weem-prod'  21 sshTo weem-prod
+
+# Default Buffers
+#               <Title>         <Screen Number>     <Command>
+  screen    -t  Irssi           0                   irssi
+  screen    -t  Shell           1
+  screen    -t  Shell           2
+  screen    -t  Shell           3
+  screen    -t  Root            4                   sudo su -c "HOME=/home/wael zsh"
+  screen    -t  Root            5                   sudo su -c "HOME=/home/wael zsh"
+  screen    -t  Root            6                   sudo su -c "HOME=/home/wael zsh"
+  screen    -t  MySQL           7                   mysql -u meatball -pXxX
+  select 1
