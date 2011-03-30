@@ -22,3 +22,6 @@
 [submodule ".filesystem/lib/bash"]
 	path = .filesystem/lib/bash
 	url = git://github.com/eMxyzptlk/bashlib.git
+[submodule ".vim/bundle/VimCalc"]
+	path = .vim/bundle/VimCalc
+	url = git://github.com/gregsexton/VimCalc.git
