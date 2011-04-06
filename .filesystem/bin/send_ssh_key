@@ -77,6 +77,7 @@ if [ -z "${Host}" ]; then
 fi
 
 cat "${HOME}/.ssh/id_rsa.pub" | ssh "${Host}" "mkdir -p ~/.ssh; cat >> ~/.ssh/authorized_keys"
+echo "export LANG=en_US.utf8" | ssh "${Host}" "cat >> ~/.bashrc"
 
 #
 ####
