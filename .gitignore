@@ -10,6 +10,7 @@ yankring_history_v2.txt
 .xinitrc-sessions
 .pki
 .ssh/environment
+.screen/ssh-auth-sock.*
 *[wW][eE][eE][mM]*
 *~
 drafts/*
