@@ -81,10 +81,10 @@ Server="${1}"
 
 case "${Server}" in
     'nasreddine.com')
-        LANG=en_US.utf8 LC_ALL=en_US.utf8 ssh "${Server}"
+        ssh "${Server}"
         ;;
     *)
-        TERM=linux LANG=en_US.utf8 LC_ALL=en_US.utf8 ssh ${Server}
+        TERM=linux ssh ${Server}
         ;;
 esac
 
