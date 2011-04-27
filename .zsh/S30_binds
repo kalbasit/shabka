@@ -1,6 +1,13 @@
 #!/bin/zsh
 
-source "${HOME}/.zkbd/${TERM}-${VENDOR}-${OSTYPE}"
+BINDS="${HOME}/.zkbd/${TERM}-${VENDOR}-${OSTYPE}"
+if [ ! -e "${BINDS}" ]; then
+	echo "${BINDS} does not exist, an empty file would be created to prevent this message from popping up a second time"
+	touch "${BINDS}"
+fi
+
+source "${BINDS}"
+unset BINDS
 
 # F1->F12
 [[ -n ${key[Backspace]} ]] && bindkey "${key[Backspace]}" backward-delete-char

@@ -136,12 +136,12 @@ fi
 # Sometimes I can't assign a new value for LS_OPTIONS so make sure
 # errors get discarded
 export LS_OPTIONS='-h'
-if [ "$(uname)" = "Linux" ]; then
+if [ "${SYSTEM}" = "Linux" ]; then
     # Do we have GNU ls of a new enough version for color?
     if ls --help 2>/dev/null | grep -q -- '--color=' 2> /dev/null; then
         export LS_OPTIONS="${LS_OPTIONS} --color=always"
     fi
-elif [ "$(uname)" = "FreeBSD" ]; then
+elif [ "${SYSTEM}" = "FreeBSD" -o "${SYSTEM}" = "Darwin" ]; then
     export LS_OPTIONS="${LS_OPTIONS} -G"
 fi
 
