@@ -55,8 +55,8 @@ alias zcp='zmv -C'
 alias zln='zmv -L'
 
 # Make sure we're safe.
-alias cp='cp -b'
 if [ "${SYSTEM}" != "Darwin" ]; then
+	alias cp='cp -b'
 	alias rm='rm -I --interactive=once'
 fi
 

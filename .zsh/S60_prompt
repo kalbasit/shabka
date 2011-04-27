@@ -83,10 +83,18 @@ else
             lprompt '[]' bold blue
             rprompt '()' yellow white
             ;;
+		'phoenix-x')
+	        lprompt '[]' bold blue
+            rprompt '()' yellow white
+            ;;
         'r16270.ovh.net')
             lprompt '[]' white green
             rprompt '<>' red white
             ;;
+		'ks361990.kimsufi.com')
+	        lprompt '[]' white green
+	        rprompt '<>' red white
+	        ;;
         *)
             if [ ${HOSTNAME#*.} = "nasreddine.info" ]; then
                 lprompt '[]' bold white
