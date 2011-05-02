@@ -25,3 +25,6 @@
 [submodule ".vim/bundle/VimCalc"]
 	path = .vim/bundle/VimCalc
 	url = git://github.com/gregsexton/VimCalc.git
+[submodule ".filesystem/bin/willgit"]
+	path = .filesystem/bin/willgit
+	url = git://gitorious.org/willgit/mainline.git
