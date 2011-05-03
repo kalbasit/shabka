@@ -222,7 +222,11 @@ if [ -x "$(${W} sudo 2> /dev/null)" ]; then
     alias umount='sudo umount'
     alias etc-update='sudo etc-update'
     alias etc-paludis='sudo etc-paludis'
-    alias sudosu="sudo su -c \"HOME=${HOME} $(grep ${USER} /etc/passwd | cut -d':' -f7 )\""
+    if [ "${SYSTEM}" = "Darwin" ]; then
+      alias sudosu="sudo su -m root -c $(dscl . -read /Users/wael UserShell | cut -d' ' -f 2)"
+    else
+      alias sudosu="sudo su -c \"HOME=${HOME} $(grep ${USER} /etc/passwd | cut -d':' -f7 )\""
+    fi
 fi
 
 # Printer options
@@ -334,3 +338,8 @@ alias playIphone='sudo rm /var/lib/mpd/playlists/iPhone.m3u; sudo touch /var/lib
 
 # Ruby / Ruby on Rails
 alias r='rails'
+
+# Mac OS X
+if [ "${SYSTEM}" = "Darwin" ]; then
+  alias rd='setgetscreenres 1344 840 && setgetscreenres 1440 900'
+fi
