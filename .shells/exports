@@ -108,7 +108,20 @@ fi
 
 # Export my local bin directory
 # export it at first, so it will be checked first!
-export PATH="/usr/local/lib/cw:${HOME}/.filesystem/bin:${HOME}/.filesystem/usr/bin:${PATH}"
+MY_PATH=""
+if [ -d "${HOME}/.filesystem/bin" ]; then
+  for dir in `find "${HOME}/.filesystem/bin" -type d -name bin`; do
+    MY_PATH="${MY_PATH}:${dir}"
+  done
+fi
+if [ -d "${HOME}/.filesystem/usr/bin" ]; then
+  for dir in `find "${HOME}/.filesystem/usr/bin" -type d -name bin`; do
+    MY_PATH="${MY_PATH}:${dir}"
+  done
+fi
+export MY_PATH="${MY_PATH##:}"
+export PATH="/usr/local/lib/cw:${MY_PATH}:${PATH}"
+unset dir
 
 # Source rvm
 source /usr/local/rvm/scripts/rvm
