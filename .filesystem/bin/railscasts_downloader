@@ -61,7 +61,7 @@ if missing_videos_urls.size > 0
   missing_videos_file.flush
 
   # Run aria2c
-  execute_command("/usr/bin/aria2c --ftp-pasv --continue --max-tries=3 --split=5 --input-file=#{missing_videos_file.path}")
+  execute_command("aria2c --ftp-pasv --continue --max-tries=3 --split=5 --input-file=#{missing_videos_file.path}")
 end
 
 # Cleanup and exit
