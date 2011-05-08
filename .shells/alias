@@ -229,10 +229,6 @@ if [ -x "$(${W} sudo 2> /dev/null)" ]; then
     fi
 fi
 
-# Printer options
-alias haweem='PRINTER=Brother_HL2150N lpr'
-alias hapdf='PRINTER=Virtual_PDF_Printer lpr'
-
 # Common mistakes
 alias xs='cd'
 alias vf='cd'
@@ -290,7 +286,6 @@ alias tf='tail -f'
 alias euses='euses -Saci --'
 alias asdf="if [ -n \"\${DISPLAY}\" ]; then setxkbmap -variant dvorak; else sudo loadkeys dvorak; fi"
 alias aoeu="if [ -n \"\${DISPLAY}\" ]; then setxkbmap -variant euro; else sudo loadkeys en_US; fi"
-alias aria2c="dumpcookies -i '${HOME}/.mozilla/firefox/eMxyzptlk/cookies.sqlite' -o '/tmp/cookies.txt' &> /dev/null; chmod 600 '/tmp/cookies.txt' &> /dev/null; aria2c --file-allocation=none --load-cookies='/tmp/cookies.txt' --ftp-pasv -c -m 3"
 alias genisoimage="genisoimage -allow-leading-dots -joliet-long -iso-level 3 -l -J -r -f -v -copyright \"GNU GENERAL PUBLIC LICENSE\" -A \"Burnt by Wael Nasreddine on $(uname -r -v -m -s).\" -p \"Wael Nasreddine\" -publisher \"Wael Nasreddine\" -V"
 alias webshare='python -c "import SimpleHTTPServer;SimpleHTTPServer.test()"'
 if [ -x "$(${W} devtodo 2> /dev/null)" ]; then
@@ -298,6 +293,17 @@ if [ -x "$(${W} devtodo 2> /dev/null)" ]; then
 fi
 alias vimtips="grep -v '^#' ${HOME}/.vim/vimtips | ${PAGER}"
 alias evimtips="${EDITOR} ${HOME}/.vim/vimtips"
+
+# Aria2 Aliases
+if [ -f "${HOME}/Library/Application Support/Google/Chrome/Default/Cookies" ]; then
+  ARIA2_COOKIE_FILE="${HOME}/Library/Application Support/Google/Chrome/Default/Cookies"
+elif [ -f "${HOME}/.mozilla/firefox/eMxyzptlk/cookies.sqlite" ]; then
+  ARIA2_COOKIE_FILE="${HOME}/.mozilla/firefox/eMxyzptlk/cookies.sqlite"
+fi
+if [ -n "${ARIA2_COOKIE_FILE}" ]; then
+  alias aria2c="dumpcookies -i '${ARIA2_COOKIE_FILE}' -o '/tmp/cookies.txt' &> /dev/null; chmod 600 '/tmp/cookies.txt' &> /dev/null; aria2c --file-allocation=none --load-cookies='/tmp/cookies.txt' --ftp-pasv -c -m 3"
+  unset ARIA2_COOKIE_FILE
+fi
 
 # xrandr aliases depending on the hostname
 #if [ "${HOSTNAME}" = "localhost" ]; then

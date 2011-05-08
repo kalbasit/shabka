@@ -35,20 +35,28 @@ export HISTIGNORE="&:[bf]g:exit"            # Ignore some commands
 export HISTFILESIZE=10000                   # History Size
 export HISTSIZE=10000                       #   //     //
 export INPUTRC=~/.inputrc                   # Inputrc file
-export EDITOR=vim                           # Default Editor, VIM of course
-export VISUAL=vim                           # Default Visual
 export MAIL=~/.mail                         # Default email folder
 export MAILCHECK=0                          # Disable mail checking.
 export IGNOREEOF=3
-export PAGER=least                          # Use an inernally defined function
-                                            # which will either cat or LEAST_PAGER
-                                            # depending on the length of the output..
-if ${W} most &> /dev/null; then
-    export LEAST_PAGER=most                 # the PAGER that'll be used by least
-    export MANPAGER=most                    # Man page viewer
+
+if [ "${SYSTEM}" = "Darwin" ]; then
+  export EDITOR='mate -w'
+  export VISUAL=mate
+  export PAGER=less
+  export GIT_EDITOR='mate -wl1'
 else
-    export LEAST_PAGER=less                 # the PAGER that'll be used by least
-    export MANPAGER=less                    # Man page viewer
+  export EDITOR=vim                           # Default Editor, VIM of course
+  export VISUAL=vim                           # Default Visual
+  export PAGER=least                          # Use an inernally defined function
+                                              # which will either cat or LEAST_PAGER
+                                              # depending on the length of the output..
+  if ${W} most &> /dev/null; then
+      export LEAST_PAGER=most                 # the PAGER that'll be used by least
+      export MANPAGER=most                    # Man page viewer
+  else
+      export LEAST_PAGER=less                 # the PAGER that'll be used by least
+      export MANPAGER=less                    # Man page viewer
+  fi
 fi
 
 # Some default programs
@@ -122,6 +130,11 @@ fi
 export MY_PATH="${MY_PATH##:}"
 export PATH="/usr/local/lib/cw:${MY_PATH}:${PATH}"
 unset dir
+
+# Add MAMP to Path
+if [ -d "/Applications/MAMP/Library/bin/" ]; then
+  export PATH="${PATH}:/Applications/MAMP/Library/bin"
+fi
 
 # Source rvm
 source /usr/local/rvm/scripts/rvm
