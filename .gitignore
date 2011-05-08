@@ -17,6 +17,7 @@ drafts/*
 .vim/_temp/*
 .vim/_backup/*
 .vim/.netrwhist
+*.emptyfile
 
 
 
