@@ -83,8 +83,8 @@ else
             lprompt '[]' bold blue
             rprompt '()' yellow white
             ;;
-		'phoenix-x')
-	        lprompt '[]' bold blue
+		    'phoenix-x'|'Phoenix-X'|'Phoenix-X.local')
+	          lprompt '[]' bold blue
             rprompt '()' yellow white
             ;;
         'r16270.ovh.net')

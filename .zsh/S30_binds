@@ -2,8 +2,11 @@
 
 BINDS="${HOME}/.zkbd/${TERM}-${VENDOR}-${OSTYPE}"
 if [ ! -e "${BINDS}" ]; then
-	echo "${BINDS} does not exist, an empty file would be created to prevent this message from popping up a second time"
-	touch "${BINDS}"
+  if [ ! -e "${BINDS}.emptyfile" ]; then
+	  echo "${BINDS} does not exist, an empty file would be created to prevent this message from popping up a second time"
+	  echo "You can remove all empty files with rm -f ~/.zkbd/*.emptyfile"
+	  touch "${BINDS}.emptyfile"
+  fi
 fi
 
 source "${BINDS}"
