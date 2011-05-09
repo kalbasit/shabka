@@ -137,7 +137,9 @@ if [ -d "/Applications/MAMP/Library/bin/" ]; then
 fi
 
 # Source rvm
-source /usr/local/rvm/scripts/rvm
+if [ -f "/usr/local/rvm/scripts/rvm" ]; then
+  source /usr/local/rvm/scripts/rvm
+fi
 
 # MANPATH
 # On FreeBSD, MANPATH is not defined but one can define it
