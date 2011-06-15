@@ -87,7 +87,7 @@ new_parse_git_branch() {
             branch="$(cut -c1-7 "$git_dir/HEAD")..."
     fi
 
-	if [ "${SYSTEM}" = "Linux" ]; then
+	if [ "${SYSTEM}" = "Linux" -o "${SYSTEM}" = "Darwin" ]; then
 		__ZSH_GIT_FULL_DIR=$(readlink -f ${git_dir:h} 2>/dev/null)
 	elif [ "${SYSTEM}" = "FreeBSD" ]; then
 		if [[ -x /usr/local/bin/readlink ]]; then
