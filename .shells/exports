@@ -127,9 +127,30 @@ if [ -d "${HOME}/.filesystem/usr/bin" ]; then
     MY_PATH="${MY_PATH}:${dir}"
   done
 fi
+dirs=('/usr/local/mysql/bin' '/usr/local/lib/cw')
+for dir in ${dirs[@]}; do
+  if [ -d "${dir}" ]; then
+    MY_PATH="${MY_PATH}:${dir}"
+  fi
+done
 export MY_PATH="${MY_PATH##:}"
-export PATH="/usr/local/lib/cw:${MY_PATH}:${PATH}"
-unset dir
+export MY_PATH="${MY_PATH%%:}"
+export PATH="${MY_PATH}:${PATH}"
+unset dir dirs
+
+# Add PostgreSQL (Mac OS X) to path
+if [ -f "/Library/PostgreSQL/9.1/pg_env.sh" ]; then
+  source "/Library/PostgreSQL/9.1/pg_env.sh"
+  alias restart_psql='sudo su - postgres -c "/Library/PostgreSQL/9.1/bin/pg_ctl restart -D /Library/PostgreSQL/9.1/data"'
+elif [ -f "/Library/PostgreSQL/9.0/pg_env.sh" ]; then
+  source "/Library/PostgreSQL/9.0/pg_env.sh"
+  alias restart_psql='sudo su - postgres -c "/Library/PostgreSQL/9.0/bin/pg_ctl restart -D /Library/PostgreSQL/9.0/data"'
+fi
+
+# Add fink to the path
+if [ -f "/sw/bin/init.sh" ]; then
+  source "/sw/bin/init.sh"
+fi
 
 # Add MAMP to Path
 if [ -d "/Applications/MAMP/Library/bin/" ]; then

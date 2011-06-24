@@ -348,4 +348,19 @@ alias r='rails'
 # Mac OS X
 if [ "${SYSTEM}" = "Darwin" ]; then
   alias rd='setgetscreenres 1344 840 && setgetscreenres 1440 900'
+  alias phpconf="MACOSX_DEPLOYMENT_TARGET=10.6 CFLAGS='-O3 -fno-common -arch i386 -arch x86_64' LDFLAGS='-O3 -arch i386 -arch x86_64' CXXFLAGS='-O3 -fno-common -arch i386 -arch x86_64' ./configure --with-php-config=/Developer/SDKs/MacOSX10.6.sdk/usr/bin/php-config"
 fi
+
+# Mysql
+if [ -x "`${W} mysql 2> /dev/null`" ] && echo 'status' | mysql --default-character-set=utf8 | grep -q 'meatball@localhost'; then
+  alias mc='mysql --default-character-set=utf8'
+  alias md='mysqldump --default-character-set=utf8'
+fi
+
+alias rs='rails server -p 3030'
+alias rs2='rails server -p 3031'
+
+# Projects
+alias prtmpl='cd ~/Projects/TechnoGate/template.rails'
+alias pad='cd ~/Projects/Agence_Durable'
+alias prfood='cd ~/Projects/TechnoGate/restaurant'
