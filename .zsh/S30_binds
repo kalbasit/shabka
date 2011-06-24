@@ -26,6 +26,12 @@ unset BINDS
 [[ -n ${key[Right]} ]] && bindkey "${key[Right]}" forward-char
 [[ -n ${key[Menu]} ]] && bindkey "${key[Menu]}" menu-complete
 
+# History search (in vi-mode)
+bindkey "^[[A" history-search-backward
+bindkey "^[[B" history-search-forward
+bindkey '\e[3~' delete-char
+bindkey '^R' history-incremental-search-backward
+
 #bindkey -v "^[[5~" backward-word
 #bindkey -v "^[[6~" forward-word
 #
