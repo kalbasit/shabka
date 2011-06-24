@@ -43,4 +43,4 @@ if [ ! -f "${1}" ]; then
     cp .tmpl "${1}"
     chmod +x "${1}"
 fi
-vim "${1}"
+$EDITOR "${1}"
