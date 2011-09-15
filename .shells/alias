@@ -345,6 +345,14 @@ alias playIphone='sudo rm /var/lib/mpd/playlists/iPhone.m3u; sudo touch /var/lib
 # Ruby / Ruby on Rails
 alias r='rails'
 
+# Padrino
+alias p='padrino'
+alias pr='p rake'
+alias pss='p start'
+alias pg='p generate'
+alias pc='p console'
+
+
 # Mac OS X
 if [ "${SYSTEM}" = "Darwin" ]; then
   alias rd='setgetscreenres 1344 840 && setgetscreenres 1440 900'
