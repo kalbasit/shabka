@@ -2,20 +2,21 @@
 # Copyright 2008 Marcus D. Hanwell <marcus@cryos.org>
 # Distributed under the terms of the GNU General Public License v2 or later
 
-import string, re, os
+import string, re, os, sys
 
 # Execute git log with the desired command line options.
-fin = os.popen('git log --summary --stat --no-merges --date=short', 'r')
+fin = os.popen('git log --summary --no-merges --date=short', 'r')
 # Create a ChangeLog file in the current directory.
 fout = open('ChangeLog', 'w')
 
 # Set up the loop variables in order to locate the blocks we want
+commitHash = ""
 authorFound = False
 dateFound = False
 messageFound = False
-filesFound = False
 message = ""
 messageNL = False
+filesFound = False
 files = ""
 prevAuthorLine = ""
 
@@ -24,6 +25,8 @@ for line in fin:
     # The commit line marks the start of a new commit object.
     if string.find(line, 'commit') >= 0:
         # Start all over again...
+        re.match('commit', line)
+        commitHash = re.split(' ', line, 1)[1]
         authorFound = False
         dateFound = False
         messageFound = False
@@ -65,18 +68,15 @@ for line in fin:
                 message = message + line.strip()
             else:
                 message = message + " " + line.strip()
-    # If this line is hit all of the files have been stored for this commit
-    elif re.search('files changed', line) >= 0:
-        filesFound = True
-        continue
-    # Collect the files for this commit. FIXME: Still need to add +/- to files
+    # Collect the files for this commit.
     elif authorFound & dateFound & messageFound:
-        fileList = re.split(' \| ', line, 2)
-        if len(fileList) > 1:
-            if len(files) > 0:
-                files = files + ", " + fileList[0].strip()
-            else:
-                files = fileList[0].strip()
+        command = "git show --format=oneline --stat --no-merges %s" % (commitHash.rstrip())
+        output = os.popen(command)
+        files = "    Files changed:\n"
+        for line in output:
+          if re.match(' ', line):
+            filesFound = True
+            files += "      " + line.strip() + "\n"
     # All of the parts of the commit have been found - write out the entry
     if authorFound & dateFound & messageFound & filesFound:
         # First the author line, only outputted if it is the first for that
@@ -91,29 +91,36 @@ for line in fin:
 
         # Assemble the actual commit message line(s) and limit the line length
         # to 80 characters.
-        commitLine = "* " + files + ": " + message
+        commitLine = message
         i = 0
         commit = ""
+        sep = ""
         while i < len(commitLine):
-            if len(commitLine) < i + 78:
-                commit = commit + "\n  " + commitLine[i:len(commitLine)]
+            if len(commitLine) < i + 76:
+                commit = commit + sep + commitLine[i:len(commitLine)]
                 break
-            index = commitLine.rfind(' ', i, i+78)
+            index = commitLine.rfind(' ', i, i+76)
             if index > i:
-                commit = commit + "\n  " + commitLine[i:index]
+                commit = commit + sep + commitLine[i:index]
                 i = index+1
             else:
-                commit = commit + "\n  " + commitLine[i:78]
-                i = i+79
+                commit = commit + sep + commitLine[i:76]
+                i = i+77
+
+            sep = "\n    "
 
         # Write out the commit line
-        fout.write(commit + "\n")
+        fout.write("  * " + commit + "\n\n")
+
+        # Write the changed files
+        fout.write(files + "\n")
 
         #Now reset all the variables ready for a new commit block.
         authorFound = False
         dateFound = False
         messageFound = False
         messageNL = False
+        commitHash = ""
         message = ""
         filesFound = False
         files = ""
