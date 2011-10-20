@@ -1,0 +1,12 @@
+#!/bin/zsh
+
+# URL encode something and print it.
+function url-encode; {
+        setopt extendedglob
+        echo "${${(j: :)@}//(#b)(?)/%$[[##16]##${match[1]}]}"
+}
+
+# Search google for the given keywords.
+function google; {
+        w3m "http://www.google.com/search?q=`url-encode "${(j: :)@}"`"
+}

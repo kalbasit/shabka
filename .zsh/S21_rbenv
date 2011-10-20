@@ -1,0 +1,3 @@
+#!/bin/zsh
+
+[[ -d "${HOME}/.rbenv" ]] && eval "$(rbenv init -)"
