@@ -2,8 +2,6 @@
 #
 #   vim:ft=sh:fenc=UTF-8:ts=4:sts=4:sw=4:expandtab:foldmethod=marker:foldlevel=0:
 #
-#   $Id: Screen 1442 2009-09-09 19:59:27Z wael $
-#
 #   A little script to make life easier with GNU screen sessions.
 #   Put any number of sessions in $HOME/.screen/sessions/ to load them
 #   from this script, an example script:
@@ -217,13 +215,15 @@ while true; do
                     exit 0
                     ;;
             esac
-        else
-            # Seems that the given session name does not exist
-            echo "${GIVEN_SESSION_NAME} is not a valid session name"
-            # The easiest is to restart the script
-            $0
-            exit 0
         fi
     done
+    if [ -n "${GIVEN_SESSION_NAME}" ]; then
+        # Seems that the given session name does not exist
+        echo "${GIVEN_SESSION_NAME} is not a valid session name"
+        # The easiest is to restart the script
+        $0
+        exit 0
+    fi
+
 done
 #}}}
