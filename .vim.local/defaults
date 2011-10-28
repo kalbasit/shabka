@@ -1,0 +1,7 @@
+" vim: filetype=vim
+
+if has("gui")
+  color railscasts+
+else
+  color xoria256
+endif

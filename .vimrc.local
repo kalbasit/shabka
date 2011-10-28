@@ -1,0 +1,9 @@
+" My ViM Customisations
+
+source ~/.vim.local/typos
+source ~/.vim.local/defaults
+source ~/.vim.local/syntax_hl
+source ~/.vim.local/statusline
+source ~/.vim.local/functions
+source ~/.vim.local/autocmd
+source ~/.vim.local/mappings

@@ -28,3 +28,6 @@
 [submodule ".filesystem/bin/willgit"]
 	path = .filesystem/bin/willgit
 	url = git://gitorious.org/willgit/mainline.git
+[submodule ".vim"]
+	path = .vim
+	url = git://github.com/carlhuda/janus.git
