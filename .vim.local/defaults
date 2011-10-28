@@ -5,3 +5,6 @@ if has("gui")
 else
   color xoria256
 endif
+
+" Paste toggle on key F12!
+set pastetoggle=<F12>

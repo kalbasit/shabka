@@ -41,21 +41,64 @@ set relativenumber
 " System default for mappings is now the "," character
 let mapleader = ","
 
+" use :w!! to write to a file using sudo if you forgot to 'sudo vim file'
+" (it will prompt for sudo password when writing)
+cmap w!! %!sudo tee > /dev/null %
+
+" upper/lower word
+nmap <leader>u mQviwU`Q
+nmap <leader>l mQviwu`Q
+
+" upper/lower first char of word
+nmap <leader>U mQgewvU`Q
+nmap <leader>L mQgewvu`Q
+
+" Next buffer
+nmap <silent> <leader>. :bnext<CR>
+
+" Previous buffer
+nmap <silent> <leader>m :bprev<CR>
+
 " Wipe out all buffers
 nmap <silent> <leader>wa :1,9000bwipeout<cr>
 
+" format the entire file
+nmap <leader>fef ggVG=
+
 " Toggle paste mode
 nmap <silent> <leader>p :set invpaste<CR>:set paste?<CR>
+
+" spelling
+nmap <leader>sn ]s
+nmap <leader>sp [s
+nmap <leader>s= z=
+nmap <leader>sg zG
+nmap <leader>sm zW
+nmap <leader>se :set spelllang=en<CR>
+nmap <leader>sf :set spelllang=fr<CR>
+nmap <C-X>s wi<C-X>s
+
+" ,----
+" | fugitive
+" `----
+nmap <leader>gb :Gblame<CR>
+nmap <leader>gs :Gstatus<CR>
+nmap <leader>gd :Gdiff<CR>
+nmap <leader>gl :Glog<CR>
+nmap <leader>gc :Gcommit<CR>
 
 " cd to the directory containing the file in the buffer
 nmap <silent> <leader>cd :lcd %:h<CR>
 nmap <silent> <leader>md :!mkdir -p %:p:h<CR>
 
 " Turn off that stupid highlight search
-nmap <silent> <leader>l :nohls<CR>
+nmap <silent> <leader>nl :nohls<CR>
 
 " put the vim directives for my file editing settings in
 nmap <silent> <leader>vi ovim:set ts=2 sts=2 sw=2:<CR>vim600:fdm=marker fdl=1 fdc=0:<ESC>
+
+" find merge conflict markers
+nmap <silent> <leader>fc <ESC>/\v^[<=>]{7}( .*\|$)<CR>
 
 " Insert my name and email
 nmap <silent> <leader>me aWael Nasreddine <wael.nasreddine@gmail.com><ESC>

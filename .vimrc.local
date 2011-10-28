@@ -7,3 +7,4 @@ source ~/.vim.local/statusline
 source ~/.vim.local/functions
 source ~/.vim.local/autocmd
 source ~/.vim.local/mappings
+source ~/.vim.local/abbreviations
