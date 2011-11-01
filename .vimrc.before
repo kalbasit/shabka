@@ -1,0 +1,2 @@
+" System default for mappings is now the "," character
+let mapleader = ","
