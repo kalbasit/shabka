@@ -1,43 +1,3 @@
-" vim: filetype=vim
-
-" Setting this below makes it sow that error messages don't disappear after
-" one second on startup.
-" set debug=msg
-
-" Make sure that unsaved buffers that are to be put in the background are
-" allowed to go in there (ie. the "must save first" error doesn't come up)
-set hidden
-
-" Make the 'cw' and like commands put a $ at the end instead of just deleting
-" the text and replacing it
-" set cpoptions=ces$
-
-" Don't update the display while executing macros
-set lazyredraw
-
-" Make the command-line completion better
-set wildmenu
-
-" Make it easier to complete buffers, open files, etc...
-set wildignorecase
-
-" Same as default except that I remove the 'u' option
-set complete=.,w,b,t
-
-" When completing by tag, show the whole tag, not just the function name
-set showfulltag
-
-" Add ignorance of whitespace to diff
-set diffopt+=iwhite
-
-" Automatically read a file that has changed on disk
-set autoread
-
-" set grepprg=grep\ -nH\ $*
-
-" Display relative number, makes motion easier
-set relativenumber
-
 " System default for mappings is now the "," character
 let mapleader = ","
 
@@ -53,11 +13,18 @@ nmap <leader>l mQviwu`Q
 nmap <leader>U mQgewvU`Q
 nmap <leader>L mQgewvu`Q
 
+" <leader><leader> toggles between files
+nnoremap <leader><leader> <c-^>
+
 " Next buffer
 nmap <silent> <leader>. :bnext<CR>
 
 " Previous buffer
 nmap <silent> <leader>m :bprev<CR>
+
+" Next tab
+nmap <silent> ;' :tabnext<CR>
+nmap <silent> ;l :tabprev<CR>
 
 " Wipe out all buffers
 nmap <silent> <leader>wa :1,9000bwipeout<cr>
@@ -104,7 +71,7 @@ nmap <silent> <leader>fc <ESC>/\v^[<=>]{7}( .*\|$)<CR>
 nmap <silent> <leader>me aWael Nasreddine <wael.nasreddine@gmail.com><ESC>
 
 " Show all available VIM servers
-nmap <silent> <leader>ss :echo serverlist()<CR>
+nmap <silent> <leader>sl :echo serverlist()<CR>
 
 " The following beast is something i didn't write... it will return the
 " syntax highlighting group that the current "thing" under the cursor
@@ -115,6 +82,14 @@ nmap <silent> <leader>qq :echo "hi<" . synIDattr(synID(line("."),col("."),1),"na
 " Make shift-insert work like in Xterm
 map <S-Insert> <MiddleMouse>
 map! <S-Insert> <MiddleMouse>
+
+" Some helpers to edit mode
+" http://vimcasts.org/e/14
+cnoremap %% <C-R>=expand('%:h').'/'<cr>
+map <leader>ew :e %%
+map <leader>es :sp %%
+map <leader>ev :vsp %%
+map <leader>et :tabe %%
 
 " set text wrapping toggles
 nmap <silent> <leader>ww :set invwrap<CR>:set wrap?<CR>
@@ -145,10 +120,6 @@ noremap <silent> <C-8> <C-W>+
 noremap <silent> <C-9> <C-W>+
 noremap <silent> <C-0> <C-W>>
 
-" Edit the vimrc file
-nmap <silent> <leader>ev :e $MYVIMRC<CR>
-nmap <silent> <leader>sv :so $MYVIMRC<CR>
-
 " Make horizontal scrolling easier
 nmap <silent> <C-o> 10zl
 nmap <silent> <C-i> 10zh
@@ -166,6 +137,8 @@ if !has("gui_macvim")
   " Control-T for ControlT
   map <C-t> :CommandT<CR>
   imap <C-t> <Esc>:CommandT<CR>
+  map <M-t> :CommandTBuffer<CR>
+  imap <M-t> <ESC>:CommandTBuffer<CR>
 
   " Control-Shift-F for Ack
   map <C-F> :Ack<space>
@@ -177,10 +150,11 @@ if !has("gui_macvim")
   map <leader>/ <plug>NERDCommenterToggle<CR>
   imap <leader>/ <Esc><plug>NERDCommenterToggle<CR>i
 
-
-  " Control-][ to increase/decrease indentation
-  vmap <C-]> >gv
-  vmap <C-[> <gv
+  " Alt-][ to increase/decrease indentation
+  nmap <A-]> >>
+  nmap <A-[> <<
+  vmap <A-]> >gv
+  vmap <A-[> <gv
 
   " Map Control-# to switch tabs
   map  <C-0> 0gt
@@ -218,3 +192,29 @@ if !has("gui_macvim")
   map <Leader>= <C-w>=
   imap <Leader>= <Esc> <C-w>=
 endif
+
+" ,----
+" | Gundo
+" `----
+nnoremap <F5> :GundoToggle<CR>
+
+" ,----
+" | Modifying defaults options
+" `----
+nmap <leader>elc :set listchars+=eol:$<CR>
+nmap <leader>rlc :set listchars-=eol:$<CR>
+
+
+" ,----
+" | Par
+" `----
+if executable("par")
+  nnoremap <silent> <leader>fp vip:!par -w<c-r>=&tw<cr><cr>
+  xnoremap <silent> <leader>fp :!par -w<c-r>=&tw<cr><cr>
+endif
+
+
+" ,----
+" | ZoomWin
+" ,---
+map <Leader>zo :ZoomWin<CR>  " Map <leader>zo to zoom
