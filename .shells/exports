@@ -45,7 +45,7 @@ if [ "${SYSTEM}" = "Darwin" ]; then
   export PAGER=less
   export GIT_EDITOR='mate -wl1'
 else
-  export EDITOR=vim                           # Default Editor, VIM of course
+  export EDITOR="gvim --remote-tab-silent"    # Default Editor is gvim
   export VISUAL=vim                           # Default Visual
   export PAGER=least                          # Use an inernally defined function
                                               # which will either cat or LEAST_PAGER
@@ -133,9 +133,14 @@ for dir in ${dirs[@]}; do
     MY_PATH="${MY_PATH}:${dir}"
   fi
 done
+if [ -d "${HOME}/.rbenv/bin" ]; then
+  RBENV="${HOME}/.rbenv/bin"
+else
+  RBENV=""
+fi
 export MY_PATH="${MY_PATH##:}"
 export MY_PATH="${MY_PATH%%:}"
-export PATH="${MY_PATH}:${PATH}"
+export PATH="${MY_PATH}:${RBENV}:${PATH}"
 unset dir dirs
 
 # Add PostgreSQL (Mac OS X) to path
@@ -263,3 +268,10 @@ if [ -z "${JDK_HOME}" ]; then
         unset temp
     fi
 fi
+
+# Ruby 19!!
+export JRUBY_OPTS="--1.9"
+export RBXOPT="-X19"
+
+# alias ack='ack --color'
+export ACK_OPTIONS="--color"
