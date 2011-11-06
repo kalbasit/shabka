@@ -31,3 +31,6 @@
 [submodule ".vim"]
 	path = .vim
 	url = git://github.com/TechnoGate/janus.git
+[submodule ".rbenv"]
+	path = .rbenv
+	url = git://github.com/sstephenson/rbenv.git
