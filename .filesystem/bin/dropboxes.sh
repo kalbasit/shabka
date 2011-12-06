@@ -8,5 +8,13 @@ do
         ln -s "$HOME/.Xauthority" "$HOME/$dropbox/" 2> /dev/null
     fi
     HOME="$HOME/$dropbox"
-    /home/$USER/.dropbox-dist/dropboxd 2> /dev/null &
+
+    if [ -x "/home/$USER/.dropbox-dist/dropboxd" ]; then
+      /home/$USER/.dropbox-dist/dropboxd 2> /dev/null &
+    elif [ -x `which dropboxd 2>/dev/null` ]; then
+      dropboxd 2> /dev/null &
+    else
+      echo "Could not find dropboxd"
+      exit 1
+    fi
 done
