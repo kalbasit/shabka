@@ -1,0 +1,238 @@
+""
+"" Functions
+""
+
+""
+"" Defaults
+""
+
+" Paste toggle on key F12!
+set pastetoggle=<F12>
+
+" ,----
+" | Windows
+" `---
+:set splitbelow   " Always split under
+:set splitright   " Always split on the right
+
+" ,----
+" | files / backup
+" `----
+set backupdir=~/.vim/_backup    " where to put backup file
+set directory=~/.vim/_temp      " directory is the directory for temp file
+set makeef=error.err            " When using make, where should it dump the file
+set noautowrite                 " safe automacially content
+set modeline                    " activate modelines
+set modelines=5                 " the first/last 5 lines can be a modeline
+set autoread                    " Automatically read a file that has changed on disk
+
+" ,----
+" | viminfo
+" `----
+" Remember things between sessions
+"
+" '20  - remember marks for 20 previous files
+" \"50 - save 50 lines for each register
+" :20  - remember 20 items in command-line history
+" %    - remember the buffer list (if vim started without a file arg)
+" n    - set name of viminfo file
+set viminfo='20,\"50,:20,%,n~/.viminfo,!
+
+" ,----
+" | UI / visual cues
+" `----
+color xoria256          " Xoria256 is good theme for Terminal mode.
+set lsp=0               " space it out a little more (easier to read)
+set wildmenu            " turn on wild menu
+set wildignorecase      " Make it easier to complete buffers, open files, etc...
+set ruler               " Always show current positions along the bottom
+set cmdheight=1         " the command bar is 1 line high
+set relativenumber      " turn on line numbers but display them as relative to the current line
+set lz                  " do not redraw while running macros (much faster) (LazyRedraw)
+set hidden              " you can change buffer without saving
+set whichwrap+=<,>,h,l  " backspace and cursor keys wrap to
+set shortmess=atI       " shortens messages to avoid 'press a key' prompt
+set report=1            " tell us when anything is changed via :...
+set complete=.,w,b,t    " Same as default except that I remove the 'u' option
+set noerrorbells        " don't make noise
+set fillchars=vert:\ ,stl:\ ,stlnc:\   " make the splitters between windows be blank
+set showmatch           " show matching brackets
+set matchtime=2         " how many tenths of a second to blink matching brackets for
+set nohlsearch          " do not highlight searched for phrases
+set incsearch           " BUT do highlight as you type you search phrase
+set so=5                " Keep 10 lines (top/bottom) for scope
+set novisualbell        " don't blink
+set showmode            " show mode in statusline
+set startofline         " Move the cursor to the first non-blank of the line
+set esckeys             " allow cursor keys in insert mode
+set showmatch           " show matching brackets
+set wildchar=<TAB>      " Which character activates the wildmenu
+set showfulltag         " When completing by tag, show the whole tag, not just the function name
+if v:version >= 700
+    set nocursorcolumn      " no cursor column highlighting
+    set nocursorline        " no cursor line highlighting
+endif
+if has("gui_running")
+  "color railscasts+     " Lovely theme but sucks when in diff mode
+  "color solarized       " Truely amazing theme.
+  color getafe           " Amazin black theme
+  set mouse=""          " I hate using the mouse for other than copying/pasting.
+  set guioptions=cei    " Set the guioptions I like
+  " set guifont=Courier\ 10\ Pitch\ 10
+  set guifont=Terminus
+endif
+
+" ,----
+" | Shell
+" `----
+if has("gui_macvim")
+  set shell = bash        " Always use bash for the shell on mvim
+                          " See https://github.com/carlhuda/janus/pull/229
+endif
+
+" ,----
+" | Diff
+" `----
+set diffopt+=iwhite     " Add ignorance of whitespace to diff
+
+" ,----
+" | snipMate
+" `----
+let g:snips_author = 'Wael Nasreddine <wael.nasreddine@gmail.com>'
+
+" ,----
+" | NERDTree
+" `----
+"let g:loaded_nerd_tree=1  " Disable NERDTree, it is driving me mad.
+
+" Setting this below makes it sow that error messages don't disappear after
+" one second on startup.
+" set debug=msg
+
+" Make the 'cw' and like commands put a $ at the end instead of just deleting
+" the text and replacing it
+" set cpoptions=ces$
+
+""
+"" Mappings
+""
+
+" Wipe out all buffers
+" nmap <silent> <leader>wa :1,9000bwipeout<cr>
+nmap <silent> <leader>wa :1,9000bd<cr>
+
+" spelling
+nmap <leader>sn ]s
+nmap <leader>sp [s
+nmap <leader>s= z=
+nmap <leader>sg zG
+nmap <leader>sm zW
+nmap <leader>se :set spelllang=en<CR>
+nmap <leader>sf :set spelllang=fr<CR>
+nmap <C-X>s wi<C-X>s
+
+" put the vim directives for my file editing settings in
+nmap <silent> <leader>vi ovim:set ts=2 sts=2 sw=2:<CR>vim600:fdm=marker fdl=1 fdc=0:<ESC>
+
+" Insert my name and email
+nmap <silent> <leader>me aWael Nasreddine <wael.nasreddine@gmail.com><ESC>
+
+" Show all available VIM servers
+nmap <silent> <leader>sl :echo serverlist()<CR>
+
+" The following beast is something i didn't write... it will return the
+" syntax highlighting group that the current "thing" under the cursor
+" belongs to -- very useful for figuring out what to change as far as
+" syntax highlighting goes.
+nmap <silent> <leader>qq :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
+
+" Maps to make handling windows a bit easier
+"noremap <silent> ,h :wincmd h<CR>
+"noremap <silent> ,j :wincmd j<CR>
+"noremap <silent> ,k :wincmd k<CR>
+"noremap <silent> ,l :wincmd l<CR>
+"noremap <silent> ,sb :wincmd p<CR>
+"noremap <silent> <C-F9> :vertical resize -10<CR>
+"noremap <silent> <C-F10> :resize +10<CR>
+"noremap <silent> <C-F11> :resize -10<CR>
+"noremap <silent> <C-F12> :vertical resize +10<CR>
+"noremap <silent> <leader>s8 :vertical resize 83<CR>
+"noremap <silent> <leader>cj :wincmd j<CR>:close<CR>
+"noremap <silent> <leader>ck :wincmd k<CR>:close<CR>
+"noremap <silent> <leader>ch :wincmd h<CR>:close<CR>
+"noremap <silent> <leader>cl :wincmd l<CR>:close<CR>
+"noremap <silent> <leader>cc :close<CR>
+"noremap <silent> <leader>cw :cclose<CR>
+"noremap <silent> <leader>ml <C-W>L
+"noremap <silent> <leader>mk <C-W>K
+"noremap <silent> <leader>mh <C-W>H
+"noremap <silent> <leader>mj <C-W>J
+"noremap <silent> <C-7> <C-W>>
+"noremap <silent> <C-8> <C-W>+
+"noremap <silent> <C-9> <C-W>+
+"noremap <silent> <C-0> <C-W>>
+
+" Make horizontal scrolling easier
+nmap <silent> <C-o> 10zl
+nmap <silent> <C-i> 10zh
+
+" Use CTRL-E to replace the original ',' mapping
+nnoremap <C-E> ,
+
+" ,----
+" | Modifying defaults options
+" `----
+nmap <leader>elc :set listchars+=eol:$<CR>
+nmap <leader>rlc :set listchars-=eol:$<CR>
+
+" ,----
+" | Par
+" `----
+if executable("par")
+  nnoremap <silent> <leader>fp vip:!par -w<c-r>=&tw<cr><cr>
+  xnoremap <silent> <leader>fp :!par -w<c-r>=&tw<cr><cr>
+endif
+
+""
+"" Auto Commands
+""
+
+""
+"" Abbreviations
+""
+
+" footnotes
+ab ~0 [0]<esc>m`:/^--\s*/-2/<CR>o<CR>Footnotes:<CR>----------<CR>[0]
+ab ~1 [1]<esc>m`:/^Footnotes\:/+2/<CR>o[1]
+ab ~2 [2]<esc>m`:/^Footnotes\:/+3/<CR>o[2]
+ab ~3 [3]<esc>m`:/^Footnotes\:/+4/<CR>o[3]
+ab ~4 [4]<esc>m`:/^Footnotes\:/+5/<CR>o[4]
+ab ~5 [5]<esc>m`:/^Footnotes\:/+6/<CR>o[5]
+ab ~6 [6]<esc>m`:/^Footnotes\:/+7/<CR>o[6]
+ab ~7 [7]<esc>m`:/^Footnotes\:/+8/<CR>o[7]
+ab ~8 [8]<esc>m`:/^Footnotes\:/+9/<CR>o[8]
+ab ~9 [9]<esc>m`:/^Footnotes\:/+10/<CR>o[9]
+
+""
+"" Typos
+""
+
+"" simple corrections
+iab alos        also
+iab aslo        also
+iab bianry      binary
+iab bianries    binaries
+iab charcter    character
+iab charcters   characters
+iab exmaple     example
+iab exmaples    examples
+iab shoudl      should
+iab seperate    separate
+iab teh         the
+iab Srever      Server
+iab tpyo        typo
+
+"" greetings
+
+iab rr Regards,<cr>Wael Nasreddine
+iab grr Greetings,<cr>Wael Nasreddine

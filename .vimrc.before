@@ -1,0 +1,4 @@
+" System default for mappings is now the "," character
+let mapleader = ","
+
+call janus#disable_plugin('pep8')

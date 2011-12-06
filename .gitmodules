@@ -28,3 +28,9 @@
 [submodule ".filesystem/bin/willgit"]
 	path = .filesystem/bin/willgit
 	url = git://gitorious.org/willgit/mainline.git
+[submodule ".rbenv"]
+	path = .rbenv
+	url = git://github.com/sstephenson/rbenv.git
+[submodule ".vim"]
+	path = .vim
+	url = https://github.com/carlhuda/janus.git

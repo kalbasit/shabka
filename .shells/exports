@@ -45,7 +45,7 @@ if [ "${SYSTEM}" = "Darwin" ]; then
   export PAGER=less
   export GIT_EDITOR='mate -wl1'
 else
-  export EDITOR=vim                           # Default Editor, VIM of course
+  export EDITOR="gvim --remote-tab-silent"    # Default Editor is gvim
   export VISUAL=vim                           # Default Visual
   export PAGER=least                          # Use an inernally defined function
                                               # which will either cat or LEAST_PAGER
