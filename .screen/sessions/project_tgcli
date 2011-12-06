@@ -1,7 +1,7 @@
-# SESSION NAME=WatchTower Project
+# SESSION NAME=TgCli Project
 
 # Change to the project's folder
-chdir $HOME/Projects/TechnoGate/watch_tower
+  chdir $HOME/Projects/TechnoGate/tg_cli
 
 # Source the config file
   source $HOME/.screen/config
@@ -18,16 +18,13 @@ chdir $HOME/Projects/TechnoGate/watch_tower
 
   # Apps
   bind G screen -t Guard  0   bundle exec guard
-  bind P screen -t Pry    1   bundle exec pry -r ./lib/watch_tower
-  bind S screen -t Psql   3   psql watch_tower_development
+  bind P screen -t Pry    1   bundle exec pry -I./lib -r./lib/tg_cli
 
 # Default Buffers
 #               <Title>         <Screen Number>     <Command>
   screen    -t  Guard           0                   bundle exec guard
-  screen    -t  Log             1                   tail -f ~/.watch_tower/log/production.log
-  screen    -t  Pry             2                   bundle exec pry -r ./lib/watch_tower
-  screen    -t  Psql            3                   psql watch_tower_development
+  screen    -t  Pry             1                   bundle exec pry -I./lib -r./lib/tg_cli
+  screen    -t  Shell           2
+  screen    -t  Shell           3
   screen    -t  Shell           4
-  screen    -t  Shell           5
-  screen    -t  Shell           6
-  select 4
+  select 2
