@@ -81,7 +81,9 @@
 # shell                 zsh
 # shell                 bash
 # shell                 ksh
-  shell -$SHELL
+
+# http://stackoverflow.com/questions/5616592/chdir-in-screenrc-in-mac-doesnt-work
+#  shell -$SHELL
 
 # Use screen-256color
   term screen-256color
@@ -293,8 +295,8 @@
 
 # ... and make them better.
   bind 'K' kill
-  bind 'I' login on
-  bind 'O' login off
+#  bind 'I' login on
+#  bind 'O' login off
   bind '}' history
   bind 'Q' quit
 

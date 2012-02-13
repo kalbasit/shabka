@@ -322,11 +322,6 @@ if [ -x "$(${W} qemu-system-x86_64 2> /dev/null)" -a -f "${HOME}/.qemu/TinyXp.im
     alias qxp="qemu-system-x86_64 -hda ${HOME}/.qemu/TinyXp.img -boot c -m 1024 -localtime -usb -net nic,model=e1000 -net tap,name=tap0,script=no -soundhw ac97 -ctrl-grab"
 fi
 
-# Clean source files
-alias clean='sed -e "s@@@g" -e "s/[ ]*\t/\t/g" -e "s/[ \t]*$//g" -i'
-
-alias storageMount='mount /media/Whd160; mount /media/Whd500; mount /media/Whd750'
-
 # This is a security alias,
 # If you quit your X session (or X server was killed)
 # You get a login and not a shell

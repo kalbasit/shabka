@@ -4,10 +4,10 @@
 
 # Sanity Check.
 if [ x"${HOME}" = "x" ]; then
-    export HOME=$(cd ~ ; pwd)
+  export HOME=$(cd ~ ; pwd)
 fi
 if [ x"${HOSTNAME}" = "x" ]; then
-    export HOSTNAME=$(hostname)
+  export HOSTNAME=$(hostname)
 fi
 
 # ME :D
@@ -22,10 +22,10 @@ source "${HOME}/.shells/lang"
 
 # Find out where which is located and export it as W.
 for BinDir in /usr/bin /bin /usr/local/bin; do
-    if [ -x "${BinDir}/which" ]; then
-        export W="${BinDir}/which"
-        break
-    fi
+  if [ -x "${BinDir}/which" ]; then
+    export W="${BinDir}/which"
+    break
+  fi
 done
 unset BinDir
 
@@ -39,24 +39,22 @@ export MAIL=~/.mail                         # Default email folder
 export MAILCHECK=0                          # Disable mail checking.
 export IGNOREEOF=3
 
-if [ "${SYSTEM}" = "Darwin" ]; then
-  export EDITOR='mate -w'
-  export VISUAL=mate
-  export PAGER=less
-  export GIT_EDITOR='mate -wl1'
-else
-  export EDITOR="gvim --remote-tab-silent"    # Default Editor is gvim
-  export VISUAL=vim                           # Default Visual
+export EDITOR="gvim --remote-tab-silent"    # Default Editor is gvim
+export VISUAL=vim                           # Default Visual
+if [ "${SYSTEM}" = "Linux" ]; then
   export PAGER=least                          # Use an inernally defined function
                                               # which will either cat or LEAST_PAGER
                                               # depending on the length of the output..
-  if ${W} most &> /dev/null; then
-      export LEAST_PAGER=most                 # the PAGER that'll be used by least
-      export MANPAGER=most                    # Man page viewer
-  else
-      export LEAST_PAGER=less                 # the PAGER that'll be used by least
-      export MANPAGER=less                    # Man page viewer
-  fi
+else
+  export PAGER=less
+fi
+
+if ${W} most &> /dev/null; then
+  export LEAST_PAGER=most                 # the PAGER that'll be used by least
+  export MANPAGER=most                    # Man page viewer
+else
+  export LEAST_PAGER=less                 # the PAGER that'll be used by least
+  export MANPAGER=less                    # Man page viewer
 fi
 
 # Some default programs
@@ -93,8 +91,12 @@ export NNTPSERVER='aioe.cjb.net'
 export TODO_OPTIONS="--timeout --summary"
 
 # Add /sbin and /usr/sbin
-if ! echo "${PATH}" | grep -q "sbin"; then
-    export PATH="${PATH}:/usr/local/sbin:/usr/sbin:/sbin"
+if [ -x "/usr/libexec/path_helper" ]; then
+  eval `/usr/libexec/path_helper -s`
+else
+  if ! echo "${PATH}" | grep -q "sbin"; then
+      export PATH="${PATH}:/usr/local/sbin:/usr/sbin:/sbin"
+  fi
 fi
 
 # If we don't have distcc or ccache, add them!
@@ -109,9 +111,9 @@ fi
 
 # export any bin folder in ~/opt/
 if [ `find ${HOME}/.filesystem/opt/ -maxdepth 2 -name bin -type d | wc -l` -gt 0 ]; then
-    for i in `find ${HOME}/.filesystem/opt/ -maxdepth 2 -name bin -type d`; do
+  for i in `find ${HOME}/.filesystem/opt/ -maxdepth 2 -name bin -type d`; do
     export PATH="${i}:${PATH}"
-    done
+  done
 fi
 
 # Export my local bin directory
@@ -138,34 +140,15 @@ if [ -d "${HOME}/.rbenv/bin" ]; then
 else
   RBENV=""
 fi
-export MY_PATH="${MY_PATH##:}"
-export MY_PATH="${MY_PATH%%:}"
-export PATH="${MY_PATH}:${RBENV}:${PATH}"
-unset dir dirs
+MY_PATH="${RBENV}:${MY_PATH}"
 
-# Add PostgreSQL (Mac OS X) to path
-if [ -f "/Library/PostgreSQL/9.1/pg_env.sh" ]; then
-  source "/Library/PostgreSQL/9.1/pg_env.sh"
-  alias restart_psql='sudo su - postgres -c "/Library/PostgreSQL/9.1/bin/pg_ctl restart -D /Library/PostgreSQL/9.1/data"'
-elif [ -f "/Library/PostgreSQL/9.0/pg_env.sh" ]; then
-  source "/Library/PostgreSQL/9.0/pg_env.sh"
-  alias restart_psql='sudo su - postgres -c "/Library/PostgreSQL/9.0/bin/pg_ctl restart -D /Library/PostgreSQL/9.0/data"'
-fi
-
-# Add fink to the path
-if [ -f "/sw/bin/init.sh" ]; then
-  source "/sw/bin/init.sh"
-fi
-
-# Add MAMP to Path
-if [ -d "/Applications/MAMP/Library/bin/" ]; then
-  export PATH="${PATH}:/Applications/MAMP/Library/bin"
-fi
-
-# Source rvm
-if [ -f "/usr/local/rvm/scripts/rvm" ]; then
-  source /usr/local/rvm/scripts/rvm
-fi
+# Export the constructed dirs
+MY_PATH="${MY_PATH}:${PATH}"
+oldifs="${IFS}"
+export IFS=":"
+export PATH="`echo "${MY_PATH}" | sed -e 's@::@:@g' -e 's@//@/@g' | uniq | sed -e 's@::@:@g' -e 's@//@/@g'`"
+export IFS="${oldifs}"
+unset dir dirs MY_PATH oldifs
 
 # MANPATH
 # On FreeBSD, MANPATH is not defined but one can define it
@@ -198,22 +181,6 @@ if [ "${SYSTEM}" = "Linux" ]; then
 elif [ "${SYSTEM}" = "FreeBSD" -o "${SYSTEM}" = "Darwin" ]; then
     export LS_OPTIONS="${LS_OPTIONS} -G"
 fi
-
-# CDPATH is like PATH but works for cd command
-#export CDPATH=".:~:/:/usr/portage"
-
-# Export my phone bluetooth MAC address
-export eMxyzptlk='00:1D:6E:52:8B:F7'
-
-# paludis have a hook that generateѕ metadata a lot faster than plaudis does
-# so disable paludis metadata generation
-#PALUDIS_NO_WRITE_CACHE_CLEAN=yes
-
-# Use thoughtfully the GTK+ runtime environment (lib & conf files) from
-# VMware otherwize I get the below error:
-# /opt/vmware/workstation/lib/lib/libvmwareui.so.0/libvmwareui.so.0:
-#   undefined symbol: _ZThn12_N4view10FieldEntry17delete_text_vfuncEii
-#export VMWARE_USE_SHIPPED_GTK="yes"
 
 # watch for people
 watch=(notme)                   # watch for everybody but me
@@ -248,18 +215,6 @@ fi
 # to use SSH with corkscrew, you will get 'zsh: no shuch file or directory', so it needs to be an absolute path!!
 export SHELL="$( ${W} $(basename ${SHELL}) )"
 
-export ZEND_TOOL_INCLUDE_PATH_PREPEND=/home/wael/src/projects/fwngame/library
-
-# Force libflashsupport to use pulse
-# See: http://pulseaudio.revolutionlinux.com/PulseAudio
-#export FLASH_FORCE_PULSEAUDIO=1
-
-# SDL for PulseAudio
-#export SDL_AUDIODRIVER="pulse"
-
-# Eclim
-export ECLIM_ECLIPSE_HOME=/usr/share/eclipse
-
 # JDK_HOME
 if [ -z "${JDK_HOME}" ]; then
     if [ -x "$(${W} java 2> /dev/null)" ]; then
@@ -275,3 +230,13 @@ export RBXOPT="-X19"
 
 # alias ack='ack --color'
 export ACK_OPTIONS="--color"
+
+export PERL5LIB="$HOME/.filesystem/lib/perl5/site_perl"
+
+# Speed up Ruby
+# https://gist.github.com/1688857
+export RUBY_HEAP_MIN_SLOTS=1000000
+export RUBY_HEAP_SLOTS_INCREMENT=1000000
+export RUBY_HEAP_SLOTS_GROWTH_FACTOR=1
+export RUBY_GC_MALLOC_LIMIT=1000000000
+export RUBY_HEAP_FREE_MIN=500000

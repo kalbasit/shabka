@@ -1,7 +1,7 @@
 # SESSION NAME=WatchTower Project
 
 # Change to the project's folder
-chdir $HOME/Projects/TechnoGate/watch_tower
+chdir $HOME/Code/TechnoGate/watch_tower
 
 # Source the config file
   source $HOME/.screen/config

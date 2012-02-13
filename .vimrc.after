@@ -44,7 +44,7 @@ set viminfo='20,\"50,:20,%,n~/.viminfo,!
 color xoria256          " Xoria256 is good theme for Terminal mode.
 set lsp=0               " space it out a little more (easier to read)
 set wildmenu            " turn on wild menu
-set wildignorecase      " Make it easier to complete buffers, open files, etc...
+"set wildignorecase      " Make it easier to complete buffers, open files, etc...
 set ruler               " Always show current positions along the bottom
 set cmdheight=1         " the command bar is 1 line high
 set relativenumber      " turn on line numbers but display them as relative to the current line
@@ -85,10 +85,6 @@ endif
 " ,----
 " | Shell
 " `----
-if has("gui_macvim")
-  set shell = bash        " Always use bash for the shell on mvim
-                          " See https://github.com/carlhuda/janus/pull/229
-endif
 
 " ,----
 " | Diff

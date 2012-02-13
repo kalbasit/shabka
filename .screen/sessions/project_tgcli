@@ -1,7 +1,7 @@
 # SESSION NAME=TgCli Project
 
 # Change to the project's folder
-  chdir $HOME/Projects/TechnoGate/tg_cli
+  chdir $HOME/Code/TechnoGate/tg_cli
 
 # Source the config file
   source $HOME/.screen/config

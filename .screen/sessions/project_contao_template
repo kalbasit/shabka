@@ -1,7 +1,7 @@
 # SESSION NAME=Contao Template Project
 
 # Change to the project's folder
-chdir $HOME/Projects/Agence_Durable/contao_template
+chdir $HOME/Code/Agence_Durable/contao_template
 
 # Source the config file
   source $HOME/.screen/config

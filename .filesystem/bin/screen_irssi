@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+screen -S Irssi -c $HOME/.screen/sessions/irssi

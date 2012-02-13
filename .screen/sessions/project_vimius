@@ -1,7 +1,7 @@
 # SESSION NAME=Vimius Project
 
 # Change to the project's folder
-  chdir $HOME/Projects/TechnoGate/vimius/ruby
+  chdir $HOME/Code/TechnoGate/vimius/ruby
 
 # Source the config file
   source $HOME/.screen/config

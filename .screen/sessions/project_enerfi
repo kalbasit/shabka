@@ -1,7 +1,7 @@
 # SESSION NAME=Enerfi Project
 
 # Change to the project's folder
-chdir $HOME/Projects/Agence_Durable/enerfi
+chdir $HOME/Code/Agence_Durable/enerfi
 
 # Source the config file
   source $HOME/.screen/config

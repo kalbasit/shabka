@@ -1,7 +1,7 @@
 # SESSION NAME=Netplus Project
 
 # Change to the project's folder
-  chdir $HOME/Projects/Agence_Durable/netplus
+  chdir $HOME/Code/Agence_Durable/netplus
 
 # Source the config file
   source $HOME/.screen/config

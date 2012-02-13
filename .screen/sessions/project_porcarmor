@@ -1,7 +1,7 @@
-# SESSION NAME=TgConfig Project
+# SESSION NAME=PorcArmor Project
 
 # Change to the project's folder
-chdir $HOME/Code/TechnoGate/tg_config
+  chdir $HOME/Code/Agence_Durable/porcarmor
 
 # Source the config file
   source $HOME/.screen/config
@@ -17,14 +17,12 @@ chdir $HOME/Code/TechnoGate/tg_config
   hardstatus alwayslastline "%{+b bw}[%H :: $USER]%{=b kw} %=%{=b bw}[%m.%d.%y %0C%a]"
 
   # Apps
-  bind G screen -t Guard  0   bundle exec guard
-  bind P screen -t Pry    1   bundle exec pry -r ./lib/tg_config
+  bind G screen -t 'Guard'      0 bundle exec guard
 
 # Default Buffers
 #               <Title>         <Screen Number>     <Command>
   screen    -t  Guard           0                   bundle exec guard
-  screen    -t  Pry             1                   bundle exec pry -r ./lib/tg_config
+  screen    -t  Shell           1
   screen    -t  Shell           2
   screen    -t  Shell           3
-  screen    -t  Shell           4
-  select 2
+  select 1

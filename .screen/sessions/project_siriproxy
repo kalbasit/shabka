@@ -1,7 +1,7 @@
 # SESSION NAME=SiriProxy Project
 
 # Change to the project's folder
-  chdir $HOME/Projects/eMxyzptlk/SiriProxy
+  chdir $HOME/Code/eMxyzptlk/SiriProxy
 
 # Source the config file
   source $HOME/.screen/config

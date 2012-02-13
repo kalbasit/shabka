@@ -1,7 +1,7 @@
 # SESSION NAME=MerFragile Project
 
 # Change to the project's folder
-chdir $HOME/Projects/Agence_Durable/merfragile
+chdir $HOME/Code/Agence_Durable/merfragile
 
 # Source the config file
   source $HOME/.screen/config
