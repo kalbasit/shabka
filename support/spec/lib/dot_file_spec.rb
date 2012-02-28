@@ -43,6 +43,12 @@ describe DotFile do
   end
 
   context '#link_dotfiles' do
+    before :each do
+      File.stub(:folder?).with("#{expanded_source_path}/folder").and_return true
+      subject.stub(:find_files).with(expanded_source_path, recursive: false).
+        and_return ["#{expanded_source_path}/folder"]
+    end
+
     it {should respond_to :link_dotfiles }
 
     it "should find_files in the source_path" do
@@ -50,19 +56,24 @@ describe DotFile do
       subject.link_dotfiles
     end
 
-    it "should call link_dotfile for files and folders that does not have a .link_childs" do
+    it "should call link_dotfile for files and folders that does not have a .link_childs not a .dont_link" do
       subject.should_receive(:find_files).with(expanded_source_path, recursive: false).and_return ["#{expanded_source_path}/.file"]
       subject.should_receive(:link_dotfile).with('.file')
       subject.link_dotfiles
     end
 
     it "should not call link_dotfile if the folder in question has a .dont_link file" do
-      File.should_receive(:folder?).with("#{expanded_source_path}/.not_linkable_folder").and_return true
-      subject.should_not_receive(:link_dotfile).with('.not_linkable_folder')
-      subject.should_receive(:find_files).with(expanded_source_path, recursive: false).
-        and_return ["#{expanded_source_path}/.not_linkable_folder"]
-      subject.should_receive(:find_files).with("#{expanded_source_path}/.not_linkable_folder", recursive: false).
-        and_return ["#{expanded_source_path}/.not_linkable_folder/.file", "#{expanded_source_path}/.not_linkable_folder/.dont_link"]
+      subject.should_not_receive(:link_dotfile).with('folder')
+      subject.should_receive(:find_files).with("#{expanded_source_path}/folder").at_least(:once).
+        and_return ["#{expanded_source_path}/folder/.file", "#{expanded_source_path}/folder/.dont_link"]
+
+      subject.link_dotfiles
+    end
+
+    it "should not link any folder that has .link_childs file" do
+      subject.should_not_receive(:link_dotfile).with('folder')
+      subject.should_receive(:find_files).with("#{expanded_source_path}/folder").at_least(:once).
+        and_return ["#{expanded_source_path}/folder/.file", "#{expanded_source_path}/folder/.link_childs"]
 
       subject.link_dotfiles
     end
@@ -96,9 +107,9 @@ describe DotFile do
     end
 
     it "should cache the result" do
-      Dir.should_receive(:[]).with("#{source_path}/**/*").once.and_return([])
-      subject.send(:find_files, source_path)
-      subject.send(:find_files, source_path)
+      Dir.should_receive(:[]).with("#{source_path}/**/.*").once.and_return(["#{source_path}/file"])
+      subject.send(:find_files, source_path).should == ["#{source_path}/file"]
+      subject.send(:find_files, source_path).should == subject.send(:find_files, source_path)
     end
 
     it "should not return the cache of the wrond options hash" do
