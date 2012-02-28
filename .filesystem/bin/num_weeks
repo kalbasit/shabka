@@ -1,0 +1,38 @@
+#!/usr/bin/env ruby
+
+require 'date'
+
+class Date
+  def self.num_weeks(start_date, end_date)
+    begin
+      Array(parse(start_date)..parse(end_date)).map(&:cweek).uniq.size
+    rescue ArgumentError
+      puts "Could not parse '#{start_date}' or '#{end_date}'"
+      exit 1
+    end
+  end
+end
+
+
+if __FILE__ == $0
+  raise "Usage: #{$0} start_date end_date" unless ARGV.size == 2
+  puts "#{Date.num_weeks(ARGV[0], ARGV[1])} weeks."
+else
+  describe Date do
+    subject { Date }
+    context '#num_weeks' do
+      it { should respond_to :num_weeks }
+      it "should return 1 week for monday..tuesday" do
+        subject.num_weeks("February 20th 2012", "February 21st 2012").should == 1
+      end
+
+      it "should return 2 weeks for monday..monday" do
+        subject.num_weeks("February 20th 2012", "February 27th 2012").should == 2
+      end
+
+      it "should return 1 week for sunday..monday" do
+        subject.num_weeks("February 19th 2012", "February 20th 2012").should == 2
+      end
+    end
+  end
+end
