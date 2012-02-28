@@ -12,15 +12,15 @@ class DotFile
   end
 
   def link_dotfile path
-    unless File.exists?("#{destination_path}/#{path}")
-      FileUtils.ln_s("#{source_path}/#{path}", "#{destination_path}/#{path}")
+    unless File.exists?(absolute_destination_path(path))
+      FileUtils.ln_s(absolute_source_path(path), absolute_destination_path(path))
     end
   end
 
   def link_dotfiles
     find_files(@source_path, recursive: false).each do |path|
-      next if file_exists_in_path(path, DONT_LINK_FILENAME)
-      if file_exists_in_path(path, LINK_ONLY_CHILDS_FILENAME)
+      next if file_exists_in_path?(path, DONT_LINK_FILENAME)
+      if file_exists_in_path?(path, LINK_ONLY_CHILDS_FILENAME)
         link_dotfiles_in_child_dotfile(path)
         next
       end
@@ -30,19 +30,28 @@ class DotFile
 
   protected
 
-  def link_dotfiles_in_child_dotfile path
-    bare_path = remove_source_path_from_path path
-    child_path = File.read find_files(path, matches: /\/#{Regexp.quote LINK_ONLY_CHILDS_FILENAME}$/).first
-    if child_path.present?
-      dest_path = "#{destination_path}/#{child_path}"
-    else
-      dest_path = "#{destination_path}/#{bare_path}"
-    end
-
-    DotFile.new "#{source_path}/#{bare_path}", dest_path
+  def absolute_source_path path
+    "#{source_path}/#{path}"
   end
 
-  def file_exists_in_path(path, file_name)
+  def absolute_destination_path path
+    "#{destination_path}/#{path}"
+  end
+
+  def link_dotfiles_in_child_dotfile path
+    bare_path = remove_source_path_from_path(path)
+    child_path = File.read find_files(path, matches: /\/#{Regexp.quote LINK_ONLY_CHILDS_FILENAME}$/).first
+    if child_path.present?
+      dest_path = absolute_destination_path(child_path)
+    else
+      dest_path = absolute_destination_path(bare_path)
+    end
+
+    # XXX: Adding source path to bare_path ? Just path!!
+    DotFile.new absolute_source_path(bare_path), dest_path
+  end
+
+  def file_exists_in_path?(path, file_name)
     File.directory?(path) && find_files(path).select {|p| p =~ /\/#{Regexp.quote file_name}$/}.any?
   end
 

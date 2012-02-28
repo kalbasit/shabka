@@ -8,11 +8,45 @@ describe DotFile do
   let(:destination_path) { stub "destination_path" }
   let(:expanded_destination_path) { stub "expanded_destination_path" }
 
+  let(:file) { stub "file" }
+  let(:source_file) { stub "source file" }
+  let(:destination_file) { stub "destination file" }
+
+  let(:folder) { stub "folder" }
+  let(:source_folder) { stub "source folder" }
+  let(:destination_folder) { stub "destination folder" }
+
+  let(:dont_link_file) { stub "dont_link_file" }
+  let(:source_dont_link_file) { stub "source dont_link_file" }
+  let(:destination_dont_link_file) { stub "destination dont_link_file" }
+
+  let(:link_childs_file) { stub "link_childs" }
+  let(:source_link_childs_file) { stub "source link_childs" }
+  let(:destination_link_childs_file) { stub "destination link_childs" }
+
   before(:each) do
     File.stub(:expand_path).with(source_path).and_return(expanded_source_path)
     File.stub(:expand_path).with(destination_path).and_return(expanded_destination_path)
     FileUtils.stub(:ln_s)
-    File.stub(:directory?).and_return(false)
+    File.stub(:read)
+
+    File.stub(:directory?).and_return false
+
+    subject.stub(:absolute_source_path).with(file).and_return(source_file)
+    subject.stub(:absolute_destination_path).with(file).and_return(destination_file)
+    subject.stub(:remove_source_path_from_path).with(source_file).and_return(file)
+
+    subject.stub(:absolute_source_path).with(folder).and_return(source_folder)
+    subject.stub(:absolute_destination_path).with(folder).and_return(destination_folder)
+    subject.stub(:remove_source_path_from_path).with(source_folder).and_return(folder)
+
+    subject.stub(:absolute_source_path).with(dont_link_file).and_return(source_dont_link_file)
+    subject.stub(:absolute_destination_path).with(dont_link_file).and_return(destination_dont_link_file)
+    subject.stub(:remove_source_path_from_path).with(source_dont_link_file).and_return(dont_link_file)
+
+    subject.stub(:absolute_source_path).with(link_childs_file).and_return(source_link_childs_file)
+    subject.stub(:absolute_destination_path).with(link_childs_file).and_return(destination_link_childs_file)
+    subject.stub(:remove_source_path_from_path).with(source_link_childs_file).and_return(link_childs_file)
   end
 
   subject { DotFile.new source_path, destination_path }
@@ -24,37 +58,36 @@ describe DotFile do
       end.to raise_error ArgumentError
     end
 
-    it "should set the @source to the given source path, but expanded" do
+    it "should expand_path the arguments while stored" do
       File.should_receive(:expand_path).with(source_path).and_return(expanded_source_path)
       File.should_receive(:expand_path).with(destination_path).and_return(expanded_destination_path)
-      subject.source_path.should == expanded_source_path
-      subject.destination_path.should == expanded_destination_path
+
+      it = DotFile.new source_path, destination_path
+      it.source_path.should == expanded_source_path
+      it.destination_path.should == expanded_destination_path
     end
   end
 
   context '#link_dotfile' do
     it {should respond_to :link_dotfile }
 
-    it "should, given a path, links it to the home folder" do
-      file = stub
-      FileUtils.should_receive(:ln_s).with("#{expanded_source_path}/#{file}", "#{expanded_destination_path}/#{file}")
+    it "should, given a path, links it to the destination folder" do
+      FileUtils.should_receive(:ln_s).with(source_file, destination_file)
       subject.link_dotfile file
     end
 
     it "should not link if the file exists" do
-      file = stub
-      File.stub(:exists?).with("#{expanded_destination_path}/#{file}").and_return(true)
-      FileUtils.should_not_receive(:ln_s).with("#{expanded_source_path}/#{file}", "#{expanded_destination_path}/#{file}")
+      File.stub(:exists?).with(destination_file).and_return(true)
+      FileUtils.should_not_receive(:ln_s).with(source_file, destination_file)
       subject.link_dotfile file
     end
   end
 
   context '#link_dotfiles' do
     before :each do
-      File.stub(:directory?).with("#{expanded_source_path}/folder").and_return true
       subject.stub(:link_dotfiles_in_child_dotfile)
-      subject.stub(:find_files).with(expanded_source_path, recursive: false).
-        and_return ["#{expanded_source_path}/folder"]
+      subject.stub(:find_files).with(expanded_source_path, recursive: false).and_return [source_folder]
+      subject.stub(:file_exists_in_path?).with(any_args).and_return false
     end
 
     it {should respond_to :link_dotfiles }
@@ -65,76 +98,45 @@ describe DotFile do
     end
 
     it "should call link_dotfile for files and folders that does not have a .link_childs not a .dont_link" do
-      subject.should_receive(:find_files).with(expanded_source_path, recursive: false).and_return ["#{expanded_source_path}/.file"]
-      subject.should_receive(:link_dotfile).with('.file')
+      subject.should_receive(:find_files).with(expanded_source_path, recursive: false).and_return [source_file]
+      subject.should_receive(:link_dotfile).with(file)
+
       subject.link_dotfiles
     end
 
     it "should not call link_dotfile if the folder in question has a .dont_link file" do
-      subject.should_not_receive(:link_dotfile).with('folder')
-      subject.should_receive(:find_files).with("#{expanded_source_path}/folder").at_least(:once).
-        and_return ["#{expanded_source_path}/folder/.file", "#{expanded_source_path}/folder/.dont_link"]
+      subject.stub(:file_exists_in_path?).with(source_folder, DotFile::DONT_LINK_FILENAME).and_return true
+      subject.should_not_receive(:link_dotfile).with(folder)
 
       subject.link_dotfiles
     end
 
-    it "should not link any folder that has .link_childs file" do
-      subject.should_not_receive(:link_dotfile).with('folder')
-      subject.should_receive(:find_files).with("#{expanded_source_path}/folder").at_least(:once).
-        and_return ["#{expanded_source_path}/folder/.file", "#{expanded_source_path}/folder/.link_childs"]
-
-      subject.link_dotfiles
-    end
-
-    it "should call link_dotfiles_in_child_dotfile if .link_childs is present" do
-      subject.should_receive(:link_dotfiles_in_child_dotfile).with("#{expanded_source_path}/folder")
-      subject.should_receive(:find_files).with("#{expanded_source_path}/folder").at_least(:once).
-        and_return ["#{expanded_source_path}/folder/.file", "#{expanded_source_path}/folder/.link_childs"]
+    it "should not link any folder that has .link_childs file but calls link_dotfiles_in_child_dotfile on it instead" do
+      subject.stub(:file_exists_in_path?).with(source_folder, DotFile::LINK_ONLY_CHILDS_FILENAME).and_return true
+      subject.should_receive(:link_dotfiles_in_child_dotfile).with(source_folder)
+      subject.should_not_receive(:link_dotfile).with(folder)
 
       subject.link_dotfiles
     end
   end
 
   context '#link_dotfiles_in_child_dotfile' do
-    before :each do
-      File.stub(:directory?).with("#{expanded_source_path}/folder").and_return true
-      File.stub(:read).with("#{expanded_source_path}/folder/.link_childs").and_return("")
-      subject.stub(:find_files).with(expanded_source_path, recursive: false).
-        and_return ["#{expanded_source_path}/folder"]
-      subject.stub(:find_files).with("#{expanded_source_path}/folder", recursive: false).
-        and_return ["#{expanded_source_path}/folder/.file", "#{expanded_source_path}/folder/.link_childs"]
-      subject.stub(:find_files).with("#{expanded_source_path}/folder", matches: /\/\.link_childs$/).
-        and_return ["#{expanded_source_path}/folder/.link_childs"]
-    end
-
     it {should respond_to :link_dotfiles_in_child_dotfile}
 
-    it "should create a new DotFile with the adjust source and destination paths" do
-      subject.class.should_receive(:new).with("#{expanded_source_path}/folder", "#{expanded_destination_path}/folder").once
+    it "should create a new DotFile starting from the existing source/destination paths" do
+      subject.class.should_receive(:new).with(source_folder, destination_folder).once
 
-      subject.send(:link_dotfiles_in_child_dotfile, "#{expanded_source_path}/folder")
-    end
-
-    it "an empty .link_childs should not affect the path" do
-      File.should_receive(:read).with("#{expanded_source_path}/folder/.link_childs").and_return("")
-      subject.class.should_receive(:new).with("#{expanded_source_path}/folder", "#{expanded_destination_path}/folder").once
-
-      subject.send(:link_dotfiles_in_child_dotfile, "#{expanded_source_path}/folder")
+      subject.send(:link_dotfiles_in_child_dotfile, source_folder)
     end
 
     it "should honor the contents of .link_childs" do
-      File.should_receive(:read).with("#{expanded_source_path}/folder/.link_childs").and_return("some/path")
-      subject.class.should_receive(:new).with("#{expanded_source_path}/folder", "#{expanded_destination_path}/some/path").once
+      some_path = stub "some path"
+      absolute_some_path = stub "absolute some path"
+      File.stub(:read).and_return(some_path)
+      subject.stub(:absolute_destination_path).with(some_path).and_return(absolute_some_path)
+      subject.class.should_receive(:new).with(source_folder, absolute_some_path)
 
-      subject.send(:link_dotfiles_in_child_dotfile, "#{expanded_source_path}/folder")
-    end
-  end
-
-  context '#remove_source_path_from_path' do
-    it {should respond_to :remove_source_path_from_path}
-
-    it "should remove source_path from it" do
-      subject.send(:remove_source_path_from_path, "#{expanded_source_path}/file").should == "file"
+      subject.send(:link_dotfiles_in_child_dotfile, source_folder)
     end
   end
 
