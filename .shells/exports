@@ -39,7 +39,11 @@ export MAIL=~/.mail                         # Default email folder
 export MAILCHECK=0                          # Disable mail checking.
 export IGNOREEOF=3
 
-export EDITOR="gvim --remote-tab-silent"    # Default Editor is gvim
+if [ "${SYSTEM}" = "Linux" ]; then
+    export EDITOR="gvim --remote-tab-silent"    # Default Editor is gvim
+else
+    export EDITOR="mvim --remote-tab-silent"    # Default Editor is mvim
+fi
 export VISUAL=vim                           # Default Visual
 if [ "${SYSTEM}" = "Linux" ]; then
   export PAGER=least                          # Use an inernally defined function
@@ -135,13 +139,6 @@ for dir in ${dirs[@]}; do
     MY_PATH="${MY_PATH}:${dir}"
   fi
 done
-if [ -d "${HOME}/.rbenv/bin" ]; then
-  RBENV="${HOME}/.rbenv/bin"
-else
-  RBENV=""
-fi
-MY_PATH="${RBENV}:${MY_PATH}"
-
 # Export the constructed dirs
 MY_PATH="${MY_PATH}:${PATH}"
 oldifs="${IFS}"
