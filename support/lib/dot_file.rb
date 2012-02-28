@@ -10,10 +10,27 @@ class DotFile
     FileUtils.ln_s("#{source_path}/#{path}", "#{destination_path}/#{path}")
   end
 
+  def link_dotfiles
+    find_files(@source_path, recursive: false).each do |path|
+      next if find_files(path, recursive: false).select {|p| p =~ /\/\.dont_link$/}.any?
+      link_dotfile remove_source_path_from_path(path)
+    end
+  end
+
   protected
 
-  def find_files path
-    @files ||= {}
-    @files[path] ||= Dir["#{path}/**/*"] + Dir["#{path}/**/.*"] - ["#{path}/.", "#{path}/.."]
+  def remove_source_path_from_path path
+    path.gsub(/#{Regexp.quote source_path}\//, '')
+  end
+
+  def find_files path, options = {}
+    options = {recursive: true}.merge options
+    if options[:recursive]
+      @recursive_scans ||= {}
+      @recursive_scans[path] ||= Dir["#{path}/**/*"] + Dir["#{path}/**/.*"] - ["#{path}/.", "#{path}/.."]
+    else
+      @not_recursive_scans ||= {}
+      @not_recursive_scans[path] ||= Dir["#{path}/*"] + Dir["#{path}/.*"] - ["#{path}/.", "#{path}/.."]
+    end
   end
 end
