@@ -40,7 +40,7 @@ export MAILCHECK=0                          # Disable mail checking.
 export IGNOREEOF=3
 
 if [ "${SYSTEM}" = "Linux" ]; then
-    export EDITOR="gvim --remote-tab-silent"    # Default Editor is gvim
+    export EDITOR="vim"                     # Default Editor is gvim
 else
     export EDITOR="mvim --remote-tab-silent"    # Default Editor is mvim
 fi
@@ -237,3 +237,7 @@ export RUBY_HEAP_SLOTS_INCREMENT=1000000
 export RUBY_HEAP_SLOTS_GROWTH_FACTOR=1
 export RUBY_GC_MALLOC_LIMIT=1000000000
 export RUBY_HEAP_FREE_MIN=500000
+
+# TERM Mutations
+[[ "${TERM}" = 'xterm' ]] && export TERM='xterm-256color'
+[[ "${TERM}" = 'screen' ]] && export TERM='screen-256color'
