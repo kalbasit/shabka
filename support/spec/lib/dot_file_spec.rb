@@ -45,6 +45,7 @@ describe DotFile do
   context '#link_dotfiles' do
     before :each do
       File.stub(:folder?).with("#{expanded_source_path}/folder").and_return true
+      subject.stub(:link_dotfiles_in_child_dotfile)
       subject.stub(:find_files).with(expanded_source_path, recursive: false).
         and_return ["#{expanded_source_path}/folder"]
     end
@@ -76,6 +77,49 @@ describe DotFile do
         and_return ["#{expanded_source_path}/folder/.file", "#{expanded_source_path}/folder/.link_childs"]
 
       subject.link_dotfiles
+    end
+
+    it "should call link_dotfiles_in_child_dotfile if .link_childs is present" do
+      subject.should_receive(:link_dotfiles_in_child_dotfile).with("#{expanded_source_path}/folder")
+      subject.should_receive(:find_files).with("#{expanded_source_path}/folder").at_least(:once).
+        and_return ["#{expanded_source_path}/folder/.file", "#{expanded_source_path}/folder/.link_childs"]
+
+      subject.link_dotfiles
+    end
+  end
+
+  context '#link_dotfiles_in_child_dotfile' do
+    before :each do
+      File.stub(:folder?).with("#{expanded_source_path}/folder").and_return true
+      File.stub(:read).with("#{expanded_source_path}/folder/.link_childs").and_return("")
+      subject.stub(:find_files).with(expanded_source_path, recursive: false).
+        and_return ["#{expanded_source_path}/folder"]
+      subject.stub(:find_files).with("#{expanded_source_path}/folder", recursive: false).
+        and_return ["#{expanded_source_path}/folder/.file", "#{expanded_source_path}/folder/.link_childs"]
+      subject.stub(:find_files).with("#{expanded_source_path}/folder", matches: /\/\.link_childs$/).
+        and_return ["#{expanded_source_path}/folder/.link_childs"]
+    end
+
+    it {should respond_to :link_dotfiles_in_child_dotfile}
+
+    it "should create a new DotFile with the adjust source and destination paths" do
+      subject.class.should_receive(:new).with("#{expanded_source_path}/folder", "#{expanded_destination_path}/folder").once
+
+      subject.send(:link_dotfiles_in_child_dotfile, "#{expanded_source_path}/folder")
+    end
+
+    it "an empty .link_childs should not affect the path" do
+      File.should_receive(:read).with("#{expanded_source_path}/folder/.link_childs").and_return("")
+      subject.class.should_receive(:new).with("#{expanded_source_path}/folder", "#{expanded_destination_path}/folder").once
+
+      subject.send(:link_dotfiles_in_child_dotfile, "#{expanded_source_path}/folder")
+    end
+
+    it "should honor the contents of .link_childs" do
+      File.should_receive(:read).with("#{expanded_source_path}/folder/.link_childs").and_return("some/path")
+      subject.class.should_receive(:new).with("#{expanded_source_path}/folder", "#{expanded_destination_path}/some/path").once
+
+      subject.send(:link_dotfiles_in_child_dotfile, "#{expanded_source_path}/folder")
     end
   end
 
@@ -126,6 +170,12 @@ describe DotFile do
       Dir.should_receive(:[]).with("#{source_path}/*").and_return []
       Dir.should_receive(:[]).with("#{source_path}/.*").and_return ["#{source_path}/.", "#{source_path}/..", "#{source_path}/.file"]
       subject.send(:find_files, source_path, :recursive => false).should == ["#{source_path}/.file"]
+    end
+
+    it "support matches" do
+      Dir.stub(:[]).with("#{source_path}/**/.*").
+        and_return ["#{source_path}/.", "#{source_path}/..", "#{source_path}/.file", "#{source_path}/.file2"]
+      subject.send(:find_files, source_path, matches: /\.file$/).should == ["#{source_path}/.file"]
     end
   end
 end
