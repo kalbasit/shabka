@@ -7,16 +7,13 @@ class DotFile
   end
 
   def link_dotfile path
-    FileUtils.ln_s(path, dotfile_path(path))
+    FileUtils.ln_s("#{source_path}/#{path}", "#{destination_path}/#{path}")
   end
 
   protected
 
-  def dotfile_path path
-    "#{@source_path}/#{path}"
-  end
-
-  def find_files
-
+  def find_files path
+    @files ||= {}
+    @files[path] ||= Dir["#{path}/**/*"] + Dir["#{path}/**/.*"] - ["#{path}/.", "#{path}/.."]
   end
 end

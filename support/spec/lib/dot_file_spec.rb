@@ -37,21 +37,34 @@ describe DotFile do
 
     it "should, given a path, links it to the home folder" do
       file = stub
-      FileUtils.should_receive(:ln_s).with(file, "#{expanded_source_path}/#{file}")
+      FileUtils.should_receive(:ln_s).with("#{expanded_source_path}/#{file}", "#{expanded_destination_path}/#{file}")
       subject.link_dotfile file
-    end
-
-    xit "should be able to link only child files/folders" do
-      folder = stub
-      File.should_receive(:folder?).with(folder).and_return(true)
     end
   end
 
   context '#find_files' do
+    before :each do
+      Dir.stub(:[]).with("#{source_path}/**/*").and_return []
+      Dir.stub(:[]).with("#{source_path}/**/.*").and_return ["#{source_path}/.", "#{source_path}/..", "#{source_path}/.file"]
+    end
+
     it {should respond_to :find_files}
 
     it "should be able to find all files within a folder" do
-      Dir.stub([]).with(source_path)
+      Dir.should_receive(:[]).with("#{source_path}/**/*").and_return []
+      Dir.should_receive(:[]).with("#{source_path}/**/.*").and_return ["#{source_path}/.", "#{source_path}/..", "#{source_path}/.file"]
+      subject.send(:find_files, source_path).should include("#{source_path}/.file")
+    end
+
+    it "should not return . and .." do
+      subject.send(:find_files, source_path).should_not include("#{source_path}/.")
+      subject.send(:find_files, source_path).should_not include("#{source_path}/..")
+    end
+
+    it "should cache the result" do
+      Dir.should_receive(:[]).with("#{source_path}/**/*").once.and_return([])
+      subject.send(:find_files, source_path)
+      subject.send(:find_files, source_path)
     end
   end
 end
