@@ -12,7 +12,7 @@ describe DotFile do
     File.stub(:expand_path).with(source_path).and_return(expanded_source_path)
     File.stub(:expand_path).with(destination_path).and_return(expanded_destination_path)
     FileUtils.stub(:ln_s)
-    File.stub(:folder?).and_return(false)
+    File.stub(:directory?).and_return(false)
   end
 
   subject { DotFile.new source_path, destination_path }
@@ -51,7 +51,7 @@ describe DotFile do
 
   context '#link_dotfiles' do
     before :each do
-      File.stub(:folder?).with("#{expanded_source_path}/folder").and_return true
+      File.stub(:directory?).with("#{expanded_source_path}/folder").and_return true
       subject.stub(:link_dotfiles_in_child_dotfile)
       subject.stub(:find_files).with(expanded_source_path, recursive: false).
         and_return ["#{expanded_source_path}/folder"]
@@ -97,7 +97,7 @@ describe DotFile do
 
   context '#link_dotfiles_in_child_dotfile' do
     before :each do
-      File.stub(:folder?).with("#{expanded_source_path}/folder").and_return true
+      File.stub(:directory?).with("#{expanded_source_path}/folder").and_return true
       File.stub(:read).with("#{expanded_source_path}/folder/.link_childs").and_return("")
       subject.stub(:find_files).with(expanded_source_path, recursive: false).
         and_return ["#{expanded_source_path}/folder"]
