@@ -1,9 +1,0 @@
-#!/bin/bash
-#
-# Copyright (C) 2006 Kolesnikov Vova
-
-ratmenu \
--label Player \
-toggle "mpc toggle; ~/.ratmenu/player" \
-volume "~/.ratmenu/volume" \
-playlist "~/.ratmenu/playlist"
