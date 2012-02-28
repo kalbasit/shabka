@@ -57,9 +57,12 @@ describe DotFile do
     end
 
     it "should not call link_dotfile if the folder in question has a .dont_link file" do
+      File.should_receive(:folder?).with("#{expanded_source_path}/.not_linkable_folder").and_return true
       subject.should_not_receive(:link_dotfile).with('.not_linkable_folder')
-      subject.should_receive(:find_files).with(expanded_source_path, recursive: false).and_return
-        ["#{expanded_source_path}/.not_linkable_folder/.file", "#{expanded_source_path}/.not_linkable_folder/.dont_link"]
+      subject.should_receive(:find_files).with(expanded_source_path, recursive: false).
+        and_return ["#{expanded_source_path}/.not_linkable_folder"]
+      subject.should_receive(:find_files).with("#{expanded_source_path}/.not_linkable_folder", recursive: false).
+        and_return ["#{expanded_source_path}/.not_linkable_folder/.file", "#{expanded_source_path}/.not_linkable_folder/.dont_link"]
 
       subject.link_dotfiles
     end

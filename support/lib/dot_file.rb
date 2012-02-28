@@ -12,7 +12,7 @@ class DotFile
 
   def link_dotfiles
     find_files(@source_path, recursive: false).each do |path|
-      next if find_files(path, recursive: false).select {|p| p =~ /\/\.dont_link$/}.any?
+      next if File.folder?(path) && find_files(path, recursive: false).select {|p| p =~ /\/\.dont_link$/}.any?
       link_dotfile remove_source_path_from_path(path)
     end
   end
