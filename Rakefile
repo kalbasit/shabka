@@ -1,0 +1,2 @@
+class DotFile
+end

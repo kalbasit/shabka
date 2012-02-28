@@ -1,0 +1,27 @@
+# A sample Gemfile
+source "https://rubygems.org"
+
+gem 'activesupport', '~> 3.2.1'
+
+group :development do
+  gem 'pry'
+  gem 'rspec'
+  gem 'rake'
+  gem 'guard-rspec'
+
+  platforms :ruby do
+    # Require rbconfig to figure out the target OS
+    require 'rbconfig'
+
+    unless ENV['TRAVIS']
+      if RbConfig::CONFIG['target_os'] =~ /darwin/i
+        gem 'rb-fsevent', require: false
+        gem 'ruby_gntp', require: false
+      end
+      if RbConfig::CONFIG['target_os'] =~ /linux/i
+        gem 'rb-inotify', require: false
+        gem 'libnotify', require: false
+      end
+    end
+  end
+end
