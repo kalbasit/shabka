@@ -1,0 +1,12 @@
+# ~/.tmuxinator/bruded.yml
+# you can make as many tabs as you wish...
+
+project_name: Bruded
+project_root: ~/Code/Agence_Durable/bruded
+socket_name: agence_durable_bruded
+tabs:
+  - guard:
+    - bundle
+    - bundle exec guard
+  - shell:
+  - shell: cd public/system/modules/fx_ad_news
