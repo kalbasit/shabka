@@ -40,6 +40,13 @@ describe DotFile do
       FileUtils.should_receive(:ln_s).with("#{expanded_source_path}/#{file}", "#{expanded_destination_path}/#{file}")
       subject.link_dotfile file
     end
+
+    it "should not link if the file exists" do
+      file = stub
+      File.stub(:exists?).with("#{expanded_destination_path}/#{file}").and_return(true)
+      FileUtils.should_not_receive(:ln_s).with("#{expanded_source_path}/#{file}", "#{expanded_destination_path}/#{file}")
+      subject.link_dotfile file
+    end
   end
 
   context '#link_dotfiles' do

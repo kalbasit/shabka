@@ -12,7 +12,9 @@ class DotFile
   end
 
   def link_dotfile path
-    FileUtils.ln_s("#{source_path}/#{path}", "#{destination_path}/#{path}")
+    unless File.exists?("#{destination_path}/#{path}")
+      FileUtils.ln_s("#{source_path}/#{path}", "#{destination_path}/#{path}")
+    end
   end
 
   def link_dotfiles
