@@ -38,61 +38,114 @@ export INPUTRC=~/.inputrc                   # Inputrc file
 export MAIL=~/.mail                         # Default email folder
 export MAILCHECK=0                          # Disable mail checking.
 export IGNOREEOF=3
-
-if [ "${SYSTEM}" = "Linux" ]; then
-    export EDITOR="vim"                     # Default Editor is gvim
-else
-    export EDITOR="mvim --remote-tab-silent"    # Default Editor is mvim
-fi
+export EDITOR="vim"                         # Default Editor is gvim
 export VISUAL=vim                           # Default Visual
 if [ "${SYSTEM}" = "Linux" ]; then
-  export PAGER=least                          # Use an inernally defined function
-                                              # which will either cat or LEAST_PAGER
-                                              # depending on the length of the output..
+  export PAGER=least                        # Use an inernally defined function
+                                            # which will either cat or LEAST_PAGER
+                                            # depending on the length of the output..
 else
   export PAGER=less
 fi
 
 if ${W} most &> /dev/null; then
-  export LEAST_PAGER=most                 # the PAGER that'll be used by least
-  export MANPAGER=most                    # Man page viewer
+  export LEAST_PAGER=most                   # the PAGER that'll be used by least
+  export MANPAGER=most                      # Man page viewer
 else
-  export LEAST_PAGER=less                 # the PAGER that'll be used by least
-  export MANPAGER=less                    # Man page viewer
+  export LEAST_PAGER=less                   # the PAGER that'll be used by least
+  export MANPAGER=less                      # Man page viewer
 fi
 
 # Some default programs
-if [ "${HOSTNAME}" = "phoenix.nasreddine.info" -a "${SYSTEM}" = "FreeBSD" ]; then
-    export BROWSER="firefox3"
-elif  [ "${HOSTNAME}" = "phoenix.nasreddine.info" -a "${SYSTEM}" = "Linux" ]; then
-    export BROWSER="chromium"
-elif  [ "${HOSTNAME}" = "cadmus.nasreddine.info" ]; then
-    export BROWSER="chromium"
+if [ "${SYSTEM}" = "Darwin" ]; then
+    export BROWSER="open -a 'Google Chrome'"
+else
+    if [ -x "`${W} chrome`" ]; then
+        export BROWSER="chrome"
+    elif [ -x "`${W} firefox`" ]; then
+        export BROWSER="firefox"
+    fi
 fi
 export TERMCMD="urxvt"
-export VIDEO_PLAYER="vlc"
-export AUDIO_PLAYER="audacious"
 
-# PACKAGER value for makepkg
-export PACKAGER='Wael Nasreddine <wael.nasreddine@free.fr>'
+if [ "${SYSTEM}" = "Linux" ]; then
+    # PACKAGER value for makepkg
+    export PACKAGER='Wael Nasreddine <wael.nasreddine@gmail.com>'
 
-# Use openoffice with gnome look.
-export OOO_FORCE_DESKTOP=gnome
+    # Use openoffice with gnome look.
+    export OOO_FORCE_DESKTOP=gnome
 
-# Default SVN Editor
-export SVN_EDITOR="${EDITOR}"
-
-# Export SVN_SSH
-export SVN_SSH="ssh -i ${HOME}/.ssh/id_rsa.subversion"
-
-# Export DISTCC_DIR so distccmon-gnome works
-export DISTCC_DIR=/var/tmp/portage/.distcc
-
-# export NNTP Server
-export NNTPSERVER='aioe.cjb.net'
+    # Export DISTCC_DIR so distccmon-gnome works
+    [[ -d "/var/tmp/portage" ]] && export DISTCC_DIR=/var/tmp/portage/.distcc
+fi
 
 # Export the default options to pass to devtodo.
 export TODO_OPTIONS="--timeout --summary"
+
+# LS options
+# Sometimes I can't assign a new value for LS_OPTIONS so make sure
+# errors get discarded
+export LS_OPTIONS='-h'
+if [ "${SYSTEM}" = "Linux" ]; then
+    # Do we have GNU ls of a new enough version for color?
+    if ls --help 2>/dev/null | grep -q -- '--color=' 2> /dev/null; then
+        export LS_OPTIONS="${LS_OPTIONS} --color=always"
+    fi
+elif [ "${SYSTEM}" = "FreeBSD" -o "${SYSTEM}" = "Darwin" ]; then
+    export LS_OPTIONS="${LS_OPTIONS} -G"
+fi
+
+# alias ack='ack --color'
+export ACK_OPTIONS="--color"
+
+# watch for people
+watch=(notme)                   # watch for everybody but me
+LOGCHECK=300                    # check every 5 min for login/logout activity
+
+# The format of login / logout reports if the watch parameter is set.
+# Default is `%n has %a %l from %m'.
+# Recognizes the following escape sequences:
+#   %n = name of the user that logged in/out.
+#   %a = observed action, i.e. "logged on" or "logged off".
+#   %l = line (tty) the user is logged in on.
+#   %M = full hostname of the remote host.
+#   %m = hostname up to the first `.'.
+#   %t or %@ = time, in 12-hour, am/pm format.
+#   %w = date in `day-dd' format.
+#   %W = date in `mm/dd/yy' format.
+#   %D = date in `yy-mm-dd' format.
+# WATCHFMT='%n %a %l from %m at %t.'
+# WATCHFMT='*knock* *knock* Follow the white rabbit => %n %a %l from %m at %t.'
+# WATCHFTM=print '\e[1;35m%B[%b\e[1;32m%B%n%b\e[1;35m%B]%b \e[1;34m%U%a%u \e[1;35mfrom terminal \e[1;31m%M \e[1;35mat \e[1;33m%U%T%u\e[0m''
+#WATCHFMT="[%B%t%b] %B%n%b has %a %B%l%b from %B%M%b"
+WATCHFMT="%B->%b %n has just %a %(l:tty%l:%U-Ghost-%u)%(m: from %m:)"
+
+# Add my custom PERL path to PERL5LIB
+export PERL5LIB="$HOME/.filesystem/lib/perl5/site_perl"
+
+# TERM Mutations (Only 256 colors please
+[[ "${TERM}" = 'xterm' ]] && export TERM='xterm-256color'
+[[ "${TERM}" = 'screen' ]] && export TERM='screen-256color'
+
+#################################
+############ RUBY ###############
+#################################
+
+# Ruby 19!!
+export JRUBY_OPTS="--1.9"
+export RBXOPT="-X19"
+
+# Speed up Ruby
+# https://gist.github.com/1688857
+export RUBY_HEAP_MIN_SLOTS=1000000
+export RUBY_HEAP_SLOTS_INCREMENT=1000000
+export RUBY_HEAP_SLOTS_GROWTH_FACTOR=1
+export RUBY_GC_MALLOC_LIMIT=1000000000
+export RUBY_HEAP_FREE_MIN=500000
+
+#################################
+############ PATH ###############
+#################################
 
 # Add /sbin and /usr/sbin
 if [ -x "/usr/libexec/path_helper" ]; then
@@ -146,98 +199,3 @@ export IFS=":"
 export PATH="`echo "${MY_PATH}" | sed -e 's@::@:@g' -e 's@//@/@g' | uniq | sed -e 's@::@:@g' -e 's@//@/@g'`"
 export IFS="${oldifs}"
 unset dir dirs MY_PATH oldifs
-
-# MANPATH
-# On FreeBSD, MANPATH is not defined but one can define it
-# using then manpath command, so if this command exists, export
-# MANPATH using it, but this command will not parse /etc/manpath.config
-# unless MANPATH is not defined so unset it before setting it using
-# manpath.
-if [ -x "`${W} manpath`" ]; then
-    unset MANPATH
-    MANPATH="`manpath`"
-fi
-MANPATH="${HOME}/.filesystem/man:${MANPATH}"
-
-# Hostname.
-if [ "${SYSTEM}" = "Linux" ]; then
-    export HOSTNAME="$( hostname -f )"
-else
-    export HOSTNAME="$( hostname )"     # FIX: we need FQDN!
-fi
-
-# LS options
-# Sometimes I can't assign a new value for LS_OPTIONS so make sure
-# errors get discarded
-export LS_OPTIONS='-h'
-if [ "${SYSTEM}" = "Linux" ]; then
-    # Do we have GNU ls of a new enough version for color?
-    if ls --help 2>/dev/null | grep -q -- '--color=' 2> /dev/null; then
-        export LS_OPTIONS="${LS_OPTIONS} --color=always"
-    fi
-elif [ "${SYSTEM}" = "FreeBSD" -o "${SYSTEM}" = "Darwin" ]; then
-    export LS_OPTIONS="${LS_OPTIONS} -G"
-fi
-
-# watch for people
-watch=(notme)                   # watch for everybody but me
-LOGCHECK=300                    # check every 5 min for login/logout activity
-
-# The format of login / logout reports if the watch parameter is set.
-# Default is `%n has %a %l from %m'.
-# Recognizes the following escape sequences:
-#   %n = name of the user that logged in/out.
-#   %a = observed action, i.e. "logged on" or "logged off".
-#   %l = line (tty) the user is logged in on.
-#   %M = full hostname of the remote host.
-#   %m = hostname up to the first `.'.
-#   %t or %@ = time, in 12-hour, am/pm format.
-#   %w = date in `day-dd' format.
-#   %W = date in `mm/dd/yy' format.
-#   %D = date in `yy-mm-dd' format.
-# WATCHFMT='%n %a %l from %m at %t.'
-# WATCHFMT='*knock* *knock* Follow the white rabbit => %n %a %l from %m at %t.'
-# WATCHFTM=print '\e[1;35m%B[%b\e[1;32m%B%n%b\e[1;35m%B]%b \e[1;34m%U%a%u \e[1;35mfrom terminal \e[1;31m%M \e[1;35mat \e[1;33m%U%T%u\e[0m''
-#WATCHFMT="[%B%t%b] %B%n%b has %a %B%l%b from %B%M%b"
-WATCHFMT="%B->%b %n has just %a %(l:tty%l:%U-Ghost-%u)%(m: from %m:)"
-
-# Determining where we are and exporting some variables.
-if [ -e /proc/cmdline ]; then
-    if grep -q 'location=' /proc/cmdline && [ -z "${LOCATION}" ]; then
-        export LOCATION="$(cat /proc/cmdline | sed -e "s@.*location=\([a-zA-Z0-9]*\).*@\1@g")"
-    fi
-fi
-
-# I don't know why and what is the reason behind this, but if SHELL is not an absolute path and you try
-# to use SSH with corkscrew, you will get 'zsh: no shuch file or directory', so it needs to be an absolute path!!
-export SHELL="$( ${W} $(basename ${SHELL}) )"
-
-# JDK_HOME
-if [ -z "${JDK_HOME}" ]; then
-    if [ -x "$(${W} java 2> /dev/null)" ]; then
-        temp="$(${W} java 2> /dev/null)"
-        export JDK_HOME="$(cd `dirname $temp`/.. && pwd)"
-        unset temp
-    fi
-fi
-
-# Ruby 19!!
-export JRUBY_OPTS="--1.9"
-export RBXOPT="-X19"
-
-# alias ack='ack --color'
-export ACK_OPTIONS="--color"
-
-export PERL5LIB="$HOME/.filesystem/lib/perl5/site_perl"
-
-# Speed up Ruby
-# https://gist.github.com/1688857
-export RUBY_HEAP_MIN_SLOTS=1000000
-export RUBY_HEAP_SLOTS_INCREMENT=1000000
-export RUBY_HEAP_SLOTS_GROWTH_FACTOR=1
-export RUBY_GC_MALLOC_LIMIT=1000000000
-export RUBY_HEAP_FREE_MIN=500000
-
-# TERM Mutations
-[[ "${TERM}" = 'xterm' ]] && export TERM='xterm-256color'
-[[ "${TERM}" = 'screen' ]] && export TERM='screen-256color'
