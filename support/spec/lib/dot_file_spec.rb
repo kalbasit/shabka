@@ -30,8 +30,6 @@ describe DotFile do
     FileUtils.stub(:ln_s)
     File.stub(:read)
 
-    File.stub(:directory?).and_return false
-
     subject.stub(:absolute_source_path).with(file).and_return(source_file)
     subject.stub(:absolute_destination_path).with(file).and_return(destination_file)
     subject.stub(:remove_source_path_from_path).with(source_file).and_return(file)

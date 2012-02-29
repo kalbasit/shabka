@@ -50,7 +50,7 @@ class DotFile
   end
 
   def file_exists_in_path?(path, file_name)
-    File.directory?(path) && find_files(path).select {|p| p =~ /\/#{Regexp.quote file_name}$/}.any?
+    find_files(path).select {|p| p =~ /\/#{Regexp.quote file_name}$/}.any?
   end
 
   def remove_source_path_from_path path
