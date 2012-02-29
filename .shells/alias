@@ -27,7 +27,7 @@ alias 7-='cd +8'
 alias 9-='cd +9'
 
 # usefull listing
-alias ls="$(${W} ls 2> /dev/null) \$LS_OPTIONS"
+alias ls="$(${W} ls 2> /dev/null) $LS_OPTIONS"
 alias ll='ls -ahl | more; echo -e "${FG_GREEN_B} --[${FG_BLUE_B} Dirs:${FG_CYAN_B} `ls -al | egrep \"^drw\" | wc -l` ${FG_GREEN_B}|${FG_MAGNETA_B} Files: ${FG_RED_B}`ls -al | egrep -v \"^drw\" | grep -v total | wc -l` ${FG_GREEN_B}]--"'
 alias la='ls -ahl'
 alias lgrep='ls -al | grep'
