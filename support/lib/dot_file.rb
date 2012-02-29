@@ -39,16 +39,14 @@ class DotFile
   end
 
   def link_dotfiles_in_child_dotfile path
-    bare_path = remove_source_path_from_path(path)
     child_path = File.read find_files(path, matches: /\/#{Regexp.quote LINK_ONLY_CHILDS_FILENAME}$/).first
     if child_path.present?
       dest_path = absolute_destination_path(child_path)
     else
-      dest_path = absolute_destination_path(bare_path)
+      dest_path = absolute_destination_path(remove_source_path_from_path(path))
     end
 
-    # XXX: Adding source path to bare_path ? Just path!!
-    DotFile.new absolute_source_path(bare_path), dest_path
+    DotFile.new path, dest_path
   end
 
   def file_exists_in_path?(path, file_name)
