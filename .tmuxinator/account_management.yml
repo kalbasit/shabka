@@ -9,13 +9,16 @@ tabs:
   - server:
       layout: main-vertical
       panes:
-        - ssh foxy "~/am_cmd rails s -p 3001"
+        #- ssh foxy "~/am_cmd rails s -p 3001"
+        - rails s -p 3001
         - tail -f log/development.log
   - specs:
       layout: even-horizontal
       panes:
-        - ssh foxy "source ~/am_cd"
+        #- ssh foxy "source ~/am_cd"
+        - bundle exec guard -g focused
         - tail -f log/test.log
+  - editor: vim
   - shell:
       layout: even-horizontal
       panes:
@@ -24,7 +27,8 @@ tabs:
   - console_pry:
       layout: even-horizontal
       panes:
-        - ssh foxy "~/am_cmd rails c"
+        #- ssh foxy "~/am_cmd rails c"
+        - rails c
         - pry
   - accounts-client:
       layout: even-horizontal

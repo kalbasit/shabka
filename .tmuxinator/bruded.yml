@@ -8,5 +8,5 @@ tabs:
   - guard:
     - bundle
     - bundle exec guard
+  - editor: vim
   - shell:
-  - shell: cd public/system/modules/fx_ad_news

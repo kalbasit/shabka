@@ -1,0 +1,9 @@
+# ~/.tmuxinator/wildfire.yml
+# you can make as many tabs as you wish...
+
+project_name: Default
+project_root: ~/
+rbenv: ree-1.8.7-2012.01
+tabs:
+  - work:
+  - play:

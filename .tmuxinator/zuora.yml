@@ -1,0 +1,10 @@
+# ~/.tmuxinator/zuora.yml
+# you can make as many tabs as you wish...
+
+project_name: Zuora
+project_root: ~/Code/Wildfire/zuora
+socket_name: wildfire_zuora
+rbenv: ree-1.8.7-2012.01
+tabs:
+  - editor: vim
+  - shell:

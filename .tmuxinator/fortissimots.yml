@@ -1,0 +1,12 @@
+# ~/.tmuxinator/fortissimots.yml
+# you can make as many tabs as you wish...
+
+project_name: Fortissimots
+project_root: ~/Code/Agence_Durable/fortissimots
+socket_name: agence_durable_fortissimots
+tabs:
+  - guard:
+    - bundle
+    - bundle exec guard
+  - editor: vim
+  - shell:
