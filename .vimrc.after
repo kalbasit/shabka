@@ -39,7 +39,7 @@ set viminfo='20,\"50,:20,%,n~/.viminfo,!
 " ,----
 " | UI / visual cues
 " `----
-color xoria256          " Xoria256 is good theme for Terminal mode.
+color solarized         " Terminal Emulator scheme
 set lsp=0               " space it out a little more (easier to read)
 set wildmenu            " turn on wild menu
 "set wildignorecase      " Make it easier to complete buffers, open files, etc...
