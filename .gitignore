@@ -20,6 +20,7 @@ drafts/*
 *.emptyfile
 .vimrc
 .gvimrc
+.irssi/config.autosave
 
 
 
