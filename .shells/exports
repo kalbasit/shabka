@@ -199,3 +199,19 @@ export IFS=":"
 export PATH="`echo "${MY_PATH}" | sed -e 's@::@:@g' -e 's@//@/@g' | uniq | sed -e 's@::@:@g' -e 's@//@/@g'`"
 export IFS="${oldifs}"
 unset dir dirs MY_PATH oldifs
+
+# MySQL User and Password
+if [[ -f "${HOME}/.mysql_password" ]]; then
+    user="`cat "${HOME}/.mysql_password" | grep 'username:' | cut -d' ' -f2`"
+    pass="`cat "${HOME}/.mysql_password" | grep 'password:' | cut -d' ' -f2`"
+
+    # Agence Durable
+    export AD_DBUSERNAME="${user}"
+    export AD_DBPASSWORD="${pass}"
+
+    # Wildfire
+    export WF_DBUSERNAME="${user}"
+    export WF_DBPASSWORD="${pass}"
+
+    unset user pass
+fi
