@@ -1,0 +1,12 @@
+# ~/.tmuxinator/senologie.yml
+# you can make as many tabs as you wish...
+
+project_name: Senologie
+project_root: ~/Code/Agence_Durable/senologie
+socket_name: agence_durable_senologie
+tabs:
+  - guard:
+    - bundle
+    - bundle exec guard
+  - editor: vim
+  - shell:
