@@ -40,12 +40,13 @@ set viminfo='20,\"50,:20,%,n~/.viminfo,!
 " | UI / visual cues
 " `----
 color solarized         " Terminal Emulator scheme
+set background=light
 set lsp=0               " space it out a little more (easier to read)
 set wildmenu            " turn on wild menu
 "set wildignorecase      " Make it easier to complete buffers, open files, etc...
 set ruler               " Always show current positions along the bottom
 set cmdheight=1         " the command bar is 1 line high
-set relativenumber      " turn on line numbers but display them as relative to the current line
+set number              " turn on line numbers but display them as relative to the current line
 set winwidth=79         " Set the minimum window width
 
 " We have to have a winheight bigger than we want to set winminheight. But if
@@ -111,6 +112,11 @@ let g:snips_author = 'Wael Nasreddine <wael.nasreddine@gmail.com>'
 let g:ctrlp_working_path_mode = 0
 let g:ctrlp_extensions = ["tag"]
 let g:ctrlp_max_height = 100
+
+" ,----
+" | Vroom
+" `----
+let g:vroom_write_all = 1
 
 " ,----
 " | NERDTree
@@ -365,74 +371,8 @@ endfunction
 nnoremap <leader>. :call OpenTestAlternate()<cr>
 nnoremap <leader><leader> <c-^>
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Running tests
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-function! RunTests(filename)
-  " Write the file and run tests for the given filename
-  :w
-  :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
-  :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
-  :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
-  :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
-  :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
-  :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
-  :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
-  :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
-  if match(a:filename, '\.feature$') != -1
-    exec ":!script/features " . a:filename
-  else
-    let focus_tag = match(expand("%"), '\(:focus\|focus:\)') != -1
-    if focus_tag
-      let rspec_arguments = " --focus"
-    else
-      let rspec_arguments = ""
-    endif
-    if filereadable("Gemfile")
-      exec ":!bundle exec rspec --color " . rspec_arguments . a:filename
-    else
-      exec ":!rspec --color " . rspec_arguments . a:filename
-    end
-  end
-endfunction
-
-function! SetTestFile()
-  " Set the spec file that tests will be run for.
-  let t:grb_test_file=@%
-endfunction
-
-function! RunTestFile(...)
-  if a:0
-    let command_suffix = a:1
-  else
-    let command_suffix = ""
-  endif
-
-  " Run the tests for the previously-marked file.
-  let in_test_file = match(expand("%"), '\(.feature\|_spec.rb\)$') != -1
-  if in_test_file
-    call SetTestFile()
-  elseif !exists("t:grb_test_file")
-    return
-  end
-  call RunTests(t:grb_test_file . command_suffix)
-endfunction
-
-function! RunNearestTest()
-  let spec_line_number = line('.')
-  call RunTestFile(":" . spec_line_number . " -b")
-endfunction
-
-map <leader>t :call RunTestFile()<cr>
-map <leader>T :call RunNearestTest()<cr>
-map <leader>a :call RunTests('')<cr>
-map <leader>c :w\|:!script/features<cr>
-map <leader>w :w\|:!script/features --profile wip<cr>
-
 " Force myself to learn the hjkl
 map <Left> :echo "no!"<cr>
 map <Right> :echo "no!"<cr>
 map <Up> :echo "no!"<cr>
 map <Down> :echo "no!"<cr>
-
