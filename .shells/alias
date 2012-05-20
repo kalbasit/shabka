@@ -103,12 +103,6 @@ if [ -x "$(${W} devtodo 2> /dev/null)" ]; then
     alias tdg="todo -G"
 fi
 
-# Ruby / Ruby on Rails
-#alias r='rails'
-
-# Padrino
-#alias p='padrino'
-#alias pr='p rake'
-#alias pss='p start'
-#alias pg='p generate'
-#alias pc='p console'
+if [ -x "/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Resources/jsc" ]; then
+    alias jsc="/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Resources/jsc"
+fi

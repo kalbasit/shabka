@@ -56,18 +56,6 @@ else
   export MANPAGER=less                      # Man page viewer
 fi
 
-# Some default programs
-if [ "${SYSTEM}" = "Darwin" ]; then
-    export BROWSER="open -a 'Google Chrome'"
-else
-    if [ -x "`${W} chrome`" ]; then
-        export BROWSER="chrome"
-    elif [ -x "`${W} firefox`" ]; then
-        export BROWSER="firefox"
-    fi
-fi
-export TERMCMD="urxvt"
-
 if [ "${SYSTEM}" = "Linux" ]; then
     # PACKAGER value for makepkg
     export PACKAGER='Wael Nasreddine <wael.nasreddine@gmail.com>'
@@ -215,3 +203,5 @@ if [[ -f "${HOME}/.mysql_password" ]]; then
 
     unset user pass
 fi
+
+export CLASSPATH=$CLASSPATH:/usr/local/Cellar/clojure-contrib/1.2.0/clojure-contrib.jar
