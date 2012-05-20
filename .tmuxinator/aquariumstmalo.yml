@@ -1,0 +1,12 @@
+# ~/.tmuxinator/aquariumstmalo.yml
+# you can make as many tabs as you wish...
+
+project_name: Aquarium Saint Malo
+project_root: ~/Code/Agence_Durable/aquariumstmalo
+socket_name: agence_durable_aquariumstmalo
+tabs:
+  - guard:
+    - bundle
+    - bundle exec guard
+  - editor: vim
+  - shell:
