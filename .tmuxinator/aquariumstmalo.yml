@@ -5,8 +5,8 @@ project_name: Aquarium Saint Malo
 project_root: ~/Code/Agence_Durable/aquariumstmalo
 socket_name: agence_durable_aquariumstmalo
 tabs:
-  - guard:
+  - assets:
     - bundle
-    - bundle exec guard
+    - bundle exec foreman start
   - editor: vim
   - shell:

@@ -1,9 +1,9 @@
-# ~/.tmuxinator/senologie.yml
+# ~/.tmuxinator/staffdecor.yml
 # you can make as many tabs as you wish...
 
 project_name: Aquarium Saint Malo
-project_root: ~/Code/Agence_Durable/senologie
-socket_name: agence_durable_senologie
+project_root: ~/Code/Agence_Durable/staffdecor
+socket_name: agence_durable_staffdecor
 tabs:
   - assets:
     - bundle

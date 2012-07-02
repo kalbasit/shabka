@@ -1,9 +1,9 @@
-# ~/.tmuxinator/senologie.yml
+# ~/.tmuxinator/contao_template.yml
 # you can make as many tabs as you wish...
 
 project_name: Aquarium Saint Malo
-project_root: ~/Code/Agence_Durable/senologie
-socket_name: agence_durable_senologie
+project_root: ~/Code/TechnoGate/contao_template
+socket_name: technogate_contao_template
 tabs:
   - assets:
     - bundle
