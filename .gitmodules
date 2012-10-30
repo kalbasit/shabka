@@ -1,30 +1,6 @@
-[submodule ".vim/bundle/vim-fugitive"]
-	path = .vim/bundle/vim-fugitive
-	url = git://github.com/tpope/vim-fugitive.git
-[submodule ".vim/bundle/snipmate"]
-	path = .vim/bundle/snipmate
-	url = git://github.com/msanders/snipmate.vim.git
-[submodule ".vim/bundle/neocomplcache"]
-	path = .vim/bundle/neocomplcache
-	url = git://github.com/Shougo/neocomplcache.git
-[submodule ".vim/bundle/nerdtree"]
-	path = .vim/bundle/nerdtree
-	url = git://github.com/scrooloose/nerdtree.git
-[submodule ".vim/bundle/nerdcommenter"]
-	path = .vim/bundle/nerdcommenter
-	url = git://github.com/scrooloose/nerdcommenter.git
-[submodule ".vim/bundle/rails"]
-	path = .vim/bundle/rails
-	url = git://github.com/tpope/vim-rails.git
-[submodule ".vim/bundle/vimshell"]
-	path = .vim/bundle/vimshell
-	url = git://github.com/Shougo/vimshell.git
 [submodule ".filesystem/lib/bash"]
 	path = .filesystem/lib/bash
 	url = git://github.com/eMxyzptlk/bashlib.git
-[submodule ".vim/bundle/VimCalc"]
-	path = .vim/bundle/VimCalc
-	url = git://github.com/gregsexton/VimCalc.git
 [submodule ".filesystem/bin/willgit"]
 	path = .filesystem/bin/willgit
 	url = git://gitorious.org/willgit/mainline.git
