@@ -49,8 +49,7 @@ source $HOME/.shells/opts
 [[ -f "${HOME}/.pythonbrew/etc/bashrc" ]] && source /Users/wael/.pythonbrew/etc/bashrc
 
 # Rbenv
-[[ -d "${HOME}/.rbenv/bin" ]] && export PATH="${HOME}/.rbenv/bin:${PATH}"
-eval "$(rbenv init -)"
+[[ -d "${HOME}/.rbenv/bin" ]] && export PATH="${HOME}/.rbenv/bin:${PATH}" && eval "$(rbenv init -)"
 
 # Tmuxinator
 [[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] && source $HOME/.tmuxinator/scripts/tmuxinator
