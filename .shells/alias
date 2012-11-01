@@ -106,3 +106,5 @@ fi
 if [ -x "/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Resources/jsc" ]; then
     alias jsc="/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Resources/jsc"
 fi
+
+alias ct='ctags -R --exclude=.git --exclude=log * $GEM_HOME/*'

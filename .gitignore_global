@@ -75,11 +75,7 @@ test/version_tmp
 # Logs and databases #
 ######################
 *.log
-*.sql
 *.sqlite[0-9]
-
-# We don't want to ignore contao's database.sql files
-!config/*.sql
 
 # OS generated files #
 ######################

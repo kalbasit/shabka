@@ -145,6 +145,10 @@ nnoremap <CR> :nohlsearch<cr>
 " Don't use Ex mode, use Q for formatting
 map Q gq
 
+" Source vim files
+map <leader>svb :source ~/.vimrc.before<cr>
+map <leader>sva :source ~/.vimrc.after<cr>
+
 " Remap the tab key to do autocompletion or indentation depending on the
 " context (from http://www.vim.org/tips/tip.php?tip_id=102)
 function! InsertTabWrapper()
@@ -331,6 +335,8 @@ function! ShowRoutes()
   :normal dd
 endfunction
 map <leader>gR :call ShowRoutes()<cr>
+map <leader>ga :CtrlP app/assets<cr>
+map <leader>gC :CtrlP contao<cr>
 map <leader>gv :CtrlP app/views<cr>
 map <leader>gc :CtrlP app/controllers<cr>
 map <leader>gm :CtrlP app/models<cr>
@@ -376,3 +382,8 @@ map <Left> :echo "no!"<cr>
 map <Right> :echo "no!"<cr>
 map <Up> :echo "no!"<cr>
 map <Down> :echo "no!"<cr>
+
+" CoffeeScript
+vmap <leader>c <esc>:'<,'>:CoffeeCompile<CR>
+map <leader>c :CoffeeCompile<CR>
+command -nargs=1 C CoffeeCompile | :<args>

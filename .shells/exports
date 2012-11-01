@@ -140,18 +140,8 @@ if [ -x "/usr/libexec/path_helper" ]; then
   eval `/usr/libexec/path_helper -s`
 else
   if ! echo "${PATH}" | grep -q "sbin"; then
-      export PATH="${PATH}:/usr/local/sbin:/usr/sbin:/sbin"
+      export PATH="/usr/local/sbin:/usr/sbin:/sbin:${PATH}"
   fi
-fi
-
-# If we don't have distcc or ccache, add them!
-if [ -d "/usr/lib/distcc/bin" ] && ! echo "${PATH}" | grep -q "/usr/lib/distcc/bin"; then
-    export PATH="/usr/lib/distcc/bin:${PATH}"
-elif [ -d "/usr/local/libexec/distcc" ] && ! echo "${PATH}" | grep -q "/usr/local/libexec/distcc"; then
-    export PATH="/usr/local/libexec/distcc:${PATH}"
-fi
-if [ -d "/usr/lib/ccache/bin" ] && ! echo "${PATH}" | grep -q "/usr/lib/ccache/bin"; then
-    export PATH="/usr/lib/ccache/bin:${PATH}"
 fi
 
 # export any bin folder in ~/opt/
@@ -174,19 +164,13 @@ if [ -d "${HOME}/.filesystem/usr/bin" ]; then
     MY_PATH="${MY_PATH}:${dir}"
   done
 fi
-dirs=('/usr/local/mysql/bin' '/usr/local/lib/cw')
-for dir in ${dirs[@]}; do
-  if [ -d "${dir}" ]; then
-    MY_PATH="${MY_PATH}:${dir}"
-  fi
-done
-# Export the constructed dirs
+# Export the constructed folders
 MY_PATH="${MY_PATH}:${PATH}"
 oldifs="${IFS}"
 export IFS=":"
 export PATH="`echo "${MY_PATH}" | sed -e 's@::@:@g' -e 's@//@/@g' | uniq | sed -e 's@::@:@g' -e 's@//@/@g'`"
 export IFS="${oldifs}"
-unset dir dirs MY_PATH oldifs
+unset dir MY_PATH oldifs
 
 # MySQL User and Password
 if [[ -f "${HOME}/.mysql_password" ]]; then
@@ -205,3 +189,6 @@ if [[ -f "${HOME}/.mysql_password" ]]; then
 fi
 
 export CLASSPATH=$CLASSPATH:/usr/local/Cellar/clojure-contrib/1.2.0/clojure-contrib.jar
+
+export ARCHFLAGS='-arch x86_64'
+export NODE_PATH='/usr/local/lib/node_modules'
