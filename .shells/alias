@@ -108,3 +108,6 @@ if [ -x "/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Resource
 fi
 
 alias ct='ctags -R --exclude=.git --exclude=log * $GEM_HOME/*'
+
+# Setup alias to source ssh variables using command 'fixssh'
+alias fixssh='source ~/.tmux/ssh_vars'
