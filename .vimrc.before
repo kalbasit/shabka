@@ -55,7 +55,7 @@ call janus#disable_plugin('snipmate-snippets', "I don't use this colorscheme/plu
 call janus#disable_plugin('syntastic', "I don't use this colorscheme/plugin")
 call janus#disable_plugin('tagbar', "I don't use this colorscheme/plugin")
 call janus#disable_plugin('tlib', "I don't use this colorscheme/plugin")
-call janus#disable_plugin('unimpaired', "I don't use this colorscheme/plugin")
+" call janus#disable_plugin('unimpaired', "I don't use this colorscheme/plugin")
 call janus#disable_plugin('vim-addon-mw-utils', "I don't use this colorscheme/plugin")
 call janus#disable_plugin('vimwiki', "I don't use this colorscheme/plugin")
 " call janus#disable_plugin('vroom', "I don't use this colorscheme/plugin")
