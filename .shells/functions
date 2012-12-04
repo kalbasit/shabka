@@ -27,3 +27,11 @@ else
     echo "$0: The required functions file could not be found, Aborting..."
     exit 54
 fi
+
+# Completion
+_sc () {
+  local service=ssh
+  _ssh "$@"
+}
+
+compdef _sc sc
