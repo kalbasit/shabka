@@ -94,7 +94,7 @@ echo >> "${TempCronFile}"
 if [ -f "${UserCronDir}/common" ]; then
     print_info 2 "Found common file, using it's contents."
     echo "# From ${UserCronDir}/common:" >> "${TempCronFile}"
-    sed -e "s@\$\(HOME\|{HOME}\)@${UserHome}@g" \
+    gsed -e "s@\$\(HOME\|{HOME}\)@${UserHome}@g" \
         -e "s@^#.*@@g" \
         -e "/^[ \t]*$/d" \
         -e "s@^[ \t]*@@g" \
@@ -106,7 +106,7 @@ fi
 if [ -f "${HostCronFile}" ]; then
     print_info 2 "Found host-specific file, using it's contents."
     echo "# From ${HostCronFile}:" >> "${TempCronFile}"
-    sed -e "s@\$\(HOME\|{HOME}\)@${UserHome}@g" \
+    gsed -e "s@\$\(HOME\|{HOME}\)@${UserHome}@g" \
         -e "s@^#.*@@g" \
         -e "/^[ \t]*$/d" \
         -e "s@^[ \t]*@@g" \
@@ -116,7 +116,7 @@ if [ -f "${HostCronFile}" ]; then
 fi
 #}}}
 # Finally let's add our final touch to the crontab.#{{{
-sed -e "s@\t@ @g" \
+gsed -e "s@\t@ @g" \
     -e "s@ [ ]*@ @g" \
     -i "${TempCronFile}"
 #}}}
