@@ -1,9 +1,6 @@
 [submodule ".filesystem/lib/bash"]
 	path = .filesystem/lib/bash
 	url = https://github.com/eMxyzptlk/bashlib.git
-[submodule ".filesystem/bin/willgit"]
-	path = .filesystem/bin/willgit
-	url = https://gitorious.org/willgit/mainline.git
 [submodule ".rbenv"]
 	path = .rbenv
 	url = https://github.com/sstephenson/rbenv.git
