@@ -114,3 +114,7 @@ alias fixssh='source ~/.tmux/ssh_vars'
 
 # Add an alias for tmux-attach-or-create
 alias ac=tmux-attach-or-create
+
+if [ -x "`${W} ack-grep`" ]; then
+  alias ack=ack-grep
+fi
