@@ -180,7 +180,15 @@ if [[ -f "${HOME}/.mysql_password" ]]; then
     unset user pass
 fi
 
+if [[ -e "/var/run/mysqld/mysqld.sock" ]]; then
+  export WF_DBSOCKET="/var/run/mysqld/mysqld.sock"
+fi
+
 export CLASSPATH=$CLASSPATH:/usr/local/Cellar/clojure-contrib/1.2.0/clojure-contrib.jar
 
 export ARCHFLAGS='-arch x86_64'
 export NODE_PATH='/usr/local/lib/node_modules'
+
+if [[ -e '/etc/bash_completion.d/g4d' ]]; then
+  source /etc/bash_completion.d/g4d
+fi
