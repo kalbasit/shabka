@@ -13,31 +13,13 @@ unset bootstrap
 PROJECT_ROOT_PATH="`git rev-parse --show-toplevel`"
 #}}}
 # Copy all user configuration files
-if [ -z "${CIBUILD_IS_RUNNING}" -a -d "${HOME}/.wildfire/app_suite/config" ]; then
+if [ -d "${HOME}/.wildfire/app_suite/config" ]; then
   print_info 0 "Copying personal copy of config files"
   for config in ${HOME}/.wildfire/app_suite/config/*; do
-    path="${PROJECT_ROOT_PATH}/config/$(basename "${config}")"
+    path="${PROJECT_ROOT_PATH}/config/"
     print_info 2 "Copying ${config}"
-    cp "$config" "$path"
+    cp -R "$config" ${PROJECT_ROOT_PATH}/config/
   done
 fi
 
-# Copy all new configuration example files
-print_info 0 "Copying missing config files"
-for config in config/examples/*; do
-  path="${PROJECT_ROOT_PATH}/config/$(basename "${config}")"
-  if [ ! -f "$path" ]; then
-    cp "$config" "$path"
-  fi
-done
-
-print_info 0 "Running bundle install"
-bundle
-
-# Recreate & migrate databases (and prepare test database)
-print_info 0 "Preparing the database"
-if [ -z "${CIBUILD_IS_RUNNING}" ]; then
-  bundle exec rake db:create:all db:migrate db:test:prepare db:seed --trace
-else
-  bundle exec rake db:drop:all db:create:all db:migrate db:test:prepare --trace
-fi
+sh ./script/bootstrap

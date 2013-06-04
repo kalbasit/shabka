@@ -1,0 +1,151 @@
+#!/usr/bin/env bash
+#
+# Copyright (c) 2013 Wael Nasreddine <wael.nasreddine@gmail.com>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
+# USA.
+#
+
+####
+# Notes
+
+# Don't use the following variables in your script, they are reserved
+#   to the Functions uses
+# 'LOCK': This is a variable used by the functions 'lock_script' and
+#   'free_lock'
+# 'TempFiles': This is a variable containing a list of Files to remove
+#   when the script exits.
+# Make sure you always use $ARGS instead of $1, Note that $ARGS[0]
+#   correspond to $1, and $ARGS[1] correspong to $2 ...
+
+#
+####
+
+####
+# Options
+
+# Change this option to true to enable options parsing
+ParseOptions=false
+
+#
+####
+
+# Bootstrap{{{
+bootstrap="`dirname $0`/.bootstrap"
+if [ -f "${bootstrap}" ]; then
+  source "${bootstrap}"
+else
+  echo "Cannot bootstrap"
+  exit 54
+fi
+unset bootstrap
+#}}}
+
+####
+# Functions
+
+# If you want to define a specific help for this script
+#function help()
+#{
+#  # print_info goes here
+#}
+
+function isGnomeScreensaverRunning() {
+  if RunningX; then
+  if ! ps -edf | grep -v grep | grep -q 'gnome-screensaver'; then
+    ( gnome-screensaver --no-daemon & ) &> /dev/null
+  fi
+  return 0
+  else
+  return 1
+  fi
+}
+
+function lockX()
+{
+  if [ "x${LOCKED}" = "x" ]; then
+    gnome-screensaver-command -al
+    pactl set-sink-mute 1 1
+    export LOCKED="Yes"
+  fi
+}
+
+function unlockX()
+{
+  if [ "x${LOCKED}" != "x" ]; then
+    #gnome-screensaver-command -d
+    pactl set-sink-mute 1 0
+    unset LOCKED
+  fi
+}
+
+function mountUsb() {
+  if ! isMounted; then
+    mount "${MOUNT_POINT}"
+  fi
+}
+
+function umountUsb() {
+  if isMounted; then
+    umount "${MOUNT_POINT}"
+  fi
+}
+
+function isMounted() {
+  mount | grep -q "${MOUNT_POINT}"
+}
+
+#
+####
+
+####
+# Main
+
+export DISPLAY=:0
+
+OVERRIDE_FILE="${HOME}/.unlock"
+DEVICE=/dev/disk/by-uuid/CB3A-1304
+MOUNT_POINT=/media/panda
+SECRET_FILE="secret.key"
+SHA512="2c2a8bf27ced09e49c58180ba4209c91d3a36bdf0ea0ad5d363f65c9f950423872557cdce7cb46e6e4ea7faf71b24e16374b63a9deaaf21366f42cf544ef3393"
+
+# Start the loop
+(
+  while true; do
+    if [ -e "${OVERRIDE_FILE}" ]; then
+      unlockX
+    else
+      if [ ! -e "${DEVICE}" ]; then
+        umountUsb
+        lockX
+      else
+        mountUsb
+
+        NEW_SHA=`sha512sum "${MOUNT_POINT}/${SECRET_FILE}" | awk '{print $1}'`
+
+        if [ "${SHA512}" != "${NEW_SHA}" ]; then
+          lockX
+        else
+          unlockX
+        fi
+      fi
+    fi
+
+    sleep 1
+  done
+) &
+
+#
+####

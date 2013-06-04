@@ -82,8 +82,8 @@ if v:version >= 700
 endif
 if has("gui_running")
   "color railscasts+     " Lovely theme but sucks when in diff mode
-  "color solarized       " Truely amazing theme.
-  color getafe           " Amazin black theme
+  color solarized       " Truely amazing theme.
+  "color getafe           " Amazin black theme
   set mouse=""          " I hate using the mouse for other than copying/pasting.
   set guioptions=cei    " Set the guioptions I like
   " set guifont=Courier\ 10\ Pitch\ 10
@@ -266,8 +266,6 @@ iab grr Greetings,<cr>Wael Nasreddine
 command! W :w
 command! Wa :wa
 
-command! KillWhitespace :normal :%s/ *$//g<cr><c-o><cr>
-
 ""
 "" Functions and their bindings
 ""
@@ -377,10 +375,10 @@ nnoremap <leader>. :call OpenTestAlternate()<cr>
 nnoremap <leader><leader> <c-^>
 
 " Force myself to learn the hjkl
-map <Left> :echo "no!"<cr>
-map <Right> :echo "no!"<cr>
-map <Up> :echo "no!"<cr>
-map <Down> :echo "no!"<cr>
+"map <Left> :echo "no!"<cr>
+"map <Right> :echo "no!"<cr>
+"map <Up> :echo "no!"<cr>
+"map <Down> :echo "no!"<cr>
 
 " CoffeeScript
 vmap <leader>c <esc>:'<,'>:CoffeeCompile<CR>

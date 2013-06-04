@@ -20,3 +20,8 @@ keycode 222 = XF86Launch0
 
 ! Put a Mod4 on the right too
 keycode 135 = Super_L
+
+! Remap CapsLock to Control
+remove Lock = Caps_Lock
+keysym Caps_Lock = Control_L
+add Control = Control_L

@@ -10,23 +10,23 @@ Xft.hintstyle:  hintslight
 Xft.rgba:       rgb
 
 ! rxvt-unicode settings
-URxvt.transparent:     true
+URxvt.transparent:     false
 URxvt.inheritPixmap:   true
 URxvt.imLocale:        en_US.UTF-8
 URxvt.scrollBar:       false
 URxvt.saveLines:       32767
 URxvt.cursorBlink:     true
 URxvt.cursorColor:     #FF0000
-URxvt.color:           #FFFFFF
-URxvt.shading:         30
-URxvt.tintcolor:       #151515
+!URxvt.color:           #FFFFFF
+!URxvt.shading:         30
+!URxvt.tintcolor:       #151515
 URxvt.depth:           24
 URxvt.visualBall:      true
 URxvt*termName:        rxvt-unicode-256color
-URxvt*font:            xft:DejaVu Sans Mono:pixelsize=12:antialias=true:hinting=true
-URxvt*boldFont:        xft:DejaVu Sans Mono:pixelsize=12:antialias=true:hinting=true:bold
-URxvt*italicFont:      xft:DejaVu Sans Mono:pixelsize=12:antialias=true:hinting=true:italic
-URxvt*bolditalicFont:  xft:DejaVu Sans Mono:pixelsize=12:antialias=true:hinting=true:bold:italic
+URxvt*font:            xft:DejaVu Sans Mono:pixelsize=14:antialias=true:hinting=true
+URxvt*boldFont:        xft:DejaVu Sans Mono:pixelsize=14:antialias=true:hinting=true:bold
+URxvt*italicFont:      xft:DejaVu Sans Mono:pixelsize=14:antialias=true:hinting=true:italic
+URxvt*bolditalicFont:  xft:DejaVu Sans Mono:pixelsize=14:antialias=true:hinting=true:bold:italic
 URxvt*perl-ext-common: default,matcher,clipboard
 URxvt*urlLauncher:     google-chrome
 URxvt.matcher.button:  1

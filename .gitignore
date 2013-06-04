@@ -10,6 +10,7 @@ yankring_history_v2.txt
 .xinitrc-sessions
 .pki
 .ssh/environment
+.ssh/id_rsa_google*
 .screen/ssh-auth-sock.*
 *[wW][eE][eE][mM]*
 *~
@@ -21,6 +22,8 @@ drafts/*
 .vimrc
 .gvimrc
 .irssi/config.autosave
+fishd.*
+fish_history
 
 
 

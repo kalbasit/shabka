@@ -118,3 +118,7 @@ alias ac=tmux-attach-or-create
 if [ -x "`${W} ack-grep`" ]; then
   alias ack=ack-grep
 fi
+
+if [ -x "$(${W} Xvfb 2> /dev/null)" ]; then
+  alias run_xvfb='Xvfb :4 -screen 0 1280x1024x24'
+fi
