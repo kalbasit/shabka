@@ -12,3 +12,4 @@ rbenv rehash >/dev/null ^&1
 # Some universal variables
 set -U EDITOR vim
 set -U BROWSER google-chrome
+set -U GOPATH $HOME/code/go
