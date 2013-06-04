@@ -1,6 +1,9 @@
 # Setup my paths
 set_my_paths
 
+# Export everything that we need for wildfire
+init_wildfire
+
 # Setup rbenv
 set -x PATH $HOME/.rbenv/bin $PATH
 set -x PATH $HOME/.rbenv/shims $PATH
