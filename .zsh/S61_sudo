@@ -1,8 +1,0 @@
-# Prefix the previous line with "sudo " then execute it
-rerun-with-sudo () {
-  LBUFFER="sudo !!"
-  zle accept-line
-}
-zle -N rerun-with-sudo
-
-bindkey '\C-x\C-x' rerun-with-sudo

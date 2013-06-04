@@ -1,1 +1,0 @@
-"This one time, at SUP Camp, " + message.from.name + ' said, On ' + message.date.strftime('%Y-%m-%d %H:%M') + ':'

@@ -1,6 +1,0 @@
-# vim: set ft=sh ts=4 sts=4 sw=4 expandtab:
-#
-# $Id: proxy 1429 2009-05-31 03:56:15Z wael $
-
-# populate the proxy settings based on our location
-populateProxySettingsBasedOnLocation

@@ -1,1 +1,0 @@
-../../.private/.sup/hooks/before-add-message.rb
