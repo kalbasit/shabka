@@ -1,23 +1,11 @@
 #!/usr/bin/env bash
-# Bootstrap{{{
-bootstrap="`dirname $0`/.bootstrap"
-if [ -f "${bootstrap}" ]; then
-    source "${bootstrap}"
-else
-    echo "Cannot bootstrap"
-    exit 54
-fi
-unset bootstrap
-#}}}
 # Project base {{{
 PROJECT_ROOT_PATH="`git rev-parse --show-toplevel`"
 #}}}
 # Copy all user configuration files
 if [ -d "${HOME}/.wildfire/app_suite/config" ]; then
-  print_info 0 "Copying personal copy of config files"
   for config in ${HOME}/.wildfire/app_suite/config/*; do
     path="${PROJECT_ROOT_PATH}/config/"
-    print_info 2 "Copying ${config}"
     cp -R "$config" ${PROJECT_ROOT_PATH}/config/
   done
 fi

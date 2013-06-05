@@ -1,20 +1,3 @@
 #!/usr/bin/env bash
-# Bootstrap{{{
-bootstrap="`dirname $0`/.bootstrap"
-if [ -f "${bootstrap}" ]; then
-    source "${bootstrap}"
-else
-    echo "Cannot bootstrap"
-    exit 54
-fi
-unset bootstrap
 
-# Tell bootstrap that it's the test script
-export CIBUILD_IS_RUNNING=1
-
-# Remove all untracked files
-git clean -fdx
-
-. `dirname $0`/bootstrap
-
-bundle exec rspec -f documentation spec/
+sh ./script/cibuild

@@ -34,26 +34,6 @@
 ####
 
 ####
-# Options
-
-# Change this option to true to enable options parsing
-ParseOptions=false
-
-#
-####
-
-# Bootstrap{{{
-bootstrap="`dirname $0`/.bootstrap"
-if [ -f "${bootstrap}" ]; then
-  source "${bootstrap}"
-else
-  echo "Cannot bootstrap"
-  exit 54
-fi
-unset bootstrap
-#}}}
-
-####
 # Functions
 
 # If you want to define a specific help for this script
