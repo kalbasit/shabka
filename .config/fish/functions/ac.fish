@@ -1,3 +1,3 @@
 function ac
-  tmux-attach-or-create
+  tmux-attach-or-create $argv
 end
