@@ -9,7 +9,7 @@ set -x PATH $HOME/.rbenv/bin $PATH
 set -x PATH $HOME/.rbenv/shims $PATH
 rbenv rehash >/dev/null ^&1
 
-# Some universal variables
-set -U EDITOR vim
-set -U BROWSER google-chrome
-set -U GOPATH $HOME/code/go
+# Some global variables
+set -xg EDITOR vim
+set -xg BROWSER google-chrome
+set -xg GOPATH $HOME/code/go
