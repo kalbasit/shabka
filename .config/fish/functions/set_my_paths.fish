@@ -13,7 +13,7 @@ function set_my_paths
   if test -d "$HOME/.filesystem/opt/"
     set -l opt_paths (find "$HOME/.filesystem/opt/" -maxdepth 2 -name bin -type d)
 
-    if count $opt_paths > 0
+    if [ (count $opt_paths) -gt 0 ]
       for dir in $opt_paths
         add_path "$dir"
       end
