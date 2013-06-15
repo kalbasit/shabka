@@ -1,6 +1,9 @@
 # Setup my paths
 set_my_paths
 
+# Load aliases
+load_aliases
+
 # Export everything that we need for wildfire
 init_wildfire
 
