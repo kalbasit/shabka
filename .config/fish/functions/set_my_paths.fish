@@ -19,4 +19,9 @@ function set_my_paths
       end
     end
   end
+
+  # Add npm's OSX folder
+  if test -d /usr/local/share/npm/bin
+    add_path /usr/local/share/npm/bin
+  end
 end
