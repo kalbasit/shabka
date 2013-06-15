@@ -6,6 +6,9 @@
 "" Defaults
 ""
 
+" Use bash
+set shell=/bin/bash
+
 " Paste toggle on key F12!
 set pastetoggle=<F12>
 
