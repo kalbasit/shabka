@@ -24,4 +24,9 @@ function set_my_paths
   if test -d /usr/local/share/npm/bin
     add_path /usr/local/share/npm/bin
   end
+
+  # Add go path
+  if test -d "$HOME/code/go/bin"
+    add_path "$HOME/code/go/bin"
+  end
 end
