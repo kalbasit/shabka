@@ -16,12 +16,4 @@ function tnp
   for name in Main Vim CI
     tmux new-window -n "[$project_name] $name"
   end
-
-  if [ $tmux_last_window -ge 20 ]
-    set tmux_server_number (math "$tmux_last_window + 1")
-  else
-    set tmux_server_number 20
-  end
-
-  tmux new-window -n "[$project_name] server" -t $tmux_server_number
 end

@@ -17,5 +17,5 @@ rbenv rehash >/dev/null ^&1
 
 # Some global variables
 set -xg EDITOR vim
-set -xg BROWSER google-chrome
+#set -xg BROWSER google-chrome
 set -xg GOPATH $HOME/code/go
