@@ -11,16 +11,12 @@ Xft.rgba:       rgb
 
 ! rxvt-unicode settings
 URxvt.transparent:     false
-URxvt.inheritPixmap:   true
 URxvt.imLocale:        en_US.UTF-8
 URxvt.scrollBar:       false
 URxvt.saveLines:       32767
 URxvt.cursorBlink:     true
 URxvt.cursorColor:     #FF0000
-!URxvt.color:           #FFFFFF
-!URxvt.shading:         30
-!URxvt.tintcolor:       #151515
-URxvt.depth:           24
+!URxvt.depth:           24
 URxvt.visualBall:      true
 URxvt*termName:        rxvt-unicode-256color
 URxvt*font:            xft:DejaVu Sans Mono:pixelsize=14:antialias=true:hinting=true
