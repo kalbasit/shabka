@@ -12,6 +12,12 @@ set shell=/bin/bash
 " Paste toggle on key F12!
 set pastetoggle=<F12>
 
+" Remap F1 to ESC
+:map <F1> <ESC>
+:vmap <F1> <ESC>
+:nmap <F1> <ESC>
+:imap <F1> <ESC>
+
 " ,----
 " | Windows
 " `---
