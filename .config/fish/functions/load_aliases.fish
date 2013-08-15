@@ -28,6 +28,7 @@ function load_aliases
 
   # run_xvfb
   function run_xvfb; command Xvfb :4 -screen 0 1280x1024x24; end
+  function xr; command xvfb-run --server-args='-screen 0 1280x1024x24' $argv; end
 
   # Chef Servers
   function officelist; knife node list -c ~/.chef/knife.office.rb; end
