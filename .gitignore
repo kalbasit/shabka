@@ -24,6 +24,10 @@ drafts/*
 .irssi/config.autosave
 fishd.*
 fish_history
+.xmonad/xmonad.hi
+.xmonad/xmonad.o
+.xmonad/xmonad-*
+.xmonad/xmonad.errors
 
 
 
