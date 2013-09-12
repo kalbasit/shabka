@@ -25,10 +25,12 @@ function load_aliases
 
   # Serve this
   function serve_this; python -m SimpleHTTPServer; end
+  function rserve_this; ruby -rrack -e "Rack::Handler::WEBrick.run Rack::Directory.new('.')"; end
 
   # run_xvfb
   function run_xvfb; command Xvfb :4 -screen 0 1280x1024x24; end
   function xr; command xvfb-run --server-args='-screen 0 1280x1024x24' $argv; end
+  function xrake; xr bundle exec rake $argv; end
 
   # Chef Servers
   function officelist; knife node list -c ~/.chef/knife.office.rb; end
