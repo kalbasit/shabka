@@ -1,12 +1,17 @@
 import XMonad
+
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
+
 import XMonad.Layout.NoBorders
+
 import XMonad.Util.Dmenu
 import XMonad.Util.EZConfig(additionalKeys)
 import XMonad.Util.Run(spawnPipe)
+import XMonad.Util.WorkspaceCompare
+import XMonad.Util.Scratchpad
 
 import System.Exit
 import System.IO
@@ -14,33 +19,65 @@ import System.IO
 import Control.Monad
 import Graphics.X11.ExtraTypes.XF86
 
-quitWithWarning :: X()
-quitWithWarning = do
-  let m = "confirm quit"
-  s <- dmenu [m]
-  when (m == s) (io exitSuccess)
+myTerminal           = "urxvt"
+myBorderWidth        = 1
+myNormalBorderColor  = "snow4"
+myFocusedBorderColor = "#61ce3c"
 
+-- Whether focus follows the mouse pointer.
+myFocusFollowsMouse :: Bool
+myFocusFollowsMouse = False
 
-myManageHook = composeAll
+myManageHook = manageDocks
+    <+> composeAll
     [ className =? "Gimp"      --> doFloat
     , className =? "Vncviewer" --> doFloat
     , isFullscreen --> doFullFloat
     ]
+    <+> manageHook defaultConfig
+
+myStartupHook = do
+    spawn "/usr/bin/synergys"
+    spawn "xautolock -locker 'gnome-screensaver-command --lock' -time 10"
+
+myLayout = avoidStruts
+    $ smartBorders
+    $ layoutHook defaultConfig
+
+quitWithWarning :: X()
+quitWithWarning = do
+    let m = "confirm quit"
+    s <- dmenu [m]
+    when (m == s) (io exitSuccess)
+
+myXmobarPP h = xmobarPP
+        { ppOutput = hPutStrLn h
+        , ppCurrent = xmobarColor "#f8f8f8" "DodgerBlue4" . wrap " " " "
+        , ppVisible = xmobarColor "#f8f8f8" "LightSkyBlue4" . wrap " " " "
+        , ppUrgent = xmobarColor "#f8f8f8" "red4" . wrap " " " " . xmobarStrip
+        , ppLayout = wrap " |" "" . xmobarColor "DarkOrange" "" . wrap " [" "] "
+        , ppTitle = xmobarColor "#61ce3c" "" . shorten 50
+        , ppSort = fmap (.scratchpadFilterOutWorkspace) getSortByIndex
+        , ppSep = ""
+        , ppWsSep = " | "
+        }
 
 main = do
-    xmproc <- spawnPipe "/usr/bin/xmobar $HOME/.xmonad/xmobarrc"
+    xmobar <- spawnPipe "/usr/bin/xmobar $HOME/.xmonad/xmobarrc"
     xmonad $ defaultConfig
-        { manageHook = manageDocks <+> myManageHook
-                        <+> manageHook defaultConfig
-        , layoutHook = avoidStruts  $  smartBorders  $  layoutHook defaultConfig
-        , handleEventHook = fullscreenEventHook
-        , logHook = dynamicLogWithPP xmobarPP
-                        { ppOutput = hPutStrLn xmproc
-                        , ppTitle = xmobarColor "green" "" . shorten 50
-                        }
-        , modMask = mod4Mask     -- Rebind Mod to the Windows key
-        , terminal = "urxvt"
-        } `additionalKeys`
+        { manageHook                 = myManageHook
+        , layoutHook                 = myLayout
+        , handleEventHook            = fullscreenEventHook
+        , focusFollowsMouse          = myFocusFollowsMouse
+        , logHook                    = (dynamicLogWithPP $ myXmobarPP xmobar)
+        , modMask                    = mod4Mask     -- Rebind Mod to the Windows key
+        , terminal                   = myTerminal
+        , startupHook                = myStartupHook
+        , borderWidth                = myBorderWidth
+        , normalBorderColor          = myNormalBorderColor
+        , focusedBorderColor         = myFocusedBorderColor
+        }
+        `additionalKeys`
         [ ((mod4Mask .|. shiftMask, xK_z), spawn "/usr/bin/gnome-screensaver-command -l")
         , ((mod4Mask .|. shiftMask, xK_o), spawn "/usr/bin/fetchotp -x")
         , ((mod4Mask .|. shiftMask, xK_b), spawn "/usr/bin/google-chrome")
