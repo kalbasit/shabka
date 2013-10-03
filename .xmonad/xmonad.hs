@@ -1,23 +1,35 @@
 import XMonad
+import System.Exit
+import System.IO
+
+import qualified XMonad.StackSet as W
 
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
+import XMonad.Hooks.UrgencyHook
 
 import XMonad.Layout.NoBorders
 
 import XMonad.Util.Dmenu
 import XMonad.Util.EZConfig(additionalKeys)
-import XMonad.Util.Run(spawnPipe)
+import XMonad.Util.Run
 import XMonad.Util.WorkspaceCompare
 import XMonad.Util.Scratchpad
-
-import System.Exit
-import System.IO
+import XMonad.Util.NamedWindows
 
 import Control.Monad
 import Graphics.X11.ExtraTypes.XF86
+
+data LibNotifyUrgencyHook = LibNotifyUrgencyHook deriving (Read, Show)
+
+instance UrgencyHook LibNotifyUrgencyHook where
+  urgencyHook LibNotifyUrgencyHook w = do
+    name <- getName w
+    ws <- gets windowset
+    whenJust (W.findTag w ws) (flash name)
+      where flash name index = safeSpawn "notify-send" [index ++ ": " ++ show name]
 
 myTerminal           = "urxvt"
 myBorderWidth        = 1
@@ -64,7 +76,7 @@ myXmobarPP h = xmobarPP
 
 main = do
     xmobar <- spawnPipe "/usr/bin/xmobar $HOME/.xmonad/xmobarrc"
-    xmonad $ defaultConfig
+    xmonad $ withUrgencyHook LibNotifyUrgencyHook defaultConfig
         { manageHook                 = myManageHook
         , layoutHook                 = myLayout
         , handleEventHook            = fullscreenEventHook
