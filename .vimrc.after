@@ -394,4 +394,4 @@ vmap <leader>c <esc>:'<,'>:CoffeeCompile<CR>
 map <leader>c :CoffeeCompile<CR>
 command -nargs=1 C CoffeeCompile | :<args>
 
-command ConvertHashStyle :%s/:\([a-zA-Z_]*\) =>/\1:/g
+command ConvertHashStyle :%s/\([^:]\):\([a-zA-Z_]*\)\s*=>/\1\2:/g
