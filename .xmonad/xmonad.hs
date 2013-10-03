@@ -42,8 +42,8 @@ main = do
         , terminal = "urxvt"
         } `additionalKeys`
         [ ((mod4Mask .|. shiftMask, xK_z), spawn "/usr/bin/gnome-screensaver-command -l")
-        , ((mod4Mask .|. shiftMask, xK_x), spawn "/usr/bin/gksudo /usr/sbin/pm-suspend-hybrid")
-        , ((mod4Mask .|. shiftMask, xK_i), spawn "/usr/bin/fetchotp -x")
+        , ((mod4Mask .|. shiftMask, xK_o), spawn "/usr/bin/fetchotp -x")
+        , ((mod4Mask .|. shiftMask, xK_b), spawn "/usr/bin/google-chrome")
         , ((mod4Mask .|. shiftMask, xK_q), quitWithWarning)
         , ((mod4Mask, xK_b), sendMessage ToggleStruts)
         , ((0, xF86XK_AudioLowerVolume), spawn "/usr/bin/amixer set Master 2dB-")
