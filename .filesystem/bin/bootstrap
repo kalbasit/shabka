@@ -1,13 +1,28 @@
 #!/usr/bin/env bash
+set -e
+
 # Project base {{{
 PROJECT_ROOT_PATH="`git rev-parse --show-toplevel`"
+PROJECT_NAME="`basename ${PROJECT_ROOT_PATH}`"
 #}}}
 # Copy all user configuration files
-if [ -d "${HOME}/.wildfire/app_suite/config" ]; then
-  for config in ${HOME}/.wildfire/app_suite/config/*; do
+if [ -d "${HOME}/.wildfire/${PROJECT_NAME}/config" ]; then
+  for config in ${HOME}/.wildfire/${PROJECT_NAME}/config/*; do
     path="${PROJECT_ROOT_PATH}/config/"
-    cp -R "$config" ${PROJECT_ROOT_PATH}/config/
+    cp -rv "$config" ${PROJECT_ROOT_PATH}/config/
   done
 fi
 
-sh ./script/bootstrap
+# Copy any new configuration example files
+for config in ${PROJECT_ROOT_PATH}/config/examples/*; do
+  path="${PROJECT_ROOT_PATH}/config/$(basename "$config")"
+  if [ ! -f "$path" ]; then
+    cp -rv "$config" "$path"
+  fi
+done
+
+bundle
+
+spring rake db:drop:all db:create:all
+spring rake db:schema:load db:migrate db:seed
+spring rake db:test:prepare
