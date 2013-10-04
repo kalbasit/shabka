@@ -56,6 +56,7 @@ set ruler               " Always show current positions along the bottom
 set cmdheight=1         " the command bar is 1 line high
 set number              " turn on line numbers but display them as relative to the current line
 set winwidth=79         " Set the minimum window width
+set colorcolumn=80
 
 " We have to have a winheight bigger than we want to set winminheight. But if
 " we set winheight to be huge before winminheight, the winminheight set will
