@@ -10,6 +10,9 @@ antigen bundles <<EOBUNDLES
   $HOME/.oh-my-zsh-ext/zsh-reload
   $HOME/.oh-my-zsh-ext/fix-vi-mode-on-debian
 
+  # Syntax highlighting bundle.
+  zsh-users/zsh-syntax-highlighting
+
   # Bundles from the default repo (robbyrussell's oh-my-zsh).
   command-not-found
   npm
@@ -20,21 +23,15 @@ antigen bundles <<EOBUNDLES
   cloudapp
   extract
   gem
-  gas
   python
   redis-cli
   thor
   ruby
   bundler
   rails3
+  vi-mode
   history
   history-substring-search
-  vi-mode
-  vagrant
-  lol
-
-  # Syntax highlighting bundle.
-  zsh-users/zsh-syntax-highlighting
 EOBUNDLES
 
 # Load the theme.
