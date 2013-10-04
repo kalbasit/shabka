@@ -4,12 +4,38 @@ source ~/.antigen/antigen.zsh
 # Load the oh-my-zsh's library.
 antigen use oh-my-zsh
 
-# Bundles from the default repo (robbyrussell's oh-my-zsh).
-antigen bundle git
-antigen bundle command-not-found
+antigen bundles <<EOBUNDLES
+  # Load my custom plugins
+  $HOME/.oh-my-zsh-ext/my-aliases
+  $HOME/.oh-my-zsh-ext/zsh-reload
+  $HOME/.oh-my-zsh-ext/fix-vi-mode-on-debian
 
-# Syntax highlighting bundle.
-antigen bundle zsh-users/zsh-syntax-highlighting
+  # Bundles from the default repo (robbyrussell's oh-my-zsh).
+  command-not-found
+  npm
+  git
+  github
+  git-flow
+  capistrano
+  cloudapp
+  extract
+  gem
+  gas
+  python
+  redis-cli
+  thor
+  ruby
+  bundler
+  rails3
+  history
+  history-substring-search
+  vi-mode
+  vagrant
+  lol
+
+  # Syntax highlighting bundle.
+  zsh-users/zsh-syntax-highlighting
+EOBUNDLES
 
 # Load the theme.
 antigen theme crunch
