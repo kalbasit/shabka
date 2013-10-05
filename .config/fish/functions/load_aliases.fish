@@ -38,4 +38,7 @@ function load_aliases
   function officelist; knife node list -c ~/.chef/knife.office.rb; end
   function staginglist; knife node list -c ~/.chef/knife.staging.rb; end
   function productionlist; knife node list -c ~/.chef/knife.production.rb; end
+
+  # SSH
+  function desktop; ssh gaea.mtv.corp.google.com; end
 end

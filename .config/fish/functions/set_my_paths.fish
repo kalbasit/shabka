@@ -29,4 +29,9 @@ function set_my_paths
   if test -d "$HOME/code/go/bin"
     add_path "$HOME/code/go/bin"
   end
+
+  # Add homebrew path (for corporate)
+  if test -d "/brew/bin"
+    add_path "/brew/bin"
+  end
 end
