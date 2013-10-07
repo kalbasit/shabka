@@ -5,6 +5,11 @@ for i in ~/.filesystem/opt/*; do
   path+=($i/bin(N-/))
 done
 
+# Load rbenv
+path+=(~/.rbenv/bin(N-/))
+path+=(~/.rbenv/shims(N-/))
+eval "$(rbenv init --no-rehash - zsh)"
+
 # Load antigen
 source ~/.antigen/antigen.zsh
 
