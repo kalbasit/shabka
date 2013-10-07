@@ -23,7 +23,7 @@ URxvt*font:            xft:DejaVu Sans Mono:pixelsize=14:antialias=true:hinting=
 URxvt*boldFont:        xft:DejaVu Sans Mono:pixelsize=14:antialias=true:hinting=true:bold
 URxvt*italicFont:      xft:DejaVu Sans Mono:pixelsize=14:antialias=true:hinting=true:italic
 URxvt*bolditalicFont:  xft:DejaVu Sans Mono:pixelsize=14:antialias=true:hinting=true:bold:italic
-URxvt*perl-ext-common: default,matcher,clipboard
+URxvt*perl-ext-common: default,matcher
 URxvt*urlLauncher:     google-chrome
 URxvt.matcher.button:  1
 
