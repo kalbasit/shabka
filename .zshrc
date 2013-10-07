@@ -1,3 +1,10 @@
+# Add my paths
+typeset -Ug path # Make sure the path array does not contain duplicates
+path+=(~/.filesystem/bin(N-/))
+for i in ~/.filesystem/opt/*; do
+  path+=($i/bin(N-/))
+done
+
 # Load antigen
 source ~/.antigen/antigen.zsh
 
