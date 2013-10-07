@@ -49,8 +49,9 @@ myManageHook = manageDocks
     <+> manageHook defaultConfig
 
 myStartupHook = do
-    spawn "/usr/bin/synergys"
-    spawn "xautolock -locker 'gnome-screensaver-command --lock' -time 10"
+    safeSpawn "synergys" []
+    safeSpawn "xautolock" ["-locker", "gnome-screensaver-command --lock", "-time", "10"]
+    unsafeSpawn "$HOME/.filesystem/bin/Gwall"
 
 myLayout = avoidStruts
     $ smartBorders
