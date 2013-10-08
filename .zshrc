@@ -6,6 +6,11 @@ for i in ~/.filesystem/opt/*; do
   path+=($i/bin(N-/))
 done
 
+# Load Google specific stuff
+if [ -r "$HOME/.zshrc-google" ]; then
+  source "$HOME/.zshrc-google"
+fi
+
 # Load rbenv
 path+=(~/.rbenv/bin(N-/))
 path+=(~/.rbenv/shims(N-/))
