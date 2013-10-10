@@ -27,6 +27,8 @@ antigen bundles <<EOBUNDLES
   $HOME/.oh-my-zsh-ext/my-aliases
   $HOME/.oh-my-zsh-ext/zsh-reload
   $HOME/.oh-my-zsh-ext/fix-vi-mode-on-debian
+  $HOME/.oh-my-zsh-ext/mysql-credentials
+  $HOME/.oh-my-zsh-ext/init-wildfire
 
   # Syntax highlighting bundle.
   zsh-users/zsh-syntax-highlighting
@@ -57,3 +59,6 @@ antigen theme crunch
 
 # Tell antigen that you're done.
 antigen apply
+
+# Export all my env variables
+export GOPATH=$HOME/code/go
