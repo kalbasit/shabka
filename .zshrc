@@ -12,8 +12,8 @@ if [ -r "$HOME/.zshrc-google" ]; then
 fi
 
 # Load rbenv
-path+=(~/.rbenv/bin(N-/))
-path+=(~/.rbenv/shims(N-/))
+path=(~/.rbenv/bin(N-/) $path)
+path=(~/.rbenv/shims(N-/) $path)
 eval "$(rbenv init --no-rehash - zsh)"
 
 # Load antigen
