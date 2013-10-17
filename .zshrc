@@ -29,6 +29,7 @@ antigen bundles <<EOBUNDLES
   $HOME/.oh-my-zsh-ext/fix-vi-mode-on-debian
   $HOME/.oh-my-zsh-ext/mysql-credentials
   $HOME/.oh-my-zsh-ext/init-wildfire
+  $HOME/.oh-my-zsh-ext/my-git-extensions
 
   # Syntax highlighting bundle.
   zsh-users/zsh-syntax-highlighting
