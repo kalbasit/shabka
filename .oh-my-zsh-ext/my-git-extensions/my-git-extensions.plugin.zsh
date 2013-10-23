@@ -8,7 +8,9 @@ function gcim() {
 
   if [[ "x`git rev-parse --git-dir 2> /dev/null`" != "x" ]]; then
     local branch="`current_branch`"
-    local story="`echo "${branch}" | grep '^US[0-9]*-' | sed -e 's:^\(US[0-9]*\)-.*:\1:g'`"
+    local story="`echo "${branch}" | grep '^[Uu][Ss][0-9]*[-_]' \
+      | sed -e 's:^\([Uu][Ss][0-9]*\)[-_].*:\1:g' \
+      | tr 'a-z' 'A-Z'`"
     if [[ "x${story}" != "x" ]]; then
       git commit -m "[${story}] ${message}"
     else
