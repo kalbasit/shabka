@@ -229,6 +229,7 @@ iab grr Greetings,<cr>Wael Nasreddine
 " Seriously, guys. It's not like :W is bound to anything anyway.
 command! W :w
 command! Wa :wa
+command! Xa :xa
 
 ""
 "" Functions and their bindings
