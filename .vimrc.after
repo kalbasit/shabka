@@ -29,7 +29,6 @@ set pastetoggle=<F12>
 " `----
 set makeef=error.err            " When using make, where should it dump the file
 set noautowrite                 " safe automacially content
-set nomodeline                  " deactivate modelines: http://lists.alioth.debian.org/pipermail/pkg-vim-maintainers/2007-June/004020.html
 set autoread                    " Automatically read a file that has changed on disk
 
 " ,----
