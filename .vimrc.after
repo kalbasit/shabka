@@ -89,20 +89,6 @@ if v:version >= 700
     set nocursorcolumn      " no cursor column highlighting
     set nocursorline        " no cursor line highlighting
 endif
-if has("gui_running")
-  "color railscasts+     " Lovely theme but sucks when in diff mode
-  color solarized       " Truely amazing theme.
-  "color getafe           " Amazin black theme
-  set mouse=""          " I hate using the mouse for other than copying/pasting.
-  set guioptions=cei    " Set the guioptions I like
-  " set guifont=Courier\ 10\ Pitch\ 10
-  " set guifont=Terminus
-  set guifont=Inconsolata-dz:h12
-endif
-
-" ,----
-" | Shell
-" `----
 
 " ,----
 " | Diff
@@ -110,15 +96,9 @@ endif
 set diffopt+=iwhite     " Add ignorance of whitespace to diff
 
 " ,----
-" | snipMate
-" `----
-let g:snips_author = 'Wael Nasreddine <wael.nasreddine@gmail.com>'
-
-" ,----
 " | CtrlP
 " `----
 let g:ctrlp_working_path_mode = 0
-let g:ctrlp_extensions = ["tag"]
 let g:ctrlp_max_height = 100
 
 " ,----
@@ -126,28 +106,14 @@ let g:ctrlp_max_height = 100
 " `----
 let g:vroom_write_all = 1
 
-" ,----
-" | NERDTree
-" `----
-"let g:loaded_nerd_tree=1  " Disable NERDTree, it is driving me mad.
-
-" Setting this below makes it sow that error messages don't disappear after
-" one second on startup.
-" set debug=msg
-
-" Make the 'cw' and like commands put a $ at the end instead of just deleting
-" the text and replacing it
-" set cpoptions=ces$
-
 ""
 "" Mappings
 ""
 
 " Wipe out all buffers
-" nmap <silent> <leader>wa :1,9000bwipeout<cr>
 nmap <silent> <leader>wa :1,9000bd<cr>
 
-" GRB: clear the search buffer when hitting return
+" clear the search buffer when hitting return
 nnoremap <CR> :nohlsearch<cr>
 
 " Don't use Ex mode, use Q for formatting
@@ -180,14 +146,8 @@ nmap <leader>se :set spelllang=en<CR>
 nmap <leader>sf :set spelllang=fr<CR>
 nmap <C-X>s wi<C-X>s
 
-" put the vim directives for my file editing settings in
-nmap <silent> <leader>vi ovim:set ts=2 sts=2 sw=2:<CR>vim600:fdm=marker fdl=1 fdc=0:<ESC>
-
 " Insert my name and email
 nmap <silent> <leader>me aWael Nasreddine <wael.nasreddine@gmail.com><ESC>
-
-" Show all available VIM servers
-nmap <silent> <leader>sl :echo serverlist()<CR>
 
 " The following beast is something i didn't write... it will return the
 " syntax highlighting group that the current "thing" under the cursor
@@ -200,7 +160,6 @@ nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
 nnoremap <c-h> <c-w>h
 nnoremap <c-l> <c-w>l
-
 
 " Make horizontal scrolling easier
 nmap <silent> <C-o> 10zl
@@ -222,10 +181,6 @@ if executable("par")
   nnoremap <silent> <leader>fp vip:!par -w<c-r>=&tw<cr><cr>
   xnoremap <silent> <leader>fp :!par -w<c-r>=&tw<cr><cr>
 endif
-
-""
-"" Auto Commands
-""
 
 ""
 "" Abbreviations
@@ -394,4 +349,5 @@ vmap <leader>c <esc>:'<,'>:CoffeeCompile<CR>
 map <leader>c :CoffeeCompile<CR>
 command -nargs=1 C CoffeeCompile | :<args>
 
+" Convert 1.8 hash to 1.9
 command ConvertHashStyle :%s/\([^:]\):\([a-zA-Z_]*\)\s*=>/\1\2:/g
