@@ -1,7 +1,9 @@
 # Add my paths
+if [[ -x /usr/libexec/path_helper ]]; then
+  eval `/usr/libexec/path_helper -s`
+fi
 typeset -Ug path # Make sure the path array does not contain duplicates
 path+=(~/.filesystem/bin(N-/))
-path+=(/brew/bin(N-/))
 for i in ~/.filesystem/opt/*; do
   path+=($i/bin(N-/))
 done
@@ -9,6 +11,12 @@ done
 # Load Google specific stuff
 if [ -r "$HOME/.zshrc-google" ]; then
   source "$HOME/.zshrc-google"
+fi
+
+# /brew ? Export DYLD path
+if [[ -d /brew ]]; then
+  path+=(/brew/bin)
+  export DYLD_LIBRARY_PATH=/brew/lib:$DYLD_LIBRARY_PATH
 fi
 
 # Load rbenv
