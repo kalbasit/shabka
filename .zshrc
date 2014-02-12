@@ -57,7 +57,7 @@ antigen bundles <<EOBUNDLES
   thor
   ruby
   bundler
-  rails3
+  rails
   vi-mode
   history
   history-substring-search
