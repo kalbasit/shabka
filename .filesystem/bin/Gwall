@@ -130,11 +130,9 @@ fi
 if [ -f "${HOME}/.gwall.pid" ]; then
   OldPID="$( cat "${HOME}/.gwall.pid" )"
   if ps aux | grep -v grep | awk '{print $2}' | grep -q "${OldPID}"; then
-    print_error 0 "Gwall already running, aborting..."
-    exit 1
-  else
-    rm -f "${HOME}/.gwall.pid"
+    kill "${OldPID}"
   fi
+  rm -f "${HOME}/.gwall.pid"
 fi
 if [ ${#FOLDERS[@]} -lt 1 ]; then
   print_error 0 "Please add folders to FOLDERS array in ~/.gwallrc"

@@ -23,6 +23,6 @@ done
 
 bundle
 
-spring rake db:drop:all db:create:all parallel:create
-spring rake db:schema:load db:migrate db:seed
-spring rake db:test:prepare
+bundle exec rake db:drop:all db:create:all parallel:create
+bundle exec rake db:schema:load db:migrate db:seed
+bundle exec rake db:test:prepare
