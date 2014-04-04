@@ -76,7 +76,7 @@ myXmobarPP h = xmobarPP
         }
 
 main = do
-    xmobar <- spawnPipe "/usr/bin/xmobar $HOME/.xmonad/xmobarrc"
+    xmobar <- spawnPipe "/usr/bin/xmobar --screen=1 $HOME/.xmonad/xmobarrc"
     xmonad $ withUrgencyHook LibNotifyUrgencyHook defaultConfig
         { manageHook                 = myManageHook
         , layoutHook                 = myLayout
