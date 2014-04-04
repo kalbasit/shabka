@@ -38,7 +38,7 @@ myFocusedBorderColor = "#61ce3c"
 
 -- Whether focus follows the mouse pointer.
 myFocusFollowsMouse :: Bool
-myFocusFollowsMouse = False
+myFocusFollowsMouse = True
 
 myManageHook = manageDocks
     <+> composeAll
