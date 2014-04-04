@@ -1,0 +1,9 @@
+# Open the default windows
+new-window -t 2 -n Main
+kill-window -t 1
+new-window -t 1 -n Main
+new-window -t 3 -n Git
+new-window -t 4 -n Vim
+new-window -t 5 -n CI
+new-window -t 20 -n Servers
+select-window -t 1

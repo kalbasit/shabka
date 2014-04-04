@@ -1,0 +1,5 @@
+# Add a two panned window running irssi
+# This layout is intended to run the “/nicklist fifo” command
+new-window -t 0 -n irssi irssi
+split-window -h -p 15 -t 0 "/bin/cat ~/.irssi/nicklistfifo"
+select-pane -t 0
