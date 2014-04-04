@@ -25,3 +25,10 @@ keycode 135 = Super_L
 remove Lock = Caps_Lock
 keysym Caps_Lock = Control_L
 add Control = Control_L
+
+! Swap the left ctrl and Super keys
+!clear Control
+!clear Mod4
+!keysym Super_L = Control_L
+!add    Control = Control_L Control_R
+!add    Mod4    = Super_L Super_R
