@@ -20,9 +20,11 @@ if [[ -d /brew ]]; then
 fi
 
 # Load rbenv
-path=(~/.rbenv/bin(N-/) $path)
-path=(~/.rbenv/shims(N-/) $path)
-eval "$(rbenv init --no-rehash - zsh)"
+if [[ -d ~/.rbenv ]]; then
+  path=(~/.rbenv/bin(N-/) $path)
+  path=(~/.rbenv/shims(N-/) $path)
+  eval "$(rbenv init --no-rehash - zsh)"
+fi
 
 # Load antigen
 source ~/.antigen/antigen.zsh
