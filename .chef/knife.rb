@@ -1,1 +1,0 @@
-../../.private/.chef/knife.rb

@@ -38,7 +38,6 @@ antigen bundles <<EOBUNDLES
   $HOME/.oh-my-zsh-ext/zsh-reload
   $HOME/.oh-my-zsh-ext/fix-vi-mode-on-debian
   $HOME/.oh-my-zsh-ext/mysql-credentials
-  $HOME/.oh-my-zsh-ext/init-wildfire
   $HOME/.oh-my-zsh-ext/my-git-extensions
 
   # Syntax highlighting bundle.
@@ -73,3 +72,36 @@ antigen apply
 
 # Export all my env variables
 export GOPATH=$HOME/code/go
+
+# create the pane with irssi's nicklist
+function irssi_nickpane() {
+    tmux renamew irssi                                              # name the window
+    tmux -q setw main-pane-width $(( $(tput cols) - 21))            # set the main pane width to the total width-20
+    tmux splitw -v "cat ~/.irssi/nicklistfifo"                      # create the window and begin reading the fifo
+    tmux -q selectl main-vertical                                   # assign the layout
+    tmux selectw -t irssi                                           # select window 'irssi'
+    tmux selectp -t 0                                               # select pane 0
+}
+
+# irssi wrapper
+function irssi() {
+    irssi_nickpane
+    /usr/bin/env irssi
+}
+
+# repair running irssi's nicklist pane
+function irssi_repair() {
+    tmux selectw -t irssi
+    tmux selectp -t 0
+    tmux killp -a                                                   # kill all panes
+    irssi_nickpane
+}
+
+if [[ -s "${HOME}/.nvm/nvm.sh" ]]; then
+  source "${HOME}/.nvm/nvm.sh"
+fi
+if [[ -s "${HOME}/.nvm/bash_completion" ]]; then
+  source "${HOME}/.nvm/bash_completion"
+fi
+
+export PATH=./node_modules/.bin:$PATH
