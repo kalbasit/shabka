@@ -129,7 +129,7 @@ fi
 # Sanity checks#{{{
 if [ -f "${HOME}/.gwall.pid" ]; then
   OldPID="$( cat "${HOME}/.gwall.pid" )"
-  if ps aux | grep -v grep | awk '{print $2}' | grep -q "${OldPID}"; then
+  if [ "x${OldPID}" != "x" ] && ps aux | grep -v grep | awk '{print $2}' | grep -q "${OldPID}"; then
     kill "${OldPID}"
   fi
   rm -f "${HOME}/.gwall.pid"
