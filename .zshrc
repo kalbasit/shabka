@@ -15,7 +15,7 @@ fi
 
 # /brew ? Export DYLD path
 if [[ -d /brew ]]; then
-  path+=(/brew/bin)
+  path=(/brew/bin $path)
   export DYLD_LIBRARY_PATH=/brew/lib:$DYLD_LIBRARY_PATH
 fi
 
