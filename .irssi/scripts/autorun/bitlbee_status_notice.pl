@@ -1,1 +1,0 @@
-../bitlbee_status_notice.pl

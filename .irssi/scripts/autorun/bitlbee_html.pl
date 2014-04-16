@@ -1,1 +1,0 @@
-../bitlbee_html.pl
