@@ -44,7 +44,7 @@ else
 # tested this script with feh and gconftool-2, to set the
 # background with feh use the following combination:
 #   PROG="feh"
-#   ARGS="--bg-scale"
+#   ARGS="--bg-fill"
 # If you would like to use gconftool-2 which is used by
 # Gnome desktop, use the following combination:
 #   PROG="gconftool-2"
@@ -174,6 +174,9 @@ fi
 #}}}
 # Set the wallpaper.#{{{
 # If ROTATE is true then rotate the wallpaper while sleeping for ROTATE_SLEEP
+# NOTE: Sleeping to allow xrandr to set the resolution on all screens
+# correctly
+sleep 5
 while true; do
   # Generating a random number between 0 and ${#images[@]}
   rand="$(expr $RANDOM % ${#images[@]})"
