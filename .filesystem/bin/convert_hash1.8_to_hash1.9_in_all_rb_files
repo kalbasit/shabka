@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+set -ex
+
+git grep '[^:]:\([a-zA-Z_]*\)\s*=>' | cut -d: -f1 | grep '\.rb$' | sort | uniq | xargs sed -e 's@\([^:]\):\([a-zA-Z_]*\)\s*=>@\1\2:@g' -i
