@@ -49,6 +49,7 @@ myManageHook = manageDocks
     <+> manageHook defaultConfig
 
 myStartupHook = do
+    safeSpawn "xrandr" ["--output", "DP-1", "--mode", "2560x1600", "--pos", "0x0", "--output", "DVI-I-1", "--mode", "1920x1200", "--rotate", "right", "--pos", "-1200x0"]
     safeSpawn "synergys" []
     safeSpawn "xautolock" ["-locker", "gnome-screensaver-command --lock", "-time", "10"]
     unsafeSpawn "$HOME/.filesystem/bin/Gwall"
