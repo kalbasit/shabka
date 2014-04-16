@@ -1,5 +1,6 @@
 .viminfo,!
 tmp
+.tmux/ssh_vars
 yankring_history_v2.txt
 .screen/env
 .viminfo*
