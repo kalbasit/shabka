@@ -1,5 +1,5 @@
 # Attach or Create
-alias ac=tmux-attach-or-create
+alias ac="tmx main"
 
 # ack
 if [[ -x "`which ack-grep 2> /dev/null`" ]]; then
