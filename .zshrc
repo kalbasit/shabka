@@ -37,7 +37,6 @@ antigen bundles <<EOBUNDLES
   $HOME/.oh-my-zsh-ext/colors
   $HOME/.oh-my-zsh-ext/my-functions
   $HOME/.oh-my-zsh-ext/my-aliases
-  $HOME/.oh-my-zsh-ext/zsh-reload
   $HOME/.oh-my-zsh-ext/fix-vi-mode-on-debian
   $HOME/.oh-my-zsh-ext/mysql-credentials
   $HOME/.oh-my-zsh-ext/my-git-extensions
@@ -47,6 +46,7 @@ antigen bundles <<EOBUNDLES
 
   # Bundles from the default repo (robbyrussell's oh-my-zsh).
   command-not-found
+  zsh_reload
   npm
   git
   github
