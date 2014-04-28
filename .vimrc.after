@@ -364,3 +364,7 @@ command -nargs=1 C CoffeeCompile | :<args>
 
 " Convert 1.8 hash to 1.9
 command ConvertHashStyle :%s/\([^:]\):\([a-zA-Z_]*\)\s*=>/\1\2:/g
+
+" Vmail
+au FileType vmailMessageList map <leader>E :normal ggVGIggVG,e<CR>
+au FileType mail map <leader>E :normal ,e<CR><CR>
