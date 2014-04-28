@@ -36,6 +36,7 @@ antigen bundles <<EOBUNDLES
   # Load my custom plugins
   $HOME/.oh-my-zsh-ext/colors
   $HOME/.oh-my-zsh-ext/my-functions
+  $HOME/.oh-my-zsh-ext/my-exports
   $HOME/.oh-my-zsh-ext/my-aliases
   $HOME/.oh-my-zsh-ext/fix-vi-mode-on-debian
   $HOME/.oh-my-zsh-ext/mysql-credentials
