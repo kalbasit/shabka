@@ -24,3 +24,6 @@ alias xr="xvfb-run --server-args='-screen 0 1280x1024x24'"
 alias xrake="xr bundle exec rake"
 alias xrspec="xr bundle exec rspec"
 alias xspec="xrake parallel:prepare parallel:spec"
+
+alias vmail_home="VMAIL_HOME=~/.vmail/home vmail"
+alias vmail_work="VMAIL_HOME=~/.vmail/work vmail"
