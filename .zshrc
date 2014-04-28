@@ -4,6 +4,7 @@ if [[ -x /usr/libexec/path_helper ]]; then
 fi
 typeset -Ug path # Make sure the path array does not contain duplicates
 path+=(~/.filesystem/bin(N-/))
+path+=(~/code/go/bin(N-/))
 for i in ~/.filesystem/opt/*; do
   path+=($i/bin(N-/))
 done
