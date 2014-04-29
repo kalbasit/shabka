@@ -123,7 +123,7 @@ function print_info() {
 
     # STRUCTURE printlevel
     if [ "${1}" -gt "1" ]; then
-        PRINTLEVEL="$(for i in $(fseq 1 ${1}); do echo -ne "  "; done)"
+        PRINTLEVEL="$(for i in $(seq 1 ${1}); do echo -ne "  "; done)"
     else
         PRINTLEVEL=" "
     fi
@@ -576,7 +576,7 @@ function least()
 
     # dump_array()#{{{
     function dump_array () {
-        for n in `fseq 1 "${#lines[@]}"` ; do
+        for n in `seq 1 "${#lines[@]}"` ; do
             echo "${lines[$n]}"
         done
     }
