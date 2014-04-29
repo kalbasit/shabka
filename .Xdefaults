@@ -67,17 +67,17 @@ URxvt.matcher.button:  1
 #define S_green         #859900
 
 *background:            #002b36
-*foreground:            #657b83
+*foreground:            #839496
 *cursorColor:           #93a1a1
 *pointerColorBackground:#586e75
 *pointerColorForeground:#93a1a1
 
 !! black dark/light
-*color0:                #839496
+*color0:                #073642
 *color8:                #002b36
 
 !! red dark/light
-*color1:                #dc71c4
+*color1:                #dc322f
 *color9:                #cb4b16
 
 !! green dark/light
