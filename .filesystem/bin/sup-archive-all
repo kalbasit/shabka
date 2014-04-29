@@ -49,11 +49,5 @@ sup-dump > "${backup_filename}"
 # Archiving everything{{{
 print_info 0 "Archiving everything"
 SUP_LOG_LEVEL=debug sup-tweak-labels --query "label:inbox OR label:unread" \
-  --remove inbox,unread --verbose --all-sources &> ~/.sup/archive-all.log
-#}}}
-# Synchronsing to Gmail{{{
-print_info 0 "Synchronising maildir"
-for uri in `sup-sync-back-maildir -l 2>/dev/null |grep uri |cut -d' ' -f 4`; do
-    sup-sync-back-maildir --no-confirm "${uri}"
-done
+  --remove inbox,unread --sync-back --verbose --all-sources &> ~/.sup/archive-all.log
 #}}}
