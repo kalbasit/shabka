@@ -27,6 +27,12 @@ if [[ -d ~/.rbenv ]]; then
   eval "$(rbenv init --no-rehash - zsh)"
 fi
 
+# Load pyenv
+if [[ -d ~/.pyenv ]]; then
+  path=(~/.pyenv/bin(N-/) $path)
+  eval "$(pyenv init --no-rehash - zsh)"
+fi
+
 # Load antigen
 source ~/.antigen/antigen.zsh
 
@@ -74,38 +80,10 @@ antigen theme crunch
 # Tell antigen that you're done.
 antigen apply
 
-# Export all my env variables
-export GOPATH=$HOME/code/go
+# Options
+setopt print_exit_value         # print return value if non-zero
+unsetopt hist_beep              # no bell on error in history
+unsetopt list_beep              # no bell on ambiguous completion
 
-# create the pane with irssi's nicklist
-function irssi_nickpane() {
-    tmux renamew irssi                                              # name the window
-    tmux -q setw main-pane-width $(( $(tput cols) - 21))            # set the main pane width to the total width-20
-    tmux splitw -v "cat ~/.irssi/nicklistfifo"                      # create the window and begin reading the fifo
-    tmux -q selectl main-vertical                                   # assign the layout
-    tmux selectw -t irssi                                           # select window 'irssi'
-    tmux selectp -t 0                                               # select pane 0
-}
-
-# irssi wrapper
-function irssi() {
-    irssi_nickpane
-    /usr/bin/env irssi
-}
-
-# repair running irssi's nicklist pane
-function irssi_repair() {
-    tmux selectw -t irssi
-    tmux selectp -t 0
-    tmux killp -a                                                   # kill all panes
-    irssi_nickpane
-}
-
-if [[ -s "${HOME}/.nvm/nvm.sh" ]]; then
-  source "${HOME}/.nvm/nvm.sh"
-fi
-if [[ -s "${HOME}/.nvm/bash_completion" ]]; then
-  source "${HOME}/.nvm/bash_completion"
-fi
-
-export PATH=./node_modules/.bin:$PATH
+# Bell on every prompt
+PROMPT+="%{$(echo "\a")%}"
