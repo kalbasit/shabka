@@ -21,6 +21,10 @@ font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
 # chose a FreeType font, such as:
 # font pango:DejaVu Sans Mono 10
 
+# Colors
+# class                 border  backgr. text    indicator
+client.focused          #00FF00 #00FF00 #000000 #2e9ef4
+
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
@@ -62,10 +66,10 @@ bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
 # split in horizontal orientation
-bindsym $mod+c split h
+bindsym $alt+h split h
 
 # split in vertical orientation
-bindsym $mod+v split v
+bindsym $alt+v split v
 
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen
@@ -118,63 +122,8 @@ bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
-# resize window (you can also use the mouse for that)
-mode "resize" {
-        # These bindings trigger as soon as you enter the resize mode
-
-        # Pressing left will shrink the window’s width.
-        # Pressing right will grow the window’s width.
-        # Pressing up will shrink the window’s height.
-        # Pressing down will grow the window’s height.
-        bindsym j resize shrink width 10 px or 10 ppt
-        bindsym k resize grow height 10 px or 10 ppt
-        bindsym l resize shrink height 10 px or 10 ppt
-        bindsym semicolon resize grow width 10 px or 10 ppt
-
-        # same bindings, but for the arrow keys
-        bindsym Left resize shrink width 10 px or 10 ppt
-        bindsym Down resize grow height 10 px or 10 ppt
-        bindsym Up resize shrink height 10 px or 10 ppt
-        bindsym Right resize grow width 10 px or 10 ppt
-
-        # back to normal: Enter or Escape
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
-}
-
-bindsym $mod+r mode "resize"
-
-# Start i3bar to display a workspace bar (plus the system information i3status
-# finds out, if available)
-bar {
-        status_command i3status --config ~/.i3/status.conf
-}
-
 # lock screen
 bindsym $mod+Shift+z exec --no-startup-id gnome-screensaver-command -l
-
-# Pre assign workspaces
-workspace 1 output DVI-I-1
-workspace 2 output DP-1
-workspace 3 output DP-1
-
-# Assign applications to workspaces
-assign [class="^URxvt$" instance="^main$"] → 2
-assign [class="^URxvt$" instance="^irssi$"] → 1
-assign [class="^Google-chrome$"] → 3
-
-# Auto start Gwall
-exec --no-startup-id ~/.filesystem/bin/Gwall
-
-# Auto start my main and IRC terminals
-exec urxvt -name main
-exec urxvt -name irssi
-
-# autostart chrome
-exec google-chrome
-
-# class                 border  backgr. text    indicator
-client.focused          #00FF00 #00FF00 #000000 #2e9ef4
 
 # Make the currently focused window a scratchpad
 bindsym $mod+Shift+minus move scratchpad
@@ -182,10 +131,74 @@ bindsym $mod+Shift+minus move scratchpad
 # Show the first scratchpad window
 bindsym $mod+minus scratchpad show
 
-# Show the sup-mail scratchpad window, if any.
+# mail client scratchpad
+bindsym $mod+Shift+s exec urxvt -name mail -e zsh -i -c "tmx mail"
 bindsym $alt+s [instance="^mail$"] scratchpad show
 
-# Start my mail client as a scratchpad
-bindsym $mod+Shift+s exec zsh -i -c "urxvt -name mail -e /usr/local/google/home/wmn/code/eMxyzptlk/sup/bin/sup"
-exec zsh -i -c "urxvt -name mail -e /usr/local/google/home/wmn/code/eMxyzptlk/sup/bin/sup"
+# irc client scratchpad
+bindsym $mod+Shift+i exec urxvt -name irc -e zsh -i -c "tmx irc"
+bindsym $alt+i [instance="^irc$"] scratchpad show
+
+# https://github.com/tybitsfox/i3msg/blob/master/.i3/config
+# mark current window
+bindsym $mod+m exec i3-input -F 'mark %s' -l 1 -P 'Mark: '
+
+# goto mark
+bindsym $mod+apostrophe exec i3-input -F '[con_mark="%s"] focus' -l 1 -P 'Go to: '
+
+# resize window (you can also use the mouse for that)
+mode "resize" {
+  # These bindings trigger as soon as you enter the resize mode
+
+  # Pressing left will shrink the window’s width.
+  # Pressing right will grow the window’s width.
+  # Pressing up will shrink the window’s height.
+  # Pressing down will grow the window’s height.
+  bindsym h resize shrink width 10 px or 10 ppt
+  bindsym j resize grow height 10 px or 10 ppt
+  bindsym k resize shrink height 10 px or 10 ppt
+  bindsym l resize grow width 10 px or 10 ppt
+
+  # same bindings, but for the arrow keys
+  bindsym Left resize shrink width 10 px or 10 ppt
+  bindsym Down resize grow height 10 px or 10 ppt
+  bindsym Up resize shrink height 10 px or 10 ppt
+  bindsym Right resize grow width 10 px or 10 ppt
+
+  # back to normal: Enter or Escape
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+}
+
+bindsym $mod+r mode "resize"
+
+# Start i3bar to display a workspace bar (plus the system information i3status
+# finds out, if available)
+bar {
+  status_command i3status --config ~/.i3/status.conf
+}
+
+# Pre assign workspaces
+workspace 1 output DVI-I-1
+workspace 2 output DP-1
+workspace 3 output DP-1
+workspace 4 output DVI-I-1
+
+# Assign applications to workspaces
+assign [class="^URxvt$" instance="^irssi$"] → 1
+assign [class="^URxvt$" instance="^main$"] → 2
+assign [class="^Google-chrome$" instance="google-chrome"] → 3
+assign [class="^Google-chrome$" instance="crx_nckgahadagoaajjgafhacjanaoiihapd"] → 4
+
+# automove to scratchpad
 for_window [class="URxvt" instance="mail"] move scratchpad
+for_window [class="URxvt" instance="irc"] move scratchpad
+
+# autostart
+exec --no-startup-id ~/.filesystem/bin/Gwall
+exec urxvt -name main
+exec urxvt -name irssi
+exec google-chrome
+exec --no-startup-id gnome-keyring-daemon --start --components=pkcs11
+exec urxvt -name mail -e zsh -i -c "tmx mail"
+exec urxvt -name irc -e zsh -i -c "tmx irc"
