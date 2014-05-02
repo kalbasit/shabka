@@ -1,0 +1,4 @@
+new-window -t 1 -n shell_1
+new-window -t 2 -n shell_2
+kill-window -t 0
+select-window -t 1

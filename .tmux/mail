@@ -1,0 +1,3 @@
+new-window -t 1 -n mail sup
+kill-window -t 0
+select-window -t 1
