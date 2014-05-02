@@ -27,6 +27,7 @@ fi
 
 base_session="$1"
 base_session_config="$HOME/.tmux/$base_session"
+window_name="$2"
 # This actually works without the trim() on all systems except OSX
 tmux_nb=$(trim `tmux ls | grep "^$base_session" | wc -l`)
 if [[ "$tmux_nb" == "0" ]]; then
@@ -52,9 +53,15 @@ else
         # to share windows
         tmux new-session -d -t $base_session -s $session_id
         # Attach to the new session
-        tmux attach-session -t $session_id
+        if [[ -n "$window_name" ]]; then
+          tmux attach-session -t $session_id \; select-window -t $window_name
+        else
+          tmux attach-session -t $session_id
+        fi
         # When we detach from it, kill the session
+        echo "Killing the base session copy."
         tmux kill-session -t $session_id
+    else
+        echo "Please run outside of a tmux session."
     fi
 fi
-
