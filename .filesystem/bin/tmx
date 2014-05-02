@@ -26,11 +26,16 @@ if [[ "$1" == "ls" ]]; then
 fi
 
 base_session="$1"
+base_session_config="$HOME/.tmux/$base_session"
 # This actually works without the trim() on all systems except OSX
 tmux_nb=$(trim `tmux ls | grep "^$base_session" | wc -l`)
 if [[ "$tmux_nb" == "0" ]]; then
     echo "Launching tmux base session $base_session ..."
-    tmux new-session -s $base_session
+    if [[ -r $base_session_config ]]; then
+      tmux new-session -s $base_session \; source-file $base_session_config
+    else
+      tmux new-session -s $base_session
+    fi
 else
     # Make sure we are not already in a tmux session
     if [[ -z "$TMUX" ]]; then
