@@ -41,10 +41,8 @@ fi
 unset bootstrap
 #}}}
 # Creating a backup{{{
-sup-backup
-#}}}
-# Archiving everything{{{
-print_info 0 "Archiving everything"
-SUP_LOG_LEVEL=debug sup-tweak-labels --query "label:inbox OR label:unread" \
-  --remove inbox,unread --sync-back --verbose --all-sources &> ~/.sup/archive-all.log
+backup_filename="${HOME}/.sup/backups/backup-$(date +%Y%m%d%H%M%S)"
+mkdir -p `dirname $backup_filename`
+print_info 0 "Creating a backup"
+sup-dump > "${backup_filename}"
 #}}}
