@@ -48,6 +48,7 @@ antigen bundles <<EOBUNDLES
   $HOME/.oh-my-zsh-ext/fix-vi-mode-on-debian
   $HOME/.oh-my-zsh-ext/mysql-credentials
   $HOME/.oh-my-zsh-ext/my-git-extensions
+  $HOME/.oh-my-zsh-ext/tmuxinator
 
   # Syntax highlighting bundle.
   zsh-users/zsh-syntax-highlighting
