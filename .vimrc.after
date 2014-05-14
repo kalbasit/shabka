@@ -186,6 +186,9 @@ endif
 "" Abbreviations
 ""
 
+" pry
+ab pryme require "pry"; binding.pry
+
 " footnotes
 ab ~0 [0]<esc>m`:/^--\s*/-2/<CR>o<CR>Footnotes:<CR>----------<CR>[0]
 ab ~1 [1]<esc>m`:/^Footnotes\:/+2/<CR>o[1]
