@@ -27,3 +27,7 @@ alias xspec="xrake parallel:prepare parallel:spec"
 
 alias vmail_home="VMAIL_HOME=~/.vmail/home vmail"
 alias vmail_work="VMAIL_HOME=~/.vmail/work vmail"
+
+alias emacs="emacs -nw"
+alias e="emacs"
+alias ec="emacsclient -t"
