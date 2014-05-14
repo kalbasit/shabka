@@ -24,7 +24,7 @@ URxvt*boldFont:        xft:Monospace:pixelsize=12:antialias=true:hinting=true:bo
 URxvt*italicFont:      xft:Monospace:pixelsize=12:antialias=true:hinting=true:italic
 URxvt*bolditalicFont:  xft:Monospace:pixelsize=12:antialias=true:hinting=true:bold:italic
 URxvt*perl-ext-common: default,matcher
-URxvt*urlLauncher:     google-chrome
+URxvt*urlLauncher:     google-chrome-beta
 URxvt.matcher.button:  1
 URxvt*urgentOnBell:    true
 

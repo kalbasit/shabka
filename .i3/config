@@ -187,8 +187,8 @@ workspace 4 output DVI-I-1
 # Assign applications to workspaces
 assign [class="^URxvt$" instance="^irssi$"] → 1
 assign [class="^URxvt$" instance="^main$"] → 2
-assign [class="^Google-chrome$" instance="google-chrome"] → 3
-assign [class="^Google-chrome$" instance="crx_nckgahadagoaajjgafhacjanaoiihapd"] → 4
+assign [class="^Google-chrome(-beta)?$" instance="crx_nckgahadagoaajjgafhacjanaoiihapd"] → 4
+assign [class="^Google-chrome(-beta)?$"] → 3
 
 # automove to scratchpad
 for_window [class="URxvt" instance="mail"] move scratchpad
@@ -198,7 +198,7 @@ for_window [class="URxvt" instance="irc"] move scratchpad
 exec --no-startup-id ~/.filesystem/bin/Gwall
 exec urxvt -name main
 exec urxvt -name irssi
-exec google-chrome
+exec google-chrome-beta
 exec --no-startup-id gnome-keyring-daemon --start --components=pkcs11
 exec urxvt -name mail -e zsh -i -c "tmx mail"
 exec urxvt -name irc -e zsh -i -c "tmx irc"
