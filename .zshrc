@@ -1,40 +1,41 @@
-# Add my paths
-if [[ -x /usr/libexec/path_helper ]]; then
-  eval `/usr/libexec/path_helper -s`
-fi
 typeset -Ug path # Make sure the path array does not contain duplicates
-path+=(~/.filesystem/bin(N-/))
-path+=(~/code/go/bin(N-/))
-for i in ~/.filesystem/opt/*; do
+[[ -x /usr/libexec/path_helper ]] && eval `/usr/libexec/path_helper -s`
+if [[ -d $HOME/.filesystem/bin ]]; then
+  path+=($HOME/.filesystem/bin(N-/))
+  export DYLD_LIBRARY_PATH=$HOME/.filesystem/bin:$DYLD_LIBRARY_PATH
+fi
+path+=($HOME/code/go/bin(N-/))
+for i in $HOME/.filesystem/opt/*; do
   path+=($i/bin(N-/))
 done
-
-# Load Google specific stuff
-if [ -r "$HOME/.zshrc-google" ]; then
-  source "$HOME/.zshrc-google"
-fi
-
-# /brew ? Export DYLD path
+for i in $HOME/.filesystem/opt/*; do
+  export DYLD_LIBRARY_PATH=$i/lib:$DYLD_LIBRARY_PATH
+done
 if [[ -d /brew ]]; then
   path=(/brew/bin $path)
   export DYLD_LIBRARY_PATH=/brew/lib:$DYLD_LIBRARY_PATH
 fi
 
+# Load Google specific stuff
+[[ -r "$HOME/.zshrc-google" ]] && source "$HOME/.zshrc-google"
+
+# Load travis
+[[ -r "$HOME/.travis/travis.sh" ]] && source "$HOME/.travis/travis.sh"
+
 # Load rbenv
-if [[ -d ~/.rbenv ]]; then
-  path=(~/.rbenv/bin(N-/) $path)
-  path=(~/.rbenv/shims(N-/) $path)
+if [[ -d $HOME/.rbenv ]]; then
+  path=($HOME/.rbenv/bin(N-/) $path)
   eval "$(rbenv init --no-rehash - zsh)"
 fi
 
 # Load pyenv
-if [[ -d ~/.pyenv ]]; then
-  path=(~/.pyenv/bin(N-/) $path)
+if [[ -d $HOME/.pyenv ]]; then
+  path=($HOME/.pyenv/bin(N-/) $path)
   eval "$(pyenv init --no-rehash - zsh)"
 fi
 
 # Load antigen
-source ~/.antigen/antigen.zsh
+source "$HOME/.antigen/antigen.zsh"
 
 # Load the oh-my-zsh's library.
 antigen use oh-my-zsh
@@ -45,7 +46,6 @@ antigen bundles <<EOBUNDLES
   $HOME/.oh-my-zsh-ext/my-functions
   $HOME/.oh-my-zsh-ext/my-exports
   $HOME/.oh-my-zsh-ext/my-aliases
-  $HOME/.oh-my-zsh-ext/fix-vi-mode-on-debian
   $HOME/.oh-my-zsh-ext/mysql-credentials
   $HOME/.oh-my-zsh-ext/my-git-extensions
   $HOME/.oh-my-zsh-ext/tmuxinator
@@ -60,17 +60,11 @@ antigen bundles <<EOBUNDLES
   git
   github
   git-flow
-  capistrano
-  cloudapp
   extract
-  gem
   python
   redis-cli
-  thor
-  ruby
   bundler
   rails
-  vi-mode
   history
   history-substring-search
 EOBUNDLES

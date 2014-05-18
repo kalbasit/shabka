@@ -275,68 +275,6 @@ function not_root()
     fi
 }
 #}}}
-# x()#{{{
-function x() {
-    local file cmd program
-    if [ "${#}" -lt "1" ]; then
-        print_error 0 "Usage: x compressed archive."
-        return 1
-    fi
-    for file in "${@}"; do
-        if [ -f "${file}" ] ; then
-            case "${file}" in
-                *.tar.bz2)   cmd="tar xjf"      ;;
-                *.tar.gz)    cmd="tar xzf"      ;;
-                *.bz2)       cmd="bunzip2 -f"   ;;
-                *.rar|*.001) cmd="unrar x"      ;;
-                *.gz)        cmd="gunzip -f"    ;;
-                *.jar)       cmd="jar xf"       ;;
-                *.tar)       cmd="tar xf"       ;;
-                *.tbz2)      cmd="tar xjf"      ;;
-                *.tgz)       cmd="tar xzf"      ;;
-                *.zip|*.xpi) cmd="unzip"        ;;
-                *.Z)         cmd="uncompress"   ;;
-                *.7z)        cmd="7z x"         ;;
-                *.ppe|pdb)
-                    # A little hacking here since the file
-                    # might be tar.gz or tar.bz, so we take care
-                    # of it
-                    if file "${1}" | grep -q "bzip2"; then
-                        # a bziped file, great
-                        cmd="tar xjf"
-                    elif file "${1}" | grep -q "gzip"; then
-                        # a Gziped file
-                        cmd="tar xzf"
-                    else
-                        print_error 0 "'${1}' is not a valid ppe/pdb archive."
-                        return 1
-                    fi
-                    ;;
-                *)
-                    print_error 0 "'${1}' is not an archive type I am aware of."
-                    return 1
-                    ;;
-            esac
-            # Ok extract it now but first let's see if the progam can be used
-            program="$(echo "${cmd}" | awk '{print $1}')"
-            if ! type "${program}" &>/dev/null; then
-                print_error 0 "I couldn't find the program '${program}', Please make sure it is installed."
-                return 1
-            fi
-            ${cmd} "${file}"
-            if [ "${?}" -ne "0" ]; then
-                print_error 0 "Oops an error occured..."
-                return 1
-            else
-                print_info 0 "Archive has been successfully extracted!"
-            fi
-        else
-            print_error 0 "'${file}' is not a valid file."
-            return 1
-        fi
-    done
-}
-#}}}
 # c()#{{{
 function c() {
     local cmd program archive files answer
