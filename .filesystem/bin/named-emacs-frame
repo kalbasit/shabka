@@ -1,0 +1,10 @@
+#!/bin/bash
+
+name="${1}"; framenamearg=""
+socket="${2}" socketarg=""
+
+if [[ "x${socket}" != "x" ]]; then
+  socketarg="-s ${socket}"
+fi
+
+emacsclient $socketarg -e "(make-frame-on-display \"$DISPLAY\" '((name . \"$name\")))"
