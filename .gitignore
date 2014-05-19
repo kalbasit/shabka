@@ -24,12 +24,7 @@ drafts/*
 .vimrc
 .gvimrc
 .irssi/config.autosave
-fishd.*
-fish_history
-.xmonad/xmonad.hi
-.xmonad/xmonad.o
-.xmonad/xmonad-*
-.xmonad/xmonad.errors
+.emacs.d/.cask
 
 
 
