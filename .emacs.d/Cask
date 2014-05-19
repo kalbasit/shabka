@@ -1,0 +1,13 @@
+(source gnu)
+(source melpa)
+
+(depends-on "notmuch")
+(depends-on "projectile")
+(depends-on "erc")
+(depends-on "flx-ido")
+(depends-on "grizzl")
+(depends-on "markdown-mode")
+(depends-on "zenburn-theme")
+(depends-on "pallet")
+(depends-on "use-package")
+(depends-on "git")
