@@ -5,6 +5,7 @@ if [[ -d $HOME/.filesystem/bin ]]; then
   export DYLD_LIBRARY_PATH=$HOME/.filesystem/bin:$DYLD_LIBRARY_PATH
 fi
 path+=($HOME/code/go/bin(N-/))
+path+=($HOME/.cask/bin(N-/))
 for i in $HOME/.filesystem/opt/*; do
   path+=($i/bin(N-/))
 done
