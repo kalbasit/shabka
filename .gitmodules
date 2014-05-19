@@ -4,6 +4,3 @@
 [submodule ".antigen"]
 	path = .antigen
 	url = https://github.com/zsh-users/antigen.git
-[submodule ".emacs.d"]
-	path = .emacs.d
-	url = https://github.com/eMxyzptlk/prelude.git
