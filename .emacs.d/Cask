@@ -1,6 +1,9 @@
 (source gnu)
 (source melpa)
 
+(depends-on "s")
+(depends-on "f")
+(depends-on "ht")
 (depends-on "notmuch")
 (depends-on "projectile")
 (depends-on "erc")
@@ -11,3 +14,4 @@
 (depends-on "pallet")
 (depends-on "use-package")
 (depends-on "git")
+(depends-on "erc")

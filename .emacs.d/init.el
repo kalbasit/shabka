@@ -1,18 +1,27 @@
-(require 'cask "~/.cask/cask.el")
+(add-to-list 'load-path (getenv "CASK_PATH"))
+(require 'cask)
 (cask-initialize)
 (require 'pallet)
 
-;; Load a theme
-(load-theme 'zenburn :no-confirm)
-
 ;; Initialize the code
+(require 's)
+(require 'f)
+(require 'ht)
 (require 'git)
 (require 'use-package)
 
-(setq default-directory (f-full (getenv "HOME")))
-
+;; Load a local file
 (defun load-local (file)
   (load (f-expand file user-emacs-directory)))
 
+;; Load our variables
+(load-local "variables")
+
+;; Load our functions
 (load-local "defuns")
+
+;; Load our settings
+(load-local "settings")
+
+;; Load our packages and their settings
 (load-local "packages")
