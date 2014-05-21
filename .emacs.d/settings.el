@@ -28,5 +28,8 @@
 (define-key global-map (kbd "RET") 'newline-and-indent)
 
 ;; Change the autosave and backup location
-(setq auto-save-file-name-transforms '((".*" emacs-autosave-dir t)))
 (setq backup-directory-alist '((".*" . emacs-backup-dir)))
+
+; TODO: Fix this, getting error "Wrong type argument: stringp, emacs-autosave-dir"
+;(setq auto-save-file-name-transforms '((".*" emacs-autosave-dir t)))
+(setq auto-save-file-name-transforms '((".*" "~/.emacs.d/autosave/\\1" t)))
