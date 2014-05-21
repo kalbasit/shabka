@@ -151,6 +151,8 @@
         (notmuch-show-view-raw-message)
         (message-resend address)))
           (add-hook 'message-setup-hook 'mml-secure-sign-pgpmime)
+    ;; Sign messages by default.
+    (add-hook 'message-setup-hook 'mml-secure-sign-pgpmime)
     ;; At startup position the cursor on the first saved searches
     (add-hook 'notmuch-hello-refresh-hook
         (lambda ()
@@ -276,9 +278,15 @@
    ("\\.md$" . markdown-mode)))
 
 (use-package erc
-  :commands etc
+  :commands erc
+  :bind ("C-c C-e" . erc-start-or-switch)
   :config
   (progn
+    (setq erc-modules (quote
+                        (autoaway autojoin button completion fill irccontrols
+                         list match menu move-to-prompt netsplit networks
+                         noncommands notify readonly ring scrolltobottom smiley
+                         stamp spelling track truncate unmorse)))
     (load "~/.ercpass") ;; load erc passwords
     (setq erc-autojoin-mode t)
     (setq erc-autojoin-channels-alist
