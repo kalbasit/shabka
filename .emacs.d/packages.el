@@ -287,3 +287,8 @@
     (setq erc-hide-list '("JOIN" "PART" "QUIT" "NICK"))
     ;; don't prompt for nickserv password
     (setq erc-prompt-for-nickserv-password nil)))
+
+(use-package drag-stuff
+  :init (drag-stuff-global-mode 1)
+  :bind (("M-N" . drag-stuff-down)
+	 ("M-P" . drag-stuff-up)))

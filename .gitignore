@@ -25,7 +25,11 @@ drafts/*
 .gvimrc
 .irssi/config.autosave
 .emacs.d/.cask
-
+.emacs.d/cache/
+.emacs.d/backup/
+.emacs.d/autosave/
+.emacs.d/projectile-bookmarks.eld
+.emacs.d/projectile.cache
 
 
 

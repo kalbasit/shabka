@@ -26,3 +26,7 @@
 
 ;; Always new-line-and-indent
 (define-key global-map (kbd "RET") 'newline-and-indent)
+
+;; Change the autosave and backup location
+(setq auto-save-file-name-transforms '((".*" emacs-autosave-dir t)))
+(setq backup-directory-alist '((".*" . emacs-backup-dir)))
