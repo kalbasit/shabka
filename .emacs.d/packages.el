@@ -26,16 +26,16 @@
 (use-package smex
   :init (smex-initialize)
   :bind (("M-x" . smex)
-	 ("M-X" . smex-major-mode-commands)))
+   ("M-X" . smex-major-mode-commands)))
 
 (use-package ido-ubiquitous
   :init (ido-ubiquitous-mode +1))
 
 (use-package prodigy
   :init (progn
-	  (add-hook 'prodigy-mode-hook
-		    (lambda ()
-		      (setq-local show-trailing-whitespace nil))))
+    (add-hook 'prodigy-mode-hook
+        (lambda ()
+          (setq-local show-trailing-whitespace nil))))
   :demand t
   :bind ("C-x p" . prodigy))
 
@@ -73,15 +73,15 @@
   :config
   (progn
     (setq notmuch-saved-searches
-	  '((:name "inbox-work-new" :query "tag:work AND tag:unread AND tag:inbox")
-	    (:name "inbox-personal-new" :query "tag:personal AND tag:unread AND tag:inbox")
-	    (:name "work-new" :query "tag:work AND tag:unread")
-	    (:name "personal-new" :query "tag:personal AND tag:unread")
-	    (:name "work" :query "tag:work")
-	    (:name "personal" :query "tag:personal")
-	    (:name "inbox-unread" :query "tag:inbox AND tag:unread")
-	    (:name "unread" :query "tag:unread")
-	    (:name "inbox" :query "tag:inbox")))
+    '((:name "inbox-work-new" :query "tag:work AND tag:unread AND tag:inbox")
+      (:name "inbox-personal-new" :query "tag:personal AND tag:unread AND tag:inbox")
+      (:name "work-new" :query "tag:work AND tag:unread")
+      (:name "personal-new" :query "tag:personal AND tag:unread")
+      (:name "work" :query "tag:work")
+      (:name "personal" :query "tag:personal")
+      (:name "inbox-unread" :query "tag:inbox AND tag:unread")
+      (:name "unread" :query "tag:unread")
+      (:name "inbox" :query "tag:inbox")))
     (setq mail-envelope-from (quote header))
     (setq mail-specify-envelope-from t)
     (setq message-kill-buffer-on-exit t)
@@ -98,64 +98,64 @@
     ;; Toggle message deletion
     (define-key notmuch-show-mode-map "d"
       (lambda ()
-	"toggle deleted tag for message"
-	(interactive)
-	(if (member "deleted" (notmuch-show-get-tags))
-	    (notmuch-show-tag (list "-deleted"))
-	  (notmuch-show-tag (list "+deleted")))))
+        "toggle deleted tag for message"
+        (interactive)
+        (if (member "deleted" (notmuch-show-get-tags))
+            (notmuch-show-tag (list "-deleted"))
+          (notmuch-show-tag (list "+deleted")))))
     ;; Mark as a Spam
     (define-key notmuch-show-mode-map "!"
       (lambda ()
-	"toggle spam tag for message"
-	(interactive)
-	(if (member "spam" (notmuch-show-get-tags))
-	    (notmuch-show-tag (list "-spam"))
-	  (notmuch-show-tag (list "+spam")))))
+        "toggle spam tag for message"
+        (interactive)
+        (if (member "spam" (notmuch-show-get-tags))
+            (notmuch-show-tag (list "-spam"))
+          (notmuch-show-tag (list "+spam")))))
     ;; Kill a thread
     (define-key notmuch-show-mode-map "&"
       (lambda ()
-	"toggle killed tag for message"
-	(interactive)
-	(if (member "killed" (notmuch-show-get-tags))
-	    (notmuch-show-tag (list "-killed"))
-	  (notmuch-show-tag (list "+killed")))))
+        "toggle killed tag for message"
+        (interactive)
+        (if (member "killed" (notmuch-show-get-tags))
+            (notmuch-show-tag (list "-killed"))
+          (notmuch-show-tag (list "+killed")))))
     ;; Bounce a message
     (define-key notmuch-show-mode-map "b"
       (lambda (&optional address)
-	"Bounce the current message."
-	(interactive "sBounce To: ")
-	(notmuch-show-view-raw-message)
-	(message-resend address)))
-    (add-hook 'message-setup-hook 'mml-secure-sign-pgpmime)
+        "Bounce the current message."
+        (interactive "sBounce To: ")
+        (notmuch-show-view-raw-message)
+        (message-resend address)))
+          (add-hook 'message-setup-hook 'mml-secure-sign-pgpmime)
     ;; At startup position the cursor on the first saved searches
     (add-hook 'notmuch-hello-refresh-hook
-	      (lambda ()
-		(if (and (eq (point) (point-min))
-			 (search-forward "Saved searches:" nil t))
-		    (progn
-		      (forward-line)
-		      (widget-forward 1))
-		  (if (eq (widget-type (widget-at)) 'editable-field)
-		      (beginning-of-line)))))))
+        (lambda ()
+          (if (and (eq (point) (point-min))
+             (search-forward "Saved searches:" nil t))
+              (progn
+                (forward-line)
+                (widget-forward 1))
+            (if (eq (widget-type (widget-at)) 'editable-field)
+                (beginning-of-line)))))))
 
 (use-package gnus-alias
   :config
   (progn
     (setq gnus-alias-identity-alist
-	  '(("personal"
-	     nil ;; Does not refer to any other identity
-	     "Wael Nasreddine <wael.nasreddine@gmail.com>" ;; Sender address
-	     nil ;; No organization header
-	     nil ;; No extra headers
-	     nil ;; No extra body text
-	     "~/.signatures/personal")
-	    ("work"
-	     nil
-	     "Wael Nasreddine <wmn@google.com>" ;; Sender address
-	     "Google"
-	     nil
-	     nil
-	     "~/.signatures/work")))
+    '(("personal"
+       nil ;; Does not refer to any other identity
+       "Wael Nasreddine <wael.nasreddine@gmail.com>" ;; Sender address
+       nil ;; No organization header
+       nil ;; No extra headers
+       nil ;; No extra body text
+       "~/.signatures/personal")
+      ("work"
+       nil
+       "Wael Nasreddine <wmn@google.com>" ;; Sender address
+       "Google"
+       nil
+       nil
+       "~/.signatures/work")))
     ;; Use "home" identity by default
     (setq gnus-alias-default-identity "work")
     ;; Determine identity when message-mode loads
@@ -194,9 +194,9 @@
   :config
   (progn
     (add-hook 'web-mode-hook
-	      (lambda ()
-		(setq web-mode-style-padding 2)
-		(setq web-mode-script-padding 2)))))
+        (lambda ()
+    (setq web-mode-style-padding 2)
+    (setq web-mode-script-padding 2)))))
 
 (use-package yaml-mode
   :mode ("\\.yml$" . yaml-mode))
@@ -240,31 +240,31 @@
     (use-package ruby-tools)
     (use-package rhtml-mode
       :mode (("\\.rhtml$" . rhtml-mode)
-	     ("\\.html\\.erb$" . rhtml-mode)))
+       ("\\.html\\.erb$" . rhtml-mode)))
     (use-package rinari
       :init (global-rinari-mode 1)
       :config (setq ruby-insert-encoding-magic-comment nil))
     (use-package rspec-mode
       :config
       (progn
-	(setq rspec-use-rake-flag nil)
-	(defadvice rspec-compile (around rspec-compile-around activate)
-	  "Use BASH shell for running the specs because of ZSH issues."
-	  (let ((shell-file-name "/bin/bash"))
-	    ad-do-it)))))
+  (setq rspec-use-rake-flag nil)
+  (defadvice rspec-compile (around rspec-compile-around activate)
+    "Use BASH shell for running the specs because of ZSH issues."
+    (let ((shell-file-name "/bin/bash"))
+      ad-do-it)))))
   :config
   (progn
     (setq ruby-deep-indent-paren nil))
   :bind (("C-M-h" . backward-kill-word)
-	 ("C-M-n" . scroll-up-five)
-	 ("C-M-p" . scroll-down-five))
+   ("C-M-n" . scroll-up-five)
+   ("C-M-p" . scroll-down-five))
   :mode (("\\.rake$" . ruby-mode)
-	 ("\\.gemspec$" . ruby-mode)
-	 ("\\.ru$" . ruby-mode)
-	 ("Rakefile$" . ruby-mode)
-	 ("Gemfile$" . ruby-mode)
-	 ("Capfile$" . ruby-mode)
-	 ("Guardfile$" . ruby-mode)))
+   ("\\.gemspec$" . ruby-mode)
+   ("\\.ru$" . ruby-mode)
+   ("Rakefile$" . ruby-mode)
+   ("Gemfile$" . ruby-mode)
+   ("Capfile$" . ruby-mode)
+   ("Guardfile$" . ruby-mode)))
 
 (use-package markdown-mode
   :config
@@ -272,7 +272,7 @@
     (bind-key "M-n" 'open-line-below markdown-mode-map)
     (bind-key "M-p" 'open-line-above markdown-mode-map))
   :mode (("\\.markdown$" . markdown-mode)
-	 ("\\.md$" . markdown-mode)))
+   ("\\.md$" . markdown-mode)))
 
 (use-package erc
   :commands etc
@@ -281,8 +281,8 @@
     (load "~/.ercpass") ;; load erc passwords
     (setq erc-autojoin-mode t)
     (setq erc-autojoin-channels-alist
-	  '((".*\\.freenode.net" "#notmuch" "#emacs")
-	    (".*irc.*\\.corp.google.com" "#ci" "#ci-oncall" "#corpdb")))
+    '((".*\\.freenode.net" "#notmuch" "#emacs")
+      (".*irc.*\\.corp.google.com" "#ci" "#ci-oncall" "#corpdb")))
     ;; don't show any of this
     (setq erc-hide-list '("JOIN" "PART" "QUIT" "NICK"))
     ;; don't prompt for nickserv password
@@ -291,4 +291,4 @@
 (use-package drag-stuff
   :init (drag-stuff-global-mode 1)
   :bind (("M-N" . drag-stuff-down)
-	 ("M-P" . drag-stuff-up)))
+   ("M-P" . drag-stuff-up)))
