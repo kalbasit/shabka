@@ -25,3 +25,6 @@
 
 ;; Load our packages and their settings
 (load-local "packages")
+
+;; Load the bindings
+(load-local "bindings")
