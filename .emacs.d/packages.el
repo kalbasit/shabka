@@ -62,8 +62,6 @@
     (add-hook 'magit-mode-hook 'rinari-launch))
   :bind ("C-x g" . magit-status))
 
-;; TODO: discover?
-
 (use-package git-gutter
   :init (global-git-gutter-mode +1))
 
@@ -72,6 +70,32 @@
   :bind ("C-c m" . notmuch)
   :config
   (progn
+    (use-package gnus-alias
+      :config
+      (progn
+        (setq gnus-alias-identity-alist
+        '(("personal"
+           nil ;; Does not refer to any other identity
+           "Wael Nasreddine <wael.nasreddine@gmail.com>" ;; Sender address
+           nil ;; No organization header
+           nil ;; No extra headers
+           nil ;; No extra body text
+           "~/.signatures/personal")
+          ("work"
+           nil
+           "Wael Nasreddine <wmn@google.com>" ;; Sender address
+           "Google"
+           nil
+           nil
+           "~/.signatures/work")))
+        ;; Define the rules TODO: Add all of personal addresses
+        (setq gnus-alias-identity-rules (quote
+                                          (("personal" ("any" "wael.nasreddine@gmail.com" both) "personal")
+                                           ("work" ("any" "\\(wmn\\|wnasreddine\\)@google.com" both) "work"))))
+        ;; Use "work" identity by default
+        (setq gnus-alias-default-identity "work")
+        ;; Determine identity when message-mode loads
+        (add-hook 'message-setup-hook 'gnus-alias-determine-identity)))
     (setq notmuch-saved-searches
     '((:name "inbox-work-new" :query "tag:work AND tag:unread AND tag:inbox")
       (:name "inbox-personal-new" :query "tag:personal AND tag:unread AND tag:inbox")
@@ -137,29 +161,6 @@
                 (widget-forward 1))
             (if (eq (widget-type (widget-at)) 'editable-field)
                 (beginning-of-line)))))))
-
-(use-package gnus-alias
-  :config
-  (progn
-    (setq gnus-alias-identity-alist
-    '(("personal"
-       nil ;; Does not refer to any other identity
-       "Wael Nasreddine <wael.nasreddine@gmail.com>" ;; Sender address
-       nil ;; No organization header
-       nil ;; No extra headers
-       nil ;; No extra body text
-       "~/.signatures/personal")
-      ("work"
-       nil
-       "Wael Nasreddine <wmn@google.com>" ;; Sender address
-       "Google"
-       nil
-       nil
-       "~/.signatures/work")))
-    ;; Use "home" identity by default
-    (setq gnus-alias-default-identity "work")
-    ;; Determine identity when message-mode loads
-    (add-hook 'message-setup-hook 'gnus-alias-determine-identity)))
 
 (use-package ack-and-a-half
   :commands (ack-and-a-half ack-and-a-half-same ack-and-a-half-find-file ack-and-a-half-find-file-same)
