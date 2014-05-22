@@ -10,9 +10,11 @@
 (require 'git)
 (require 'use-package)
 
-;; Load a local file
+;; Load a local file if it exists.
 (defun load-local (file)
-  (load (f-expand file user-emacs-directory)))
+  (setq file_path (f-expand file user-emacs-directory))
+  (when (f-exists? (concat file_path ".el"))
+    (load file_path)))
 
 ;; Load our variables
 (load-local "variables")
@@ -28,3 +30,6 @@
 
 ;; Load the bindings
 (load-local "bindings")
+
+;; Load google-specific settings
+(load-local "google-specific")
