@@ -96,6 +96,9 @@
         (setq gnus-alias-default-identity "work")
         ;; Determine identity when message-mode loads
         (add-hook 'message-setup-hook 'gnus-alias-determine-identity)))
+    (when (eq system-type 'darwin)
+      (setq notmuch-command
+            (f-expand "remote-notmuch" (concat (f-full (getenv "HOME")) "/.filesystem/bin"))))
     (setq notmuch-saved-searches
     '((:name "inbox-work-new" :query "tag:work AND tag:unread AND tag:inbox")
       (:name "inbox-personal-new" :query "tag:personal AND tag:unread AND tag:inbox")
