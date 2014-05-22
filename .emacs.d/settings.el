@@ -24,9 +24,6 @@
       (funcall mode -1)))
   '(menu-bar-mode tool-bar-mode scroll-bar-mode))
 
-;; Always new-line-and-indent
-(define-key global-map (kbd "RET") 'newline-and-indent)
-
 ;; Change the autosave and backup location
 (setq backup-directory-alist '((".*" . emacs-backup-dir)))
 

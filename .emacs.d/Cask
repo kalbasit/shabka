@@ -2,6 +2,7 @@
 (source melpa)
 
 (depends-on "s")
+(depends-on "bind-key")
 (depends-on "f")
 (depends-on "ht")
 (depends-on "notmuch")
