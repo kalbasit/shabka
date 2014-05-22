@@ -28,6 +28,8 @@
 #   USA.
 #
 
+set -e
+
 # Bootstrap{{{
 bootstrap="`dirname $0`/.bootstrap"
 if [ -f "${bootstrap}" ]; then
@@ -114,11 +116,6 @@ if [ -f "${HostCronFile}" ]; then
         >> "${TempCronFile}"
     echo >> "${TempCronFile}"
 fi
-#}}}
-# Finally let's add our final touch to the crontab.#{{{
-sed -e "s@\t@ @g" \
-    -e "s@ [ ]*@ @g" \
-    -i "${TempCronFile}"
 #}}}
 # Using the constructing crontab content.#{{{
 print_info 0 "Loading crontab for user ${CronUser}."
