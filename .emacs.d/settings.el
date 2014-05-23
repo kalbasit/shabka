@@ -25,7 +25,9 @@
   '(menu-bar-mode tool-bar-mode scroll-bar-mode))
 
 ;; Change the autosave and backup location
-(setq backup-directory-alist '((".*" . emacs-backup-dir)))
+;; TODO: Fix this, Wrong type argument: stringp, emacs-backup-dir
+;(setq backup-directory-alist '((".*" . emacs-backup-dir)))
+(setq backup-directory-alist '((".*" . "~/.emacs.d/backup/")))
 
 ; TODO: Fix this, getting error "Wrong type argument: stringp, emacs-autosave-dir"
 ;(setq auto-save-file-name-transforms '((".*" emacs-autosave-dir t)))
