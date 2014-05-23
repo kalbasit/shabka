@@ -31,7 +31,7 @@ drafts/*
 .emacs.d/projectile-bookmarks.eld
 .emacs.d/projectile.cache
 .emacs.d/url/cache
-
+.filesystem/bin/ssx-agents
 
 
 
