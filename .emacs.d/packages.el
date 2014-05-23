@@ -104,9 +104,9 @@
 
 (use-package org
   :bind(("C-c l" . org-store-link)
-	("C-c c" . org-capture)
-	("C-c a" . org-agenda)
-	("C-c b" . org-iswitchb)))
+  ("C-c c" . org-capture)
+  ("C-c a" . org-agenda)
+  ("C-c b" . org-iswitchb)))
 
 (use-package hl-line
   :config (set-face-background 'hl-line "#073642"))
