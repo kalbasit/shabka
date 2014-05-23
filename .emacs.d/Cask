@@ -23,6 +23,7 @@
 (depends-on "markdown-mode")
 (depends-on "notmuch")
 (depends-on "org")
+(depends-on "org-trello")
 (depends-on "pallet")
 (depends-on "prodigy")
 (depends-on "projectile")
