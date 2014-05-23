@@ -297,3 +297,13 @@
 (defun beautify-json (beg end)
   (interactive "r")
   (shell-command-on-region beg end "python -mjson.tool" (current-buffer) 'replace))
+
+(defun ruby-interpolate ()
+  "In a double quoted string, interpolate."
+  (interactive)
+  (insert "#")
+  (when (and
+          (looking-back "\".*")
+          (looking-at ".*\""))
+    (insert "{}")
+    (backward-char 1)))
