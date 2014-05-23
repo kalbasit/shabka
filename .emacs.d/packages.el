@@ -106,6 +106,9 @@
       (:name "inbox-unread" :query "tag:inbox AND tag:unread")
       (:name "unread" :query "tag:unread")
       (:name "inbox" :query "tag:inbox")))
+    (setq notmuch-address-command
+      (f-expand "nottoomuch-addresses" (concat (f-full (getenv "HOME")) "/.filesystem/bin")))
+    (notmuch-address-message-insinuate)
     (setq mail-envelope-from (quote header))
     (setq mail-specify-envelope-from t)
     (setq message-kill-buffer-on-exit t)
