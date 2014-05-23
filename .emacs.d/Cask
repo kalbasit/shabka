@@ -6,6 +6,7 @@
 (depends-on "ag")
 (depends-on "bind-key")
 (depends-on "browse-kill-ring")
+(depends-on "calc")
 (depends-on "drag-stuff")
 (depends-on "erc")
 (depends-on "erc")

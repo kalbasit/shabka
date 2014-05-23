@@ -126,6 +126,9 @@
     (setq ido-file-extensions-order '(".py" ".rb" ".el" ".coffee" ".js"))
     (add-to-list 'ido-ignore-files "\\.DS_Store")))
 
+(use-package calc
+  :commands calc)
+
 (use-package flx-ido
   :init (flx-ido-mode 1)
   :config (setq ido-use-face nil))
