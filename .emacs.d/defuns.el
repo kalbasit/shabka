@@ -293,3 +293,7 @@
           (newline)
           (forward-line -1)
           (indent-according-to-mode))))
+
+(defun beautify-json (beg end)
+  (interactive "r")
+  (shell-command-on-region beg end "python -mjson.tool" (current-buffer) 'replace))
