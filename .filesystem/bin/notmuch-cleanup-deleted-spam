@@ -1,0 +1,18 @@
+#!/bin/bash
+set -e
+
+# How many days should we keep the messages?
+EXPIRATION=30
+
+# remove the expiring flag from messages that has been redeemed
+notmuch tag -expiring -- tag:expiring and \( not tag:deleted or not tag:spam \)
+
+for days in $(seq 0 $((EXPIRATION - 1))); do
+  notmuch tag +expire-$((days)) -expire-$((days + 1)) -- tag:expire-$((days + 1)) and tag:expiring
+  notmuch tag -expire-$((days)) -expire-$((days + 1)) -- \( tag:expire-$((days)) or tag:expire-$((days + 1)) \) and not tag:expiring
+done
+
+notmuch tag +expire-$EXPIRATION +expiring -- \(tag:deleted or tag:spam\) and not tag:expiring
+
+# Delete all the expiring messages that has been deleted for 30 days
+notmuch search --output=files tag:expire-0 and tag:expiring -print0 | xargs -0 rm
