@@ -13,6 +13,7 @@
 (depends-on "erc")
 (depends-on "f")
 (depends-on "flx-ido")
+(depends-on "flyspell")
 (depends-on "git")
 (depends-on "git-gutter")
 (depends-on "gnus-alias")

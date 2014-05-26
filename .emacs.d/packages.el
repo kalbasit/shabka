@@ -321,3 +321,10 @@
   :init (drag-stuff-global-mode 1)
   :bind (("M-N" . drag-stuff-down)
    ("M-P" . drag-stuff-up)))
+
+(use-package flyspell
+  :commands flyspell-mode
+  :config
+  (progn
+    (setq ispell-program-name "aspell")
+    (setq ispell-extra-args '("--sug-mode=ultra"))))

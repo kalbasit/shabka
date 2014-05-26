@@ -33,5 +33,8 @@
 ;(setq auto-save-file-name-transforms '((".*" emacs-autosave-dir t)))
 (setq auto-save-file-name-transforms '((".*" "~/.emacs.d/autosave/\\1" t)))
 
+;; Enable flyspell
+(flyspell-mode +1)
+
 ;; Auto clean whitespace
 (add-hook 'before-save-hook 'whitespace-cleanup)
