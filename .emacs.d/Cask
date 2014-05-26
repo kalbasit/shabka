@@ -1,5 +1,6 @@
 (source gnu)
 (source melpa)
+(source org)
 
 (depends-on "ace-jump-mode")
 (depends-on "ack-and-a-half")
@@ -23,9 +24,9 @@
 (depends-on "markdown-mode")
 (depends-on "notmuch")
 (depends-on "org")
+(depends-on "org-plus-contrib")
 (depends-on "pallet")
 (depends-on "prodigy")
-(depends-on "projectile")
 (depends-on "projectile")
 (depends-on "rhtml-mode")
 (depends-on "rinari")

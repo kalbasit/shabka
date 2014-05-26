@@ -3,6 +3,7 @@
   :bind ("C-c m" . notmuch)
   :init
   (progn
+    (use-package org-notmuch)
     (use-package gnus-alias
       :config
       (progn
