@@ -32,3 +32,6 @@
 ; TODO: Fix this, getting error "Wrong type argument: stringp, emacs-autosave-dir"
 ;(setq auto-save-file-name-transforms '((".*" emacs-autosave-dir t)))
 (setq auto-save-file-name-transforms '((".*" "~/.emacs.d/autosave/\\1" t)))
+
+;; Auto clean whitespace
+(add-hook 'before-save-hook 'whitespace-cleanup)
