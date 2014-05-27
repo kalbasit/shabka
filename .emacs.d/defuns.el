@@ -307,3 +307,8 @@
           (looking-at ".*\""))
     (insert "{}")
     (backward-char 1)))
+
+(defun indent-all ()
+  "Indent entire buffer."
+  (interactive)
+  (indent-region (point-min) (point-max) nil))

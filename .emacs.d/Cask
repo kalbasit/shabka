@@ -22,7 +22,6 @@
 (depends-on "ido-vertical-mode")
 (depends-on "magit")
 (depends-on "markdown-mode")
-(depends-on "markdown-mode")
 (depends-on "notmuch")
 (depends-on "org")
 (depends-on "org-plus-contrib")
