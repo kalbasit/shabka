@@ -38,3 +38,38 @@
 
 ;; Auto clean whitespace
 (add-hook 'before-save-hook 'whitespace-cleanup)
+
+;; Show keystrokes in minibuffer early
+(setq echo-keystrokes 0.1)
+
+;; Set default browser
+(setq browse-url-browser-function 'browse-url-generic)
+(setq browse-url-generic-program "google-chrome")
+
+;; Initial major mode is Emacs Lisp mode
+(setq initial-major-mode 'emacs-lisp-mode)
+
+;; Make default mode Emacs lisp mode
+(setq default-major-mode 'emacs-lisp-mode)
+
+;; Kill whole line (including \n)
+(setq kill-whole-line t)
+
+;; Indent with spaces instead of tabs
+(setq-default indent-tabs-mode nil)
+
+;; Do not pause on redisplay
+(setq redisplay-dont-pause t)
+
+;; Highlight symbol at point
+(add-hook 'find-file-hook 'idle-highlight-mode)
+
+;; Auto refresh buffers
+(global-auto-revert-mode 1)
+
+;; Auto refresh dired, but be quiet about it
+(setq global-auto-revert-non-file-buffers t)
+(setq auto-revert-verbose nil)
+
+;; Show column number in mode line
+(column-number-mode 1)
