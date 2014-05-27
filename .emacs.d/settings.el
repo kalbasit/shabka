@@ -61,9 +61,6 @@
 ;; Do not pause on redisplay
 (setq redisplay-dont-pause t)
 
-;; Highlight symbol at point
-(add-hook 'find-file-hook 'idle-highlight-mode)
-
 ;; Auto refresh buffers
 (global-auto-revert-mode 1)
 
