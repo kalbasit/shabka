@@ -33,7 +33,9 @@
   :config
   (progn
     (setq notmuch-saved-searches
-      '((:name "inbox-work-new" :query "tag:work AND tag:unread AND tag:inbox")
+      '((:name "family-new" :query "tag:family AND tag:unread")
+        (:name "wife-new" :query "tag:wife AND tag:unread")
+        (:name "inbox-work-new" :query "tag:work AND tag:unread AND tag:inbox")
         (:name "inbox-personal-new" :query "tag:personal AND tag:unread AND tag:inbox")
         (:name "work-new" :query "tag:work AND tag:unread")
         (:name "personal-new" :query "tag:personal AND tag:unread")
