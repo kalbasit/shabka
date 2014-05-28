@@ -92,6 +92,12 @@
         (notmuch-show-view-raw-message)
         (message-resend address)))
           (add-hook 'message-setup-hook 'mml-secure-sign-pgpmime)
+    ;; Archive and mark as read
+    (define-key notmuch-search-mode-map "A"
+      (lambda (&optional beg end)
+        "archive and mark as read"
+        (interactive (notmuch-search-interactive-region))
+        (notmuch-search-tag (list "-unread" "-inbox") beg end)))
     ;; View inline patch as diff
     (defun my-notmuch-show-view-as-patch ()
       "View the the current message as a patch."
