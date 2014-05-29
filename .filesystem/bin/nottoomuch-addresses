@@ -2,7 +2,7 @@
 # -*- cperl -*-
 
 case $* in (''|--*) exec perl -x "$0" "$@" ;; (???*) ;; (*) exit 0 ;; esac
-grep -aiF "$*" "${XDG_CONFIG_HOME:-$HOME/.config}/nottoomuch/addresses.active"
+grep -aiF "$*" "${HOME}/.notmuch/nottoomuch-addresses/addresses.active"
 case $? in 0|1) exit 0; esac
 exit $?
 
@@ -91,7 +91,7 @@ use MIME::QuotedPrint 'decode_qp';
 
 no encoding;
 
-my $configdir = ($ENV{XDG_CONFIG_HOME}||$ENV{HOME}.'/.config').'/nottoomuch';
+my $configdir = ($ENV{HOME}.'/.notmuch/nottoomuch-addresses');
 my $adbpath = $configdir . '/addresses';
 my $ignpath = $configdir . '/addresses.ignore';
 my $actpath = $configdir . '/addresses.active';
@@ -106,16 +106,16 @@ unless (@ARGV)
 if ($ARGV[0] eq '--help')
 {
     $SIG{__DIE__} = sub {
-     	$SIG{__DIE__} = 'DEFAULT';
-     	require Pod::Usage;
-     	Pod::Usage::pod2usage( -verbose => 2, -exitval => 0, -noperldoc => 1 );
-     	exit 1;
+        $SIG{__DIE__} = 'DEFAULT';
+        require Pod::Usage;
+        Pod::Usage::pod2usage( -verbose => 2, -exitval => 0, -noperldoc => 1 );
+        exit 1;
     };
     require Pod::Perldoc;
     $SIG{__DIE__} = 'DEFAULT';
     # in case PAGER is not set, perldoc runs /usr/bin/perl -isr ...
     if ( ($ENV{PAGER} || '') eq 'less') {
-	$ENV{LESS} .= 'R' if ($ENV{LESS} || '') !~ /[rR]/;
+        $ENV{LESS} .= 'R' if ($ENV{LESS} || '') !~ /[rR]/;
     }
     @ARGV = ( $0 );
     exit ( Pod::Perldoc->run() );
@@ -127,11 +127,11 @@ if ($ARGV[0] eq '--update')
 {
     sub mkdirs($);
     sub mkdirs($) {
-	die "'$_[0]': not a (writable) directory\n" if -e $_[0];
-	return if mkdir $_[0]; # no mode: 0777 & ~umask used
-	local $_ = $_[0];
-	mkdirs $_ if s|/?[^/]+$|| and $_;
-	mkdir $_[0] or die "Cannot create '$_[0]': $!\n";
+        die "'$_[0]': not a (writable) directory\n" if -e $_[0];
+        return if mkdir $_[0]; # no mode: 0777 & ~umask used
+        local $_ = $_[0];
+        mkdirs $_ if s|/?[^/]+$|| and $_;
+        mkdir $_[0] or die "Cannot create '$_[0]': $!\n";
     }
 
     mkdirs $configdir unless -d $configdir;
@@ -140,42 +140,42 @@ if ($ARGV[0] eq '--update')
 
     my ($sstr, $acount) = (0, 0);
     if (-s $adbpath) {
-	die "Cannot open '$adbpath': $!\n" unless open I, '<', $adbpath;
-	sysread I, $_, 18;
-	# new header: "v4/dd/dd/dd/dd/dd\n" where / == '\t' (but match also v2)
-	if (/^v[234]\s(\d\d)\s(\d\d)\s(\d\d)\s(\d\d)\s(\d\d)\n$/) {
-	    $sstr = "$1$2$3$4$5" - 86400 * 7; # one week extra to (re)look.
-	    $sstr = 0 if $sstr < 0;
-	}
-	close I if $sstr == 0;
+        die "Cannot open '$adbpath': $!\n" unless open I, '<', $adbpath;
+        sysread I, $_, 18;
+        # new header: "v4/dd/dd/dd/dd/dd\n" where / == '\t' (but match also v2)
+        if (/^v[234]\s(\d\d)\s(\d\d)\s(\d\d)\s(\d\d)\s(\d\d)\n$/) {
+            $sstr = "$1$2$3$4$5" - 86400 * 7; # one week extra to (re)look.
+            $sstr = 0 if $sstr < 0;
+        }
+        close I if $sstr == 0;
     }
     if ($sstr > 0) {
-	print "Updating '$adbpath', since $sstr.\n";
-	$sstr .= '..';
+        print "Updating '$adbpath', since $sstr.\n";
+        $sstr .= '..';
     }
     else {
-	print "Creating '$adbpath'. This may take some time...\n";
-	$sstr = '*';
+        print "Creating '$adbpath'. This may take some time...\n";
+        $sstr = '*';
     }
     my (%ign_hash, @ign_relist);
     if (-f $ignpath) {
-	die "Cannot open '$ignpath': $!\n" unless open J, '<', $ignpath;
-	while (<J>) {
-	    next if /^\s*#/;
-	    if (m|^/(.*)/(\w*)\s*$|) {
-		if ($2 eq 'i') {
-		    push @ign_relist, qr/$1/i;
-		}
-		else {
-		    push @ign_relist, qr/$1/;
-		}
-	    }
-	    else {
-		s/\s+$/\n/;
-		$ign_hash{$_} = 1;
-	    }
-	}
-	close J;
+        die "Cannot open '$ignpath': $!\n" unless open J, '<', $ignpath;
+        while (<J>) {
+            next if /^\s*#/;
+            if (m|^/(.*)/(\w*)\s*$|) {
+                if ($2 eq 'i') {
+                    push @ign_relist, qr/$1/i;
+                }
+                else {
+                    push @ign_relist, qr/$1/;
+                }
+            }
+            else {
+                s/\s+$/\n/;
+                $ign_hash{$_} = 1;
+            }
+        }
+        close J;
     }
 
     my $sometime = time;
@@ -206,8 +206,8 @@ if ($ARGV[0] eq '--update')
     my $ctext          = qr/(?>[^()\\]+)/;
     my ($ccontent, $comment) = (q{})x2;
     for (1 .. $COMMENT_NEST_LEVEL) {
-	$ccontent = qr/$ctext|$quoted_pair|$comment/;
-	$comment  = qr/\s*\((?:\s*$ccontent)*\s*\)\s*/;
+        $ccontent = qr/$ctext|$quoted_pair|$comment/;
+        $comment  = qr/\s*\((?:\s*$ccontent)*\s*\)\s*/;
     }
     my $cfws           = qr/$comment|\s+/;
 
@@ -267,125 +267,125 @@ if ($ARGV[0] eq '--update')
       open M, '<', $_ or next;
 
       while (<M>) {
-	last if /^\s*$/;
-	next unless s/^(From|To|Cc|Bcc):\s+//i;
-	s/\s+$//;
-	my @a = ( $_ );
-	while (<M>) {
-	    # XXX leaks to body in case empty line is found in this loop...
-	    # XXX Note that older code leaked to mail body always...
-	    if (s/^\s+// or s/^(From|To|Cc|Bcc):\s+/,/i) {
-		s/\s+$//;
-		push @a, $_;
-		next;
-	    }
-	    last;
-	}
-	$_ = join ' ', @a;
+        last if /^\s*$/;
+        next unless s/^(From|To|Cc|Bcc):\s+//i;
+        s/\s+$//;
+        my @a = ( $_ );
+        while (<M>) {
+            # XXX leaks to body in case empty line is found in this loop...
+            # XXX Note that older code leaked to mail body always...
+            if (s/^\s+// or s/^(From|To|Cc|Bcc):\s+/,/i) {
+                s/\s+$//;
+                push @a, $_;
+                next;
+            }
+            last;
+        }
+        $_ = join ' ', @a;
 
-	if (time > $ptime) {
-	    my $c = qw(/ - \ |)[int ($ptime / 5) % 4];
-	    print $c, ' active addresses gathered: ', $addrcount, "\r";
-	    $ptime += 5;
-	}
+        if (time > $ptime) {
+            my $c = qw(/ - \ |)[int ($ptime / 5) % 4];
+            print $c, ' active addresses gathered: ', $addrcount, "\r";
+            $ptime += 5;
+        }
 
-	# The parse function from Email::Address heavily modified
-	# to fit ok in this particular purpose. New bugs are mine!
-	# --8<----8<----8<----8<----8<----8<----8<----8<----8<----8<----8<--
+        # The parse function from Email::Address heavily modified
+        # to fit ok in this particular purpose. New bugs are mine!
+        # --8<----8<----8<----8<----8<----8<----8<----8<----8<----8<----8<--
 
-	s/[ \t]+/ /g;
-	s/\?= =\?/\?==\?/g;
-	my (@mailboxes) = (/$mailbox/go);
-	L: foreach (@mailboxes) {
-	    next if $seen{$_};
-	    $seen{$_} = 1;
+        s/[ \t]+/ /g;
+        s/\?= =\?/\?==\?/g;
+        my (@mailboxes) = (/$mailbox/go);
+        L: foreach (@mailboxes) {
+            next if $seen{$_};
+            $seen{$_} = 1;
 
-	    my @comments = /($comment)/go;
-	    s/$comment//go if @comments;
+            my @comments = /($comment)/go;
+            s/$comment//go if @comments;
 
-	    my ($user, $host);
-	    ($user, $host) = ($1, $2) if s/<($local_part)\@($domain)>//o;
-	    if (! defined($user) || ! defined($host)) {
-		s/($local_part)\@($domain)//o;
-		($user, $host) = ($1, $2);
-	    }
+            my ($user, $host);
+            ($user, $host) = ($1, $2) if s/<($local_part)\@($domain)>//o;
+            if (! defined($user) || ! defined($host)) {
+                s/($local_part)\@($domain)//o;
+                ($user, $host) = ($1, $2);
+            }
 
-	    sub decode_substring ($) {
-		my $t = lc $2;
-		my $s;
-		if ($t eq 'b') { $s = decode_base64($3); }
-		elsif ($t eq 'q') { $s = decode_qp($3);	}
-		else {
-		    $_[0] = 0;
-		    return "=?$1?$2?$3?=";
-		}
-		$s =~ tr/_/ /;
+            sub decode_substring ($) {
+                my $t = lc $2;
+                my $s;
+                if ($t eq 'b') { $s = decode_base64($3); }
+                elsif ($t eq 'q') { $s = decode_qp($3);	}
+                else {
+                    $_[0] = 0;
+                    return "=?$1?$2?$3?=";
+                }
+                $s =~ tr/_/ /;
 
-		return $s if lc $1 eq 'utf-8';
+                return $s if lc $1 eq 'utf-8';
 
-		my $o = find_encoding($1);
-		$_[0] = 0, return "=?$1?$2?$3?=" unless ref $o;
-		return encode_utf8($o->decode($s));
-	    }
-	    sub decode_data () {
-		my $loopmax = 5;
-		while ( s{ =\?([^?]+)\?(\w)\?(.*?)\?= }
-			 { decode_substring($loopmax) }gex ) {
-		    last if --$loopmax <= 0;
-		};
-	    }
+                my $o = find_encoding($1);
+                $_[0] = 0, return "=?$1?$2?$3?=" unless ref $o;
+                return encode_utf8($o->decode($s));
+            }
+            sub decode_data () {
+                my $loopmax = 5;
+                while ( s{ =\?([^?]+)\?(\w)\?(.*?)\?= }
+                         { decode_substring($loopmax) }gex ) {
+                    last if --$loopmax <= 0;
+                };
+            }
 
-	    my @phrase       = /($display_name)/o;
-	    decode_data foreach (@phrase);
+            my @phrase       = /($display_name)/o;
+            decode_data foreach (@phrase);
 
-	    for ( @phrase, $host, $user, @comments ) {
-		next unless defined $_;
-		s/^[\s'"]+//; ## additions 20111123 too
-		s/[\s'"]+$//; ## additions 20111123 too
-		$_ = undef unless length $_;
-	    }
-	    # here we want to have email address always // 20111123 too
-	    next unless defined $user and defined $host;
+            for ( @phrase, $host, $user, @comments ) {
+                next unless defined $_;
+                s/^[\s'"]+//; ## additions 20111123 too
+                s/[\s'"]+$//; ## additions 20111123 too
+                $_ = undef unless length $_;
+            }
+            # here we want to have email address always // 20111123 too
+            next unless defined $user and defined $host;
 
-	    my $userhost = lc "<$user\@$host>";
-	    #my $userhost = "<$user\@$host>";
+            my $userhost = lc "<$user\@$host>";
+            #my $userhost = "<$user\@$host>";
 
-	    @comments = grep { defined or return 0; decode_data; 1; } @comments;
+            @comments = grep { defined or return 0; decode_data; 1; } @comments;
 
-	    # "trim" phrase, if equals to user@host after trimming, drop it.
-	    if (defined $phrase[0]) {
-		#$phrase[0] =~s/\A"(.+)"\z/$1/;
-		$phrase[0] =~ tr/\\//d; ## 20111124 too
-		$phrase[0] =~ s/\"/\\"/g;
-		@phrase = () if lc "<$phrase[0]>" eq $userhost;
-	    }
+            # "trim" phrase, if equals to user@host after trimming, drop it.
+            if (defined $phrase[0]) {
+                #$phrase[0] =~s/\A"(.+)"\z/$1/;
+                $phrase[0] =~ tr/\\//d; ## 20111124 too
+                $phrase[0] =~ s/\"/\\"/g;
+                @phrase = () if lc "<$phrase[0]>" eq $userhost;
+            }
 
-	    # In case we would have {phrase} <user@host> (comment),
-	    # make that "{phrase} (comment)" <user@host> ...
-	    if (defined $phrase[0]) {
-		if (@comments) {
-		    $phrase[0] = qq/"$phrase[0] / . join(' ', @comments) . '"';
-		    @comments = ();
-		}
-		else {
-		    $phrase[0] = qq/"$phrase[0]"/;
-		}
-	    }
-	    else {
-		@phrase = ();
-	    }
-	    $_ = join(' ', @phrase, $userhost, @comments) . "\n";
-	    next if defined $hash{$_};
-	    print O $_;
-	    $hash{$_} = 1;
-	    next if defined $ign_hash{$_};
-	    foreach my $re (@ign_relist) {
-		next L if $_ =~ $re;
-	    }
-	    print A $_;
-	    $addrcount++;
-	}
-	# --8<----8<----8<----8<----8<----8<----8<----8<----8<----8<----8<--
+            # In case we would have {phrase} <user@host> (comment),
+            # make that "{phrase} (comment)" <user@host> ...
+            if (defined $phrase[0]) {
+                if (@comments) {
+                    $phrase[0] = qq/"$phrase[0] / . join(' ', @comments) . '"';
+                    @comments = ();
+                }
+                else {
+                    $phrase[0] = qq/"$phrase[0]"/;
+                }
+            }
+            else {
+                @phrase = ();
+            }
+            $_ = join(' ', @phrase, $userhost, @comments) . "\n";
+            next if defined $hash{$_};
+            print O $_;
+            $hash{$_} = 1;
+            next if defined $ign_hash{$_};
+            foreach my $re (@ign_relist) {
+                next L if $_ =~ $re;
+            }
+            print A $_;
+            $addrcount++;
+        }
+        # --8<----8<----8<----8<----8<----8<----8<----8<----8<----8<----8<--
       }
       close M;
     }
@@ -393,21 +393,21 @@ if ($ARGV[0] eq '--update')
     close P;
     my $oldaddrcount = 0;
     if ($sstr ne '*') {
-	L: while (<I>) {
-	    last if /^---/;
-	    next if defined $hash{$_};
-	    print O $_;
-	    next if defined $ign_hash{$_};
-	    foreach my $re (@ign_relist) {
-		next L if $_ =~ $re;
-	    }
-	    print A $_;
-	    $addrcount++;
-	}
-	while (<I>) {
-	    $oldaddrcount = ($1 + 0), next if /^active:\s+(\d+)\s*$/;
-	}
-	close I;
+        L: while (<I>) {
+            last if /^---/;
+            next if defined $hash{$_};
+            print O $_;
+            next if defined $ign_hash{$_};
+            foreach my $re (@ign_relist) {
+                next L if $_ =~ $re;
+            }
+            print A $_;
+            $addrcount++;
+        }
+        while (<I>) {
+            $oldaddrcount = ($1 + 0), next if /^active:\s+(\d+)\s*$/;
+        }
+        close I;
     }
     print O "---\n";
     print O "active: ", $addrcount, "\n";
@@ -420,9 +420,9 @@ if ($ARGV[0] eq '--update')
     rename $actpath . '.new', $actpath or
       die "Cannot rename '$actpath.new' to '$actpath': $!\n";
     if ($oldaddrcount or $sstr eq '*') {
-	$sometime = time - $sometime;
-	my $new = $addrcount - $oldaddrcount;
-	print "Added $new active addresses in $sometime seconds.\n";
+        $sometime = time - $sometime;
+        my $new = $addrcount - $oldaddrcount;
+        print "Added $new active addresses in $sometime seconds.\n";
     }
     print "Total number of active addresses: $addrcount.\n";
     exit 0;
