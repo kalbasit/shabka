@@ -91,7 +91,6 @@
         (interactive "sBounce To: ")
         (notmuch-show-view-raw-message)
         (message-resend address)))
-          (add-hook 'message-setup-hook 'mml-secure-sign-pgpmime)
     ;; Archive and mark as read
     (define-key notmuch-search-mode-map "A"
       (lambda (&optional beg end)
@@ -119,8 +118,6 @@
                      (add-to-list 'minor-mode-overriding-map-alist new-ro-bind))
         (goto-char (point-min))))
     (define-key 'notmuch-show-mode-map "D" 'my-notmuch-show-view-as-patch)
-    ;; Sign messages by default.
-    (add-hook 'message-setup-hook 'mml-secure-sign-pgpmime)
     ;; At startup position the cursor on the first saved searches
     (add-hook 'notmuch-hello-refresh-hook
         (lambda ()
