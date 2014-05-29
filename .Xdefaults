@@ -16,7 +16,6 @@ URxvt.scrollBar:       false
 URxvt.saveLines:       32767
 URxvt.cursorBlink:     true
 URxvt.cursorColor:     #FF0000
-!URxvt.depth:           24
 URxvt.visualBall:      true
 URxvt*termName:        rxvt-unicode-256color
 URxvt*font:            xft:Monospace:pixelsize=12:antialias=true:hinting=true
