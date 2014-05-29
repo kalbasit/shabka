@@ -1,0 +1,198 @@
+# This is where all key bindings are specified. Mouse bindings are specified
+# in mouse.wini.
+#
+# Key bindings work by specifying a key combination (left side of ":=") that
+# will execute a command (right side of ":=") when pressed. Commands in this
+# case are Wingo commands (the Gribble language). There are *a lot* of commands
+# available to you---only a small subset are shown below in the default
+# configuration.
+#
+#
+# Key combinations
+# ----------------
+# Key combinations are specified as "[Mod[-Mod[...]]-]KEY", where "mod"
+# corresponds to a key modifier like "Mod1" or "Control", and "KEY" corresponds
+# to a key symbol on your keyboard like "a" or "Return" or "plus". A full
+# list of key symbols can be found here: http://goo.gl/MYd7G --- you could
+# also discover them by running the 'xev' command and pressing the keys.
+#
+#
+# Modifiers
+# ---------
+# Since most keys on the keyboard have their own particular function, it is
+# usually necessary to bind key presses in combination with some modifier key
+# like "Shift", "Control", "Alt" or "Super" (i.e., the window key). In order
+# to know which keys are bound to particular modifiers on your system, you
+# should run the `xmodmap` command. The left hand column lists the modifiers
+# you should use in this file, while the right columns list the key symbols
+# bound to those modifiers.
+#
+# In general, if you haven't tweaked your configuration, the mapping probably
+# looks something like this:
+#
+#     shift   -> Shift
+#     control -> Control
+#     mod1    -> alt
+#     mod4    -> super (the "windows" key)
+#
+#
+# Where's the beef?
+# -----------------
+# Wingo has a lot of commands, and they can all be inspected either in Wingo
+# itself with the `WingoHelp` command (by default bound to "Mod4-Shift-h") or
+# with the `wingo-cmd` utility.
+#
+# With `wingo-cmd`, you can get a list of every command and the type of
+# parameters they accept:
+#
+#     wingo-cmd --list-types
+#
+# Or you can see a list of all commands with a description of each:
+#
+#     wingo-cmd --list-usage
+#
+# Or you can see the details of a particular command:
+#
+#     wingo-cmd --usage WorkspaceGreedy
+#
+# If you don't have `wingo-cmd` available on your system, and you installed
+# Wingo with `go get`, then `go get github.com/BurntSushi/wingo/wingo-cmd`
+# should install wingo-cmd for you. If you *didn't* install Wingo with `go
+# get`, then presumably you need to speak to the package maintainer in charge
+# of the package.
+
+
+[Global]
+# Set up some common key bindings. "Shell" is Wingo's command for executing
+# shell commands. In practice, I strongly recommend using `xbindkeys` to
+# configure shortcuts for running programs. It's more mature and will work
+# with *any* window manager.
+#
+# Commands are run with bash like so: `bash -c "{COMMAND}"`. Double quotes can
+# be escaped with a backslash, e.g., \".
+#
+# N.B. The shell used can be changed in `options.wini`.
+Mod4-t := Shell "xterm"
+Mod1-F2 := Shell "gmrun"
+
+# You could also use Wingo's Shell command to execute commands on the fly.
+# In all likelihood, you should use a real launcher like `gmrun` or `dmenu`.
+# Mod4-r := Shell (Input "Command:")
+
+# Some basic window manager commands. Closing/maximizing can also be done with
+# buttons on fully decorated windows.
+Mod4-c := Close (GetActive)
+Mod1-Shift-c := Quit
+Mod4-x := ToggleMaximize (GetActive)
+Mod1-f := ToggleFloating (GetActive)
+Mod1-s := ToggleSticky (GetActive)
+
+# WingoExec will allow you to execute *any* Wingo command.
+Mod4-Shift-r := WingoExec (Input "Wingo command:")
+
+# WingoHelp will show you everything you could possibly want to know about
+# any of Wingo's commands.
+Mod4-Shift-h := WingoHelp (Input "Wingo command name:")
+
+# Execute a script from an input prompt.
+# Scripts are executable files in your $XDG_CONFIG_HOME/wingo/scripts directory.
+Mod4-Shift-s := Script (Input "Script command:")
+
+# Allows you to specify precisely which layout you want to be active.
+Mod4-Shift-l := SetLayout (GetWorkspace) (Input "Layout name:")
+
+# Add and remove workspaces.
+# Note that a workspace MUST be empty before it can be removed. (Don't worry,
+# Wingo won't let you do it even if you try :P)
+Mod4-Shift-a := AddWorkspace (Input "New workspace name:")
+Mod4-BackSpace := RemoveWorkspace (GetWorkspace)
+
+# An alternative version of AddWorkspace that will add a new workspace given
+# some input, and then automatically switch to it. This shows a lesser known
+# feature where some commands return relevant values that can be re-used in
+# other commands. In this case, `AddWorkspace` returns the name of the
+# workspace added.
+# Mod4-Shift-a := Workspace (AddWorkspace (Input "New workspace name:"))
+
+# Your basic Workspace commands.
+# Note that these commands become extremely awkward in a multi-head setup,
+# particularly because a different workspace is visible on each monitor.
+Mod4-left := Workspace (GetWorkspacePrev)
+Mod4-right := Workspace (GetWorkspaceNext)
+Mod4-Shift-left := WorkspaceWithClient (GetWorkspacePrev) (GetActive)
+Mod4-Shift-right := WorkspaceWithClient (GetWorkspaceNext) (GetActive)
+
+# Switch to a particular workspace "greedily". A greedy workspace switch
+# *always* brings the workspace specified to the current monitor. When the
+# workspace is hidden, there is no difference between a regular switch and
+# a greedy switch. But when the workspace is visible on another monitor,
+# a greedy switch will flip the workspaces whereas a regular switch will
+# move focus to the monitor that the workspace is on.
+# (This is exactly like a greedy switch in Xmonad.)
+Mod1-1 := WorkspaceGreedy "1"
+Mod1-2 := WorkspaceGreedy "2"
+Mod1-3 := WorkspaceGreedy "3"
+Mod1-4 := WorkspaceGreedy "4"
+
+# Same as above, but bring the active window with us.
+Mod1-Shift-1 := WorkspaceGreedyWithClient "1" (GetActive)
+Mod1-Shift-2 := WorkspaceGreedyWithClient "2" (GetActive)
+Mod1-Shift-3 := WorkspaceGreedyWithClient "3" (GetActive)
+Mod1-Shift-4 := WorkspaceGreedyWithClient "4" (GetActive)
+
+# Move focus to the workspace on the corresponding monitor. Monitor indices
+# start at 0 and are ordered by left to right, and then top to bottom.
+# (We also move the pointer with the focus.)
+# Bonus: Triple monitors on Linux: http://goo.gl/nmW6v
+Mod1-w := HeadFocus 0
+Mod1-w := MovePointerRelative 0 0
+Mod1-e := HeadFocus 1
+Mod1-e := MovePointerRelative 0 0
+Mod1-r := HeadFocus 2
+Mod1-r := MovePointerRelative 0 0
+
+# Move focus and the current client to a particular monitor.
+Mod1-Shift-w := HeadFocusWithClient 0 (GetActive)
+Mod1-Shift-w := MovePointerRelative 0 0
+Mod1-Shift-e := HeadFocusWithClient 1 (GetActive)
+Mod1-Shift-e := MovePointerRelative 0 0
+Mod1-Shift-r := HeadFocusWithClient 2 (GetActive)
+Mod1-Shift-r := MovePointerRelative 0 0
+
+# Your every day Alt-Tab. Use WingoHelp or `wingo-cmd --usage CycleClientNext`
+# to discover what each of the parameters means. (They specify which kinds of
+# clients should be shown.)
+Mod1-Tab := CycleClientNext "yes" "no" "yes"
+Mod1-Shift-Tab := CycleClientPrev "yes" "no" "yes"
+
+# List all windows and focus/raise the selected client.
+Mod4-space := FocusRaise (SelectClient "Any" "no" "no" "yes")
+
+# List all workspaces, and greedily switch to the one selected.
+Mod4-return := WorkspaceGreedy (SelectWorkspace "Prefix")
+
+# List all workspaces, and greedily switch to the one selected with the
+# active window.
+Mod4-Shift-return := WorkspaceGreedyWithClient \
+                       (SelectWorkspace "Prefix") \
+                       (GetActive)
+
+# Basic auto tiling commands. Auto tiling layouts are split into two panes:
+# "masters" and "slaves". The commands below revolve around adjusting the size
+# of those two panes, adding/removing windows from those panes, etc.
+Mod1-a := AutoTile (GetWorkspace)
+Mod1-u := AutoUntile (GetWorkspace)
+Mod1-z := AutoCycle (GetWorkspace)
+Mod1-h := AutoResizeMaster (GetWorkspace) -0.02
+Mod1-l := AutoResizeMaster (GetWorkspace) 0.02
+Mod1-b := AutoResizeWindow (GetWorkspace) -0.02
+Mod1-n := AutoResizeWindow (GetWorkspace) 0.02
+Mod1-k := AutoNext (GetWorkspace)
+Mod1-j := AutoPrev (GetWorkspace)
+Mod1-Shift-k := AutoSwitchNext (GetWorkspace)
+Mod1-Shift-j := AutoSwitchPrev (GetWorkspace)
+Mod1-m := AutoMaster (GetWorkspace)
+Mod1-Shift-return := AutoMakeMaster (GetWorkspace)
+Mod1-comma := AutoMastersFewer (GetWorkspace)
+Mod1-period := AutoMastersMore (GetWorkspace)
+
