@@ -27,6 +27,7 @@ URxvt*perl-ext-common: default,matcher
 URxvt*urlLauncher:     google-chrome-beta
 URxvt.matcher.button:  1
 URxvt*urgentOnBell:    true
+URxvt*iso14755:        false
 
 !! drop in Solarized colorscheme for Xresources/Xdefaults
 ! from: https://github.com/aconbere/dotfiles/blob/master/.Xdefaults.solarized.urxvt
