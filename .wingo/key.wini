@@ -202,3 +202,5 @@ Mod4-slash := AutoMakeMaster (GetWorkspace)
 Mod4-comma := AutoMastersFewer (GetWorkspace)
 Mod4-period := AutoMastersMore (GetWorkspace)
 
+# Custom keys
+Mod4-Shift-z := Shell "gnome-screensaver-command -l"
