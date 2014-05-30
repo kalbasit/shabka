@@ -1,0 +1,13 @@
+# Start stuff
+wingo-cmd 'Shell "x-www-browser"'
+wingo-cmd 'Shell "emacs --daemon=mail"'
+wingo-cmd 'Shell "emacs --daemon=chat"'
+wingo-cmd 'Shell "named-emacs-frame mail mail"'
+wingo-cmd 'Shell "named-emacs-frame chat chat"'
+wingo-cmd 'Shell "urxvt -name term"'
+
+# Send stuff to workspaces
+wingo-cmd 'WorkspaceSendClient "term" "term"'
+wingo-cmd 'WorkspaceSendClient "chat" "chat"'
+wingo-cmd 'WorkspaceSendClient "mail" "mail"'
+wingo-cmd 'WorkspaceSendClient "web" "Google Chrome"'

@@ -5,13 +5,13 @@
 [Options]
 # The list of workspaces to set upon startup. Workspaces can be added or
 # removed while Wingo is running.
-workspaces := 1 2 3 4 browser mail
+workspaces := term web mail chat
 
 # The default layout that is used for all workspaces. Currently, the
 # only available layouts are: Floating, Vertical or Horizontal.
 # Setting this to something other than a Floating layout effectively turns
 # Wingo into a tiling window manager.
-default_layout := Floating
+default_layout := Vertical
 
 # When enabled, windows will be focused when the mouse enters the window.
 # N.B. I don't use focus follows mouse, so I'm not sure precisely how it
@@ -73,7 +73,7 @@ cancel := Escape
 # If you need to pass additional arguments to the shell invocation, then
 # you'll need to make a wrapper script.
 # (Make sure it can handle the `-c` flag!)
-shell := bash
+shell := zsh
 
 # The program to use to play a wav file. This is only used with the "Dale"
 # command, which is an easter egg.

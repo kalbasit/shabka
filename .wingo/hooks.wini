@@ -72,14 +72,13 @@
 [Autostart]
 match := True
 
+startup := Script "startup"
+
 # You can add startup programs here if you like.
 #startup := Shell "xterm"
 
 # You can add more by just adding another definition of "startup".
 #startup := Shell "gkrellm"
-
-# Easter egg!
-startup := Dale
 
 [ForceFloating]
 # This hook matches certain windows, and forces them into the floating layout.
