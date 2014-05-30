@@ -7,4 +7,4 @@ if [[ "x${socket}" != "x" ]]; then
   socketarg="-s ${socket}"
 fi
 
-emacsclient $socketarg -e "(make-frame-on-display \"$DISPLAY\" '((name . \"$name\")))"
+emacsclient -a '' $socketarg -e "(make-frame-on-display \"$DISPLAY\" '((name . \"$name\")))"
