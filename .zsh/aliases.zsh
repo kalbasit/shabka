@@ -22,7 +22,7 @@ alias xspec="xrake parallel:prepare parallel:spec"
 
 # Emacs
 alias enw="emacs -nw"
-alias e="emacsclient -t"
+alias e="emacsclient -a '' -t"
 alias email="emacsclient -s mail -t"
 alias chat="emacsclient -s chat -t"
 

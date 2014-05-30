@@ -40,6 +40,47 @@ ZSH_COMPDUMP="${HOME}/.zcompdump-${SHORT_HOST}-${ZSH_VERSION}"
 autoload -U compinit
 compinit -i -d "${ZSH_COMPDUMP}"
 
+##############
+
+typeset -Ug path # Make sure the path array does not contain duplicates
+[[ -x /usr/libexec/path_helper ]] && eval `/usr/libexec/path_helper -s`
+if [[ -d $HOME/.filesystem/bin ]]; then
+  path+=($HOME/.filesystem/bin(N-/))
+  export DYLD_LIBRARY_PATH=$HOME/.filesystem/bin:$DYLD_LIBRARY_PATH
+fi
+path+=($HOME/code/go/bin(N-/))
+path+=($HOME/.cask/bin(N-/))
+for i in $HOME/.filesystem/opt/*; do
+  path+=($i/bin(N-/))
+done
+for i in $HOME/.filesystem/opt/*; do
+  export DYLD_LIBRARY_PATH=$i/lib:$DYLD_LIBRARY_PATH
+done
+if [[ -d /brew ]]; then
+  path=(/brew/bin $path)
+  export DYLD_LIBRARY_PATH=/brew/lib:$DYLD_LIBRARY_PATH
+fi
+
+# Load Google specific stuff
+[[ -r "$HOME/.zshrc-google" ]] && source "$HOME/.zshrc-google"
+
+# Load travis
+[[ -r "$HOME/.travis/travis.sh" ]] && source "$HOME/.travis/travis.sh"
+
+# Load rbenv
+if [[ -d $HOME/.rbenv ]]; then
+  path=($HOME/.rbenv/bin(N-/) $path)
+  eval "$(rbenv init --no-rehash - zsh)"
+fi
+
+# Load pyenv
+if [[ -d $HOME/.pyenv ]]; then
+  path=($HOME/.pyenv/bin(N-/) $path)
+  eval "$(pyenv init --no-rehash - zsh)"
+fi
+
+##############
+
 # Load all the configs
 for config ($configs); do
   source "${ZSH}/${config}"
@@ -55,8 +96,3 @@ done
 
 # Load the theme
 source "${THEMES_PATH}/${THEME}.zsh-theme"
-
-# Load Google specific
-if [[ -r "${HOME}/.zshrc-google" ]]; then
-  source "${HOME}/.zshrc-google"
-fi
