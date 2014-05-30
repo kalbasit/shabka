@@ -253,7 +253,6 @@
     (use-package smartparens-ruby)
     (use-package smartparens-html)
     (use-package smartparens-latex)
-    (smartparens-global-mode 1) ;; When enabled, bindings on *notmuch-hello* do not work
     (show-smartparens-global-mode 1))
   :config
   (progn
