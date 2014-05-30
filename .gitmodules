@@ -1,6 +1,3 @@
 [submodule ".filesystem/opt/tmux-powerline"]
 	path = .filesystem/opt/tmux-powerline
 	url = git://github.com/erikw/tmux-powerline.git
-[submodule ".antigen"]
-	path = .antigen
-	url = https://github.com/zsh-users/antigen.git
