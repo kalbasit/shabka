@@ -1,7 +1,5 @@
 # Start stuff
 wingo-cmd 'Shell "x-www-browser"'
-wingo-cmd 'Shell "emacs --daemon=mail"'
-wingo-cmd 'Shell "emacs --daemon=chat"'
 wingo-cmd 'Shell "named-emacs-frame mail mail"'
 wingo-cmd 'Shell "named-emacs-frame chat chat"'
 wingo-cmd 'Shell "urxvt -name term"'
