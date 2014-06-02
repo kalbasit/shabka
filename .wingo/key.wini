@@ -145,20 +145,20 @@ Mod4-4 := WorkspaceGreedy "chat"
 # start at 0 and are ordered by left to right, and then top to bottom.
 # (We also move the pointer with the focus.)
 # Bonus: Triple monitors on Linux: http://goo.gl/nmW6v
-Mod1-w := HeadFocus 0
-Mod1-w := MovePointerRelative 0 0
-Mod1-e := HeadFocus 1
-Mod1-e := MovePointerRelative 0 0
-Mod1-r := HeadFocus 2
-Mod1-r := MovePointerRelative 0 0
+#Mod1-w := HeadFocus 0
+#Mod1-w := MovePointerRelative 0 0
+#Mod1-e := HeadFocus 1
+#Mod1-e := MovePointerRelative 0 0
+#Mod1-r := HeadFocus 2
+#Mod1-r := MovePointerRelative 0 0
 
 # Move focus and the current client to a particular monitor.
-Mod1-Shift-w := HeadFocusWithClient 0 (GetActive)
-Mod1-Shift-w := MovePointerRelative 0 0
-Mod1-Shift-e := HeadFocusWithClient 1 (GetActive)
-Mod1-Shift-e := MovePointerRelative 0 0
-Mod1-Shift-r := HeadFocusWithClient 2 (GetActive)
-Mod1-Shift-r := MovePointerRelative 0 0
+#Mod1-Shift-w := HeadFocusWithClient 0 (GetActive)
+#Mod1-Shift-w := MovePointerRelative 0 0
+#Mod1-Shift-e := HeadFocusWithClient 1 (GetActive)
+#Mod1-Shift-e := MovePointerRelative 0 0
+#Mod1-Shift-r := HeadFocusWithClient 2 (GetActive)
+#Mod1-Shift-r := MovePointerRelative 0 0
 
 # Your every day Alt-Tab. Use WingoHelp or `wingo-cmd --usage CycleClientNext`
 # to discover what each of the parameters means. (They specify which kinds of
