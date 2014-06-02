@@ -4,6 +4,9 @@ wingo-cmd 'Shell "named-emacs-frame mail mail"'
 wingo-cmd 'Shell "named-emacs-frame chat chat"'
 wingo-cmd 'Shell "urxvt -name term"'
 
+# Wait till everything starts
+sleep 10
+
 # Send stuff to workspaces
 wingo-cmd 'WorkspaceSendClient "term" "term"'
 wingo-cmd 'WorkspaceSendClient "chat" "chat"'
