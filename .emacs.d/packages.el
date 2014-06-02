@@ -315,7 +315,7 @@
     (load "~/.ercpass") ;; load erc passwords
     (setq erc-autojoin-mode t)
     (setq erc-autojoin-channels-alist
-    '((".*\\.freenode.net" "#notmuch" "#emacs")
+    '((".*\\.freenode.net" "#notmuch" "#emacs" "#wingo")
       (".*irc.*\\.corp.google.com" "#ci" "#ci-oncall" "#corpdb")))
     ;; don't show any of this
     (setq erc-hide-list '("JOIN" "PART" "QUIT" "NICK"))
