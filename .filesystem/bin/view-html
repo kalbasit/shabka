@@ -8,7 +8,7 @@ if munpack -C "$dir" -t < "$dir"/msg 2>&1 | grep 'Did not find'; then
 fi
 for i in "$dir"/part*; do
     if grep -q -i -e '<html>' -e 'text/html' "$i"; then
-        $BROWSER "$i" &
+        x-www-browser "$i" &
         sleep 3
         exit 0
     fi
