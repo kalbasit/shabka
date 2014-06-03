@@ -33,7 +33,7 @@ drafts/*
 .emacs.d/url/cache
 .filesystem/bin/ssx-agents
 .zsh/cache/
-
+.emacs.d/eshell/
 
 
 
