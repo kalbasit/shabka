@@ -61,6 +61,8 @@
     (define-key notmuch-show-mode-map "R" 'notmuch-show-reply-sender)
     (define-key notmuch-search-mode-map "r" 'notmuch-search-reply-to-thread)
     (define-key notmuch-search-mode-map "R" 'notmuch-search-reply-to-thread-sender)
+    ;; Remove the blue color of flagged messages
+    (setq notmuch-search-line-faces '((\"flagged\" . (:foreground nil))))
     ;; Toggle message deletion
     (define-key notmuch-show-mode-map "d"
       (lambda ()
