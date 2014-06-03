@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Start stuff
 wingo-cmd 'Shell "x-www-browser"'
 wingo-cmd 'Shell "named-emacs-frame mail mail"'

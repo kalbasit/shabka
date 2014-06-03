@@ -107,6 +107,7 @@ Mod4-Shift-l := SetLayout (GetWorkspace) (Input "Layout name:")
 # Wingo won't let you do it even if you try :P)
 Mod4-Shift-return := Workspace (AddWorkspace (Input "New workspace name:"))
 Mod4-BackSpace := RemoveWorkspace (GetWorkspace)
+Mod4-Shift-p := Script "project"
 
 # An alternative version of AddWorkspace that will add a new workspace given
 # some input, and then automatically switch to it. This shows a lesser known
