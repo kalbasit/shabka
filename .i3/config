@@ -132,11 +132,11 @@ bindsym $mod+Shift+minus move scratchpad
 bindsym $mod+minus scratchpad show
 
 # mail client scratchpad
-bindsym $mod+Shift+m exec $HOME/.filesystem/bin/named-emacs-frame mail mail
+bindsym $mod+Shift+m exec $HOME/.filesystem/bin/named-emacs-frame mail
 bindsym $alt+m [instance="^mail$"] scratchpad show
 
 # irc client scratchpad
-bindsym $mod+Shift+i exec $HOME/.filesystem/bin/named-emacs-frame irc irc
+bindsym $mod+Shift+i exec $HOME/.filesystem/bin/named-emacs-frame irc
 bindsym $alt+i [instance="^irc$"] scratchpad show
 
 # https://github.com/tybitsfox/i3msg/blob/master/.i3/config
@@ -199,5 +199,5 @@ exec --no-startup-id ~/.filesystem/bin/Gwall
 exec urxvt -name main
 exec urxvt -name slave
 exec google-chrome-beta
-exec $HOME/.filesystem/bin/named-emacs-frame mail mail
-exec $HOME/.filesystem/bin/named-emacs-frame irc irc
+exec $HOME/.filesystem/bin/named-emacs-frame mail
+exec $HOME/.filesystem/bin/named-emacs-frame irc

@@ -1,7 +1,8 @@
 #!/bin/bash
 
-name="${1}"; framenamearg=""
-socket="${2}" socketarg=""
+name="${1}"
+socket="${2:-$name}"
+socketarg=""
 
 if [[ "x${socket}" != "x" ]]; then
   socketarg="-s ${socket}"

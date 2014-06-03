@@ -7,7 +7,7 @@ project_name="$(wingo-cmd 'Input "Project name:"')"
 wingo-cmd "Workspace (AddWorkspace \"${project_name}\")"
 
 # Start an emacs
-wingo-cmd "Shell \"named-emacs-frame ${project_name} ${project_name}\""
+wingo-cmd "Shell \"named-emacs-frame ${project_name}\""
 
 # Start a shell
 wingo-cmd "Shell \"urxvt -name ${project_name}\""
