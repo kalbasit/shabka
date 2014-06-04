@@ -65,6 +65,9 @@
     (define-key notmuch-search-mode-map "R" 'notmuch-search-reply-to-thread-sender)
     ;; Remove the blue color of flagged messages
     (setq notmuch-search-line-faces '((\"flagged\" . (:foreground nil))))
+    ;; Hide trailing whitespace when showing a message
+    (add-hook 'notmuch-show-hook (lambda ()
+                                   (setq show-trailing-whitespace nil)))
     ;; Toggle message deletion
     (define-key notmuch-show-mode-map "d"
       (lambda ()
