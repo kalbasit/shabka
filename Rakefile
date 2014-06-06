@@ -1,16 +1,74 @@
-$: << File.expand_path('../support/lib', __FILE__)
-require 'dot_file'
+require 'rake'
+require 'erb'
 
-# Monkey path so we can test it first
-class DotFile
-  def link_dotfile path
-    puts "Linking #{source_path}/#{path} to #{destination_path}/#{path}"
+desc "install the dot files into user's home directory"
+task :install do
+  update_submodules
+  switch_to_zsh
+  replace_all = false
+  files = Dir['.??*']
+  files.each do |file|
+    system %Q{mkdir -p "$HOME/.#{File.dirname(file)}"} if file =~ /\//
+    if File.exist?(File.join(ENV['HOME'], "#{file.sub(/\.erb$/, '')}"))
+      if File.identical? file, File.join(ENV['HOME'], "#{file.sub(/\.erb$/, '')}")
+        puts "identical ~/.#{file.sub(/\.erb$/, '')}"
+      elsif replace_all
+        replace_file(file)
+      else
+        print "overwrite ~/#{file.sub(/\.erb$/, '')}? [ynaq] "
+        case $stdin.gets.chomp
+        when 'a'
+          replace_all = true
+          replace_file(file)
+        when 'y'
+          replace_file(file)
+        when 'q'
+          exit
+        else
+          puts "skipping ~/#{file.sub(/\.erb$/, '')}"
+        end
+      end
+    else
+      link_file(file)
+    end
   end
 end
 
-desc "Link dotfile to the home folder"
-task :link_dotfiles do
-  DotFile.new(File.expand_path('../', __FILE__), ENV['HOME']).link_dotfiles
+def replace_file(file)
+  system %Q{rm -rf "$HOME/#{file.sub(/\.erb$/, '')}"}
+  link_file(file)
 end
 
-task :default => :link_dotfiles
+def link_file(file)
+  if file =~ /.erb$/
+    puts "generating ~/#{file.sub(/\.erb$/, '')}"
+    File.open(File.join(ENV['HOME'], "#{file.sub(/\.erb$/, '')}"), 'w') do |new_file|
+      new_file.write ERB.new(File.read(file)).result(binding)
+    end
+  else
+    puts "linking ~/#{file}"
+    system %Q{ln -s "$PWD/#{file}" "$HOME/#{file}"}
+  end
+end
+
+def switch_to_zsh
+  if ENV["SHELL"] =~ /zsh/
+    puts "using zsh"
+  else
+    print "switch to zsh? (recommended) [ynq] "
+    case $stdin.gets.chomp
+    when 'y'
+      puts "switching to zsh"
+      system %Q{chsh -s `which zsh`}
+    when 'q'
+      exit
+    else
+      puts "skipping zsh"
+    end
+  end
+end
+
+def update_submodules
+  puts "Updating the submodules"
+  `git submodule update --init > /dev/null`
+end
