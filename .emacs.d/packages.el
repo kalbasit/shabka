@@ -340,3 +340,11 @@
   (progn
     (setq ispell-program-name "aspell")
     (setq ispell-extra-args '("--sug-mode=ultra"))))
+
+(use-package go-mode
+  :mode ("\\.go$" . go-mode)
+  :config
+  (progn
+    (add-hook 'before-save-hook 'gofmt-before-save)
+    (bind-key "C-c C-r" 'go-remove-unused-imports go-mode-map)
+    (bind-key "C-c i" 'go-goto-imports go-mode-map)))
