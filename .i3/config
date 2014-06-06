@@ -29,10 +29,10 @@ client.focused          #00FF00 #00FF00 #000000 #2e9ef4
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec i3-sensible-terminal
+bindsym $mod+t exec i3-sensible-terminal
 
 # kill focused window
-bindsym $mod+Shift+q kill
+bindsym $mod+Shift+c kill
 
 # start dmenu (a program launcher)
 bindsym $mod+d exec dmenu_run
@@ -92,10 +92,10 @@ bindsym $mod+a focus parent
 #bindsym $mod+d focus child
 
 # switch to workspace
-bindsym $mod+1 workspace 1
-bindsym $mod+2 workspace 2
-bindsym $mod+3 workspace 3
-bindsym $mod+4 workspace 4
+bindsym $mod+1 workspace term
+bindsym $mod+2 workspace web
+bindsym $mod+3 workspace mail
+bindsym $mod+4 workspace chat
 bindsym $mod+5 workspace 5
 bindsym $mod+6 workspace 6
 bindsym $mod+7 workspace 7
@@ -104,10 +104,10 @@ bindsym $mod+9 workspace 9
 bindsym $mod+0 workspace 10
 
 # move focused container to workspace
-bindsym $mod+Shift+1 move container to workspace 1
-bindsym $mod+Shift+2 move container to workspace 2
-bindsym $mod+Shift+3 move container to workspace 3
-bindsym $mod+Shift+4 move container to workspace 4
+bindsym $mod+Shift+1 move container to workspace term
+bindsym $mod+Shift+2 move container to workspace web
+bindsym $mod+Shift+3 move container to workspace mail
+bindsym $mod+Shift+4 move container to workspace chat
 bindsym $mod+Shift+5 move container to workspace 5
 bindsym $mod+Shift+6 move container to workspace 6
 bindsym $mod+Shift+7 move container to workspace 7
@@ -116,11 +116,11 @@ bindsym $mod+Shift+9 move container to workspace 9
 bindsym $mod+Shift+0 move container to workspace 10
 
 # reload the configuration file
-bindsym $mod+Shift+c reload
+bindsym $mod+r reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+bindsym $mod+Shift+q exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
 # lock screen
 bindsym $mod+Shift+z exec --no-startup-id gnome-screensaver-command -l
@@ -132,12 +132,12 @@ bindsym $mod+Shift+minus move scratchpad
 bindsym $mod+minus scratchpad show
 
 # mail client scratchpad
-bindsym $mod+Shift+m exec $HOME/.filesystem/bin/named-emacs-frame mail
-bindsym $alt+m [instance="^mail$"] scratchpad show
+bindsym $alt+Shift+m exec $HOME/.filesystem/bin/named-emacs-frame mail-scratchpad mail
+bindsym $alt+m [instance="^mail-scratchpad$"] scratchpad show
 
-# irc client scratchpad
-bindsym $mod+Shift+i exec $HOME/.filesystem/bin/named-emacs-frame irc
-bindsym $alt+i [instance="^irc$"] scratchpad show
+# chat client scratchpad
+bindsym $alt+Shift+c exec $HOME/.filesystem/bin/named-emacs-frame chat-scratchpad chat
+bindsym $alt+c [instance="^chat-scratchpad$"] scratchpad show
 
 # https://github.com/tybitsfox/i3msg/blob/master/.i3/config
 # mark current window
@@ -170,7 +170,7 @@ mode "resize" {
   bindsym Escape mode "default"
 }
 
-bindsym $mod+r mode "resize"
+bindsym $alt+r mode "resize"
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
@@ -178,26 +178,25 @@ bar {
   status_command i3status --config ~/.i3/status.conf
 }
 
-# Pre assign workspaces
-workspace 1 output DVI-I-1
-workspace 2 output DP-1
-workspace 3 output DP-1
-workspace 4 output DVI-I-1
-
 # Assign applications to workspaces
-assign [class="^URxvt$" instance="^slave$"] → 1
-assign [class="^URxvt$" instance="^main$"] → 2
-assign [class="^Google-chrome(-beta)?$" instance="crx_nckgahadagoaajjgafhacjanaoiihapd"] → 4
-assign [class="^Google-chrome(-beta)?$"] → 3
+assign [class="^URxvt$" instance="^main$"] → term
+assign [class="^X-www-browser$"] → web
+assign [class="^Emacs24$" instance="^mail$"] → mail
+assign [class="^Emacs24$" instance="^chat$"] → chat
 
 # automove to scratchpad
-for_window [class="^Emacs24$" instance="^mail$"] move scratchpad
-for_window [class="^Emacs24$" instance="^irc$"] move scratchpad
+for_window [instance="^mail-scratchpad$"] move scratchpad
+for_window [instance="^chat-scratchpad$"] move scratchpad
+
+# i3-dynamic-workspaces
+bindsym $mod+Return exec "i3-dynamic-workspaces --switch-workspace"
+bindsym $mod+Shift+Return exec "i3-dynamic-workspaces --add-workspace"
 
 # autostart
 exec --no-startup-id ~/.filesystem/bin/Gwall
 exec urxvt -name main
-exec urxvt -name slave
-exec google-chrome-beta
+exec x-www-browser
 exec $HOME/.filesystem/bin/named-emacs-frame mail
-exec $HOME/.filesystem/bin/named-emacs-frame irc
+exec $HOME/.filesystem/bin/named-emacs-frame mail-scratchpad mail
+exec $HOME/.filesystem/bin/named-emacs-frame chat
+exec $HOME/.filesystem/bin/named-emacs-frame chat-scratchpad chat
