@@ -104,7 +104,9 @@
       (lambda (&optional beg end)
         "archive and mark as read"
         (interactive (notmuch-search-interactive-region))
-        (notmuch-search-tag (list "-unread" "-inbox") beg end)))
+        (notmuch-search-tag (list "-unread" "-inbox") beg end)
+        (when (eq beg end)
+          (notmuch-search-next-thread))))
     ;; View inline patch as diff
     (defun my-notmuch-show-view-as-patch ()
       "View the the current message as a patch."
