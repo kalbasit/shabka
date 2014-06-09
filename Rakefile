@@ -11,7 +11,7 @@ task :install do
     system %Q{mkdir -p "$HOME/.#{File.dirname(file)}"} if file =~ /\//
     if File.exist?(File.join(ENV['HOME'], "#{file.sub(/\.erb$/, '')}"))
       if File.identical? file, File.join(ENV['HOME'], "#{file.sub(/\.erb$/, '')}")
-        puts "identical ~/.#{file.sub(/\.erb$/, '')}"
+        puts "identical ~/#{file.sub(/\.erb$/, '')}"
       elsif replace_all
         replace_file(file)
       else
@@ -40,6 +40,8 @@ def replace_file(file)
 end
 
 def link_file(file)
+  return if file == ".git"
+
   if file =~ /.erb$/
     puts "generating ~/#{file.sub(/\.erb$/, '')}"
     File.open(File.join(ENV['HOME'], "#{file.sub(/\.erb$/, '')}"), 'w') do |new_file|
