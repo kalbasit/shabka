@@ -196,6 +196,11 @@ for_window [instance="^chat-scratchpad$"] move scratchpad
 bindsym $mod+Return exec "i3-dynamic-workspaces --switch-workspace"
 bindsym $mod+Shift+Return exec "i3-dynamic-workspaces --add-workspace"
 
+# Synergy
+bindsym $mod+$alt+d exec --no-startup-id synergys
+bindsym $mod+$alt+c exec --no-startup-id "synergyc gaea.mtv"
+bindsym $mod+$alt+s exec --no-startup-id "killall synergys; killall synergyc"
+
 # autostart
 exec --no-startup-id ~/.filesystem/bin/Gwall
 exec urxvt -name main
