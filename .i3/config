@@ -204,8 +204,8 @@ bindsym $mod+Return exec "i3-dynamic-workspaces --switch-workspace"
 bindsym $mod+Shift+Return exec "i3-dynamic-workspaces --add-workspace"
 
 # Synergy
-bindsym $mod+$alt+d exec --no-startup-id synergys
-bindsym $mod+$alt+c exec --no-startup-id "synergyc gaea.mtv"
+bindsym $mod+$alt+d exec --no-startup-id "start_daemon /usr/bin/synergys"
+bindsym $mod+$alt+c exec --no-startup-id "start_daemon /usr/bin/synergyc gaea.mtv"
 bindsym $mod+$alt+s exec --no-startup-id "killall synergys; killall synergyc"
 
 # vpn
