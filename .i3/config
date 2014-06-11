@@ -193,6 +193,7 @@ assign [class="^URxvt$" instance="^main$"] → term
 assign [class="^X-www-browser$"] → web
 assign [class="^Emacs24$" instance="^mail$"] → mail
 assign [class="^Emacs24$" instance="^chat$"] → chat
+assign [class="^URxvt$" instance="^ovpn$"] → vpn
 
 # automove to scratchpad
 for_window [instance="^mail-scratchpad$"] move scratchpad
@@ -206,6 +207,9 @@ bindsym $mod+Shift+Return exec "i3-dynamic-workspaces --add-workspace"
 bindsym $mod+$alt+d exec --no-startup-id synergys
 bindsym $mod+$alt+c exec --no-startup-id "synergyc gaea.mtv"
 bindsym $mod+$alt+s exec --no-startup-id "killall synergys; killall synergyc"
+
+# vpn
+bindsym $mod+Shift+v exec "i3-msg 'workspace vpn'; urxvt -name ovpn -e zsh -i -c 'ovpn -g'"
 
 # autostart
 exec --no-startup-id ~/.filesystem/bin/Gwall
