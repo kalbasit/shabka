@@ -128,6 +128,7 @@ bindsym $mod+Shift+z exec --no-startup-id gnome-screensaver-command -l
 # switch between the current and the previously focused one
 bindsym $mod+b workspace back_and_forth
 bindsym $mod+Shift+b move container to workspace back_and_forth
+bindsym $alt+Tab workspace back_and_forth
 
 # Make the currently focused window a scratchpad
 bindsym $mod+Shift+minus move scratchpad
