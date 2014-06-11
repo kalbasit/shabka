@@ -219,3 +219,4 @@ exec $HOME/.filesystem/bin/named-emacs-frame mail
 exec $HOME/.filesystem/bin/named-emacs-frame mail-scratchpad mail
 exec $HOME/.filesystem/bin/named-emacs-frame chat
 exec $HOME/.filesystem/bin/named-emacs-frame chat-scratchpad chat
+exec --no-startup-id nm-applet
