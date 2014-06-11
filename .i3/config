@@ -123,7 +123,7 @@ bindsym $mod+Shift+r restart
 bindsym $mod+Shift+q exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
 # lock screen
-bindsym $mod+Shift+z exec --no-startup-id gnome-screensaver-command -l
+bindsym $mod+Shift+z exec --no-startup-id lock_screen
 
 # switch between the current and the previously focused one
 bindsym $mod+b workspace back_and_forth
