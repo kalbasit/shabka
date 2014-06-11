@@ -1,3 +1,0 @@
-[submodule ".filesystem/opt/tmux-powerline"]
-	path = .filesystem/opt/tmux-powerline
-	url = git://github.com/erikw/tmux-powerline.git
