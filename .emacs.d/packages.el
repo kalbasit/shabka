@@ -379,3 +379,4 @@
   :config (add-hook 'prog-mode-hook 'guru-mode))
 
 (use-package inf-ruby)
+(use-package ruby-tools)
