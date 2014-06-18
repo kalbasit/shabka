@@ -380,3 +380,4 @@
 
 (use-package inf-ruby)
 (use-package ruby-tools)
+(use-package ruby-end)
