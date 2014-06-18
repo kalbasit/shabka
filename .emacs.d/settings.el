@@ -79,3 +79,9 @@
 
 ;; smart tab behavior - indent or complete
 (setq tab-always-indent 'complete)
+
+;; Python indent with two spaces
+(add-hook 'python-mode-hook
+          (function (lambda ()
+                      (setq indent-tabs-mode nil
+                            tab-width 2))))
