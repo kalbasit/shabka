@@ -377,3 +377,5 @@
 
 (use-package guru-mode
   :config (add-hook 'prog-mode-hook 'guru-mode))
+
+(use-package inf-ruby)
