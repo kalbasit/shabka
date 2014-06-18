@@ -20,6 +20,7 @@
 (depends-on "git")
 (depends-on "git-gutter")
 (depends-on "gnus-alias")
+(depends-on "guru-mode")
 (depends-on "ht")
 (depends-on "ido-ubiquitous")
 (depends-on "ido-vertical-mode")

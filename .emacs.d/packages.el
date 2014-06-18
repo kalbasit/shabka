@@ -374,3 +374,6 @@
 
 (use-package undo-tree
   :init (global-undo-tree-mode))
+
+(use-package guru-mode
+  :config (add-hook 'prog-mode-hook 'guru-mode))
