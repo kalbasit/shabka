@@ -354,7 +354,8 @@
   :config
   (progn
     (setq ispell-program-name "aspell")
-    (setq ispell-extra-args '("--sug-mode=ultra"))))
+    (setq ispell-extra-args '("--sug-mode=ultra"))
+    (add-hook 'text-mode-hook 'enable-flyspell)))
 
 (use-package go-mode
   :mode ("\\.go$" . go-mode)
