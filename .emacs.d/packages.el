@@ -370,3 +370,6 @@
 
 (use-package anzu
   :init (global-anzu-mode))
+
+(use-package undo-tree
+  :init (global-undo-tree-mode))
