@@ -309,6 +309,11 @@
     (insert "{}")
     (backward-char 1)))
 
+(defun enable-flyspell ()
+    "Enable command `flyspell-mode'"
+      (when (executable-find ispell-program-name)
+            (flyspell-mode +1)))
+
 (defun indent-all ()
   "Indent entire buffer."
   (interactive)
