@@ -363,3 +363,7 @@
     (add-hook 'before-save-hook 'gofmt-before-save)
     (bind-key "C-c C-r" 'go-remove-unused-imports go-mode-map)
     (bind-key "C-c i" 'go-goto-imports go-mode-map)))
+
+(use-package flycheck
+  :init (global-flycheck-mode +1)
+  :config (add-hook 'prog-mode-hook 'flycheck-mode))
