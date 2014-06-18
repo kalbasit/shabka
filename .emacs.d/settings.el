@@ -68,5 +68,11 @@
 (setq global-auto-revert-non-file-buffers t)
 (setq auto-revert-verbose nil)
 
+;; Newline at end of file
+(setq require-final-newline t)
+
+;; delete the selection with a keypress
+(delete-selection-mode t)
+
 ;; Show column number in mode line
 (column-number-mode 1)
