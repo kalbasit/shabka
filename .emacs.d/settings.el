@@ -76,3 +76,6 @@
 
 ;; Show column number in mode line
 (column-number-mode 1)
+
+;; smart tab behavior - indent or complete
+(setq tab-always-indent 'complete)
