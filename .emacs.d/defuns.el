@@ -98,6 +98,7 @@
     (when (y-or-n-p "Start ERC? ") ;; no: maybe start ERC
       (erc :server "gaea2.eem.corp.google.com" :port 6667 :nick "wmn" :full-name "Wael Nasreddine" :password bitlbee-nick-pass)
       (erc :server "irc.freenode.net" :port 6667 :nick "eMxyzptlk" :full-name "Wael Nasreddine" :password freenode-nick-pass)
+      (erc :server "irc.twice-irc.de" :port 6667 :nick "eMxyzptlk" :full-name "Wael Nasreddine" :password twice-irc-nick-pass)
       (erc-tls :server "irc.corp.google.com" :port 6697 :nick "wmn" :full-name "Wael Nasreddine" :password corp-nick-pass))))
 
 ;; NOTE: (region-beginning) and (region-end) are not saved in

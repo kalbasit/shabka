@@ -336,9 +336,9 @@
     (load "~/.ercpass") ;; load erc passwords
     (setq erc-autojoin-mode t)
     (setq erc-autojoin-channels-alist
-    '((".*\\.freenode.net" "#notmuch" "#emacs" "#wingo")
+    '((".*\\.freenode.net" "#notmuch" "#emacs")
       (".*\\.twice-irc.de" "#i3")
-      (".*irc.*\\.corp.google.com" "#ci" "#ci-oncall" "#corpdb")))
+      (".*irc.*\\.corp.google.com" "#ci" "#ci-oncall" "#corpdb" "#goobuntu")))
     ;; don't show any of this
     (setq erc-hide-list '("JOIN" "PART" "QUIT" "NICK"))
     ;; don't prompt for nickserv password
