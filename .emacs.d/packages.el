@@ -366,8 +366,7 @@
     (bind-key "C-c i" 'go-goto-imports go-mode-map)))
 
 (use-package flycheck
-  :init (global-flycheck-mode +1)
-  :config (add-hook 'prog-mode-hook 'flycheck-mode))
+  :init (add-hook 'prog-mode-hook 'flycheck-mode))
 
 (use-package anzu
   :init (global-anzu-mode))
