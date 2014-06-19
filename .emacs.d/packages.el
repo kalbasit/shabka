@@ -378,7 +378,20 @@
   :config (add-hook 'prog-mode-hook 'guru-mode))
 
 (use-package inf-ruby)
+
 (use-package ruby-tools)
+
 (use-package ruby-end)
+
 (use-package wrap-region
   :init (add-hook 'prog-mode-hook 'wrap-region-mode))
+
+(use-package yasnippet
+  :init
+  (progn
+    (setq yas-snippet-dirs
+          '(
+            "~/.emacs.d/snippets"        ;; personal snippets
+            "~/.emacs.d/crotti_snippets" ;; official snippets
+            ))
+    (add-hook 'prog-mode-hook 'yas-minor-mode)))
