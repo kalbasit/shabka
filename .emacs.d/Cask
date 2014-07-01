@@ -35,6 +35,7 @@
 (depends-on "projectile")
 (depends-on "rhtml-mode")
 (depends-on "rinari")
+(depends-on "recentf")
 (depends-on "rspec-mode")
 (depends-on "ruby-end")
 (depends-on "ruby-tools")

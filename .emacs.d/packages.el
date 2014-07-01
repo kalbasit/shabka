@@ -331,7 +331,7 @@
           (quote
             (autoaway autojoin button completion fill irccontrols
              list match menu move-to-prompt netsplit networks
-             noncommands notify readonly ring scrolltobottom smiley
+             noncommands notifications notify readonly ring scrolltobottom smiley
              stamp spelling track truncate unmorse)))
     (load "~/.ercpass") ;; load erc passwords
     (setq erc-autojoin-mode t)
@@ -395,3 +395,10 @@
             "~/.emacs.d/crotti_snippets" ;; official snippets
             ))
     (add-hook 'prog-mode-hook 'yas-minor-mode)))
+
+(use-package recentf
+  :init
+  (progn
+    (setq recentf-max-menu-items 25)
+    (recentf-mode 1))
+  :bind ("C-x C-r" . recentf-open-files))
