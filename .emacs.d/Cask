@@ -22,6 +22,7 @@
 (depends-on "gnus-alias")
 (depends-on "guru-mode")
 (depends-on "ht")
+(depends-on "ibuffer-vc")
 (depends-on "ido-ubiquitous")
 (depends-on "ido-vertical-mode")
 (depends-on "inf-ruby")

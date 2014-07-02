@@ -1,3 +1,6 @@
+(use-package ibuffer-vc
+  :init (ibuffer-vc-set-filter-groups-by-vc-root))
+
 (use-package company
   :init (global-company-mode 1)
   :config
