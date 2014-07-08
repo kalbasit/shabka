@@ -50,11 +50,9 @@ if [[ -d $HOME/.filesystem/bin ]]; then
 fi
 path+=($HOME/code/go/bin(N-/))
 path+=($HOME/.cask/bin(N-/))
-for i in $HOME/.filesystem/opt/*; do
-  path+=($i/bin(N-/))
-done
-for i in $HOME/.filesystem/opt/*; do
-  export DYLD_LIBRARY_PATH=$i/lib:$DYLD_LIBRARY_PATH
+path+=($HOME/.evm/bin(N-/))
+for i in $HOME/.filesystem/opt/**/bin; do
+  path+=($i(N-/))
 done
 if [[ -d /brew ]]; then
   path=(/brew/bin $path)
