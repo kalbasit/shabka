@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+# battery information
+# Made by phrakture (http://phraktured.net/config/screen/batinfo)
+# Modified by Wael Nasreddine
+
+stat=` acpi | tr -s , \  | cut -d\  -f4 `
+pct=` acpi | tr -s , \  | cut -d\  -f5 `
+
+color="{k.}"
+case $stat in
+    discharging)
+        if acpi -a | grep -q "on-line"; then
+            # The battery is actually full not discharging!!!
+            stat="full"
+            color="{kg}"
+        else
+            color="{kr}"
+        fi
+        ;;
+    charging) color="{kg}" ;;
+    *) color="{k.}" ;;
+esac
+
+echo "$color$pct{-}($color$stat{-})"

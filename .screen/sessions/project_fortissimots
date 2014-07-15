@@ -1,0 +1,28 @@
+# SESSION NAME=Fortissimots Project
+
+# Change to the project's folder
+  chdir $HOME/Code/Agence_Durable/fortissimots
+
+# Source the config file
+  source $HOME/.screen/config
+
+# Overwrite default escape
+  escape ^zz
+
+# Overwrite default shell.
+  shell -$SHELL
+
+# Status bar
+  caption always "%{=bu kb} %=< %?%-Lw%?%{kc}[:%n %t:]%{kb}%?%+Lw%? >%= "
+  hardstatus alwayslastline "%{+b bw}[%H :: $USER]%{=b kw} %=%{=b bw}[%m.%d.%y %0C%a]"
+
+  # Apps
+  bind G screen -t 'Guard'      0 bundle exec guard
+
+# Default Buffers
+#               <Title>         <Screen Number>     <Command>
+  screen    -t  Guard           0                   bundle exec guard
+  screen    -t  Shell           1
+  screen    -t  Shell           2
+  screen    -t  Shell           3
+  select 1

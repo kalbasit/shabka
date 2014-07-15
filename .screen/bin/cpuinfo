@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+# CPU information
+# Made by phrakture (http://phraktured.net/config/screen/batinfo)
+# Modified by Wael Nasreddine
+
+temp=` acpi -t | tr -s , \  | cut -d\  -f4 `
+t=${temp%%.*}
+color="{k.}"
+if [ $t -ge 140 ]; then
+    color="{kr}"
+elif [ $t -ge 130 ]; then
+    color="{ky}"
+fi
+
+echo "$color$temp{-}" `cpufreq-info -f` |\
+    awk '{printf "%0.3fGHz (%sC)",$2/1000000,$1}'
