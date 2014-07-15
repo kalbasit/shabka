@@ -63,7 +63,7 @@ abstracts = {
   ##
 
   # text to insert at the beginning of each non-message line
-  line_start = "%B-%n!%B-%n ";
+  line_start = "%g-%W!%g-%n ";
 
   # timestamp styling, nothing by default
   timestamp = "$*";
@@ -100,25 +100,25 @@ abstracts = {
   ##
 
   # highlighted nick/host is printed (joins)
-  channick_hilight = "%C$*%n";
-  chanhost_hilight = "{nickhost %c$*%n}";
+  channick_hilight = "%G$*%n";
+  chanhost_hilight = "{nickhost %g$*%n}";
 
   # nick/host is printed (parts, quits, etc.)
-  channick = "%c$*%n";
+  channick = "%g$*%n";
   chanhost = "{nickhost $*}";
 
   # highlighted channel name is printed
-  channelhilight = "%c$*%n";
+  channelhilight = "%g$*%n";
 
   # ban/ban exception/invite list mask is printed
-  ban = "%c$*%n";
+  ban = "%g$*%n";
 
   ##
   ## messages
   ##
 
   # the basic styling of how to print message, $0 = nick mode, $1 = nick
-  msgnick = "%K<%n$0$1-%K>%n %|";
+  msgnick = "%W<%n%g$0%n$1-%W>%n %|";
 
   # message from you is printed. "msgownnick" specifies the styling of the
   # nick ($0 part in msgnick) and "ownmsgnick" specifies the styling of the
@@ -138,7 +138,7 @@ abstracts = {
 
   # $0 = nick mode, $1 = nick
   ownmsgnick = "{msgnick $0 $1-}";
-  ownnick = "%_$*%n";
+  ownnick = "%W$*%n";
 
   # public message in channel, $0 = nick mode, $1 = nick
   pubmsgnick = "{msgnick $0 $1-}";
@@ -146,14 +146,14 @@ abstracts = {
 
   # public message in channel meant for me, $0 = nick mode, $1 = nick
   pubmsgmenick = "{msgnick $0 $1-}";
-  menick = "%Y$*%n";
+  menick = "%G$*%n";
 
   # public highlighted message in channel
   # $0 = highlight color, $1 = nick mode, $2 = nick
   pubmsghinick = "{msgnick $1 $0$2-%n}";
 
   # channel name is printed with message
-  msgchannel = "%K:%c$*%n";
+  msgchannel = "%K:%g$*%n";
 
   # private message, $0 = nick, $1 = host
   privmsg = "[%R$0%K(%r$1-%K)%n] ";
@@ -163,7 +163,7 @@ abstracts = {
 
   # own private message in query
   ownprivmsgnick = "{msgnick  $*}";
-  ownprivnick = "%_$*%n";
+  ownprivnick = "%W$*%n";
 
   # private message in query
   privmsgnick = "{msgnick  %R$*%n}";
@@ -173,7 +173,7 @@ abstracts = {
   ##
 
   # used internally by this theme
-  action_core = "%_ * $*%n";
+  action_core = "%W * $*%n";
 
   # generic one that's used by most actions
   action = "{action_core $*} ";
@@ -182,10 +182,10 @@ abstracts = {
   ownaction = "{action $*}";
 
   # own action with target, both private/public
-  ownaction_target = "{action_core $0}%K:%c$1%n ";
+  ownaction_target = "{action_core $0}%K:%g$1%n ";
 
   # private action sent by others
-  pvtaction = "%_ (*) $*%n ";
+  pvtaction = "%W (*) $*%n ";
   pvtaction_query = "{action $*}";
 
   # public action sent by others
@@ -211,13 +211,13 @@ abstracts = {
   ctcp = "%g$*%n";
 
   # wallops
-  wallop = "%_$*%n: ";
+  wallop = "%W$*%n: ";
   wallop_nick = "%n$*";
-  wallop_action = "%_ * $*%n ";
+  wallop_action = "%W * $*%n ";
 
   # netsplits
   netsplit = "%R$*%n";
-  netjoin = "%C$*%n";
+  netjoin = "%G$*%n";
 
   # /names list
   names_prefix = "";
@@ -235,14 +235,14 @@ abstracts = {
   # DCC chat, own msg/action
   dccownmsg = "[%r$0%K($1-%K)%n] ";
   dccownnick = "%R$*%n";
-  dccownquerynick = "%_$*%n";
+  dccownquerynick = "%W$*%n";
   dccownaction = "{action $*}";
-  dccownaction_target = "{action_core $0}%K:%c$1%n ";
+  dccownaction_target = "{action_core $0}%K:%g$1%n ";
 
   # DCC chat, others
   dccmsg = "[%G$1-%K(%g$0%K)%n] ";
   dccquerynick = "%G$*%n";
-  dccaction = "%_ (*dcc*) $*%n %|";
+  dccaction = "%W (*dcc*) $*%n %|";
 
   ##
   ## statusbar
@@ -250,41 +250,44 @@ abstracts = {
 
   # default background for all statusbars. You can also give
   # the default foreground color for statusbar items.
-  sb_background = "%4%w";
+  #sb_background = "%4%w";
+  sb_background = "%w";
 
   # default backround for "default" statusbar group
-  #sb_default_bg = "%4";
+  sb_default_bg = "%K%w";
+
   # background for prompt / input line
   sb_prompt_bg = "%n";
+
   # background for info statusbar
   sb_info_bg = "%8";
+
   # background for topicbar (same default)
-  #sb_topic_bg = "%4";
+  sb_topic_bg = "%n";
 
   # text at the beginning of statusbars. sb-item already puts
   # space there,so we don't use anything by default.
-  sbstart = "";
+  sbstart = "%W>>%n";
   # text at the end of statusbars. Use space so that it's never
   # used for anything.
   sbend = " ";
 
-  topicsbstart = "{sbstart $*}";
-  topicsbend = "{sbend $*}";
+  topicsbstart = "{sbstart}";
+  topicsbend = "";
 
-  prompt = "[$*] ";
+  prompt = "%g[%n$*%g]%n ";
 
-  sb = " %c[%n$*%c]%n";
-  sbmode = "(%c+%n$*)";
-  sbaway = " (%GzZzZ%n)";
-  sbservertag = ":$0 (change with ^X)";
-  sbnickmode = "$0";
+  sb = " %g(%n$*%g)%n";
+  sbmode = "[%g+%n$*]";
+  sbaway = "[%9away%n]";
+  sbservertag = ":$0";
 
   # activity in statusbar
 
   # ',' separator
-  sb_act_sep = "%c$*";
+  sb_act_sep = "%g$*";
   # normal text
-  sb_act_text = "%c$*";
+  sb_act_text = "%g$*";
   # public message
   sb_act_msg = "%W$*";
   # hilight
@@ -293,5 +296,5 @@ abstracts = {
   sb_act_hilight_color = "$0$1-%n";
 };
 formats = {
-  "fe-common/core" = { pubmsg = "{pubmsgnick $2 {pubnick \00312$0}}$1"; };
+  "fe-common/core" = { pubmsg = "{pubmsgnick $2 {pubnick \00303$0}}$1"; };
 };
