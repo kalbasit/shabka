@@ -325,28 +325,6 @@
   :mode (("\\.markdown$" . markdown-mode)
    ("\\.md$" . markdown-mode)))
 
-(use-package erc
-  :commands erc
-  :bind ("C-c C-e" . erc-start-or-switch)
-  :config
-  (progn
-    (setq erc-modules
-          (quote
-            (autoaway autojoin button completion fill irccontrols
-             list match menu move-to-prompt netsplit networks
-             noncommands notifications notify readonly ring scrolltobottom smiley
-             stamp spelling track truncate unmorse)))
-    (load "~/.ercpass") ;; load erc passwords
-    (setq erc-autojoin-mode t)
-    (setq erc-autojoin-channels-alist
-    '((".*\\.freenode.net" "#notmuch" "#emacs")
-      (".*\\.twice-irc.de" "#i3")
-      (".*irc.*\\.corp.google.com" "#ci" "#ci-oncall" "#corpdb" "#goobuntu")))
-    ;; don't show any of this
-    (setq erc-hide-list '("JOIN" "PART" "QUIT" "NICK"))
-    ;; don't prompt for nickserv password
-    (setq erc-prompt-for-nickserv-password nil)))
-
 (use-package drag-stuff
   :init (drag-stuff-global-mode 1)
   :bind (("M-N" . drag-stuff-down)

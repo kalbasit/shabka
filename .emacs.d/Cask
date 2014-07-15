@@ -11,8 +11,6 @@
 (depends-on "calc")
 (depends-on "company")
 (depends-on "drag-stuff")
-(depends-on "erc")
-(depends-on "erc")
 (depends-on "f")
 (depends-on "flx-ido")
 (depends-on "flyspell")

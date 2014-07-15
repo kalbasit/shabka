@@ -139,7 +139,8 @@ bindsym $alt+Shift+m exec $HOME/.filesystem/bin/named-emacs-frame mail-scratchpa
 bindsym $alt+m [instance="^mail-scratchpad$"] scratchpad show
 
 # chat client scratchpad
-bindsym $alt+Shift+c exec $HOME/.filesystem/bin/named-emacs-frame chat-scratchpad chat
+bindsym $alt+Shift+c exec urxvt -name chat-scratchpad -e zsh -i -c 'screen -c ~/.screen/sessions/irssi'
+
 bindsym $alt+c [instance="^chat-scratchpad$"] scratchpad show
 
 # https://github.com/tybitsfox/i3msg/blob/master/.i3/config
@@ -186,7 +187,7 @@ assign [class="^URxvt$" instance="^main$"] → term
 assign [class="^X-www-browser$" instance="^crx_pnhechapfaindjhompbnflcldabbghjo$"] → ssh
 assign [class="^X-www-browser$"] → web
 assign [class="^Emacs24$" instance="^mail$"] → mail
-assign [class="^Emacs24$" instance="^chat$"] → chat
+assign [class="^URxvt$" instance="^chat$"] → chat
 assign [class="^URxvt$" instance="^ovpn$"] → vpn
 
 # automove to scratchpad
@@ -206,6 +207,6 @@ exec urxvt -name main
 exec x-www-browser
 exec $HOME/.filesystem/bin/named-emacs-frame mail
 exec $HOME/.filesystem/bin/named-emacs-frame mail-scratchpad mail
-exec $HOME/.filesystem/bin/named-emacs-frame chat
-exec $HOME/.filesystem/bin/named-emacs-frame chat-scratchpad chat
+exec urxvt -name chat-scratchpad -e zsh -i -c 'screen -c ~/.screen/sessions/irssi'
+exec urxvt -name chat -e zsh -i -c 'screen -c ~/.screen/sessions/irssi'
 exec --no-startup-id nm-applet
