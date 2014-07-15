@@ -68,7 +68,7 @@ URxvt*iso14755:        false
 #define S_green         #859900
 
 *background:            #002b36
-*foreground:            #839496
+*foreground:            #ffffff
 *cursorColor:           #93a1a1
 *pointerColorBackground:#586e75
 *pointerColorForeground:#93a1a1
