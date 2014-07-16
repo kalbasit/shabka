@@ -15,6 +15,7 @@
 (depends-on "flx-ido")
 (depends-on "flyspell")
 (depends-on "flycheck")
+(depends-on "gist")
 (depends-on "git")
 (depends-on "git-gutter")
 (depends-on "gnus-alias")

@@ -341,6 +341,10 @@
     (setq ispell-extra-args '("--sug-mode=ultra"))
     (add-hook 'text-mode-hook 'enable-flyspell)))
 
+(use-package gist
+  :commands (gist-list gist-region gist-region-private gist-buffer
+  gist-buffer-private gist-region-or-buffer gist-region-or-buffer-private))
+
 (use-package go-mode
   :mode ("\\.go$" . go-mode)
   :config
