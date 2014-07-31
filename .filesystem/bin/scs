@@ -1,0 +1,229 @@
+#!/usr/bin/env bash
+#
+#   vim:ft=sh:fenc=UTF-8:ts=4:sts=4:sw=4:expandtab:foldmethod=marker:foldlevel=0:
+#
+#   A little script to make life easier with GNU screen sessions.
+#   Put any number of sessions in $HOME/.screen/sessions/ to load them
+#   from this script, an example script:
+#        # SESSION NAME=Azureus
+#        # SESSION EXE=azureus
+#
+#        source $HOME/.screen/config
+#
+#        # Overwrite default escape
+#          escape ^aa
+#
+#        # Default Buffers
+#        #               <Title>         <Screen Number>     <Command>
+#          screen    -t  Azureus         0                   azureus
+#          select 0
+#
+#   The "SESSION NAME=" at the begining of the file is very important
+#   it will be used to identify the session when you execute this script
+#   and in "screen -ls", any file that doesn't include the above keyword
+#   will be ignored...
+#
+#   The "# SESSION EXE=" is optional, if it exists, the value of it will
+#   be checked as an executable in PATH, if it doesn't exist, the conf file
+#   will be ignored.
+#
+#   And please don't forget to source the common configuration file
+#   source $HOME/.screen/config
+#   otherwize only what is in the session file will be used!
+#
+#   Copyright (c) 2007 Wael Nasreddine <wael.nasreddine@gmail.com>
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
+#   USA.
+#
+
+# Bootstrap{{{
+bootstrap="`dirname $0`/.bootstrap"
+if [ -f "${bootstrap}" ]; then
+    source "${bootstrap}"
+else
+    echo "Cannot bootstrap"
+    exit 54
+fi
+unset bootstrap
+#}}}
+# Sanity checks#{{{
+if [ ! -L "$HOME/.screenrc" ]; then
+    print_error 0 "Please make sure to link $HOME/.screenrc to one of the files in $HOME/.screen/sessions/"
+    exit 1
+fi
+if [ ! -d "$HOME/.screen/sessions" -o ! -f "$HOME/.screen/config" ]; then
+    print_error 0 "Please make sure that you have the folder $HOME/.screen/ with all the required files."
+    exit 1
+fi
+#}}}
+# Getting the available session names#{{{
+SessionsNames=("0:Default:$HOME/.screenrc")
+j=1
+for i in $HOME/.screen/sessions/*; do
+    if grep -q "# SESSION NAME=" "${i}"; then
+        name="$(grep "# SESSION NAME=" "${i}" | sed -e "s@# SESSION NAME=\(.*\)@\1@g" -e "s@ @_@g")"
+        exe="$(grep "# SESSION EXE=" "${i}" | sed -e "s@# SESSION EXE=\(.*\)@\1@g" -e "s@ @_@g")"
+        if [ "${name}" = "Default" ]; then
+            # Default already included and all the session files are for the
+            # symlink ~/.screenrc so skip them all
+            continue
+        fi
+        if [ -n "${exe}" ]; then
+            if ! type "${exe}" &> /dev/null && ! [ -x "$(/usr/bin/which "${exe}" &> /dev/null)" ]; then
+                continue
+            fi
+        fi
+        SessionsNames=(${SessionsNames[@]} "${j}:${name}:${i}")
+        (( j++ ))
+    fi
+done
+unset j
+#}}}
+# Wiping GNU screen sessions#{{{
+screen -wipe &> /dev/null
+#}}}
+# Building the Sessions variable#{{{
+Sessions=()
+for i in ${SessionsNames[@]}; do
+    number="$(echo ${i} | cut -d':' -f1)"
+    name="$(echo ${i} | cut -d':' -f2)"
+    path="$(echo ${i} | cut -d':' -f3)"
+    if screen -ls | grep -q "\.${name}.*(.*)$"; then
+        # Session exist, is it attached or not?
+        if screen -ls | grep -q "\.${name}.*(Attached)$"; then
+            state="1"
+        else
+            state="0"
+        fi
+    else
+        state="-1"
+    fi
+    Sessions=(${Sessions[@]} "${number}:${name}:${path}:${state}")
+    unset number name path state
+done
+# Did we get a session name on the command line? {{{
+if [ -n "${1}" ]; then
+    GIVEN_SESSION_NAME="${1}"
+fi
+# }}}
+# If no session was requested from the command line, ask for it {{{
+if [ -z "${GIVEN_SESSION_NAME}" ]; then
+# }}}
+    # Are we in a screen already? {{{
+    if [ -n "${STY}" ]; then
+        print_warning 0 "${FG_YELLOW_B}WARNING${FG_WHITE_B}: You are already in a screen session!"
+    fi
+    #}}}
+    # Great, now all we need to do is print the list ;)#{{{
+    print_info 0 "Sessions List:"
+    for i in ${Sessions[@]}; do
+        number="$(echo ${i} | cut -d':' -f1)"
+        name="$(echo ${i} | cut -d':' -f2)"
+        state="$(echo ${i} | cut -d':' -f4)"
+        case "${state}" in
+            "-1")
+                # It doesn't exist, which means that the session has never been launched
+                print_info 0 "${FG_RED_B}${number}.${FG_CLEAR}\t\t${FG_RED_B}${name}${FG_CLEAR}" true false
+                ;;
+            "0")
+                # It's Detached
+                print_info 0 "${FG_MAGNETA_B}${number}.${FG_CLEAR}\t\t${FG_MAGNETA_B}${name}${FG_CLEAR}" true false
+                ;;
+            "1")
+                # It's Attached
+                print_info 0 "${FG_GREEN_B}${number}.${FG_CLEAR}\t\t${FG_GREEN_B}${name}${FG_CLEAR}" true false
+                ;;
+        esac
+    done
+    unset i number name state
+
+    echo
+    print_info 1 "Legend:\t" false
+    print_info 1 "${FG_GREEN_B}Attached${FG_CLEAR}\t" false false
+    print_info 1 "${FG_MAGNETA_B}Detached${FG_CLEAR}\t" false false
+    print_info 1 "${FG_RED_B}Missing${FG_CLEAR}\t" false false
+    echo
+fi
+#}}}
+# Wait for a key stroke#{{{
+# Ok Good, now everything that *should* be displayed has been displayed,
+# What actually should be done now is wait for a key, check if it matched any
+# of the sessions, and depending on its state, launch it or attach it.
+while true; do
+    # Only request the key if no session was requested from the command line
+    if [ -z "${GIVEN_SESSION_NAME}" ]; then
+        unset key action
+        read -sn 1 key
+        if ! isNumber "${key}"; then
+            continue
+        fi
+    else
+        key="-1"
+    fi
+    for i in ${Sessions[@]}; do
+        number="$(echo ${i} | cut -d':' -f1)"
+        name="$(echo ${i} | cut -d':' -f2)"
+        path="$(echo ${i} | cut -d':' -f3)"
+        state="$(echo ${i} | cut -d':' -f4)"
+        if [ "${key}" -eq "${number}" -o "${name}" = "${GIVEN_SESSION_NAME}" ]; then
+            # Ok we got it
+            case "${state}" in
+                "-1")
+                    # It doesn't exist, which means that the session has never been launched
+
+                    # Before launching Screen, we need to go to $HOME, otherwize all shells
+                    # will be automatically at $(pwd)
+                    OLDPWD="$(pwd)"
+                    if [ -z "${GIVEN_SESSION_NAME}" ]; then
+                        print_info 0 "Launch '${name}' session? [y/n]" false
+                        read -sn 1 answer; echo
+                    else
+                        answer='y'
+                    fi
+                    if isTrue "${answer}"; then
+                        cd
+                        if [ "${name}" = "Default" ]; then
+                            store_env
+                            screen -S "${name}"
+                        else
+                            store_env
+                            screen -S "${name}" -c "${path}"
+                        fi
+                        cd "${OLDPWD}"
+                    fi
+                    exit 0
+                    ;;
+                "0"|"1")
+                    # It's running, attach it here
+                    print_info 0 "Attaching the '${name}' session."
+                    sleep 0.5
+                    store_env
+                    screen -DRRr "${name}"
+                    exit 0
+                    ;;
+            esac
+        fi
+    done
+    if [ -n "${GIVEN_SESSION_NAME}" ]; then
+        # Seems that the given session name does not exist
+        echo "${GIVEN_SESSION_NAME} is not a valid session name"
+        # The easiest is to restart the script
+        $0
+        exit 0
+    fi
+
+done
+#}}}
