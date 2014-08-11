@@ -40,7 +40,7 @@ FileName="$(date +%Y)/$(date +%m)-$(date +%B)/$(date +%d)-$(date +%A).png"
 #}}}
 # Sanity Check#{{{
 Temp="$( echo "${Command}" | awk '{print $1}' )"
-if [ ! -x "$(${W} ${Temp} 2> /dev/null)" ]; then
+if [ ! -x "$(which ${Temp} 2> /dev/null)" ]; then
     print_error 0 "'${Temp}' does not exist or it is not executable, Cannot continue."
     exit 1
 fi
