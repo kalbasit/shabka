@@ -347,6 +347,9 @@
   :commands (gist-list gist-region gist-region-private gist-buffer
   gist-buffer-private gist-region-or-buffer gist-region-or-buffer-private))
 
+(use-package protobuf-mode
+  :mode ("\\.proto$" . protobuf-mode))
+
 (use-package go-mode
   :mode ("\\.go$" . go-mode)
   :config
@@ -363,9 +366,6 @@
 
 (use-package undo-tree
   :init (global-undo-tree-mode))
-
-(use-package guru-mode
-  :config (add-hook 'prog-mode-hook 'guru-mode))
 
 (use-package inf-ruby)
 
