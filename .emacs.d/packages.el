@@ -23,24 +23,24 @@
       :config
       (progn
         (setq gnus-alias-identity-alist
-        '(("personal"
-           nil ;; Does not refer to any other identity
-           "Wael Nasreddine <wael.nasreddine@gmail.com>" ;; Sender address
-           nil ;; No organization header
-           nil ;; No extra headers
-           nil ;; No extra body text
-           "~/.signatures/personal")
-          ("work"
-           nil
-           "Wael Nasreddine <wmn@google.com>" ;; Sender address
-           "Google"
-           nil
-           nil
-           "~/.signatures/work")))
+              '(("personal"
+                 nil ;; Does not refer to any other identity
+                 "Wael Nasreddine <wael.nasreddine@gmail.com>" ;; Sender address
+                 nil ;; No organization header
+                 nil ;; No extra headers
+                 nil ;; No extra body text
+                 "~/.signatures/personal")
+                ("work"
+                 nil
+                 "Wael Nasreddine <wmn@google.com>" ;; Sender address
+                 "Google"
+                 nil
+                 nil
+                 "~/.signatures/work")))
         ;; Define the rules TODO: Add all of personal addresses
         (setq gnus-alias-identity-rules (quote
-                                          (("personal" ("any" "wael.nasreddine@gmail.com" both) "personal")
-                                           ("work" ("any" "\\(wmn\\|wnasreddine\\)@google.com" both) "work"))))
+                                         (("personal" ("any" "wael.nasreddine@gmail.com" both) "personal")
+                                          ("work" ("any" "\\(wmn\\|wnasreddine\\)@google.com" both) "work"))))
         ;; Use "work" identity by default
         (setq gnus-alias-default-identity "work")
         ;; Determine identity when message-mode loads
@@ -49,26 +49,26 @@
   (progn
     (when (string= system-name "wmn-glaptop.roam.corp.google.com")
       (setq notmuch-command
-        (f-expand "remote-notmuch" (concat (f-full (getenv "HOME")) "/.filesystem/bin"))))
+            (f-expand "remote-notmuch" (concat (f-full (getenv "HOME")) "/.filesystem/bin"))))
     (setq notmuch-saved-searches
-      '((:name "flagged" :query "tag:flagged")
-        (:name "tome-work" :query "tag:unread AND tag:work AND to:wmn@google.com")
-        (:name "CI" :query "(tag:ci_sre OR tag:ci_sre_mtv) AND date:this_month..")
-        (:name "CorpDB" :query "(tag:corpdb_sre OR tag:corpdb_team OR tag:corpdb_users) AND date:this_month..")
-        (:name "family-new" :query "tag:family AND tag:unread")
-        (:name "wife-new" :query "tag:wife AND tag:unread")
-        (:name "consulting-new" :query "tag:consulting AND tag:unread")
-        (:name "inbox-work-new" :query "tag:work AND tag:unread AND tag:inbox")
-        (:name "inbox-personal-new" :query "tag:personal AND tag:unread AND tag:inbox")
-        (:name "work-new" :query "tag:work AND tag:unread")
-        (:name "personal-new" :query "tag:personal AND tag:unread")
-        (:name "work" :query "tag:work")
-        (:name "personal" :query "tag:personal")
-        (:name "inbox-unread" :query "tag:inbox AND tag:unread")
-        (:name "unread" :query "tag:unread")
-        (:name "inbox" :query "tag:inbox")))
+          '((:name "flagged" :query "tag:flagged")
+            (:name "tome-work" :query "tag:unread AND tag:work AND to:wmn@google.com")
+            (:name "CI" :query "(tag:ci_sre OR tag:ci_sre_mtv) AND date:this_month..")
+            (:name "CorpDB" :query "(tag:corpdb_sre OR tag:corpdb_team OR tag:corpdb_users) AND date:this_month..")
+            (:name "family-new" :query "tag:family AND tag:unread")
+            (:name "wife-new" :query "tag:wife AND tag:unread")
+            (:name "consulting-new" :query "tag:consulting AND tag:unread")
+            (:name "inbox-work-new" :query "tag:work AND tag:unread AND tag:inbox")
+            (:name "inbox-personal-new" :query "tag:personal AND tag:unread AND tag:inbox")
+            (:name "work-new" :query "tag:work AND tag:unread")
+            (:name "personal-new" :query "tag:personal AND tag:unread")
+            (:name "work" :query "tag:work")
+            (:name "personal" :query "tag:personal")
+            (:name "inbox-unread" :query "tag:inbox AND tag:unread")
+            (:name "unread" :query "tag:unread")
+            (:name "inbox" :query "tag:inbox")))
     (setq notmuch-address-command
-      (f-expand "nottoomuch-addresses" (concat (f-full (getenv "HOME")) "/.filesystem/bin")))
+          (f-expand "nottoomuch-addresses" (concat (f-full (getenv "HOME")) "/.filesystem/bin")))
     (notmuch-address-message-insinuate)
     (setq mail-envelope-from (quote header))
     (setq mail-specify-envelope-from t)
@@ -145,25 +145,25 @@
         (set-buffer-modified-p nil)
         (diff-mode)
         (lexical-let ((new-ro-bind (cons 'buffer-read-only map)))
-                     (add-to-list 'minor-mode-overriding-map-alist new-ro-bind))
+          (add-to-list 'minor-mode-overriding-map-alist new-ro-bind))
         (goto-char (point-min))))
     (define-key 'notmuch-show-mode-map "D" 'my-notmuch-show-view-as-patch)
     ;; At startup position the cursor on the first saved searches
     (add-hook 'notmuch-hello-refresh-hook
-        (lambda ()
-          (if (and (eq (point) (point-min))
-             (search-forward "Saved searches:" nil t))
-              (progn
-                (forward-line)
-                (widget-forward 1))
-            (if (eq (widget-type (widget-at)) 'editable-field)
-                (beginning-of-line)))))))
+              (lambda ()
+                (if (and (eq (point) (point-min))
+                         (search-forward "Saved searches:" nil t))
+                    (progn
+                      (forward-line)
+                      (widget-forward 1))
+                  (if (eq (widget-type (widget-at)) 'editable-field)
+                      (beginning-of-line)))))))
 
 (use-package org
   :bind(("C-c l" . org-store-link)
-  ("C-c c" . org-capture)
-  ("C-c a" . org-agenda)
-  ("C-c b" . org-iswitchb)))
+        ("C-c c" . org-capture)
+        ("C-c a" . org-agenda)
+        ("C-c b" . org-iswitchb)))
 
 (use-package hl-line
   :config (set-face-background 'hl-line "#073642"))
@@ -196,16 +196,16 @@
 (use-package smex
   :init (smex-initialize)
   :bind (("M-x" . smex)
-   ("M-X" . smex-major-mode-commands)))
+         ("M-X" . smex-major-mode-commands)))
 
 (use-package ido-ubiquitous
   :init (ido-ubiquitous-mode +1))
 
 (use-package prodigy
   :init (progn
-    (add-hook 'prodigy-mode-hook
-        (lambda ()
-          (setq-local show-trailing-whitespace nil))))
+          (add-hook 'prodigy-mode-hook
+                    (lambda ()
+                      (setq-local show-trailing-whitespace nil))))
   :demand t
   :bind ("C-x p" . prodigy))
 
@@ -268,9 +268,9 @@
   :config
   (progn
     (add-hook 'web-mode-hook
-        (lambda ()
-    (setq web-mode-style-padding 2)
-    (setq web-mode-script-padding 2)))))
+              (lambda ()
+                (setq web-mode-style-padding 2)
+                (setq web-mode-script-padding 2)))))
 
 (use-package yaml-mode
   :mode ("\\.yml$" . yaml-mode))
@@ -296,7 +296,7 @@
     (use-package ruby-tools)
     (use-package rhtml-mode
       :mode (("\\.rhtml$" . rhtml-mode)
-       ("\\.html\\.erb$" . rhtml-mode)))
+             ("\\.html\\.erb$" . rhtml-mode)))
     (use-package rinari
       :init (global-rinari-mode 1)
       :config (setq ruby-insert-encoding-magic-comment nil))
@@ -312,15 +312,15 @@
   (progn
     (setq ruby-deep-indent-paren nil))
   :bind (("C-M-h" . backward-kill-word)
-   ("C-M-n" . scroll-up-five)
-   ("C-M-p" . scroll-down-five))
+         ("C-M-n" . scroll-up-five)
+         ("C-M-p" . scroll-down-five))
   :mode (("\\.rake$" . ruby-mode)
-   ("\\.gemspec$" . ruby-mode)
-   ("\\.ru$" . ruby-mode)
-   ("Rakefile$" . ruby-mode)
-   ("Gemfile$" . ruby-mode)
-   ("Capfile$" . ruby-mode)
-   ("Guardfile$" . ruby-mode)))
+         ("\\.gemspec$" . ruby-mode)
+         ("\\.ru$" . ruby-mode)
+         ("Rakefile$" . ruby-mode)
+         ("Gemfile$" . ruby-mode)
+         ("Capfile$" . ruby-mode)
+         ("Guardfile$" . ruby-mode)))
 
 (use-package markdown-mode
   :config
@@ -328,12 +328,12 @@
     (bind-key "M-n" 'open-line-below markdown-mode-map)
     (bind-key "M-p" 'open-line-above markdown-mode-map))
   :mode (("\\.markdown$" . markdown-mode)
-   ("\\.md$" . markdown-mode)))
+         ("\\.md$" . markdown-mode)))
 
 (use-package drag-stuff
   :init (drag-stuff-global-mode 1)
   :bind (("M-N" . drag-stuff-down)
-   ("M-P" . drag-stuff-up)))
+         ("M-P" . drag-stuff-up)))
 
 (use-package flyspell
   :commands flyspell-mode
@@ -345,13 +345,14 @@
 
 (use-package gist
   :commands (gist-list gist-region gist-region-private gist-buffer
-  gist-buffer-private gist-region-or-buffer gist-region-or-buffer-private))
+                       gist-buffer-private gist-region-or-buffer gist-region-or-buffer-private))
 
 (use-package protobuf-mode
   :mode ("\\.proto$" . protobuf-mode))
 
 (use-package go-mode
   :mode ("\\.go$" . go-mode)
+  :init (setq gofmt-command "goimports")
   :config
   (progn
     (add-hook 'before-save-hook 'gofmt-before-save)

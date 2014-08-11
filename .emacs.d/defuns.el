@@ -20,14 +20,14 @@
     ; Check if there are modified buffers or active clients or frames.
     (setq modified-buffers (modified-buffers-exist))
     (setq active-clients-or-frames ( or (> (length server-clients) 1)
-                                        (> (length (frame-list)) 1)
-                                        ))
+					(> (length (frame-list)) 1)
+					))
 
     ; Create a new frame if prompts are needed.
     (when (or modified-buffers active-clients-or-frames)
       (when (not (eq window-system 'x))
-        (message "Initializing x windows system.")
-        (x-initialize-window-system))
+	(message "Initializing x windows system.")
+	(x-initialize-window-system))
       (when (not display) (setq display (getenv "DISPLAY")))
       (message "Opening frame on display: %s" display)
       (select-frame (make-frame-on-display display '((window-system . x)))))
@@ -40,25 +40,25 @@
     ; subtract 1 from the clients for this client.
     ; subtract 2 from the frames this frame (that we just created) and the default frame.
     (when ( or (not active-clients-or-frames)
-               (yes-or-no-p (format "There are currently %d clients and %d frames. Exit anyway?"
-                                    (- (length server-clients) 1) (- (length (frame-list)) 2))))
+	       (yes-or-no-p (format "There are currently %d clients and %d frames. Exit anyway?"
+				    (- (length server-clients) 1) (- (length (frame-list)) 2))))
 
       ; If the user quits during the save dialog then don't exit emacs.
       ; Still close the terminal though.
       (let((inhibit-quit t))
-        ; Save buffers
-        (with-local-quit
-          (save-some-buffers))
+	; Save buffers
+	(with-local-quit
+	  (save-some-buffers))
 
-        (if quit-flag
-          (setq quit-flag nil)
-          ; Kill all remaining clients
-          (progn
-            (dolist (client server-clients)
-              (server-delete-client client))
-            ; Exit emacs
-            (kill-emacs)))
-        ))
+	(if quit-flag
+	  (setq quit-flag nil)
+	  ; Kill all remaining clients
+	  (progn
+	    (dolist (client server-clients)
+	      (server-delete-client client))
+	    ; Exit emacs
+	    (kill-emacs)))
+	))
 
     ; If we made a frame then kill it.
     (when (or modified-buffers active-clients-or-frames) (delete-frame new-frame))
@@ -73,16 +73,16 @@
   (let (modified-found)
     (dolist (buffer (buffer-list))
       (when (and (buffer-live-p buffer)
-                 (buffer-modified-p buffer)
-                 (not (buffer-base-buffer buffer))
-                 (or
-                   (buffer-file-name buffer)
-                   (progn
-                     (set-buffer buffer)
-                     (and buffer-offer-save (> (buffer-size) 0))))
-                 )
-        (setq modified-found t)
-        )
+		 (buffer-modified-p buffer)
+		 (not (buffer-base-buffer buffer))
+		 (or
+		   (buffer-file-name buffer)
+		   (progn
+		     (set-buffer buffer)
+		     (and buffer-offer-save (> (buffer-size) 0))))
+		 )
+	(setq modified-found t)
+	)
       )
     modified-found
     )
@@ -97,7 +97,7 @@
     (unless (region-active-p)
       (mark-whole-buffer))
     (unless (or (eq major-mode 'coffee-mode)
-                (eq major-mode 'feature-mode))
+		(eq major-mode 'feature-mode))
       (untabify (region-beginning) (region-end))
       (indent-region (region-beginning) (region-end)))
     (save-restriction
@@ -127,59 +127,59 @@
     (setq end (line-end-position))
     (let ((region (buffer-substring-no-properties beg end)))
       (dotimes (i arg)
-        (goto-char end)
-        (newline)
-        (insert region)
-        (setq end (point)))
+	(goto-char end)
+	(newline)
+	(insert region)
+	(setq end (point)))
       (goto-char (+ origin (* (length region) arg) arg)))))
 
 (defun swap-windows ()
   "If you have 2 windows, it swaps them."
   (interactive)
   (cond ((/= (count-windows) 2)
-         (message "You need exactly 2 windows to do this."))
-        (t
-          (let* ((w1 (first (window-list)))
-                 (w2 (second (window-list)))
-                 (b1 (window-buffer w1))
-                 (b2 (window-buffer w2))
-                 (s1 (window-start w1))
-                 (s2 (window-start w2)))
-            (set-window-buffer w1 b2)
-            (set-window-buffer w2 b1)
-            (set-window-start w1 s2)
-            (set-window-start w2 s1))))
+	 (message "You need exactly 2 windows to do this."))
+	(t
+	  (let* ((w1 (first (window-list)))
+		 (w2 (second (window-list)))
+		 (b1 (window-buffer w1))
+		 (b2 (window-buffer w2))
+		 (s1 (window-start w1))
+		 (s2 (window-start w2)))
+	    (set-window-buffer w1 b2)
+	    (set-window-buffer w2 b1)
+	    (set-window-start w1 s2)
+	    (set-window-start w2 s1))))
   (other-window 1))
 
 (defun rename-this-buffer-and-file ()
   "Renames current buffer and file it is visiting."
   (interactive)
   (let ((name (buffer-name))
-        (filename (buffer-file-name)))
+	(filename (buffer-file-name)))
     (if (not (and filename (file-exists-p filename)))
       (error "Buffer '%s' is not visiting a file!" name)
       (let ((new-name (read-file-name "New name: " filename)))
-        (cond ((get-buffer new-name)
-               (error "A buffer named '%s' already exists!" new-name))
-              (t
-                (rename-file filename new-name 1)
-                (rename-buffer new-name)
-                (set-visited-file-name new-name)
-                (set-buffer-modified-p nil)
-                (message "File '%s' successfully renamed to '%s'" name (file-name-nondirectory new-name))))))))
+	(cond ((get-buffer new-name)
+	       (error "A buffer named '%s' already exists!" new-name))
+	      (t
+		(rename-file filename new-name 1)
+		(rename-buffer new-name)
+		(set-visited-file-name new-name)
+		(set-buffer-modified-p nil)
+		(message "File '%s' successfully renamed to '%s'" name (file-name-nondirectory new-name))))))))
 
 (defun delete-this-buffer-and-file ()
   "Removes file connected to current buffer and kills buffer."
   (interactive)
   (let ((filename (buffer-file-name))
-        (buffer (current-buffer))
-        (name (buffer-name)))
+	(buffer (current-buffer))
+	(name (buffer-name)))
     (if (not (and filename (file-exists-p filename)))
       (error "Buffer '%s' is not visiting a file!" name)
       (when (yes-or-no-p "Are you sure you want to remove this file? ")
-        (delete-file filename)
-        (kill-buffer buffer)
-        (message "File '%s' successfully removed" filename)))))
+	(delete-file filename)
+	(kill-buffer buffer)
+	(message "File '%s' successfully removed" filename)))))
 
 (defun google ()
   "Googles a query or region if any."
@@ -188,8 +188,8 @@
     (concat
       "http://www.google.com/search?ie=utf-8&oe=utf-8&q="
       (if (region-active-p)
-        (buffer-substring (region-beginning) (region-end))
-        (read-string "Query: ")))))
+	(buffer-substring (region-beginning) (region-end))
+	(read-string "Query: ")))))
 
 (defun comment-or-uncomment-current-line-or-region ()
   "Comments or uncomments current current line or whole lines in region."
@@ -197,21 +197,21 @@
   (save-excursion
     (let (min max)
       (if (region-active-p)
-        (setq min (region-beginning) max (region-end))
-        (setq min (point) max (point)))
+	(setq min (region-beginning) max (region-end))
+	(setq min (point) max (point)))
       (comment-or-uncomment-region
-        (progn (goto-char min) (line-beginning-position))
-        (progn (goto-char max) (line-end-position))))))
+	(progn (goto-char min) (line-beginning-position))
+	(progn (goto-char max) (line-end-position))))))
 
 (defun join-line-or-lines-in-region ()
   "Join this line or the lines in the selected region."
   (interactive)
   (cond ((region-active-p)
-         (let ((min (line-number-at-pos (region-beginning))))
-           (goto-char (region-end))
-           (while (> (line-number-at-pos) min)
-                  (join-line))))
-        (t (call-interactively 'join-line))))
+	 (let ((min (line-number-at-pos (region-beginning))))
+	   (goto-char (region-end))
+	   (while (> (line-number-at-pos) min)
+		  (join-line))))
+	(t (call-interactively 'join-line))))
 
 (defun scroll-down-five ()
   "Scrolls down five rows."
@@ -251,36 +251,36 @@
   Then move to that line and indent accordning to mode"
   (interactive)
   (cond ((or (eq major-mode 'coffee-mode) (eq major-mode 'feature-mode))
-         (let ((column
-                 (save-excursion
-                   (back-to-indentation)
-                   (current-column))))
-           (move-end-of-line 1)
-           (newline)
-           (move-to-column column t)))
-        (t
-          (move-end-of-line 1)
-          (newline)
-          (indent-according-to-mode))))
+	 (let ((column
+		 (save-excursion
+		   (back-to-indentation)
+		   (current-column))))
+	   (move-end-of-line 1)
+	   (newline)
+	   (move-to-column column t)))
+	(t
+	  (move-end-of-line 1)
+	  (newline)
+	  (indent-according-to-mode))))
 
 (defun open-line-above ()
   "Open a line above the line the point is at.
   Then move to that line and indent accordning to mode"
   (interactive)
   (cond ((or (eq major-mode 'coffee-mode) (eq major-mode 'feature-mode))
-         (let ((column
-                 (save-excursion
-                   (back-to-indentation)
-                   (current-column))))
-           (move-beginning-of-line 1)
-           (newline)
-           (forward-line -1)
-           (move-to-column column t)))
-        (t
-          (move-beginning-of-line 1)
-          (newline)
-          (forward-line -1)
-          (indent-according-to-mode))))
+	 (let ((column
+		 (save-excursion
+		   (back-to-indentation)
+		   (current-column))))
+	   (move-beginning-of-line 1)
+	   (newline)
+	   (forward-line -1)
+	   (move-to-column column t)))
+	(t
+	  (move-beginning-of-line 1)
+	  (newline)
+	  (forward-line -1)
+	  (indent-according-to-mode))))
 
 (defun beautify-json (beg end)
   (interactive "r")
@@ -291,17 +291,29 @@
   (interactive)
   (insert "#")
   (when (and
-          (looking-back "\".*")
-          (looking-at ".*\""))
+	  (looking-back "\".*")
+	  (looking-at ".*\""))
     (insert "{}")
     (backward-char 1)))
 
 (defun enable-flyspell ()
     "Enable command `flyspell-mode'"
       (when (executable-find ispell-program-name)
-            (flyspell-mode +1)))
+	    (flyspell-mode +1)))
 
-(defun indent-all ()
-  "Indent entire buffer."
+(defun indent-buffer ()
+  "Indent the currently visited buffer."
   (interactive)
-  (indent-region (point-min) (point-max) nil))
+  (indent-region (point-min) (point-max)))
+
+(defun indent-region-or-buffer ()
+  "Indent a region if selected, otherwise the whole buffer."
+  (interactive)
+  (save-excursion
+    (if (region-active-p)
+	(progn
+	  (indent-region (region-beginning) (region-end))
+	  (message "Indented selected region."))
+      (progn
+	(indent-buffer)
+	(message "Indented buffer.")))))

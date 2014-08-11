@@ -80,6 +80,13 @@
 ;; smart tab behavior - indent or complete
 (setq tab-always-indent 'complete)
 
+
+;; Disable find-file-at-point
+(setq ido-use-filename-at-point nil)
+
+;; Javascript indent by 2
+(setq js-indent-level 2)
+
 ;; Python indent with two spaces
 (add-hook 'python-mode-hook
           (function (lambda ()

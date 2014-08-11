@@ -22,3 +22,4 @@
 (bind-key "C-c r" 'rename-this-buffer-and-file)
 (bind-key "C-c k" 'delete-this-buffer-and-file)
 (define-key ruby-mode-map (kbd "#") 'ruby-interpolate)
+(global-set-key (kbd "C-M-\\") 'indent-region-or-buffer)
