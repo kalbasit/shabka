@@ -59,3 +59,9 @@ done
 
 # Load the theme
 source "${THEMES_PATH}/${THEME}.zsh-theme"
+
+# Load Google specific stuff
+[[ -r "${HOME}/.zshrc-google" ]] && source "${HOME}/.zshrc-google"
+
+# Load travis
+[[ -r "${HOME}/.travis/travis.sh" ]] && source "${HOME}/.travis/travis.sh"
