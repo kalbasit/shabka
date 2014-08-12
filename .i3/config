@@ -95,15 +95,13 @@ bindsym $mod+a focus parent
 bindsym $mod+0 workspace ssh
 bindsym $mod+1 workspace term
 bindsym $mod+2 workspace web
-bindsym $mod+3 workspace mail
-bindsym $mod+4 workspace chat
+bindsym $mod+3 workspace editor
 
 # move focused container to workspace
 bindsym $mod+Shift+0 move container to workspace ssh
 bindsym $mod+Shift+1 move container to workspace term
 bindsym $mod+Shift+2 move container to workspace web
-bindsym $mod+Shift+3 move container to workspace mail
-bindsym $mod+Shift+4 move container to workspace chat
+bindsym $mod+Shift+3 move container to workspace editor
 
 # Toggle workspace between monitors
 bindsym $mod+x move workspace to output right
@@ -146,6 +144,12 @@ bindsym $alt+c [instance="^chat-scratchpad$"] scratchpad show
 bindsym $alt+Shift+r exec urxvt -name radio -e zsh -i -c 'pianobar'
 bindsym $alt+r [instance="^radio$"] scratchpad show
 
+# Start chrome
+bindsym $mod+$alt+b exec x-www-browser
+
+# Start a project
+bindsym $mod+p exec --no-startup-id i3-corpdb-project
+
 # https://github.com/tybitsfox/i3msg/blob/master/.i3/config
 # mark current window
 bindsym $mod+m exec i3-input -F 'mark %s' -l 1 -P 'Mark: '
@@ -187,7 +191,6 @@ bar {
 
 # Assign applications to workspaces
 assign [class="^URxvt$" instance="^main$"] → term
-assign [class="^X-www-browser$" instance="^crx_pnhechapfaindjhompbnflcldabbghjo$"] → ssh
 assign [class="^X-www-browser$"] → web
 assign [class="^Emacs24$" instance="^mail$"] → mail
 assign [class="^URxvt$" instance="^chat$"] → chat
@@ -211,11 +214,6 @@ bindsym $mod+Shift+o exec "fetchotp -x"
 # autostart
 exec --no-startup-id ~/.filesystem/bin/Gwall
 exec urxvt -name main
-exec x-www-browser
-exec $HOME/.filesystem/bin/named-emacs-frame mail
-exec $HOME/.filesystem/bin/named-emacs-frame mail-scratchpad mail
-exec urxvt -name chat-scratchpad -e zsh -i -c 'screen -c ~/.screen/sessions/irssi'
-exec urxvt -name chat -e zsh -i -c 'screen -c ~/.screen/sessions/irssi'
 exec --no-startup-id nm-applet
 
 # Open Pianobar in a scratchpad
