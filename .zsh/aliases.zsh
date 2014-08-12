@@ -20,10 +20,9 @@ alias xrake="xr bundle exec rake"
 alias xrspec="xr bundle exec rspec"
 alias xspec="xrake parallel:prepare parallel:spec"
 
-# Emacs
-alias enw="emacs -nw"
-alias e="emacsclient -a '' -t"
+# Editor
+alias e="subl"
+
 alias email="emacsclient -a '' -s mail -t"
-alias chat="emacsclient -a '' -s chat -t"
 
 alias history='fc -fl 1'

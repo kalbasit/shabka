@@ -1,12 +1,4 @@
-export GOPATH=$HOME/code/go
-export EDITOR=vim
-export MYFS=$HOME/.filesystem
-
 export BROWSER=/usr/bin/google-chrome-stable
-
-if [[ -x `which cask 2> /dev/null` ]]; then
-  export CASK_PATH="$(dirname $(dirname $(which cask)))"
-fi
 
 local mysql_credentials_path="$HOME/.my.cnf"
 
@@ -20,6 +12,3 @@ if [[ -r "${mysql_credentials_path}" ]]; then
   fi
 fi
 
-# Color grep results
-export GREP_OPTIONS='--color=auto'
-export GREP_COLOR='1;32'
