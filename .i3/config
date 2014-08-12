@@ -205,6 +205,9 @@ bindsym $mod+Shift+Return exec "i3-dynamic-workspaces --add-workspace"
 # vpn
 bindsym $mod+Shift+v exec "i3-msg 'workspace vpn'; urxvt -name ovpn -e zsh -i -c 'ovpn -g'"
 
+# otp
+bindsym $mod+Shift+o exec "fetchotp -x"
+
 # autostart
 exec --no-startup-id ~/.filesystem/bin/Gwall
 exec urxvt -name main
