@@ -140,8 +140,11 @@ bindsym $alt+m [instance="^mail-scratchpad$"] scratchpad show
 
 # chat client scratchpad
 bindsym $alt+Shift+c exec urxvt -name chat-scratchpad -e zsh -i -c 'screen -c ~/.screen/sessions/irssi'
-
 bindsym $alt+c [instance="^chat-scratchpad$"] scratchpad show
+
+# radio scratchpad
+bindsym $alt+Shift+r exec urxvt -name radio -e zsh -i -c 'pianobar'
+bindsym $alt+r [instance="^radio$"] scratchpad show
 
 # https://github.com/tybitsfox/i3msg/blob/master/.i3/config
 # mark current window
@@ -174,7 +177,7 @@ mode "resize" {
   bindsym Escape mode "default"
 }
 
-bindsym $alt+r mode "resize"
+bindsym $mod+$alt+r mode "resize"
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
@@ -193,6 +196,7 @@ assign [class="^URxvt$" instance="^ovpn$"] → vpn
 # automove to scratchpad
 for_window [instance="^mail-scratchpad$"] move scratchpad
 for_window [instance="^chat-scratchpad$"] move scratchpad
+for_window [instance="^radio$"] move scratchpad
 
 # i3-dynamic-workspaces
 bindsym $mod+Return exec "i3-dynamic-workspaces --switch-workspace"
@@ -210,3 +214,6 @@ exec $HOME/.filesystem/bin/named-emacs-frame mail-scratchpad mail
 exec urxvt -name chat-scratchpad -e zsh -i -c 'screen -c ~/.screen/sessions/irssi'
 exec urxvt -name chat -e zsh -i -c 'screen -c ~/.screen/sessions/irssi'
 exec --no-startup-id nm-applet
+
+# Open Pianobar in a scratchpad
+exec urxvt -name radio -e zsh -i -c 'pianobar'
