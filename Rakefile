@@ -15,7 +15,9 @@ task :install do
 end
 
 def replace_file(file)
-  system %Q{rm -rf "$HOME/#{file.sub(/\.erb$/, '')}"}
+  relative_path = file.gsub("#{DOTFILES_PATH}/", "")
+  home_file = File.join(ENV['HOME'], "#{relative_path.sub(/\.erb$/, '')}")
+  system %Q{rm -rf '#{home_file}'}
   link_file(file)
 end
 
@@ -40,7 +42,7 @@ def link_folder(folder)
       elsif replace_all
         replace_file(file)
       else
-        print "overwrite ~/#{file.sub(/\.erb$/, '')}? [ynaq] "
+        print "overwrite ~/#{relative_path.sub(/\.erb$/, '')}? [ynaq] "
         case $stdin.gets.chomp
         when 'a'
           replace_all = true
@@ -50,7 +52,7 @@ def link_folder(folder)
         when 'q'
           exit
         else
-          puts "skipping ~/#{file.sub(/\.erb$/, '')}"
+          puts "skipping ~/#{relative_path.sub(/\.erb$/, '')}"
         end
       end
     else
