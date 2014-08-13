@@ -22,3 +22,4 @@
   screen    -t  Shell           0
   screen    -t  Shell           1
   screen    -t  Shell           2
+  select 0
