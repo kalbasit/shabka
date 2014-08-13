@@ -1,17 +1,42 @@
 require 'rake'
 require 'erb'
 
+DOTFILES_PATH = File.expand_path("../", __FILE__)
+IGNORED_FILES = [
+  "Rakefile",
+  ".git",
+]
+
 desc "install the dot files into user's home directory"
 task :install do
   update_submodules
   switch_to_zsh
+  link_folder(Dir.getwd)
+end
+
+def replace_file(file)
+  system %Q{rm -rf "$HOME/#{file.sub(/\.erb$/, '')}"}
+  link_file(file)
+end
+
+def link_folder(folder)
   replace_all = false
-  files = Dir['.??*']
+
+  files = Dir["#{folder}/.??*"] + Dir["#{folder}/*"]
+  files.reject! do |file|
+    relative_path = file.gsub("#{DOTFILES_PATH}/", "")
+    IGNORED_FILES.include?(relative_path)
+  end
+
   files.each do |file|
-    system %Q{mkdir -p "$HOME/.#{File.dirname(file)}"} if file =~ /\//
-    if File.exist?(File.join(ENV['HOME'], "#{file.sub(/\.erb$/, '')}"))
-      if File.identical? file, File.join(ENV['HOME'], "#{file.sub(/\.erb$/, '')}")
-        puts "identical ~/#{file.sub(/\.erb$/, '')}"
+    relative_path = file.gsub("#{DOTFILES_PATH}/", "")
+    home_file = File.join(ENV['HOME'], "#{relative_path.sub(/\.erb$/, '')}")
+
+    if File.exist?(home_file)
+      if File.identical? file, home_file
+        puts "identical ~/#{relative_path.sub(/\.erb$/, '')}"
+      elsif File.directory?(home_file)
+        link_folder(file)
       elsif replace_all
         replace_file(file)
       else
@@ -34,22 +59,18 @@ task :install do
   end
 end
 
-def replace_file(file)
-  system %Q{rm -rf "$HOME/#{file.sub(/\.erb$/, '')}"}
-  link_file(file)
-end
-
 def link_file(file)
-  return if file == ".git"
+  relative_path = file.gsub("#{DOTFILES_PATH}/", "")
+  home_file = File.join(ENV['HOME'], "#{relative_path.sub(/\.erb$/, '')}")
 
   if file =~ /.erb$/
-    puts "generating ~/#{file.sub(/\.erb$/, '')}"
-    File.open(File.join(ENV['HOME'], "#{file.sub(/\.erb$/, '')}"), 'w') do |new_file|
+    puts "generating #{home_file}"
+    File.open(home_file, 'w') do |new_file|
       new_file.write ERB.new(File.read(file)).result(binding)
     end
   else
-    puts "linking ~/#{file}"
-    system %Q{ln -s "$PWD/#{file}" "$HOME/#{file}"}
+    puts "linking #{file}"
+    system %Q{ln -s "#{file}" "#{home_file}"}
   end
 end
 
