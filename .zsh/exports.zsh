@@ -12,3 +12,6 @@ if [[ -r "${mysql_credentials_path}" ]]; then
   fi
 fi
 
+if [[ -f "${MYFS}/opt/stderred/build/libstderred.so" ]]; then
+  export LD_PRELOAD="${MYFS}/opt/stderred/build/libstderred.so${LD_PRELOAD:+:$LD_PRELOAD}"
+fi
