@@ -1,0 +1,2 @@
+:let mapleader=,
+:map <leader>fef gg=G

@@ -1,0 +1,7 @@
+{
+  "fmt_cmd": ["goimports"],
+  "installsufix": "appengine",
+  "env": {
+      "GOPATH": "$HOME/go:$HOME/.filesystem/opt/go_appengine/goroot"
+  }
+}

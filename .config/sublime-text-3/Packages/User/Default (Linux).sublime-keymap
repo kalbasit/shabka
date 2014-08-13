@@ -1,0 +1,5 @@
+[
+  { "keys": ["f3"], "command": "goto_definition" },
+  { "keys": ["f4"], "command": "go_imports" },
+  { "keys": ["f10"], "command": "reindent"}
+]

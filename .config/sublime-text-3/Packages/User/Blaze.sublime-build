@@ -1,0 +1,5 @@
+{
+  "cmd": ["blaze", "build", "/${file_path/^(.*google3)(.*)$/$2/}/..."],
+  "file_regex": "^([^:\n]+):([0-9]+):?([0-9]+)?:? (.*)$",
+  "working_dir": "${file_path/^(.*google3).*$/$1/}"
+}

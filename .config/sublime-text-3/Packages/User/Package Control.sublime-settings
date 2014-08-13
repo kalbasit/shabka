@@ -1,0 +1,32 @@
+{
+	"installed_packages":
+	[
+		"AdvancedNewFile",
+		"AngularJS",
+		"Autoprefixer",
+		"Emmet",
+		"Gist",
+		"GitGutter",
+		"google-autogen",
+		"google-citc-gutter",
+		"google-cs",
+		"google-file-switch",
+		"google-g4",
+		"google-syntax",
+		"GoSublime",
+		"Markdown Preview",
+		"MarkdownEditing",
+		"PlainTasks",
+		"SideBarEnhancements",
+		"sublime_goimports",
+		"SublimeGit",
+		"SublimeLinter",
+		"SublimeLinter-annotations",
+		"Vintageous",
+		"Wrap Plus"
+	],
+	"repositories":
+	[
+		"https://sublime-text-plugins.corp.google.com/google-packages.json"
+	]
+}
