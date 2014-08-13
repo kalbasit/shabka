@@ -192,7 +192,6 @@ bar {
 # Assign applications to workspaces
 assign [class="^URxvt$" instance="^main$"] → term
 assign [class="^X-www-browser$"] → web
-assign [class="^Emacs24$" instance="^mail$"] → mail
 assign [class="^URxvt$" instance="^chat$"] → chat
 assign [class="^URxvt$" instance="^ovpn$"] → vpn
 
