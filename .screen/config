@@ -87,7 +87,6 @@
 
 # Use screen-256color
   term screen-256color
-#  term xterm
 
 
 # shellaka '> |tcsh'
