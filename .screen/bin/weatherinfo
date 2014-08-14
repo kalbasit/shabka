@@ -44,7 +44,7 @@ class WeatherParser:
 def color(txt,c):
     return '{k' + c + '}' + str(txt)
 
-wth = WeatherParser('FRXX0114',True)
+wth = WeatherParser('95123',True)
 
 t = int(wth.dict['tmp'])
 temp = ''
