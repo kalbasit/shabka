@@ -8,4 +8,9 @@
 
 # Default Buffers
 #               <Title>         <Screen Number>     <Command>
-  screen    -t  Irssi           0                   irssi
+  screen    -t  SshForward      0                   ssh -4 gaea-ub-for-port-forwarding -L 6667:gaea-ub.dls.corp.google.com:6667 -N
+
+  sleep 30
+
+  screen    -t  Irssi           1                   irssi
+  select 1
