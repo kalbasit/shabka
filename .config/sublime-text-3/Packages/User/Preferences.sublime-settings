@@ -5,8 +5,6 @@
 	"highlight_line": true,
 	"ignored_packages":
 	[
-		"Markdown",
-		"google-citc-gutter",
 		"Vintage"
 	],
 	"rulers":
