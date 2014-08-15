@@ -1,5 +1,9 @@
 {
 	"atomic_save": false,
+	"caret_extra_bottom": 1,
+	"caret_extra_top": 1,
+	"caret_extra_width": 1,
+	"caret_style": "phase",
 	"color_scheme": "Packages/User/Solarized (Light) (SL).tmTheme",
 	"ensure_newline_at_eof_on_save": true,
 	"highlight_line": true,
@@ -16,9 +20,5 @@
 	"tab_size": 2,
 	"translate_tabs_to_spaces": true,
 	"trim_trailing_white_space_on_save": true,
-	"vintageous_use_sys_clipboard": true,
-	"caret_style": "phase",
-	"caret_extra_top": 1,
-	"caret_extra_bottom": 1,
-	"caret_extra_width": 1
+	"vintageous_use_sys_clipboard": true
 }
