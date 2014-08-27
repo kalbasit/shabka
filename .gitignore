@@ -39,6 +39,7 @@ GoSublime-aux.sublime-settings
 Package Control.last-run
 log.txt
 Gist.sublime-settings
+.byobu/.ssh-agent
 
 
 
