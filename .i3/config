@@ -124,6 +124,8 @@ bindsym $alt+Tab workspace back_and_forth
 # Set the keys for lower/raise volume
 bindsym XF86AudioRaiseVolume exec --no-startup-id volumectl up && killall -SIGUSR1 i3status
 bindsym XF86AudioLowerVolume exec --no-startup-id volumectl down && killall -SIGUSR1 i3status
+bindsym Pause exec --no-startup-id volumectl up && killall -SIGUSR1 i3status
+bindsym Scroll_Lock exec --no-startup-id volumectl down && killall -SIGUSR1 i3status
 bindsym XF86AudioMute exec --no-startup-id volumectl toggle && killall -SIGUSR1 i3status
 
 # Make the currently focused window a scratchpad
