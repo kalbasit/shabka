@@ -76,3 +76,4 @@
 # Set this to zero to hide seconds int the time display
 # Default 1
 #TIME_SECONDS=0
+BYOBU_CHARMAP=UTF-8
