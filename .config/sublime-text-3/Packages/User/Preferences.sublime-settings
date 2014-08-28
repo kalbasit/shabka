@@ -9,7 +9,9 @@
 	"highlight_line": true,
 	"ignored_packages":
 	[
-		"Vintage"
+		"google-citc-gutter",
+		"Vintage",
+		"Markdown"
 	],
 	"rulers":
 	[
