@@ -40,10 +40,6 @@ ZSH_COMPDUMP="${HOME}/.zcompdump-${SHORT_HOST}-${ZSH_VERSION}"
 autoload -U compinit
 compinit -i -d "${ZSH_COMPDUMP}"
 
-if [[ "x${ENV_INIT}" != "xtrue" ]]; then
-  source "/etc/profile.d/user_wmn.sh"
-fi
-
 # Load all the configs
 for config ($configs); do
   source "${ZSH}/${config}"
