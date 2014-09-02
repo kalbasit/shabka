@@ -8,10 +8,32 @@ IGNORED_FILES = [
 ]
 
 desc "install the dot files into user's home directory"
-task :install do
-  update_submodules
-  switch_to_zsh
+task :install => [:update_submodules, :switch_to_zsh] do
   link_folder(Dir.getwd)
+end
+
+desc "Switch your shell to ZSH from #{ENV["SHELL"]}"
+task :switch_to_zsh do
+  if ENV["SHELL"] =~ /zsh/
+    puts "using zsh"
+  else
+    print "switch to zsh? (recommended) [ynq] "
+    case $stdin.gets.chomp
+    when 'y'
+      puts "switching to zsh"
+      system %Q{chsh -s `which zsh`}
+    when 'q'
+      exit
+    else
+      puts "skipping zsh"
+    end
+  end
+end
+
+desc "Initialize and update submodules to the latest version"
+task :update_submodules do
+  puts "Updating the submodules"
+  `git submodule update --init > /dev/null`
 end
 
 def replace_file(file)
@@ -74,26 +96,4 @@ def link_file(file)
     puts "linking #{file}"
     system %Q{ln -s "#{file}" "#{home_file}"}
   end
-end
-
-def switch_to_zsh
-  if ENV["SHELL"] =~ /zsh/
-    puts "using zsh"
-  else
-    print "switch to zsh? (recommended) [ynq] "
-    case $stdin.gets.chomp
-    when 'y'
-      puts "switching to zsh"
-      system %Q{chsh -s `which zsh`}
-    when 'q'
-      exit
-    else
-      puts "skipping zsh"
-    end
-  end
-end
-
-def update_submodules
-  puts "Updating the submodules"
-  `git submodule update --init > /dev/null`
 end
