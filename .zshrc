@@ -63,17 +63,10 @@ source "${THEMES_PATH}/${THEME}.zsh-theme"
 [[ -r "${HOME}/.travis/travis.sh" ]] && source "${HOME}/.travis/travis.sh"
 
 # Let's detect the correct TERM to use.
-case "$(tput colors 2>/dev/null || echo 0)" in
-  256)
-    if TERM=st-256color infocmp &> /dev/null; then
-      export TERM=st-256color
-    elif TERM=screen-256color infocmp &> /dev/null; then
-      export TERM=screen-256color
-    else
-      export TERM=xterm-256color
-    fi
-    ;;
-  *)
-    export TERM=linux
-    ;;
-esac
+if TERM=st-256color infocmp &> /dev/null; then
+  export TERM=st-256color
+elif TERM=screen-256color infocmp &> /dev/null; then
+  export TERM=screen-256color
+else
+  export TERM=xterm-256color
+fi
