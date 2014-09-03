@@ -10,8 +10,8 @@
 	"ignored_packages":
 	[
 		"google-citc-gutter",
-		"Vintage",
-		"Markdown"
+		"Markdown",
+		"Vintage"
 	],
 	"rulers":
 	[
