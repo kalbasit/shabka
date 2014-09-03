@@ -13,3 +13,6 @@ export PAGER="less"
 export LESS="-R"
 
 export LC_CTYPE=$LANG
+
+## TODO: Make man pages colorful
+## http://nion.modprobe.de/blog/archives/569-colored-manpages.html
