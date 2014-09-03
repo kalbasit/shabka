@@ -11,3 +11,4 @@ alias e="subl"
 alias email="emacsclient -a '' -s mail -t"
 alias history='fc -fl 1'
 alias xcopy='xclip -selection clipboard'
+alias zs='zssh'
