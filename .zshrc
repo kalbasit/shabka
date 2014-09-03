@@ -1,7 +1,7 @@
 # ZSHRC
 
 # Which theme to use
-THEME="crunch"
+THEME="blinks"
 
 # Define paths
 ZSH="${HOME}/.zsh"
@@ -62,5 +62,4 @@ source "${THEMES_PATH}/${THEME}.zsh-theme"
 # Load travis
 [[ -r "${HOME}/.travis/travis.sh" ]] && source "${HOME}/.travis/travis.sh"
 
-#[[ `tput colors 2>/dev/null || echo 0` -eq "256" ]] &&
 export TERM=st-256color
