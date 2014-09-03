@@ -139,12 +139,12 @@ bindsym $alt+Shift+m exec $HOME/.filesystem/bin/named-emacs-frame mail-scratchpa
 bindsym $alt+m [instance="^mail-scratchpad$"] scratchpad show
 
 # chat client scratchpad
-bindsym $alt+Shift+c exec urxvt -name chat-scratchpad -e zsh -i -c 'screen -c ~/.screen/sessions/irssi -D -q -U -R irssi -t irssi'
+bindsym $alt+Shift+c exec st -c chat-scratchpad -t chat -e zsh -i -c 'screen -c ~/.screen/sessions/irssi -D -q -U -R irssi -t irssi'
 bindsym $alt+c [instance="^chat-scratchpad$"] scratchpad show
 
 # radio scratchpad
-bindsym $alt+Shift+r exec urxvt -name radio -e zsh -i -c 'pianobar'
-bindsym $alt+r [instance="^radio$"] scratchpad show
+bindsym $alt+Shift+r exec st -c radio-scratchpad -t radio -e zsh -i -c 'pianobar'
+bindsym $alt+r [instance="^radio-scratchpad$"] scratchpad show
 
 # Start chrome
 bindsym $mod+$alt+b exec x-www-browser
@@ -192,30 +192,29 @@ bar {
 }
 
 # Assign applications to workspaces
-assign [class="^URxvt$" instance="^main$"] → term
+assign [instance="^main_term$"] → term
 assign [class="^X-www-browser$"] → web
-assign [class="^URxvt$" instance="^chat$"] → chat
-assign [class="^URxvt$" instance="^ovpn$"] → vpn
+assign [instance="^ovpn$"] → vpn
 
 # automove to scratchpad
 for_window [instance="^mail-scratchpad$"] move scratchpad
 for_window [instance="^chat-scratchpad$"] move scratchpad
-for_window [instance="^radio$"] move scratchpad
+for_window [instance="^radio-scratchpad$"] move scratchpad
 
 # i3-dynamic-workspaces
 bindsym $mod+Return exec "i3-dynamic-workspaces --switch-workspace"
 bindsym $mod+Shift+Return exec "i3-dynamic-workspaces --move-container-to-workspace"
 
 # vpn
-bindsym $mod+Shift+v exec "i3-msg 'workspace vpn'; urxvt -name ovpn -e zsh -i -c 'ovpn -g'"
+bindsym $mod+Shift+v exec "i3-msg 'workspace vpn'; st -c ovpn -t ovpn -e zsh -i -c 'ovpn -g'"
 
 # otp
 bindsym $mod+Shift+o exec "fetchotp -x"
 
 # autostart
 exec --no-startup-id ~/.filesystem/bin/Gwall
-exec urxvt -name main
+exec st -c main_term -t main
 exec --no-startup-id nm-applet
 
 # Open Pianobar in a scratchpad
-exec urxvt -name radio -e zsh -i -c 'pianobar'
+exec st -c radio-scratchpad -t radio -e zsh -i -c 'pianobar'
