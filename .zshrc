@@ -4,7 +4,7 @@
 THEME="blinks"
 
 # Define paths
-ZSH="${HOME}/.zsh"
+ZSH="${ZDOTDIR:-$HOME}/.zsh"
 PLUGINS_PATH="${ZSH}/plugins"
 THEMES_PATH="${ZSH}/themes"
 
@@ -34,7 +34,7 @@ else
 fi
 
 # Save the location of the current completion dump file.
-ZSH_COMPDUMP="${HOME}/.zcompdump-${SHORT_HOST}-${ZSH_VERSION}"
+ZSH_COMPDUMP="${ZDOTDIR:-$HOME}/.zcompdump-${SHORT_HOST}-${ZSH_VERSION}"
 
 # Load and run compinit
 autoload -U compinit
@@ -57,7 +57,7 @@ done
 source "${THEMES_PATH}/${THEME}.zsh-theme"
 
 # Load Google specific stuff
-[[ -r "${HOME}/.zshrc-google" ]] && source "${HOME}/.zshrc-google"
+[[ -r "${ZDOTDIR:-$HOME}/.zshrc-google" ]] && source "${HOME}/.zshrc-google"
 
 # Load travis
 [[ -r "${HOME}/.travis/travis.sh" ]] && source "${HOME}/.travis/travis.sh"

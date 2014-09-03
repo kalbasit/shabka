@@ -585,10 +585,11 @@ function zssh() {
         # start the controlmaster
         $SSH ${user_host_port} /bin/true
         # Transfer what we need to the server
-        rm -rf $DESTZDOTDIR && mkdir $DESTZDOTDIR
+        rm -rf $DESTZDOTDIR && mkdir -p $DESTZDOTDIR
         cp -RL ${HOME}/.{zsh,zshrc,zshrc-google} $DESTZDOTDIR/
-        scp -r $DESTZDOTDIR/ ${user_host_port}:$DESTZDOTDIR/ >/dev/null
-        infocmp | $SSH -t ${user_host_port} "cat > '${DESTZDOTDIR}/${TERM}.info' && tic '${DESTZDOTDIR}/${TERM}.info'"
+        infocmp > "$DESTZDOTDIR/${TERM}.info"
+        rsync -auz --delete $DESTZDOTDIR/ ${user_host_port}:$DESTZDOTDIR/
+        $SSH ${user_host_port} "tic $DESTZDOTDIR/${TERM}.info"
     fi
 
     $SSH -tt ${user_host_port} ZDOTDIR=${DESTZDOTDIR} zsh -i
