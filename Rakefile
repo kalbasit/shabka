@@ -17,13 +17,11 @@ task :switch_to_zsh do
   if ENV["SHELL"] =~ /zsh/
     puts "using zsh"
   else
-    print "switch to zsh? (recommended) [ynq] "
+    print "switch to zsh? (recommended) [yn] "
     case $stdin.gets.chomp
     when 'y'
       puts "switching to zsh"
       system %Q{chsh -s `which zsh`}
-    when 'q'
-      exit
     else
       puts "skipping zsh"
     end
@@ -78,7 +76,11 @@ def link_folder(folder)
         end
       end
     else
-      link_file(file)
+      if File.symlink?(file)
+        link_symlink(file)
+      else
+        link_file(file)
+      end
     end
   end
 end
@@ -95,5 +97,14 @@ def link_file(file)
   else
     puts "linking #{file}"
     system %Q{ln -s "#{file}" "#{home_file}"}
+  end
+end
+
+def link_symlink(link)
+  begin
+    File.realpath(link)
+    link_file(link)
+  rescue Errno::ENOENT
+    puts "Skipping #{link} symlink because it points to a non-existing file."
   end
 end
