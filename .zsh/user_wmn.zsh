@@ -4,7 +4,7 @@ if [[ -z "${ENV_INIT}" ]]; then
 
   if [[ -d "${HOME}/.filesystem" ]]; then
     export MYFS="${HOME}/.filesystem"
-    export PATH="${MYFS}/bin:$PATH"
+    export PATH="${HOME}/.bin:${MYFS}/bin:$PATH"
 
     if [[ -d "${MYFS}/opt" ]]; then
       if [[ -d "${MYFS}/opt/go_appengine" ]]; then
