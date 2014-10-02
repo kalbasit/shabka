@@ -1,5 +1,0 @@
-#!/bin/bash
-# author: Wael Nasreddine <wael.nasreddine@gmail.com>
-Xephyr -ac -br -noreset -screen 1400x850 :1 &
-sleep 1
-DISPLAY=:1.0 subtle

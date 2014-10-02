@@ -1,9 +1,0 @@
-#!/bin/sh
-( sleep 1 ; exec /Applications/Synergy.app/Contents/MacOS/synergyc -f --restart --name poseidon localhost:24800 ) &
-trap "kill $!" EXIT
-trap "exit 1" HUP INT
-while true; do
-  echo Attempting ssh...
-  ssh -i $HOME/.ssh/synergy_id_rsa -N -x -L 24800:localhost:24800 gaea.mtv.corp.google.com
-  sleep 5
-done

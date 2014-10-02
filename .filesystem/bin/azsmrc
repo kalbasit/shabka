@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-#
-# vim:ft=sh:fenc=UTF-8:ts=4:sts=4:sw=4:expandtab:foldmethod=marker:foldlevel=0:
-#
-# $Id: azsmrc 783 2008-03-24 12:20:18Z wael $
-
-cd ${HOME}/lib//azsmrc
-java -classpath launcher.jar -Djava.library.path=. lbms.tools.launcher.Launcher

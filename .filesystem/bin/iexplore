@@ -1,2 +1,0 @@
-#!/bin/sh
-exec "/home/wael/.cxoffice/win98/desktopdata/cxmenu/StartMenu.C^5E3A^5Fwindows^5Fprofiles^5Fcrossover^5FStart^2BMenu/Programs/Internet+Explorer" "$@"
