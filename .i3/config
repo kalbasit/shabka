@@ -215,9 +215,10 @@ bindsym $mod+Shift+v exec "i3-msg 'workspace vpn'; st -c ovpn -t ovpn -e zsh -i 
 bindsym $mod+Shift+o exec "fetchotp -x"
 
 # autostart
-exec --no-startup-id ~/.filesystem/bin/Gwall
 exec st -c main_term -t main
+exec --no-startup-id Gwall
 exec --no-startup-id nm-applet
+exec --no-startup-id xautolock -time 30 -locker "i3-msg 'workspace lockscreen'; lock_screen; i3-msg 'workspace back_and_forth'"
 
 # Open Pianobar in a scratchpad
 exec st -c radio-scratchpad -t radio -e zsh -i -c 'pianobar'
