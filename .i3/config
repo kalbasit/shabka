@@ -116,6 +116,9 @@ bindsym $mod+Shift+q exec "i3-nagbar -t warning -m 'You pressed the exit shortcu
 # lock screen
 bindsym $mod+Shift+z exec --no-startup-id "i3-msg 'workspace lockscreen'; lock_screen; i3-msg 'workspace back_and_forth'"
 
+# Toggle touchpad
+bindsym $mod+$alt+t exec --no-startup-id "toggle_touchpad"
+
 # switch between the current and the previously focused one
 bindsym $mod+b workspace back_and_forth
 bindsym $mod+Shift+b move container to workspace back_and_forth
