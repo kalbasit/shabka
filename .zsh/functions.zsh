@@ -517,6 +517,24 @@ function stats() {
   history | awk '{CMD[$4]++;count++;}END { for (a in CMD)print CMD[a] " " CMD[a]/count*100 "% " a;}' | grep -v "./" | column -c3 -s " " -t | sort -nr | nl |  head -n20
 }
 #}}}
+# scs()#{{{
+function scs() {
+  if [[ "${#}" -ne 1 ]]; then
+    print_error 0 "Usage: scs <session>"
+    return 1
+  fi
+
+  session="${1}"
+
+  # U=utf8, R=reattach, q=quiet, x=multiplex
+  screen_cmd="screen -x -q -U -R ${session} -t ${session}"
+
+  if [[ -f "${HOME}/.screen/sessions/${session}" ]]; then
+    screen_cmd="${screen_cmd} -c '${HOME}/.screen/sessions/${session}'"
+  fi
+
+  eval "${screen_cmd}"
+}
 # zssh()#{{{
 function zssh() {
     local user_host_port=${1}
