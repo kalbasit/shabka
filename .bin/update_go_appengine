@@ -1,0 +1,53 @@
+#!/bin/bash
+set -e
+
+INSTALL_PATH="${MYFS}/opt/go_appengine"
+
+function parse_installed_version() {
+  local version_file="${MYFS}/opt/go_appengine/VERSION"
+  local version="$(cat "${MYFS}/opt/go_appengine/VERSION" | tr "\n" " " | sed -E 's/release: \"(.+)\"(.*)/\1/g')"
+
+  echo $version
+}
+
+function parse_remote_version() {
+  local version_url="https://appengine.google.com/api/updatecheck"
+  local version="$(echo $(curl -sS ${version_url}) | sed -E 's/release: \"(.+)\"(.*)/\1/g')"
+
+  echo $version
+}
+
+function update_go_appengine() {
+  local arch="${1}"
+  local version="${2}"
+
+  local file="go_appengine_sdk_linux_${arch}-${version}.zip"
+  local url="https://commondatastorage.googleapis.com/appengine-sdks/featured/${file}"
+  local download_path="$(mktemp -d /tmp/update_go_appengine.XXXX)"
+
+  curl -sS -o "${download_path}/${file}" "${url}"
+
+  rm -rf "${INSTALL_PATH}"
+  unzip -qq "${download_path}/${file}" -d "${MYFS}/opt"
+
+  rm -rf "${download_path}"
+}
+
+arch="386"
+if [[ `uname -a` == *x86_64* ]]
+then
+    arch="amd64"
+fi
+
+remote_version="$(parse_remote_version)"
+
+if [[ ! -r "${INSTALL_PATH}/VERSION" ]]; then
+  update_go_appengine "${arch}" "${remote_version}"
+  exit 0
+fi
+
+installed_version="$(parse_installed_version)"
+
+if [[ "x${remote_version}" != "x${installed_version}" ]]; then
+  update_go_appengine "${arch}" "${remote_version}"
+fi
