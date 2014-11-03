@@ -1,3 +1,16 @@
+# Make pathmunge is defined
+if ! type pathmunge &> /dev/null; then
+  function pathmunge() {
+      if ! [[ $PATH =~ (^|:)$1($|:) ]]; then
+         if [ "$2" = "after" ] ; then
+            PATH=$PATH:$1
+         else
+            PATH=$1:$PATH
+         fi
+      fi
+  }
+fi
+
 export EDITOR=vim
 pathmunge "${HOME}/.bin"
 
