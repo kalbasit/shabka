@@ -12,4 +12,3 @@ alias email="emacsclient -a '' -s mail -t"
 alias history='fc -fl 1'
 alias xcopy='xclip -selection clipboard'
 alias zs='zssh'
-alias remove_old_kernels="sudo apt-get remove --purge $(dpkg -l 'linux-image-*' | sed '/^ii/!d;/'"$(uname -r | sed "s/\(.*\)-\([^0-9]\+\)/\1/")"'/d;s/^[^ ]* [^ ]* \([^ ]*\).*/\1/;/[0-9]/!d')"
