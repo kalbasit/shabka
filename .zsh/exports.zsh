@@ -1,4 +1,4 @@
-export BROWSER=/usr/bin/google-chrome-stable
+export BROWSER=/usr/bin/google-chrome-unstable
 
 local mysql_credentials_path="$HOME/.my.cnf"
 
