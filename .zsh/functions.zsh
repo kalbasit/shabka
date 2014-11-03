@@ -579,7 +579,7 @@ function zssh() {
 #}}}
 # pathmunge()#{{{
 function pathmunge() {
-    if ! [[ $PATH =~ (^|:)$1($|:) ]];
+    if ! [[ $PATH =~ (^|:)$1($|:) ]]; then
        if [ "$2" = "after" ] ; then
           PATH=$PATH:$1
        else
