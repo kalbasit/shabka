@@ -535,6 +535,7 @@ function scs() {
 
   eval "${screen_cmd}"
 }
+#}}}
 # zssh()#{{{
 function zssh() {
     local user_host_port=${1}
@@ -578,12 +579,12 @@ function zssh() {
 #}}}
 # pathmunge()#{{{
 function pathmunge() {
-if ! echo $PATH | /bin/egrep -q "(^|:)$1($|:)" ; then
-   if [ "$2" = "after" ] ; then
-      PATH=$PATH:$1
-   else
-      PATH=$1:$PATH
-   fi
-fi
+    if ! [[ $PATH =~ (^|:)$1($|:) ]];
+       if [ "$2" = "after" ] ; then
+          PATH=$PATH:$1
+       else
+          PATH=$1:$PATH
+       fi
+    fi
 }
 #}}}
