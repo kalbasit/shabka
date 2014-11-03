@@ -1,52 +1,46 @@
-if [[ -z "${ENV_INIT}" ]]; then
-  export ENV_INIT=true
-  export EDITOR=vim
+export EDITOR=vim
+pathmunge "${HOME}/.bin"
 
-  if [[ -d "${HOME}/.filesystem" ]]; then
-    export MYFS="${HOME}/.filesystem"
-    export PATH="${HOME}/.bin:${MYFS}/bin:$PATH"
+if [[ -d "${HOME}/.filesystem" ]]; then
+  export MYFS="${HOME}/.filesystem"
+  pathmunge "${MYFS}/bin"
 
-    if [[ -d "${MYFS}/opt" ]]; then
-      if [[ -d "${MYFS}/opt/go_appengine" ]]; then
-        export PATH="${MYFS}/opt/go_appengine:${PATH}"
-      fi
-
-      for dir in `ls --color=never "${MYFS}/opt"`; do
-        if [[ -d "${MYFS}/opt/${dir}/bin" ]]; then
-          export PATH="${MYFS}/opt/${dir}/bin:${PATH}"
-        fi
-      done
+  if [[ -d "${MYFS}/opt" ]]; then
+    if [[ -d "${MYFS}/opt/go_appengine" ]]; then
+      pathmunge "${MYFS}/opt/go_appengine" after
     fi
+
+    for dir in `ls --color=never "${MYFS}/opt"`; do
+      if [[ -d "${MYFS}/opt/${dir}/bin" ]]; then
+        pathmunge "${MYFS}/opt/${dir}/bin"
+      fi
+    done
   fi
 
-  if [[ -d "${HOME}/go" ]]; then
-    export GOPATH="${HOME}/go:${GOPATH}"
-    export PATH="${HOME}/go/bin:${PATH}"
-  fi
-
-  if [[ -d "${HOME}/.cask/bin" ]]; then
-    export PATH="${HOME}/.cask/bin:${PATH}"
-    export CASK_PATH="$(dirname $(dirname $(which cask)))"
-  fi
-
-  # Load rbenv
-  if [[ -d "${HOME}/.rbenv" ]]; then
-    export PATH="${HOME}/.rbenv/bin:$PATH"
-    eval "$(rbenv init --no-rehash -)"
-  fi
-
-  # Load pyenv
-  if [[ -d "${HOME}/.pyenv" ]]; then
-    export PATH="${HOME}/.pyenv/bin:$PATH"
-    eval "$(pyenv init --no-rehash -)"
-  fi
-
-  # Load GVM
-  #if [[ -d "${HOME}/.gvm" ]]; then
-  #  source "${HOME}/.gvm/scripts/gvm"
-  #fi
-
-  # Color grep results
-  export GREP_OPTIONS='--color=auto'
-  export GREP_COLOR='1;32'
+  # Make LD can find our files.
+  export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${HOME}/.filesystem/lib"
 fi
+
+export GOPATH="${HOME}/code"
+pathmunge "${GOPATH}/bin"
+
+if [[ -d "${HOME}/.cask/bin" ]]; then
+  pathmunge "${HOME}/.cask/bin"
+  export CASK_PATH="$(dirname $(dirname $(which cask)))"
+fi
+
+# Load rbenv
+if [[ -d "${HOME}/.rbenv" ]]; then
+  pathmunge "${HOME}/.rbenv/bin"
+  eval "$(rbenv init --no-rehash -)"
+fi
+
+# Load pyenv
+if [[ -d "${HOME}/.pyenv" ]]; then
+  pathmunge "${HOME}/.pyenv/bin"
+  eval "$(pyenv init --no-rehash -)"
+fi
+
+# Color grep results
+export GREP_OPTIONS='--color=auto'
+export GREP_COLOR='1;32'
