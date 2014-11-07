@@ -12,3 +12,4 @@ alias email="emacsclient -a '' -s mail -t"
 alias history='fc -fl 1'
 alias xcopy='xclip -selection clipboard'
 alias zs='zssh'
+alias backup_code='rsync -auz --progress --delete ~/code/src/ 192.168.1.13:code/src/'
