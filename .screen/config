@@ -29,6 +29,7 @@
 # No annoying audible bell, using "visual bell"
 # vbell on                # default: off
 # vbell_msg "   -- Bell,Bell!! --   "    # default: "Wuff,Wuff!!"
+vbell off
 
 # Unicode
   defutf8 on
