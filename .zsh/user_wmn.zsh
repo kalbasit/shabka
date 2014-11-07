@@ -11,6 +11,10 @@ if ! type pathmunge &> /dev/null; then
   }
 fi
 
+if [[ -d /usr/local/go/bin ]]; then
+  pathmunge /usr/local/go/bin
+fi
+
 export EDITOR=vim
 pathmunge "${HOME}/.bin"
 
