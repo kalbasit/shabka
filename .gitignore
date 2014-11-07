@@ -21,8 +21,6 @@ drafts/*
 .vim/_backup/*
 .vim/.netrwhist
 *.emptyfile
-.vimrc
-.gvimrc
 .irssi/config.autosave
 .emacs.d/.cask
 .emacs.d/cache/
@@ -41,6 +39,7 @@ log.txt
 Gist.sublime-settings
 .byobu/.ssh-agent
 .filesystem/
+.vim/bundle/
 
 
 

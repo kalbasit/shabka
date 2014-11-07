@@ -6,12 +6,13 @@
 	"caret_style": "phase",
 	"color_scheme": "Packages/User/Solarized (Light) (SL).tmTheme",
 	"ensure_newline_at_eof_on_save": true,
+	"font_size": 10,
 	"highlight_line": true,
 	"ignored_packages":
 	[
 		"Markdown",
-		"Vintage",
-		"google-citc-gutter"
+		"google-citc-gutter",
+		"Vintage"
 	],
 	"rulers":
 	[
