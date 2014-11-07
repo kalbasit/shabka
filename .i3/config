@@ -92,10 +92,10 @@ bindsym $mod+a focus parent
 #bindsym $mod+d focus child
 
 # switch to workspace
-bindsym $mod+0 exec "i3-msg workspace ssh; i3-msg [instance='^X-www-browser$'] scratchpad show"
-bindsym $mod+1 exec "i3-msg workspace term; i3-msg [instance='^X-www-browser$'] scratchpad show"
-bindsym $mod+2 exec "i3-msg workspace web; i3-msg [instance='^X-www-browser$'] scratchpad show"
-bindsym $mod+3 exec "i3-msg workspace editor; i3-msg [instance='^X-www-browser$'] scratchpad show"
+bindsym $mod+0 exec "i3-msg workspace ssh; i3-msg [instance='^X-www-browser$'] scratchpad show; i3-msg focus mode_toggle"
+bindsym $mod+1 exec "i3-msg workspace term; i3-msg [instance='^X-www-browser$'] scratchpad show; i3-msg focus mode_toggle"
+bindsym $mod+2 exec "i3-msg workspace web; i3-msg [instance='^X-www-browser$'] scratchpad show; i3-msg focus mode_toggle"
+bindsym $mod+3 exec "i3-msg workspace editor; i3-msg [instance='^X-www-browser$'] scratchpad show; i3-msg focus mode_toggle"
 
 # move focused container to workspace
 bindsym $mod+Shift+0 move container to workspace ssh
@@ -192,6 +192,7 @@ bindsym $mod+$alt+r mode "resize"
 # finds out, if available)
 bar {
   status_command myi3status
+  #status_command i3blocks
 }
 
 # Assign applications to workspaces
