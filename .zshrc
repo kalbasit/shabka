@@ -61,12 +61,3 @@ source "${THEMES_PATH}/${THEME}.zsh-theme"
 
 # Load travis
 [[ -r "${HOME}/.travis/travis.sh" ]] && source "${HOME}/.travis/travis.sh"
-
-# Let's detect the correct TERM to use.
-if TERM=st-256color infocmp &> /dev/null; then
-  export TERM=st-256color
-elif TERM=screen-256color infocmp &> /dev/null; then
-  export TERM=screen-256color
-else
-  export TERM=xterm-256color
-fi
