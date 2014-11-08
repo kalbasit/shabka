@@ -15,8 +15,9 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
 
-" Use solarized colorscheme
+" Colorschemes
 Plugin 'altercation/vim-colors-solarized'
+Plugin 'fatih/molokai'
 
 " Coffescript
 Plugin 'kchmck/vim-coffee-script'
@@ -141,7 +142,8 @@ set viminfo='20,\"50,:20,%,n~/.viminfo,!
 " ,----
 " | UI / visual cues
 " `----
-color solarized         " Use solarized colorscheme.
+let mapleader = ","
+color molokai           " Use solarized colorscheme.
 set background=light    " Use a light background.
 set lsp=0               " space it out a little more (easier to read)
 set wildmenu            " turn on wild menu
