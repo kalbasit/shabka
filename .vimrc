@@ -18,6 +18,7 @@ Plugin 'gmarik/Vundle.vim'
 " Colorschemes
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'fatih/molokai'
+Plugin 'vim-scripts/summerfruit256.vim'
 
 " Coffescript
 Plugin 'kchmck/vim-coffee-script'
@@ -42,6 +43,7 @@ if executable("curl")
 endif
 if has("python")
   Plugin 'sjl/gundo.vim'
+  Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
 endif
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'scrooloose/nerdtree'
@@ -55,6 +57,106 @@ Plugin 'tpope/vim-unimpaired'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
+
+""
+"" Settings
+""
+
+color summerfruit256
+
+let mapleader = ","     " set the mapleader
+set encoding=utf-8      " Set default encoding to UTF-8
+set wildmenu            " turn on wild menu
+set wildchar=<TAB>      " Which character activates the wildmenu
+set ruler               " Always show current positions along the bottom
+set cmdheight=1         " the command bar is 1 line high
+set number              " turn on line numbers but display them as relative to the current line
+set winwidth=79         " Set the minimum window width
+set colorcolumn=80      " Display a color column
+set lz                  " do not redraw while running macros (much faster) (LazyRedraw)
+set hidden              " you can change buffer without saving
+set whichwrap+=<,>,h,l  " backspace and cursor keys wrap to
+set shortmess=atI       " shortens messages to avoid 'press a key' prompt
+set report=1            " tell us when anything is changed via :...
+set complete=.,w,b,t    " Same as default except that I remove the 'u' option
+set noerrorbells        " don't make noise
+set showmatch           " show matching brackets
+set matchtime=2         " how many tenths of a second to blink matching brackets for
+set so=5                " Keep 10 lines (top/bottom) for scope
+set novisualbell        " don't blink
+set showmode            " show mode in statusline
+set startofline         " Move the cursor to the first non-blank of the line
+set esckeys             " allow cursor keys in insert mode
+set showmatch           " show matching brackets
+set showfulltag         " When completing by tag, show the whole tag, not just the function name
+if v:version >= 703
+  set undofile " remember undo chains between sessions
+  set nocursorcolumn      " no cursor column highlighting
+  set cursorline        " cursor line highlighting
+  hi CursorLine cterm=none
+endif
+
+" We have to have a winheight bigger than we want to set winminheight. But if
+" we set winheight to be huge before winminheight, the winminheight set will
+" fail.
+set winheight=5
+set winminheight=5
+set winheight=999
+
+""
+"" Gui Settings
+""
+
+if has("gui_running")
+  set mouse=""          " I hate using the mouse for other than copying/pasting.
+  set guioptions=cei    " Set the guioptions I like
+  set guifont=Inconsolata-dz:h12
+endif
+
+""
+"" Status line
+""
+
+if has("statusline") && !&cp
+  set laststatus=2  " always show the status bar
+
+  " Start the status line
+  set statusline=%f\ %m\ %r
+  set statusline+=Line:%l/%L[%p%%]
+  set statusline+=Col:%v
+  set statusline+=Buf:#%n
+  set statusline+=[%b][0x%B]
+endif
+
+""
+"" Whitespace
+""
+
+set nowrap                        " don't wrap lines
+set tabstop=2                     " a tab is two spaces
+set shiftwidth=2                  " an autoindent (with <<) is two spaces
+set expandtab                     " use spaces, not tabs
+set list                          " Show invisible characters
+set backspace=indent,eol,start    " backspace through everything in insert mode
+
+" List chars
+set listchars=""                  " Reset the listchars
+set listchars=tab:\ \             " a tab should display as "  ", trailing whitespace as "."
+set listchars+=trail:.            " show trailing spaces as dots
+set listchars+=extends:>          " The character to show in the last column when wrap is
+                                  " off and the line continues beyond the right of the screen
+set listchars+=precedes:<         " The character to show in the last column when wrap is
+                                  " off and the line continues beyond the left of the screen
+
+""
+"" Searching
+""
+
+set hlsearch    " highlight matches
+set incsearch   " incremental searching
+set ignorecase  " searches are case insensitive...
+set smartcase   " ... unless they contain at least one capital letter
+
 
 ""
 "" Functions
@@ -114,6 +216,19 @@ set pastetoggle=<F12>
 :nmap <F1> <ESC>
 :imap <F1> <ESC>
 
+" Go
+au FileType go nmap gd <Plug>(go-def)
+au FileType go nmap <Leader>i <Plug>(go-info)
+au FileType go nmap <Leader>gd <Plug>(go-doc)
+au FileType go nmap <Leader>gv <Plug>(go-doc-vertical)
+au FileType go nmap <Leader>gb <Plug>(go-doc-browser)
+au FileType go nmap <leader>r <Plug>(go-run)
+au FileType go nmap <leader>b <Plug>(go-build)
+au FileType go nmap <leader>t <Plug>(go-test)
+au FileType go nmap <Leader>ds <Plug>(go-def-split)
+au FileType go nmap <Leader>dv <Plug>(go-def-vertical)
+au FileType go nmap <Leader>dt <Plug>(go-def-tab)
+
 " ,----
 " | Windows
 " `---
@@ -139,116 +254,11 @@ set autoread                    " Automatically read a file that has changed on 
 " n    - set name of viminfo file
 set viminfo='20,\"50,:20,%,n~/.viminfo,!
 
-" ,----
-" | UI / visual cues
-" `----
-let mapleader = ","
-color molokai           " Use solarized colorscheme.
-set background=light    " Use a light background.
-set lsp=0               " space it out a little more (easier to read)
-set wildmenu            " turn on wild menu
-"set wildignorecase     " Make it easier to complete buffers, open files, etc...
-set ruler               " Always show current positions along the bottom
-set cmdheight=1         " the command bar is 1 line high
-set number              " turn on line numbers but display them as relative to the current line
-set winwidth=79         " Set the minimum window width
-set colorcolumn=80      " Display a color column
-
-" We have to have a winheight bigger than we want to set winminheight. But if
-" we set winheight to be huge before winminheight, the winminheight set will
-" fail.
-set winheight=5
-set winminheight=5
-set winheight=999
-
-set lz                  " do not redraw while running macros (much faster) (LazyRedraw)
-set hidden              " you can change buffer without saving
-set whichwrap+=<,>,h,l  " backspace and cursor keys wrap to
-set shortmess=atI       " shortens messages to avoid 'press a key' prompt
-set report=1            " tell us when anything is changed via :...
-set complete=.,w,b,t    " Same as default except that I remove the 'u' option
-set noerrorbells        " don't make noise
-set fillchars=vert:\ ,stl:\ ,stlnc:\   " make the splitters between windows be blank
-set showmatch           " show matching brackets
-set matchtime=2         " how many tenths of a second to blink matching brackets for
-set hlsearch            " do not highlight searched for phrases
-set incsearch           " BUT do highlight as you type you search phrase
-set so=5                " Keep 10 lines (top/bottom) for scope
-set novisualbell        " don't blink
-set showmode            " show mode in statusline
-set startofline         " Move the cursor to the first non-blank of the line
-set esckeys             " allow cursor keys in insert mode
-set showmatch           " show matching brackets
-hi User1 term=inverse,bold cterm=inverse,bold ctermfg=red
-set wildchar=<TAB>      " Which character activates the wildmenu
-set showfulltag         " When completing by tag, show the whole tag, not just the function name
-if v:version >= 700
-    set nocursorcolumn      " no cursor column highlighting
-    set nocursorline        " no cursor line highlighting
-endif
-if has("gui_running")
-  set mouse=""          " I hate using the mouse for other than copying/pasting.
-  set guioptions=cei    " Set the guioptions I like
-  set guifont=Inconsolata-dz:h12
-endif
-
-""
-"" Status line
-""
-
-if has("statusline") && !&cp
-  set laststatus=2  " always show the status bar
-
-  " Start the status line
-  set statusline=%f\ %m\ %r
-  set statusline+=Line:%l/%L[%p%%]
-  set statusline+=Col:%v
-  set statusline+=Buf:#%n
-  set statusline+=[%b][0x%B]
-endif
 
 ""
 "" Basic Setup
 ""
 
-set nocompatible      " Use vim, no vi defaults
-set number            " Show line numbers
-set ruler             " Show line and column number
-syntax enable         " Turn on syntax highlighting allowing local overrides
-set encoding=utf-8    " Set default encoding to UTF-8
-
-""
-"" Whitespace
-""
-
-set nowrap                        " don't wrap lines
-set tabstop=2                     " a tab is two spaces
-set shiftwidth=2                  " an autoindent (with <<) is two spaces
-set expandtab                     " use spaces, not tabs
-set list                          " Show invisible characters
-set backspace=indent,eol,start    " backspace through everything in insert mode
-
-if exists("g:enable_mvim_shift_arrow")
-  let macvim_hig_shift_movement = 1 " mvim shift-arrow-keys
-endif
-
-" List chars
-set listchars=""                  " Reset the listchars
-set listchars=tab:\ \             " a tab should display as "  ", trailing whitespace as "."
-set listchars+=trail:.            " show trailing spaces as dots
-set listchars+=extends:>          " The character to show in the last column when wrap is
-                                  " off and the line continues beyond the right of the screen
-set listchars+=precedes:<         " The character to show in the last column when wrap is
-                                  " off and the line continues beyond the left of the screen
-
-""
-"" Searching
-""
-
-set hlsearch    " highlight matches
-set incsearch   " incremental searching
-set ignorecase  " searches are case insensitive...
-set smartcase   " ... unless they contain at least one capital letter
 
 ""
 "" Wild settings
@@ -287,6 +297,8 @@ set directory^=~/.vim/_temp//      " where to put swap files.
 ""
 
 if has("autocmd")
+  "autocmd BufEnter * set listchars=tab:▸\ ,eol:¬   " Show invisible characters
+
   " In Makefiles, use real tabs, not tabs expanded to spaces
   au FileType make setlocal noexpandtab
 
@@ -318,6 +330,11 @@ endif
 " | Diff
 " `----
 set diffopt+=iwhite     " Add ignorance of whitespace to diff
+
+" ,----
+" | Go
+" `----
+let g:go_fmt_command = "goimports"
 
 " ,----
 " | CtrlP
