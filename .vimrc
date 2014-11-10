@@ -1,8 +1,6 @@
-"" TODO: Clean up this mess!
+" vim:foldmethod=marker:foldlevel=0:
 
-
-""
-"" Vundle
+"" Vundle{{{
 ""
 
 set nocompatible    " be iMproved, required
@@ -53,13 +51,14 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-repeat'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-unimpaired'
+Plugin 'msanders/snipmate.vim'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
 
-""
-"" Settings
+" }}}
+"" Settings{{{
 ""
 
 color summerfruit256
@@ -89,9 +88,18 @@ set startofline         " Move the cursor to the first non-blank of the line
 set esckeys             " allow cursor keys in insert mode
 set showmatch           " show matching brackets
 set showfulltag         " When completing by tag, show the whole tag, not just the function name
+set shell=/bin/bash     " Use bash no matter what shell are we running
+set diffopt+=iwhite     " Add ignorance of whitespace to diff
+set pastetoggle=<F12>   " Paste toggle on key F12!
+set makeef=error.err    " When using make, where should it dump the file
+set noautowrite         " safe automacially content
+set autoread            " Automatically read a file that has changed on disk
+:set splitbelow         " Always split under
+:set splitright         " Always split on the right
+syntax enable           " Enable syntax highlighting
 if v:version >= 703
   set undofile " remember undo chains between sessions
-  set nocursorcolumn      " no cursor column highlighting
+  set nocursorcolumn    " no cursor column highlighting
   set cursorline        " cursor line highlighting
   hi CursorLine cterm=none
 endif
@@ -103,148 +111,6 @@ set winheight=5
 set winminheight=5
 set winheight=999
 
-""
-"" Gui Settings
-""
-
-if has("gui_running")
-  set mouse=""          " I hate using the mouse for other than copying/pasting.
-  set guioptions=cei    " Set the guioptions I like
-  set guifont=Inconsolata-dz:h12
-endif
-
-""
-"" Status line
-""
-
-if has("statusline") && !&cp
-  set laststatus=2  " always show the status bar
-
-  " Start the status line
-  set statusline=%f\ %m\ %r
-  set statusline+=Line:%l/%L[%p%%]
-  set statusline+=Col:%v
-  set statusline+=Buf:#%n
-  set statusline+=[%b][0x%B]
-endif
-
-""
-"" Whitespace
-""
-
-set nowrap                        " don't wrap lines
-set tabstop=2                     " a tab is two spaces
-set shiftwidth=2                  " an autoindent (with <<) is two spaces
-set expandtab                     " use spaces, not tabs
-set list                          " Show invisible characters
-set backspace=indent,eol,start    " backspace through everything in insert mode
-
-" List chars
-set listchars=""                  " Reset the listchars
-set listchars=tab:\ \             " a tab should display as "  ", trailing whitespace as "."
-set listchars+=trail:.            " show trailing spaces as dots
-set listchars+=extends:>          " The character to show in the last column when wrap is
-                                  " off and the line continues beyond the right of the screen
-set listchars+=precedes:<         " The character to show in the last column when wrap is
-                                  " off and the line continues beyond the left of the screen
-
-""
-"" Searching
-""
-
-set hlsearch    " highlight matches
-set incsearch   " incremental searching
-set ignorecase  " searches are case insensitive...
-set smartcase   " ... unless they contain at least one capital letter
-
-
-""
-"" Functions
-""
-
-function! OpenTestAlternate()
-  let new_file = AlternateForCurrentFile()
-  exec ':e ' . new_file
-endfunction
-function! AlternateForCurrentFile()
-  let current_file = expand("%")
-  let new_file = current_file
-  let in_spec = match(current_file, '^spec/') != -1
-  let going_to_spec = !in_spec
-  let rakefile = match(current_file, '\.rake$') != -1
-  let in_app = match(current_file, '\<controllers\>') != -1 || match(current_file, '\<models\>') != -1 || match(current_file, '\<views\>') != -1
-  if going_to_spec
-    if in_app
-      let new_file = substitute(new_file, '^app/', '', '')
-    end
-    if rakefile
-      let new_file = substitute(new_file, '\.rake$', '_spec.rb', '')
-    else
-      let new_file = substitute(new_file, '\.rb$', '_spec.rb', '')
-    end
-    let new_file = 'spec/' . new_file
-  else
-    let new_file = substitute(new_file, '_spec\.rb$', '.rb', '')
-    let new_file = substitute(new_file, '^spec/', '', '')
-    if in_app
-      let new_file = 'app/' . new_file
-    end
-
-    if !filereadable(new_file)
-      let spec_file = substitute(new_file, '\.rb$', '.rake', '')
-      if filereadable(spec_file)
-        let new_file = spec_file
-      endif
-    endif
-  endif
-  return new_file
-endfunction
-
-""
-"" Defaults
-""
-
-" Use bash, this fixes issues with using a non-POSIX shell like fish.
-set shell=/bin/bash
-
-" Paste toggle on key F12!
-set pastetoggle=<F12>
-
-" Remap F1 to ESC
-:map <F1> <ESC>
-:vmap <F1> <ESC>
-:nmap <F1> <ESC>
-:imap <F1> <ESC>
-
-" Go
-au FileType go nmap gd <Plug>(go-def)
-au FileType go nmap <Leader>i <Plug>(go-info)
-au FileType go nmap <Leader>gd <Plug>(go-doc)
-au FileType go nmap <Leader>gv <Plug>(go-doc-vertical)
-au FileType go nmap <Leader>gb <Plug>(go-doc-browser)
-au FileType go nmap <leader>r <Plug>(go-run)
-au FileType go nmap <leader>b <Plug>(go-build)
-au FileType go nmap <leader>t <Plug>(go-test)
-au FileType go nmap <Leader>ds <Plug>(go-def-split)
-au FileType go nmap <Leader>dv <Plug>(go-def-vertical)
-au FileType go nmap <Leader>dt <Plug>(go-def-tab)
-
-" ,----
-" | Windows
-" `---
-:set splitbelow   " Always split under
-:set splitright   " Always split on the right
-
-" ,----
-" | files / backup
-" `----
-set makeef=error.err            " When using make, where should it dump the file
-set noautowrite                 " safe automacially content
-set autoread                    " Automatically read a file that has changed on disk
-
-" ,----
-" | viminfo
-" `----
 " Remember things between sessions
 "
 " '20  - remember marks for 20 previous files
@@ -254,14 +120,18 @@ set autoread                    " Automatically read a file that has changed on 
 " n    - set name of viminfo file
 set viminfo='20,\"50,:20,%,n~/.viminfo,!
 
-
+" }}}
+"" Gui Settings{{{
 ""
-"" Basic Setup
-""
 
+if has("gui_running")
+  set mouse=""          " I hate using the mouse for other than copying/pasting.
+  set guioptions=cei    " Set the guioptions I like
+  set guifont=Inconsolata-dz:h12
+endif
 
-""
-"" Wild settings
+" }}}
+"" Wild settings{{{
 ""
 
 " TODO: Investigate the precise meaning of these settings
@@ -285,20 +155,18 @@ set wildignore+=*/tmp/cache/assets/*/sprockets/*,*/tmp/cache/assets/*/sass/*
 " Disable temp and backup files
 set wildignore+=*.swp,*~,._*
 
-""
-"" Backup and swap files
+" }}}
+"" Backup and swap files{{{
 ""
 
 set backupdir^=~/.vim/_backup//    " where to put backup files.
 set directory^=~/.vim/_temp//      " where to put swap files.
 
-""
-"" Auto Commands
+" }}}
+"" Auto Commands{{{
 ""
 
 if has("autocmd")
-  "autocmd BufEnter * set listchars=tab:▸\ ,eol:¬   " Show invisible characters
-
   " In Makefiles, use real tabs, not tabs expanded to spaces
   au FileType make setlocal noexpandtab
 
@@ -324,43 +192,151 @@ if has("autocmd")
     " Automatically resize splits when resizing MacVim window
     autocmd VimResized * wincmd =
   endif
+
+  " Go
+  au FileType go nmap gd <Plug>(go-def)
+  au FileType go nmap <Leader>i <Plug>(go-info)
+  au FileType go nmap <Leader>gd <Plug>(go-doc)
+  au FileType go nmap <Leader>gv <Plug>(go-doc-vertical)
+  au FileType go nmap <Leader>gb <Plug>(go-doc-browser)
+  au FileType go nmap <leader>r <Plug>(go-run)
+  au FileType go nmap <leader>b <Plug>(go-build)
+  au FileType go nmap <leader>t <Plug>(go-test)
+  au FileType go nmap <Leader>ds <Plug>(go-def-split)
+  au FileType go nmap <Leader>dv <Plug>(go-def-vertical)
+  au FileType go nmap <Leader>dt <Plug>(go-def-tab)
 endif
 
-" ,----
-" | Diff
-" `----
-set diffopt+=iwhite     " Add ignorance of whitespace to diff
+" }}}
+"" Status line {{{
+""
 
-" ,----
-" | Go
-" `----
+if has("statusline") && !&cp
+  set laststatus=2  " always show the status bar
+
+  " Start the status line
+  set statusline=%f\ %m\ %r
+  set statusline+=Line:%l/%L[%p%%]
+  set statusline+=Col:%v
+  set statusline+=Buf:#%n
+  set statusline+=[%b][0x%B]
+endif
+
+" }}}
+"" Whitespace {{{
+""
+
+set nowrap                        " don't wrap lines
+set tabstop=2                     " a tab is two spaces
+set shiftwidth=2                  " an autoindent (with <<) is two spaces
+set expandtab                     " use spaces, not tabs
+set list                          " Show invisible characters
+set backspace=indent,eol,start    " backspace through everything in insert mode
+
+" }}}
+"" List chars {{{
+""
+
+set listchars=""                  " Reset the listchars
+set listchars=tab:\ \             " a tab should display as "  ", trailing whitespace as "."
+set listchars+=trail:.            " show trailing spaces as dots
+set listchars+=extends:>          " The character to show in the last column when wrap is
+                                  " off and the line continues beyond the right of the screen
+set listchars+=precedes:<         " The character to show in the last column when wrap is
+                                  " off and the line continues beyond the left of the screen
+
+" }}}
+"" Searching{{{
+""
+
+set hlsearch    " highlight matches
+set incsearch   " incremental searching
+set ignorecase  " searches are case insensitive...
+set smartcase   " ... unless they contain at least one capital letter
+
+" }}}
+"" Snipmate{{{
+""
+
+let g:snippets_dir="~/.vim/snippets"
+
+" }}}
+"" Go{{{
+""
+
 let g:go_fmt_command = "goimports"
 
-" ,----
-" | CtrlP
-" `----
+" }}}
+"" CtrlP{{{
+""
+
 let g:ctrlp_working_path_mode = 0
 let g:ctrlp_max_height = 100
 
-" ,----
-" | Vroom
-" `----
+" }}}
+"" Vroom{{{
+""
+
 let g:vroom_write_all = 1
 
-""
-"" Command-Line Mappings
+"}}}
+"" Command-Line Mappings {{{
 ""
 
 " After whitespace, insert the current directory into a command-line path
 cnoremap <expr> <C-P> getcmdline()[getcmdpos()-2] ==# ' ' ? expand('%:p:h') : "\<C-P>"
 
-""
-"" General Mappings (Normal, Visual, Operator-pending)
+" W should write the same as w
+command! W :w
+command! Wa :wa
+command! Xa :xa
+
+" }}}
+"" General Mappings (Normal, Visual, Operator-pending) {{{
 ""
 
-" Toggle paste mode
-nmap <silent> <F4> :set invpaste<CR>:set paste?<CR>
-imap <silent> <F4> <ESC>:set invpaste<CR>:set paste?<CR>
+vnoremap <leader>rv :call ExtractVariable()<cr>
+nnoremap <leader>ri :call InlineVariable()<cr>
+
+" Map keys to go to specific files
+map <leader>gr :topleft :split config/routes.rb<cr>
+map <leader>gR :call ShowRoutes()<cr>
+map <leader>ga :CtrlP app/assets<cr>
+map <leader>gC :CtrlP contao<cr>
+map <leader>gv :CtrlP app/views<cr>
+map <leader>gc :CtrlP app/controllers<cr>
+map <leader>gm :CtrlP app/models<cr>
+map <leader>gh :CtrlP app/helpers<cr>
+map <leader>gl :CtrlP lib<cr>
+map <leader>gp :CtrlP public<cr>
+map <leader>gs :CtrlP public/stylesheets/sass<cr>
+map <leader>gf :CtrlP features<cr>
+map <leader>gg :topleft 100 :split Gemfile<cr>
+map <leader>gt :CtrlPTag<cr>
+map <leader>F :CtrlP %%<cr>
+
+nnoremap <leader>. :call OpenTestAlternate()<cr>
+nnoremap <leader><leader> <c-^>
+
+" Force myself to learn the hjkl
+map <Left> :echo "no!"<cr>
+map <Right> :echo "no!"<cr>
+map <Up> :echo "no!"<cr>
+map <Down> :echo "no!"<cr>
+
+" CoffeeScript
+vmap <leader>c <esc>:'<,'>:CoffeeCompile<CR>
+map <leader>c :CoffeeCompile<CR>
+command! -nargs=1 C CoffeeCompile | :<args>
+
+" Convert 1.8 hash to 1.9
+command! ConvertHashStyle :%s/\([^:]\):\([a-zA-Z_]*\)\s*=>/\1\2:/g
+
+" Remap F1 to ESC
+:map <F1> <ESC>
+:vmap <F1> <ESC>
+:nmap <F1> <ESC>
+:imap <F1> <ESC>
 
 " format the entire file
 nnoremap <leader>fef :normal! gg=G``<CR>
@@ -387,7 +363,7 @@ nmap <leader>ev :vsp <C-R>=expand('%:h').'/'<cr>
 nmap <leader>et :tabe <C-R>=expand('%:h').'/'<cr>
 
 " Swap two words
-nmap <silent> gw :s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3\2\1/<CR>`'
+nmap <silent>gw :s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3\2\1/<CR>`'
 
 " Underline the current line with '='
 nmap <silent> <leader>ul :t.<CR>Vr=
@@ -398,117 +374,63 @@ nmap <silent> <leader>tw :set invwrap<CR>:set wrap?<CR>
 " find merge conflict markers
 nmap <silent> <leader>fc <ESC>/\v^[<=>]{7}( .*\|$)<CR>
 
-" Map the arrow keys to be based on display lines, not physical lines
-map <Down> gj
-map <Up> gk
-
 " Toggle hlsearch with <leader>hs
 nmap <leader>hs :set hlsearch! hlsearch?<CR>
 
 " Adjust viewports to the same size
 map <Leader>= <C-w>=
 
-if has("gui_macvim") && has("gui_running")
-  " Map command-[ and command-] to indenting or outdenting
-  " while keeping the original selection in visual mode
-  vmap <D-]> >gv
-  vmap <D-[> <gv
+" Map command-[ and command-] to indenting or outdenting
+" while keeping the original selection in visual mode
+vmap <A-]> >gv
+vmap <A-[> <gv
 
-  nmap <D-]> >>
-  nmap <D-[> <<
+nmap <A-]> >>
+nmap <A-[> <<
 
-  omap <D-]> >>
-  omap <D-[> <<
+omap <A-]> >>
+omap <A-[> <<
 
-  imap <D-]> <Esc>>>i
-  imap <D-[> <Esc><<i
+imap <A-]> <Esc>>>i
+imap <A-[> <Esc><<i
 
-  " Bubble single lines
-  nmap <D-Up> [e
-  nmap <D-Down> ]e
-  nmap <D-k> [e
-  nmap <D-j> ]e
+" Bubble single lines
+nmap <C-Up> [e
+nmap <C-Down> ]e
+nmap <C-k> [e
+nmap <C-j> ]e
 
-  " Bubble multiple lines
-  vmap <D-Up> [egv
-  vmap <D-Down> ]egv
-  vmap <D-k> [egv
-  vmap <D-j> ]egv
+" Bubble multiple lines
+vmap <C-Up> [egv
+vmap <C-Down> ]egv
+vmap <C-k> [egv
+vmap <C-j> ]egv
 
-  " Map Command-# to switch tabs
-  map  <D-0> 0gt
-  imap <D-0> <Esc>0gt
-  map  <D-1> 1gt
-  imap <D-1> <Esc>1gt
-  map  <D-2> 2gt
-  imap <D-2> <Esc>2gt
-  map  <D-3> 3gt
-  imap <D-3> <Esc>3gt
-  map  <D-4> 4gt
-  imap <D-4> <Esc>4gt
-  map  <D-5> 5gt
-  imap <D-5> <Esc>5gt
-  map  <D-6> 6gt
-  imap <D-6> <Esc>6gt
-  map  <D-7> 7gt
-  imap <D-7> <Esc>7gt
-  map  <D-8> 8gt
-  imap <D-8> <Esc>8gt
-  map  <D-9> 9gt
-  imap <D-9> <Esc>9gt
-else
-  " Map command-[ and command-] to indenting or outdenting
-  " while keeping the original selection in visual mode
-  vmap <A-]> >gv
-  vmap <A-[> <gv
+" Make shift-insert work like in Xterm
+map <S-Insert> <MiddleMouse>
+map! <S-Insert> <MiddleMouse>
 
-  nmap <A-]> >>
-  nmap <A-[> <<
-
-  omap <A-]> >>
-  omap <A-[> <<
-
-  imap <A-]> <Esc>>>i
-  imap <A-[> <Esc><<i
- 
-  " Bubble single lines
-  nmap <C-Up> [e
-  nmap <C-Down> ]e
-  nmap <C-k> [e
-  nmap <C-j> ]e
-
-  " Bubble multiple lines
-  vmap <C-Up> [egv
-  vmap <C-Down> ]egv
-  vmap <C-k> [egv
-  vmap <C-j> ]egv
-
-  " Make shift-insert work like in Xterm
-  map <S-Insert> <MiddleMouse>
-  map! <S-Insert> <MiddleMouse>
-
-  " Map Control-# to switch tabs
-  map  <C-0> 0gt
-  imap <C-0> <Esc>0gt
-  map  <C-1> 1gt
-  imap <C-1> <Esc>1gt
-  map  <C-2> 2gt
-  imap <C-2> <Esc>2gt
-  map  <C-3> 3gt
-  imap <C-3> <Esc>3gt
-  map  <C-4> 4gt
-  imap <C-4> <Esc>4gt
-  map  <C-5> 5gt
-  imap <C-5> <Esc>5gt
-  map  <C-6> 6gt
-  imap <C-6> <Esc>6gt
-  map  <C-7> 7gt
-  imap <C-7> <Esc>7gt
-  map  <C-8> 8gt
-  imap <C-8> <Esc>8gt
-  map  <C-9> 9gt
-  imap <C-9> <Esc>9gt
-endif
+" Map Control-# to switch tabs
+map  <C-0> 0gt
+imap <C-0> <Esc>0gt
+map  <C-1> 1gt
+imap <C-1> <Esc>1gt
+map  <C-2> 2gt
+imap <C-2> <Esc>2gt
+map  <C-3> 3gt
+imap <C-3> <Esc>3gt
+map  <C-4> 4gt
+imap <C-4> <Esc>4gt
+map  <C-5> 5gt
+imap <C-5> <Esc>5gt
+map  <C-6> 6gt
+imap <C-6> <Esc>6gt
+map  <C-7> 7gt
+imap <C-7> <Esc>7gt
+map  <C-8> 8gt
+imap <C-8> <Esc>8gt
+map  <C-9> 9gt
+imap <C-9> <Esc>9gt
 
 " Wipe out all buffers
 nmap <silent> <leader>wa :1,9000bd<cr>
@@ -518,10 +440,6 @@ nnoremap <CR> :nohlsearch<cr>
 
 " Don't use Ex mode, use Q for formatting
 map Q gq
-
-" Source vim files
-map <leader>svb :source ~/.vimrc.before<cr>
-map <leader>sva :source ~/.vimrc.after<cr>
 
 " Remap the tab key to do autocompletion or indentation depending on the
 " context (from http://www.vim.org/tips/tip.php?tip_id=102)
@@ -560,26 +478,19 @@ nmap <silent> <C-i> 10zh
 " Use CTRL-E to replace the original ',' mapping
 nnoremap <C-E> ,
 
-" ,----
-" | Modifying defaults options
-" `----
+" Add/Remove lineend from listchars
 nmap <leader>elc :set listchars+=eol:$<CR>
 nmap <leader>rlc :set listchars-=eol:$<CR>
 
-" ,----
-" | Par
-" `----
+" Par
 if executable("par")
   nnoremap <silent> <leader>fp vip:!par -w<c-r>=&tw<cr><cr>
   xnoremap <silent> <leader>fp :!par -w<c-r>=&tw<cr><cr>
 endif
 
+" }}}
+"" Abbreviations {{{
 ""
-"" Abbreviations
-""
-
-" pry
-ab pryme require "pry"; binding.pry
 
 " footnotes
 ab ~0 [0]<esc>m`:/^--\s*/-2/<CR>o<CR>Footnotes:<CR>----------<CR>[0]
@@ -593,8 +504,8 @@ ab ~7 [7]<esc>m`:/^Footnotes\:/+8/<CR>o[7]
 ab ~8 [8]<esc>m`:/^Footnotes\:/+9/<CR>o[8]
 ab ~9 [9]<esc>m`:/^Footnotes\:/+10/<CR>o[9]
 
-""
-"" Typos
+" }}}
+"" Typos {{{
 ""
 
 "" simple corrections
@@ -617,17 +528,8 @@ iab tpyo        typo
 iab rr Regards,<cr>Wael Nasreddine
 iab grr Greetings,<cr>Wael Nasreddine
 
-""
-"" Commands
-""
-
-" Seriously, guys. It's not like :W is bound to anything anyway.
-command! W :w
-command! Wa :wa
-command! Xa :xa
-
-""
-"" Functions and their bindings
+" }}}
+"" Functions {{{
 ""
 
 function! ExtractVariable()
@@ -645,6 +547,23 @@ function! ExtractVariable()
   exec "normal! O" . name . " = "
   " Paste the original selected text to be the variable value
   normal! $p
+endfunction
+
+function! ShowRoutes()
+  " Requires 'scratch' plugin
+  :topleft 100 :split __Routes__
+  " Make sure Vim doesn't write __Routes__ as a file
+  :set buftype=nofile
+  " Delete everything
+  :normal 1GdG
+  " Put routes output in buffer
+  :0r! rake -s routes
+  " Size window to number of lines (1 plus rake output length)
+  :exec ":normal " . line("$") . _ "
+  " Move cursor to bottom
+  :normal 1GG
+  " Delete empty trailing line
+  :normal dd
 endfunction
 
 function! InsertTabWrapper()
@@ -679,55 +598,63 @@ function! InlineVariable()
   :let @b = l:tmp_b
 endfunction
 
-vnoremap <leader>rv :call ExtractVariable()<cr>
-nnoremap <leader>ri :call InlineVariable()<cr>
+function! OpenTestAlternate()
+  let current_file = expand("%")
+  let new_file = current_file
 
-" Map keys to go to specific files
-map <leader>gr :topleft :split config/routes.rb<cr>
-function! ShowRoutes()
-  " Requires 'scratch' plugin
-  :topleft 100 :split __Routes__
-  " Make sure Vim doesn't write __Routes__ as a file
-  :set buftype=nofile
-  " Delete everything
-  :normal 1GdG
-  " Put routes output in buffer
-  :0r! rake -s routes
-  " Size window to number of lines (1 plus rake output length)
-  :exec ":normal " . line("$") . _ "
-  " Move cursor to bottom
-  :normal 1GG
-  " Delete empty trailing line
-  :normal dd
+  if match(current_file, '\.go$') != -1
+    let new_file = AlternateGoFile(current_file)
+  elseif match(current_file, '\.rb$') != -1 || match(current_file, '\.rake$') != -1
+    let new_file = AlternateRubyFile(current_file)
+  endif
+
+  " Open the alternate file or self if the rules don't match
+  exec ':e ' . new_file
 endfunction
-map <leader>gR :call ShowRoutes()<cr>
-map <leader>ga :CtrlP app/assets<cr>
-map <leader>gC :CtrlP contao<cr>
-map <leader>gv :CtrlP app/views<cr>
-map <leader>gc :CtrlP app/controllers<cr>
-map <leader>gm :CtrlP app/models<cr>
-map <leader>gh :CtrlP app/helpers<cr>
-map <leader>gl :CtrlP lib<cr>
-map <leader>gp :CtrlP public<cr>
-map <leader>gs :CtrlP public/stylesheets/sass<cr>
-map <leader>gf :CtrlP features<cr>
-map <leader>gg :topleft 100 :split Gemfile<cr>
-map <leader>gt :CtrlPTag<cr>
-map <leader>F :CtrlP %%<cr>
 
-nnoremap <leader>. :call OpenTestAlternate()<cr>
-nnoremap <leader><leader> <c-^>
+function! AlternateGoFile(current_file)
+  let new_file = a:current_file
+  if match(a:current_file, '_test\.go$') != -1
+    " We are in the test file
+    let new_file = substitute(a:current_file, '_test\.go$', '.go', '')
+  else
+    " We are in the production code file
+    let new_file = substitute(a:current_file, '\.go$', '_test.go', '')
+  endif
 
-" Force myself to learn the hjkl
-map <Left> :echo "no!"<cr>
-map <Right> :echo "no!"<cr>
-map <Up> :echo "no!"<cr>
-map <Down> :echo "no!"<cr>
+  return new_file
+endfunction
 
-" CoffeeScript
-vmap <leader>c <esc>:'<,'>:CoffeeCompile<CR>
-map <leader>c :CoffeeCompile<CR>
-command! -nargs=1 C CoffeeCompile | :<args>
+function! AlternateRubyFile(current_file)
+  let new_file = a:current_file
+  let in_spec = match(a:current_file, '^spec/') != -1
+  let going_to_spec = !in_spec
+  let rakefile = match(a:current_file, '\.rake$') != -1
+  let in_app = match(a:current_file, '\<controllers\>') != -1 || match(a:current_file, '\<models\>') != -1 || match(a:current_file, '\<views\>') != -1
+  if going_to_spec
+    if in_app
+      let new_file = substitute(new_file, '^app/', '', '')
+    end
+    if rakefile
+      let new_file = substitute(new_file, '\.rake$', '_spec.rb', '')
+    else
+      let new_file = substitute(new_file, '\.rb$', '_spec.rb', '')
+    end
+    let new_file = 'spec/' . new_file
+  else
+    let new_file = substitute(new_file, '_spec\.rb$', '.rb', '')
+    let new_file = substitute(new_file, '^spec/', '', '')
+    if in_app
+      let new_file = 'app/' . new_file
+    end
 
-" Convert 1.8 hash to 1.9
-command! ConvertHashStyle :%s/\([^:]\):\([a-zA-Z_]*\)\s*=>/\1\2:/g
+    if !filereadable(new_file)
+      let spec_file = substitute(new_file, '\.rb$', '.rake', '')
+      if filereadable(spec_file)
+        let new_file = spec_file
+      endif
+    endif
+  endif
+endfunction
+
+" }}}
