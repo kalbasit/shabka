@@ -51,7 +51,12 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-repeat'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-unimpaired'
-Plugin 'msanders/snipmate.vim'
+
+""" SnipMate """
+Plugin 'MarcWeber/vim-addon-mw-utils'
+Plugin 'tomtom/tlib_vim'
+Plugin 'garbas/vim-snipmate'
+""" SnipMate """
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
