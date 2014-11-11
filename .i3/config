@@ -142,8 +142,7 @@ bindsym $alt+Shift+m exec $HOME/.filesystem/bin/named-emacs-frame mail-scratchpa
 bindsym $alt+m [instance="^mail-scratchpad$"] scratchpad show
 
 # chat client scratchpad
-bindsym $alt+Shift+c exec st -c chat-scratchpad -t chat
-bindsym $alt+c [instance="^chat-scratchpad$"] scratchpad show
+bindsym $alt+c [instance="^crx_bebigdkelppomhhjaaianniiifjbgocn$"] scratchpad show
 
 # radio scratchpad
 bindsym $alt+Shift+r exec st -c radio-scratchpad -t radio -e zsh -i -c 'pianobar'
