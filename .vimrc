@@ -51,6 +51,7 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-repeat'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-unimpaired'
+Plugin 'ervandew/screen'
 
 """ SnipMate """
 Plugin 'MarcWeber/vim-addon-mw-utils'
@@ -270,6 +271,13 @@ let g:snippets_dir="~/.vim/snippets"
 ""
 
 let g:go_fmt_command = "goimports"
+
+" }}}
+"" ScreenShell{{{
+""
+
+let g:ScreenImpl = "Tmux"
+let g:ScreenShellTmuxInitArgs = '-2'
 
 " }}}
 "" CtrlP{{{
