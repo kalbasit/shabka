@@ -446,11 +446,6 @@ nnoremap <CR> :nohlsearch<cr>
 " Don't use Ex mode, use Q for formatting
 map Q gq
 
-" Remap the tab key to do autocompletion or indentation depending on the
-" context (from http://www.vim.org/tips/tip.php?tip_id=102)
-inoremap <tab> <c-r>=InsertTabWrapper()<cr>
-inoremap <s-tab> <c-n>
-
 " spelling
 nmap <leader>sn ]s
 nmap <leader>sp [s
@@ -569,15 +564,6 @@ function! ShowRoutes()
   :normal 1GG
   " Delete empty trailing line
   :normal dd
-endfunction
-
-function! InsertTabWrapper()
-  let col = col('.') - 1
-  if !col || getline('.')[col - 1] !~ '\k'
-    return "\<tab>"
-  else
-    return "\<c-p>"
-  endif
 endfunction
 
 function! InlineVariable()
