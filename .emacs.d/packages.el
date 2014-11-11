@@ -47,12 +47,12 @@
         (add-hook 'message-setup-hook 'gnus-alias-determine-identity))))
   :config
   (progn
-    (when (string= system-name "wmn-glaptop.roam.corp.google.com")
-      (setq notmuch-command
-            (f-expand "remote-notmuch" (concat (f-full (getenv "HOME")) "/.filesystem/bin"))))
+    (setq notmuch-command
+          (f-expand "remote-notmuch" (concat (f-full (getenv "HOME")) "/.filesystem/bin")))
     (setq notmuch-saved-searches
           '((:name "flagged" :query "tag:flagged")
             (:name "tome-work" :query "tag:unread AND tag:work AND to:wmn@google.com")
+            (:name "CI-new" :query "(tag:ci_sre OR tag:ci_sre_mtv) AND tag:unread")
             (:name "CI" :query "(tag:ci_sre OR tag:ci_sre_mtv) AND date:this_month..")
             (:name "CorpDB" :query "(tag:corpdb_sre OR tag:corpdb_team OR tag:corpdb_users) AND date:this_month..")
             (:name "family-new" :query "tag:family AND tag:unread")
