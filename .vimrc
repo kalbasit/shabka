@@ -127,7 +127,7 @@ set viminfo='20,\"50,:20,%,n~/.viminfo,!
 if has("gui_running")
   set mouse=""          " I hate using the mouse for other than copying/pasting.
   set guioptions=cei    " Set the guioptions I like
-  set guifont=Inconsolata-dz:h12
+  set guifont=Monospace,Fixed\ 11
 endif
 
 " }}}
