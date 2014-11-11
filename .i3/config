@@ -142,7 +142,7 @@ bindsym $alt+Shift+m exec $HOME/.filesystem/bin/named-emacs-frame mail-scratchpa
 bindsym $alt+m [instance="^mail-scratchpad$"] scratchpad show
 
 # chat client scratchpad
-bindsym $alt+Shift+c exec st -c chat-scratchpad -t chat -e zsh -i -c 'screen -c ~/.screen/sessions/irssi -D -q -U -R irssi -t irssi'
+bindsym $alt+Shift+c exec st -c chat-scratchpad -t chat
 bindsym $alt+c [instance="^chat-scratchpad$"] scratchpad show
 
 # radio scratchpad
