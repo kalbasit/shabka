@@ -45,19 +45,18 @@ if has("python")
 endif
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'scrooloose/nerdtree'
-Plugin 'ervandew/supertab'
 Plugin 'itspriddle/ZoomWin'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-repeat'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-unimpaired'
 Plugin 'ervandew/screen'
+Plugin 'Valloric/YouCompleteMe'
 
-""" SnipMate """
-Plugin 'MarcWeber/vim-addon-mw-utils'
-Plugin 'tomtom/tlib_vim'
-Plugin 'garbas/vim-snipmate'
-""" SnipMate """
+""" UltiSnips """
+Plugin 'SirVer/ultisnips'
+Plugin 'honza/vim-snippets'
+""" UltiSnips """
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -261,16 +260,23 @@ if has("autocmd")
 endif
 
 " }}}
-"" Snipmate{{{
-""
-
-let g:snippets_dir="~/.vim/snippets"
-
-" }}}
 "" Go{{{
 ""
 
 let g:go_fmt_command = "goimports"
+
+" }}}
+"" UltiSnips{{{
+""
+
+" Trigger configuration. Do not use <tab> if you use
+" https://github.com/Valloric/YouCompleteMe.
+let g:UltiSnipsExpandTrigger="<c-x><c-z>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+" :UltiSnipsEdit Split vertically
+let g:UltiSnipsEditSplit="vertical"
 
 " }}}
 "" ScreenShell{{{
