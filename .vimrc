@@ -24,6 +24,9 @@ Plugin 'kchmck/vim-coffee-script'
 " Golang
 Plugin 'fatih/vim-go'
 
+" JSON
+Plugin 'elzr/vim-json'
+
 " Ruby/Rails
 if has("ruby")
   Plugin 'vim-ruby/vim-ruby'
@@ -228,9 +231,6 @@ if has("autocmd")
   " Make sure all mardown files have the correct filetype set and setup wrapping
   au BufRead,BufNewFile *.{md,markdown,mdown,mkd,mkdn,txt} setf markdown
   au FileType markdown setlocal wrap linebreak textwidth=72 nolist
-
-  " Treat JSON files like JavaScript
-  au BufNewFile,BufRead *.json set ft=javascript
 
   " make Python follow PEP8 for whitespace ( http://www.python.org/dev/peps/pep-0008/ )
   au FileType python setlocal tabstop=4 shiftwidth=4
