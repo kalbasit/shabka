@@ -34,6 +34,19 @@ task :update_submodules do
   `git submodule update --init > /dev/null`
 end
 
+desc "Install YouCompleteme"
+task :ycm_install do
+  ycm_path = File.join(DOTFILES_PATH, ".vim/bundle/YouCompleteMe")
+  if !File.exist?(ycm_path)
+    puts "YCM is not installed in the bundle, please run 'vim +VundleInstall +qall"
+    exit
+  end
+
+  puts "Installing required packages, please enter the sudo password"
+  sh "sudo apt-get install build-essential cmake python-dev"
+  sh "cd #{ycm_path} && ./install.sh --clang-completer"
+end
+
 def replace_file(file)
   relative_path = file.gsub("#{DOTFILES_PATH}/", "")
   home_file = File.join(ENV['HOME'], "#{relative_path.sub(/\.erb$/, '')}")
