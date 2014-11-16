@@ -1,3 +1,0 @@
-new-window -t 1 -n irc irssi
-kill-window -t 0
-select-window -t 1

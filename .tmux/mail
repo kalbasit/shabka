@@ -1,4 +1,0 @@
-# new-window -t 1 -n mail sup
-new-window -t 1 -n mail "emacs --no-window-system -f notmuch"
-kill-window -t 0
-select-window -t 1
