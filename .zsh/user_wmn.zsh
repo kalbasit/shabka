@@ -24,7 +24,7 @@ if [[ -d "${HOME}/.filesystem" ]]; then
 
   if [[ -d "${MYFS}/opt" ]]; then
     if [[ -d "${MYFS}/opt/go_appengine" ]]; then
-      pathmunge "${MYFS}/opt/go_appengine" after
+      pathmunge "${MYFS}/opt/go_appengine"
     fi
 
     for dir in `ls --color=never "${MYFS}/opt"`; do
