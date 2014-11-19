@@ -16,9 +16,10 @@ yankring_history_v2.txt
 .screen/ssh-auth-sock.*
 *[wW][eE][eE][mM]*
 *~
-drafts/*
-.vim/_temp/*
-.vim/_backup/*
+drafts/
+.vim/_temp/
+.vim/_backup/
+.vim/_undo/
 .vim/.netrwhist
 *.emptyfile
 .irssi/config.autosave

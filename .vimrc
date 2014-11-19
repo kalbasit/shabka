@@ -106,7 +106,7 @@ set autoread            " Automatically read a file that has changed on disk
 :set splitright         " Always split on the right
 syntax enable           " Enable syntax highlighting
 if v:version >= 703
-  set undofile " remember undo chains between sessions
+  set undofile          " remember undo chains between sessions
   set nocursorcolumn    " no cursor column highlighting
   set cursorline        " cursor line highlighting
   hi CursorLine cterm=none
@@ -164,11 +164,12 @@ set wildignore+=*/tmp/cache/assets/*/sprockets/*,*/tmp/cache/assets/*/sass/*
 set wildignore+=*.swp,*~,._*
 
 " }}}
-"" Backup and swap files{{{
+"" Backup, swap and undo location{{{
 ""
 
-set backupdir^=~/.vim/_backup//    " where to put backup files.
-set directory^=~/.vim/_temp//      " where to put swap files.
+set backupdir^=~/.vim/_backup//     " where to put backup files.
+set directory^=~/.vim/_temp//       " where to put swap files.
+set undodir^=~/.vim/_undo//         " where to put undo files.
 
 " }}}
 "" Status line {{{
