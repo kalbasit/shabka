@@ -62,4 +62,5 @@ source "${THEMES_PATH}/${THEME}.zsh-theme"
 # Load travis
 [[ -r "${HOME}/.travis/travis.sh" ]] && source "${HOME}/.travis/travis.sh"
 
-export TERM="screen-256color"
+export TERM=xterm-256color
+[ -n "$TMUX" ] && export TERM=screen-256color
