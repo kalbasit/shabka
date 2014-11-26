@@ -17,4 +17,4 @@ if [[ -z $USER ]]; then
   export USER=wmn
 fi
 
-i3lock --image="${wallpaper}" --dpms
+i3lock --image="${wallpaper}"
