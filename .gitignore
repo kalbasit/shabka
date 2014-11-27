@@ -13,6 +13,7 @@ yankring_history_v2.txt
 .pki
 .ssh/environment
 .ssh/id_rsa_google*
+.ssh/known_hosts
 .screen/ssh-auth-sock.*
 *[wW][eE][eE][mM]*
 *~
@@ -41,6 +42,9 @@ Gist.sublime-settings
 .byobu/.ssh-agent
 .filesystem/
 .vim/bundle/
+.notmuch/nottoomuch-addresses/addresses.active.new
+.notmuch/nottoomuch-addresses/addresses.new
+.notmuch/log
 
 
 
