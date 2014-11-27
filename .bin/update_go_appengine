@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
+# vim:ft=sh:fenc=UTF-8:ts=2:sts=2:sw=2:expandtab:foldmethod=marker:foldlevel=0:
 #
-#  vim:ft=sh:fenc=UTF-8:ts=2:sts=2:sw=2:expandtab:foldmethod=marker:foldlevel=0:
+# Original script made by Stephan Behnke
+# https://gist.github.com/stephanos/d48fd3500614bd83e63e
 
 set -e
 
