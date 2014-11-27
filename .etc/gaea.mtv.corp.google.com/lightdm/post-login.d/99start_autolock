@@ -1,0 +1,1 @@
+xautolock -locker 'gnome-screensaver-command --lock' -time 10

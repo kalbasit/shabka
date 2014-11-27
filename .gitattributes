@@ -1,0 +1,15 @@
+.config/goobuntu-backups/**/* filter=git-crypt diff=git-crypt
+.config/pianobar/**/* filter=git-crypt diff=git-crypt
+.config/sublime-text-3/Packages/User/SublimeGit.sublime-settings filter=git-crypt diff=git-crypt
+.cron/**/* filter=git-crypt diff=git-crypt
+.gitconfig filter=git-crypt diff=git-crypt
+.gnupg/**/* filter=git-crypt diff=git-crypt
+.irssi/config filter=git-crypt diff=git-crypt
+.mbsyncrc filter=git-crypt diff=git-crypt
+.msmtprc filter=git-crypt diff=git-crypt
+.my.cnf filter=git-crypt diff=git-crypt
+.notmuch/**/* filter=git-crypt diff=git-crypt
+.notmuch-config filter=git-crypt diff=git-crypt
+.signatures/**/* filter=git-crypt diff=git-crypt
+.ssh/**/* filter=git-crypt diff=git-crypt
+.zshrc-google filter=git-crypt diff=git-crypt

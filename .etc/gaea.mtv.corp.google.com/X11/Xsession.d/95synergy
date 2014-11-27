@@ -1,0 +1,3 @@
+/usr/bin/killall synergys
+sleep 5
+/usr/bin/synergys
