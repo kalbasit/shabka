@@ -7,6 +7,7 @@ IGNORED_FILES = [
   "README.md",
   ".etc",
   ".git",
+  ".gitattributes",
   ".git-crypt",
 ]
 
