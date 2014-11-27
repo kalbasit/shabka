@@ -5,7 +5,9 @@ DOTFILES_PATH = File.expand_path("../", __FILE__)
 IGNORED_FILES = [
   "Rakefile",
   "README.md",
+  ".etc",
   ".git",
+  ".git-crypt",
 ]
 
 desc "install the dot files into user's home directory"
