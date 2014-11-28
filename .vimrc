@@ -268,7 +268,6 @@ endif
 ""
 
 let g:go_fmt_command = "gofmt"  " What to run on save.
-let g:go_auto_type_info = 1     " Always display the info in the status bar.
 let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1
 let g:go_highlight_structs = 1
