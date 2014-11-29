@@ -57,7 +57,7 @@ done
 source "${THEMES_PATH}/${THEME}.zsh-theme"
 
 # Load Google specific stuff
-[[ -r "${ZDOTDIR:-$HOME}/.zshrc-google" ]] && source "${HOME}/.zshrc-google"
+[[ -r "${ZDOTDIR:-$HOME}/.zshrc.google" ]] && source "${HOME}/.zshrc.google"
 
 # Load travis
 [[ -r "${HOME}/.travis/travis.sh" ]] && source "${HOME}/.travis/travis.sh"
