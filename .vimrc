@@ -550,6 +550,11 @@ iab rr Regards,<cr>Wael Nasreddine
 iab grr Greetings,<cr>Wael Nasreddine
 
 " }}}
+"" Google.vim {{{
+if filereadable(expand("~/.vimrc.google"))
+  source ~/.vimrc.google
+endif
+" }}}
 "" Functions {{{
 ""
 
