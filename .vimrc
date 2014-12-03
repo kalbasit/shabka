@@ -621,6 +621,8 @@ function! OpenTestAlternate()
 
   if match(current_file, '\.go$') != -1
     let new_file = AlternateGoFile(current_file)
+  elseif match(current_file, '\.py$') != -1
+    let new_file = AlternatePythonFile(current_file)
   elseif match(current_file, '\.rb$') != -1 || match(current_file, '\.rake$') != -1
     let new_file = AlternateRubyFile(current_file)
   endif
@@ -637,6 +639,19 @@ function! AlternateGoFile(current_file)
   else
     " We are in the production code file
     let new_file = substitute(a:current_file, '\.go$', '_test.go', '')
+  endif
+
+  return new_file
+endfunction
+
+function! AlternatePythonFile(current_file)
+  let new_file = a:current_file
+  if match(a:current_file, '_test\.py$') != -1
+    " We are in the test file
+    let new_file = substitute(a:current_file, '_test\.py$', '.py', '')
+  else
+    " We are in the production code file
+    let new_file = substitute(a:current_file, '\.py$', '_test.py', '')
   endif
 
   return new_file
