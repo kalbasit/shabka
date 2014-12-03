@@ -80,7 +80,7 @@ func main() {
 	// Iterate over the sources and print them all to the writer.
 	for _, s := range sources {
 		if s.Secret == "" {
-			fmt.Println("Secret is required. %s has not secret defined", s.Name)
+			fmt.Println("Secret is required. %q has no secret defined", s.Name)
 			os.Exit(1)
 		}
 
