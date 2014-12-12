@@ -1,5 +1,11 @@
 " vim:foldmethod=marker:foldlevel=0:
 
+"" Google.vim {{{
+let g:running_at_google = 0
+if filereadable(expand("~/.vimrc.google"))
+  source ~/.vimrc.google
+endif
+" }}}
 "" Vundle{{{
 ""
 
@@ -54,7 +60,10 @@ Plugin 'tpope/vim-repeat'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-unimpaired'
 Plugin 'ervandew/screen'
-Plugin 'Valloric/YouCompleteMe'
+
+if !g:running_at_google
+  Plugin 'Valloric/YouCompleteMe'
+endif
 
 """ UltiSnips """
 Plugin 'SirVer/ultisnips'
@@ -102,6 +111,7 @@ set pastetoggle=<F12>   " Paste toggle on key F12!
 set makeef=error.err    " When using make, where should it dump the file
 set noautowrite         " safe automacially content
 set autoread            " Automatically read a file that has changed on disk
+set spell               " Turn on spellcheck.
 :set splitbelow         " Always split under
 :set splitright         " Always split on the right
 syntax enable           " Enable syntax highlighting
@@ -233,8 +243,14 @@ if has("autocmd")
   au BufRead,BufNewFile *.{md,markdown,mdown,mkd,mkdn,txt} setf markdown
   au FileType markdown setlocal wrap linebreak textwidth=72 nolist
 
-  " make Python follow PEP8 for whitespace ( http://www.python.org/dev/peps/pep-0008/ )
-  au FileType python setlocal tabstop=4 shiftwidth=4
+  if g:running_at_google
+    " 2 spaces at Google
+    au FileType python setlocal tabstop=2 shiftwidth=2
+  else
+    " make Python follow PEP8 for whitespace.
+    " http://www.python.org/dev/peps/pep-0008/
+    au FileType python setlocal tabstop=4 shiftwidth=4
+  endif
 
   " Remember last location in file, but not for commit messages.
   " see :help last-position-jump
@@ -544,16 +560,6 @@ iab teh         the
 iab Srever      Server
 iab tpyo        typo
 
-"" greetings
-
-iab rr Regards,<cr>Wael Nasreddine
-iab grr Greetings,<cr>Wael Nasreddine
-
-" }}}
-"" Google.vim {{{
-if filereadable(expand("~/.vimrc.google"))
-  source ~/.vimrc.google
-endif
 " }}}
 "" Functions {{{
 ""
