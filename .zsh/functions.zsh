@@ -568,13 +568,13 @@ function zssh() {
         $SSH ${user_host_port} /bin/true
         # Transfer what we need to the server
         rm -rf $DESTZDOTDIR && mkdir -p $DESTZDOTDIR
-        cp -RL ${HOME}/.{zsh,zshrc,zshrc-google} $DESTZDOTDIR/
+        cp -RL ${HOME}/.{zsh,zshrc,zshrc.google,tmux.conf} $DESTZDOTDIR/
         infocmp > "$DESTZDOTDIR/${TERM}.info"
         rsync -auz --delete $DESTZDOTDIR/ ${user_host_port}:$DESTZDOTDIR/
-        $SSH ${user_host_port} "tic $DESTZDOTDIR/${TERM}.info"
+        $SSH ${user_host_port} "chmod 700 $DESTZDOTDIR; tic $DESTZDOTDIR/${TERM}.info"
     fi
 
-    $SSH -tt ${user_host_port} ZDOTDIR=${DESTZDOTDIR} zsh -i
+    $SSH -tt ${user_host_port} ZDOTDIR=${DESTZDOTDIR} TMUXDOTDIR=${DESTZDOTDIR} zsh -i
 }
 #}}}
 # pathmunge()#{{{
