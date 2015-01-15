@@ -16,6 +16,10 @@ task :install => [:update_submodules, :switch_to_zsh] do
   link_folder(Dir.getwd)
 end
 
+task :default => :install do
+  `cd .vim/bundle/Vundle.vim && git checkout master`
+end
+
 desc "Switch your shell to ZSH from #{ENV["SHELL"]}"
 task :switch_to_zsh do
   if ENV["SHELL"] =~ /zsh/
