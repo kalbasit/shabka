@@ -31,7 +31,8 @@ if [[ -d "${HOME}/.filesystem" ]]; then
       pathmunge "${MYFS}/opt/go_appengine"
     fi
 
-    for dir in `ls --color=never "${MYFS}/opt"`; do
+    for dir in `find "${MYFS}/opt" -type d -maxdepth 1 -mindepth 1`; do
+      dir="${dir##./}"
       if [[ -d "${MYFS}/opt/${dir}/bin" ]]; then
         pathmunge "${MYFS}/opt/${dir}/bin"
       fi
