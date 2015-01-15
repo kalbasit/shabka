@@ -11,6 +11,10 @@ if ! type pathmunge &> /dev/null; then
   }
 fi
 
+if [[ -x /usr/libexec/path_helper ]]; then
+  eval `/usr/libexec/path_helper -s`
+fi
+
 if [[ -d /usr/local/go/bin ]]; then
   pathmunge /usr/local/go/bin
 fi
