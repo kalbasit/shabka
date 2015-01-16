@@ -51,7 +51,7 @@ task :ycm_install do
   end
 
   puts "Installing required packages, please enter the sudo password"
-  sh "sudo apt-get install build-essential cmake python-dev"
+  sh "sudo apt-get install build-essential cmake python-dev" if RUBY_PLATFORM.downcase =~ /linux/
   sh "cd #{ycm_path} && ./install.sh --clang-completer"
 end
 
