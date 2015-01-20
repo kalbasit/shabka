@@ -64,3 +64,6 @@ source "${THEMES_PATH}/${THEME}.zsh-theme"
 
 export TERM=xterm-256color
 [ -n "$TMUX" ] && export TERM=screen-256color
+
+# Load SSH agents
+eval `ssh-agents $SHELL`
