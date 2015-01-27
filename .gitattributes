@@ -3,6 +3,7 @@
 .config/sublime-text-3/Packages/User/SublimeGit.sublime-settings filter=git-crypt diff=git-crypt
 .cron/**/* filter=git-crypt diff=git-crypt
 .gitconfig filter=git-crypt diff=git-crypt
+.gitcookies filter=git-crypt diff=git-crypt
 .gnupg/**/* filter=git-crypt diff=git-crypt
 .irssi/config filter=git-crypt diff=git-crypt
 .mbsyncrc filter=git-crypt diff=git-crypt
