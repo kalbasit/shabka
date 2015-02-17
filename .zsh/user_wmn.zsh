@@ -32,9 +32,8 @@ if [[ -d "${HOME}/.filesystem" ]]; then
     fi
 
     for dir in `find "${MYFS}/opt" -maxdepth 1 -mindepth 1 -type d`; do
-      dir="${dir##./}"
-      if [[ -d "${MYFS}/opt/${dir}/bin" ]]; then
-        pathmunge "${MYFS}/opt/${dir}/bin"
+      if [[ -d "${dir}/bin" ]]; then
+        pathmunge "${dir}/bin"
       fi
     done
   fi
