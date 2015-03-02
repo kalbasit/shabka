@@ -11,6 +11,11 @@ IGNORED_FILES = [
   ".git-crypt",
 ]
 
+GO_BINARIES = [
+  "github.com/monochromegane/the_platinum_searcher/cmd/pt",
+  "github.com/smartystreets/goconvey",
+]
+
 desc "install the dot files into user's home directory"
 task :install => [:update_submodules, :switch_to_zsh] do
   link_folder(Dir.getwd)
