@@ -15,11 +15,13 @@ IGNORED_FILES = [
 ]
 
 desc "install the dot files into user's home directory"
-task :install => [:update_submodules, :switch_to_zsh] do
+task :install => [:checkout_vundle_master, :update_submodules, :switch_to_zsh] do
   link_folder(Dir.getwd)
 end
 
-task :default => :install do
+task :default => :install
+
+task :checkout_vundle_master do
   `cd .vim/bundle/Vundle.vim && git checkout master`
 end
 
@@ -67,33 +69,62 @@ end
 
 def replace_file(file)
   relative_path = file.gsub("#{DOTFILES_PATH}/", "")
-  home_file = File.join(ENV['HOME'], "#{relative_path.sub(/\.erb$/, '')}")
+  home_file = File.join(ENV['HOME'], home_file_name(relative_path))
   system %Q{rm -rf '#{home_file}'}
   link_file(file)
 end
 
-def link_folder(folder)
-  replace_all = false
-
+def files(folder)
   files = Dir["#{folder}/.??*"] + Dir["#{folder}/*"]
   files.reject! do |file|
     relative_path = file.gsub("#{DOTFILES_PATH}/", "")
     IGNORED_FILES.include?(relative_path)
   end
 
-  files.each do |file|
+  return files
+end
+
+def find_encryption_status
+  return `cd #{DOTFILES_PATH}; grep -q OK .encrypted && echo OK || echo NO`
+end
+
+def link_folder(folder)
+  replace_all = false
+  encryption_status = find_encryption_status()
+
+  files(folder).each do |file|
     relative_path = file.gsub("#{DOTFILES_PATH}/", "")
-    home_file = File.join(ENV['HOME'], "#{relative_path.sub(/\.erb$/, '')}")
+
+    # If the encryption was not deciphered.
+    if encryption_status == "NO"
+      # Check if we have an unsecure version
+      if File.exists?("#{file}.unsecure")
+        # We do, then symlink the unsecure file instead.
+        secure_file = file
+        file = "#{file}.unsecure"
+        unsecure_file = file
+        relative_path = file.gsub("#{DOTFILES_PATH}/", "")
+      else
+        # We don't so let's skipt this file entirely.
+        puts "In unsecure mode, skipping ~/#{home_file_name(relative_path)}"
+        continue
+      end
+    end
+
+    home_file = File.join(ENV['HOME'], home_file_name(relative_path))
 
     if File.exist?(home_file)
       if File.identical? file, home_file
-        puts "identical ~/#{relative_path.sub(/\.erb$/, '')}"
+        puts "identical ~/#{home_file_name(relative_path)}"
       elsif File.directory?(home_file)
         link_folder(file)
       elsif replace_all
         replace_file(file)
+      elsif File.identical?(secure_file, home_file) || File.identical?(unsecure_file, home_file)
+        # Case when encryption status changes
+        replace_file(file)
       else
-        print "overwrite ~/#{relative_path.sub(/\.erb$/, '')}? [ynaq] "
+        print "overwrite ~/#{home_file_name(relative_path)}? [ynaq] "
         case $stdin.gets.chomp
         when 'a'
           replace_all = true
@@ -103,7 +134,7 @@ def link_folder(folder)
         when 'q'
           exit
         else
-          puts "skipping ~/#{relative_path.sub(/\.erb$/, '')}"
+          puts "skipping ~/#{home_file_name(relative_path)}"
         end
       end
     else
@@ -116,9 +147,13 @@ def link_folder(folder)
   end
 end
 
+def home_file_name(path)
+  return path.sub(/\.erb$/, '').sub(/\.unsecure$/, '')
+end
+
 def link_file(file)
   relative_path = file.gsub("#{DOTFILES_PATH}/", "")
-  home_file = File.join(ENV['HOME'], "#{relative_path.sub(/\.erb$/, '')}")
+  home_file = File.join(ENV['HOME'], home_file_name(relative_path))
 
   if file =~ /.erb$/
     puts "generating #{home_file}"
