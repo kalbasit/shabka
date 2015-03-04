@@ -1,5 +1,6 @@
 require 'rake'
 require 'erb'
+require 'open-uri'
 
 DOTFILES_PATH = File.expand_path("../", __FILE__)
 IGNORED_FILES = [
@@ -53,6 +54,13 @@ task :ycm_install do
   puts "Installing required packages, please enter the sudo password"
   sh "sudo apt-get install build-essential cmake python-dev" if RUBY_PLATFORM.downcase =~ /linux/
   sh "cd #{ycm_path} && ./install.sh --clang-completer"
+end
+
+desc "Update the CA bundler cert"
+task :update_ca_bundle_cert do
+  url = "https://raw.githubusercontent.com/bagder/ca-bundle/master/ca-bundle.crt"
+  path = File.expand_path(File.join(File.dirname(__FILE__), ".ca-bundle.crt"))
+  download_and_save_file url, path
 end
 
 def replace_file(file)
@@ -127,5 +135,42 @@ def link_symlink(link)
     link_file(link)
   rescue Errno::ENOENT
     puts "Skipping #{link} symlink because it points to a non-existing file."
+  end
+end
+
+# Download and save file
+#
+# @param [String] url
+# @param [String] path
+def download_and_save_file(url, path)
+  options = {}
+
+  proxy = ENV['http_proxy'] || ENV['HTTP_PROXY']
+  if proxy
+    uri = URI.parse(proxy)
+    proxy_host = uri.scheme + "://" + uri.host + ":" + uri.port.to_s
+    proxy_user, proxy_pass = uri.userinfo.split(/:/) if uri.userinfo
+    options[:proxy_http_basic_authentication] = [proxy_host,proxy_user,proxy_pass]
+  end
+
+  open_and_save_file(path, open(url, options).read)
+end
+
+# Open and save file
+#
+# @param [String] path
+# @param [Value] What to write in the file
+# @param [&block]
+def open_and_save_file(path, value = nil, &block)
+  # Make sure the directory up to the folder exists
+  mkdir_p File.dirname(path)
+  # Open the file and use either the block or the value to write the
+  # file
+  File.open path, 'w' do |f|
+    if block_given?
+      f.write(yield)
+    else
+      f.write(value)
+    end
   end
 end
