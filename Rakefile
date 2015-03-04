@@ -6,6 +6,7 @@ DOTFILES_PATH = File.expand_path("../", __FILE__)
 IGNORED_FILES = [
   "Rakefile",
   "README.md",
+  ".DS_Store",
   ".etc",
   ".git",
   ".gitattributes",
