@@ -56,8 +56,8 @@ done
 # Load the theme
 source "${THEMES_PATH}/${THEME}.zsh-theme"
 
-# Load Google specific stuff
-[[ -r "${ZDOTDIR:-$HOME}/.zshrc.google" ]] && source "${ZDOTDIR:-$HOME}/.zshrc.google"
+# Load Dailymotion specific stuff
+[[ -r "${ZDOTDIR:-$HOME}/.zshrc.dailymotion" ]] && source "${ZDOTDIR:-$HOME}/.zshrc.dailymotion"
 
 # Load travis
 [[ -r "${HOME}/.travis/travis.sh" ]] && source "${HOME}/.travis/travis.sh"

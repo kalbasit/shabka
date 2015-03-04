@@ -15,3 +15,4 @@
 .ssh/**/* filter=git-crypt diff=git-crypt
 .bin/ssh-agents filter=git-crypt diff=git-crypt
 .totprc filter=git-crypt diff=git-crypt
+.zshrc.dailymotion filter=git-crypt diff=git-crypt
