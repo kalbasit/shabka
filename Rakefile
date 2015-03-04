@@ -1,3 +1,5 @@
+# TODO: WOW! Refactor!!
+
 require 'rake'
 require 'erb'
 require 'open-uri'
@@ -8,15 +10,32 @@ IGNORED_FILES = [
   "README.md",
   ".DS_Store",
   ".encrypted",
+  ".encrypted_files_list",
   ".etc",
   ".git",
   ".gitattributes",
   ".git-crypt",
 ]
+ENCRYPTED_FILES = File.read(File.join(DOTFILES_PATH, ".encrypted_files_list")).split("\n")
+IGNORED_WHEN_UNSECURE = [
+  # Folders
+  /\.ssh/,
+  /\.gnupg/,
+  /\.cron/,
+  /\.notmuch/,
+
+  # Files
+  /\.bin\/ssh-agents/,
+]
 
 desc "install the dot files into user's home directory"
 task :install => [:checkout_vundle_master, :update_submodules, :switch_to_zsh] do
   link_folder(Dir.getwd)
+
+  if find_encryption_status() == "NO"
+    home_file = File.join(ENV['HOME'], '.bin', 'ssh-agents')
+    system %Q{rm -f '#{home_file}'}
+  end
 end
 
 task :default => :install
@@ -67,9 +86,12 @@ task :update_ca_bundle_cert do
   download_and_save_file url, path
 end
 
+def relative_path(file)
+ return file.gsub("#{DOTFILES_PATH}/", "")
+end
+
 def replace_file(file)
-  relative_path = file.gsub("#{DOTFILES_PATH}/", "")
-  home_file = File.join(ENV['HOME'], home_file_name(relative_path))
+  home_file = File.join(ENV['HOME'], home_file_name(relative_path(file)))
   system %Q{rm -rf '#{home_file}'}
   link_file(file)
 end
@@ -81,11 +103,19 @@ def files(folder)
     IGNORED_FILES.include?(relative_path)
   end
 
+  files.reject! {|f| f =~ /\.unsecure$/}
+
   return files
 end
 
 def find_encryption_status
-  return `cd #{DOTFILES_PATH}; grep -q OK .encrypted && echo OK || echo NO`
+  return `cd #{DOTFILES_PATH}; grep -q OK .encrypted && echo OK || echo NO`.chomp
+end
+
+def is_encrypted?(file)
+  ENCRYPTED_FILES.any? do |encrypted_file|
+    relative_path(file) == encrypted_file
+  end
 end
 
 def link_folder(folder)
@@ -93,24 +123,36 @@ def link_folder(folder)
   encryption_status = find_encryption_status()
 
   files(folder).each do |file|
-    relative_path = file.gsub("#{DOTFILES_PATH}/", "")
-
     # If the encryption was not deciphered.
     if encryption_status == "NO"
-      # Check if we have an unsecure version
-      if File.exists?("#{file}.unsecure")
-        # We do, then symlink the unsecure file instead.
-        secure_file = file
-        file = "#{file}.unsecure"
-        unsecure_file = file
-        relative_path = file.gsub("#{DOTFILES_PATH}/", "")
-      else
-        # We don't so let's skipt this file entirely.
-        puts "In unsecure mode, skipping ~/#{home_file_name(relative_path)}"
-        continue
+      must_skip = false
+      IGNORED_WHEN_UNSECURE.each do |p|
+        if relative_path(file) =~ p
+          puts "In unsecure mode, skipping ~/#{home_file_name(relative_path(file))}"
+          must_skip = true
+          break
+        end
+      end
+      if must_skip
+        next
+      end
+
+      if is_encrypted?(file)
+        # Check if we have an unsecure version
+        if File.exists?("#{file}.unsecure")
+          # We do, then symlink the unsecure file instead.
+          secure_file = "#{file}"
+          file = "#{file}.unsecure"
+          unsecure_file = "#{file}"
+        else
+          # We don't so let's skip this file entirely.
+          puts "In unsecure mode, skipping ~/#{home_file_name(relative_path(file))}"
+          next
+        end
       end
     end
 
+    relative_path = file.gsub("#{DOTFILES_PATH}/", "")
     home_file = File.join(ENV['HOME'], home_file_name(relative_path))
 
     if File.exist?(home_file)
@@ -119,9 +161,6 @@ def link_folder(folder)
       elsif File.directory?(home_file)
         link_folder(file)
       elsif replace_all
-        replace_file(file)
-      elsif File.identical?(secure_file, home_file) || File.identical?(unsecure_file, home_file)
-        # Case when encryption status changes
         replace_file(file)
       else
         print "overwrite ~/#{home_file_name(relative_path)}? [ynaq] "
