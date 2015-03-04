@@ -32,15 +32,15 @@
                  "~/.signatures/personal")
                 ("work"
                  nil
-                 "Wael Nasreddine <wmn@google.com>" ;; Sender address
-                 "Google"
+                 "Wael Nasreddine <wael.nasreddine@dailymotion.com>" ;; Sender address
+                 "Dailymotion"
                  nil
                  nil
                  "~/.signatures/work")))
         ;; Define the rules TODO: Add all of personal addresses
         (setq gnus-alias-identity-rules (quote
                                          (("personal" ("any" "wael.nasreddine@gmail.com" both) "personal")
-                                          ("work" ("any" "\\(wmn\\|wnasreddine\\)@google.com" both) "work"))))
+                                          ("work" ("any" "wael.nasreddine@dailymotion.com" both) "work"))))
         ;; Use "work" identity by default
         (setq gnus-alias-default-identity "work")
         ;; Determine identity when message-mode loads
@@ -49,10 +49,6 @@
   (progn
     (setq notmuch-saved-searches
           '((:name "flagged" :query "tag:flagged")
-            (:name "tome-work" :query "tag:unread AND tag:work AND to:wmn@google.com")
-            (:name "CI-new" :query "(tag:ci_sre OR tag:ci_sre_mtv) AND tag:unread")
-            (:name "CI" :query "(tag:ci_sre OR tag:ci_sre_mtv) AND date:this_month..")
-            (:name "CorpDB" :query "(tag:corpdb_sre OR tag:corpdb_team OR tag:corpdb_users) AND date:this_month..")
             (:name "family-new" :query "tag:family AND tag:unread")
             (:name "wife-new" :query "tag:wife AND tag:unread")
             (:name "consulting-new" :query "tag:consulting AND tag:unread")
