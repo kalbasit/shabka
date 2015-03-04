@@ -7,6 +7,7 @@ IGNORED_FILES = [
   "Rakefile",
   "README.md",
   ".DS_Store",
+  ".encrypted",
   ".etc",
   ".git",
   ".gitattributes",
