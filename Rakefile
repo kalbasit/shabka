@@ -31,11 +31,6 @@ IGNORED_WHEN_UNSECURE = [
 desc "install the dot files into user's home directory"
 task :install => [:checkout_vundle_master, :update_submodules, :switch_to_zsh] do
   link_folder(Dir.getwd)
-
-  if find_encryption_status() == "NO"
-    home_file = File.join(ENV['HOME'], '.bin', 'ssh-agents')
-    system %Q{rm -f '#{home_file}'}
-  end
 end
 
 task :default => :install
