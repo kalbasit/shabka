@@ -66,4 +66,4 @@ export TERM=xterm-256color
 [ -n "$TMUX" ] && export TERM=screen-256color
 
 # Load SSH agents
-eval `ssh-agents $SHELL`
+[[ -x "${HOME}/.bin/ssh-agents" ]] && eval `ssh-agents $SHELL`
