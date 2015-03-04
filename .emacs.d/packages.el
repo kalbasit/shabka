@@ -47,8 +47,6 @@
         (add-hook 'message-setup-hook 'gnus-alias-determine-identity))))
   :config
   (progn
-    (setq notmuch-command
-          (f-expand "remote-notmuch" (concat (f-full (getenv "HOME")) "/.filesystem/bin")))
     (setq notmuch-saved-searches
           '((:name "flagged" :query "tag:flagged")
             (:name "tome-work" :query "tag:unread AND tag:work AND to:wmn@google.com")
