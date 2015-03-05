@@ -31,7 +31,15 @@ IGNORED_WHEN_UNSECURE = [
 GO_BINARIES = [
   "github.com/monochromegane/the_platinum_searcher/cmd/pt",
   "github.com/smartystreets/goconvey",
+  "github.com/jteeuwen/go-bindata/go-bindata",
 ]
+
+desc "Install Go Binaries"
+task :install_go_binaries do
+  GO_BINARIES.each do |binary|
+    sh %Q{go get -u #{binary}}
+  end
+end
 
 desc "install the dot files into user's home directory"
 task :install => [:checkout_vundle_master, :update_submodules, :switch_to_zsh] do
@@ -41,7 +49,7 @@ end
 task :default => :install
 
 task :checkout_vundle_master do
-  `cd .vim/bundle/Vundle.vim && git checkout master`
+  sh %Q{cd .vim/bundle/Vundle.vim && git checkout master}
 end
 
 desc "Switch your shell to ZSH from #{ENV["SHELL"]}"
@@ -53,7 +61,7 @@ task :switch_to_zsh do
     case $stdin.gets.chomp
     when 'y'
       puts "switching to zsh"
-      system %Q{chsh -s `which zsh`}
+      sh %Q{chsh -s `which zsh`}
     else
       puts "skipping zsh"
     end
@@ -63,7 +71,7 @@ end
 desc "Initialize and update submodules to the latest version"
 task :update_submodules do
   puts "Updating the submodules"
-  `git submodule update --init > /dev/null`
+  sh %Q{git submodule update --init > /dev/null}
 end
 
 desc "Install YouCompleteme"
@@ -92,7 +100,7 @@ end
 
 def replace_file(file)
   home_file = File.join(ENV['HOME'], home_file_name(relative_path(file)))
-  system %Q{rm -rf '#{home_file}'}
+  sh %Q{rm -rf '#{home_file}'}
   link_file(file)
 end
 
@@ -201,7 +209,7 @@ def link_file(file)
     end
   else
     puts "linking #{file}"
-    system %Q{ln -s "#{file}" "#{home_file}"}
+    sh %Q{ln -s "#{file}" "#{home_file}"}
   end
 end
 
