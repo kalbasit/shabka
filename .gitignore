@@ -32,6 +32,8 @@ drafts/
 .emacs.d/projectile-bookmarks.eld
 .emacs.d/projectile.cache
 .emacs.d/url/cache
+.emacs.d/recentf
+.emacs.d/smex-items
 .filesystem/bin/ssx-agents
 .zsh/cache/
 .emacs.d/eshell/
@@ -43,6 +45,7 @@ Gist.sublime-settings
 .byobu/.ssh-agent
 .filesystem/
 .vim/bundle/
+.notmuch/compose/
 .notmuch/nottoomuch-addresses/addresses
 .notmuch/nottoomuch-addresses/addresses.active
 .notmuch/nottoomuch-addresses/addresses.active.new

@@ -1,11 +1,5 @@
 " vim:foldmethod=marker:foldlevel=0:
 
-"" Google.vim {{{
-let g:running_at_google = 0
-if filereadable(expand("~/.vimrc.google"))
-  source ~/.vimrc.google
-endif
-" }}}
 "" Vundle{{{
 ""
 
@@ -60,10 +54,10 @@ Plugin 'tpope/vim-repeat'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-unimpaired'
 Plugin 'ervandew/screen'
+Plugin 'Valloric/YouCompleteMe'
 
-if !g:running_at_google
-  Plugin 'Valloric/YouCompleteMe'
-endif
+" mail
+Plugin 'diefans/notmuch-vim'
 
 """ UltiSnips """
 Plugin 'SirVer/ultisnips'
@@ -243,14 +237,9 @@ if has("autocmd")
   au BufRead,BufNewFile *.{md,markdown,mdown,mkd,mkdn,txt} setf markdown
   au FileType markdown setlocal wrap linebreak textwidth=72 nolist
 
-  if g:running_at_google
-    " 2 spaces at Google
-    au FileType python setlocal tabstop=2 shiftwidth=2
-  else
-    " make Python follow PEP8 for whitespace.
-    " http://www.python.org/dev/peps/pep-0008/
-    au FileType python setlocal tabstop=4 shiftwidth=4
-  endif
+  " make Python follow PEP8 for whitespace.
+  " http://www.python.org/dev/peps/pep-0008/
+  au FileType python setlocal tabstop=4 shiftwidth=4
 
   " Remember last location in file, but not for commit messages.
   " see :help last-position-jump
@@ -322,6 +311,30 @@ let g:ctrlp_max_height = 100
 let g:vroom_write_all = 1
 
 "}}}
+"" Notmuch{{{
+let g:notmuch_sendmail = 'msmtp'
+let g:notmuch_folders = [
+      \ [ "flagged", "tag:flagged" ],
+      \ [ "tome-work", "tag:unread AND tag:work AND to:wmn@google.com" ],
+      \ [ "family-new", "tag:family AND tag:unread" ],
+      \ [ "wife-new", "tag:wife AND tag:unread" ],
+      \ [ "consulting-new", "tag:consulting AND tag:unread" ],
+      \ [ "inbox-work-new", "tag:work AND tag:unread AND tag:inbox" ],
+      \ [ "inbox-personal-new", "tag:personal AND tag:unread AND tag:inbox" ],
+      \ [ "work-new", "tag:work AND tag:unread" ],
+      \ [ "personal-new", "tag:personal AND tag:unread" ],
+      \ [ "work", "tag:work" ],
+      \ [ "personal", "tag:personal" ],
+      \ [ "inbox-unread", "tag:inbox AND tag:unread" ],
+      \ [ "unread", "tag:unread" ],
+      \ [ "inbox", "tag:inbox" ],
+      \ ]
+let g:notmuch_signature =  [
+      \ '',
+      \ '-- ',
+      \ 'Wael Nasreddine | Senior Full Stack Engineer at Dailymotion | (650) 933-3448',
+      \ ]
+"}}}
 "" Command-Line Mappings {{{
 ""
 
@@ -365,6 +378,9 @@ map <Left> :echo "no!"<cr>
 map <Right> :echo "no!"<cr>
 map <Up> :echo "no!"<cr>
 map <Down> :echo "no!"<cr>
+
+" Open notmuch
+map <leader>m :NotMuch<cr>
 
 " CoffeeScript
 vmap <leader>c <esc>:'<,'>:CoffeeCompile<CR>
