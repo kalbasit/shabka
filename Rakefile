@@ -28,6 +28,11 @@ IGNORED_WHEN_UNSECURE = [
   /\.bin\/ssh-agents/,
 ]
 
+GO_BINARIES = [
+  "github.com/monochromegane/the_platinum_searcher/cmd/pt",
+  "github.com/smartystreets/goconvey",
+]
+
 desc "install the dot files into user's home directory"
 task :install => [:checkout_vundle_master, :update_submodules, :switch_to_zsh] do
   link_folder(Dir.getwd)
