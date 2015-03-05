@@ -11,6 +11,7 @@ yankring_history_v2.txt
 .screenrc
 .xinitrc-sessions
 .pki
+.ssh/agent.*
 .ssh/environment
 .ssh/id_rsa_google*
 .ssh/known_hosts
@@ -47,7 +48,6 @@ Gist.sublime-settings
 .notmuch/nottoomuch-addresses/addresses.active.new
 .notmuch/nottoomuch-addresses/addresses.new
 .notmuch/log
-.ssh/agent.apollo
 
 
 
