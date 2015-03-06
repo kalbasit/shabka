@@ -65,5 +65,9 @@ source "${THEMES_PATH}/${THEME}.zsh-theme"
 export TERM=xterm-256color
 [ -n "$TMUX" ] && export TERM=screen-256color
 
-# Load SSH agents
-[[ -x "${HOME}/.bin/ssh-agents" ]] && eval `ssh-agents $SHELL`
+# Lastly, do anything that requires the dotfiles to be unsecure
+if grep -q OK "${HOME}/.dotfiles/.encrypted"
+then
+  # Load SSH agents
+  [[ -x "${HOME}/.bin/ssh-agents" ]] && eval `ssh-agents $SHELL`
+fi
