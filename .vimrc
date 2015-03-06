@@ -60,7 +60,7 @@ Plugin 'bronson/vim-trailing-whitespace'
 Plugin 'tpope/vim-eunuch'
 
 " mail
-Plugin 'diefans/notmuch-vim'
+Plugin 'felipec/notmuch-vim'
 
 """ UltiSnips """
 Plugin 'SirVer/ultisnips'
