@@ -55,6 +55,10 @@ Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-unimpaired'
 Plugin 'ervandew/screen'
 Plugin 'Valloric/YouCompleteMe'
+Plugin 'editorconfig/editorconfig-vim'
+Plugin 'vim-scripts/PreserveNoEOL'
+Plugin 'bronson/vim-trailing-whitespace'
+Plugin 'tpope/vim-eunuch'
 
 " mail
 Plugin 'diefans/notmuch-vim'
@@ -315,13 +319,12 @@ let g:vroom_write_all = 1
 let g:notmuch_sendmail = 'msmtp'
 let g:notmuch_folders = [
       \ [ "flagged", "tag:flagged" ],
-      \ [ "tome-work", "tag:unread AND tag:work AND to:wmn@google.com" ],
       \ [ "family-new", "tag:family AND tag:unread" ],
       \ [ "wife-new", "tag:wife AND tag:unread" ],
+      \ [ "work-new", "tag:work AND tag:unread" ],
       \ [ "consulting-new", "tag:consulting AND tag:unread" ],
       \ [ "inbox-work-new", "tag:work AND tag:unread AND tag:inbox" ],
       \ [ "inbox-personal-new", "tag:personal AND tag:unread AND tag:inbox" ],
-      \ [ "work-new", "tag:work AND tag:unread" ],
       \ [ "personal-new", "tag:personal AND tag:unread" ],
       \ [ "work", "tag:work" ],
       \ [ "personal", "tag:personal" ],
