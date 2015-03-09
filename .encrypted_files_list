@@ -7,6 +7,7 @@
 .encrypted
 .gitconfig
 .gitcookies
+.github_token
 .gnupg/gpa.conf
 .gnupg/gpg-agent.conf
 .gnupg/gpg-agent.env
