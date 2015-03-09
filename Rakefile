@@ -16,7 +16,8 @@ IGNORED_FILES = [
   ".gitattributes",
   ".git-crypt",
 ]
-ENCRYPTED_FILES = File.read(File.join(DOTFILES_PATH, ".encrypted_files_list")).split("\n")
+ENCRYPTED_FILES_LIST_PATH = File.join(DOTFILES_PATH, ".encrypted_files_list")
+ENCRYPTED_FILES = File.read(ENCRYPTED_FILES_LIST_PATH).split("\n")
 IGNORED_WHEN_UNSECURE = [
   # Folders
   /\.ssh/,
@@ -33,6 +34,11 @@ GO_BINARIES = [
   "github.com/smartystreets/goconvey",
   "github.com/jteeuwen/go-bindata/go-bindata",
 ]
+
+desc "Update the list of encrypted files"
+task :update_encryted_files_list do
+  sh %Q{git-crypt status | grep -v 'not encrypted' | awk '{print $2}' | sort > #{ENCRYPTED_FILES_LIST_PATH}}
+end
 
 desc "Install Go Binaries"
 task :install_go_binaries do
