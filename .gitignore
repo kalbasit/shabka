@@ -37,6 +37,7 @@ drafts/
 .filesystem/bin/ssx-agents
 .zsh/cache/
 .emacs.d/eshell/
+.config/configstore/
 .config/sublime-text-3/Packages/User/*.cache
 GoSublime-aux.sublime-settings
 Package Control.last-run
@@ -51,7 +52,6 @@ Gist.sublime-settings
 .notmuch/nottoomuch-addresses/addresses.active.new
 .notmuch/nottoomuch-addresses/addresses.new
 .notmuch/log
-
 
 
 
