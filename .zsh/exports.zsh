@@ -20,3 +20,5 @@ fi
 if [[ -f "${MYFS}/opt/stderred/build/libstderred.so" ]]; then
   export LD_PRELOAD="${MYFS}/opt/stderred/build/libstderred.so${LD_PRELOAD:+:$LD_PRELOAD}"
 fi
+
+export HOMEBREW_CASK_OPTS="--appdir=/Applications"
