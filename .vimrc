@@ -32,7 +32,6 @@ if has("ruby")
   Plugin 'vim-ruby/vim-ruby'
 endif
 Plugin 'skwp/vim-rspec'
-Plugin 'skalnik/vim-vroom'
 Plugin 'tpope/vim-rails'
 Plugin 'tpope/vim-endwise'
 
@@ -58,6 +57,7 @@ Plugin 'editorconfig/editorconfig-vim'
 Plugin 'vim-scripts/PreserveNoEOL'
 Plugin 'bronson/vim-trailing-whitespace'
 Plugin 'tpope/vim-eunuch'
+Plugin 'janko-m/vim-test'
 
 " mail
 Plugin 'felipec/notmuch-vim'
@@ -302,12 +302,6 @@ let g:ctrlp_working_path_mode = 0
 let g:ctrlp_max_height = 100
 
 " }}}
-"" Vroom{{{
-""
-
-let g:vroom_write_all = 1
-
-"}}}
 "" Notmuch{{{
 let g:notmuch_sendmail = 'msmtp'
 let g:notmuch_folders = [
