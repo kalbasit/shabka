@@ -53,6 +53,7 @@ Plugin 'tpope/vim-repeat'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-unimpaired'
 Plugin 'ervandew/screen'
+Plugin 'Valloric/YouCompleteMe'
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'vim-scripts/PreserveNoEOL'
 Plugin 'bronson/vim-trailing-whitespace'
@@ -283,6 +284,12 @@ let g:go_highlight_structs = 1
 " }}}
 "" UltiSnips{{{
 ""
+
+" Trigger configuration. Do not use <tab> if you use
+" https://github.com/Valloric/YouCompleteMe.
+let g:UltiSnipsExpandTrigger="<c-x><c-z>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
 " :UltiSnipsEdit Split vertically
 let g:UltiSnipsEditSplit="vertical"

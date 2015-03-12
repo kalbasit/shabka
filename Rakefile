@@ -80,6 +80,19 @@ task :update_submodules do
   sh %Q{git submodule update --init > /dev/null}
 end
 
+desc "Install YouCompleteme"
+task :ycm_install do
+  ycm_path = File.join(DOTFILES_PATH, ".vim/bundle/YouCompleteMe")
+  if !File.exist?(ycm_path)
+    puts "YCM is not installed in the bundle, please run 'vim +VundleInstall +qall"
+    exit
+  end
+
+  puts "Installing required packages, please enter the sudo password"
+  sh "sudo apt-get install build-essential cmake python-dev" if RUBY_PLATFORM.downcase =~ /linux/
+  sh "cd #{ycm_path} && ./install.sh --clang-completer"
+end
+
 desc "Update the CA bundler cert"
 task :update_ca_bundle_cert do
   url = "https://raw.githubusercontent.com/bagder/ca-bundle/master/ca-bundle.crt"
