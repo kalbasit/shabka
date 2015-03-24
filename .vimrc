@@ -53,6 +53,7 @@ Plugin 'tpope/vim-repeat'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-unimpaired'
 Plugin 'ervandew/screen'
+Plugin 'ervandew/supertab'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'vim-scripts/PreserveNoEOL'
@@ -171,6 +172,9 @@ set wildignore+=*/tmp/cache/assets/*/sprockets/*,*/tmp/cache/assets/*/sass/*
 " Disable temp and backup files
 set wildignore+=*.swp,*~,._*
 
+" Disable Godeps workspace
+set wildignore+=*/Godeps/_workspace/*
+
 " }}}
 "" Backup, swap and undo location{{{
 ""
@@ -264,7 +268,6 @@ if has("autocmd")
   au FileType go nmap <leader>r <Plug>(go-run)
   au FileType go nmap <Leader>s <Plug>(go-implements)
   au FileType go nmap <leader>b <Plug>(go-build)
-  au FileType go nmap <leader>t <Plug>(go-test)
   au FileType go nmap <leader>c <Plug>(go-coverage)
   au FileType go nmap <Leader>ds <Plug>(go-def-split)
   au FileType go nmap <Leader>dv <Plug>(go-def-vertical)
@@ -285,11 +288,15 @@ let g:go_highlight_structs = 1
 "" UltiSnips{{{
 ""
 
-" Trigger configuration. Do not use <tab> if you use
-" https://github.com/Valloric/YouCompleteMe.
-let g:UltiSnipsExpandTrigger="<c-x><c-z>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+" make YCM compatible with UltiSnips (using supertab)
+let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
+let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
+let g:SuperTabDefaultCompletionType = '<C-n>'
+
+" better key bindings for UltiSnipsExpandTrigger
+let g:UltiSnipsExpandTrigger = "<tab>"
+let g:UltiSnipsJumpForwardTrigger = "<tab>"
+let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 
 " :UltiSnipsEdit Split vertically
 let g:UltiSnipsEditSplit="vertical"
@@ -309,6 +316,13 @@ let g:ctrlp_working_path_mode = 0
 let g:ctrlp_max_height = 100
 
 " }}}
+"" Test{{{
+map <silent> <leader>t :TestNearest<CR>
+map <silent> <leader>T :TestFile<CR>
+map <silent> <leader>a :TestSuite<CR>
+map <silent> <leader>l :TestLast<CR>
+map <silent> <leader>g :TestVisit<CR>
+"}}}
 "" Notmuch{{{
 let g:notmuch_sendmail = 'msmtp'
 let g:notmuch_folders = [
@@ -422,9 +436,6 @@ nmap <silent>gw :s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3\2\1/<CR>`'
 
 " Underline the current line with '='
 nmap <silent> <leader>ul :t.<CR>Vr=
-
-" set text wrapping toggles
-nmap <silent> <leader>tw :set invwrap<CR>:set wrap?<CR>
 
 " find merge conflict markers
 nmap <silent> <leader>fc <ESC>/\v^[<=>]{7}( .*\|$)<CR>
