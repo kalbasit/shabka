@@ -68,6 +68,10 @@ if [[ -d "${HOME}/.pyenv" ]]; then
   eval "$(pyenv init --no-rehash -)"
 fi
 
+# Load travis
+if [[ -f "${HOME}/.travis/travis.sh" ]]; then
+  source "${HOME}/.travis/travis.sh"
+fi
 
 # Export Github's token if it's readable.
 local github_token_path="$HOME/.github_token"
