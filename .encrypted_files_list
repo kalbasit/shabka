@@ -2,7 +2,8 @@
 .config/goobuntu-backups/exclude
 .config/pianobar/config
 .config/sublime-text-3/Packages/User/SublimeGit.sublime-settings
-.cron/w.nasreddine/wks-169.corp.pao.dailymotion.com
+.cron/w.nasreddine/wks-116.corp.pao.dailymotion.com
+.cron/w.nasreddine/wks-116.corp.pao.dailymotion.com.restart_travis_build
 .cron/wmn/apollo
 .encrypted
 .gitconfig
