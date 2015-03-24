@@ -11,12 +11,11 @@ function gcim() {
     project="[DMX] "
   fi
 
-  if [[ -z "${DM_PROJECT}" -a  -z "${project}" ]]; then
-    echo "Missing project, please export the project name as DM_PROJECT and amend the commit if needed"
-    project=""
-  fi
-
-  if [[ -n "${DM_PROJECT}" ]]; then
+  if [[ -z "${DM_PROJECT}" ]]; then
+    if [[ -z "${project}" ]]; then
+      echo "Missing project, please export the project name as DM_PROJECT and amend the commit if needed"
+    fi
+  else
     project="[${DM_PROJECT}] "
   fi
 
