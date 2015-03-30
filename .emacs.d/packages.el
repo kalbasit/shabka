@@ -32,7 +32,7 @@
                  "~/.signatures/personal")
                 ("work"
                  nil
-                 "Wael Nasreddine <wael.nasreddine@dailymotion.com>" ;; Sender address
+                 "Wael Nasreddine <wmn@dailymotion.com>" ;; Sender address
                  "Dailymotion"
                  nil
                  nil
@@ -40,7 +40,7 @@
         ;; Define the rules TODO: Add all of personal addresses
         (setq gnus-alias-identity-rules (quote
                                          (("personal" ("any" "wael.nasreddine@gmail.com" both) "personal")
-                                          ("work" ("any" "wael.nasreddine@dailymotion.com" both) "work"))))
+                                          ("work" ("any" "wmn@dailymotion.com" both) "work"))))
         ;; Use "work" identity by default
         (setq gnus-alias-default-identity "work")
         ;; Determine identity when message-mode loads
@@ -62,7 +62,7 @@
             (:name "unread" :query "tag:unread")
             (:name "inbox" :query "tag:inbox")))
     (setq notmuch-address-command
-          (f-expand "nottoomuch-addresses" (concat (f-full (getenv "HOME")) "/.filesystem/bin")))
+          (f-expand "nottoomuch-addresses" (concat (f-full (getenv "HOME")) "/.bin")))
     (notmuch-address-message-insinuate)
     (setq mail-envelope-from (quote header))
     (setq mail-specify-envelope-from t)
@@ -71,7 +71,7 @@
     (setq notmuch-fcc-dirs nil)
     (setq notmuch-search-oldest-first nil)
     (setq send-mail-function (quote sendmail-send-it))
-    (setq sendmail-program "/usr/bin/msmtp")
+    (setq sendmail-program "/usr/local/bin/msmtp")
     ;; reply to all by default
     (define-key notmuch-show-mode-map "r" 'notmuch-show-reply)
     (define-key notmuch-show-mode-map "R" 'notmuch-show-reply-sender)
