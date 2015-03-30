@@ -36,8 +36,8 @@ GO_BINARIES = [
   "gopkg.in/totp.v0/cmd/totp",
 ]
 
-desc "Update the list of encrypted files"
-task :update_encryted_files_list do
+desc "Generate the list of encrypted files"
+task :generate_encryted_files_list do
   sh %Q{git-crypt status | grep -v 'not encrypted' | awk '{print $2}' | sort > #{ENCRYPTED_FILES_LIST_PATH}}
 end
 
@@ -138,7 +138,7 @@ def link_folder(folder)
   encryption_status = find_encryption_status()
 
   files(folder).each do |file|
-    # If the encryption was not deciphered.
+    # Take care of an encrypted file if the encryption was not setup.
     if encryption_status == "NO"
       must_skip = false
       IGNORED_WHEN_UNSECURE.each do |p|
@@ -148,9 +148,7 @@ def link_folder(folder)
           break
         end
       end
-      if must_skip
-        next
-      end
+      next if must_skip
 
       if is_encrypted?(file)
         # Check if we have an unsecure version
@@ -173,6 +171,8 @@ def link_folder(folder)
     if File.exist?(home_file)
       if File.identical? file, home_file
         puts "identical ~/#{home_file_name(relative_path)}"
+      elsif file =~ /\.erb$/
+        replace_file(file)
       elsif File.directory?(home_file)
         link_folder(file)
       elsif replace_all
