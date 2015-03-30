@@ -34,6 +34,8 @@ GO_BINARIES = [
   "github.com/smartystreets/goconvey",
   "github.com/jteeuwen/go-bindata/go-bindata",
   "gopkg.in/totp.v0/cmd/totp",
+  "github.com/tools/godep",
+  "golang.org/x/tools/cmd/cover",
 ]
 
 desc "Generate the list of encrypted files"
