@@ -19,10 +19,10 @@
 .gnupg/sshcontrol
 .gnupg/trustdb.gpg
 .irssi/config
-.mbsyncrc
-.msmtprc
+.mbsyncrc.erb
+.msmtprc.erb
 .my.cnf
-.notmuch-config
+.notmuch-config.erb
 .notmuch/filters
 .notmuch/hooks/post-new
 .notmuch/hooks/pre-new
