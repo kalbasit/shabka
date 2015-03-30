@@ -4,6 +4,7 @@
 .config/sublime-text-3/Packages/User/SublimeGit.sublime-settings filter=git-crypt diff=git-crypt
 .cron/**/* filter=git-crypt diff=git-crypt
 .encrypted filter=git-crypt diff=git-crypt
+.gist-vim filter=git-crypt diff=git-crypt
 .gitconfig filter=git-crypt diff=git-crypt
 .gitcookies filter=git-crypt diff=git-crypt
 .github_token filter=git-crypt diff=git-crypt

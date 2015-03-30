@@ -39,6 +39,7 @@ Plugin 'tpope/vim-endwise'
 Plugin 'kien/ctrlp.vim'
 Plugin 'jeetsukumaran/vim-buffergator'
 if executable("curl")
+  Plugin 'mattn/webapi-vim'
   Plugin 'mattn/gist-vim'
 endif
 if has("python")
