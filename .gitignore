@@ -52,6 +52,8 @@ Gist.sublime-settings
 .notmuch/nottoomuch-addresses/addresses.active.new
 .notmuch/nottoomuch-addresses/addresses.new
 .notmuch/log
+.config/pianobar/state
+.vim/spell/
 
 
 
