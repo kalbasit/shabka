@@ -7,7 +7,7 @@ function gcim() {
     return 1
   fi
 
-  if echo "${PWD}" | grep -q "ads/dmx\|dailymotion/go-liverail"; then
+  if echo "${PWD}" | grep -q "/dmx\|dailymotion/go-liverail"; then
     project="[DMX] "
   fi
 
