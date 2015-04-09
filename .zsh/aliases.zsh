@@ -8,3 +8,5 @@ alias xcopy='xclip -selection clipboard'
 alias zs='zssh'
 alias backup_code='rsync -auz --progress --delete ~/code/src/ wmn@192.168.1.13:code/src/'
 alias tmx='tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf"'
+alias vi=vim
+alias e="${EDITOR:-vim}"
