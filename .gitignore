@@ -5,6 +5,7 @@
 *~
 .byobu/.ssh-agent
 .config/configstore/
+.config/git/
 .config/liteide/
 .config/pianobar/state
 .config/sublime-text-3/Packages/User/*.cache
