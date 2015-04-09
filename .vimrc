@@ -285,6 +285,7 @@ let g:go_fmt_command = "goimports"  " What to run on save.
 let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1
 let g:go_highlight_structs = 1
+autocmd BufWritePost,FileWritePost *.go execute 'GoLint' | cwindow
 
 " }}}
 "" UltiSnips{{{
