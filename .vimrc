@@ -36,6 +36,7 @@ Plugin 'tpope/vim-rails'
 Plugin 'tpope/vim-endwise'
 
 " Tools
+Plugin 'vim-scripts/Align'
 Plugin 'kien/ctrlp.vim'
 Plugin 'jeetsukumaran/vim-buffergator'
 if executable("curl")
