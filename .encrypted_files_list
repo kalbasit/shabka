@@ -2,10 +2,11 @@
 .config/goobuntu-backups/exclude
 .config/pianobar/config
 .config/sublime-text-3/Packages/User/SublimeGit.sublime-settings
-.cron/w.nasreddine/wks-116.corp.pao.dailymotion.com
-.cron/w.nasreddine/wks-116.corp.pao.dailymotion.com.restart_travis_build
 .cron/wmn/apollo
+.cron/wmn/wks-116.corp.pao.dailymotion.com
+.cron/wmn/wks-116.corp.pao.dailymotion.com.restart_travis_build
 .encrypted
+.gist-vim
 .gitconfig
 .gitcookies
 .github_token
@@ -31,6 +32,8 @@
 .signatures/work
 .ssh/authorized_keys
 .ssh/config
+.ssh/dmx-deis
+.ssh/dmx-deis.pub
 .ssh/id_boot2docker
 .ssh/id_boot2docker.pub
 .ssh/id_rsa
