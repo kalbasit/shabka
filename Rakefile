@@ -37,6 +37,7 @@ GO_BINARIES = [
   "github.com/tools/godep",
   "golang.org/x/tools/cmd/cover",
   "github.com/golang/lint/golint",
+  "github.com/codegangsta/gin",
 ]
 
 desc "Generate the list of encrypted files"
