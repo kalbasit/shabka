@@ -93,3 +93,9 @@ if [[ -r "${mysql_credentials_path}" ]]; then
   unset user pass
 fi
 unset mysql_credentials_path
+
+# Make sure we know where is the docker-machine
+if [[ -x `which docker-machine 2>/dev/null` ]]; then
+  eval `docker-machine env dev`
+  export DOCKER_MACHINE_DEV_IP="`docker-machine ip dev`"
+fi
