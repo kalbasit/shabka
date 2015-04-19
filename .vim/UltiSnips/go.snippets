@@ -1,3 +1,9 @@
 snippet pa "Package" b
 package ${1:`!v expand('%:p:h:t')`}
 endsnippet
+
+snippet xmle "XML Element of a struct"
+${1:name} ${2:type} \`xml:"`!p
+s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', t[1])
+snip.rv = re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()`"\`
+endsnippet

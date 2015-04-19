@@ -1,6 +1,5 @@
 # Compiled source #
 ###################
-*.com
 *.class
 *.dll
 *.exe
@@ -18,40 +17,35 @@ _cgo_gotypes.go
 _cgo_export.*
 _testmain.go
 *.exe
-TAGS
-tags
 
 # Ruby/Rails #
 ##############
 *.rbc
-rdoc
-doc
 .yardoc
 _yardoc
-.bundle
-pkg
+.bundle/
+pkg/
 tmp/**/*
 tmp/*
 /public/index.html
-.sass-cache
-/public/assets
+.sass-cache/
+/public/assets/
 app/assets/stylesheets/scaffolds.css.scss
 *.sassc
 capybara-*.html
-/vendor/bundle
+/vendor/bundle/
 /public/system/*
-coverage
+coverage/
 spec/tmp/*
 **.orig
 config/*.yml
 rerun.txt
 pickle-email-*.html
 *.gem
-InstalledFiles
-lib/bundler/man
-spec/reports
-test/tmp
-test/version_tmp
+lib/bundler/man/
+spec/reports/
+test/tmp/
+test/version_tmp/
 config/initializers/google_internal_network.rb
 
 # Packages #
@@ -86,7 +80,7 @@ Icon?
 Thumbs.db
 ._*
 .Spotlight-V100
-.Trashes
+.Trashes/
 Desktop.ini
 .directory
 
@@ -94,33 +88,33 @@ Desktop.ini
 ######################
 *.tmproj
 *.tmproject
-tmtags
+tmtags/
 *~
 \#*
 .\#*
-.redcar
+.redcar/
 .*.sw[a-z]
 *.un~
 Session.vim
 *.pydevproject
-.project
-.metadata
+.project/
+.metadata/
 *.tmp
 *.bak
 *~.nib
 local.properties
-.classpath
+.classpath/
 .settings/
-.loadpath
-.cproject
+.loadpath/
+.cproject/
 nbproject/
 nbactions.xml
 \#*\#
 /.emacs.desktop
 /.emacs.desktop.lock
-.elc
-auto-save-list
-tramp
+.elc/
+auto-save-list/
+tramp/
 
 # Other Version Control Systems #
 #################################

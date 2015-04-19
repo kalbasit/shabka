@@ -32,34 +32,28 @@
                  "~/.signatures/personal")
                 ("work"
                  nil
-                 "Wael Nasreddine <wmn@google.com>" ;; Sender address
-                 "Google"
+                 "Wael Nasreddine <wmn@dailymotion.com>" ;; Sender address
+                 "Dailymotion"
                  nil
                  nil
                  "~/.signatures/work")))
         ;; Define the rules TODO: Add all of personal addresses
         (setq gnus-alias-identity-rules (quote
                                          (("personal" ("any" "wael.nasreddine@gmail.com" both) "personal")
-                                          ("work" ("any" "\\(wmn\\|wnasreddine\\)@google.com" both) "work"))))
+                                          ("work" ("any" "wmn@dailymotion.com" both) "work"))))
         ;; Use "work" identity by default
         (setq gnus-alias-default-identity "work")
         ;; Determine identity when message-mode loads
         (add-hook 'message-setup-hook 'gnus-alias-determine-identity))))
   :config
   (progn
-    (setq notmuch-command
-          (f-expand "remote-notmuch" (concat (f-full (getenv "HOME")) "/.filesystem/bin")))
     (setq notmuch-saved-searches
           '((:name "flagged" :query "tag:flagged")
-            (:name "tome-work" :query "tag:unread AND tag:work AND to:wmn@google.com")
-            (:name "CI-new" :query "(tag:ci_sre OR tag:ci_sre_mtv) AND tag:unread")
-            (:name "CI" :query "(tag:ci_sre OR tag:ci_sre_mtv) AND date:this_month..")
-            (:name "CorpDB" :query "(tag:corpdb_sre OR tag:corpdb_team OR tag:corpdb_users) AND date:this_month..")
+            (:name "inbox-work-new" :query "tag:work AND tag:unread AND tag:inbox")
+            (:name "inbox-personal-new" :query "tag:personal AND tag:unread AND tag:inbox")
             (:name "family-new" :query "tag:family AND tag:unread")
             (:name "wife-new" :query "tag:wife AND tag:unread")
             (:name "consulting-new" :query "tag:consulting AND tag:unread")
-            (:name "inbox-work-new" :query "tag:work AND tag:unread AND tag:inbox")
-            (:name "inbox-personal-new" :query "tag:personal AND tag:unread AND tag:inbox")
             (:name "work-new" :query "tag:work AND tag:unread")
             (:name "personal-new" :query "tag:personal AND tag:unread")
             (:name "work" :query "tag:work")
@@ -68,7 +62,7 @@
             (:name "unread" :query "tag:unread")
             (:name "inbox" :query "tag:inbox")))
     (setq notmuch-address-command
-          (f-expand "nottoomuch-addresses" (concat (f-full (getenv "HOME")) "/.filesystem/bin")))
+          (f-expand "nottoomuch-addresses" (concat (f-full (getenv "HOME")) "/.bin")))
     (notmuch-address-message-insinuate)
     (setq mail-envelope-from (quote header))
     (setq mail-specify-envelope-from t)
@@ -77,7 +71,7 @@
     (setq notmuch-fcc-dirs nil)
     (setq notmuch-search-oldest-first nil)
     (setq send-mail-function (quote sendmail-send-it))
-    (setq sendmail-program "/usr/bin/msmtp")
+    (setq sendmail-program "/usr/local/bin/msmtp")
     ;; reply to all by default
     (define-key notmuch-show-mode-map "r" 'notmuch-show-reply)
     (define-key notmuch-show-mode-map "R" 'notmuch-show-reply-sender)

@@ -1,11 +1,5 @@
 " vim:foldmethod=marker:foldlevel=0:
 
-"" Google.vim {{{
-let g:running_at_google = 0
-if filereadable(expand("~/.vimrc.google"))
-  source ~/.vimrc.google
-endif
-" }}}
 "" Vundle{{{
 ""
 
@@ -38,14 +32,15 @@ if has("ruby")
   Plugin 'vim-ruby/vim-ruby'
 endif
 Plugin 'skwp/vim-rspec'
-Plugin 'skalnik/vim-vroom'
 Plugin 'tpope/vim-rails'
 Plugin 'tpope/vim-endwise'
 
 " Tools
+Plugin 'vim-scripts/Align'
 Plugin 'kien/ctrlp.vim'
 Plugin 'jeetsukumaran/vim-buffergator'
 if executable("curl")
+  Plugin 'mattn/webapi-vim'
   Plugin 'mattn/gist-vim'
 endif
 if has("python")
@@ -60,10 +55,16 @@ Plugin 'tpope/vim-repeat'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-unimpaired'
 Plugin 'ervandew/screen'
+Plugin 'ervandew/supertab'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'editorconfig/editorconfig-vim'
+Plugin 'vim-scripts/PreserveNoEOL'
+Plugin 'bronson/vim-trailing-whitespace'
+Plugin 'tpope/vim-eunuch'
+Plugin 'janko-m/vim-test'
 
-if !g:running_at_google
-  Plugin 'Valloric/YouCompleteMe'
-endif
+" mail
+Plugin 'felipec/notmuch-vim'
 
 """ UltiSnips """
 Plugin 'SirVer/ultisnips'
@@ -173,6 +174,9 @@ set wildignore+=*/tmp/cache/assets/*/sprockets/*,*/tmp/cache/assets/*/sass/*
 " Disable temp and backup files
 set wildignore+=*.swp,*~,._*
 
+" Disable Godeps workspace
+set wildignore+=*/Godeps/_workspace/*
+
 " }}}
 "" Backup, swap and undo location{{{
 ""
@@ -243,14 +247,9 @@ if has("autocmd")
   au BufRead,BufNewFile *.{md,markdown,mdown,mkd,mkdn,txt} setf markdown
   au FileType markdown setlocal wrap linebreak textwidth=72 nolist
 
-  if g:running_at_google
-    " 2 spaces at Google
-    au FileType python setlocal tabstop=2 shiftwidth=2
-  else
-    " make Python follow PEP8 for whitespace.
-    " http://www.python.org/dev/peps/pep-0008/
-    au FileType python setlocal tabstop=4 shiftwidth=4
-  endif
+  " make Python follow PEP8 for whitespace.
+  " http://www.python.org/dev/peps/pep-0008/
+  au FileType python setlocal tabstop=4 shiftwidth=4
 
   " Remember last location in file, but not for commit messages.
   " see :help last-position-jump
@@ -271,7 +270,6 @@ if has("autocmd")
   au FileType go nmap <leader>r <Plug>(go-run)
   au FileType go nmap <Leader>s <Plug>(go-implements)
   au FileType go nmap <leader>b <Plug>(go-build)
-  au FileType go nmap <leader>t <Plug>(go-test)
   au FileType go nmap <leader>c <Plug>(go-coverage)
   au FileType go nmap <Leader>ds <Plug>(go-def-split)
   au FileType go nmap <Leader>dv <Plug>(go-def-vertical)
@@ -287,16 +285,21 @@ let g:go_fmt_command = "goimports"  " What to run on save.
 let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1
 let g:go_highlight_structs = 1
+autocmd BufWritePost,FileWritePost *.go execute 'GoLint' | cwindow
 
 " }}}
 "" UltiSnips{{{
 ""
 
-" Trigger configuration. Do not use <tab> if you use
-" https://github.com/Valloric/YouCompleteMe.
-let g:UltiSnipsExpandTrigger="<c-x><c-z>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+" make YCM compatible with UltiSnips (using supertab)
+let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
+let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
+let g:SuperTabDefaultCompletionType = '<C-n>'
+
+" better key bindings for UltiSnipsExpandTrigger
+let g:UltiSnipsExpandTrigger = "<tab>"
+let g:UltiSnipsJumpForwardTrigger = "<tab>"
+let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 
 " :UltiSnipsEdit Split vertically
 let g:UltiSnipsEditSplit="vertical"
@@ -316,11 +319,35 @@ let g:ctrlp_working_path_mode = 0
 let g:ctrlp_max_height = 100
 
 " }}}
-"" Vroom{{{
-""
-
-let g:vroom_write_all = 1
-
+"" Test{{{
+map <silent> <leader>t :TestNearest<CR>
+map <silent> <leader>T :TestFile<CR>
+map <silent> <leader>a :TestSuite<CR>
+map <silent> <leader>l :TestLast<CR>
+map <silent> <leader>g :TestVisit<CR>
+"}}}
+"" Notmuch{{{
+let g:notmuch_sendmail = 'msmtp'
+let g:notmuch_folders = [
+      \ [ "flagged", "tag:flagged" ],
+      \ [ "family-new", "tag:family AND tag:unread" ],
+      \ [ "wife-new", "tag:wife AND tag:unread" ],
+      \ [ "work-new", "tag:work AND tag:unread" ],
+      \ [ "consulting-new", "tag:consulting AND tag:unread" ],
+      \ [ "inbox-work-new", "tag:work AND tag:unread AND tag:inbox" ],
+      \ [ "inbox-personal-new", "tag:personal AND tag:unread AND tag:inbox" ],
+      \ [ "personal-new", "tag:personal AND tag:unread" ],
+      \ [ "work", "tag:work" ],
+      \ [ "personal", "tag:personal" ],
+      \ [ "inbox-unread", "tag:inbox AND tag:unread" ],
+      \ [ "unread", "tag:unread" ],
+      \ [ "inbox", "tag:inbox" ],
+      \ ]
+let g:notmuch_signature =  [
+      \ '',
+      \ '-- ',
+      \ 'Wael Nasreddine | Senior Full Stack Engineer at Dailymotion | (650) 933-3448',
+      \ ]
 "}}}
 "" Command-Line Mappings {{{
 ""
@@ -366,6 +393,9 @@ map <Right> :echo "no!"<cr>
 map <Up> :echo "no!"<cr>
 map <Down> :echo "no!"<cr>
 
+" Open notmuch
+map <leader>m :NotMuch<cr>
+
 " CoffeeScript
 vmap <leader>c <esc>:'<,'>:CoffeeCompile<CR>
 map <leader>c :CoffeeCompile<CR>
@@ -409,9 +439,6 @@ nmap <silent>gw :s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3\2\1/<CR>`'
 
 " Underline the current line with '='
 nmap <silent> <leader>ul :t.<CR>Vr=
-
-" set text wrapping toggles
-nmap <silent> <leader>tw :set invwrap<CR>:set wrap?<CR>
 
 " find merge conflict markers
 nmap <silent> <leader>fc <ESC>/\v^[<=>]{7}( .*\|$)<CR>

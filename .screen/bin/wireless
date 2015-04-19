@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-# a Wireless routine for netinfo
-# <delay> <ESSD>
-
-# wireless information
-# Made by Wael Nasreddine
-
-interface="$(iwconfig 2>/dev/null | grep "${2}" | awk '{print $1}')"
-$HOME/.screen/bin/netinfo ${1} ${interface}

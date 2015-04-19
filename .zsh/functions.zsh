@@ -588,3 +588,8 @@ function pathmunge() {
     fi
 }
 #}}}
+# nse()#{{{
+function nse () {
+    docker exec -it $1 bash
+}
+#}}}

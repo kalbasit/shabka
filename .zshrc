@@ -56,8 +56,10 @@ done
 # Load the theme
 source "${THEMES_PATH}/${THEME}.zsh-theme"
 
-# Load Google specific stuff
-[[ -r "${ZDOTDIR:-$HOME}/.zshrc.google" ]] && source "${ZDOTDIR:-$HOME}/.zshrc.google"
+# Load work specific stuff
+[[ -r "${ZDOTDIR:-$HOME}/.zshrc.dailymotion" ]] && source "${ZDOTDIR:-$HOME}/.zshrc.dailymotion"
+[[ -r "${ZDOTDIR:-$HOME}/.zshrc.talentoday" ]] && source "${ZDOTDIR:-$HOME}/.zshrc.talentoday"
+
 
 # Load travis
 [[ -r "${HOME}/.travis/travis.sh" ]] && source "${HOME}/.travis/travis.sh"
@@ -65,5 +67,9 @@ source "${THEMES_PATH}/${THEME}.zsh-theme"
 export TERM=xterm-256color
 [ -n "$TMUX" ] && export TERM=screen-256color
 
-# Load SSH agents
-eval `ssh-agents $SHELL`
+# Lastly, do anything that requires the dotfiles to be unsecure
+if grep -q OK "${HOME}/.dotfiles/.encrypted"
+then
+  # Load SSH agents
+  [[ -x "${HOME}/.bin/ssh-agents" ]] && eval `ssh-agents $SHELL`
+fi
