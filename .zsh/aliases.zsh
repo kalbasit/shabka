@@ -10,3 +10,7 @@ alias backup_code='rsync -auz --progress --delete ~/code/src/ wmn@192.168.1.13:c
 alias tmx='tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf"'
 alias vi=vim
 alias e="${EDITOR:-vim}"
+alias comp=docker-compose
+alias mach=docker-machine
+alias fuck='$(thefuck $(fc -ln -1))'
+alias http='http --print=HhBb'
