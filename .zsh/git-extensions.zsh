@@ -22,7 +22,7 @@ function gcim() {
   fi
 
   if [[ -n "${PROJECT}" ]]; then
-    project="${PROJECT} "
+    project="${PROJECT}"
   fi
 
   if [[ -z "${project}" ]]; then
