@@ -9,6 +9,7 @@
 .config/liteide/
 .config/pianobar/state
 .config/sublime-text-3/Packages/User/*.cache
+.deis/units/
 .emacs.d/.cask
 .emacs.d/autosave/
 .emacs.d/backup/

@@ -5,6 +5,8 @@
 .cron/wmn/apollo
 .cron/wmn/wks-116.corp.pao.dailymotion.com
 .cron/wmn/wks-116.corp.pao.dailymotion.com.restart_travis_build
+.deis/client.json
+.deis/talentoday.json
 .encrypted
 .gist-vim
 .gitconfig
