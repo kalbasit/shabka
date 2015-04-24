@@ -1,3 +1,4 @@
+.aws/* filter=git-crypt diff=git-crypt
 .bin/ssh-agents filter=git-crypt diff=git-crypt
 .config/goobuntu-backups/**/* filter=git-crypt diff=git-crypt
 .config/pianobar/**/* filter=git-crypt diff=git-crypt

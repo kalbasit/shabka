@@ -1,3 +1,5 @@
+.aws/config
+.aws/credentials
 .bin/ssh-agents
 .config/goobuntu-backups/exclude
 .config/pianobar/config
@@ -41,6 +43,8 @@
 .ssh/id_rsa
 .ssh/id_rsa.pub
 .ssh/old_id_rsa
+.ssh/ro_id_rsa
+.ssh/ro_id_rsa.pub
 .ssh/talentoday-deis
 .ssh/talentoday-deis.pub
 .totprc
