@@ -4,7 +4,6 @@ export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 export EDITOR=vim                   # Vim Vim Vim baby!!
 export GREP_OPTIONS='--color=auto'  # grep always try to use colors.
 export GREP_COLOR='1;32'            # define grep's color.
-export BROWSER=/usr/bin/google-chrome-unstable
 
 # Make sure pathmunge is defined
 if ! type pathmunge > /dev/null 2>&1; then
@@ -54,6 +53,10 @@ fi
 if [[ -d "${HOME}/.cask/bin" ]]; then
   pathmunge "${HOME}/.cask/bin"
   export CASK_PATH="$(dirname $(dirname $(which cask)))"
+fi
+
+if [[ -d "${GOPATH}/src/github.com/phacility/arcanist/bin" ]]; then
+  pathmunge "${GOPATH}/src/github.com/phacility/arcanist/bin"
 fi
 
 # Load rbenv
