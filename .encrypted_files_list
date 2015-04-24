@@ -41,6 +41,8 @@
 .ssh/id_rsa
 .ssh/id_rsa.pub
 .ssh/old_id_rsa
+.ssh/talentoday-deis
+.ssh/talentoday-deis.pub
 .totprc
 .zshrc.dailymotion
 .zshrc.talentoday
