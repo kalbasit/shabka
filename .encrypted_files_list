@@ -1,3 +1,4 @@
+.arcrc
 .aws/config
 .aws/credentials
 .bin/ssh-agents
