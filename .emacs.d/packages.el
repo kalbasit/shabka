@@ -223,6 +223,7 @@
     (setq magit-stage-all-confirm nil)
     (setq magit-unstage-all-confirm nil)
     (setq magit-restore-window-configuration t)
+    (setq magit-last-seen-setup-instructions "1.4.0")
     (add-hook 'magit-mode-hook 'rinari-launch))
   :bind ("C-x g" . magit-status))
 
