@@ -40,7 +40,7 @@
         ;; Define the rules TODO: Add all of personal addresses
         (setq gnus-alias-identity-rules (quote
                                          (("personal" ("any" "wael.nasreddine@gmail.com" both) "personal")
-                                          ("work" ("any" "wmn@dailymotion.com" both) "work"))))
+                                          ("work" ("\\(wmn\\|w.nasreddine\\|wael.nasreddine\\)dailymotion.com" both) "work"))))
         ;; Use "work" identity by default
         (setq gnus-alias-default-identity "work")
         ;; Determine identity when message-mode loads
