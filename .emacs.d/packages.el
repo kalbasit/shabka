@@ -40,7 +40,7 @@
         ;; Define the rules TODO: Add all of personal addresses
         (setq gnus-alias-identity-rules (quote
                                          (("personal" ("any" "wael.nasreddine@gmail.com" both) "personal")
-                                          ("work" ("\\(wmn\\|w.nasreddine\\|wael.nasreddine\\)dailymotion.com" both) "work"))))
+                                          ("work" ("any" "\\(wmn\\|w.nasreddine\\|wael.nasreddine\\)@dailymotion.com" both) "work"))))
         ;; Use "work" identity by default
         (setq gnus-alias-default-identity "work")
         ;; Determine identity when message-mode loads
@@ -49,14 +49,14 @@
   (progn
     (setq notmuch-saved-searches
           '((:name "flagged" :query "tag:flagged")
-            (:name "inbox-work-new" :query "tag:work AND tag:unread AND tag:inbox")
+            (:name "inbox-dailymotion-new" :query "tag:dailymotion AND tag:unread AND tag:inbox")
             (:name "inbox-personal-new" :query "tag:personal AND tag:unread AND tag:inbox")
             (:name "family-new" :query "tag:family AND tag:unread")
             (:name "wife-new" :query "tag:wife AND tag:unread")
             (:name "consulting-new" :query "tag:consulting AND tag:unread")
-            (:name "work-new" :query "tag:work AND tag:unread")
+            (:name "dailymotion-new" :query "tag:dailymotion AND tag:unread")
             (:name "personal-new" :query "tag:personal AND tag:unread")
-            (:name "work" :query "tag:work")
+            (:name "dailymotion" :query "tag:dailymotion")
             (:name "personal" :query "tag:personal")
             (:name "inbox-unread" :query "tag:inbox AND tag:unread")
             (:name "unread" :query "tag:unread")
