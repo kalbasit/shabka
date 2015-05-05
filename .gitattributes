@@ -14,7 +14,6 @@
 .github_token filter=git-crypt diff=git-crypt
 .gnupg/**/* filter=git-crypt diff=git-crypt
 .irssi/config filter=git-crypt diff=git-crypt
-.mbsyncrc.erb filter=git-crypt diff=git-crypt
 .msmtprc.erb filter=git-crypt diff=git-crypt
 .my.cnf filter=git-crypt diff=git-crypt
 .notmuch/**/* filter=git-crypt diff=git-crypt
