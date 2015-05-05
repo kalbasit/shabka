@@ -5,18 +5,16 @@ export EDITOR=vim                   # Vim Vim Vim baby!!
 export GREP_OPTIONS='--color=auto'  # grep always try to use colors.
 export GREP_COLOR='1;32'            # define grep's color.
 
-# Make sure pathmunge is defined
-if ! type pathmunge > /dev/null 2>&1; then
-  function pathmunge() {
-      if ! [[ $PATH =~ (^|:)$1($|:) ]]; then
-         if [ "$2" = "after" ] ; then
-            PATH=$PATH:$1
-         else
-            PATH=$1:$PATH
-         fi
-      fi
-  }
-fi
+function pathmunge() {
+  [[ ! -d "${1}" ]] && return
+  if ! [[ $PATH =~ (^|:)$1($|:) ]]; then
+     if [ "$2" = "after" ] ; then
+        PATH=$PATH:$1
+     else
+        PATH=$1:$PATH
+     fi
+  fi
+}
 
 # Are we on Mac? Start the path as defined in /etc/paths
 if [[ -x /usr/libexec/path_helper ]]; then
@@ -30,14 +28,10 @@ pathmunge "${HOME}/.bin"
 pathmunge "${GOPATH}/bin"
 
 # Anything got installed into MYFS?
+pathmunge "${MYFS}/bin"
+pathmunge "${MYFS}/opt/go_appengine"
 if [[ -d "${MYFS}" ]]; then
-  pathmunge "${MYFS}/bin"
-
   if [[ -d "${MYFS}/opt" ]]; then
-    if [[ -d "${MYFS}/opt/go_appengine" ]]; then
-      pathmunge "${MYFS}/opt/go_appengine"
-    fi
-
     for dir in `find "${MYFS}/opt" -maxdepth 1 -mindepth 1 -type d`; do
       if [[ -d "${dir}/bin" ]]; then
         pathmunge "${dir}/bin"
@@ -55,9 +49,8 @@ if [[ -d "${HOME}/.cask/bin" ]]; then
   export CASK_PATH="$(dirname $(dirname $(which cask)))"
 fi
 
-if [[ -d "${GOPATH}/src/github.com/phacility/arcanist/bin" ]]; then
-  pathmunge "${GOPATH}/src/github.com/phacility/arcanist/bin"
-fi
+pathmunge "${GOPATH}/src/github.com/phacility/arcanist/bin"
+pathmunge "${GOPATH}/src/github.com/google/bazel/output"
 
 # Load rbenv
 if [[ -d "${HOME}/.rbenv" ]]; then
