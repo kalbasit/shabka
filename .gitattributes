@@ -5,6 +5,7 @@
 .config/pianobar/**/* filter=git-crypt diff=git-crypt
 .config/sublime-text-3/Packages/User/SublimeGit.sublime-settings filter=git-crypt diff=git-crypt
 .cron/**/* filter=git-crypt diff=git-crypt
+.cron/wmn/cratos.local !filter !diff
 .deis/* filter=git-crypt diff=git-crypt
 .encrypted filter=git-crypt diff=git-crypt
 .gist-vim filter=git-crypt diff=git-crypt

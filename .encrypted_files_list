@@ -37,6 +37,12 @@
 .signatures/work
 .ssh/authorized_keys
 .ssh/config
+.ssh/deis-test
+.ssh/deis-test.pub
+.ssh/deiskey
+.ssh/deiskey.pub
+.ssh/dm-phabricator
+.ssh/dm-phabricator.pub
 .ssh/dmx-deis
 .ssh/dmx-deis.pub
 .ssh/id_boot2docker
