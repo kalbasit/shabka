@@ -218,6 +218,9 @@ def link_file(file)
     File.open(home_file, 'w') do |new_file|
       new_file.write ERB.new(File.read(file)).result(binding)
     end
+    if is_encrypted?(file)
+      File.chmod(0400, home_file)
+    end
   else
     puts "linking #{file}"
     sh %Q{ln -s "#{file}" "#{home_file}"}
