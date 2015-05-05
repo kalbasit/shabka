@@ -2,6 +2,7 @@
 (source melpa)
 (source org)
 
+(depends-on "exec-path-from-shell")
 (depends-on "ace-jump-mode")
 (depends-on "ag")
 (depends-on "anzu")

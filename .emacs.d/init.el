@@ -1,6 +1,7 @@
-(add-to-list 'load-path (getenv "CASK_PATH"))
 (require 'cask)
 (cask-initialize)
+(when (memq window-system '(mac ns))
+    (exec-path-from-shell-initialize))
 (require 'pallet)
 
 ;; Initialize the code

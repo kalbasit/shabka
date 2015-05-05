@@ -1,6 +1,5 @@
 export GOPATH="${HOME}/code"        # How can I live without Go?
 export MYFS="${HOME}/.filesystem"   # Make sure I always know about my filesystem.
-export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 export EDITOR=vim                   # Vim Vim Vim baby!!
 export GREP_OPTIONS='--color=auto'  # grep always try to use colors.
 export GREP_COLOR='1;32'            # define grep's color.
@@ -41,12 +40,6 @@ if [[ -d "${MYFS}" ]]; then
 
   # Make LD can find our files.
   export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${HOME}/.filesystem/lib"
-fi
-
-# Are we using emacs's cask?
-if [[ -d "${HOME}/.cask/bin" ]]; then
-  pathmunge "${HOME}/.cask/bin"
-  export CASK_PATH="$(dirname $(dirname $(which cask)))"
 fi
 
 pathmunge "${GOPATH}/src/github.com/phacility/arcanist/bin"
