@@ -25,14 +25,13 @@
 .gnupg/sshcontrol
 .gnupg/trustdb.gpg
 .irssi/config
-.mbsyncrc.erb
 .msmtprc.erb
 .my.cnf
 .notmuch-config.erb
 .notmuch/filters
 .notmuch/hooks/post-new
-.notmuch/hooks/pre-new
 .notmuch/nottoomuch-addresses/addresses.ignore
+.offlineimaprc
 .signatures/personal
 .signatures/work
 .ssh/authorized_keys
