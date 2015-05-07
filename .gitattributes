@@ -19,6 +19,7 @@
 .notmuch/**/* filter=git-crypt diff=git-crypt
 .notmuch-config.erb filter=git-crypt diff=git-crypt
 .offlineimaprc filter=git-crypt diff=git-crypt
+.s3cfg filter=git-crypt diff=git-crypt
 .signatures/**/* filter=git-crypt diff=git-crypt
 .ssh/**/* filter=git-crypt diff=git-crypt
 .totprc filter=git-crypt diff=git-crypt
