@@ -49,7 +49,9 @@
   (progn
     (setq notmuch-saved-searches
           '((:name "flagged" :query "tag:flagged")
+            (:name "phabricator-new" :query "tag:unread AND tag:dailymotion::phabricator")
             (:name "inbox-dailymotion-new" :query "tag:dailymotion AND tag:unread AND tag:inbox")
+            (:name "dailymotion-jira-new" :query "tag:dailymotion AND tag:unread AND tag:jira")
             (:name "inbox-personal-new" :query "tag:personal AND tag:unread AND tag:inbox")
             (:name "family-new" :query "tag:family AND tag:unread")
             (:name "wife-new" :query "tag:wife AND tag:unread")
@@ -72,13 +74,14 @@
     (setq notmuch-search-oldest-first nil)
     (setq send-mail-function (quote sendmail-send-it))
     (setq sendmail-program "/usr/local/bin/msmtp")
+    ;; Remove the blue color of flagged messages
+    (setq notmuch-search-line-faces (quote
+                                      (("flagged" . (:foreground nil)))))
     ;; reply to all by default
     (define-key notmuch-show-mode-map "r" 'notmuch-show-reply)
     (define-key notmuch-show-mode-map "R" 'notmuch-show-reply-sender)
     (define-key notmuch-search-mode-map "r" 'notmuch-search-reply-to-thread)
     (define-key notmuch-search-mode-map "R" 'notmuch-search-reply-to-thread-sender)
-    ;; Remove the blue color of flagged messages
-    (setq notmuch-search-line-faces '((\"flagged\" . (:foreground nil))))
     ;; Hide trailing whitespace when showing a message
     (add-hook 'notmuch-show-hook (lambda ()
                                    (setq show-trailing-whitespace nil)))
