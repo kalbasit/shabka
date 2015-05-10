@@ -1,7 +1,7 @@
 .arcrc filter=git-crypt diff=git-crypt
 .aws/* filter=git-crypt diff=git-crypt
 .bin/ssh-agents filter=git-crypt diff=git-crypt
-.config/goobuntu-backups/**/* filter=git-crypt diff=git-crypt
+.config/keybase/**/* filter=git-crypt diff=git-crypt
 .config/pianobar/**/* filter=git-crypt diff=git-crypt
 .config/sublime-text-3/Packages/User/SublimeGit.sublime-settings filter=git-crypt diff=git-crypt
 .cron/**/* filter=git-crypt diff=git-crypt
