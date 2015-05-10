@@ -598,3 +598,34 @@ function devnfs() {
     docker-machine ssh dev 'export IP="$(netstat -rn | grep eth1 | awk "{print $1}" | cut -d. -f1-3).1" && sudo umount /Users && sudo /usr/local/etc/init.d/nfs-client start >/dev/null && sudo mount $IP:/Users /Users -o rw,async,noatime,rsize=32768,wsize=32768,proto=tcp && echo "Mounted /Users over NFS"'
 }
 #}}}
+# swp() #{{{
+function swp() {
+if [[ "${#}" -eq "0" ]]; then
+    if [[ -n "${ACTIVE_WORK_PROFILE}" ]]; then
+        print_info 0 "Active work profie: ${ACTIVE_WORK_PROFILE}"
+    else
+        print_info 0 "No active work profile"
+    fi
+else
+    if [[ "${1}" = "ls" ]]; then
+        wp ls
+    elif [[ "${1}" = "kill" ]]; then
+        if [[ -n "${ACTIVE_WORK_PROFILE}" ]]; then
+            source `wp deactivate "${ACTIVE_WORK_PROFILE}"`
+            wpdeactivate
+            unset ACTIVE_WORK_PROFILE
+        fi
+    else
+        if [[ -n "${ACTIVE_WORK_PROFILE}" ]]; then
+            source `wp deactivate "${ACTIVE_WORK_PROFILE}"`
+            wpdeactivate
+            unset ACTIVE_WORK_PROFILE
+        else
+            export ACTIVE_WORK_PROFILE="${1}"
+            source `wp activate "${1}"`
+            wpactivate
+        fi
+    fi
+fi
+}
+#}}}

@@ -15,6 +15,20 @@ function pathmunge() {
   fi
 }
 
+function pathunmunge() {
+  [[ ! -d "${1}" ]] && return
+  oldpath=("${(@s/:/)PATH}")
+  newpath=""
+  sep=""
+  for p in ${oldpath[*]}; do
+    if [[ "x${p}" != "x${1}" ]]; then
+      newpath="${newpath}${sep}${p}"
+      sep=":"
+    fi
+  done
+  export PATH="${newpath}"
+}
+
 # Are we on Mac? Start the path as defined in /etc/paths
 if [[ -x /usr/libexec/path_helper ]]; then
   eval `/usr/libexec/path_helper -s`

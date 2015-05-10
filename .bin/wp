@@ -1,0 +1,51 @@
+#!/bin/bash
+
+# Bootstrap{{{
+bootstrap="`dirname $0`/.bootstrap"
+if [ -f "${bootstrap}" ]; then
+    source "${bootstrap}"
+else
+    echo "Cannot bootstrap"
+    exit 54
+fi
+unset bootstrap
+#}}}
+# Variables{{{
+action="${1}"
+work_profile="${2}"
+work_profile_path="${HOME}/.zsh/work/profiles/${work_profile}.zsh"
+#}}}
+# usage{{{
+function usage() {
+  print_error 0 "Usage: ${0} <ls|activate|deactivate> <work_profile>"
+}
+#}}}
+# list_profiles(){{{
+function list_profiles() {
+  for wpf in ${HOME}/.zsh/work/profiles/*.zsh; do
+    f="`basename "${wpf}"`"
+    echo "${f%%.zsh}"
+  done
+}
+#}}}
+# Sanity Check{{{
+if [ "${action}" != "activate" -a "${action}" != "deactivate" -a "${action}" != "ls" ]; then
+  usage
+  exit 1
+fi
+if [ "${#}" -ne "2" -a "${#}" -ne "1" -a "${action}" != "ls" ]; then
+  usage
+  exit 1
+fi
+if [ "${action}" != "ls" -a ! -r "${work_profile_path}" ]; then
+  print_error 0 "The profile '${work_profile}' does not exist."
+  exit 1
+fi
+#}}}
+# Main functionality{{{
+if [[ "${action}" = "ls" ]]; then
+  list_profiles
+else
+  echo "${work_profile_path}"
+fi
+#}}}

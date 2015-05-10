@@ -56,11 +56,6 @@ done
 # Load the theme
 source "${THEMES_PATH}/${THEME}.zsh-theme"
 
-# Load work specific stuff
-[[ -r "${ZDOTDIR:-$HOME}/.zshrc.dailymotion" ]] && source "${ZDOTDIR:-$HOME}/.zshrc.dailymotion"
-[[ -r "${ZDOTDIR:-$HOME}/.zshrc.talentoday" ]] && source "${ZDOTDIR:-$HOME}/.zshrc.talentoday"
-
-
 # Load travis
 [[ -r "${HOME}/.travis/travis.sh" ]] && source "${HOME}/.travis/travis.sh"
 

@@ -23,5 +23,4 @@
 .signatures/**/* filter=git-crypt diff=git-crypt
 .ssh/**/* filter=git-crypt diff=git-crypt
 .totprc filter=git-crypt diff=git-crypt
-.zshrc.dailymotion filter=git-crypt diff=git-crypt
-.zshrc.talentoday filter=git-crypt diff=git-crypt
+.zsh/work/profiles/* filter=git-crypt diff=git-crypt
