@@ -50,6 +50,7 @@
     (setq notmuch-saved-searches
           '((:name "flagged" :query "tag:flagged")
             (:name "phabricator-new" :query "tag:unread AND tag:dailymotion::phabricator")
+            (:name "jira-new" :query "tag:unread AND tag:dailymotion::jira")
             (:name "inbox-dailymotion-new" :query "tag:dailymotion AND tag:unread AND tag:inbox")
             (:name "dailymotion-jira-new" :query "tag:dailymotion AND tag:unread AND tag:jira")
             (:name "inbox-personal-new" :query "tag:personal AND tag:unread AND tag:inbox")
