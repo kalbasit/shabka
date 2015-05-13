@@ -66,7 +66,14 @@ NeoBundle 'tpope/vim-surround'
 NeoBundle 'tpope/vim-unimpaired'
 NeoBundle 'ervandew/screen'
 NeoBundle 'ervandew/supertab'
-NeoBundle 'Valloric/YouCompleteMe'
+NeoBundle 'Valloric/YouCompleteMe', {
+     \ 'build'      : {
+        \ 'mac'     : './install.sh --clang-completer --system-libclang --gocode-completer',
+        \ 'unix'    : './install.sh --clang-completer --system-libclang --gocode-completer',
+        \ 'windows' : './install.sh --clang-completer --system-libclang --gocode-completer',
+        \ 'cygwin'  : './install.sh --clang-completer --system-libclang --gocode-completer'
+        \ }
+     \ }
 NeoBundle 'editorconfig/editorconfig-vim'
 NeoBundle 'vim-scripts/PreserveNoEOL'
 NeoBundle 'bronson/vim-trailing-whitespace'
