@@ -620,11 +620,11 @@ else
             source `wp deactivate "${ACTIVE_WORK_PROFILE}"`
             wpdeactivate
             unset ACTIVE_WORK_PROFILE
-        else
-            export ACTIVE_WORK_PROFILE="${1}"
-            source `wp activate "${1}"`
-            wpactivate
         fi
+
+        export ACTIVE_WORK_PROFILE="${1}"
+        source `wp activate "${1}"`
+        wpactivate
     fi
 fi
 }
