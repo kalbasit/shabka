@@ -12,7 +12,7 @@ alias vi=vim
 alias e="${EDITOR:-vim}"
 alias comp=docker-compose
 alias mach=docker-machine
-alias fuck='$(thefuck $(fc -ln -1))'
+alias fuck='eval $(thefuck $(fc -ln -1 | tail -n 1)); fc -R'
 alias http='http --print=HhBb'
 alias blaze=bazel
 alias rot13="tr '[A-Za-z]' '[N-ZA-Mn-za-m]'"
