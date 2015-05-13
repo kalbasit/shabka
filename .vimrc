@@ -1,80 +1,95 @@
 " vim:foldmethod=marker:foldlevel=0:
 
-"" Vundle{{{
+"" NeoBundle{{{
 ""
 
-set nocompatible    " be iMproved, required
-filetype off        " required
+ " Note: Skip initialization for vim-tiny or vim-small.
+ if !1 | finish | endif
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+ if has('vim_starting')
+   if &compatible
+     set nocompatible               " Be iMproved
+   endif
 
-" let Vundle manage Vundle, required
-Plugin 'gmarik/Vundle.vim'
+   " Required:
+   set runtimepath+=~/.vim/bundle/neobundle.vim/
+ endif
+
+ " Required:
+ call neobundle#begin(expand('~/.vim/bundle/'))
+
+ " Let NeoBundle manage NeoBundle
+ " Required:
+ NeoBundleFetch 'Shougo/neobundle.vim'
 
 " Colorschemes
-Plugin 'altercation/vim-colors-solarized'
-Plugin 'fatih/molokai'
-Plugin 'vim-scripts/summerfruit256.vim'
+NeoBundle 'altercation/vim-colors-solarized'
+NeoBundle 'fatih/molokai'
+NeoBundle 'vim-scripts/summerfruit256.vim'
 
 " Coffescript
-Plugin 'kchmck/vim-coffee-script'
+NeoBundle 'kchmck/vim-coffee-script'
 
 " Golang
-Plugin 'fatih/vim-go'
+NeoBundle 'fatih/vim-go'
 
 " JSON
-Plugin 'elzr/vim-json'
+NeoBundle 'elzr/vim-json'
 
 " Ruby/Rails
 if has("ruby")
-  Plugin 'vim-ruby/vim-ruby'
+  NeoBundle 'vim-ruby/vim-ruby'
 endif
-Plugin 'skwp/vim-rspec'
-Plugin 'tpope/vim-rails'
-Plugin 'tpope/vim-endwise'
+NeoBundle 'skwp/vim-rspec'
+NeoBundle 'tpope/vim-rails'
+NeoBundle 'tpope/vim-endwise'
 
 " Tools
-Plugin 'scrooloose/syntastic'
-Plugin 'vim-scripts/Align'
-Plugin 'kien/ctrlp.vim'
-Plugin 'jeetsukumaran/vim-buffergator'
+NeoBundle 'scrooloose/syntastic'
+NeoBundle 'vim-scripts/Align'
+NeoBundle 'kien/ctrlp.vim'
+NeoBundle 'jeetsukumaran/vim-buffergator'
 if executable("curl")
-  Plugin 'mattn/webapi-vim'
-  Plugin 'mattn/gist-vim'
+  NeoBundle 'mattn/webapi-vim'
+  NeoBundle 'mattn/gist-vim'
 endif
 if has("python")
-  Plugin 'sjl/gundo.vim'
-  Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
+  NeoBundle 'sjl/gundo.vim'
+  NeoBundle 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
 endif
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'scrooloose/nerdtree'
-Plugin 'itspriddle/ZoomWin'
-Plugin 'tpope/vim-fugitive'
-Plugin 'tpope/vim-repeat'
-Plugin 'tpope/vim-surround'
-Plugin 'tpope/vim-unimpaired'
-Plugin 'ervandew/screen'
-Plugin 'ervandew/supertab'
-Plugin 'Valloric/YouCompleteMe'
-Plugin 'editorconfig/editorconfig-vim'
-Plugin 'vim-scripts/PreserveNoEOL'
-Plugin 'bronson/vim-trailing-whitespace'
-Plugin 'tpope/vim-eunuch'
-Plugin 'janko-m/vim-test'
+NeoBundle 'scrooloose/nerdcommenter'
+NeoBundle 'scrooloose/nerdtree'
+NeoBundle 'itspriddle/ZoomWin'
+NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'tpope/vim-repeat'
+NeoBundle 'tpope/vim-surround'
+NeoBundle 'tpope/vim-unimpaired'
+NeoBundle 'ervandew/screen'
+NeoBundle 'ervandew/supertab'
+NeoBundle 'Valloric/YouCompleteMe'
+NeoBundle 'editorconfig/editorconfig-vim'
+NeoBundle 'vim-scripts/PreserveNoEOL'
+NeoBundle 'bronson/vim-trailing-whitespace'
+NeoBundle 'tpope/vim-eunuch'
+NeoBundle 'janko-m/vim-test'
 
 " mail
-Plugin 'felipec/notmuch-vim'
+NeoBundle 'felipec/notmuch-vim'
 
 """ UltiSnips """
-Plugin 'SirVer/ultisnips'
-Plugin 'honza/vim-snippets'
+NeoBundle 'SirVer/ultisnips'
+NeoBundle 'honza/vim-snippets'
 """ UltiSnips """
 
 " All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
+ call neobundle#end()
+
+ " Required:
+ filetype plugin indent on
+
+ " If there are uninstalled bundles found on startup,
+ " this will conveniently prompt you to install them.
+ NeoBundleCheck
 
 " }}}
 "" Settings{{{
