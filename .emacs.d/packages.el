@@ -30,25 +30,34 @@
                  nil ;; No extra headers
                  nil ;; No extra body text
                  "~/.signatures/personal")
-                ("work"
+                ("dailymotion"
                  nil
                  "Wael Nasreddine <wmn@dailymotion.com>" ;; Sender address
                  "Dailymotion"
                  nil
                  nil
-                 "~/.signatures/work")))
+                 "~/.signatures/dailymotion")
+               ("talentoday"
+                 nil
+                 "Wael Nasreddine <wmn@talentoday.com>" ;; Sender address
+                 "talentoday"
+                 nil
+                 nil
+                 "~/.signatures/talentoday")))
         ;; Define the rules TODO: Add all of personal addresses
         (setq gnus-alias-identity-rules (quote
                                          (("personal" ("any" "wael.nasreddine@gmail.com" both) "personal")
-                                          ("work" ("any" "\\(wmn\\|w.nasreddine\\|wael.nasreddine\\)@dailymotion.com" both) "work"))))
-        ;; Use "work" identity by default
-        (setq gnus-alias-default-identity "work")
+                                          ("dailymotion" ("any" "\\(wmn\\|w.nasreddine\\|wael.nasreddine\\)@dailymotion.com" both) "dailymotion")
+                                          ("talentoday" ("any" "\\(wmn\\|w.nasreddine\\|wael.nasreddine\\)@talentoday.com" both) "talentoday"))))
+        ;; Use "dailymotion" identity by default
+        (setq gnus-alias-default-identity "personal")
         ;; Determine identity when message-mode loads
         (add-hook 'message-setup-hook 'gnus-alias-determine-identity))))
   :config
   (progn
     (setq notmuch-saved-searches
           '((:name "flagged" :query "tag:flagged")
+            (:name "deis-new" :query "tag:github::deis AND tag:unread")
             (:name "phabricator-new" :query "tag:unread AND tag:dailymotion::phabricator")
             (:name "jira-new" :query "tag:unread AND tag:dailymotion::jira")
             (:name "inbox-dailymotion-new" :query "tag:dailymotion AND tag:unread AND tag:inbox")
