@@ -4,23 +4,36 @@
 ""
 
  " Note: Skip initialization for vim-tiny or vim-small.
- if !1 | finish | endif
+if !1 | finish | endif
 
- if has('vim_starting')
-   if &compatible
-     set nocompatible               " Be iMproved
-   endif
+if has('vim_starting')
+  if &compatible
+    set nocompatible               " Be iMproved
+  endif
 
-   " Required:
-   set runtimepath+=~/.vim/bundle/neobundle.vim/
- endif
+  " Required:
+  set runtimepath+=~/.vim/bundle/neobundle.vim/
+endif
 
- " Required:
- call neobundle#begin(expand('~/.vim/bundle/'))
+" Required:
+call neobundle#begin(expand('~/.vim/bundle/'))
 
- " Let NeoBundle manage NeoBundle
- " Required:
- NeoBundleFetch 'Shougo/neobundle.vim'
+" Let NeoBundle manage NeoBundle
+" Required:
+NeoBundleFetch 'Shougo/neobundle.vim'
+
+" Increase the install timeout to 1500s
+let g:neobundle#install_process_timeout = 1500
+
+NeoBundle 'Shougo/vimproc.vim', {
+      \ 'build' : {
+      \     'windows' : 'tools\\update-dll-mingw',
+      \     'cygwin' : 'make -f make_cygwin.mak',
+      \     'mac' : 'make -f make_mac.mak',
+      \     'linux' : 'make',
+      \     'unix' : 'gmake',
+      \    },
+      \ }
 
 " Colorschemes
 NeoBundle 'altercation/vim-colors-solarized'
