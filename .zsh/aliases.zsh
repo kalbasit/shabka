@@ -16,3 +16,5 @@ alias fuck='$(thefuck $(fc -ln -1))'
 alias http='http --print=HhBb'
 alias blaze=bazel
 alias rot13="tr '[A-Za-z]' '[N-ZA-Mn-za-m]'"
+alias dm='swp dailymotion'
+alias tt='swp talentoday'
