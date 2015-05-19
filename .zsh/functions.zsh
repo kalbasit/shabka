@@ -600,6 +600,11 @@ function devnfs() {
 #}}}
 # swp() #{{{
 function swp() {
+profiles=()
+for wpf in ${HOME}/.zsh/work/profiles/*.zsh; do
+    f="`basename "${wpf}"`"
+    profiles=(${profiles[@]} ${f%%.zsh})
+done
 if [[ "${#}" -eq "0" ]]; then
     if [[ -n "${ACTIVE_WORK_PROFILE}" ]]; then
         print_info 0 "Active work profie: ${ACTIVE_WORK_PROFILE}"
@@ -608,23 +613,24 @@ if [[ "${#}" -eq "0" ]]; then
     fi
 else
     if [[ "${1}" = "ls" ]]; then
-        wp ls
+        for wpf in ${profiles[@]}; do
+            if [[ "x${wpf}" = "x${ACTIVE_WORK_PROFILE}" ]]; then
+                echo "${FG_GREEN}*${FG_CLEAR} ${wpf}"
+            else
+                echo "  ${wpf}"
+            fi
+        done
     elif [[ "${1}" = "kill" ]]; then
         if [[ -n "${ACTIVE_WORK_PROFILE}" ]]; then
-            source `wp deactivate "${ACTIVE_WORK_PROFILE}"`
+            source "${HOME}/.zsh/work/profiles/${ACTIVE_WORK_PROFILE}.zsh"
             wpdeactivate
             unset ACTIVE_WORK_PROFILE
         fi
     else
-        if [[ -n "${ACTIVE_WORK_PROFILE}" ]]; then
-            source `wp deactivate "${ACTIVE_WORK_PROFILE}"`
-            wpdeactivate
-            unset ACTIVE_WORK_PROFILE
-        fi
-
-        export ACTIVE_WORK_PROFILE="${1}"
-        source `wp activate "${1}"`
+        swp kill
+        source "${HOME}/.zsh/work/profiles/${1}.zsh"
         wpactivate
+        export ACTIVE_WORK_PROFILE="${1}"
     fi
 fi
 }
