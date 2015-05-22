@@ -62,6 +62,7 @@
             (:name "jira-new" :query "tag:unread AND tag:dailymotion::jira")
             (:name "inbox-dailymotion-new" :query "tag:dailymotion AND tag:unread AND tag:inbox")
             (:name "dailymotion-jira-new" :query "tag:dailymotion AND tag:unread AND tag:jira")
+            (:name "inbox-talentoday-new" :query "tag:talentoday AND tag:unread AND tag:inbox")
             (:name "inbox-personal-new" :query "tag:personal AND tag:unread AND tag:inbox")
             (:name "family-new" :query "tag:family AND tag:unread")
             (:name "wife-new" :query "tag:wife AND tag:unread")
