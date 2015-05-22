@@ -610,33 +610,25 @@ for wpf in ${HOME}/.zsh/work/profiles/*.zsh; do
     f="`basename "${wpf}"`"
     profiles=(${profiles[@]} ${f%%.zsh})
 done
-if [[ "${#}" -eq "0" ]]; then
+if [ "${#}" -eq "0" -o "${1}" = "ls" ]; then
+    for wpf in ${profiles[@]}; do
+        if [[ "x${wpf}" = "x${ACTIVE_WORK_PROFILE}" ]]; then
+            echo "${FG_GREEN}*${FG_CLEAR} ${wpf}"
+        else
+            echo "  ${wpf}"
+        fi
+    done
+elif [[ "${1}" = "kill" ]]; then
     if [[ -n "${ACTIVE_WORK_PROFILE}" ]]; then
-        print_info 0 "Active work profie: ${ACTIVE_WORK_PROFILE}"
-    else
-        print_info 0 "No active work profile"
+        source "${HOME}/.zsh/work/profiles/${ACTIVE_WORK_PROFILE}.zsh"
+        wpdeactivate
+        unset ACTIVE_WORK_PROFILE
     fi
 else
-    if [[ "${1}" = "ls" ]]; then
-        for wpf in ${profiles[@]}; do
-            if [[ "x${wpf}" = "x${ACTIVE_WORK_PROFILE}" ]]; then
-                echo "${FG_GREEN}*${FG_CLEAR} ${wpf}"
-            else
-                echo "  ${wpf}"
-            fi
-        done
-    elif [[ "${1}" = "kill" ]]; then
-        if [[ -n "${ACTIVE_WORK_PROFILE}" ]]; then
-            source "${HOME}/.zsh/work/profiles/${ACTIVE_WORK_PROFILE}.zsh"
-            wpdeactivate
-            unset ACTIVE_WORK_PROFILE
-        fi
-    else
-        swp kill
-        source "${HOME}/.zsh/work/profiles/${1}.zsh"
-        wpactivate
-        export ACTIVE_WORK_PROFILE="${1}"
-    fi
+    swp kill
+    source "${HOME}/.zsh/work/profiles/${1}.zsh"
+    wpactivate
+    export ACTIVE_WORK_PROFILE="${1}"
 fi
 }
 #}}}
