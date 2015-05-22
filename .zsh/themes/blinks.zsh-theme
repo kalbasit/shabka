@@ -13,4 +13,12 @@ ZSH_THEME_GIT_PROMPT_SUFFIX="%{%f%k%b%K{black}%B%F{green}%}]"
 ZSH_THEME_GIT_PROMPT_DIRTY=" %{%F{red}%}*%{%f%k%b%}"
 ZSH_THEME_GIT_PROMPT_CLEAN=""
 
-PROMPT='%{%K{black}%B%F{green}%}%n%{%B%F{blue}%}@%{%B%F{cyan}%}%m%{%B%F{green}%} %{%b%F{yellow}%K{black}%}%~%{%B%F{green}%}$(git_prompt_info)%E%{%f%k%b%} %{%K{black}%}$(_prompt_char)%{%K{black}%} %#%{%f%k%b%} '
+function work_prompt_info() {
+  if [[ -n "${ACTIVE_WORK_PROFILE}" ]]; then
+    echo "%{%F{green}%} {${ACTIVE_WORK_PROFILE}}%{%f%k%b%}"
+  else
+    echo ''
+  fi
+}
+
+PROMPT='%{%K{black}%B%F{green}%}%n%{%B%F{blue}%}@%{%B%F{cyan}%}%m%{%B%F{green}%} %{%b%F{yellow}%K{black}%}%~%{%B%F{green}%}$(git_prompt_info)$(work_prompt_info)%E%{%f%k%b%} %{%K{black}%}$(_prompt_char)%{%K{black}%} %#%{%f%k%b%} '
