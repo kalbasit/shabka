@@ -622,13 +622,16 @@ elif [[ "${1}" = "kill" ]]; then
     if [[ -n "${ACTIVE_WORK_PROFILE}" ]]; then
         source "${HOME}/.zsh/work/profiles/${ACTIVE_WORK_PROFILE}.zsh"
         wpdeactivate
-        unset ACTIVE_WORK_PROFILE
+        unset ACTIVE_WORK_PROFILE SSH_AGENT_PID SSH_AUTH_SOCK
+        eval `SSH_AGENT_NAME=personal ssh-agents $SHELL`
     fi
 else
     swp kill
     source "${HOME}/.zsh/work/profiles/${1}.zsh"
     wpactivate
     export ACTIVE_WORK_PROFILE="${1}"
+    unset SSH_AGENT_PID SSH_AUTH_SOCK
+    eval `SSH_AGENT_NAME=$ACTIVE_WORK_PROFILE ssh-agents $SHELL`
 fi
 }
 #}}}

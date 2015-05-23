@@ -55,9 +55,7 @@
 .screen/env
 .screen/ssh-auth-sock.*
 .screenrc
-.ssh/agent.*
-.ssh/environment
-.ssh/id_rsa_google*
+.ssh/*/agent
 .ssh/known_hosts
 .tmux/ssh_vars
 .vim/.netrwhist
