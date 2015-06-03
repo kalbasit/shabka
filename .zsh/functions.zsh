@@ -622,16 +622,17 @@ elif [[ "${1}" = "kill" ]]; then
     if [[ -n "${ACTIVE_WORK_PROFILE}" ]]; then
         source "${HOME}/.zsh/work/profiles/${ACTIVE_WORK_PROFILE}.zsh"
         wpdeactivate
-        unset ACTIVE_WORK_PROFILE SSH_AGENT_PID SSH_AUTH_SOCK
-        eval `SSH_AGENT_NAME=personal ssh-agents $SHELL`
+        unset ACTIVE_WORK_PROFILE SSH_AGENT_PID SSH_AUTH_SOCK SSH_AGENT_NAME
+        eval `ssh-agents $SHELL`
     fi
 else
     swp kill
     source "${HOME}/.zsh/work/profiles/${1}.zsh"
     wpactivate
     export ACTIVE_WORK_PROFILE="${1}"
+    export SSH_AGENT_NAME="${1}"
     unset SSH_AGENT_PID SSH_AUTH_SOCK
-    eval `SSH_AGENT_NAME=$ACTIVE_WORK_PROFILE ssh-agents $SHELL`
+    eval `ssh-agents $SHELL`
 fi
 }
 #}}}
@@ -667,5 +668,24 @@ function jsonpp() {
         python -m json.tool < "${input_file}" > "${output_file}" || return
         mv "${output_file}" "${input_file}"
     fi
+}
+#}}}
+# tmx #{{{
+function tmx() {
+    awp="${ACTIVE_WORK_PROFILE}"
+    ret=$?
+
+    if [ "${ret}" -eq 0 -a "${1}" = 'new' ]; then
+        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" $@ \; \
+            set-environment ACTIVE_WORK_PROFILE "$awp" \; \
+            set-environment SSH_AGENT_NAME "$awp" \; \
+            new-window \; \
+            kill-window -t :0 \; \
+            new-window -t :0 vim \;
+    else
+        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" $@
+    fi
+
+    return $ret
 }
 #}}}
