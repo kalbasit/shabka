@@ -62,6 +62,7 @@
 .vim/_backup/
 .vim/_temp/
 .vim/_undo/
+.vim/autoload/plug.vim.old
 .vim/bundle/
 .vim/spell/
 .vim/yankring_history_v2.txt
