@@ -1,7 +1,7 @@
 # Beware! This file is rewritten every time htop exits.
 # The parser is also very primitive, and not human-friendly.
 # (I know, it's in the todo list).
-fields=0 48 17 18 38 39 40 2 46 47 49 1
+fields=0 48 17 18 38 39 40 2 46 47 49 1 
 sort_key=46
 sort_direction=1
 hide_threads=0
@@ -16,7 +16,7 @@ header_margin=1
 detailed_cpu_time=0
 color_scheme=5
 delay=15
-left_meters=Clock CPU CPU(1) CPU(2) Memory Swap
-left_meter_modes=2 1 1 1 1 1
-right_meters=Tasks LoadAverage Uptime
-right_meter_modes=2 2 2
+left_meters=Clock Memory Swap CPU CPU(1) CPU(2) CPU(3) CPU(4) CPU(5) CPU(6) CPU(7) CPU(8) 
+left_meter_modes=2 1 1 1 1 1 1 1 1 1 1 1 
+right_meters=Tasks LoadAverage Uptime 
+right_meter_modes=2 2 2 
