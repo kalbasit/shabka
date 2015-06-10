@@ -40,7 +40,7 @@ Plug 'tpope/vim-endwise', { 'for': 'ruby' }
 
 " Tools
 Plug 'scrooloose/syntastic'
-Plug 'vim-scripts/Align', { 'on': 'Align' }
+Plug 'junegunn/vim-easy-align'
 Plug 'kien/ctrlp.vim', { 'on': 'CtrlP' }
 Plug 'jeetsukumaran/vim-buffergator', { 'on': 'BuffergatorOpen' }
 if executable("curl")
@@ -53,7 +53,7 @@ endif
 Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'itspriddle/ZoomWin', { 'on': 'ZoomWin' }
-Plug 'tpope/vim-fugitive', { 'on': ['Gedit', 'Gstatus', 'Glog', 'Gblame', 'Gmove', 'Ggrep', 'Gbrowse', 'Gread', 'Gwrite', 'Gremove'] }
+Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
@@ -348,6 +348,9 @@ let g:notmuch_signature =  [
       \ 'Wael Nasreddine | Senior Full Stack Engineer at Dailymotion | (650) 933-3448',
       \ ]
 "}}}
+"" EasyAlign{{{
+vmap ga <Plug>(EasyAlign)
+"" }}}
 "" Command-Line Mappings {{{
 ""
 
