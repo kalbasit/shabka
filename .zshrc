@@ -1,7 +1,7 @@
 # ZSHRC
 
 # Which theme to use
-THEME="blinks"
+THEME="kalbasit"
 
 # Define paths
 ZSH="${ZDOTDIR:-$HOME}/.zsh"
