@@ -17,6 +17,7 @@ call plug#begin(expand('~/.vim/bundle/'))
 
 " Colorschemes
 Plug 'altercation/vim-colors-solarized'
+Plug 'junegunn/seoul256.vim'
 Plug 'fatih/molokai'
 Plug 'vim-scripts/summerfruit256.vim'
 
@@ -77,7 +78,7 @@ filetype plugin indent on
 "" Settings{{{
 ""
 
-color summerfruit256
+color seoul256
 
 let mapleader = ","     " set the mapleader
 set encoding=utf-8      " Set default encoding to UTF-8
