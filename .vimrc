@@ -1,6 +1,6 @@
 " vim:foldmethod=marker:foldlevel=0:
 
-"" NeoBundle{{{
+"" Plug{{{
 ""
 
  " Note: Skip initialization for vim-tiny or vim-small.
@@ -10,106 +10,68 @@ if has('vim_starting')
   if &compatible
     set nocompatible               " Be iMproved
   endif
-
-  " Required:
-  set runtimepath+=~/.vim/bundle/neobundle.vim/
 endif
 
 " Required:
-call neobundle#begin(expand('~/.vim/bundle/'))
-
-" Let NeoBundle manage NeoBundle
-" Required:
-NeoBundleFetch 'Shougo/neobundle.vim'
-
-" Increase the install timeout to 1500s
-let g:neobundle#install_process_timeout = 1500
-
-NeoBundle 'Shougo/vimproc.vim', {
-      \ 'build' : {
-      \     'windows' : 'tools\\update-dll-mingw',
-      \     'cygwin' : 'make -f make_cygwin.mak',
-      \     'mac' : 'make -f make_mac.mak',
-      \     'linux' : 'make',
-      \     'unix' : 'gmake',
-      \    },
-      \ }
+call plug#begin(expand('~/.vim/bundle/'))
 
 " Colorschemes
-NeoBundle 'altercation/vim-colors-solarized'
-NeoBundle 'fatih/molokai'
-NeoBundle 'vim-scripts/summerfruit256.vim'
+Plug 'altercation/vim-colors-solarized'
+Plug 'fatih/molokai'
+Plug 'vim-scripts/summerfruit256.vim'
 
 " Coffescript
-NeoBundle 'kchmck/vim-coffee-script'
+Plug 'kchmck/vim-coffee-script', { 'for': 'coffee' }
 
 " Golang
-NeoBundle 'fatih/vim-go'
+Plug 'fatih/vim-go', { 'for': 'go' }
 
 " JSON
-NeoBundle 'elzr/vim-json'
+Plug 'elzr/vim-json', { 'for': 'json' }
 
 " Ruby/Rails
 if has("ruby")
-  NeoBundle 'vim-ruby/vim-ruby'
+  Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
 endif
-NeoBundle 'skwp/vim-rspec'
-NeoBundle 'tpope/vim-rails'
-NeoBundle 'tpope/vim-endwise'
+Plug 'skwp/vim-rspec', { 'for': 'ruby' }
+Plug 'tpope/vim-rails', { 'for': 'ruby' }
+Plug 'tpope/vim-endwise', { 'for': 'ruby' }
 
 " Tools
-NeoBundle 'scrooloose/syntastic'
-NeoBundle 'vim-scripts/Align'
-NeoBundle 'kien/ctrlp.vim'
-NeoBundle 'jeetsukumaran/vim-buffergator'
+Plug 'scrooloose/syntastic'
+Plug 'vim-scripts/Align', { 'on': 'Align' }
+Plug 'kien/ctrlp.vim', { 'on': 'CtrlP' }
+Plug 'jeetsukumaran/vim-buffergator', { 'on': 'BuffergatorOpen' }
 if executable("curl")
-  NeoBundle 'mattn/webapi-vim'
-  NeoBundle 'mattn/gist-vim'
+  Plug 'mattn/webapi-vim' | Plug 'mattn/gist-vim', { 'on': 'Gist' }
 endif
 if has("python")
-  NeoBundle 'sjl/gundo.vim'
-  NeoBundle 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
+  Plug 'sjl/gundo.vim', { 'on': 'GundoToggle' }
+  Plug 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
 endif
-NeoBundle 'scrooloose/nerdcommenter'
-NeoBundle 'scrooloose/nerdtree'
-NeoBundle 'itspriddle/ZoomWin'
-NeoBundle 'tpope/vim-fugitive'
-NeoBundle 'tpope/vim-repeat'
-NeoBundle 'tpope/vim-surround'
-NeoBundle 'tpope/vim-unimpaired'
-NeoBundle 'ervandew/screen'
-NeoBundle 'ervandew/supertab'
-NeoBundle 'Valloric/YouCompleteMe', {
-     \ 'build'      : {
-        \ 'mac'     : './install.sh --clang-completer --system-libclang --gocode-completer',
-        \ 'unix'    : './install.sh --clang-completer --system-libclang --gocode-completer',
-        \ 'windows' : './install.sh --clang-completer --system-libclang --gocode-completer',
-        \ 'cygwin'  : './install.sh --clang-completer --system-libclang --gocode-completer'
-        \ }
-     \ }
-NeoBundle 'editorconfig/editorconfig-vim'
-NeoBundle 'vim-scripts/PreserveNoEOL'
-NeoBundle 'bronson/vim-trailing-whitespace'
-NeoBundle 'tpope/vim-eunuch'
-NeoBundle 'janko-m/vim-test'
-
-" mail
-NeoBundle 'felipec/notmuch-vim'
-
-""" UltiSnips """
-NeoBundle 'SirVer/ultisnips'
-NeoBundle 'honza/vim-snippets'
-""" UltiSnips """
+Plug 'scrooloose/nerdcommenter'
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+Plug 'itspriddle/ZoomWin', { 'on': 'ZoomWin' }
+Plug 'tpope/vim-fugitive', { 'on': ['Gedit', 'Gstatus', 'Glog', 'Gblame', 'Gmove', 'Ggrep', 'Gbrowse', 'Gread', 'Gwrite', 'Gremove'] }
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-unimpaired'
+Plug 'ervandew/screen', { 'on': 'ScreenShell' }
+Plug 'ervandew/supertab'
+Plug 'Valloric/YouCompleteMe', { 'do': './install.sh --clang-completer --system-libclang --gocode-completer' }
+Plug 'editorconfig/editorconfig-vim'
+Plug 'vim-scripts/PreserveNoEOL'
+Plug 'bronson/vim-trailing-whitespace'
+Plug 'tpope/vim-eunuch', { 'on': ['Remove', 'Unlink', 'Move', 'Rename', 'Chmod', 'Mkdir', 'Find', 'Locate', 'Wall', 'SudoWrite', 'SudoEdit'] }
+Plug 'janko-m/vim-test'
+Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 
 " All of your Plugins must be added before the following line
- call neobundle#end()
+call plug#end()
 
- " Required:
- filetype plugin indent on
-
- " If there are uninstalled bundles found on startup,
- " this will conveniently prompt you to install them.
- NeoBundleCheck
+" Required:
+filetype plugin on
+filetype plugin indent on
 
 " }}}
 "" Settings{{{

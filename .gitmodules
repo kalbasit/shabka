@@ -1,6 +1,3 @@
 [submodule ".emacs.d/crotti_snippets"]
 	path = .emacs.d/crotti_snippets
 	url = https://github.com/AndreaCrotti/yasnippet-snippets.git
-[submodule ".vim/bundle/neobundle.vim"]
-	path = .vim/bundle/neobundle.vim
-	url = https://github.com/Shougo/neobundle.vim
