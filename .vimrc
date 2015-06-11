@@ -235,6 +235,9 @@ set smartcase   " ... unless they contain at least one capital letter
 ""
 
 if has("autocmd")
+  " See http://stackoverflow.com/a/3787326/301730
+  au BufEnter ?* call PreviewHeightWorkAround()
+
   " In Makefiles, use real tabs, not tabs expanded to spaces
   au FileType make setlocal noexpandtab
 
@@ -595,6 +598,14 @@ iab tpyo        typo
 " }}}
 "" Functions {{{
 ""
+
+function PreviewHeightWorkAround()
+  if &previewwindow
+    " See http://stackoverflow.com/a/30771487/301730
+    exec 'wincmd K'
+    exec 'setlocal winheight='.&previewheight
+  endif
+endfunction
 
 function! ExtractVariable()
   let name = input("Variable name: ")
