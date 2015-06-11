@@ -30,6 +30,9 @@ Plug 'fatih/vim-go', { 'for': 'go' }
 " JSON
 Plug 'elzr/vim-json', { 'for': 'json' }
 
+" CSV
+Plug 'chrisbra/csv.vim', { 'for': 'csv' }
+
 " Ruby/Rails
 if has("ruby")
   Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
@@ -39,6 +42,7 @@ Plug 'tpope/vim-rails', { 'for': 'ruby' }
 Plug 'tpope/vim-endwise', { 'for': 'ruby' }
 
 " Tools
+Plug 'bling/vim-airline'
 Plug 'scrooloose/syntastic'
 Plug 'junegunn/vim-easy-align'
 Plug 'jeetsukumaran/vim-buffergator', { 'on': 'BuffergatorOpen' }
@@ -47,7 +51,6 @@ if executable("curl")
 endif
 if has("python")
   Plug 'sjl/gundo.vim', { 'on': 'GundoToggle' }
-  Plug 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
 endif
 Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
@@ -81,8 +84,15 @@ filetype plugin indent on
 color seoul256
 
 let mapleader = ","     " set the mapleader
+set backupdir^=~/.vim/_backup//     " where to put backup files.
+set directory^=~/.vim/_temp//       " where to put swap files.
+set undodir^=~/.vim/_undo//         " where to put undo files.
 set encoding=utf-8      " Set default encoding to UTF-8
 set wildmenu            " turn on wild menu
+set hlsearch            " highlight matches
+set incsearch           " incremental searching
+set ignorecase          " searches are case insensitive...
+set smartcase           " ... unless they contain at least one capital letter
 set wildchar=<TAB>      " Which character activates the wildmenu
 set ruler               " Always show current positions along the bottom
 set cmdheight=1         " the command bar is 1 line high
@@ -100,7 +110,9 @@ set showmatch           " show matching brackets
 set matchtime=2         " how many tenths of a second to blink matching brackets for
 set so=5                " Keep 10 lines (top/bottom) for scope
 set novisualbell        " don't blink
-set showmode            " show mode in statusline
+if has("statusline") && !&cp
+  set laststatus=2  " always show the status bar
+endif
 set startofline         " Move the cursor to the first non-blank of the line
 set esckeys             " allow cursor keys in insert mode
 set showfulltag         " When completing by tag, show the whole tag, not just the function name
@@ -113,13 +125,19 @@ set autoread            " Automatically read a file that has changed on disk
 set spell               " Turn on spellcheck.
 set splitbelow          " Always split under
 set splitright          " Always split on the right
-syntax enable           " Enable syntax highlighting
 if v:version >= 703
   set undofile          " remember undo chains between sessions
   set nocursorcolumn    " no cursor column highlighting
   set cursorline        " cursor line highlighting
-  hi CursorLine cterm=none
 endif
+
+" Whitespace
+set nowrap                        " don't wrap lines
+set tabstop=2                     " a tab is two spaces
+set shiftwidth=2                  " an autoindent (with <<) is two spaces
+set expandtab                     " use spaces, not tabs
+set list                          " Show invisible characters
+set backspace=indent,eol,start    " backspace through everything in insert mode
 
 " We have to have a winheight bigger than we want to set winminheight. But if
 " we set winheight to be huge before winminheight, the winminheight set will
@@ -135,7 +153,7 @@ set winheight=999
 " :20  - remember 20 items in command-line history
 " %    - remember the buffer list (if vim started without a file arg)
 " n    - set name of viminfo file
-set viminfo='20,\"50,:20,%,n~/.viminfo,!
+set viminfo='20,\"50,:20,%,n~/.vim/_info
 
 " }}}
 "" Gui Settings{{{
@@ -150,9 +168,6 @@ endif
 " }}}
 "" Wild settings{{{
 ""
-
-" TODO: Investigate the precise meaning of these settings
-" set wildmode=list:longest,list:full
 
 " Disable output and VCS files
 set wildignore+=*.o,*.out,*.obj,.git,*.rbc,*.rbo,*.class,.svn,*.gem
@@ -176,40 +191,6 @@ set wildignore+=*.swp,*~,._*
 set wildignore+=*/Godeps/_workspace/*
 
 " }}}
-"" Backup, swap and undo location{{{
-""
-
-set backupdir^=~/.vim/_backup//     " where to put backup files.
-set directory^=~/.vim/_temp//       " where to put swap files.
-set undodir^=~/.vim/_undo//         " where to put undo files.
-
-" }}}
-"" Status line {{{
-""
-
-if has("statusline") && !&cp
-  set laststatus=2  " always show the status bar
-
-  " Start the status line
-  set statusline=%f\ %m\ %r
-  set statusline+=Line:%l/%L[%p%%]
-  set statusline+=Col:%v
-  set statusline+=Buf:#%n
-  set statusline+=[%b][0x%B]
-endif
-
-" }}}
-"" Whitespace {{{
-""
-
-set nowrap                        " don't wrap lines
-set tabstop=2                     " a tab is two spaces
-set shiftwidth=2                  " an autoindent (with <<) is two spaces
-set expandtab                     " use spaces, not tabs
-set list                          " Show invisible characters
-set backspace=indent,eol,start    " backspace through everything in insert mode
-
-" }}}
 "" List chars {{{
 ""
 
@@ -222,15 +203,6 @@ set listchars+=precedes:<         " The character to show in the last column whe
                                   " off and the line continues beyond the left of the screen
 
 " }}}
-"" Searching{{{
-""
-
-set hlsearch    " highlight matches
-set incsearch   " incremental searching
-set ignorecase  " searches are case insensitive...
-set smartcase   " ... unless they contain at least one capital letter
-
-" }}}
 "" Auto Commands{{{
 ""
 
@@ -241,14 +213,23 @@ if has("autocmd")
   " In Makefiles, use real tabs, not tabs expanded to spaces
   au FileType make setlocal noexpandtab
 
-  " For vim files, open :help for words under the cursor
-  au FileType vim setlocal keywordprg :help
+  " In emails allow footnotes
+  au FileType mail ab ~0 [0]<esc>m`:/^--\s*/-2/<CR>o<CR>Footnotes:<CR>----------<CR>[0]
+  au FileType mail ab ~1 [1]<esc>m`:/^Footnotes\:/+2/<CR>o[1]
+  au FileType mail ab ~2 [2]<esc>m`:/^Footnotes\:/+3/<CR>o[2]
+  au FileType mail ab ~3 [3]<esc>m`:/^Footnotes\:/+4/<CR>o[3]
+  au FileType mail ab ~4 [4]<esc>m`:/^Footnotes\:/+5/<CR>o[4]
+  au FileType mail ab ~5 [5]<esc>m`:/^Footnotes\:/+6/<CR>o[5]
+  au FileType mail ab ~6 [6]<esc>m`:/^Footnotes\:/+7/<CR>o[6]
+  au FileType mail ab ~7 [7]<esc>m`:/^Footnotes\:/+8/<CR>o[7]
+  au FileType mail ab ~8 [8]<esc>m`:/^Footnotes\:/+9/<CR>o[8]
+  au FileType mail ab ~9 [9]<esc>m`:/^Footnotes\:/+10/<CR>o[9]
 
   " Set the Ruby filetype for a number of common Ruby files without .rb
   au BufRead,BufNewFile {Gemfile,Rakefile,Vagrantfile,Thorfile,Procfile,Guardfile,config.ru,*.rake} set ft=ruby
 
   " Make sure all mardown files have the correct filetype set and setup wrapping
-  au BufRead,BufNewFile *.{md,markdown,mdown,mkd,mkdn,txt} setf markdown
+  au BufRead,BufNewFile *.{md,markdown,mdown,mkd,mkdn,txt} set ft=markdown
   au FileType markdown setlocal wrap linebreak textwidth=72 nolist
 
   " make Python follow PEP8 for whitespace.
@@ -260,7 +241,7 @@ if has("autocmd")
   au BufReadPost * if &filetype !~ '^git\c' && line("'\"") > 0 && line("'\"") <= line("$")
     \| exe "normal! g`\"" | endif
 
-  " Delete certain buffers in order to not cluttering up the buffer list:
+  " Delete certain buffers in order to not cluttering up the buffer list
   au BufReadPost fugitive://* set bufhidden=delete
 
   if has("gui_running")
@@ -281,7 +262,6 @@ if has("autocmd")
   au FileType go nmap <Leader>ds <Plug>(go-def-split)
   au FileType go nmap <Leader>dv <Plug>(go-def-vertical)
   au FileType go nmap <Leader>dt <Plug>(go-def-tab)
-  au FileType go nmap <Leader>gi :GoImports<cr>
 endif
 
 " }}}
@@ -332,14 +312,17 @@ map <silent> <leader>g :TestVisit<CR>
 "" EasyAlign{{{
 vmap ga <Plug>(EasyAlign)
 "" }}}
+"" Airline{{{
+let g:airline#extensions#tabline#enabled = 1
+"" }}}
 "" FZF {{{
 nnoremap <silent><c-p> :<c-u>FZF!<cr>
 "" }}}
 "" Command-Line Mappings {{{
 ""
 
-" After whitespace, insert the current directory into a command-line path
-cnoremap <expr> <C-P> getcmdline()[getcmdpos()-2] ==# ' ' ? expand('%:p:h') : "\<C-P>"
+" <c-p> insert the current directory into a command-line, requires at least a space.
+cnoremap <expr> <c-p> getcmdline()[getcmdpos()-2] ==# ' ' ? expand('%:p:h') : "\<C-P>"
 
 " W should write the same as w
 command! W :w
@@ -353,11 +336,6 @@ command! Xa :xa
 vnoremap <leader>rv :call ExtractVariable()<cr>
 nnoremap <leader>ri :call InlineVariable()<cr>
 
-" Map keys to go to specific files
-map <leader>gr :topleft :split config/routes.rb<cr>
-map <leader>gR :call ShowRoutes()<cr>
-map <leader>gg :topleft 100 :split Gemfile<cr>
-
 nnoremap <leader>. :call OpenTestAlternate()<cr>
 nnoremap <leader><leader> <c-^>
 
@@ -366,17 +344,6 @@ map <Left> :echo "no!"<cr>
 map <Right> :echo "no!"<cr>
 map <Up> :echo "no!"<cr>
 map <Down> :echo "no!"<cr>
-
-" Open notmuch
-map <leader>m :NotMuch<cr>
-
-" CoffeeScript
-vmap <leader>c <esc>:'<,'>:CoffeeCompile<CR>
-map <leader>c :CoffeeCompile<CR>
-command! -nargs=1 C CoffeeCompile | :<args>
-
-" Convert 1.8 hash to 1.9
-command! ConvertHashStyle :%s/\([^:]\):\([a-zA-Z_]*\)\s*=>/\1\2:/g
 
 " Remap F1 to ESC
 :map <F1> <ESC>
@@ -420,22 +387,10 @@ nmap <silent> <leader>fc <ESC>/\v^[<=>]{7}( .*\|$)<CR>
 " Toggle hlsearch with <leader>hs
 nmap <leader>hs :set hlsearch! hlsearch?<CR>
 
-" Adjust viewports to the same size
-map <Leader>= <C-w>=
-
 " Map command-[ and command-] to indenting or outdenting
 " while keeping the original selection in visual mode
 vmap <A-]> >gv
 vmap <A-[> <gv
-
-nmap <A-]> >>
-nmap <A-[> <<
-
-omap <A-]> >>
-omap <A-[> <<
-
-imap <A-]> <Esc>>>i
-imap <A-[> <Esc><<i
 
 " Bubble single lines
 nmap <C-Up> [e
@@ -448,10 +403,6 @@ vmap <C-Up> [egv
 vmap <C-Down> ]egv
 vmap <C-k> [egv
 vmap <C-j> ]egv
-
-" Make shift-insert work like in Xterm
-map <S-Insert> <MiddleMouse>
-map! <S-Insert> <MiddleMouse>
 
 " Map Control-# to switch tabs
 map  <C-0> 0gt
@@ -498,78 +449,25 @@ nmap <leader>se :set spelllang=en<CR>
 nmap <leader>sf :set spelllang=fr<CR>
 nmap <C-X>s wi<C-X>s
 
-" Insert my name and email
-nmap <silent> <leader>me aWael Nasreddine <wael.nasreddine@gmail.com><ESC>
-
-" The following beast is something i didn't write... it will return the
-" syntax highlighting group that the current "thing" under the cursor
-" belongs to -- very useful for figuring out what to change as far as
-" syntax highlighting goes.
-nmap <silent> <leader>qq :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
-
-" Maps to make handling windows a bit easier
+" make handling windows a bit easier
 nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
 nnoremap <c-h> <c-w>h
 nnoremap <c-l> <c-w>l
 
-" Make horizontal scrolling easier
+" make horizontal scrolling easier
 nmap <silent> <C-o> 10zl
 nmap <silent> <C-i> 10zh
 
-" Use CTRL-E to replace the original ',' mapping
-nnoremap <C-E> ,
-
 " Add/Remove lineend from listchars
-nmap <leader>elc :set listchars+=eol:$<CR>
-nmap <leader>rlc :set listchars-=eol:$<CR>
-
-" Par
-if executable("par")
-  nnoremap <silent> <leader>fp vip:!par -w<c-r>=&tw<cr><cr>
-  xnoremap <silent> <leader>fp :!par -w<c-r>=&tw<cr><cr>
-endif
-
-" }}}
-"" Abbreviations {{{
-""
-
-" footnotes
-ab ~0 [0]<esc>m`:/^--\s*/-2/<CR>o<CR>Footnotes:<CR>----------<CR>[0]
-ab ~1 [1]<esc>m`:/^Footnotes\:/+2/<CR>o[1]
-ab ~2 [2]<esc>m`:/^Footnotes\:/+3/<CR>o[2]
-ab ~3 [3]<esc>m`:/^Footnotes\:/+4/<CR>o[3]
-ab ~4 [4]<esc>m`:/^Footnotes\:/+5/<CR>o[4]
-ab ~5 [5]<esc>m`:/^Footnotes\:/+6/<CR>o[5]
-ab ~6 [6]<esc>m`:/^Footnotes\:/+7/<CR>o[6]
-ab ~7 [7]<esc>m`:/^Footnotes\:/+8/<CR>o[7]
-ab ~8 [8]<esc>m`:/^Footnotes\:/+9/<CR>o[8]
-ab ~9 [9]<esc>m`:/^Footnotes\:/+10/<CR>o[9]
-
-" }}}
-"" Typos {{{
-""
-
-"" simple corrections
-iab alos        also
-iab aslo        also
-iab bianry      binary
-iab bianries    binaries
-iab charcter    character
-iab charcters   characters
-iab exmaple     example
-iab exmaples    examples
-iab shoudl      should
-iab seperate    separate
-iab teh         the
-iab Srever      Server
-iab tpyo        typo
+nmap <leader>sle :set listchars+=eol:$<CR>
+nmap <leader>hle :set listchars-=eol:$<CR>
 
 " }}}
 "" Functions {{{
 ""
 
-function PreviewHeightWorkAround()
+function! PreviewHeightWorkAround()
   if &previewwindow
     " See http://stackoverflow.com/a/30771487/301730
     exec 'wincmd K'

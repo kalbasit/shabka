@@ -60,6 +60,7 @@
 .tmux/ssh_vars
 .vim/.netrwhist
 .vim/_backup/
+.vim/_info
 .vim/_temp/
 .vim/_undo/
 .vim/autoload/plug.vim.old
