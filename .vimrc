@@ -257,6 +257,9 @@ if has("autocmd")
   au BufReadPost * if &filetype !~ '^git\c' && line("'\"") > 0 && line("'\"") <= line("$")
     \| exe "normal! g`\"" | endif
 
+  " Delete certain buffers in order to not cluttering up the buffer list:
+  au BufReadPost fugitive://* set bufhidden=delete
+
   if has("gui_running")
     " Automatically resize splits when resizing MacVim window
     autocmd VimResized * wincmd =
