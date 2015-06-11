@@ -94,7 +94,7 @@ set hidden              " you can change buffer without saving
 set whichwrap+=<,>,h,l  " backspace and cursor keys wrap to
 set shortmess=atI       " shortens messages to avoid 'press a key' prompt
 set report=1            " tell us when anything is changed via :...
-set complete=.,w,b,t    " Same as default except that I remove the 'u' option
+set complete=.,w,b,t,i  " Same as default except that I remove the 'u' option
 set noerrorbells        " don't make noise
 set showmatch           " show matching brackets
 set matchtime=2         " how many tenths of a second to blink matching brackets for
