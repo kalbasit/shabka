@@ -103,7 +103,6 @@ set novisualbell        " don't blink
 set showmode            " show mode in statusline
 set startofline         " Move the cursor to the first non-blank of the line
 set esckeys             " allow cursor keys in insert mode
-set showmatch           " show matching brackets
 set showfulltag         " When completing by tag, show the whole tag, not just the function name
 set shell=/bin/bash     " Use bash no matter what shell are we running
 set diffopt+=iwhite     " Add ignorance of whitespace to diff
