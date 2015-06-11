@@ -68,3 +68,4 @@ then
   # Load SSH agents
   [[ -x "${HOME}/.bin/ssh-agents" ]] && eval `ssh-agents $SHELL`
 fi
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
