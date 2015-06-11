@@ -41,7 +41,6 @@ Plug 'tpope/vim-endwise', { 'for': 'ruby' }
 " Tools
 Plug 'scrooloose/syntastic'
 Plug 'junegunn/vim-easy-align'
-Plug 'kien/ctrlp.vim', { 'on': 'CtrlP' }
 Plug 'jeetsukumaran/vim-buffergator', { 'on': 'BuffergatorOpen' }
 if executable("curl")
   Plug 'mattn/webapi-vim' | Plug 'mattn/gist-vim', { 'on': 'Gist' }
@@ -66,6 +65,7 @@ Plug 'bronson/vim-trailing-whitespace'
 Plug 'tpope/vim-eunuch', { 'on': ['Remove', 'Unlink', 'Move', 'Rename', 'Chmod', 'Mkdir', 'Find', 'Locate', 'Wall', 'SudoWrite', 'SudoEdit'] }
 Plug 'janko-m/vim-test'
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
 
 " All of your Plugins must be added before the following line
 call plug#end()
