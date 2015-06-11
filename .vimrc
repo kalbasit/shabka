@@ -322,13 +322,6 @@ let g:ScreenImpl = "Tmux"
 let g:ScreenShellTmuxInitArgs = '-2'
 
 " }}}
-"" CtrlP{{{
-""
-
-let g:ctrlp_working_path_mode = 0
-let g:ctrlp_max_height = 100
-
-" }}}
 "" Test{{{
 map <silent> <leader>t :TestNearest<CR>
 map <silent> <leader>T :TestFile<CR>
@@ -338,6 +331,9 @@ map <silent> <leader>g :TestVisit<CR>
 "}}}
 "" EasyAlign{{{
 vmap ga <Plug>(EasyAlign)
+"" }}}
+"" FZF {{{
+nnoremap <silent><c-p> :<c-u>FZF!<cr>
 "" }}}
 "" Command-Line Mappings {{{
 ""
@@ -360,19 +356,7 @@ nnoremap <leader>ri :call InlineVariable()<cr>
 " Map keys to go to specific files
 map <leader>gr :topleft :split config/routes.rb<cr>
 map <leader>gR :call ShowRoutes()<cr>
-map <leader>ga :CtrlP app/assets<cr>
-map <leader>gC :CtrlP contao<cr>
-map <leader>gv :CtrlP app/views<cr>
-map <leader>gc :CtrlP app/controllers<cr>
-map <leader>gm :CtrlP app/models<cr>
-map <leader>gh :CtrlP app/helpers<cr>
-map <leader>gl :CtrlP lib<cr>
-map <leader>gp :CtrlP public<cr>
-map <leader>gs :CtrlP public/stylesheets/sass<cr>
-map <leader>gf :CtrlP features<cr>
 map <leader>gg :topleft 100 :split Gemfile<cr>
-map <leader>gt :CtrlPTag<cr>
-map <leader>F :CtrlP %%<cr>
 
 nnoremap <leader>. :call OpenTestAlternate()<cr>
 nnoremap <leader><leader> <c-^>
