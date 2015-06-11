@@ -111,8 +111,8 @@ set makeef=error.err    " When using make, where should it dump the file
 set noautowrite         " safe automacially content
 set autoread            " Automatically read a file that has changed on disk
 set spell               " Turn on spellcheck.
-:set splitbelow         " Always split under
-:set splitright         " Always split on the right
+set splitbelow          " Always split under
+set splitright          " Always split on the right
 syntax enable           " Enable syntax highlighting
 if v:version >= 703
   set undofile          " remember undo chains between sessions
