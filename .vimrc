@@ -333,29 +333,6 @@ map <silent> <leader>a :TestSuite<CR>
 map <silent> <leader>l :TestLast<CR>
 map <silent> <leader>g :TestVisit<CR>
 "}}}
-"" Notmuch{{{
-let g:notmuch_sendmail = 'msmtp'
-let g:notmuch_folders = [
-      \ [ "flagged", "tag:flagged" ],
-      \ [ "family-new", "tag:family AND tag:unread" ],
-      \ [ "wife-new", "tag:wife AND tag:unread" ],
-      \ [ "work-new", "tag:work AND tag:unread" ],
-      \ [ "consulting-new", "tag:consulting AND tag:unread" ],
-      \ [ "inbox-work-new", "tag:work AND tag:unread AND tag:inbox" ],
-      \ [ "inbox-personal-new", "tag:personal AND tag:unread AND tag:inbox" ],
-      \ [ "personal-new", "tag:personal AND tag:unread" ],
-      \ [ "work", "tag:work" ],
-      \ [ "personal", "tag:personal" ],
-      \ [ "inbox-unread", "tag:inbox AND tag:unread" ],
-      \ [ "unread", "tag:unread" ],
-      \ [ "inbox", "tag:inbox" ],
-      \ ]
-let g:notmuch_signature =  [
-      \ '',
-      \ '-- ',
-      \ 'Wael Nasreddine | Senior Full Stack Engineer at Dailymotion | (650) 933-3448',
-      \ ]
-"}}}
 "" EasyAlign{{{
 vmap ga <Plug>(EasyAlign)
 "" }}}
