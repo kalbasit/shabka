@@ -318,6 +318,9 @@ let g:airline#extensions#tabline#enabled = 1
 "" FZF {{{
 nnoremap <silent><c-p> :<c-u>FZF!<cr>
 "" }}}
+"" EditorConfig {{{
+let g:EditorConfig_exclude_patterns = ['fugitive://.*']
+"" }}}
 "" Command-Line Mappings {{{
 ""
 
