@@ -46,7 +46,6 @@ lib/bundler/man/
 spec/reports/
 test/tmp/
 test/version_tmp/
-config/initializers/google_internal_network.rb
 
 # Packages #
 ############

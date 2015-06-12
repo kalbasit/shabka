@@ -32,8 +32,5 @@
 ;; Load the bindings
 (load-local "bindings")
 
-;; Load google-specific settings
-(load-local "google-specific")
-
 ;; Load the hooks
 (load-local "hooks")
