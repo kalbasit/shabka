@@ -8,6 +8,7 @@
 .config/git/
 .config/liteide/
 .config/pianobar/state
+.config/sublime-text-3/Backup/
 .config/sublime-text-3/Cache/
 .config/sublime-text-3/Installed Packages/
 .config/sublime-text-3/Local/Auto Save Session.sublime_session
