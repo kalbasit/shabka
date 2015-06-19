@@ -431,7 +431,7 @@ imap <C-9> <Esc>9gt
 
 " Wipe out all buffers
 if has("patch-7.4.585")
-  nmap <silent> <leader>wa :1,$bd<cr>
+  nmap <silent> <leader>wa :enew \| 1,$bd<cr>
 else
   nmap <silent> <leader>wa :1,9000bd<cr>
 endif
