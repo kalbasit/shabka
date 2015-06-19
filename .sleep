@@ -1,0 +1,3 @@
+#!/bin/sh
+
+launchctl unload ~/Library/LaunchAgents/homebrew.mxcl.offline-imap.plist
