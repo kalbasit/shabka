@@ -8,6 +8,7 @@
 .config/git/
 .config/liteide/
 .config/pianobar/state
+.config/robomongo/
 .config/sublime-text-3/Backup/
 .config/sublime-text-3/Cache/
 .config/sublime-text-3/Installed Packages/
