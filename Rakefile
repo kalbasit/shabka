@@ -54,15 +54,11 @@ task :install_go_binaries do
 end
 
 desc "install the dot files into user's home directory"
-task :install => [:checkout_neobundle_master, :update_submodules, :switch_to_zsh] do
+task :install => [:update_submodules, :switch_to_zsh] do
   link_folder(Dir.getwd)
 end
 
 task :default => :install
-
-task :checkout_neobundle_master do
-  sh %Q{cd .vim/bundle/neobundle.vim && git checkout master}
-end
 
 desc "Switch your shell to ZSH from #{ENV["SHELL"]}"
 task :switch_to_zsh do
