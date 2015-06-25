@@ -69,6 +69,7 @@ Plug 'tpope/vim-eunuch', { 'on': ['Remove', 'Unlink', 'Move', 'Rename', 'Chmod',
 Plug 'janko-m/vim-test'
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
+Plug 'terryma/vim-multiple-cursors'
 
 " All of your Plugins must be added before the following line
 call plug#end()
