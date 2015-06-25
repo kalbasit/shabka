@@ -2,6 +2,7 @@
 .aws/config
 .aws/credentials
 .bin/ssh-agents
+.config/acd-token.json
 .config/acd.json
 .config/keybase/config.json
 .config/pianobar/config
