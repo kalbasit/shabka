@@ -3,6 +3,7 @@ tap 'caskroom/cask'
 tap 'caskroom/versions'
 tap 'homebrew/bundle'
 tap 'homebrew/dupes'
+tap 'manastech/crystal'
 
 # Brews
 brew 'ack'
@@ -68,6 +69,7 @@ brew 'wrk'
 brew 'youtube-dl'
 brew 'zsh'
 brew 'caskroom/cask/brew-cask'
+brew 'crystal-lang'
 
 # Casks
 cask 'alfred'
@@ -88,3 +90,4 @@ cask 'viber'
 cask 'skype'
 cask 'atom'
 cask 'teamviewer'
+cask 'dropbox'
