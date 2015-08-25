@@ -1,4 +1,5 @@
 export GOPATH="${HOME}/code"        # How can I live without Go?
+export GO15VENDOREXPERIMENT=1       # https://github.com/golang/go/commit/183cc0cd41f06f83cb7a2490a499e3f9101befff
 export MYFS="${HOME}/.filesystem"   # Make sure I always know about my filesystem.
 export EDITOR=vim                   # Vim Vim Vim baby!!
 export GREP_OPTIONS='--color=auto'  # grep always try to use colors.
@@ -47,7 +48,7 @@ if [[ -d "${MYFS}" ]]; then
   if [[ -d "${MYFS}/opt" ]]; then
     for dir in `find "${MYFS}/opt" -maxdepth 1 -mindepth 1 -type d`; do
       if [[ -d "${dir}/bin" ]]; then
-        pathmunge "${dir}/bin"
+        pathmunge "${dir}/bin" after
       fi
     done
   fi
