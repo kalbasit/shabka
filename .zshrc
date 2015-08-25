@@ -11,13 +11,13 @@ THEMES_PATH="${ZSH}/themes"
 # Get the list of configs
 configs=()
 for config (${ZSH}/*.zsh); do
-  configs=($(basename $config) $configs)
+  configs=($configs $(basename $config))
 done
 
 # Get the list of plugins
 plugins=()
 for plugin (${PLUGINS_PATH}/*); do
-  plugins=($(basename $plugin) $plugins)
+  plugins=($plugins $(basename $plugin))
 done
 
 # Add each plugin to fpath
@@ -56,16 +56,8 @@ done
 # Load the theme
 source "${THEMES_PATH}/${THEME}.zsh-theme"
 
-# Load travis
-[[ -r "${HOME}/.travis/travis.sh" ]] && source "${HOME}/.travis/travis.sh"
-
+# Make sure TERM is sane
 export TERM=xterm-256color
 [ -n "$TMUX" ] && export TERM=screen-256color
 
-# Lastly, do anything that requires the dotfiles to be unsecure
-if grep -q OK "${HOME}/.dotfiles/.encrypted"
-then
-  # Load SSH agents
-  [[ -x "${HOME}/.bin/ssh-agents" ]] && eval `ssh-agents $SHELL`
-fi
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+## END
