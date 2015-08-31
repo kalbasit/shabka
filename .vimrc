@@ -70,6 +70,7 @@ Plug 'janko-m/vim-test'
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
 Plug 'terryma/vim-multiple-cursors'
+Plug 'navicore/vissort.vim'
 
 " All of your Plugins must be added before the following line
 call plug#end()
