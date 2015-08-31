@@ -61,7 +61,7 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'ervandew/screen', { 'on': 'ScreenShell' }
 Plug 'ervandew/supertab'
-Plug 'Valloric/YouCompleteMe', { 'do': './install.sh --clang-completer --system-libclang --gocode-completer' }
+Plug 'Valloric/YouCompleteMe', { 'do': 'python install.py --clang-completer --system-libclang --gocode-completer' }
 Plug 'editorconfig/editorconfig-vim'
 Plug 'vim-scripts/PreserveNoEOL'
 Plug 'bronson/vim-trailing-whitespace'
