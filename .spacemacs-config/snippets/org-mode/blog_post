@@ -1,0 +1,6 @@
+#+title: $1
+#+AUTHOR: `user-full-name`
+#+keywords: $2
+{{{dt(`(format-time-string "%Y-%m-%d %H:%M")`)}}}
+
+$3

@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: table
+# key: tab
+# --
+#+CAPTION: ${1:caption}
+#+LABEL: tab:${2:label}
+| $0

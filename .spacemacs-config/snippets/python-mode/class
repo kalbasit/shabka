@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: class
+# key: class
+# group: object oriented
+# --
+class ${1:class}(${2:object}):
+    """
+    $3
+    """
+    def __init__(self${4:,}):
+        $0

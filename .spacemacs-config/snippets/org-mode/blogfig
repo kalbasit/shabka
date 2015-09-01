@@ -1,0 +1,5 @@
+#+CAPTION: $1
+#+ATTR_LaTeX: scale=0.75
+#+LABEL: fig:$2
+[[http://splendidabacus.com/files/$3]]
+$0

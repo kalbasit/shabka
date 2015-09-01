@@ -1,0 +1,12 @@
+#+BEGIN_HTML
+---
+layout: default
+title: $1
+excerpt: $2
+categories:
+  - $3
+tags:
+  - [$4]
+---
+#+END_HTML
+* $5
