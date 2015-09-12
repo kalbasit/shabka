@@ -66,7 +66,6 @@ Plug 'editorconfig/editorconfig-vim'
 Plug 'vim-scripts/PreserveNoEOL'
 Plug 'bronson/vim-trailing-whitespace'
 Plug 'tpope/vim-eunuch', { 'on': ['Remove', 'Unlink', 'Move', 'Rename', 'Chmod', 'Mkdir', 'Find', 'Locate', 'Wall', 'SudoWrite', 'SudoEdit'] }
-Plug 'janko-m/vim-test'
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
 Plug 'terryma/vim-multiple-cursors'
@@ -260,6 +259,7 @@ if has("autocmd")
   au FileType go nmap <leader>r <Plug>(go-run)
   au FileType go nmap <Leader>s <Plug>(go-implements)
   au FileType go nmap <leader>b <Plug>(go-build)
+  au FileType go nmap <leader>t <Plug>(go-test)
   au FileType go nmap <leader>c <Plug>(go-coverage)
   au FileType go nmap <Leader>ds <Plug>(go-def-split)
   au FileType go nmap <Leader>dv <Plug>(go-def-vertical)
@@ -304,13 +304,6 @@ let g:ScreenImpl = "Tmux"
 let g:ScreenShellTmuxInitArgs = '-2'
 
 " }}}
-"" Test{{{
-map <silent> <leader>t :TestNearest<CR>
-map <silent> <leader>T :TestFile<CR>
-map <silent> <leader>a :TestSuite<CR>
-map <silent> <leader>l :TestLast<CR>
-map <silent> <leader>g :TestVisit<CR>
-"}}}
 "" EasyAlign{{{
 vmap ga <Plug>(EasyAlign)
 "" }}}
