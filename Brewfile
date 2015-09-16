@@ -23,6 +23,7 @@ brew 'curl'
 brew 'cv'
 brew 'docker'
 brew 'docker-machine'
+brew 'ec2-api-tools'
 brew 'editorconfig'
 brew 'elinks'
 brew 'emacs', args: ['with-cocoa']
