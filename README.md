@@ -20,7 +20,7 @@ Clone my dotfiles and clean it up from my own encrypted files Do not
 forget to replace the URL with your own fork.
 
 ```
-git clone git@github.com:kalbasit/dotfiles.git ~/.dotfiles
+git clone --recursive git@github.com:kalbasit/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
 brew bundle
 git-crypt status | grep -v 'not encrypted' | awk '{print $2}' | xargs git rm
