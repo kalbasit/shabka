@@ -54,7 +54,7 @@ if has("python")
 endif
 Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
-Plug 'itspriddle/ZoomWin', { 'on': 'ZoomWin' }
+Plug 'troydm/zoomwintab.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
