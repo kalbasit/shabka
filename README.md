@@ -27,6 +27,7 @@ git-crypt status | grep -v 'not encrypted' | awk '{print $2}' | xargs git rm
 git rm -rf .git-crypt
 git commit -m "forking the repo, remove kalbasit's encrypted files"
 git-crypt init
+echo "`dd if=/dev/urandom of=/dev/stdout bs=1024 count=1`OK`dd if=/dev/urandom of=/dev/stdout bs=1024 count=1`" > .encrypted
 rake
 ```
 
