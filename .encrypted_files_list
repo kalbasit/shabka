@@ -1,7 +1,6 @@
 .arcrc
 .aws/config
 .aws/credentials
-.bin/ssh-agents
 .config/acd-token.json
 .config/acd.json
 .config/keybase/config.json
@@ -13,7 +12,6 @@
 .cron/wmn/wks-116.corp.pao.dailymotion.com.restart_travis_build
 .deis/dmx.json
 .deis/talentoday.json
-.deis/vagrant.json
 .encrypted
 .gist-vim
 .gitconfig
@@ -44,6 +42,8 @@
 .ssh/config
 .ssh/dailymotion/dmx-deis
 .ssh/dailymotion/dmx-deis.pub
+.ssh/dailymotion/hades
+.ssh/dailymotion/hades.pub
 .ssh/dailymotion/id_rsa
 .ssh/dailymotion/id_rsa.pub
 .ssh/github.com/notmuch/notmuch/deploy_key
