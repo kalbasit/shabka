@@ -32,6 +32,8 @@ cp .gitconfig.unsecure .gitconfig
 git add .
 git commit -m "add my stuff"
 rake
+vim +PlugInstall +qall
+git checkout HEAD -- .zshrc
 ```
 
 Now you should import your GnuPG stuff into `~/.dotfiles/.gnupg` or
