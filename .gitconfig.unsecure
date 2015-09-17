@@ -63,6 +63,8 @@
   pob             = "!f() { git push -u ${1:-origin} `git symbolic-ref HEAD`; }; f"
   pobf            = "!f() { git push -fu ${1:-origin} `git symbolic-ref HEAD`; }; f"
 
+  credit          = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
+
   last            = cat-file commit HEAD
   sta             = ls-files --exclude-per-directory=.gitignore \
                       --exclude-from=.git/info/exclude \
@@ -70,6 +72,8 @@
   stc             = diff --stat --name-status --cached
   cat             = -p cat-file -p
   up              = remote update
+
+  co-branch       = "!f() { git checkout-index -a -f --prefix=${1}/; }; f"
 
   ls-ignored      = ls-files --others -i --exclude-standard
 
@@ -119,3 +123,5 @@
 #
 #   vim:ft=gitconfig:fenc=UTF-8:ts=2:sts=2:sw=2:expandtab:foldmethod=marker:foldlevel=0:
 #
+[url "https://github"]
+	insteadOf = git://github
