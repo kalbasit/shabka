@@ -30,6 +30,7 @@
 .config/sublime-text-3/Packages/bz2/
 .deis/client.json
 .deis/units/
+.deis/vagrant.json
 .emacs.d/.cask
 .emacs.d/autosave/
 .emacs.d/backup/
@@ -58,6 +59,8 @@
 .screen/ssh-auth-sock.*
 .screenrc
 .ssh/*/agent
+.ssh/id_boot2docker
+.ssh/id_boot2docker.pub
 .ssh/known_hosts
 .tmux/ssh_vars
 .vim/.netrwhist

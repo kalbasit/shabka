@@ -55,6 +55,7 @@ endif
 Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'troydm/zoomwintab.vim'
+Plug 'jiangmiao/auto-pairs'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
