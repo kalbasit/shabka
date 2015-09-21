@@ -2,6 +2,7 @@
 .aws/* filter=git-crypt diff=git-crypt
 .config/acd.json filter=git-crypt diff=git-crypt
 .config/acd-token.json filter=git-crypt diff=git-crypt
+.docker/config.json filter=git-crypt diff=git-crypt
 .config/keybase/**/* filter=git-crypt diff=git-crypt
 .config/pianobar/**/* filter=git-crypt diff=git-crypt
 .config/sublime-text-3/Local/License.sublime_license filter=git-crypt diff=git-crypt
