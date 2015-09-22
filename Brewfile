@@ -34,7 +34,7 @@ brew 'git-crypt'
 brew 'git-url-sub'
 brew 'gnu-sed', args: ['with-default-names']
 brew 'gnupg'
-brew 'go', args: ['with-cc-common']
+brew 'go'
 brew 'gpm'
 brew 'graphviz'
 brew 'heroku-toolbelt'
