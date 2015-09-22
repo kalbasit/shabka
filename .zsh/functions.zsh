@@ -689,3 +689,11 @@ function tmx() {
     return $ret
 }
 #}}}
+# machdev() #{{{
+function machdev() {
+    if [[ -x `which docker-machine 2>/dev/null` ]]; then
+      eval `docker-machine env dev`
+      export DOCKER_MACHINE_DEV_IP="`docker-machine ip dev`"
+    fi
+}
+#}}}
