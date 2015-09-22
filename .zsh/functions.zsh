@@ -653,7 +653,7 @@ function xmlpp() {
     fi
 }
 #}}}
-# jsonpp #{{{
+# jsonpp() #{{{
 function jsonpp() {
     if [[ "${#}" -eq 0 ]]; then
         python -m json.tool
@@ -670,23 +670,30 @@ function jsonpp() {
     fi
 }
 #}}}
-# tmx #{{{
+# tmx() #{{{
 function tmx() {
     awp="${ACTIVE_WORK_PROFILE}"
-    ret=$?
+    sess="${1}"
 
-    if [ "${ret}" -eq 0 -a "${1}" = 'new' ]; then
-        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" $@ \; \
+    if [ "x${sess}" = "x" ]; then
+        echo "session name is required"
+        return 1
+    fi
+
+    if [ "x${sess}" = "xls" ]; then
+        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" ls
+        return 0
+    fi
+
+    tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" attach -dt "${sess}" || \
+        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" new -s "${sess}" \; \
             set-environment ACTIVE_WORK_PROFILE "$awp" \; \
             set-environment SSH_AGENT_NAME "$awp" \; \
             new-window \; \
             kill-window -t :0 \; \
             new-window -t :0 vim \;
-    else
-        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" $@
-    fi
 
-    return $ret
+    return $?
 }
 #}}}
 # machdev() #{{{
