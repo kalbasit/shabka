@@ -672,20 +672,21 @@ function jsonpp() {
 #}}}
 # tmx() #{{{
 function tmx() {
-    awp="${ACTIVE_WORK_PROFILE}"
-    sess="${1}"
-
-    if [ "x${sess}" = "x" ]; then
-        echo "session name is required"
-        return 1
-    fi
+    local awp="${ACTIVE_WORK_PROFILE}"
+    local sess="${1}"
 
     if [ "x${sess}" = "xls" ]; then
         tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" ls
         return 0
     fi
 
-    tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" attach -dt "${sess}" || \
+    if [ "x${sess}" = "x" ]; then
+        # session name cannot contain a dot or a column
+        # https://github.com/tmux/tmux/blob/76688d204071b76fd3388e46e944e4b917c09625/session.c#L232
+        sess="$( echo `basename ${PWD}` | sed -e 's#\.##g' -e 's#:##g' )"
+    fi
+
+    tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" attach -t "${sess}" || \
         tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" new -s "${sess}" \; \
             set-environment ACTIVE_WORK_PROFILE "$awp" \; \
             set-environment SSH_AGENT_NAME "$awp" \; \
