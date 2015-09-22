@@ -16,6 +16,7 @@ if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
 fi
 
 bindkey -v                                            # Use vim key bindings
+export KEYTIMEOUT=1                                   # kill ZSH's lag when ESC is pressed in vim mode
 
 bindkey '\ew' kill-region                             # [Esc-w] - Kill from the cursor to the mark
 bindkey -s '\el' 'ls\n'                               # [Esc-l] - run command: ls
