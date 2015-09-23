@@ -692,7 +692,7 @@ function tmx() {
             set-environment SSH_AGENT_NAME "$awp" \; \
             new-window \; \
             kill-window -t :0 \; \
-            new-window -t :0 vim \;
+            new-window -t :0 'zsh -i -c vim' \;
 
     return $?
 }
