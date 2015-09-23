@@ -32,6 +32,7 @@ brew 'fleetctl'
 brew 'git'
 brew 'git-crypt'
 brew 'git-url-sub'
+brew 'glide'
 brew 'gnu-sed', args: ['with-default-names']
 brew 'gnupg'
 brew 'go'
