@@ -42,6 +42,7 @@ Plug 'tpope/vim-rails', { 'for': 'ruby' }
 Plug 'tpope/vim-endwise', { 'for': 'ruby' }
 
 " Tools
+Plug 'christoomey/vim-tmux-navigator'
 Plug 'bling/vim-airline'
 Plug 'scrooloose/syntastic'
 Plug 'junegunn/vim-easy-align'
