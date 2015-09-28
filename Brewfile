@@ -6,6 +6,7 @@ tap 'homebrew/dupes'
 tap 'homebrew/fuse'
 tap 'kalbasit/tap'
 tap 'manastech/crystal'
+tap 'neovim/neovim'
 
 # Brews
 brew 'ack'
@@ -56,6 +57,7 @@ brew 'msmtp'
 brew 'mtr'
 brew 'mysql'
 brew 'ncdu'
+brew 'neovim', args: ['HEAD']
 brew 'node'
 brew 'notmuch'
 brew 'ntfs-3g'
