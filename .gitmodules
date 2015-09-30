@@ -1,6 +1,3 @@
-[submodule ".emacs.d"]
-	path = .emacs.d
-	url = https://github.com/syl20bnr/spacemacs.git
 [submodule ".spacemacs-config/material-theme"]
 	path = .spacemacs-config/material-theme
 	url = https://github.com/cpaulik/emacs-material-theme.git
