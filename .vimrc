@@ -159,6 +159,11 @@ set winheight=999
 set viminfo='20,\"50,:20,%,n~/.vim/_info
 
 " }}}
+"" NeoVim Settings{{{
+if has('nvim')
+  set mouse=  " I hate using the mouse for other than copying/pasting.
+endif
+" }}}
 "" Gui Settings{{{
 ""
 
