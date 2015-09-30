@@ -454,12 +454,6 @@ nmap <leader>se :set spelllang=en<CR>
 nmap <leader>sf :set spelllang=fr<CR>
 nmap <C-X>s wi<C-X>s
 
-" make handling windows a bit easier
-nnoremap <c-j> <c-w>j
-nnoremap <c-k> <c-w>k
-nnoremap <c-h> <c-w>h
-nnoremap <c-l> <c-w>l
-
 " make horizontal scrolling easier
 nmap <silent> <C-o> 10zl
 nmap <silent> <C-i> 10zh
