@@ -12,6 +12,7 @@
 .cron/wmn/wks-116.corp.pao.dailymotion.com.restart_travis_build
 .deis/dmx.json
 .deis/talentoday.json
+.docker/config.json
 .encrypted
 .gist-vim
 .gitconfig
