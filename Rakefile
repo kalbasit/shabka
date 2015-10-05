@@ -42,6 +42,9 @@ GO_BINARIES = [
   "git.bytbox.net/sloc.git/sloc",
   "github.com/peco/peco/cmd/peco",
   "golang.org/x/tools/cmd/stringer",
+  "github.com/golang/protobuf/protoc-gen-go",
+  "github.com/Masterminds/glide",
+  "github.com/kardianos/govendor",
 ]
 
 desc "Generate the list of encrypted files"
