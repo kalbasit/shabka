@@ -605,35 +605,40 @@ function devnfs() {
 #}}}
 # swp() #{{{
 function swp() {
-profiles=()
-for wpf in ${HOME}/.zsh/work/profiles/*.zsh; do
-    f="`basename "${wpf}"`"
-    profiles=(${profiles[@]} ${f%%.zsh})
-done
-if [ "${#}" -eq "0" -o "${1}" = "ls" ]; then
-    for wpf in ${profiles[@]}; do
-        if [[ "x${wpf}" = "x${ACTIVE_WORK_PROFILE}" ]]; then
-            echo "${FG_GREEN}*${FG_CLEAR} ${wpf}"
-        else
-            echo "  ${wpf}"
-        fi
+    profiles=()
+    for wpf in ${HOME}/.zsh/work/profiles/*.zsh; do
+        f="`basename "${wpf}"`"
+        profiles=(${profiles[@]} ${f%%.zsh})
     done
-elif [[ "${1}" = "kill" ]]; then
-    if [[ -n "${ACTIVE_WORK_PROFILE}" ]]; then
-        source "${HOME}/.zsh/work/profiles/${ACTIVE_WORK_PROFILE}.zsh"
-        wpdeactivate
-        unset ACTIVE_WORK_PROFILE SSH_AGENT_PID SSH_AUTH_SOCK SSH_AGENT_NAME
+    if [ "${#}" -eq "0" -o "${1}" = "ls" ]; then
+        for wpf in ${profiles[@]}; do
+            if [[ "x${wpf}" = "x${ACTIVE_WORK_PROFILE}" ]]; then
+                echo "${FG_GREEN}*${FG_CLEAR} ${wpf}"
+            else
+                echo "  ${wpf}"
+            fi
+        done
+    elif [[ "${1}" = "kill" ]]; then
+        if [[ -n "${ACTIVE_WORK_PROFILE}" ]]; then
+            source "${HOME}/.zsh/work/profiles/${ACTIVE_WORK_PROFILE}.zsh"
+            wpdeactivate
+            unset ACTIVE_WORK_PROFILE SSH_AGENT_PID SSH_AUTH_SOCK SSH_AGENT_NAME
+            eval `ssh-agents $SHELL`
+        fi
+    else
+        if [[ ! -e "${HOME}/.zsh/work/profiles/${1}.zsh" ]]; then
+            echo "profile ${1} not found."
+            return 1
+        fi
+
+        swp kill
+        source "${HOME}/.zsh/work/profiles/${1}.zsh"
+        wpactivate
+        export ACTIVE_WORK_PROFILE="${1}"
+        export SSH_AGENT_NAME="${1}"
+        unset SSH_AGENT_PID SSH_AUTH_SOCK
         eval `ssh-agents $SHELL`
     fi
-else
-    swp kill
-    source "${HOME}/.zsh/work/profiles/${1}.zsh"
-    wpactivate
-    export ACTIVE_WORK_PROFILE="${1}"
-    export SSH_AGENT_NAME="${1}"
-    unset SSH_AGENT_PID SSH_AUTH_SOCK
-    eval `ssh-agents $SHELL`
-fi
 }
 #}}}
 # xmlpp() #{{{
