@@ -1,0 +1,76 @@
+#!/bin/bash
+
+# The shell to which we tailor export/setent statements.
+USER_SHELL=$1
+
+# Path where we store the ssh-agent environment variables, so that
+# multiple sessions may look for an existing agent.
+SSH_AGENT_NAME="${SSH_AGENT_NAME:-personal}"
+SSH_AGENT_FILE="$HOME/.ssh/$SSH_AGENT_NAME/agent"
+if [[ ! -w $(dirname $SSH_AGENT_FILE) ]]; then
+  return # do not spawn an agent if we cannot write to $HOME.
+fi
+
+# Forget any currently running agent
+unset SSH_AUTH_SOCK SSH_AGENT_PID
+
+function start_ssh_agent() {
+  # No. Try to get the environment variables from the file.
+  if [ -f $SSH_AGENT_FILE ] ; then
+    eval `cat $SSH_AGENT_FILE | grep -v echo`
+  fi
+
+  # Exit status of ssh-add
+  #   0 means the agent exists and has keys,
+  #   1 means the agent exists but has no keys, and
+  #   2 means agent does not exist.
+  ssh-add -l > /dev/null 2>&1
+  agent_status=$?
+
+  # Does our environment point to an agent now?
+  if [ $agent_status -eq 2 ]; then
+    # No.  Start an ssh-agent, saving the environment variables.
+    ssh-agent -s > $SSH_AGENT_FILE
+    if [ $? -ne 0 ]; then
+      echo "Failed to start the ssh-agent." >&2
+      return
+    fi
+    eval `cat $SSH_AGENT_FILE | grep -v echo`
+  fi
+
+  # Add all of the keys
+  for key in $(find "${HOME}/.ssh/$SSH_AGENT_NAME/" -not -name '*.pub' -not -name agent -type f | sed -e 's://:/:g'); do
+    ssh-add "${key}" < /dev/null > /dev/null 2>&1
+  done
+}
+
+
+function export_env() {
+  # Print commands to setup environment.  This handles tcsh and
+  # assumes everyone else can understand sh syntax (bash, ksh, zsh
+  # and maybe others).  Other folks can add detection for more
+  # esoteric shells as needed.
+
+  if [ "${USER_SHELL##*/}" = "tcsh" ] ; then
+    for var in $* ; do
+      if [ -n "${!var}" ] ; then
+        echo "setenv $var ${!var};"
+      fi
+    done
+  elif [ "${USER_SHELL##*/}" = "fish" ] ; then
+    for var in $* ; do
+      if [ -n "${!var}" ] ; then
+        echo "set -Ux $var ${!var};"
+      fi
+    done
+  else
+    for var in $* ; do
+      if [ -n "${!var}" ] ; then
+        echo "$var=${!var}; export $var;"
+      fi
+    done
+  fi
+}
+
+start_ssh_agent
+export_env SSH_AUTH_SOCK SSH_AGENT_PID
