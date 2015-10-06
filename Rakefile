@@ -49,7 +49,7 @@ GO_BINARIES = [
 
 desc "Generate the list of encrypted files"
 task :generate_encryted_files_list do
-  sh %Q{git-crypt status | grep -v 'not encrypted' | awk '{print $2}' | sort > #{ENCRYPTED_FILES_LIST_PATH}}
+  sh %Q{cd .private; git-crypt status | grep -v 'not encrypted' | awk '{print $2}' | sort > #{ENCRYPTED_FILES_LIST_PATH}}
 end
 
 desc "Install Go Binaries"
