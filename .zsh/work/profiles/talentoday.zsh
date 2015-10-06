@@ -1,0 +1,1 @@
+.private/.zsh/work/profiles/talentoday.zsh
