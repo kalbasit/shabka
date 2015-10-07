@@ -64,7 +64,7 @@ task :install => [:update_submodules, :switch_to_zsh] do
   link_folder(Dir.getwd)
 end
 
-task :default => :install
+task :default => [:install, :install_go_binaries]
 
 desc "Switch your shell to ZSH from #{ENV["SHELL"]}"
 task :switch_to_zsh do
