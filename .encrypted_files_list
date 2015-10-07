@@ -52,8 +52,8 @@
 .ssh/personal/id_rsa
 .ssh/personal/id_rsa.pub
 .ssh/personal/old_id_rsa
-.ssh/phabricator.dmx.dailymotion.com/dm-phabricator
-.ssh/phabricator.dmx.dailymotion.com/dm-phabricator.pub
+.ssh/phab.dm.gg/dm-codereview
+.ssh/phab.dm.gg/dm-codereview.pub
 .ssh/phabricator.nasreddine.com/id_rsa
 .ssh/phabricator.nasreddine.com/id_rsa.pub
 .ssh/talentoday/id_rsa
