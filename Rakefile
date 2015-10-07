@@ -27,7 +27,6 @@ IGNORED_WHEN_UNSECURE = [
   /\.notmuch/,
 
   # Files
-  /\.bin\/ssh-agents/,
 ]
 
 GO_BINARIES = [
@@ -165,7 +164,7 @@ def link_folder(folder)
         puts "identical ~/#{home_file_name(relative_path)}"
       elsif file =~ /\.erb$/
         replace_file(file)
-      elsif File.directory?(home_file)
+      elsif File.directory?(home_file) && !File.symlink?(home_file)
         link_folder(file)
       elsif replace_all
         replace_file(file)
