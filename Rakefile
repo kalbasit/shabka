@@ -16,6 +16,7 @@ IGNORED_FILES = [
   ".git",
   ".gitattributes",
   ".git-crypt",
+  ".private",
 ]
 ENCRYPTED_FILES_LIST_PATH = File.join(DOTFILES_PATH, ".encrypted_files_list")
 ENCRYPTED_FILES = File.read(ENCRYPTED_FILES_LIST_PATH).split("\n")
