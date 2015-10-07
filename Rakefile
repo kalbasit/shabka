@@ -5,29 +5,15 @@ require 'erb'
 require 'open-uri'
 
 DOTFILES_PATH = File.expand_path("../", __FILE__)
+PRIVATE_PATH = File.expand_path(File.join(DOTFILES_PATH, ".private"))
 IGNORED_FILES = [
   "Brewfile",
   "Rakefile",
   "README.md",
   ".DS_Store",
-  ".encrypted",
-  ".encrypted_files_list",
   ".etc",
   ".git",
-  ".gitattributes",
-  ".git-crypt",
   ".private",
-]
-ENCRYPTED_FILES_LIST_PATH = File.join(DOTFILES_PATH, ".encrypted_files_list")
-ENCRYPTED_FILES = File.read(ENCRYPTED_FILES_LIST_PATH).split("\n")
-IGNORED_WHEN_UNSECURE = [
-  # Folders
-  /\.ssh/,
-  /\.gnupg/,
-  /\.cron/,
-  /\.notmuch/,
-
-  # Files
 ]
 
 GO_BINARIES = [
@@ -47,11 +33,6 @@ GO_BINARIES = [
   "github.com/kardianos/govendor",
 ]
 
-desc "Generate the list of encrypted files"
-task :generate_encryted_files_list do
-  sh %Q{cd .private; git-crypt status | grep -v 'not encrypted' | awk '{print $2}' | sort > #{ENCRYPTED_FILES_LIST_PATH}}
-end
-
 desc "Install Go Binaries"
 task :install_go_binaries do
   GO_BINARIES.each do |binary|
@@ -59,12 +40,17 @@ task :install_go_binaries do
   end
 end
 
-desc "install the dot files into user's home directory"
-task :install => [:update_submodules, :switch_to_zsh] do
-  link_folder(Dir.getwd)
+desc "link files from dotfiles"
+task :link_dotfiles do
+  link_folder(DOTFILES_PATH, ENV["HOME"])
 end
 
-task :default => [:install, :install_go_binaries]
+desc "link files from the private repository"
+task :link_private do
+  link_folder(PRIVATE_PATH, ENV["HOME"])
+end
+
+task :default => [:update_submodules, :switch_to_zsh, :link_dotfiles, :link_private]
 
 desc "Switch your shell to ZSH from #{ENV["SHELL"]}"
 task :switch_to_zsh do
@@ -96,20 +82,19 @@ task :update_ca_bundle_cert do
 end
 
 def relative_path(file)
- return file.gsub("#{DOTFILES_PATH}/", "")
+  return file.gsub("#{PRIVATE_PATH}/", "").gsub("#{DOTFILES_PATH}/", "")
 end
 
-def replace_file(file)
-  home_file = File.join(ENV['HOME'], home_file_name(relative_path(file)))
-  sh %Q{rm -rf '#{home_file}'}
-  link_file(file)
+def replace_file(file, dest)
+  target_file = File.join(dest, dest_filename(relative_path(file)))
+  sh %Q{rm -rf '#{target_file}'}
+  link_file(file, dest)
 end
 
 def files(folder)
   files = Dir["#{folder}/.??*"] + Dir["#{folder}/*"]
   files.reject! do |file|
-    relative_path = file.gsub("#{DOTFILES_PATH}/", "")
-    IGNORED_FILES.include?(relative_path)
+    IGNORED_FILES.include?(relative_path(file))
   end
 
   files.reject! {|f| f =~ /\.unsecure$/}
@@ -118,107 +103,91 @@ def files(folder)
 end
 
 def find_encryption_status
-  return `cd #{DOTFILES_PATH}; grep -q OK .encrypted && echo OK || echo NO`.chomp
-end
+  return false if !File.exists?(File.join(PRIVATE_PATH, ".encrypted"))
 
-def is_encrypted?(file)
-  ENCRYPTED_FILES.any? do |encrypted_file|
-    relative_path(file) == encrypted_file
+  st = `cd #{DOTFILES_PATH}; grep -q OK .private/.encrypted && echo OK || echo NO`.chomp
+  if st == "OK"
+    return true
+  else
+    return false
   end
 end
 
-def link_folder(folder)
+def link_folder(folder, dest)
   replace_all = false
-  encryption_status = find_encryption_status()
 
   files(folder).each do |file|
     # Take care of an encrypted file if the encryption was not setup.
-    if encryption_status == "NO"
-      must_skip = false
-      IGNORED_WHEN_UNSECURE.each do |p|
-        if relative_path(file) =~ p
-          puts "In unsecure mode, skipping ~/#{home_file_name(relative_path(file))}"
-          must_skip = true
-          break
-        end
-      end
-      next if must_skip
-
-      if is_encrypted?(file)
-        # Check if we have an unsecure version
-        if File.exists?("#{file}.unsecure")
-          # We do, then symlink the unsecure file instead.
-          file = "#{file}.unsecure"
-        else
-          # We don't so let's skip this file entirely.
-          puts "In unsecure mode, skipping ~/#{home_file_name(relative_path(file))}"
-          next
-        end
-      end
+    if !find_encryption_status() && File.exists?("#{file}.unsecure")
+      # Check if we have an unsecure version
+      # We do, then symlink the unsecure file instead.
+      file = "#{file}.unsecure"
     end
 
-    relative_path = file.gsub("#{DOTFILES_PATH}/", "")
-    home_file = File.join(ENV['HOME'], home_file_name(relative_path))
+    target_file = File.join(dest, dest_filename(relative_path(file)))
 
-    if File.exist?(home_file)
-      if File.identical? file, home_file
-        puts "identical ~/#{home_file_name(relative_path)}"
+    if File.exist?(target_file)
+      if File.identical? file, target_file
+        puts "identical ~/#{dest_filename(relative_path(file))}"
       elsif file =~ /\.erb$/
-        replace_file(file)
-      elsif File.directory?(home_file) && !File.symlink?(home_file)
-        link_folder(file)
+        replace_file(file, dest)
+      elsif File.directory?(target_file)
+        link_folder(file, dest)
       elsif replace_all
-        replace_file(file)
+        replace_file(file, dest)
       else
-        print "overwrite ~/#{home_file_name(relative_path)}? [ynaq] "
+        print "overwrite ~/#{dest_filename(relative_path(file))}? [ynaq] "
         case $stdin.gets.chomp
         when 'a'
           replace_all = true
-          replace_file(file)
+          replace_file(file, dest)
         when 'y'
-          replace_file(file)
+          replace_file(file, dest)
         when 'q'
           exit
         else
-          puts "skipping ~/#{home_file_name(relative_path)}"
+          puts "skipping ~/#{dest_filename(relative_path(file))}"
         end
       end
     else
       if File.symlink?(file)
-        link_symlink(file)
+        link_symlink(file, dest)
       else
-        link_file(file)
+        link_file(file, dest)
       end
     end
   end
 end
 
-def home_file_name(path)
+def dest_filename(path)
   return path.sub(/\.erb$/, '').sub(/\.unsecure$/, '')
 end
 
-def link_file(file)
-  relative_path = file.gsub("#{DOTFILES_PATH}/", "")
-  home_file = File.join(ENV['HOME'], home_file_name(relative_path))
+def link_file(file, dest)
+  target_file = File.join(dest, dest_filename(relative_path(file)))
 
   if file =~ /.erb$/
-    puts "generating #{home_file}"
-    File.open(home_file, 'w') do |new_file|
+    puts "generating #{target_file}"
+    File.open(target_file, 'w') do |new_file|
       new_file.write ERB.new(File.read(file)).result(binding)
     end
     if is_encrypted?(file)
-      File.chmod(0400, home_file)
+      File.chmod(0400, target_file)
     end
   else
     puts "linking #{file}"
-    sh %Q{ln -s "#{file}" "#{home_file}"}
+    sh %Q{ln -s "#{file}" "#{target_file}"}
   end
 end
 
-def link_symlink(link)
+def is_encrypted?(file)
+  file =~ /#{PRIVATE_PATH}/
+end
+
+def link_symlink(link, dest)
   begin
     File.realpath(link)
-    link_file(link)
+    link_file(link, dest)
   rescue Errno::ENOENT
     puts "Skipping #{link} symlink because it points to a non-existing file."
   end

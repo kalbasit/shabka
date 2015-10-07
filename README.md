@@ -3,8 +3,6 @@ dotfiles
 
 My dotfiles
 
-To decrypt encrypted files, install [git-crypt](https://github.com/AGWA/git-crypt)
-
 # Create your own
 
 Start with a freshly installed Mac and follow the following commands
