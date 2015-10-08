@@ -14,6 +14,7 @@ IGNORED_FILES = [
   ".etc",
   ".git",
   ".private",
+  ".osx",
 ]
 
 GO_BINARIES = [
@@ -32,6 +33,21 @@ GO_BINARIES = [
   "github.com/Masterminds/glide",
   "github.com/kardianos/govendor",
 ]
+
+desc "Init Mac"
+task :osx do
+  sh %Q{#{DOTFILES_PATH}/.osx}
+end
+
+desc "Run brew bundle"
+task :brew_bundle do
+  sh %Q{brew bundle}
+end
+
+desc "Install all vim plugins"
+task :vim_plug do
+  sh %Q{vim +PlugInstall +qall}
+end
 
 desc "Install Go Binaries"
 task :install_go_binaries do
