@@ -4,16 +4,18 @@
 *[wW][eE][eE][mM]*
 *~
 .byobu/.ssh-agent
+.config/acd-token.json
+.config/acd.json
 .config/configstore/
 .config/git/
+.config/keybase
 .config/liteide/
-.config/pianobar/state
+.config/pianobar
 .config/robomongo/
 .config/sublime-text-3/Backup/
 .config/sublime-text-3/Cache/
 .config/sublime-text-3/Installed Packages/
-.config/sublime-text-3/Local/Auto Save Session.sublime_session
-.config/sublime-text-3/Local/Session.sublime_session
+.config/sublime-text-3/Local
 .config/sublime-text-3/Packages/Autoprefixer/
 .config/sublime-text-3/Packages/GoSublime/
 .config/sublime-text-3/Packages/HTML/
@@ -27,10 +29,12 @@
 .config/sublime-text-3/Packages/User/Package Control.merged-ca-bundle
 .config/sublime-text-3/Packages/User/Package Control.system-ca-bundle
 .config/sublime-text-3/Packages/User/Package Control.user-ca-bundle
+.config/sublime-text-3/Packages/User/SublimeGit.sublime-settings
 .config/sublime-text-3/Packages/bz2/
 .deis/client.json
 .deis/units/
 .deis/vagrant.json
+.irssi/config
 .docker/machine/
 .emacs.d/.cask
 .emacs.d/autosave/
@@ -78,6 +82,7 @@
 .viminfo,!
 .xinitrc-sessions
 .zsh/cache/
+.zsh/work
 Gist.sublime-settings
 GoSublime-aux.sublime-settings
 Package Control.last-run
