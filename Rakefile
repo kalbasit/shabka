@@ -13,6 +13,7 @@ IGNORED_FILES = [
   ".DS_Store",
   ".etc",
   ".git",
+  ".gitignore",
   ".private",
   ".osx",
 ]
@@ -26,7 +27,6 @@ GO_BINARIES = [
   "golang.org/x/tools/cmd/cover",
   "github.com/golang/lint/golint",
   "github.com/codegangsta/gin",
-  "git.bytbox.net/sloc.git/sloc",
   "github.com/peco/peco/cmd/peco",
   "golang.org/x/tools/cmd/stringer",
   "github.com/golang/protobuf/protoc-gen-go",
