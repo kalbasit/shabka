@@ -473,6 +473,7 @@ sudo ln -sf "/Applications/Xcode.app/Contents/Developer/Applications/iOS Simulat
 
 # Applications that need to be on all desktops
 defaults delete com.apple.spaces app-bindings
+defaults write com.apple.spaces app-bindings -dict-add com.apple.finder AllSpaces
 defaults write com.apple.spaces app-bindings -dict-add com.apple.safari AllSpaces
 defaults write com.apple.spaces app-bindings -dict-add com.hipchat.hipchat AllSpaces
 defaults write com.apple.spaces app-bindings -dict-add com.samstone.chitchat AllSpaces
