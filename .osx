@@ -33,6 +33,7 @@ if [[ ! -x /usr/local/bin/brew ]]; then
 fi
 
 # Run brew bundle
+brew update
 brew bundle --verbose
 
 # Make ZSH is a selectable shell
@@ -61,6 +62,10 @@ fi
 if [[ ! -x "`which pip 2>/dev/null`" ]]; then
   sudo easy_install pip
 fi
+
+###############################################################################
+# Neovim Python sypport                                                       #
+###############################################################################
 
 sudo -H easy_install -U greenlet
 sudo -H pip install --upgrade neovim
