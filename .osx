@@ -15,15 +15,15 @@ while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
 if ! xcode-select -p &>/dev/null; then
   # install Xcode Command Line Tools
-  # https://github.com/chcokr/osx-init/blob/master/install.sh#L27
-  # https://github.com/timsutton/osx-vm-templates/blob/ce8df8a7468faa7c5312444ece1b977c1b2f77a4/scripts/xcode-cli-tools.sh
-  touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress;
-  PROD=$(softwareupdate -l |
-    grep "\*.*Command Line" |
-    head -n 1 | awk -F"*" '{print $2}' |
-    sed -e 's/^ *//' |
-    tr -d '\n')
-  softwareupdate -i "$PROD" -v;
+  # Stolen from: https://github.com/timsutton/osx-vm-templates/blob/master/scripts/xcode-cli-tools.sh
+  # create the placeholder file that's checked by CLI updates' .dist code
+  # in Apple's SUS catalog
+  touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
+  # find the CLI Tools update
+  PROD=$(softwareupdate -l | grep "\*.*Command Line" | head -n 1 | awk -F"*" '{print $2}' | sed -e 's/^ *//' | tr -d '\n')
+  # install it
+  softwareupdate -i "$PROD" -v
+  rm -f /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
 fi
 
 # Install homebrew
