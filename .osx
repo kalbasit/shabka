@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-# Mostly a modified verion of https://mths.be/osx and https://github.com/chcokr/osx-init/blob/master/install.sh#L27
+# Mostly a modified verion of https://mths.be/osx
 
 # Ask for the administrator password upfront
 sudo -v
