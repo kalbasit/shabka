@@ -17,3 +17,4 @@ alias blaze=bazel
 alias rot13="tr '[A-Za-z]' '[N-ZA-Mn-za-m]'"
 alias dm='swp dailymotion'
 alias tt='swp talentoday'
+alias -g rocker_auth="--auth kalbasit:\$(lpass show --password 4984935876)"
