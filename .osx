@@ -163,9 +163,6 @@ defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
 # SSD-specific tweaks                                                         #
 ###############################################################################
 
-# Disable local Time Machine snapshots
-sudo tmutil disablelocal
-
 # Disable hibernation (speeds up entering sleep mode)
 sudo pmset -a hibernatemode 0
 
@@ -627,7 +624,18 @@ rm -rf /tmp/seoul
 defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
 
 # Disable local Time Machine backups
-hash tmutil &> /dev/null && sudo tmutil disablelocal
+sudo tmutil disablelocal
+
+# Exclude folders from Time Machine
+sudo tmutil addexclusion -p /usr/local
+sudo tmutil addexclusion -p /opt/homebrew-cask
+sudo tmutil addexclusion -p ~/.docker/machine
+sudo tmutil addexclusion -p ~/.lpass
+sudo tmutil addexclusion -p ~/.rbenv
+sudo tmutil addexclusion -p ~/Applications
+sudo tmutil addexclusion -p ~/Downloads
+sudo tmutil addexclusion -p ~/Dropbox
+sudo tmutil addexclusion -p ~/VirtualBox\ VMs
 
 ###############################################################################
 # Activity Monitor                                                            #
