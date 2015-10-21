@@ -325,6 +325,9 @@ vmap ga <Plug>(EasyAlign)
 "" Airline{{{
 let g:airline#extensions#tabline#enabled = 1
 "" }}}
+"" AutoPairs{{{
+let g:AutoPairsMultilineClose=0
+"}}}
 "" FZF {{{
 nnoremap <silent><c-p> :<c-u>FZF!<cr>
 "" }}}
