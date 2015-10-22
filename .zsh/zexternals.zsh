@@ -14,3 +14,6 @@ fi
 
 # Load FZF
 [[ -f "${HOME}/.fzf.zsh" ]] && source "${HOME}/.fzf.zsh"
+
+# Load SSH agents
+[[ -x "${HOME}/.bin/ssh-agents" ]] && eval `ssh-agents $SHELL`
