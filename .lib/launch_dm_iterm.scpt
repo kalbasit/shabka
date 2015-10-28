@@ -6,7 +6,7 @@ tell application "iTerm"
 
 	-- talk to the new terminal
 	tell dm_term
-		repeat with sess in {"dmx-api", "dmx-bridge", "dmx-eve", "dmx-console", "squad-ads","go-libs","go-liverail"}
+		repeat with sess in {"dmx-api", "dmx-bridge", "dmx-inventory", "dmx-eve", "dmx-console", "squad-ads","go-libs","go-liverail"}
 			launch session "Default Session"
 			tell the last session
 				set my_command to ("cd ~/code/src/github.com/dailymotion/" & sess & "; machdev; dm; tmx")

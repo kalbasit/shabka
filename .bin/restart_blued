@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-#   vim:ft=sh:fenc=UTF-8:ts=4:sts=4:sw=4:expandtab:foldmethod=marker:foldlevel=0:
+#   vim:ft=sh:fenc=UTF-8:ts=2:sts=2:sw=2:expandtab:foldmethod=marker:foldlevel=0:
 #
 #   Copyright (c) 2010 Wael Nasreddine <wael.nasreddine@gmail.com>
 #
@@ -70,8 +70,17 @@ unset bootstrap
 ####
 # Main
 
-osascript "${HOME}/.lib/launch_dm_iterm.scpt"
-osascript -e 'tell application "Terminal" to quit'
+if ! check_root; then
+  echo "this script requires root"
+fi
+
+pid="$(pgrep blued)"
+if [[ "x${pid}" != "x" ]]; then
+  echo "found blued running on pid ${pid}"
+  kill "${pid}"
+else
+  echo "blued not found"
+fi
 
 #
 ####
