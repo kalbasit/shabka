@@ -31,6 +31,9 @@ Plug 'elzr/vim-json', { 'for': 'json' }
 " CSV
 Plug 'chrisbra/csv.vim', { 'for': 'csv' }
 
+" Terraform
+Plug 'markcornick/vim-terraform'
+
 " Ruby/Rails
 if has("ruby")
   Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
@@ -38,6 +41,12 @@ endif
 Plug 'skwp/vim-rspec', { 'for': 'ruby' }
 Plug 'tpope/vim-rails', { 'for': 'ruby' }
 Plug 'tpope/vim-endwise', { 'for': 'ruby' }
+
+" YouCompleteMe
+" NOTE: It is disabled on vim because nvim compiles it and vim die with sig ABRT
+if has('nvim')
+  Plug 'Valloric/YouCompleteMe', { 'do': 'python install.py --clang-completer --system-libclang --gocode-completer' }
+endif
 
 " Tools
 Plug 'christoomey/vim-tmux-navigator'
@@ -61,7 +70,6 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'ervandew/screen', { 'on': 'ScreenShell' }
 Plug 'ervandew/supertab'
-Plug 'Valloric/YouCompleteMe', { 'do': 'python install.py --clang-completer --system-libclang --gocode-completer' }
 Plug 'editorconfig/editorconfig-vim'
 Plug 'vim-scripts/PreserveNoEOL'
 Plug 'bronson/vim-trailing-whitespace'
@@ -84,11 +92,17 @@ filetype plugin indent on
 
 color seoul256
 
+" The below settings should only be read on startup, sourcing .vimrc again
+" should not load these settings.
+if has('vim_starting')
+  " Only at startup because of https://github.com/neovim/neovim/wiki/Following-HEAD#20150909
+  set encoding=utf-8      " Set default encoding to UTF-8
+endif
+
 let mapleader = ","     " set the mapleader
 set backupdir^=~/.vim/_backup//     " where to put backup files.
 set directory^=~/.vim/_temp//       " where to put swap files.
 set undodir^=~/.vim/_undo//         " where to put undo files.
-set encoding=utf-8      " Set default encoding to UTF-8
 set wildmenu            " turn on wild menu
 set hlsearch            " highlight matches
 set incsearch           " incremental searching
@@ -111,7 +125,7 @@ set showmatch           " show matching brackets
 set matchtime=2         " how many tenths of a second to blink matching brackets for
 set so=5                " Keep 10 lines (top/bottom) for scope
 set novisualbell        " don't blink
-if has("statusline") && !&cp
+if has("statusline")
   set laststatus=2  " always show the status bar
 endif
 set startofline         " Move the cursor to the first non-blank of the line
