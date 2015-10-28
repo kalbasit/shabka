@@ -1,3 +1,4 @@
 #!/bin/sh
 
-launchctl load ~/Library/LaunchAgents/homebrew.mxcl.offline-imap.plist
+sleep 5
+sudo $HOME/.bin/restart_blued
