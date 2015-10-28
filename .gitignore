@@ -48,7 +48,6 @@
 .emacs.d/url/cache
 .filesystem/
 .filesystem/bin/ssx-agents
-.gnupg/random_seed
 .irssi/config.autosave
 .irssi/seen.dat
 .local/share/gvfs-metadata
