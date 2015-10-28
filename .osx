@@ -30,6 +30,7 @@ fi
 if [[ ! -x /usr/local/bin/brew ]]; then
   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   brew tap Homebrew/bundle
+  brew install python
 fi
 
 # Run brew bundle
@@ -56,19 +57,10 @@ if [[ ! -d "${HOME}/.rbenv" ]]; then
 fi
 
 ###############################################################################
-# Python                                                                      #
-###############################################################################
-
-if [[ ! -x "`which pip 2>/dev/null`" ]]; then
-  sudo easy_install pip
-fi
-
-###############################################################################
 # Neovim Python sypport                                                       #
 ###############################################################################
 
-sudo -H easy_install -U greenlet
-sudo -H pip install --upgrade neovim
+pip install --upgrade neovim
 
 ###############################################################################
 # General UI/UX                                                               #
