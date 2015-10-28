@@ -6,7 +6,6 @@
 [user]
   name            = Wael M. Nasreddine
   email           = wael.nasreddine@gmail.com
-  editor          = vim
   signingkey      = C8DD18A2
 # }}}
 # help# {{{
