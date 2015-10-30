@@ -19,6 +19,13 @@ let searchalias g = "google" " Create a shortcut for search engines.
                              " would act the same way as ':tabnew google example'
 set nosmoothscroll
 
+"""""""""""""""""""
+" Code blocks
+
+getIP() -> {{
+httpRequest({url: 'http://api.ipify.org/?format=json', json: true},
+            function(res) { Status.setMessage('IP: ' + res.ip); });
+}}
 
 """""""""""""""""""
 " Mappings
@@ -43,18 +50,13 @@ map <C-l> nextTab
 map <C-d> scrollPageDown
 map <C-e> scrollPageUp
 
-" Code blocks (see below for more info)
-getIP() -> {{
-httpRequest({url: 'http://api.ipify.org/?format=json', json: true},
-            function(res) { Status.setMessage('IP: ' + res.ip); });
-}}
 " Displays your public IP address in the status bar
 map ci :call getIP<CR>
 
 """""""""""""""""""
 " Sites
 
-site '*://(mail|inbox).google.com/*' {
+site '*://(mail\|inbox).google.com/*' {
   call :pintab
 }
 
