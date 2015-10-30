@@ -1,0 +1,63 @@
+"""""""""""""""""""
+" Init
+let configpath = '<%= ENV['HOME'] %>/.cvimrc'
+let homedirectory = '<%= ENV['HOME'] %>'
+
+" Update settings via a local file (and the `:source` command) rather than the
+" default options page in chrome As long as localconfig is set in the .cvimrc
+" file. cVim will continue to read settings from there
+set localconfig
+
+"""""""""""""""""""
+" Settings
+
+let mapleader = ","
+let barposition = "bottom"
+let completionengines = ["google", "google-image", "amazon", "imdb", "youtube"]
+let searchalias g = "google" " Create a shortcut for search engines.
+                             " For example, typing ':tabnew g example'
+                             " would act the same way as ':tabnew google example'
+set nosmoothscroll
+
+
+"""""""""""""""""""
+" Mappings
+
+map <Leader>r reloadTabUncached
+map <Leader>x :restore<Space>
+map gS :viewsource&<CR>
+
+" You can use <Space>, which is interpreted as a
+" literal " " character, to enter buffer completion mode
+map gb :buffer<Space>
+
+" Toggle the current HUD display value
+map <C-h> :set hud!<CR>
+
+" Switch between alphabetical hint characters and numeric hints
+map <C-i> :set numerichints!<CR>
+
+map <C-u> rootFrame
+map <C-h> previousTab
+map <C-l> nextTab
+map <C-d> scrollPageDown
+map <C-e> scrollPageUp
+
+" Code blocks (see below for more info)
+getIP() -> {{
+httpRequest({url: 'http://api.ipify.org/?format=json', json: true},
+            function(res) { Status.setMessage('IP: ' + res.ip); });
+}}
+" Displays your public IP address in the status bar
+map ci :call getIP<CR>
+
+"""""""""""""""""""
+" Sites
+
+site '*://(mail|inbox).google.com/*' {
+  call :pintab
+}
+
+site '*://github.com/*' {
+  call :pintab
+}
