@@ -57,16 +57,6 @@ alias rlc='rake log:clear'
 alias rn='rake notes'
 alias rr='rake routes'
 
-# legacy stuff
-alias ss='thin --stats "/thin/stats" start'
-alias sg='ruby script/generate'
-alias sd='ruby script/destroy'
-alias sp='ruby script/plugin'
-alias sr='ruby script/runner'
-alias ssp='ruby script/spec'
-alias sc='ruby script/console'
-alias sd='ruby script/server --debugger'
-
 function remote_console() {
   /usr/bin/env ssh $1 "( cd $2 && ruby script/console production )"
 }
