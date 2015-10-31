@@ -57,10 +57,14 @@ if [[ ! -d "${HOME}/.rbenv" ]]; then
 fi
 
 ###############################################################################
-# Neovim Python sypport                                                       #
+# Python                                                                      #
 ###############################################################################
 
+# Neovim Python sypport
 pip install --upgrade neovim
+
+# jsonpp uses pygments
+pip install Pygments
 
 ###############################################################################
 # General UI/UX                                                               #

@@ -661,7 +661,7 @@ function xmlpp() {
 # jsonpp() #{{{
 function jsonpp() {
     if [[ "${#}" -eq 0 ]]; then
-        python -m json.tool
+        python -m json.tool | pygmentize -l javascript
     else
         input_file="${1}"
         if [[ "${#}" -eq 2 ]]; then
