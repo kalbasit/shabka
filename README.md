@@ -106,8 +106,11 @@ The ssh agents is managed by [`~/.bin/ssh-agents`][7] which is loaded on
 startup of ZSH. It assigns an agent for each profile, so when you switch
 profiles, you will also switch the ssh agent and the keys it manages.
 
-The consequence for this is that your personal SSH key should live under
-`~/.ssh/personal` and not `~/.ssh`.
+The keys for a particular profile should live under
+`~/.ssh/<profile-name>`, so your personal keys (for the default profile)
+should live under `~/.ssh/personal` and not `~/.ssh`.
+
+![My ~/.ssh folder](http://i.imgur.com/tNsMlks.png)
 
 [1]: https://github.com/kalbasit/dotfiles/blob/master/.osx
 [2]: https://github.com/kalbasit/dotfiles/blob/master/Brewfile
