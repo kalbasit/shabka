@@ -1,48 +1,67 @@
-dotfiles
-========
+# Kalbasit's dotfiles
 
-My dotfiles
+![Screenshot of my shell](http://i.imgur.com/8TnOljy.png)
 
-# Create your own
+## Installation
 
-Start with a freshly installed Mac and follow the following commands
+**Warning:** If you want to give these dotfiles a try, you should first
+fork this repository, review the code, and remove things you don’t want
+or need. Don’t blindly use my settings unless you know what that
+entails. Use at your own risk!
 
-Install homebrew and brew bundle
+You can clone the repository wherever you want, however the path should
+not include any spaces. I like to keep it in `~/.dotfiles`. For the rest
+of the tutorial, we are going to refer to the clone dotfiles under the
+path `~/.dotfiles`.
 
-```
-ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-brew tap Homebrew/bundle
-```
+### First installation
 
-Clone my dotfiles and clean it up from my own encrypted files Do not
-forget to replace the URL with your own fork.
+On the first installation, you should run `rake init` which will:
 
-```
-git clone --recursive git@github.com:kalbasit/dotfiles.git ~/.dotfiles
-cd ~/.dotfiles
-brew bundle
-git-crypt status | grep -v 'not encrypted' | awk '{print $2}' | xargs git rm
-git rm -rf .git-crypt
-git commit -m "forking the repo, remove kalbasit's encrypted files"
-git-crypt init
-echo "`dd if=/dev/urandom of=/dev/stdout bs=1024 count=1`OK`dd if=/dev/urandom of=/dev/stdout bs=1024 count=1`" > .encrypted
-cp .gitconfig.unsecure .gitconfig
-git add .
-git commit -m "add my stuff"
-rake
-vim +PlugInstall +qall
-git checkout HEAD -- .zshrc
-```
+- Initialize OSX, only if ran on OSX. Thanks to [`@mathiasbynens`][6]
+  for the idea!
+  - Make sure to read over [`.osx`][1] and modify it to your liking.
+  - The OSX script will:
+    - Install XCode CLI.
+    - Install rbenv, installs the latest ruby version and installs
+      `bundler` and `git-smart`.
+    - Install homebrew.
+    - Install homebrew bundle.
+    - Run `brew bundle` which will install everything mentioned in
+      [`Brewfile`][2].
+- Update submodules.
+- Switch to ZSH.
+- Link everything from `~/.dotfiles` to the home directory.
+- Link everything from `~/.dotfiles/.private` **if it exists**, this is
+  the perfect place for you to keep private things. See [Keeping things
+  private private][3] for more information.
+- Install all of Vim plugins, as specified in [`.vimrc`][4]
+- Install Go binaries, as specified in [`Rakefile`][5]
 
-Now you should import your GnuPG stuff into `~/.dotfiles/.gnupg` or
-generate a new one if you do not have one. Once you have it all
-generated you can go ahead and add your GPG key in the repo so git-crypt
-can decrypt the next time you clone!
+### Subsequent linling
 
-```
-git-crypt add-gpg-user <ID or Email>
-```
+When adding a new file to the dotfiles, run `rake` to link any newly
+added file.
 
-Now add everything and commit. GnuPG stuff should be encrypted by
-default. See `~/.dotfiles/.gitattributes` for the list of encrypted
-files.
+# Keeping private things private
+
+The dotfiles are not really the place for your private things. But it
+does fully support a `.private` sub-folder which you can track in any
+way you want. This is folder to keep your `~/.ssh` and your `~/.gnupg`.
+
+![Screenshot of .private](http://i.imgur.com/UvWQmze.png)
+
+# ZSH personal/work profiles
+
+My dotfiles provides support for personal and work profiles.
+
+# SSH Agent
+
+TBD
+
+[1]: https://github.com/kalbasit/dotfiles/blob/master/.osx
+[2]: https://github.com/kalbasit/dotfiles/blob/master/Brewfile
+[3]: #keeping-private-things-private
+[4]: https://github.com/kalbasit/dotfiles/blob/master/.vimrc#L3
+[5]: https://github.com/kalbasit/dotfiles/blob/master/Rakefile#L21
+[6]: https://github.com/mathiasbynens/dotfiles/blob/master/.osx
