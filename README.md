@@ -27,6 +27,10 @@ On the first installation, you should run `rake init` which will:
       `bundler` and `git-smart`.
     - Install homebrew, homebrew-bundle and run `brew bundle` which will
       install everything mentioned in [`Brewfile`][2].
+    - Run `~/.dotfiles/.private/.osx` if it exists. This allows you to
+      add any extra setup steps that are private. I use this file to
+      insert Divvy's License and add custom search domains to all
+      interfaces.
 - Update submodules.
 - Switch to ZSH.
 - Link everything from `~/.dotfiles` to the home directory.
