@@ -112,6 +112,12 @@ should live under `~/.ssh/personal` and not `~/.ssh`.
 
 ![My ~/.ssh folder](http://i.imgur.com/tNsMlks.png)
 
+# Author
+
+| [![twitter/kalbasit](https://avatars0.githubusercontent.com/u/87115?v=3&s=460)](http://twitter.com/kalbasit "Follow @kalbasit on Twitter") |
+|---|
+| [Wael Nasreddine](https://github.com/kalbasit) |
+
 [1]: https://github.com/kalbasit/dotfiles/blob/master/.osx
 [2]: https://github.com/kalbasit/dotfiles/blob/master/Brewfile
 [3]: #keeping-private-things-private
