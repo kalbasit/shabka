@@ -34,7 +34,10 @@ GO_BINARIES = [
   "github.com/kardianos/govendor",
 ]
 
-desc "Init Mac"
+desc "Initialize"
+task :init, [:osx, :default, :vim_plug, :install_go_binaries]
+
+desc "Initialize the Mac"
 task :osx do
   sh %Q{#{DOTFILES_PATH}/.osx} if (/darwin/ =~ RUBY_PLATFORM) != nil
 end
