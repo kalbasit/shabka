@@ -603,38 +603,38 @@ function devnfs() {
   && echo "Mounted /Users over NFS"'
 }
 #}}}
-# swp() #{{{
-function swp() {
+# sp() #{{{
+function sp() {
     profiles=()
-    for wpf in ${HOME}/.zsh/work/profiles/*.zsh; do
+    for wpf in ${HOME}/.zsh/profiles/*.zsh; do
         f="`basename "${wpf}"`"
         profiles=(${profiles[@]} ${f%%.zsh})
     done
     if [ "${#}" -eq "0" -o "${1}" = "ls" ]; then
         for wpf in ${profiles[@]}; do
-            if [[ "x${wpf}" = "x${ACTIVE_WORK_PROFILE}" ]]; then
+            if [[ "x${wpf}" = "x${ACTIVE_PROFILE}" ]]; then
                 echo "${FG_GREEN}*${FG_CLEAR} ${wpf}"
             else
                 echo "  ${wpf}"
             fi
         done
     elif [[ "${1}" = "kill" ]]; then
-        if [[ -n "${ACTIVE_WORK_PROFILE}" ]]; then
-            source "${HOME}/.zsh/work/profiles/${ACTIVE_WORK_PROFILE}.zsh"
+        if [[ -n "${ACTIVE_PROFILE}" ]]; then
+            source "${HOME}/.zsh/profiles/${ACTIVE_PROFILE}.zsh"
             wpdeactivate
-            unset ACTIVE_WORK_PROFILE SSH_AGENT_PID SSH_AUTH_SOCK SSH_AGENT_NAME
+            unset ACTIVE_PROFILE SSH_AGENT_PID SSH_AUTH_SOCK SSH_AGENT_NAME
             eval `ssh-agents $SHELL`
         fi
     else
-        if [[ ! -e "${HOME}/.zsh/work/profiles/${1}.zsh" ]]; then
+        if [[ ! -e "${HOME}/.zsh/profiles/${1}.zsh" ]]; then
             echo "profile ${1} not found."
             return 1
         fi
 
         swp kill
-        source "${HOME}/.zsh/work/profiles/${1}.zsh"
+        source "${HOME}/.zsh/profiles/${1}.zsh"
         wpactivate
-        export ACTIVE_WORK_PROFILE="${1}"
+        export ACTIVE_PROFILE="${1}"
         export SSH_AGENT_NAME="${1}"
         unset SSH_AGENT_PID SSH_AUTH_SOCK
         eval `ssh-agents $SHELL`
@@ -677,7 +677,7 @@ function jsonpp() {
 #}}}
 # tmx() #{{{
 function tmx() {
-    local awp="${ACTIVE_WORK_PROFILE}"
+    local ap="${ACTIVE_PROFILE}"
     local sess="${1}"
 
     if [ "x${sess}" = "xls" ]; then
@@ -693,8 +693,8 @@ function tmx() {
 
     tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" attach -t "${sess}" || \
         tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" new -s "${sess}" \; \
-            set-environment ACTIVE_WORK_PROFILE "$awp" \; \
-            set-environment SSH_AGENT_NAME "$awp" \; \
+            set-environment ACTIVE_PROFILE "$ap" \; \
+            set-environment SSH_AGENT_NAME "$ap" \; \
             new-window \; \
             kill-window -t :0 \; \
             new-window -t :0 'zsh -i -c vim' \;
