@@ -18,6 +18,11 @@ alias rot13="tr '[A-Za-z]' '[N-ZA-Mn-za-m]'"
 alias kp='swp kill'
 alias dm='swp dailymotion'
 alias tt='swp talentoday'
+# Always enable colored `grep` output
+# Note: `GREP_OPTIONS="--color=auto"` is deprecated, hence the alias usage.
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
 
 # General aliases
 alias -g rocker_auth="--auth kalbasit:\$(lpass show --password 4984935876)"
