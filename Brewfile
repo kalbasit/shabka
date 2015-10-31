@@ -5,7 +5,6 @@ tap 'grammarly/tap'
 tap 'homebrew/bundle'
 tap 'homebrew/dupes'
 tap 'homebrew/games'
-tap 'kalbasit/tap'
 tap 'neovim/neovim'
 
 # Casks
