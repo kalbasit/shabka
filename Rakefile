@@ -66,7 +66,7 @@ end
 
 desc "link files from the private repository"
 task :link_private do
-  link_folder(PRIVATE_PATH, ENV["HOME"]) if PRIVATE_PATH.exists?
+  link_folder(PRIVATE_PATH, ENV["HOME"]) if File.exists?(PRIVATE_PATH)
 end
 
 task :default => [:update_submodules, :switch_to_zsh, :link_dotfiles, :link_private]

@@ -82,7 +82,7 @@
 .viminfo,!
 .xinitrc-sessions
 .zsh/cache/
-.zsh/work
+.zsh/profiles
 Gist.sublime-settings
 GoSublime-aux.sublime-settings
 Package Control.last-run
