@@ -275,7 +275,7 @@ function not_root()
 #}}}
 # c()#{{{
 function c() {
-    local cmd program archive files answer
+    local cmd flags archive files answer
     if [ "${#}" -gt "1" ]; then
         archive="${1}"
         shift
@@ -292,33 +292,60 @@ function c() {
         fi
 
         case "${archive}" in
-            *.tar.bz2)   cmd="tar cjf"      ;;
-            *.tar.gz)    cmd="tar czf"      ;;
-            *.bz2)       cmd="bzip2"
-                         archive="" # Bzip2 takes one Argument
-                         ;;
-            *.rar)       cmd="rar c"        ;;
-            *.gz)        cmd="gzip"
-                         archive="" # gzip takes one Argument
-                         ;;
-            *.tar)       cmd="tar cf"       ;;
-            *.jar)       cmd="jar cf"       ;;
-            *.tbz2)      cmd="tar cjf"      ;;
-            *.tgz)       cmd="tar czf"      ;;
-            *.zip|*.xpi) cmd="zip -r"       ;;
-            # TODO .Z and .7z formats
-            *)
+            *.tar.bz2)
+                cmd="tar"
+                flags="cjf"
+                ;;
+            *.tar.gz)
+                cmd="tar"
+                flags="czf"
+                ;;
+            *.bz2)
+                cmd="bzip2"
+                flags=""
+                archive="" # Bzip2 takes one Argument
+                ;;
+            *.rar)
+                cmd="rar"
+                flags="c"
+                ;;
+            *.gz)
+                cmd="gzip"
+                flags=""
+                archive="" # gzip takes one Argument
+                ;;
+            *.tar)
+                cmd="tar"
+                flags="cf"
+                ;;
+            *.jar)
+                cmd="jar cf"
+                flags="cf"
+                ;;
+            *.tbz2)
+                cmd="tar"
+                flags="cjf"
+                ;;
+            *.tgz)
+                cmd="tar"
+                flags="czf"
+                ;;
+            *.zip|*.xpi)
+                cmd="zip"
+                flags="-r"
+                ;;
+                # TODO .Z and .7z formats
+                *)
                 print_error 0 "'${archive}' is not a valid archive type i am aware of."
                 return 1
                 ;;
         esac
         # Ok extract it now but first let's see if the progam can be used
-        program="$(echo "${cmd}" | awk '{print $1}')"
-        if ! type "${program}" &>/dev/null; then
-            print_error 0 "I couldn't find the program '${program}', Please make sure it is installed."
+        if ! type "${cmd}" &>/dev/null; then
+            print_error 0 "I couldn't find the program '${cmd}', Please make sure it is installed."
             return 1
         fi
-       ${cmd} ${archive} ${files}
+        ${cmd} ${flags} ${archive} ${files}
         if [ "${?}" -ne "0" ]; then
             print_error 0 "Oops an error occured..."
             return 1
