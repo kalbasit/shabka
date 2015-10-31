@@ -36,7 +36,7 @@ GO_BINARIES = [
 
 desc "Init Mac"
 task :osx do
-  sh %Q{#{DOTFILES_PATH}/.osx}
+  sh %Q{#{DOTFILES_PATH}/.osx} if (/darwin/ =~ RUBY_PLATFORM) != nil
 end
 
 desc "Run brew bundle"
