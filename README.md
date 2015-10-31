@@ -25,10 +25,8 @@ On the first installation, you should run `rake init` which will:
     - Install XCode CLI.
     - Install rbenv, installs the latest ruby version and installs
       `bundler` and `git-smart`.
-    - Install homebrew.
-    - Install homebrew bundle.
-    - Run `brew bundle` which will install everything mentioned in
-      [`Brewfile`][2].
+    - Install homebrew, homebrew-bundle and run `brew bundle` which will
+      install everything mentioned in [`Brewfile`][2].
 - Update submodules.
 - Switch to ZSH.
 - Link everything from `~/.dotfiles` to the home directory.
@@ -53,9 +51,52 @@ way you want. This is folder to keep your `~/.ssh` and your `~/.gnupg`.
 
 # ZSH personal/work profiles
 
-My dotfiles provides support for personal and work profiles.
+My dotfiles provides support for personal and work profiles. It allows
+me to separate personal from work (work being one or more profiles).
 
-# SSH Agent
+The personal profile is loaded by default, it's everything you include
+in your regular `~/.dotfiles`.
+
+Profiles live under `~/.zsh/profiles`, it is advised to keep those under
+your private repository, `~/.dotfiles/.private/.zsh/profiles` and let
+`rake` manage the linking.
+
+## Profile
+
+A profile is defined by two functions:
+- `pactivate()` is called when the profile is activated. You can add
+  alias, export variables or do anything possible from inside a ZSH
+  function.
+- `pdeactivate()` is called when the profile is deactivated (or switched
+  off). You should basically undo anything done in `pactivate()` above.
+
+Example: `~/.dotfiles/.private/.zsh/profiles/dailymotion.zsh`:
+
+```
+function pactivate() {
+  alias dev='ssh -A dev'
+
+  if [[ -x `which docker-machine 2>/dev/null` ]]; then
+    export DMX_EVE_URL="//${DOCKER_MACHINE_DEV_IP}:1234"
+    export DMX_JWT_SECRET="some-long-big-secret"
+    export DMX_API_URL="//${DOCKER_MACHINE_DEV_IP}:5678"
+  fi
+
+  export AWS_CLI_PROFILE=dmx
+  export AWS_PROFILE=dmx
+  export DEIS_PROFILE=dmx
+  export FLEETCTL_TUNNEL=1.2.3.4
+  export DEISCTL_TUNNEL=$FLEETCTL_TUNNEL
+}
+
+function pdeactivate() {
+  unalias dev 2> /dev/null
+  unset DMX_EVE_URL DMX_JWT_SECRET DMX_API_URL \
+  FLEETCTL_TUNNEL DEISCTL_TUNNEL AWS_PROFILE DEIS_PROFILE AWS_CLI_PROFILE
+}
+```
+
+## SSH Agent
 
 TBD
 
