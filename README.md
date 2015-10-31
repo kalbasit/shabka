@@ -114,7 +114,7 @@ should live under `~/.ssh/personal` and not `~/.ssh`.
 
 # Author
 
-| [![twitter/kalbasit](https://avatars0.githubusercontent.com/u/87115?v=3&s=460)](http://twitter.com/kalbasit "Follow @kalbasit on Twitter") |
+| [![twitter/kalbasit](https://avatars0.githubusercontent.com/u/87115?v=3&s=128)](http://twitter.com/kalbasit "Follow @kalbasit on Twitter") |
 |---|
 | [Wael Nasreddine](https://github.com/kalbasit) |
 
