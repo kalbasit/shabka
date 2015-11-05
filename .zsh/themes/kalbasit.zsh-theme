@@ -7,8 +7,8 @@ function _prompt_char() {
 }
 
 function work_prompt_info() {
-  if [[ -n "${ACTIVE_WORK_PROFILE}" ]]; then
-    echo "%{%F{green}%} {${ACTIVE_WORK_PROFILE}}%{%f%k%}"
+  if [[ -n "${ACTIVE_PROFILE}" ]]; then
+    echo "%{%F{green}%} {${ACTIVE_PROFILE}}%{%f%k%}"
   else
     echo ''
   fi

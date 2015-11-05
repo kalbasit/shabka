@@ -648,7 +648,7 @@ function sp() {
     elif [[ "${1}" = "kill" ]]; then
         if [[ -n "${ACTIVE_PROFILE}" ]]; then
             source "${HOME}/.zsh/profiles/${ACTIVE_PROFILE}.zsh"
-            wpdeactivate
+            pdeactivate
             unset ACTIVE_PROFILE SSH_AGENT_PID SSH_AUTH_SOCK SSH_AGENT_NAME
             eval `ssh-agents $SHELL`
         fi
@@ -658,9 +658,9 @@ function sp() {
             return 1
         fi
 
-        swp kill
+        sp kill
         source "${HOME}/.zsh/profiles/${1}.zsh"
-        wpactivate
+        pactivate
         export ACTIVE_PROFILE="${1}"
         export SSH_AGENT_NAME="${1}"
         unset SSH_AGENT_PID SSH_AUTH_SOCK
