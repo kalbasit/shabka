@@ -3,6 +3,7 @@
 *.emptyfile
 *[wW][eE][eE][mM]*
 *~
+.bin/launch_dm_iterm
 .byobu/.ssh-agent
 .config/acd-token.json
 .config/acd.json
@@ -25,16 +26,15 @@
 .config/sublime-text-3/Packages/TodoReview/
 .config/sublime-text-3/Packages/User/*.cache
 .config/sublime-text-3/Packages/User/GoSublime-aux.sublime-settings
-.config/sublime-text-3/Packages/User/Package*Control.last-run
 .config/sublime-text-3/Packages/User/Package Control.merged-ca-bundle
 .config/sublime-text-3/Packages/User/Package Control.system-ca-bundle
 .config/sublime-text-3/Packages/User/Package Control.user-ca-bundle
+.config/sublime-text-3/Packages/User/Package*Control.last-run
 .config/sublime-text-3/Packages/User/SublimeGit.sublime-settings
 .config/sublime-text-3/Packages/bz2/
 .deis/client.json
 .deis/units/
 .deis/vagrant.json
-.irssi/config
 .docker/machine/
 .emacs.d/.cask
 .emacs.d/autosave/
@@ -48,8 +48,10 @@
 .emacs.d/url/cache
 .filesystem/
 .filesystem/bin/ssx-agents
+.irssi/config
 .irssi/config.autosave
 .irssi/seen.dat
+.lib/launch_dm_iterm.scpt
 .local/share/gvfs-metadata
 .notmuch/compose/
 .notmuch/log
@@ -71,9 +73,9 @@
 .vim/.netrwhist
 .vim/_backup/
 .vim/_nviminfo
-.vim/_viminfo
 .vim/_temp/
 .vim/_undo/
+.vim/_viminfo
 .vim/autoload/plug.vim.old
 .vim/bundle/
 .vim/spell/
