@@ -1,3 +1,19 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Kalbasit's dotfiles](#kalbasits-dotfiles)
+  - [Installation](#installation)
+    - [First installation](#first-installation)
+    - [Subsequent linking](#subsequent-linking)
+- [Keeping private things private](#keeping-private-things-private)
+- [ZSH personal/work profiles](#zsh-personalwork-profiles)
+  - [Profile](#profile)
+  - [SSH Agents](#ssh-agents)
+- [Author](#author)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Kalbasit's dotfiles
 
 ![Screenshot of my shell](http://i.imgur.com/8TnOljy.png)
@@ -40,7 +56,7 @@ On the first installation, you should run `rake init` which will:
 - Install all of Vim plugins, as specified in [`.vimrc`][4]
 - Install Go binaries, as specified in [`Rakefile`][5]
 
-### Subsequent linling
+### Subsequent linking
 
 When adding a new file to the dotfiles, run `rake` to link any newly
 added file.
