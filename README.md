@@ -3,9 +3,9 @@
 **Table of Contents**
 
 - [Kalbasit's dotfiles](#kalbasits-dotfiles)
-  - [Installation](#installation)
-    - [First installation](#first-installation)
-    - [Subsequent linking](#subsequent-linking)
+- [Installation](#installation)
+  - [First installation](#first-installation)
+  - [Subsequent linking](#subsequent-linking)
 - [Keeping private things private](#keeping-private-things-private)
 - [ZSH personal/work profiles](#zsh-personalwork-profiles)
   - [Profile](#profile)
@@ -18,7 +18,7 @@
 
 ![Screenshot of my shell](http://i.imgur.com/8TnOljy.png)
 
-## Installation
+# Installation
 
 **Warning:** If you want to give these dotfiles a try, you should first
 fork this repository, review the code, and remove things you don’t want
@@ -30,7 +30,7 @@ not include any spaces. I like to keep it in `~/.dotfiles`. For the rest
 of the tutorial, we are going to refer to the clone dotfiles under the
 path `~/.dotfiles`.
 
-### First installation
+## First installation
 
 On the first installation, you should run `rake init` which will:
 
@@ -56,7 +56,7 @@ On the first installation, you should run `rake init` which will:
 - Install all of Vim plugins, as specified in [`.vimrc`][4]
 - Install Go binaries, as specified in [`Rakefile`][5]
 
-### Subsequent linking
+## Subsequent linking
 
 When adding a new file to the dotfiles, run `rake` to link any newly
 added file.
