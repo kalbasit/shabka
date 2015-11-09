@@ -59,6 +59,11 @@ task :install_go_binaries do
   end
 end
 
+desc "update README's TOC"
+task :update_readme_toc do
+  sh %Q{doctoc --title "**Table of Contents**" README.md}
+end
+
 desc "link files from dotfiles"
 task :link_dotfiles do
   link_folder(DOTFILES_PATH, ENV["HOME"])
