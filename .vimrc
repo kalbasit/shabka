@@ -491,7 +491,9 @@ map  <C-9> 9gt
 imap <C-9> <Esc>9gt
 
 " Wipe out all buffers
-if has("patch-7.4.585")
+if has('nvim')
+  nmap <silent> <leader>wa :execute 'bdelete' join(filter(range(1, bufnr('$')), 'bufexists(v:val) && getbufvar(v:val, "&buftype") isnot# "terminal"'))<cr>
+elseif has("patch-7.4.585")
   nmap <silent> <leader>wa :enew \| 1,$bd<cr>
 else
   nmap <silent> <leader>wa :1,9000bd<cr>
