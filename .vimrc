@@ -23,7 +23,8 @@ Plug 'vim-scripts/summerfruit256.vim'
 Plug 'kchmck/vim-coffee-script', { 'for': 'coffee' }
 
 " Golang
-Plug 'fatih/vim-go', { 'for': 'go' }
+Plug 'fatih/vim-go', { 'for': 'go' } | Plug 'majutsushi/tagbar'
+Plug 'garyburd/go-explorer', { 'for': 'go' }
 
 " JSON
 Plug 'elzr/vim-json', { 'for': 'json' }
@@ -339,6 +340,39 @@ vmap ga <Plug>(EasyAlign)
 "" Airline{{{
 let g:airline#extensions#tabline#enabled = 1
 "" }}}
+"" Syntastic{{{
+let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
+let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
+""}}}
+"" TagBar{{{
+let g:tagbar_type_go = {
+    \ 'ctagstype' : 'go',
+    \ 'kinds'     : [
+        \ 'p:package',
+        \ 'i:imports:1',
+        \ 'c:constants',
+        \ 'v:variables',
+        \ 't:types',
+        \ 'n:interfaces',
+        \ 'w:fields',
+        \ 'e:embedded',
+        \ 'm:methods',
+        \ 'r:constructor',
+        \ 'f:functions'
+    \ ],
+    \ 'sro' : '.',
+    \ 'kind2scope' : {
+        \ 't' : 'ctype',
+        \ 'n' : 'ntype'
+    \ },
+    \ 'scope2kind' : {
+        \ 'ctype' : 't',
+        \ 'ntype' : 'n'
+    \ },
+    \ 'ctagsbin'  : 'gotags',
+    \ 'ctagsargs' : '-sort -silent'
+\ }
+""}}}
 "" AutoPairs{{{
 let g:AutoPairsMultilineClose=0
 "}}}
