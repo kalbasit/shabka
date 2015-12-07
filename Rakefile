@@ -18,24 +18,8 @@ IGNORED_FILES = [
   ".osx",
 ]
 
-GO_BINARIES = [
-  "github.com/monochromegane/the_platinum_searcher/cmd/pt",
-  "github.com/smartystreets/goconvey",
-  "github.com/jteeuwen/go-bindata/go-bindata",
-  "gopkg.in/totp.v0/cmd/totp",
-  "github.com/tools/godep",
-  "golang.org/x/tools/cmd/cover",
-  "github.com/golang/lint/golint",
-  "github.com/codegangsta/gin",
-  "github.com/peco/peco/cmd/peco",
-  "golang.org/x/tools/cmd/stringer",
-  "github.com/golang/protobuf/protoc-gen-go",
-  "github.com/Masterminds/glide",
-  "github.com/kardianos/govendor",
-]
-
 desc "Initialize"
-task :init, [:osx, :default, :vim_plug, :install_go_binaries]
+task :init, [:default, :osx]
 
 desc "Initialize the Mac"
 task :osx do
@@ -45,18 +29,6 @@ end
 desc "Run brew bundle"
 task :brew_bundle do
   sh %Q{brew bundle}
-end
-
-desc "Install all vim plugins"
-task :vim_plug do
-  sh %Q{vim +PlugInstall +qall}
-end
-
-desc "Install Go Binaries"
-task :install_go_binaries do
-  GO_BINARIES.each do |binary|
-    sh %Q{go get -u #{binary}}
-  end
 end
 
 desc "update README's TOC"

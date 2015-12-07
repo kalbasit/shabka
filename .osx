@@ -73,6 +73,31 @@ pip install --upgrade neovim
 pip install Pygments
 
 ###############################################################################
+# ViM                                                                         #
+###############################################################################
+
+vim +PlugInstall +qall
+
+###############################################################################
+# Go                                                                          #
+###############################################################################
+
+go get -u  "github.com/monochromegane/the_platinum_searcher/cmd/pt"
+go get -u  "github.com/smartystreets/goconvey"
+go get -u  "github.com/jteeuwen/go-bindata/go-bindata"
+go get -u  "gopkg.in/totp.v0/cmd/totp"
+go get -u  "github.com/tools/godep"
+go get -u  "golang.org/x/tools/cmd/cover"
+go get -u  "github.com/golang/lint/golint"
+go get -u  "github.com/codegangsta/gin"
+go get -u  "github.com/peco/peco/cmd/peco"
+go get -u  "golang.org/x/tools/cmd/stringer"
+go get -u  "github.com/golang/protobuf/protoc-gen-go"
+go get -u  "github.com/Masterminds/glide"
+go get -u  "github.com/kardianos/govendor"
+go get -u  "github.com/spf13/cobra/cobra"
+
+###############################################################################
 # General UI/UX                                                               #
 ###############################################################################
 
