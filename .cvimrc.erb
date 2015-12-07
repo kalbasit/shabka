@@ -56,6 +56,11 @@ map ci :call getIP<CR>
 """""""""""""""""""
 " Sites
 
-site '*://(mail\|inbox).google.com/*' {
+site "https://inbox.google.com/*" {
   call :pintab
+}
+
+site "https://mail.google.com/*" {
+  call :pintab
+  unmapAll
 }
