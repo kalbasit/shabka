@@ -49,6 +49,7 @@ cask 'torbrowser'
 cask 'tunnelblick'
 cask 'viber'
 cask 'virtualbox'
+cask 'vlc'
 cask 'vyprvpn'
 
 # Brews
