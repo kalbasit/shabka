@@ -498,11 +498,17 @@ sudo ln -sf "/Applications/Xcode.app/Contents/Developer/Applications/iOS Simulat
 # Applications that need to be on all desktops
 defaults delete com.apple.spaces app-bindings
 defaults write com.apple.spaces app-bindings -dict-add com.apple.finder AllSpaces
+defaults write com.apple.spaces app-bindings -dict-add com.apple.ical AllSpaces
+defaults write com.apple.spaces app-bindings -dict-add com.apple.ichat AllSpaces
+defaults write com.apple.spaces app-bindings -dict-add com.apple.mail AllSpaces
 defaults write com.apple.spaces app-bindings -dict-add com.apple.safari AllSpaces
+defaults write com.apple.spaces app-bindings -dict-add com.echostar.sling AllSpaces
 defaults write com.apple.spaces app-bindings -dict-add com.hipchat.hipchat AllSpaces
+defaults write com.apple.spaces app-bindings -dict-add com.lastpass.lastpass AllSpaces
 defaults write com.apple.spaces app-bindings -dict-add com.samstone.chitchat AllSpaces
 defaults write com.apple.spaces app-bindings -dict-add com.tinyspeck.slackmacgap AllSpaces
 defaults write com.apple.spaces app-bindings -dict-add com.viber.osx AllSpaces
+defaults write com.apple.spaces app-bindings -dict-add org.m0k.transmission AllSpaces
 
 ###############################################################################
 # Safari & WebKit                                                             #
