@@ -70,7 +70,7 @@ npm install -g doctoc
 pip install --upgrade neovim
 
 # jsonpp uses pygments
-pip install Pygments
+pip install --upgrade Pygments
 
 ###############################################################################
 # ViM                                                                         #
@@ -96,6 +96,14 @@ go get -u  "github.com/golang/protobuf/protoc-gen-go"
 go get -u  "github.com/Masterminds/glide"
 go get -u  "github.com/kardianos/govendor"
 go get -u  "github.com/spf13/cobra/cobra"
+
+###############################################################################
+# Codesign                                                                    #
+###############################################################################
+
+# if [[ ! -r "${HOME}/.codesign/codesign.key" ]]; then
+#   openssl req -subj "/C=US/ST=California/L=San Jose/O=Nasreddine/CN=wael.nasreddine.com" -newkey rsa:2048 -nodes -keyout "${HOME}/.codesign/codesign.key" -out "${HOME}/.codesign/codesign.csr"
+# fi
 
 ###############################################################################
 # General UI/UX                                                               #
