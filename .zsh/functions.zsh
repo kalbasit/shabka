@@ -762,3 +762,10 @@ function mkd() {
     mkdir -p "$@" && cd "$_";
 }
 # }}}
+# pled() {{{
+function pled {
+    plutil -convert xml1 ${1}
+    ${EDITOR} ${1}
+    plutil -convert binary1 ${1}
+}
+# }}}
