@@ -1,0 +1,6 @@
+#!/bin/bash
+set -ex
+
+brew update
+brew reinstall --HEAD neovim
+pip install --upgrade neovim
