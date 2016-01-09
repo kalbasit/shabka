@@ -737,6 +737,14 @@ function machdev() {
     fi
 }
 #}}}
+# machzeus() #{{{
+function machzeus() {
+    if [[ -x `which docker-machine 2>/dev/null` ]]; then
+      eval `docker-machine env zeus`
+      export DOCKER_MACHINE_ZEUS_IP="`docker-machine ip zeus`"
+    fi
+}
+#}}}
 # calc() #{{{
 # Taken from https://github.com/mathiasbynens/dotfiles/blob/master/.functions
 function calc() {
