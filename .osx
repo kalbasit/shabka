@@ -668,6 +668,8 @@ sudo tmutil addexclusion -p ~/Applications
 sudo tmutil addexclusion -p ~/Downloads
 sudo tmutil addexclusion -p ~/Dropbox
 sudo tmutil addexclusion -p ~/VirtualBox\ VMs
+sudo tmutil addexclusion -p ~/Library/Application\ Support/Steam/logs
+sudo tmutil addexclusion -p ~/Library/Application\ Support/Steam/steamapps
 
 ###############################################################################
 # Activity Monitor                                                            #
