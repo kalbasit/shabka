@@ -58,23 +58,6 @@ fi
 pathmunge "${GOPATH}/src/github.com/phacility/arcanist/bin"
 pathmunge "${GOPATH}/src/github.com/google/bazel/output"
 
-# Load rbenv
-if [[ -d "${HOME}/.rbenv" ]]; then
-  pathmunge "${HOME}/.rbenv/bin"
-  eval "$(rbenv init --no-rehash -)"
-fi
-
-# Load pyenv
-if [[ -d "${HOME}/.pyenv" ]]; then
-  pathmunge "${HOME}/.pyenv/bin"
-  eval "$(pyenv init --no-rehash -)"
-fi
-
-# Load travis
-if [[ -f "${HOME}/.travis/travis.sh" ]]; then
-  source "${HOME}/.travis/travis.sh"
-fi
-
 # Export Github's token if it's readable.
 github_token_path="$HOME/.github_token"
 if [[ -r "${github_token_path}" ]]; then
@@ -95,3 +78,6 @@ if [[ -r "${mysql_credentials_path}" ]]; then
   unset user pass
 fi
 unset mysql_credentials_path
+
+# Export camlistore's secret keyring
+# [[ -x "$(brew --prefix)/bin/camput" ]] && export CAMLI_SECRET_RING="${HOME}/.gnupg/secring.gpg"

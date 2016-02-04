@@ -11,7 +11,6 @@ alias rserve_this="ruby -rrack -e \"Rack::Handler::WEBrick.run Rack::Directory.n
 alias history='fc -fl 1'
 alias comp=docker-compose
 alias mach=docker-machine
-alias fuck='eval $(thefuck $(fc -ln -1 | tail -n 1)); fc -R'
 alias http='http --print=HhBb'
 alias blaze=bazel
 alias rot13="tr '[A-Za-z]' '[N-ZA-Mn-za-m]'"

@@ -771,9 +771,14 @@ function mkd() {
 }
 # }}}
 # pled() {{{
-function pled {
+function pled() {
     plutil -convert xml1 ${1}
     ${EDITOR} ${1}
     plutil -convert binary1 ${1}
+}
+# }}}
+# cdc() {{{
+function cdc() {
+    cd "${GOPATH}/src/${@}"
 }
 # }}}
