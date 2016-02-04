@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+set -e
+
+if [[ $# -ne 1 ]]; then
+  echo "USAGE: $0 <git-dir>"
+  exit 1
+fi
+
+# GLOBAL VARIABLES
+GIT_DIR="${1}"
+CLEAN=1
+IS_KING_BRANCH=1
+KING_BRANCH=
+
+# FUNCTIONS
+function assert_king_branch() {
+  [[ $# -ne 1 ]] && echo "USAGE: assert_king_branch <current branch>" && return 1
+
+  local current_branch="${1}"
+
+  if echo "${current_branch}" | grep -qE '^master$'; then
+    return 0
+  fi
+  if echo "${current_branch}" | grep -qE '^v\d+$'; then
+    return 0
+  fi
+
+  return 1
+}
+
+# PRINT THE PATH OF THE GIT_DIR
+echo -n "`dirname "${GIT_DIR}"`: "
+
+# CD INTO THE DIRECTORY
+cd "`dirname "${GIT_DIR}"`"
+
+# CHECK IF DIRTY
+if [[ `git status --porcelain | wc -l` -ne 0 ]]; then
+  echo -n "DIRTY,"
+  CLEAN=0
+else
+  echo -n "CLEAN,"
+fi
+
+# CHECK IF WE ARE NOT ON A KING BRANCH
+KING_BRANCH="`git rev-parse --abbrev-ref HEAD`"
+if ! assert_king_branch "${KING_BRANCH}"; then
+  echo -n "FEATURE BRANCH,"
+  IS_KING_BRANCH=0
+else
+  echo -n "KING BRANCH,"
+fi
+
+# DID WE PASS THE TEST?
+if [ "$(( ${CLEAN} * ${IS_KING_BRANCH} ))" -ne "1" ]; then
+  echo "SKIPPED."
+  exit 1
+else
+  echo "UPDATING."
+fi
+
+git fetch --all --prune --tags --quiet && git merge --ff-only --quiet "origin/${KING_BRANCH}" "${KING_BRANCH}"
+exit $?
