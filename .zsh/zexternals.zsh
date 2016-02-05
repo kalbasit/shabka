@@ -7,9 +7,10 @@ if [[ -x $(which brew 2>/dev/null) ]]; then
   export CGO_CPPFLAGS="${CGO_CFLAGS}"
   export CGO_CXXFLAGS="${CGO_CFLAGS}"
   export CGO_LDFLAGS="-L/usr/local/lib"
+
+  [[ -x "$(brew --prefix)/bin/thefuck" ]] && eval "$(thefuck --alias)"
 fi
 
-[[ -x "$(brew --prefix)/bin/thefuck" ]] && eval "$(thefuck --alias)"
 
 # Load travis
 [[ -r "${HOME}/.travis/travis.sh" ]] && source "${HOME}/.travis/travis.sh"
