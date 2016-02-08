@@ -1,0 +1,36 @@
+#!/bin/sh -e
+
+PSID=$( (scutil | grep PrimaryService | sed -e 's/.*PrimaryService : //')<< EOF
+open
+get State:/Network/Global/IPv4
+d.show
+quit
+EOF
+)
+
+DOMAIN=$( (scutil | grep "DomainName : " | sed -e 's/.*DomainName : //')<< EOF
+open
+get State:/Network/Service/${PSID}/DNS
+d.show
+quit
+EOF
+)
+
+DNS1=$( (scutil | grep '0 : ' | sed -e 's/\ *0 : //')<< EOF
+open
+get State:/Network/Service/${PSID}/DNS
+d.show
+quit
+EOF
+)
+
+DNS2=$( (scutil | grep '1 : ' | sed -e 's/\ *1 : //')<< EOF
+open
+get State:/Network/Service/${PSID}/DNS
+d.show
+quit
+EOF
+)
+
+echo "domain = ${domain}"
+echo "DNS = ${DNS1}, ${DNS2}"
