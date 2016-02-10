@@ -172,8 +172,12 @@ def link_file(file, dest)
     end
   else
     puts "linking #{file}"
-    sh %Q{ln -s "#{file}" "#{target_file}"}
+    sh %Q{ln -s "#{strip_home(file)}" "#{target_file}"}
   end
+end
+
+def strip_home(file)
+  return file.gsub("#{ENV['HOME']}/", "")
 end
 
 def is_encrypted?(file)
@@ -182,7 +186,6 @@ end
 
 def link_symlink(link, dest)
   begin
-    File.realpath(link)
     link_file(link, dest)
   rescue Errno::ENOENT
     puts "Skipping #{link} symlink because it points to a non-existing file."
