@@ -55,6 +55,13 @@ if [[ -d "${MYFS}" ]]; then
   export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${HOME}/.filesystem/lib"
 fi
 
+# Add all rubygems bin dir
+if [[ -d "${HOME}/.gem/ruby" ]]; then
+  for dir in $HOME/.gem/ruby/*/bin; do
+    pathmunge "${dir}"
+  done
+fi
+
 pathmunge "${GOPATH}/src/github.com/phacility/arcanist/bin"
 pathmunge "${GOPATH}/src/github.com/google/bazel/output"
 
