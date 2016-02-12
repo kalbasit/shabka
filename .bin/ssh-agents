@@ -8,7 +8,7 @@ USER_SHELL=$1
 SSH_AGENT_NAME="${SSH_AGENT_NAME:-personal}"
 SSH_AGENT_FILE="$HOME/.ssh/$SSH_AGENT_NAME/agent"
 if [[ ! -w $(dirname $SSH_AGENT_FILE) ]]; then
-  return # do not spawn an agent if we cannot write to $HOME.
+  exit # do not spawn an agent if we cannot write to $HOME.
 fi
 
 # Forget any currently running agent
