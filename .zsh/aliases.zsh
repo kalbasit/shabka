@@ -15,7 +15,7 @@ alias http='http --print=HhBb'
 alias blaze=bazel
 alias rot13="tr '[A-Za-z]' '[N-ZA-Mn-za-m]'"
 alias kp='sp kill'
-alias dm='sp dailymotion'
+alias dmx='sp dmx'
 alias tt='sp talentoday'
 # Always enable colored `grep` output
 # Note: `GREP_OPTIONS="--color=auto"` is deprecated, hence the alias usage.
