@@ -11,6 +11,8 @@ if [[ -x $(which brew 2>/dev/null) ]]; then
   [[ -x "$(brew --prefix)/bin/thefuck" ]] && eval "$(thefuck --alias)"
 fi
 
+# Load iterm2 shell integration
+[[ -r "${HOME}/.iterm2_shell_integration.zsh" ]] && source "${HOME}/.iterm2_shell_integration.zsh"
 
 # Load travis
 [[ -r "${HOME}/.travis/travis.sh" ]] && source "${HOME}/.travis/travis.sh"
