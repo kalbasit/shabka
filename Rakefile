@@ -35,8 +35,12 @@ GO_BINARIES = [
   "github.com/spf13/cobra/cobra",
 ]
 
-desc "Initialize"
-task :init, [:default, :osx]
+task :init, [:update_submodules, :switch_to_zsh, :link, :osx] do
+  puts "Please re-login and run `rake`"
+end
+
+task :default => [:install_go_binaries, :update_submodules, :link, :vim_plug]
+task :link => [:link_dotfiles, :link_private]
 
 desc "Initialize the Mac"
 task :osx do
@@ -62,8 +66,6 @@ desc "link files from the private repository"
 task :link_private do
   link_folder(PRIVATE_PATH, ENV["HOME"]) if File.exists?(PRIVATE_PATH)
 end
-
-task :default => [:install_go_binaries, :update_submodules, :switch_to_zsh, :link_dotfiles, :link_private, :vim_plug]
 
 desc "Install Go Binaries"
 task :install_go_binaries do
