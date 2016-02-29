@@ -18,6 +18,23 @@ IGNORED_FILES = [
   ".osx",
 ]
 
+GO_BINARIES = [
+  "github.com/monochromegane/the_platinum_searcher/cmd/pt",
+  "github.com/smartystreets/goconvey",
+  "github.com/jteeuwen/go-bindata/go-bindata",
+  "gopkg.in/totp.v0/cmd/totp",
+  "github.com/tools/godep",
+  "golang.org/x/tools/cmd/cover",
+  "github.com/golang/lint/golint",
+  "github.com/codegangsta/gin",
+  "github.com/peco/peco/cmd/peco",
+  "golang.org/x/tools/cmd/stringer",
+  "github.com/golang/protobuf/protoc-gen-go",
+  "github.com/Masterminds/glide",
+  "github.com/kardianos/govendor",
+  "github.com/spf13/cobra/cobra",
+]
+
 desc "Initialize"
 task :init, [:default, :osx]
 
@@ -46,7 +63,19 @@ task :link_private do
   link_folder(PRIVATE_PATH, ENV["HOME"]) if File.exists?(PRIVATE_PATH)
 end
 
-task :default => [:update_submodules, :switch_to_zsh, :link_dotfiles, :link_private]
+task :default => [:install_go_binaries, :update_submodules, :switch_to_zsh, :link_dotfiles, :link_private, :vim_plug]
+
+desc "Install Go Binaries"
+task :install_go_binaries do
+  GO_BINARIES.each do |binary|
+    sh %Q{go get -u #{binary}}
+  end
+end
+
+desc "Install all vim plugins"
+task :vim_plug do
+  sh %Q{vim +PlugUpgrade +PlugInstall +PlugUpdate +qall}
+end
 
 desc "Switch your shell to ZSH from #{ENV["SHELL"]}"
 task :switch_to_zsh do
