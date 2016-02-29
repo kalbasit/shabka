@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -ex
 
 if [[ $# -ne 1 ]]; then
   echo "USAGE: $0 </Applications/*/Contents/SharedSupport/InstallESD.dmg>"
@@ -8,37 +9,38 @@ fi
 # Mount the installer image
 hdiutil attach "$1" -noverify -nobrowse -mountpoint /Volumes/install_app
 
-# Convert the boot image to a sparse bundle
-hdiutil convert /Volumes/install_app/BaseSystem.dmg -format UDSP -o /tmp/OSXInstall
+# Create El Capitan sparseimage of 7316mb with a Single Partition - Apple Partition Map
+hdiutil create -o /tmp/OSXInstall -size 7316m -layout SPUD -fs HFS+J -type SPARSE
 
-# Increase the sparse bundle capacity to accommodate the packages
-hdiutil resize -size 8g /tmp/OSXInstall.sparseimage
-
-# Mount the sparse bundle for package addition
+# Mount the El Capitan sparseimage
 hdiutil attach /tmp/OSXInstall.sparseimage -noverify -nobrowse -mountpoint /Volumes/install_build
 
-# Remove Package link and replace with actual files
-rm /Volumes/install_build/System/Installation/Packages
-cp -rp /Volumes/install_app/Packages /Volumes/install_build/System/Installation/
+# Restore the Base System into the El Capitan Blank sparseimage
+asr restore -source /Volumes/install_app/BaseSystem.dmg -target /Volumes/install_build -noprompt -noverify -erase
 
-# Copy Base System
-cp -rp /Volumes/install_app/BaseSystem.dmg /Volumes/install_build/
-cp -rp /Volumes/install_app/BaseSystem.chunklist /Volumes/install_build/
+# Remove Packages link and replace with actual files
+rm /Volumes/OS\ X\ Base\ System/System/Installation/Packages
+cp -rp /Volumes/install_app/Packages /Volumes/OS\ X\ Base\ System/System/Installation/
+
+# Copy El Capitan installer dependencies
+cp -rp /Volumes/install_app/BaseSystem.chunklist /Volumes/OS\ X\ Base\ System/BaseSystem.chunklist
+cp -rp /Volumes/install_app/BaseSystem.dmg /Volumes/OS\ X\ Base\ System/BaseSystem.dmg
 
 # Unmount the installer image
 hdiutil detach /Volumes/install_app
 
-# Unmount the sparse bundle
-hdiutil detach /Volumes/install_build
+# Unmount the Base System image
+hdiutil detach /Volumes/OS\ X\ Base\ System/
 
-# Resize the partition in the sparse bundle to remove any free space
-hdiutil resize -size `hdiutil resize -limits /tmp/OSXInstall.sparseimage | tail -n 1 | awk '{ print $1 }'`b /tmp/OSXInstall.sparseimage
+# Optimise Sparseimage Size
+hdiutil compact /tmp/OSXInstall.sparseimage
+hdiutil resize -size min /tmp/OSXInstall.sparseimage
 
-# Convert the sparse bundle to ISO/CD master
-hdiutil convert /tmp/OSXInstall.sparseimage -format UDTO -o /tmp/OSXInstall
+# Convert the OSXInstall spareseimage to ISO/CD master
+hdiutil convert /tmp/OSXInstall.sparseimage -format UDTO -o /tmp/OSXInstall.iso
 
-# Remove the sparse bundle
-rm /tmp/OSXInstall.sparseimage
+# Rename the OSXInstall ISO image and move it to the desktop
+mv /tmp/OSXInstall.iso.cdr ~/Desktop/OSXinstall.iso
 
-# Rename the ISO and move it to the desktop
-mv /tmp/OSXInstall.cdr ~/Desktop/OSXInstall.iso
+# Delete OSXInstall.sparseimage file
+rm -f /tmp/OSXInstall.sparseimage
