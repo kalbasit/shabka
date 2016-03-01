@@ -1,6 +1,7 @@
-export GOPATH="${HOME}/code"        # How can I live without Go?
-export MYFS="${HOME}/.filesystem"   # Make sure I always know about my filesystem.
-export EDITOR=nvim                  # NeoVim simply rocks!!
+export GOPATH="${HOME}/code"            # How can I live without Go?
+export CDPATH="${GOPATH}/src:$cdpath"   # Add $GOPATH/src to CDPATH
+export MYFS="${HOME}/.filesystem"       # Make sure I always know about my filesystem.
+export EDITOR=nvim                      # NeoVim simply rocks!!
 
 function pathmunge() {
   [[ ! -d "${1}" ]] && return
