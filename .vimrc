@@ -46,7 +46,7 @@ Plug 'tpope/vim-endwise', { 'for': 'ruby' }
 " YouCompleteMe
 " NOTE: It is disabled on vim because nvim compiles it and vim die with sig ABRT
 if has('nvim')
-  Plug 'Valloric/YouCompleteMe', { 'do': 'python install.py --clang-completer --system-libclang --gocode-completer' }
+  Plug 'Valloric/YouCompleteMe', { 'do': 'python2 install.py --clang-completer --system-libclang --gocode-completer' }
   autocmd! User YouCompleteMe if !has('vim_starting') | call youcompleteme#Enable() | endif
 endif
 
