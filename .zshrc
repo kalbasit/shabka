@@ -60,4 +60,8 @@ source "${THEMES_PATH}/${THEME}.zsh-theme"
 export TERM=xterm-256color
 [ -n "$TMUX" ] && export TERM=screen-256color
 
+# Source host-specific settings if the exists. Keep this last so it can
+# overwrite any of the other settings.
+[[ -r "${ZSH}/hosts/${SHORT_HOST}.zsh" ]] && source "${ZSH}/hosts/${SHORT_HOST}.zsh"
+
 ## END
