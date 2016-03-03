@@ -18,6 +18,7 @@ Plug 'altercation/vim-colors-solarized'
 Plug 'junegunn/seoul256.vim'
 Plug 'fatih/molokai'
 Plug 'vim-scripts/summerfruit256.vim'
+Plug 'nanotech/jellybeans.vim'
 
 " Coffescript
 Plug 'kchmck/vim-coffee-script', { 'for': 'coffee' }
@@ -86,7 +87,7 @@ call plug#end()
 
 " Required:
 filetype plugin on
-filetype plugin indent on
+filetype plugin indent on " No longer needed in nvim. TODO: put it behind an if..endif block when https://github.com/neovim/neovim/wiki/Following-HEAD#20160214 reaches Arch Linux.
 
 " }}}
 "" Settings{{{
