@@ -1,9 +1,8 @@
 ## Command history configuration
-if [ -z $HISTFILE ]; then
-    HISTFILE=${ZDOTDIR:-$HOME}/.zsh_history
-fi
-HISTSIZE=10000
-SAVEHIST=10000
+
+[[ -z $HISTFILE ]] && export HISTFILE=${ZDOTDIR:-$HOME}/.zsh_history
+export HISTSIZE=100000
+export SAVEHIST=100000
 
 setopt append_history
 setopt extended_history
