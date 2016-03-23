@@ -63,7 +63,7 @@ endif
 if has("python")
   Plug 'sjl/gundo.vim', { 'on': 'GundoToggle' }
 endif
-Plug 'scrooloose/nerdcommenter'
+Plug 'tyru/caw.vim'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'troydm/zoomwintab.vim'
 Plug 'jiangmiao/auto-pairs'
