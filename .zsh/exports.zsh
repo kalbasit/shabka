@@ -15,7 +15,6 @@ function pathmunge() {
 }
 
 function pathunmunge() {
-  [[ ! -d "${1}" ]] && return
   oldpath=("${(@s/:/)PATH}")
   newpath=""
   sep=""
