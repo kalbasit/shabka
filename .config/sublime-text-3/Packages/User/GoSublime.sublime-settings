@@ -1,7 +1,0 @@
-{
-  "fmt_cmd": ["goimports"],
-  "installsufix": "",
-  "env": {
-      "GOPATH": "$HOME/code"
-  }
-}

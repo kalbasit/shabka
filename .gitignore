@@ -13,26 +13,6 @@
 .config/liteide/
 .config/pianobar
 .config/robomongo/
-.config/sublime-text-3/Backup/
-.config/sublime-text-3/Cache/
-.config/sublime-text-3/Installed Packages/
-.config/sublime-text-3/Local
-.config/sublime-text-3/Packages/Autoprefixer/
-.config/sublime-text-3/Packages/GoSublime/
-.config/sublime-text-3/Packages/HTML/
-.config/sublime-text-3/Packages/PlainTasks/
-.config/sublime-text-3/Packages/PyV8/
-.config/sublime-text-3/Packages/Rails/
-.config/sublime-text-3/Packages/SublimeLinter/
-.config/sublime-text-3/Packages/TodoReview/
-.config/sublime-text-3/Packages/User/*.cache
-.config/sublime-text-3/Packages/User/GoSublime-aux.sublime-settings
-.config/sublime-text-3/Packages/User/Package Control.merged-ca-bundle
-.config/sublime-text-3/Packages/User/Package Control.system-ca-bundle
-.config/sublime-text-3/Packages/User/Package Control.user-ca-bundle
-.config/sublime-text-3/Packages/User/Package*Control.last-run
-.config/sublime-text-3/Packages/User/SublimeGit.sublime-settings
-.config/sublime-text-3/Packages/bz2/
 .deis/client.json
 .deis/units/
 .deis/vagrant.json
@@ -86,8 +66,6 @@
 .xinitrc-sessions
 .zsh/cache/
 .zsh/profiles
-Gist.sublime-settings
-GoSublime-aux.sublime-settings
 Package Control.last-run
 drafts/
 log.txt

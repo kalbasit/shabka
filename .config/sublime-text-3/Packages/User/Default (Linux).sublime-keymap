@@ -1,4 +1,0 @@
-[
-  { "keys": ["f3"], "command": "goto_definition" },
-  { "keys": ["f10"], "command": "reindent"}
-]
