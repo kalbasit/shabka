@@ -145,25 +145,26 @@ def link_folder(folder, dest)
 
   files(folder).each do |file|
     # Take care of an encrypted file if the encryption was not setup.
+    # Check if we have an unsecure version
     if !find_encryption_status() && File.exists?("#{file}.unsecure")
-      # Check if we have an unsecure version
       # We do, then symlink the unsecure file instead.
       file = "#{file}.unsecure"
     end
 
-    target_file = File.join(dest, dest_filename(relative_path(file)))
+    dest_fn = dest_filename(relative_path(file))
+    target_file = File.join(dest, dest_fn)
 
-    if File.exist?(target_file)
-      if File.identical? file, target_file
-        puts "identical ~/#{dest_filename(relative_path(file))}"
-      elsif file =~ /\.erb$/
+    if File.symlink?(target_file) && File.identical?(file, target_file)
+        puts "identical ~/#{dest_fn}"
+    elsif File.exist?(target_file)
+      if file =~ /\.erb$/
         replace_file(file, dest)
       elsif File.directory?(target_file)
         link_folder(file, dest)
       elsif replace_all
         replace_file(file, dest)
       else
-        print "overwrite ~/#{dest_filename(relative_path(file))}? [ynaq] "
+        print "overwrite ~/#{dest_fn}? [ynaq] "
         case $stdin.gets.chomp
         when 'a'
           replace_all = true
@@ -173,7 +174,7 @@ def link_folder(folder, dest)
         when 'q'
           exit
         else
-          puts "skipping ~/#{dest_filename(relative_path(file))}"
+          puts "skipping ~/#{dest_fn}"
         end
       end
     else
@@ -203,12 +204,8 @@ def link_file(file, dest)
     end
   else
     puts "linking #{file}"
-    sh %Q{ln -s "#{strip_home(file)}" "#{target_file}"}
+    sh %Q{ln -s "#{file}" "#{target_file}"}
   end
-end
-
-def strip_home(file)
-  return file.gsub("#{ENV['HOME']}/", "")
 end
 
 def is_encrypted?(file)
