@@ -22,7 +22,6 @@ GO_BINARIES = [
   "github.com/monochromegane/the_platinum_searcher/cmd/pt",
   "github.com/smartystreets/goconvey",
   "github.com/jteeuwen/go-bindata/go-bindata",
-  "gopkg.in/totp.v0/cmd/totp",
   "github.com/tools/godep",
   "golang.org/x/tools/cmd/cover",
   "github.com/golang/lint/golint",
