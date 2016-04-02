@@ -34,9 +34,7 @@ GO_BINARIES = [
   "github.com/spf13/cobra/cobra",
 ]
 
-task :init, [:update_submodules, :switch_to_zsh, :link, :osx] do
-  puts "Please re-login and run `rake`"
-end
+task :init => [:update_submodules, :switch_to_zsh, :link, :osx]
 
 task :default => [:install_go_binaries, :update_submodules, :link, :vim_plug]
 task :link => [:link_dotfiles, :link_private]
