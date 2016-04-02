@@ -127,14 +127,17 @@ def files(folder)
 end
 
 def find_encryption_status
-  return false if !File.exists?(File.join(PRIVATE_PATH, ".encrypted"))
+  return @encrypted unless @encrypted.nil?
+  return false unless File.exists?(File.join(PRIVATE_PATH, ".encrypted"))
 
   st = `cd #{DOTFILES_PATH}; grep -q OK .private/.encrypted && echo OK || echo NO`.chomp
   if st == "OK"
-    return true
+    @encrypted = true
   else
-    return false
+    @encrypted = false
   end
+
+  return @encrypted
 end
 
 def link_folder(folder, dest)
