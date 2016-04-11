@@ -38,7 +38,7 @@ cask 'iterm2-beta'
 cask 'java'
 cask 'lantern'
 cask 'lastpass'
-cask 'licecap'
+cask 'licecap' # GIF screen recorder
 cask 'mactex'
 cask 'music-manager'
 cask 'netspot'
@@ -48,6 +48,8 @@ cask 'paragon-ntfs'
 cask 'polycom-realpresence-desktop'
 cask 'private-internet-access'
 cask 'real-vnc'
+cask 'screenflick' # Screen recorder
+cask 'serial' # Serial Console communication
 cask 'skype'
 cask 'slack'
 cask 'sqlitebrowser'
