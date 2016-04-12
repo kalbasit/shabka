@@ -69,6 +69,7 @@ cask 'virtualbox'
 cask 'viscosity'
 cask 'vlc'
 cask 'vyprvpn'
+cask 'wkhtmltopdf' # Required for transmuter
 
 # Brews
 brew 'ack'
