@@ -5,6 +5,7 @@
 *~
 .bin/launch_dm_iterm
 .byobu/.ssh-agent
+.config/Transmission\ Remote\ GUI
 .config/acd-token.json
 .config/acd.json
 .config/configstore/
