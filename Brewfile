@@ -10,6 +10,7 @@ tap 'neovim/neovim'
 # Casks
 cask '1password'
 cask 'alfred'
+cask 'angry-ip-scanner'
 cask 'arduino'
 cask 'arq'
 cask 'atom'
@@ -115,6 +116,7 @@ brew 'homebrew/games/git-game'
 brew 'htop-osx'
 brew 'httpie'
 brew 'hugo'
+brew 'hybridgroup/tools/gort'  # GORT is used to send firmata to an Arduino
 brew 'iftop'
 brew 'irssi'
 brew 'jq'
@@ -135,6 +137,7 @@ brew 'ncdu'
 brew 'neovim', args: ['HEAD']
 brew 'node'
 brew 'pianobar'
+brew 'platformio' # Platformio is a language which Arduino based off of. 100% support for Arduino.
 brew 'postgresql'
 brew 'protobuf', args: ['devel']
 brew 'protobuf-c'
