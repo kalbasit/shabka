@@ -32,6 +32,9 @@ path `~/.dotfiles`.
 
 ## First installation
 
+Before installing the dotfiles, you should rename the computer to your
+liking. `sed -e 's:crator:mycomputer:g' -i ~/.dotfiles/.osx`
+
 On the first installation, you should run `rake init` which will:
 
 - Initialize OSX, only if ran on OSX. Thanks to [`@mathiasbynens`][6]
