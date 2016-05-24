@@ -34,3 +34,9 @@ if [[ -d "${HOME}/.pyenv" ]]; then
   pathmunge "${HOME}/.pyenv/bin"
   eval "$(pyenv init --no-rehash -)"
 fi
+
+# Load nvm
+if [[ -d "${HOME}/.nvm" ]]; then
+  export NVM_DIR="/home/kalbasit/.nvm"
+  source "$NVM_DIR/nvm.sh"
+fi

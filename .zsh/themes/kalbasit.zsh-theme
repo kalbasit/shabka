@@ -15,7 +15,7 @@ function _work_prompt_info() {
 }
 
 function _host_color() {
-  if [[ "`hostname`" = "hermes" ]]; then
+  if [[ "`hostname`" = "zeus" ]]; then
     echo "%{%F{red}%}"
   else
     echo "%{%F{cyan}%}"

@@ -6,7 +6,7 @@
 alias vi=vim
 alias e="${EDITOR:-vim}"
 alias pw="ps aux | grep -v grep | grep -e"
-alias serve_this="python -m SimpleHTTPServer"
+alias serve_this="python2 -m SimpleHTTPServer"
 alias rserve_this="ruby -rrack -e \"Rack::Handler::WEBrick.run Rack::Directory.new('.')\""
 alias history='fc -fl 1'
 alias comp=docker-compose
@@ -22,6 +22,9 @@ alias tt='sp talentoday'
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
+alias remove_dead_containers="docker rm -v \$(docker ps -a -q -f status=exited)"
+alias remove_created_containers="docker rm -v \$(docker ps -a -q -f status=created)"
+alias remove_dangling_images="docker rmi \$(docker images -f "dangling=true" -q)"
 
 # General aliases
 alias -g rocker_auth="--auth kalbasit:\$(lpass show --password 4984935876)"
