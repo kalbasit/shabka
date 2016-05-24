@@ -1,8 +1,10 @@
 if [[ -o login ]]; then
-  if [ x"$TERM" != "xscreen" ]; then
+  if [ "$TERM" != "screen" -a "$ITERM_SHELL_INTEGRATION_INSTALLED" = "" ]; then
+    export ITERM_SHELL_INTEGRATION_INSTALLED=Yes
+    ITERM2_SHOULD_DECORATE_PROMPT="1"
     # Indicates start of command output. Runs just before command executes.
     iterm2_before_cmd_executes() {
-      printf "\033]133;C;\r\007"
+      printf "\033]133;C;\007"
     }
 
     iterm2_set_user_var() {
@@ -14,8 +16,11 @@ if [[ -o login ]]; then
     # e.g., iterm2_set_user_var currentDirectory $PWD
     # Accessible in iTerm2 (in a badge now, elsewhere in the future) as
     # \(user.currentDirectory).
-    iterm2_print_user_vars() {
-    }
+    whence -v iterm2_print_user_vars > /dev/null 2>&1
+    if [ $? -ne 0 ]; then
+      iterm2_print_user_vars() {
+      }
+    fi
 
     iterm2_print_state_data() {
       printf "\033]1337;RemoteHost=%s@%s\007" "$USER" "$iterm2_hostname"
@@ -25,7 +30,7 @@ if [[ -o login ]]; then
 
     # Report return code of command; runs after command finishes but before prompt
     iterm2_after_cmd_executes() {
-      printf "\033]133;D;$?\007"
+      printf "\033]133;D;%s\007" "$STATUS"
       iterm2_print_state_data
     }
 
@@ -45,7 +50,7 @@ if [[ -o login ]]; then
     #    The following steps happen:
     #    * iterm2_preexec is invoked
     #      * PS1 is set to ITERM2_PRECMD_PS1
-    #      * ITERM2_PRECMD_PS1 is set to empty string
+    #      * ITERM2_SHOULD_DECORATE_PROMPT is set to 1
     #    * The command executes (possibly reading or modifying PS1)
     #    * iterm2_precmd is invoked
     #      * ITERM2_PRECMD_PS1 is set to PS1 (as modified by command execution)
@@ -66,12 +71,14 @@ if [[ -o login ]]; then
     # 3) A new shell is born.
     #    * PS1 has some initial value, either zsh's default or a value set before this script is sourced.
     #    * iterm2_precmd is invoked
+    #      * ITERM2_SHOULD_DECORATE_PROMPT is initialized to 1
     #      * ITERM2_PRECMD_PS1 is set to the initial value of PS1
     #      * PS1 gets our escape sequences added to it
     #    * Your prompt is shown and you may begin entering a command.
     #
     # Invariants:
-    # * ITERM2_PRECMD_PS1 is empty during and just after command execution
+    # * ITERM2_SHOULD_DECORATE_PROMPT is 1 during and just after command execution, and "" while the prompt is
+    #   shown and until you enter a command and press return.
     # * PS1 does not have our escape sequences during command execution
     # * After the command executes but before a new one begins, PS1 has escape sequences and
     #   ITERM2_PRECMD_PS1 has PS1's original value.
@@ -79,20 +86,22 @@ if [[ -o login ]]; then
       # This should be a raw PS1 without iTerm2's stuff. It could be changed during command
       # execution.
       ITERM2_PRECMD_PS1="$PS1"
+      ITERM2_SHOULD_DECORATE_PROMPT=""
 
       # Add our escape sequences just before the prompt is shown.
       PS1="%{$(iterm2_prompt_start)%}$PS1%{$(iterm2_prompt_end)%}"
     }
 
     iterm2_precmd() {
-      if [ -n "$ITERM2_PRECMD_PS1" ]; then
+      local STATUS="$?"
+      if [ -z "$ITERM2_SHOULD_DECORATE_PROMPT" ]; then
         # You pressed ^C while entering a command (iterm2_preexec did not run)
         iterm2_before_cmd_executes
       fi
 
-      iterm2_after_cmd_executes
+      iterm2_after_cmd_executes "$STATUS"
 
-      if [ -z "$ITERM2_PRECMD_PS1" ]; then
+      if [ -n "$ITERM2_SHOULD_DECORATE_PROMPT" ]; then
         iterm2_decorate_prompt
       fi
     }
@@ -101,7 +110,7 @@ if [[ -o login ]]; then
     iterm2_preexec() {
       # Set PS1 back to its raw value prior to executing the command.
       PS1="$ITERM2_PRECMD_PS1"
-      ITERM2_PRECMD_PS1=""
+      ITERM2_SHOULD_DECORATE_PROMPT="1"
       iterm2_before_cmd_executes
     }
 
@@ -115,6 +124,7 @@ if [[ -o login ]]; then
     preexec_functions=($preexec_functions iterm2_preexec)
 
     iterm2_print_state_data
-    printf "\033]1337;ShellIntegrationVersion=1\007"
+    printf "\033]1337;ShellIntegrationVersion=2;shell=zsh\007"
   fi
 fi
+alias imgcat=~/.iterm2/imgcat; alias it2dl=~/.iterm2/it2dl
