@@ -36,6 +36,10 @@ Plug 'chrisbra/csv.vim', { 'for': 'csv' }
 " Terraform
 Plug 'markcornick/vim-terraform'
 
+" TypeScript
+Plug 'leafgarland/typescript-vim'
+" TODO: install Quramy/tsuquyomi
+
 " Ruby/Rails
 if has("ruby")
   Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
