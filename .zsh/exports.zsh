@@ -87,3 +87,6 @@ unset mysql_credentials_path
 
 # Export camlistore's secret keyring
 # [[ -x "$(brew --prefix)/bin/camput" ]] && export CAMLI_SECRET_RING="${HOME}/.gnupg/secring.gpg"
+
+# Docker Environment Variable export
+eval $(docker-machine env)

@@ -28,3 +28,4 @@ alias remove_dangling_images="docker rmi \$(docker images -f "dangling=true" -q)
 
 # General aliases
 alias -g rocker_auth="--auth kalbasit:\$(lpass show --password 4984935876)"
+alias ll="ls -al"
