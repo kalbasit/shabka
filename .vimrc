@@ -14,7 +14,7 @@ endif
 call plug#begin(expand('~/.vim/bundle/'))
 
 " Languages
-Plug 'sheerun/vim-polyglot' | Plug 'majutsushi/tagbar'
+Plug 'sheerun/vim-polyglot'
 
 " Colorschemes
 Plug 'altercation/vim-colors-solarized'
@@ -24,6 +24,7 @@ Plug 'vim-scripts/summerfruit256.vim'
 Plug 'nanotech/jellybeans.vim'
 
 " Golang
+Plug 'fatih/vim-go', { 'for': 'go' } | Plug 'majutsushi/tagbar'
 Plug 'garyburd/go-explorer', { 'for': 'go' }
 
 " CSV
@@ -298,15 +299,19 @@ if has("autocmd")
 endif
 
 " }}}
-"" Go{{{
+"" Golang{{{
 ""
 
 let g:go_fmt_command = "goimports"  " What to run on save.
 let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1
 let g:go_highlight_structs = 1
-autocmd BufWritePost,FileWritePost *.go execute 'GoLint' | cwindow
+" configure vim-go to show errors in the quickfix window and not the location list.
+let g:go_list_type = "quickfix"
 
+" }}}
+" Polyglot{{{
+let g:polyglot_disabled = ['go']
 " }}}
 "" UltiSnips{{{
 ""
