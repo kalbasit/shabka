@@ -87,3 +87,8 @@ unset mysql_credentials_path
 
 # Export camlistore's secret keyring
 # [[ -x "$(brew --prefix)/bin/camput" ]] && export CAMLI_SECRET_RING="${HOME}/.gnupg/secring.gpg"
+
+# On ArchLinux disable pinentry for lastpass
+if test -r /etc/lsb-release && grep -q 'DISTRIB_ID=Arch' /etc/lsb-release; then
+  export LPASS_DISABLE_PINENTRY=1
+fi
