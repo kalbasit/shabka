@@ -13,6 +13,9 @@ endif
 " Required:
 call plug#begin(expand('~/.vim/bundle/'))
 
+" Languages
+Plug 'sheerun/vim-polyglot' | Plug 'majutsushi/tagbar'
+
 " Colorschemes
 Plug 'altercation/vim-colors-solarized'
 Plug 'junegunn/seoul256.vim'
@@ -20,15 +23,8 @@ Plug 'fatih/molokai'
 Plug 'vim-scripts/summerfruit256.vim'
 Plug 'nanotech/jellybeans.vim'
 
-" Coffescript
-Plug 'kchmck/vim-coffee-script', { 'for': 'coffee' }
-
 " Golang
-Plug 'fatih/vim-go', { 'for': 'go' } | Plug 'majutsushi/tagbar'
 Plug 'garyburd/go-explorer', { 'for': 'go' }
-
-" JSON
-Plug 'elzr/vim-json', { 'for': 'json' }
 
 " CSV
 Plug 'chrisbra/csv.vim', { 'for': 'csv' }
@@ -37,16 +33,13 @@ Plug 'chrisbra/csv.vim', { 'for': 'csv' }
 Plug 'markcornick/vim-terraform'
 
 " TypeScript
-Plug 'leafgarland/typescript-vim'
 " TODO: install Quramy/tsuquyomi
 
 " Ruby/Rails
-if has("ruby")
-  Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
-endif
-Plug 'skwp/vim-rspec', { 'for': 'ruby' }
 Plug 'tpope/vim-rails', { 'for': 'ruby' }
-Plug 'tpope/vim-endwise', { 'for': 'ruby' }
+
+" Apple Script
+Plug 'dearrrfish/vim-applescript'
 
 " YouCompleteMe
 " NOTE: It is disabled on vim because nvim compiles it and vim die with sig ABRT
@@ -56,36 +49,36 @@ if has('nvim')
 endif
 
 " Tools
-Plug 'christoomey/vim-tmux-navigator'
-Plug 'bling/vim-airline'
-Plug 'scrooloose/syntastic'
-Plug 'junegunn/vim-easy-align'
-Plug 'jeetsukumaran/vim-buffergator', { 'on': 'BuffergatorOpen' }
 if executable("curl")
   Plug 'mattn/webapi-vim' | Plug 'mattn/gist-vim', { 'on': 'Gist' }
 endif
 if has("python")
   Plug 'sjl/gundo.vim', { 'on': 'GundoToggle' }
 endif
-Plug 'tyru/caw.vim'
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
-Plug 'troydm/zoomwintab.vim'
+Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+Plug 'bling/vim-airline'
+Plug 'bronson/vim-trailing-whitespace'
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'editorconfig/editorconfig-vim'
+Plug 'ervandew/screen', { 'on': 'ScreenShell' }
+Plug 'ervandew/supertab'
+Plug 'jeetsukumaran/vim-buffergator', { 'on': 'BuffergatorOpen' }
 Plug 'jiangmiao/auto-pairs'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all --no-update-rc' }
+Plug 'junegunn/vim-easy-align'
+Plug 'navicore/vissort.vim'
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+Plug 'scrooloose/syntastic'
+Plug 'terryma/vim-multiple-cursors'
+Plug 'tpope/vim-endwise', { 'for': 'ruby' }
+Plug 'tpope/vim-eunuch', { 'on': ['Remove', 'Unlink', 'Move', 'Rename', 'Chmod', 'Mkdir', 'Find', 'Locate', 'Wall', 'SudoWrite', 'SudoEdit'] }
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
-Plug 'ervandew/screen', { 'on': 'ScreenShell' }
-Plug 'ervandew/supertab'
-Plug 'editorconfig/editorconfig-vim'
+Plug 'troydm/zoomwintab.vim'
+Plug 'tyru/caw.vim'
 Plug 'vim-scripts/PreserveNoEOL'
-Plug 'bronson/vim-trailing-whitespace'
-Plug 'tpope/vim-eunuch', { 'on': ['Remove', 'Unlink', 'Move', 'Rename', 'Chmod', 'Mkdir', 'Find', 'Locate', 'Wall', 'SudoWrite', 'SudoEdit'] }
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all --no-update-rc' }
-Plug 'terryma/vim-multiple-cursors'
-Plug 'navicore/vissort.vim'
-Plug 'dearrrfish/vim-applescript'
 
 " All of your Plugins must be added before the following line
 call plug#end()
