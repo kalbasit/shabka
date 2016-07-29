@@ -7,6 +7,10 @@ RECFN="$TMPDIR/vim.recovery.$USER.fn"
 trap 'rm -f "$RECTXT" "$RECFN"; rmdir "$TMPDIR"' 0 1 2 3 15
 for q in ~/.vim/_temp/.*sw? ~/.vim/_temp/*; do
   [[ -f $q ]] || continue
+  if [[ `du $q | awk '{print $1}'` -eq 0 ]]; then
+    rm -f $q
+    continue
+  fi
   rm -f "$RECTXT" "$RECFN"
   vim -X -r "$q" \
       -c "w! $RECTXT" \
