@@ -46,6 +46,7 @@ cask 'macpaw-gemini' # Remove duplicates.
 cask 'mactex'
 cask 'music-manager'
 cask 'netspot'
+cask 'nomachine'
 cask 'nylas-n1'
 cask 'omnifocus'
 cask 'paragon-ntfs'
