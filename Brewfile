@@ -112,7 +112,7 @@ brew 'git-lfs'
 brew 'git-url-sub'
 brew 'glide'
 brew 'gnu-sed', args: ['with-default-names']
-brew 'gnupg'
+brew 'gnupg2'
 brew 'go'
 brew 'gpm'
 brew 'grammarly/tap/rocker'
