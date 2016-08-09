@@ -34,9 +34,9 @@ GO_BINARIES = [
   "github.com/spf13/cobra/cobra",
 ]
 
-task :init => [:update_submodules, :switch_to_zsh, :link, :osx]
+task :init => [:update_submodules, :switch_to_zsh, :link, :osx, :install_go_binaries]
 
-task :default => [:install_go_binaries, :update_submodules, :link, :vim_plug]
+task :default => [:update_submodules, :link, :vim_plug]
 task :link => [:link_dotfiles, :link_private]
 
 desc "Initialize the Mac"
