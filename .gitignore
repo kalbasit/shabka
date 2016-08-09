@@ -54,7 +54,7 @@
 .tmux/ssh_vars
 .vim/.netrwhist
 .vim/_backup/
-.vim/_nviminfo
+.vim/_nviminfo*
 .vim/_temp/
 .vim/_undo/
 .vim/_viminfo
