@@ -19,15 +19,13 @@ call plug#begin(expand('~/.vim/bundle/'))
 
 " Multi-lang plugin
 Plug 'sheerun/vim-polyglot'
+" Terraform
+Plug 'hashivim/vim-terraform'
 " Go
 Plug 'fatih/vim-go', { 'for': 'go' } | Plug 'majutsushi/tagbar'
 Plug 'garyburd/go-explorer', { 'for': 'go' }
 " CSV
 Plug 'chrisbra/csv.vim', { 'for': 'csv' }
-
-" Terraform
-Plug 'markcornick/vim-terraform'
-
 " Ruby/Rails
 Plug 'tpope/vim-rails', { 'for': 'ruby' }
 
