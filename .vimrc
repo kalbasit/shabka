@@ -311,8 +311,9 @@ let g:go_highlight_structs = 1
 let g:go_list_type = "quickfix"
 
 " }}}
-" Polyglot{{{
-let g:polyglot_disabled = ['go']
+"" Polyglot{{{
+"
+let g:polyglot_disabled = ['go', 'terraform', 'csv', 'ruby']
 " }}}
 "" UltiSnips{{{
 ""
