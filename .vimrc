@@ -13,34 +13,36 @@ endif
 " Required:
 call plug#begin(expand('~/.vim/bundle/'))
 
-" Languages
+""""""""""""""
+" Languages  "
+""""""""""""""
+
+" Multi-lang plugin
 Plug 'sheerun/vim-polyglot'
-
-" Colorschemes
-Plug 'altercation/vim-colors-solarized'
-Plug 'junegunn/seoul256.vim'
-Plug 'fatih/molokai'
-Plug 'vim-scripts/summerfruit256.vim'
-Plug 'nanotech/jellybeans.vim'
-
-" Golang
+" Go
 Plug 'fatih/vim-go', { 'for': 'go' } | Plug 'majutsushi/tagbar'
 Plug 'garyburd/go-explorer', { 'for': 'go' }
-
 " CSV
 Plug 'chrisbra/csv.vim', { 'for': 'csv' }
 
 " Terraform
 Plug 'markcornick/vim-terraform'
 
-" TypeScript
-" TODO: install Quramy/tsuquyomi
-
 " Ruby/Rails
 Plug 'tpope/vim-rails', { 'for': 'ruby' }
 
-" Apple Script
-Plug 'dearrrfish/vim-applescript'
+""""""""""""""""
+" Colorschemes "
+""""""""""""""""
+Plug 'altercation/vim-colors-solarized'
+Plug 'junegunn/seoul256.vim'
+Plug 'fatih/molokai'
+Plug 'vim-scripts/summerfruit256.vim'
+Plug 'nanotech/jellybeans.vim'
+
+"""""""""
+" Tools "
+"""""""""
 
 " YouCompleteMe
 " NOTE: It is disabled on vim because nvim compiles it and vim die with sig ABRT
@@ -49,7 +51,6 @@ if has('nvim')
   autocmd! User YouCompleteMe if !has('vim_starting') | call youcompleteme#Enable() | endif
 endif
 
-" Tools
 if executable("curl")
   Plug 'mattn/webapi-vim' | Plug 'mattn/gist-vim', { 'on': 'Gist' }
 endif
@@ -87,7 +88,9 @@ call plug#end()
 
 " Required:
 filetype plugin on
-filetype plugin indent on " No longer needed in nvim. TODO: put it behind an if..endif block when https://github.com/neovim/neovim/wiki/Following-HEAD#20160214 reaches Arch Linux.
+if !has('nvim')
+  filetype plugin indent on
+endif
 
 " }}}
 "" Settings{{{
