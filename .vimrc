@@ -300,6 +300,12 @@ if has("autocmd")
 endif
 
 " }}}
+"" Terraform{{{
+""
+
+let g:terraform_fmt_on_save = 1
+
+""}}}
 "" Golang{{{
 ""
 
@@ -312,8 +318,10 @@ let g:go_list_type = "quickfix"
 
 " }}}
 "" Polyglot{{{
-"
+""
+
 let g:polyglot_disabled = ['go', 'terraform', 'csv', 'ruby']
+
 " }}}
 "" UltiSnips{{{
 ""
