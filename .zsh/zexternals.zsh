@@ -7,9 +7,10 @@ if [[ -x $(which brew 2>/dev/null) ]]; then
   export CGO_CPPFLAGS="${CGO_CFLAGS}"
   export CGO_CXXFLAGS="${CGO_CFLAGS}"
   export CGO_LDFLAGS="-L/usr/local/lib"
-
-  [[ -x "$(brew --prefix)/bin/thefuck" ]] && eval "$(thefuck --alias)"
 fi
+
+# Load TheFuck
+[[ -x "$(which thefuck 2>/dev/null)" ]] && eval "$(thefuck --alias)"
 
 # Load iterm2 shell integration
 [[ -r "${HOME}/.iterm2_shell_integration.zsh" ]] && source "${HOME}/.iterm2_shell_integration.zsh"
