@@ -80,6 +80,7 @@ Plug 'tpope/vim-unimpaired'
 Plug 'troydm/zoomwintab.vim'
 Plug 'tyru/caw.vim'
 Plug 'vim-scripts/PreserveNoEOL'
+Plug 'kalbasit/vim-colemak'
 
 " All of your Plugins must be added before the following line
 call plug#end()
