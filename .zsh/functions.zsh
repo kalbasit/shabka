@@ -706,7 +706,6 @@ function jsonpp() {
 #}}}
 # tmx() #{{{
 function tmx() {
-    local ap="${ACTIVE_PROFILE}"
     local sess="${1}"
 
     if [ "x${sess}" = "xls" ]; then
@@ -715,15 +714,17 @@ function tmx() {
     fi
 
     if [ "x${sess}" = "x" ]; then
-        # session name cannot contain a dot or a column
-        # https://github.com/tmux/tmux/blob/76688d204071b76fd3388e46e944e4b917c09625/session.c#L232
-        sess="${${${PWD##$GOPATH/src/}//./_}//:/_}"
+        sess="${PWD##$GOPATH/src/}"
     fi
+
+    # session name cannot contain a dot or a column
+    # https://github.com/tmux/tmux/blob/76688d204071b76fd3388e46e944e4b917c09625/session.c#L232
+    sess="${${${sess}//./_}//:/_}"
 
     tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" attach -t "${sess}" || \
         tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" new -s "${sess}" \; \
-            set-environment ACTIVE_PROFILE "$ap" \; \
-            set-environment SSH_AGENT_NAME "$ap" \; \
+            set-environment ACTIVE_PROFILE "${ACTIVE_PROFILE}" \; \
+            set-environment SSH_AGENT_NAME "${ACTIVE_PROFILE}" \; \
             new-window \; \
             kill-window -t :0 \; \
             new-window -t :0 'zsh -i -c vim' \;
