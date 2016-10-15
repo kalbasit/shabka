@@ -6,7 +6,7 @@ function gcim() {
 
   if [[ "x`git rev-parse --git-dir 2> /dev/null`" != "x" ]]; then
     branch="`current_branch`"
-    story="`echo "${branch}" | grep '^\(DAILY\|DMX\)-[[:digit:]][[:digit:]]*$'`"
+    story="`echo "${branch}" | grep '^\(DAILY\|DMX\|PUB\)-[[:digit:]][[:digit:]]*$'`"
   else
     echo "You must be under a git repository to use gcim"
     return 1
