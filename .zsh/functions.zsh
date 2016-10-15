@@ -10,21 +10,23 @@ function isTrue() {
     case "${1}" in
         [Tt][Rr][Uu][Ee])
             return 0
-        ;;
+            ;;
         [Tt])
             return 0
-        ;;
+            ;;
         [Yy][Ee][Ss])
             return 0
-        ;;
+            ;;
         [Yy])
             return 0
-        ;;
+            ;;
         1)
             return 0
-        ;;
+            ;;
+        *)
+            return 1
+            ;;
     esac
-    return 1
 }
 #}}}
 # isFalse()#{{{
@@ -727,22 +729,6 @@ function tmx() {
             new-window -t :0 'zsh -i -c vim' \;
 
     return $?
-}
-#}}}
-# machdev() #{{{
-function machdev() {
-    if [[ -x `which docker-machine 2>/dev/null` ]]; then
-      eval `docker-machine env dev`
-      export DOCKER_MACHINE_DEV_IP="`docker-machine ip dev`"
-    fi
-}
-#}}}
-# machzeus() #{{{
-function machzeus() {
-    if [[ -x `which docker-machine 2>/dev/null` ]]; then
-      eval `docker-machine env zeus`
-      export DOCKER_MACHINE_ZEUS_IP="`docker-machine ip zeus`"
-    fi
 }
 #}}}
 # calc() #{{{
