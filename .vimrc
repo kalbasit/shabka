@@ -28,6 +28,8 @@ Plug 'garyburd/go-explorer', { 'for': 'go' }
 Plug 'chrisbra/csv.vim', { 'for': 'csv' }
 " Ruby/Rails
 Plug 'tpope/vim-rails', { 'for': 'ruby' }
+" Pig
+Plug 'motus/pig.vim'
 
 """"""""""""""""
 " Colorschemes "
