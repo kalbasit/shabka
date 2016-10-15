@@ -715,9 +715,19 @@ function tmx() {
     fi
 
     if [ "x${sess}" = "x" ]; then
-        # session name cannot contain a dot or a column
-        # https://github.com/tmux/tmux/blob/76688d204071b76fd3388e46e944e4b917c09625/session.c#L232
-        sess="$( echo `basename ${PWD}` | sed -e 's#\.##g' -e 's#:##g' )"
+        if [[ "${PWD##$GOPATH/src/}" != "${PWD}" ]]; then
+            # session name cannot contain a dot or a column
+            # https://github.com/tmux/tmux/blob/76688d204071b76fd3388e46e944e4b917c09625/session.c#L232
+            sess="$(echo "${PWD##$GOPATH/src/}" | sed -e 's#\.##g' -e 's#:##g' )"
+        else
+            local hashsum=""
+            if [[ -x "$(which md5 2> /dev/null)" ]]; then
+                hashsum="$(echo "${PWD}" | md5 | awk '{print $1}')"
+            elif [[ -x "$(which md5sum 2> /dev/null)" ]]; then
+                hashsum="$(echo "${PWD}" | md5sum | awk '{print $1}')"
+            fi
+            sess="$(basename "${PWD}" | sed -e 's#\.##g' -e 's#:##g' )-${hashsum:0:8}"
+        fi
     fi
 
     tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" attach -t "${sess}" || \
