@@ -482,11 +482,6 @@ nmap <silent> <leader>fc <ESC>/\v^[<=>]{7}( .*\|$)<CR>
 " Toggle hlsearch with <leader>hs
 nmap <leader>hs :set hlsearch! hlsearch?<CR>
 
-" Map command-[ and command-] to indenting or outdenting
-" while keeping the original selection in visual mode
-vmap <A-]> >gv
-vmap <A-[> <gv
-
 " Bubble single lines
 nmap <C-Up> [e
 nmap <C-Down> ]e
