@@ -82,7 +82,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
-Plug 'troydm/zoomwintab.vim'
+Plug 'troydm/zoomwintab.vim', { 'on': 'ZoomWinTabToggle' }
 Plug 'tyru/caw.vim'
 Plug 'vim-scripts/PreserveNoEOL'
 Plug 'kalbasit/vim-colemak'
@@ -358,6 +358,12 @@ let g:ScreenShellTmuxInitArgs = '-2'
 " }}}
 "" EasyAlign{{{
 vmap ga <Plug>(EasyAlign)
+"" }}}
+"" Gundo{{{
+nmap <Leader>go :GundoToggle<CR>
+"" }}}
+"" ZoomWinTab{{{
+nmap <Leader>zo :ZoomWinTabToggle<CR>
 "" }}}
 "" Airline{{{
 let g:airline#extensions#tabline#enabled = 1
