@@ -45,9 +45,12 @@ Plug 'nanotech/jellybeans.vim'
 """""""""
 
 " YouCompleteMe
-" NOTE: It is disabled on vim because nvim compiles it and vim die with sig ABRT
+" Install the plugin separately for nvim and vim.
 if has('nvim')
-  Plug 'Valloric/YouCompleteMe', { 'do': 'python2 install.py --clang-completer --system-libclang --gocode-completer' }
+  Plug 'Valloric/YouCompleteMe', { 'dir': '~/.vim/bundle/nvim-YouCompleteMe', 'do': 'python2 install.py --clang-completer --system-libclang --gocode-completer' }
+  autocmd! User YouCompleteMe if !has('vim_starting') | call youcompleteme#Enable() | endif
+else
+  Plug 'Valloric/YouCompleteMe', { 'dir': '~/.vim/bundle/vim-YouCompleteMe', 'do': 'python2 install.py --clang-completer --system-libclang --gocode-completer' }
   autocmd! User YouCompleteMe if !has('vim_starting') | call youcompleteme#Enable() | endif
 endif
 
