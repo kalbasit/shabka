@@ -440,12 +440,6 @@ nnoremap <leader>ri :call InlineVariable()<cr>
 nnoremap <leader>. :call OpenTestAlternate()<cr>
 nnoremap <leader><leader> <c-^>
 
-" Force myself to learn the hjkl
-map <Left> :echo "no!"<cr>
-map <Right> :echo "no!"<cr>
-map <Up> :echo "no!"<cr>
-map <Down> :echo "no!"<cr>
-
 " Remap F1 to ESC
 :map <F1> <ESC>
 :vmap <F1> <ESC>
