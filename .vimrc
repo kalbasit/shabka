@@ -111,65 +111,65 @@ endif
 
 let mapleader = ","     " set the mapleader
 set backupdir^=~/.vim/_backup//     " where to put backup files.
-set directory^=~/.vim/_temp//       " where to put swap files.
-set undodir^=~/.vim/_undo//         " where to put undo files.
-set wildmenu            " turn on wild menu
-set hlsearch            " highlight matches
-set incsearch           " incremental searching
-set ignorecase          " searches are case insensitive...
-set smartcase           " ... unless they contain at least one capital letter
-set wildchar=<TAB>      " Which character activates the wildmenu
-set ruler               " Always show current positions along the bottom
 set cmdheight=1         " the command bar is 1 line high
-set number              " turn on line numbers but display them as relative to the current line
-set winwidth=79         " Set the minimum window width
 set colorcolumn=80      " Display a color column
-set lz                  " do not redraw while running macros (much faster) (LazyRedraw)
-set hidden              " you can change buffer without saving
-set whichwrap+=<,>,h,l  " backspace and cursor keys wrap to
-set shortmess=atI       " shortens messages to avoid 'press a key' prompt
-set report=1            " tell us when anything is changed via :...
 set complete=.,w,b,t,i  " Same as default except that I remove the 'u' option
-set noerrorbells        " don't make noise
-set showmatch           " show matching brackets
+set directory^=~/.vim/_temp//       " where to put swap files.
+set hidden              " you can change buffer without saving
+set hlsearch            " highlight matches
+set ignorecase          " searches are case insensitive...
+set incsearch           " incremental searching
+set lz                  " do not redraw while running macros (much faster) (LazyRedraw)
 set matchtime=2         " how many tenths of a second to blink matching brackets for
-set so=5                " Keep 10 lines (top/bottom) for scope
+set noerrorbells        " don't make noise
 set novisualbell        " don't blink
+set number              " turn on line numbers but display them as relative to the current line
+set report=1            " tell us when anything is changed via :...
+set ruler               " Always show current positions along the bottom
+set shortmess=atI       " shortens messages to avoid 'press a key' prompt
+set showmatch           " show matching brackets
+set smartcase           " ... unless they contain at least one capital letter
+set so=5                " Keep 10 lines (top/bottom) for scope
+set undodir^=~/.vim/_undo//         " where to put undo files.
+set whichwrap+=<,>,h,l  " backspace and cursor keys wrap to
+set wildchar=<TAB>      " Which character activates the wildmenu
+set wildmenu            " turn on wild menu
+set winwidth=79         " Set the minimum window width
 if has("statusline")
   set laststatus=2  " always show the status bar
 endif
-set startofline         " Move the cursor to the first non-blank of the line
-set esckeys             " allow cursor keys in insert mode
-set showfulltag         " When completing by tag, show the whole tag, not just the function name
-set shell=/bin/bash     " Use bash no matter what shell are we running
+set autoread            " Automatically read a file that has changed on disk
 set diffopt+=iwhite     " Add ignorance of whitespace to diff
-set pastetoggle=<F12>   " Paste toggle on key F12!
+set esckeys             " allow cursor keys in insert mode
 set makeef=error.err    " When using make, where should it dump the file
 set noautowrite         " safe automacially content
-set autoread            " Automatically read a file that has changed on disk
+set pastetoggle=<F12>   " Paste toggle on key F12!
+set shell=/bin/bash     " Use bash no matter what shell are we running
+set showfulltag         " When completing by tag, show the whole tag, not just the function name
 set spell               " Turn on spellcheck.
 set splitbelow          " Always split under
 set splitright          " Always split on the right
+set startofline         " Move the cursor to the first non-blank of the line
 if v:version >= 703
-  set undofile          " remember undo chains between sessions
-  set nocursorcolumn    " no cursor column highlighting
   set cursorline        " cursor line highlighting
+  set nocursorcolumn    " no cursor column highlighting
+  set undofile          " remember undo chains between sessions
 endif
 
 " Whitespace
-set nowrap                        " don't wrap lines
-set tabstop=2                     " a tab is two spaces
-set shiftwidth=2                  " an autoindent (with <<) is two spaces
+set backspace=indent,eol,start    " backspace through everything in insert mode
 set expandtab                     " use spaces, not tabs
 set list                          " Show invisible characters
-set backspace=indent,eol,start    " backspace through everything in insert mode
+set nowrap                        " don't wrap lines
+set shiftwidth=2                  " an autoindent (with <<) is two spaces
+set tabstop=2                     " a tab is two spaces
 
 " We have to have a winheight bigger than we want to set winminheight. But if
 " we set winheight to be huge before winminheight, the winminheight set will
 " fail.
 set winheight=5
-set winminheight=5
 set winheight=999
+set winminheight=5
 
 if has('nvim')
   " Remember things between sessions
