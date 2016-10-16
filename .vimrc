@@ -1,5 +1,11 @@
 " vim:foldmethod=marker:foldlevel=0:
 
+"" Profiles{{{
+
+let g:kb_profile = 'colemak'
+let g:kb_profiles = { 'qwerty': expand("~/.vim/profiles/qwerty"), 'colemak': expand("~/.vim/profiles/colemak") }
+
+" }}}
 "" Plug{{{
 ""
 
@@ -85,7 +91,8 @@ Plug 'tpope/vim-unimpaired'
 Plug 'troydm/zoomwintab.vim', { 'on': 'ZoomWinTabToggle' }
 Plug 'tyru/caw.vim'
 Plug 'vim-scripts/PreserveNoEOL'
-Plug 'kalbasit/vim-colemak'
+
+exe 'source ' . g:kb_profiles[g:kb_profile] . '/plug.vim'
 
 " All of your Plugins must be added before the following line
 call plug#end()
@@ -436,262 +443,12 @@ command! Xa :xa
 "" General Mappings (Normal, Visual, Operator-pending) {{{
 ""
 
-vnoremap <leader>rv :call ExtractVariable()<cr>
-nnoremap <leader>ri :call InlineVariable()<cr>
-
-nnoremap <leader>. :call OpenTestAlternate()<cr>
-nnoremap <leader><leader> <c-^>
-
-" Remap F1 to ESC
-:map <F1> <ESC>
-:vmap <F1> <ESC>
-:nmap <F1> <ESC>
-:imap <F1> <ESC>
-
-" format the entire file
-nnoremap <leader>fef :normal! gg=G``<CR>
-
-" upper/lower word
-nmap <leader>u mQviwU`Q
-nmap <leader>l mQviwu`Q
-
-" upper/lower first char of word
-nmap <leader>U mQgewvU`Q
-nmap <leader>L mQgewvu`Q
-
-" cd to the directory containing the file in the buffer
-nmap <silent> <leader>cd :lcd %:h<CR>
-
-" Create the directory containing the file in the buffer
-nmap <silent> <leader>md :!mkdir -p %:p:h<CR>
-
-" Some helpers to edit mode
-" http://vimcasts.org/e/14
-nmap <leader>ew :e <C-R>=expand('%:h').'/'<cr>
-nmap <leader>es :sp <C-R>=expand('%:h').'/'<cr>
-nmap <leader>ev :vsp <C-R>=expand('%:h').'/'<cr>
-nmap <leader>et :tabe <C-R>=expand('%:h').'/'<cr>
-
-" Swap two words
-nmap <silent>gw :s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3\2\1/<CR>`'
-
-" Underline the current line with '='
-nmap <silent> <leader>ul :t.<CR>Vr=
-
-" find merge conflict markers
-nmap <silent> <leader>fc <ESC>/\v^[<=>]{7}( .*\|$)<CR>
-
-" Toggle hlsearch with <leader>hs
-nmap <leader>hs :set hlsearch! hlsearch?<CR>
-
-" Bubble single lines
-nmap <C-Up> [e
-nmap <C-Down> ]e
-nmap <C-k> [e
-nmap <C-j> ]e
-
-" Bubble multiple lines
-vmap <C-Up> [egv
-vmap <C-Down> ]egv
-vmap <C-k> [egv
-vmap <C-j> ]egv
-
-" Map Control-# to switch tabs
-map  <C-0> 0gt
-imap <C-0> <Esc>0gt
-map  <C-1> 1gt
-imap <C-1> <Esc>1gt
-map  <C-2> 2gt
-imap <C-2> <Esc>2gt
-map  <C-3> 3gt
-imap <C-3> <Esc>3gt
-map  <C-4> 4gt
-imap <C-4> <Esc>4gt
-map  <C-5> 5gt
-imap <C-5> <Esc>5gt
-map  <C-6> 6gt
-imap <C-6> <Esc>6gt
-map  <C-7> 7gt
-imap <C-7> <Esc>7gt
-map  <C-8> 8gt
-imap <C-8> <Esc>8gt
-map  <C-9> 9gt
-imap <C-9> <Esc>9gt
-
-" Wipe out all buffers
-if has('nvim')
-  nmap <silent> <leader>wa :execute 'bdelete' join(filter(range(1, bufnr('$')), 'bufexists(v:val) && getbufvar(v:val, "&buftype") isnot# "terminal"'))<cr>
-elseif has("patch-7.4.585")
-  nmap <silent> <leader>wa :enew \| 1,$bd<cr>
-else
-  nmap <silent> <leader>wa :1,9000bd<cr>
-endif
-
-" clear the search buffer when hitting return
-nnoremap <CR> :nohlsearch<cr>
-
-" Don't use Ex mode, use Q for formatting
-map Q gq
-
-" spelling
-nmap <leader>sn ]s
-nmap <leader>sp [s
-nmap <leader>s= z=
-nmap <leader>sg zG
-nmap <leader>sm zW
-nmap <leader>se :set spelllang=en<CR>
-nmap <leader>sf :set spelllang=fr<CR>
-nmap <C-X>s wi<C-X>s
-
-" make horizontal scrolling easier
-nmap <silent> <C-o> 10zl
-nmap <silent> <C-i> 10zh
-
-" Add/Remove lineend from listchars
-nmap <leader>sle :set listchars+=eol:$<CR>
-nmap <leader>hle :set listchars-=eol:$<CR>
+exe 'source ' . g:kb_profiles[g:kb_profile] . '/mappings.vim'
 
 " }}}
 "" Functions {{{
 ""
 
-function! PreviewHeightWorkAround()
-  if &previewwindow
-    " See http://stackoverflow.com/a/30771487/301730
-    exec 'wincmd K'
-    exec 'setlocal winheight='.&previewheight
-  endif
-endfunction
-
-function! ExtractVariable()
-  let name = input("Variable name: ")
-  if name == ''
-    return
-  endif
-  " Enter visual mode (not sure why this is needed since we're already in
-  " visual mode anyway)
-  normal! gv
-
-  " Replace selected text with the variable name
-  exec "normal c" . name
-  " Define the variable on the line above
-  exec "normal! O" . name . " = "
-  " Paste the original selected text to be the variable value
-  normal! $p
-endfunction
-
-function! ShowRoutes()
-  " Requires 'scratch' plugin
-  :topleft 100 :split __Routes__
-  " Make sure Vim doesn't write __Routes__ as a file
-  :set buftype=nofile
-  " Delete everything
-  :normal 1GdG
-  " Put routes output in buffer
-  :0r! rake -s routes
-  " Size window to number of lines (1 plus rake output length)
-  :exec ":normal " . line("$") . _ "
-  " Move cursor to bottom
-  :normal 1GG
-  " Delete empty trailing line
-  :normal dd
-endfunction
-
-function! InlineVariable()
-  " Copy the variable under the cursor into the 'a' register
-  :let l:tmp_a = @a
-  :normal "ayiw
-  " Delete variable and equals sign
-  :normal 2daW
-  " Delete the expression into the 'b' register
-  :let l:tmp_b = @b
-  :normal "bd$
-  " Delete the remnants of the line
-  :normal dd
-  " Go to the end of the previous line so we can start our search for the
-  " usage of the variable to replace. Doing '0' instead of 'k$' doesn't
-  " work; I'm not sure why.
-  normal k$
-  " Find the next occurence of the variable
-  exec '/\<' . @a . '\>'
-  " Replace that occurence with the text we yanked
-  exec ':.s/\<' . @a . '\>/' . @b
-  :let @a = l:tmp_a
-  :let @b = l:tmp_b
-endfunction
-
-function! OpenTestAlternate()
-  let current_file = expand("%")
-  let new_file = current_file
-
-  if match(current_file, '\.go$') != -1
-    let new_file = AlternateGoFile(current_file)
-  elseif match(current_file, '\.py$') != -1
-    let new_file = AlternatePythonFile(current_file)
-  elseif match(current_file, '\.rb$') != -1 || match(current_file, '\.rake$') != -1
-    let new_file = AlternateRubyFile(current_file)
-  endif
-
-  " Open the alternate file or self if the rules don't match
-  exec ':e ' . new_file
-endfunction
-
-function! AlternateGoFile(current_file)
-  let new_file = a:current_file
-  if match(a:current_file, '_test\.go$') != -1
-    " We are in the test file
-    let new_file = substitute(a:current_file, '_test\.go$', '.go', '')
-  else
-    " We are in the production code file
-    let new_file = substitute(a:current_file, '\.go$', '_test.go', '')
-  endif
-
-  return new_file
-endfunction
-
-function! AlternatePythonFile(current_file)
-  let new_file = a:current_file
-  if match(a:current_file, '_test\.py$') != -1
-    " We are in the test file
-    let new_file = substitute(a:current_file, '_test\.py$', '.py', '')
-  else
-    " We are in the production code file
-    let new_file = substitute(a:current_file, '\.py$', '_test.py', '')
-  endif
-
-  return new_file
-endfunction
-
-function! AlternateRubyFile(current_file)
-  let new_file = a:current_file
-  let in_spec = match(a:current_file, '^spec/') != -1
-  let going_to_spec = !in_spec
-  let rakefile = match(a:current_file, '\.rake$') != -1
-  let in_app = match(a:current_file, '\<controllers\>') != -1 || match(a:current_file, '\<models\>') != -1 || match(a:current_file, '\<views\>') != -1
-  if going_to_spec
-    if in_app
-      let new_file = substitute(new_file, '^app/', '', '')
-    end
-    if rakefile
-      let new_file = substitute(new_file, '\.rake$', '_spec.rb', '')
-    else
-      let new_file = substitute(new_file, '\.rb$', '_spec.rb', '')
-    end
-    let new_file = 'spec/' . new_file
-  else
-    let new_file = substitute(new_file, '_spec\.rb$', '.rb', '')
-    let new_file = substitute(new_file, '^spec/', '', '')
-    if in_app
-      let new_file = 'app/' . new_file
-    end
-
-    if !filereadable(new_file)
-      let spec_file = substitute(new_file, '\.rb$', '.rake', '')
-      if filereadable(spec_file)
-        let new_file = spec_file
-      endif
-    endif
-  endif
-endfunction
+exe 'source ' . g:kb_profiles[g:kb_profile] . '/functions.vim'
 
 " }}}
