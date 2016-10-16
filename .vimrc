@@ -2,7 +2,9 @@
 
 "" Profiles{{{
 
-let g:kb_profile = 'colemak'
+if !exists('g:kb_profile')
+  let g:kb_profile = 'colemak'
+endif
 let g:kb_profiles = { 'qwerty': expand("~/.vim/profiles/qwerty"), 'colemak': expand("~/.vim/profiles/colemak") }
 
 " }}}
