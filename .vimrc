@@ -78,7 +78,7 @@ Plug 'scrooloose/syntastic'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'tpope/vim-endwise', { 'for': 'ruby' }
 Plug 'tpope/vim-eunuch', { 'on': ['Remove', 'Unlink', 'Move', 'Rename', 'Chmod', 'Mkdir', 'Find', 'Locate', 'Wall', 'SudoWrite', 'SudoEdit'] }
-Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-fugitive', { 'on': ['Git', 'Gcd', 'Glcd', 'Gstatus', 'Gcommit', 'Gmerge', 'Gpull', 'Ggrep', 'Glgrep', 'Glog', 'Gllog', 'Ge', 'Gedit', 'Gpedit', 'Gsplit', 'Gvsplit', 'Gtabedit', 'Gread', 'Gwrite', 'Gw', 'Gwq', 'Gpush', 'Gfetch', 'Gdiff', 'Gvdiff', 'Gsdiff', 'Gbrowse'] }
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
