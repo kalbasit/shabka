@@ -5,10 +5,10 @@ nnoremap <leader>. :call OpenTestAlternate()<cr>
 nnoremap <leader><leader> <c-^>
 
 " Remap F1 to ESC
-:map <F1> <ESC>
-:vmap <F1> <ESC>
-:nmap <F1> <ESC>
-:imap <F1> <ESC>
+map <F1> <ESC>
+vmap <F1> <ESC>
+nmap <F1> <ESC>
+imap <F1> <ESC>
 
 " format the entire file
 nnoremap <leader>fef :normal! gg=G``<CR>
