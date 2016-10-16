@@ -230,6 +230,15 @@ set wildignore+=*.swp,*~,._*
 " Disable Godeps workspace
 set wildignore+=*/Godeps/_workspace/*
 
+" Disable the vendor directory Go 1.5+
+set wildignore+=*/vendor/*
+
+" Disable node/TypeScript
+set wildignore+=*/node_modules/*,*/typings/*,*/dist/*
+
+" Disable the build folder, usually used by java
+set wildignore+=*/build/*
+
 " }}}
 "" List chars {{{
 ""
