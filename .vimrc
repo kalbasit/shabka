@@ -426,6 +426,36 @@ let g:AutoPairsMultilineClose=0
 "}}}
 "" FZF {{{
 nnoremap <silent><c-p> :<c-u>FZF!<cr>
+let g:fzf_action = {
+  \ 'ctrl-t': 'tab split',
+  \ 'ctrl-s': 'split',
+  \ 'ctrl-v': 'vsplit' }
+if has('nvim')
+  function! s:fzf_statusline()
+    " Override statusline as you like
+    highlight fzf1 ctermfg=161 ctermbg=251
+    highlight fzf2 ctermfg=23 ctermbg=251
+    highlight fzf3 ctermfg=237 ctermbg=251
+    setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
+  endfunction
+
+  autocmd! User FzfStatusLine call <SID>fzf_statusline()
+endif
+
+" https://github.com/junegunn/fzf.vim/issues/133
+if executable("ag")
+  function! s:with_agignore(bang, args)
+    let agignore = '/tmp/agignore-for-fzf'
+    let entries = split(&wildignore, ',')
+    let source = 'ag --path-to-agignore '.agignore.' -g ""'
+    call writefile(entries, agignore)
+    call fzf#vim#files(a:args, extend(fzf#vim#layout(a:bang), {'source': source}))
+  endfunction
+
+  autocmd VimEnter * command! -bang -nargs=? -complete=dir Files
+        \ call s:with_agignore(<bang>0, <q-args>)<Paste>
+endif
+
 "" }}}
 "" EditorConfig {{{
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
