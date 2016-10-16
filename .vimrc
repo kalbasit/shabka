@@ -177,10 +177,8 @@ set tabstop=2                     " a tab is two spaces
 " we set winheight to be huge before winminheight, the winminheight set will
 " fail.
 set winheight=5
+set winminheight=5   " must come before setting winheight to 999
 set winheight=999
-" The silent! in here is to prevent the 'Not enough room' error
-" http://stackoverflow.com/a/29406545/301730
-silent! set winminheight=5
 
 if has('nvim')
   " Remember things between sessions
