@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
-	<key>Label</key>
-	<string>it.kalbas.Lemonade</string>
-	<key>Program</key>
-	<string>/Users/kalbasit/code/bin/lemonade</string>
-	<key>ProgramArguments</key>
-	<array>
-    <string>-allow</string>
-    <string>127.0.0.1</string>
-    <string>server</string>
-	</array>
-  <key>RunAtLoad</key>
-  <true/>
-  <key>StandardErrorPath</key>
-  <string>~/.filesystem/log/lemonade.err</string>
-  <key>StandardOutPath</key>
-  <string>~/.filesystem/log/lemonade.log</string>
-</dict>
+  <dict>
+    <key>Label</key>
+    <string>it.kalbas.Lemonade</string>
+    <key>Program</key>
+    <string>/Users/kalbasit/code/bin/lemonade</string>
+    <key>ProgramArguments</key>
+    <array>
+      <string>-allow</string>
+      <string>127.0.0.1</string>
+      <string>server</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>StandardErrorPath</key>
+    <string>~/.filesystem/log/lemonade.err</string>
+    <key>StandardOutPath</key>
+    <string>~/.filesystem/log/lemonade.log</string>
+  </dict>
 </plist>
