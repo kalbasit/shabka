@@ -111,67 +111,53 @@ endif
 
 color seoul256
 
-" The below settings should only be read on startup, sourcing .vimrc again
-" should not load these settings.
-if has('vim_starting')
-  " Only at startup because of https://github.com/neovim/neovim/wiki/Following-HEAD#20150909
-  set encoding=utf-8      " Set default encoding to UTF-8
-endif
+let mapleader = ","             " set the mapleader
+set backupdir^=~/.vim/_backup// " where to put backup files.
+set cmdheight=1                 " the command bar is 1 line high
+set colorcolumn=80              " Display a color column
+set complete=.,w,b,t,i          " Same as default except that I remove the 'u' option
+set directory^=~/.vim/_temp//   " where to put swap files.
+set hidden                      " you can change buffer without saving
+set ignorecase                  " searches are case insensitive...
+set lz                          " do not redraw while running macros (much faster) (LazyRedraw)
+set matchtime=2                 " how many tenths of a second to blink matching brackets for
+set noerrorbells                " don't make noise
+set novisualbell                " don't blink
+set number                      " turn on line numbers but display them as relative to the current line
+set report=1                    " tell us when anything is changed via :...
+set ruler                       " Always show current positions along the bottom
+set shortmess=atTIc             " shortens messages to avoid 'press a key' prompt
+set showmatch                   " show matching brackets
+set smartcase                   " ... unless they contain at least one capital letter
+set scrolloff=5                 " Keep 10 lines (top/bottom) for scope
+set undodir^=~/.vim/_undo//     " where to put undo files.
+set whichwrap+=<,>,h,l          " backspace and cursor keys wrap to
+set wildchar=<TAB>              " Which character activates the wildmenu
+set winwidth=79                 " Set the minimum window width
+set diffopt+=iwhite             " Add ignorance of whitespace to diff
+set esckeys                     " allow cursor keys in insert mode
+set makeef=error.err            " When using make, where should it dump the file
+set noautowrite                 " safe automacially content
+set pastetoggle=<F12>           " Paste toggle on key F12!
+set shell=/bin/bash             " Use bash no matter what shell are we running
+set showfulltag                 " When completing by tag, show the whole tag, not just the function name
+set spell                       " Turn on spellcheck.
+set splitbelow                  " Always split under
+set splitright                  " Always split on the right
+set startofline                 " Move the cursor to the first non-blank of the line
 
-let mapleader = ","     " set the mapleader
-set backupdir^=~/.vim/_backup//     " where to put backup files.
-set cmdheight=1         " the command bar is 1 line high
-set colorcolumn=80      " Display a color column
-set complete=.,w,b,t,i  " Same as default except that I remove the 'u' option
-set directory^=~/.vim/_temp//       " where to put swap files.
-set hidden              " you can change buffer without saving
-set hlsearch            " highlight matches
-set ignorecase          " searches are case insensitive...
-set incsearch           " incremental searching
-set lz                  " do not redraw while running macros (much faster) (LazyRedraw)
-set matchtime=2         " how many tenths of a second to blink matching brackets for
-set noerrorbells        " don't make noise
-set novisualbell        " don't blink
-set number              " turn on line numbers but display them as relative to the current line
-set report=1            " tell us when anything is changed via :...
-set ruler               " Always show current positions along the bottom
-set shortmess=atI       " shortens messages to avoid 'press a key' prompt
-set showmatch           " show matching brackets
-set smartcase           " ... unless they contain at least one capital letter
-set so=5                " Keep 10 lines (top/bottom) for scope
-set undodir^=~/.vim/_undo//         " where to put undo files.
-set whichwrap+=<,>,h,l  " backspace and cursor keys wrap to
-set wildchar=<TAB>      " Which character activates the wildmenu
-set wildmenu            " turn on wild menu
-set winwidth=79         " Set the minimum window width
-if has("statusline")
-  set laststatus=2  " always show the status bar
-endif
-set autoread            " Automatically read a file that has changed on disk
-set diffopt+=iwhite     " Add ignorance of whitespace to diff
-set esckeys             " allow cursor keys in insert mode
-set makeef=error.err    " When using make, where should it dump the file
-set noautowrite         " safe automacially content
-set pastetoggle=<F12>   " Paste toggle on key F12!
-set shell=/bin/bash     " Use bash no matter what shell are we running
-set showfulltag         " When completing by tag, show the whole tag, not just the function name
-set spell               " Turn on spellcheck.
-set splitbelow          " Always split under
-set splitright          " Always split on the right
-set startofline         " Move the cursor to the first non-blank of the line
 if v:version >= 703
-  set cursorline        " cursor line highlighting
-  set nocursorcolumn    " no cursor column highlighting
-  set undofile          " remember undo chains between sessions
+  set cursorline     " cursor line highlighting
+  set nocursorcolumn " no cursor column highlighting
+  set undofile       " remember undo chains between sessions
 endif
 
 " Whitespace
-set backspace=indent,eol,start    " backspace through everything in insert mode
-set expandtab                     " use spaces, not tabs
-set list                          " Show invisible characters
-set nowrap                        " don't wrap lines
-set shiftwidth=2                  " an autoindent (with <<) is two spaces
-set tabstop=2                     " a tab is two spaces
+set expandtab    " use spaces, not tabs
+set list         " Show invisible characters
+set nowrap       " don't wrap lines
+set shiftwidth=2 " an autoindent (with <<) is two spaces
+set tabstop=2    " a tab is two spaces
 
 " We have to have a winheight bigger than we want to set winminheight. But if
 " we set winheight to be huge before winminheight, the winminheight set will
@@ -199,6 +185,24 @@ else
   set viminfo='20,\"50,:20,%,n~/.vim/_viminfo
 endif
 
+" }}}
+"" ViM only settings, these are default in nvim. See nvim-defaults{{{
+if !has('nvim')
+  set autoread                   " Automatically read a file that has changed on disk
+  set backspace=indent,eol,start " backspace through everything in insert mode
+  set hlsearch                   " highlight matches
+  set incsearch                  " incremental searching
+  set wildmenu                   " turn on wild menu
+
+  if has('vim_starting')
+    " Only at startup because of https://github.com/neovim/neovim/wiki/Following-HEAD#20150909
+    set encoding=utf-8      " Set default encoding to UTF-8
+  endif
+
+  if has("statusline")
+    set laststatus=2  " always show the status bar
+  endif
+endif
 " }}}
 "" NeoVim Settings{{{
 if has('nvim')
@@ -253,7 +257,7 @@ set wildignore+=*/build/*
 ""
 
 set listchars=""                  " Reset the listchars
-set listchars=tab:\ \             " a tab should display as "  ", trailing whitespace as "."
+set listchars=tab:\ \             " a tab should display as "  "
 set listchars+=trail:.            " show trailing spaces as dots
 set listchars+=extends:>          " The character to show in the last column when wrap is
                                   " off and the line continues beyond the right of the screen
