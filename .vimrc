@@ -431,7 +431,10 @@ let g:tagbar_type_go = {
 \ }
 ""}}}
 "" AutoPairs{{{
-let g:AutoPairsMultilineClose=0
+let g:AutoPairsMultilineClose = 0
+"}}}
+"" Surround{{{
+let g:surround_no_mappings = 0
 "}}}
 "" FZF {{{
 nnoremap <silent><c-p> :<c-u>FZF!<cr>

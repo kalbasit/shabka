@@ -1,3 +1,8 @@
+" Surround plugin
+" Copied from https://github.com/tpope/vim-surround/blob/e49d6c2459e0f5569ff2d533b4df995dd7f98313/plugin/surround.vim#L578-L596
+" TODO: complete as needed
+nmap ws  <Plug>Csurround
+
 vnoremap <leader>rv :call ExtractVariable()<cr>
 nnoremap <leader>ri :call InlineVariable()<cr>
 
