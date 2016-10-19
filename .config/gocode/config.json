@@ -1,1 +1,1 @@
-{"propose-builtins":false,"lib-path":"","autobuild":false,"force-debug-output":""}
+{"propose-builtins":true,"lib-path":"","autobuild":true,"force-debug-output":"","package-lookup-mode":"go"}
