@@ -78,8 +78,8 @@ Plug 'ervandew/supertab'
 Plug 'jeetsukumaran/vim-buffergator', { 'on': 'BuffergatorOpen' }
 Plug 'jiangmiao/auto-pairs'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all --no-update-rc' }
-Plug 'junegunn/vim-easy-align'
-Plug 'navicore/vissort.vim'
+Plug 'junegunn/vim-easy-align', { 'on': 'EasyAlign' }
+Plug 'navicore/vissort.vim', { 'on': 'Vissort' }
 Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'scrooloose/syntastic'
