@@ -93,3 +93,10 @@ unset mysql_credentials_path
 if test -r /etc/lsb-release && grep -q 'DISTRIB_ID=Arch' /etc/lsb-release; then
   export LPASS_DISABLE_PINENTRY=1
 fi
+
+# use git ls-tree to speed up FZF. Fall back to find if no current folder is
+# not under Git.
+export FZF_DEFAULT_COMMAND='
+  (git ls-tree -r --name-only HEAD ||
+   find . -path "*/\.*" -prune -o -type f -print -o -type l -print |
+      sed s/^..//) 2> /dev/null'
