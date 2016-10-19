@@ -80,7 +80,6 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all --no-update-rc' }
 Plug 'junegunn/vim-easy-align', { 'on': 'EasyAlign' }
 Plug 'navicore/vissort.vim', { 'on': 'Vissort' }
-Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'scrooloose/syntastic'
 Plug 'terryma/vim-multiple-cursors'
@@ -91,7 +90,13 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'troydm/zoomwintab.vim', { 'on': 'ZoomWinTabToggle' }
-Plug 'tyru/caw.vim'
+Plug 'tyru/caw.vim' " Comment plugin:
+                    " - gci / gcui to comment/uncomment the current line
+                    " - gco to insert a new line below the current line and
+                    "   start a comment.
+                    " - gcO to insert a new line above the current line and
+                    "   start a comment.
+                    " - gcw / gcuw to comment / uncomment a block (/* ... */)
 Plug 'vim-scripts/PreserveNoEOL'
 
 exe 'source ' . g:kb_profiles[g:kb_profile] . '/plug.vim'
