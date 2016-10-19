@@ -113,7 +113,9 @@ color seoul256
 
 let mapleader = ","             " set the mapleader
 set backupdir^=~/.vim/_backup// " where to put backup files.
-set cmdheight=1                 " the command bar is 1 line high
+set cmdheight=2                 " the height of the command line, giving it a high
+                                " number can prevent the "Hit ENTER to continue" but
+                                " will shorten the editor.
 set colorcolumn=80              " Display a color column
 set complete=.,w,b,t,i          " Same as default except that I remove the 'u' option
 set directory^=~/.vim/_temp//   " where to put swap files.
