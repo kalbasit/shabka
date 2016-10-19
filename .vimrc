@@ -37,7 +37,7 @@ Plug 'chrisbra/csv.vim', { 'for': 'csv' }
 " Ruby/Rails
 Plug 'tpope/vim-rails', { 'for': 'ruby' }
 " Pig
-Plug 'motus/pig.vim'
+Plug 'motus/pig.vim', { 'for': 'pig' }
 
 """"""""""""""""
 " Colorschemes "
