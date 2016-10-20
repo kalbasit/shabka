@@ -75,9 +75,8 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'ervandew/screen', { 'on': 'ScreenShell' }
 Plug 'ervandew/supertab'
-Plug 'jeetsukumaran/vim-buffergator', { 'on': 'BuffergatorOpen' }
 Plug 'jiangmiao/auto-pairs'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all --no-update-rc' }
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all --no-update-rc' } | Plug 'junegunn/fzf.vim'
 Plug 'junegunn/vim-easy-align', { 'on': 'EasyAlign' }
 Plug 'navicore/vissort.vim', { 'on': 'Vissort' }
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
@@ -437,7 +436,10 @@ let g:AutoPairsMultilineClose = 0
 let g:surround_no_mappings = 0
 "}}}
 "" FZF {{{
-nnoremap <silent><c-p> :<c-u>FZF!<cr>
+
+" [Buffers] Jump to the existing window if possible
+let g:fzf_buffers_jump = 1
+
 let g:fzf_action = {
   \ 'ctrl-t': 'tab split',
   \ 'ctrl-s': 'split',
@@ -466,6 +468,18 @@ if executable("ag")
 
   autocmd VimEnter * command! -bang -nargs=? -complete=dir Files
         \ call s:with_agignore(<bang>0, <q-args>)<Paste>
+endif
+
+if has('nvim')
+  function! s:fzf_statusline()
+    " Override statusline as you like
+    highlight fzf1 ctermfg=161 ctermbg=251
+    highlight fzf2 ctermfg=23 ctermbg=251
+    highlight fzf3 ctermfg=237 ctermbg=251
+    setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
+  endfunction
+
+  autocmd! User FzfStatusLine call <SID>fzf_statusline()
 endif
 
 "" }}}

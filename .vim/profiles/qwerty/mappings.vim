@@ -1,4 +1,7 @@
-" Surround plugin
+""""""""""""
+" Surround "
+""""""""""""
+
 " Copied from https://github.com/tpope/vim-surround/blob/e49d6c2459e0f5569ff2d533b4df995dd7f98313/plugin/surround.vim#L578-L596
 nmap ds  <Plug>Dsurround
 nmap cs  <Plug>Csurround
@@ -10,6 +13,29 @@ nmap ySs <Plug>YSsurround
 nmap ySS <Plug>YSsurround
 xmap S   <Plug>VSurround
 xmap gS  <Plug>VgSurround
+
+"""""""
+" FZF "
+"""""""
+
+" mapping for files and buffers
+nmap <Leader>f :Files<CR>
+nmap <Leader>b :Buffers<CR>
+
+" Mapping selecting mappings
+nmap <leader><tab> <plug>(fzf-maps-n)
+xmap <leader><tab> <plug>(fzf-maps-x)
+omap <leader><tab> <plug>(fzf-maps-o)
+
+" Insert mode completion
+imap <c-x><c-k> <plug>(fzf-complete-word)
+imap <c-x><c-f> <plug>(fzf-complete-path)
+imap <c-x><c-j> <plug>(fzf-complete-file-ag)
+imap <c-x><c-l> <plug>(fzf-complete-line)
+
+""""""""""
+" Custom "
+""""""""""
 
 vnoremap <leader>rv :call ExtractVariable()<cr>
 nnoremap <leader>ri :call InlineVariable()<cr>
@@ -24,7 +50,7 @@ nmap <F1> <ESC>
 imap <F1> <ESC>
 
 " format the entire file
-nnoremap <leader>fef :normal! gg=G``<CR>
+nnoremap <leader>= :normal! gg=G``<CR>
 
 " upper/lower word
 nmap <leader>u mQviwU`Q
@@ -54,7 +80,7 @@ nmap <silent>gw :s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3\2\1/<CR>`'
 nmap <silent> <leader>ul :t.<CR>Vr=
 
 " find merge conflict markers
-nmap <silent> <leader>fc <ESC>/\v^[<=>]{7}( .*\|$)<CR>
+nmap <silent> \fc <ESC>/\v^[<=>]{7}( .*\|$)<CR>
 
 " Toggle hlsearch with <leader>hs
 nmap <leader>hs :set hlsearch! hlsearch?<CR>
