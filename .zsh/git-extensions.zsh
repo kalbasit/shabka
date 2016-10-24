@@ -23,3 +23,16 @@ function gcim() {
     git commit -m "${message}"
   fi
 }
+
+function gtime() {
+  local branch=""
+
+  if [[ "x$(git rev-parse --git-dir 2> /dev/null)" != "x" ]]; then
+    branch="$(current_branch)"
+  else
+    echo "You must be under a git repository to use gcim"
+    return 1
+  fi
+
+  git show --pretty=format:"%Cblue%cr%Creset" "${branch}" | head -1
+}
