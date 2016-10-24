@@ -1,0 +1,186 @@
+" vrapper
+
+" Settings {{{
+set ignorecase
+set smartcase
+set incsearch
+" }}}
+
+" Colemak {{{
+" Up/down/left/right
+nnoremap n h
+vnoremap n h
+onoremap n h
+
+nnoremap e j
+vnoremap e j
+onoremap e j
+
+nnoremap i k
+vnoremap i k
+onoremap i k
+
+nnoremap o l
+vnoremap o l
+onoremap o l
+
+" Words forward/backward
+nnoremap l b
+vnoremap l b
+onoremap l b
+
+nnoremap L B
+vnoremap L B
+onoremap L B
+
+nnoremap u e
+vnoremap u e
+onoremap u e
+
+nnoremap U E
+vnoremap U E
+onoremap U E
+
+nnoremap y w
+vnoremap y w
+onoremap y w
+
+nnoremap Y W
+vnoremap Y W
+onoremap Y W
+
+cnoremap <C-L> <C-Left>
+cnoremap <C-Y> <C-Right>
+
+" inSert/Replace/append (T)/new line
+nnoremap s i
+
+nnoremap S I
+
+nnoremap t a
+
+nnoremap T A
+
+nnoremap h o
+
+" Change
+nnoremap w c
+vnoremap w c
+
+nnoremap W C
+vnoremap W C
+
+nnoremap ww cc
+
+" Cut/copy/paste
+nnoremap x x
+vnoremap x d
+
+nnoremap c y
+vnoremap c y
+
+nnoremap v p
+vnoremap v p
+
+nnoremap X dd
+vnoremap X d
+
+nnoremap C yy
+vnoremap C y
+
+nnoremap V P
+vnoremap V P
+
+nnoremap gv gp
+vnoremap gv gp
+
+nnoremap gV gP
+vnoremap gV gP
+
+" Undo/redo
+nnoremap z u
+vnoremap z :<C-U>undo<CR>
+
+nnoremap gz U
+vnoremap gz :<C-U>undo<CR>
+
+nnoremap Z <C-R>
+vnoremap Z :<C-U>redo<CR>
+
+" Visual mode
+nnoremap a v
+vnoremap a v
+
+nnoremap A V
+vnoremap A V
+
+nnoremap ga gv
+" Make insert/add work also in visual line mode like in visual block mode
+vnoremap <silent> <expr> s (mode() =~# "[V]" ? "\<C-V>0o$I" : "I")
+vnoremap <silent> <expr> S (mode() =~# "[V]" ? "\<C-V>0o$I" : "I")
+vnoremap <silent> <expr> t (mode() =~# "[V]" ? "\<C-V>0o$A" : "A")
+vnoremap <silent> <expr> T (mode() =~# "[V]" ? "\<C-V>0o$A" : "A")
+
+" Search
+" f/F are unchanged
+nnoremap p t
+vnoremap p t
+onoremap p t
+
+nnoremap P T
+vnoremap P T
+onoremap P T
+
+nnoremap b ;
+vnoremap b ;
+onoremap b ;
+
+nnoremap B ,
+vnoremap B ,
+onoremap B ,
+
+nnoremap k n
+vnoremap k n
+onoremap k n
+
+nnoremap K N
+vnoremap K N
+onoremap K N
+
+" inneR text objects
+" E.g. dip (delete inner paragraph) is now drp
+onoremap r i
+
+" Folds, etc.
+nnoremap j z
+vnoremap j z
+
+nnoremap jn zj
+vnoremap jn zj
+
+nnoremap je zk
+vnoremap je zk
+
+" Overridden keys must be prefixed with g {{{
+nnoremap gX X
+vnoremap gX X
+
+nnoremap gK K
+vnoremap gK K
+
+nnoremap gL L
+vnoremap gL L
+
+" Window handling
+nnoremap <C-W>h <C-W>h
+vnoremap <C-W>h <C-W>h
+
+nnoremap <C-W>n <C-W>j
+vnoremap <C-W>n <C-W>j
+
+nnoremap <C-W>e <C-W>k
+vnoremap <C-W>e <C-W>k
+
+nnoremap <C-W>i <C-W>l
+vnoremap <C-W>i <C-W>l
+" }}}
