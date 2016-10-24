@@ -34,5 +34,5 @@ function gtime() {
     return 1
   fi
 
-  git show --pretty=format:"%Cblue%cr%Creset" "${branch}" | head -1
+  git reflog --date=relative --all | grep "refs/heads/${branch}@.*: branch: Created" | sed -e 's:.*{\([^}]*\)}.*:\1:g'
 }
