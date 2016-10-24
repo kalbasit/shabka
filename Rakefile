@@ -32,6 +32,7 @@ GO_BINARIES = [
   "github.com/Masterminds/glide",
   "github.com/kardianos/govendor",
   "github.com/spf13/cobra/cobra",
+  "github.com/pocke/lemonade",
 ]
 
 task :init => [:update_submodules, :switch_to_zsh, :link, :osx, :install_go_binaries]
