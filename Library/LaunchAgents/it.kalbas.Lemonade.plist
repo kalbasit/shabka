@@ -15,8 +15,8 @@
     <key>RunAtLoad</key>
     <true/>
     <key>StandardErrorPath</key>
-    <string>~/.filesystem/log/lemonade.err</string>
+    <string>/Users/kalbasit/.filesystem/log/lemonade.err</string>
     <key>StandardOutPath</key>
-    <string>~/.filesystem/log/lemonade.log</string>
+    <string>/Users/kalbasit/.filesystem/log/lemonade.log</string>
   </dict>
 </plist>
