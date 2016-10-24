@@ -5,7 +5,7 @@ TMPDIR=$(mktemp -d vimrecovery.XXXXXXXX)
 RECTXT="$TMPDIR/vim.recovery.$USER.txt"
 RECFN="$TMPDIR/vim.recovery.$USER.fn"
 trap 'rm -f "$RECTXT" "$RECFN"; rmdir "$TMPDIR"' 0 1 2 3 15
-for q in ~/.vim/_temp/.*sw? ~/.vim/_temp/*; do
+for q in ~/.vim/_swap/.*sw? ~/.vim/_swap/*; do
   [[ -f $q ]] || continue
   if [[ `du $q | awk '{print $1}'` -eq 0 ]]; then
     rm -f $q

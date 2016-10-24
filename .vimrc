@@ -116,13 +116,14 @@ endif
 color seoul256
 
 let mapleader = ","             " set the mapleader
+set backup                      " enable backup, written to backupdir set below
 set backupdir^=~/.vim/_backup// " where to put backup files.
 set cmdheight=2                 " the height of the command line, giving it a high
                                 " number can prevent the "Hit ENTER to continue" but
                                 " will shorten the editor.
 set colorcolumn=80              " Display a color column
 set complete=.,w,b,t,i          " Same as default except that I remove the 'u' option
-set directory^=~/.vim/_temp//   " where to put swap files.
+set directory^=~/.vim/_swap//   " where to put swap files.
 set hidden                      " you can change buffer without saving
 set ignorecase                  " searches are case insensitive...
 set lz                          " do not redraw while running macros (much faster) (LazyRedraw)
