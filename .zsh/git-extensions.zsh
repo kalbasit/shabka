@@ -36,3 +36,11 @@ function gtime() {
 
   git reflog --date=relative --all | grep "refs/heads/${branch}@.*: branch: Created" | sed -e 's:.*{\([^}]*\)}.*:\1:g'
 }
+
+function gorder() {
+  local branch
+
+  for branch in $(git branch | sed s/^..//); do
+    echo -e "$(git log -1 --pretty=format:"%Cgreen%ci %Cblue%cr%Creset" "${branch}")\t${branch}"
+  done | sort -r
+}
