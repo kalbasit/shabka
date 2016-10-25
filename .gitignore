@@ -55,7 +55,7 @@
 .vim/.netrwhist
 .vim/_backup/
 .vim/_nviminfo*
-.vim/_temp/
+.vim/_swap/
 .vim/_undo/
 .vim/_viminfo
 .vim/autoload/plug.vim.old
