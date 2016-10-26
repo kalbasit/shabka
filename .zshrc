@@ -8,6 +8,12 @@ ZSH="${ZDOTDIR:-$HOME}/.zsh"
 PLUGINS_PATH="${ZSH}/plugins"
 THEMES_PATH="${ZSH}/themes"
 
+# Set ZSH_CACHE_DIR to the path where cache files should be created
+# or else we will use the default cache/
+if [[ -z "$ZSH_CACHE_DIR" ]]; then
+  ZSH_CACHE_DIR="$ZSH/cache"
+fi
+
 # Get the list of configs
 configs=()
 for config (${ZSH}/*.zsh); do
@@ -36,10 +42,6 @@ fi
 # Save the location of the current completion dump file.
 ZSH_COMPDUMP="${ZDOTDIR:-$HOME}/.zcompdump-${SHORT_HOST}-${ZSH_VERSION}"
 
-# Load and run compinit
-autoload -U compinit
-compinit -i -d "${ZSH_COMPDUMP}"
-
 # Load all the configs
 for config ($configs); do
   source "${ZSH}/${config}"
@@ -52,6 +54,17 @@ for plugin ($plugins); do
     source "${PLUGINS_PATH}/${plugin}/${plugin}.plugin.zsh"
   fi
 done
+
+# Load all stock functions (from $fpath files) called below.
+autoload -U compaudit compinit
+# If completion insecurities exist, warn the user without enabling completions.
+if ! compaudit &>/dev/null; then
+  # This function resides in the "lib/compfix.zsh" script sourced above.
+  handle_completion_insecurities
+  # Else, enable and cache completions to the desired file.
+else
+  compinit -d "${ZSH_COMPDUMP}"
+fi
 
 # Load the theme
 source "${THEMES_PATH}/${THEME}.zsh-theme"
