@@ -47,14 +47,6 @@ for config ($configs); do
   source "${ZSH}/${config}"
 done
 
-# Load all the plugins
-for plugin ($plugins); do
-  plugin_path="${PLUGINS_PATH}/${plugin}/${plugin}.plugin.zsh"
-  if [[ -r "${plugin_path}" ]]; then
-    source "${PLUGINS_PATH}/${plugin}/${plugin}.plugin.zsh"
-  fi
-done
-
 # Load all stock functions (from $fpath files) called below.
 autoload -U compaudit compinit
 # If completion insecurities exist, warn the user without enabling completions.
@@ -65,6 +57,14 @@ if ! compaudit &>/dev/null; then
 else
   compinit -d "${ZSH_COMPDUMP}"
 fi
+
+# Load all the plugins
+for plugin ($plugins); do
+  plugin_path="${PLUGINS_PATH}/${plugin}/${plugin}.plugin.zsh"
+  if [[ -r "${plugin_path}" ]]; then
+    source "${PLUGINS_PATH}/${plugin}/${plugin}.plugin.zsh"
+  fi
+done
 
 # Load the theme
 source "${THEMES_PATH}/${THEME}.zsh-theme"
