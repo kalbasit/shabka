@@ -14,23 +14,6 @@ if [[ -z "$ZSH_CACHE_DIR" ]]; then
   ZSH_CACHE_DIR="$ZSH/cache"
 fi
 
-# Get the list of configs
-configs=()
-for config (${ZSH}/*.zsh); do
-  configs=($configs $(basename $config))
-done
-
-# Get the list of plugins
-plugins=()
-for plugin (${PLUGINS_PATH}/*); do
-  plugins=($plugins $(basename $plugin))
-done
-
-# Add each plugin to fpath
-for plugin ($plugins); do
-  fpath=("${PLUGINS_PATH}/$plugin" $fpath)
-done
-
 # Figure out the SHORT hostname
 if [ -n "$commands[scutil]" ]; then
   # OS X
@@ -43,9 +26,16 @@ fi
 ZSH_COMPDUMP="${ZDOTDIR:-$HOME}/.zcompdump-${SHORT_HOST}-${ZSH_VERSION}"
 
 # Load all the configs
-for config ($configs); do
-  source "${ZSH}/${config}"
+for config (${ZSH}/*.zsh); do
+  source "${config}"
 done
+unset config
+
+# Tell the completion where the plugins are
+for plugin (${PLUGINS_PATH}/*); do
+  fpath=("$plugin" $fpath)
+done
+unset plugin
 
 # Load all stock functions (from $fpath files) called below.
 autoload -U compaudit compinit
@@ -59,12 +49,12 @@ else
 fi
 
 # Load all the plugins
-for plugin ($plugins); do
+for plugin (${PLUGINS_PATH}/*); do
+  plugin="$(basename $plugin)"
   plugin_path="${PLUGINS_PATH}/${plugin}/${plugin}.plugin.zsh"
-  if [[ -r "${plugin_path}" ]]; then
-    source "${PLUGINS_PATH}/${plugin}/${plugin}.plugin.zsh"
-  fi
+  [[ -r "${plugin_path}" ]] && source "${plugin_path}"
 done
+unset plugin plugin_path
 
 # Load the theme
 source "${THEMES_PATH}/${THEME}.zsh-theme"
