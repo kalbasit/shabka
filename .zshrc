@@ -73,8 +73,11 @@ source "${THEMES_PATH}/${THEME}.zsh-theme"
 export TERM=xterm-256color
 [ -n "$TMUX" ] && export TERM=screen-256color
 
-# If the ACTIVE_PROFILE is set, source the profile file
-[[ -n "${ACTIVE_PROFILE}" ]] && source "${ZSH}/profiles/${ACTIVE_PROFILE}.zsh"
+# If the ACTIVE_PROFILE is set, source the profile file and activate the profile
+if [[ -n "${ACTIVE_PROFILE}" ]]; then
+  source "${ZSH}/profiles/${ACTIVE_PROFILE}.zsh"
+  pactivate
+fi
 
 # Source host-specific settings if the exists. Keep this last so it can
 # overwrite any of the other settings.
