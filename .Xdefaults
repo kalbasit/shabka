@@ -18,10 +18,10 @@ URxvt.cursorBlink:     true
 URxvt.cursorColor:     #FF0000
 URxvt.visualBall:      true
 URxvt*termName:        rxvt-unicode-256color
-URxvt*font:            xft:Monospace:pixelsize=12:antialias=true:hinting=true
-URxvt*boldFont:        xft:Monospace:pixelsize=12:antialias=true:hinting=true:bold
-URxvt*italicFont:      xft:Monospace:pixelsize=12:antialias=true:hinting=true:italic
-URxvt*bolditalicFont:  xft:Monospace:pixelsize=12:antialias=true:hinting=true:bold:italic
+URxvt*font:            xft:monaco:pixelsize=12:antialias=true:hinting=true
+URxvt*boldFont:        xft:monaco:pixelsize=12:antialias=true:hinting=true:bold
+URxvt*italicFont:      xft:monaco:pixelsize=12:antialias=true:hinting=true:italic
+URxvt*bolditalicFont:  xft:monaco:pixelsize=12:antialias=true:hinting=true:bold:italic
 URxvt*perl-ext-common: default,matcher
 URxvt*urlLauncher:     google-chrome
 URxvt.matcher.button:  1
