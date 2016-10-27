@@ -487,6 +487,9 @@ endif
 "" EditorConfig {{{
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 "" }}}
+"" Profile settings {{{
+exe 'source ' . g:kb_profiles[g:kb_profile] . '/settings.vim'
+"" }}}
 "" Command-Line Mappings {{{
 ""
 
