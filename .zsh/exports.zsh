@@ -1,6 +1,5 @@
 export GPG_TTY="$(tty)"                 # GPG_TTY is needed for gpg with pinentry-curses
 export GOPATH="${HOME}/code"            # How can I live without Go?
-export CDPATH="${GOPATH}/src:$cdpath"   # Add $GOPATH/src to CDPATH
 export MYFS="${HOME}/.filesystem"       # Make sure I always know about my filesystem.
 export EDITOR=nvim                      # NeoVim simply rocks!!
 
