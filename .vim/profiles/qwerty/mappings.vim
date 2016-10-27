@@ -93,6 +93,9 @@ nmap <C-j> ]e
 vmap <C-k> [egv
 vmap <C-j> ]egv
 
+" save all buffers
+nmap <silent> <leader>ww :wall<cr>
+
 " Wipe out all buffers
 if has('nvim')
   nmap <silent> <leader>wa :execute 'bdelete' join(filter(range(1, bufnr('$')), 'bufexists(v:val) && getbufvar(v:val, "&buftype") isnot# "terminal"'))<cr>
