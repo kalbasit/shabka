@@ -87,7 +87,9 @@ Plug 'tpope/vim-eunuch', { 'on': ['Remove', 'Unlink', 'Move', 'Rename', 'Chmod',
 Plug 'tpope/vim-fugitive', { 'on': ['Git', 'Gcd', 'Glcd', 'Gstatus', 'Gcommit', 'Gmerge', 'Gpull', 'Ggrep', 'Glgrep', 'Glog', 'Gllog', 'Ge', 'Gedit', 'Gpedit', 'Gsplit', 'Gvsplit', 'Gtabedit', 'Gread', 'Gwrite', 'Gw', 'Gwq', 'Gpush', 'Gfetch', 'Gdiff', 'Gvdiff', 'Gsdiff', 'Gbrowse'] }
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
-Plug 'tpope/vim-unimpaired'
+" disable unimpaired as there is no way to disable mappings and it's messing
+" up with my colemak mappins. (mapped yo and yO).
+" Plug 'tpope/vim-unimpaired'
 Plug 'troydm/zoomwintab.vim', { 'on': 'ZoomWinTabToggle' }
 Plug 'tyru/caw.vim' " Comment plugin:
                     " - gci / gcui to comment/uncomment the current line
