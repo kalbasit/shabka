@@ -442,7 +442,7 @@ let g:tagbar_type_go = {
 let g:AutoPairsMultilineClose = 0
 "}}}
 "" Surround{{{
-let g:surround_no_mappings = 0
+let g:surround_no_mappings = 1
 "}}}
 "" FZF {{{
 
