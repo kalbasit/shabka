@@ -193,6 +193,13 @@ else
 endif
 
 " }}}
+"" Nvim only settings{{{
+if has('nvim')
+  " settings that only applies on boot
+  if has('vim_starting')
+  endif
+endif
+" }}}
 "" ViM only settings, these are default in nvim. See nvim-defaults{{{
 if !has('nvim')
   set autoread                   " Automatically read a file that has changed on disk
@@ -202,7 +209,8 @@ if !has('nvim')
   set wildmenu                   " turn on wild menu
 
   if has('vim_starting')
-    " Only at startup because of https://github.com/neovim/neovim/wiki/Following-HEAD#20150909
+    " The default encoding for nvim is utf-8. It's not possible to change it
+    " either. See http://neovim.io/doc/user/options.html#%27encoding%27
     set encoding=utf-8      " Set default encoding to UTF-8
   endif
 
