@@ -54,11 +54,11 @@ cask 'polycom-realpresence-desktop'
 cask 'private-internet-access'
 cask 'real-vnc'
 cask 'screenflick' # Screen recorder
+cask 'sequel-pro' # MySQL frontend supporting connections through a tunnel
 cask 'serial' # Serial Console communication
 cask 'skype'
 cask 'slack'
 cask 'sqlitebrowser'
-cask 'sshfs'
 cask 'steam'
 cask 'synology-cloud-station-drive'
 cask 'synology-photo-station-uploader'
