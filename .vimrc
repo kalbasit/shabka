@@ -38,6 +38,8 @@ Plug 'chrisbra/csv.vim', { 'for': 'csv' }
 Plug 'tpope/vim-rails', { 'for': 'ruby' }
 " Pig
 Plug 'motus/pig.vim', { 'for': 'pig' }
+" HTML
+Plug 'mattn/emmet-vim', { 'for': ['html', 'css'] }
 
 """"""""""""""""
 " Colorschemes "
