@@ -251,7 +251,7 @@ function! plug#end()
 
   for [cmd, names] in items(lod.cmd)
     execute printf(
-    \ 'command! -nargs=* -range -bang %s call s:lod_cmd(%s, "<bang>", <line1>, <line2>, <q-args>, %s)',
+    \ 'command! -nargs=* -range -bang -complete=file %s call s:lod_cmd(%s, "<bang>", <line1>, <line2>, <q-args>, %s)',
     \ cmd, string(cmd), string(names))
   endfor
 
@@ -312,7 +312,7 @@ endfunction
 
 function! s:git_version_requirement(...)
   if !exists('s:git_version')
-    let s:git_version = map(split(split(s:system('git --version'))[-1], '\.'), 'str2nr(v:val)')
+    let s:git_version = map(split(split(s:system('git --version'))[2], '\.'), 'str2nr(v:val)')
   endif
   return s:version_requirement(s:git_version, a:000)
 endfunction
