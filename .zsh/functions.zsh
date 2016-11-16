@@ -733,13 +733,16 @@ function tmx() {
 
     # start a tmux session with the first window being Vim. Conserve the
     # environment variables needed for profiling.
-    tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" attach -t "${sess}" || \
+    if tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" list-sessions -F '#{session_name}' | grep -q -e "^${sess}\$"; then
+        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" attach -t "${sess}"
+    else
         tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" new -s "${sess}" \; \
             set-environment ACTIVE_PROFILE "${ACTIVE_PROFILE}" \; \
             set-environment SSH_AGENT_NAME "${ACTIVE_PROFILE}" \; \
             new-window \; \
             kill-window -t :0 \; \
             new-window -t :0 'zsh -i -c vim' \;
+    fi
 
     # if we did change directory, we must change the directory back
     if isTrue "${should_popd}"; then
