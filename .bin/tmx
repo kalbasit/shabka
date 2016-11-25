@@ -76,6 +76,7 @@ function popd() {
 
 sess=
 tmux_new_session_extras=()
+new_session_only=false
 should_popd=false
 
 while [[ $# -ge 1 ]]; do
@@ -87,6 +88,10 @@ while [[ $# -ge 1 ]]; do
         -l|--list)
             tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" ls
             exit 0
+            ;;
+        -n|--new)
+            new_session_only=true
+            shift
             ;;
         -d|--detach)
             tmux_new_session_extras=(${tmux_new_session_extras[@]} "-d")
@@ -124,6 +129,10 @@ sess="$(echo "${sess}" | sed -e 's:\.:_:g' -e 's#:#_#g')"
 # start a tmux session with the first window being Vim. Conserve the
 # environment variables needed for profiling.
 if tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" list-sessions -F '#{session_name}' | grep -q -e "^${sess}\$"; then
+    if isTrue "${new_session_only}"; then
+        print_error 0 "the session ${sess} already exists, not attaching the session due to the --new flag"
+        exit 0
+    fi
     tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" attach -t "${sess}"
 else
     tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" new-session "${tmux_new_session_extras[@]}" -s "${sess}" \; \
