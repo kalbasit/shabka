@@ -704,54 +704,6 @@ function jsonpp() {
     fi
 }
 #}}}
-# tmx() #{{{
-function tmx() {
-    local sess="${1}"
-    local should_popd=false
-
-    if [ "x${sess}" = "xls" ]; then
-        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" ls
-        return 0
-    fi
-
-    # if the sess is an actual directory, go there first and set the sess to
-    # empty to generate the session name from the path
-    if [[ -d "${sess}" ]]; then
-        pushd "${sess}"
-        should_popd=true
-        sess=
-    fi
-
-    # if the session name was not given, generate one from the path
-    if [ "x${sess}" = "x" ]; then
-        sess="${PWD##$GOPATH/src/}"
-    fi
-
-    # session name cannot contain a dot or a column
-    # https://github.com/tmux/tmux/blob/76688d204071b76fd3388e46e944e4b917c09625/session.c#L232
-    sess="${${${sess}//./_}//:/_}"
-
-    # start a tmux session with the first window being Vim. Conserve the
-    # environment variables needed for profiling.
-    if tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" list-sessions -F '#{session_name}' | grep -q -e "^${sess}\$"; then
-        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" attach -t "${sess}"
-    else
-        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" new -s "${sess}" \; \
-            set-environment ACTIVE_PROFILE "${ACTIVE_PROFILE}" \; \
-            set-environment SSH_AGENT_NAME "${ACTIVE_PROFILE}" \; \
-            new-window \; \
-            kill-window -t :0 \; \
-            new-window -t :0 'zsh -i -c vim' \;
-    fi
-
-    # if we did change directory, we must change the directory back
-    if isTrue "${should_popd}"; then
-        popd
-    fi
-
-    return $?
-}
-#}}}
 # calc() #{{{
 # Taken from https://github.com/mathiasbynens/dotfiles/blob/master/.functions
 function calc() {

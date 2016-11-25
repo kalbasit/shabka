@@ -1,0 +1,143 @@
+#!/usr/bin/env bash
+#
+#   vim:ft=sh:fenc=UTF-8:ts=4:sts=4:sw=4:expandtab:foldmethod=marker:foldlevel=0:
+#
+#   Copyright (c) 2010 Wael Nasreddine <wael.nasreddine@gmail.com>
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
+#   USA.
+#
+
+set -e
+
+####
+# Notes
+
+# Don't use the following variables in your script, they are reserved
+#   to the Functions uses
+# 'LOCK': This is a variable used by the functions 'lock_script' and
+#   'free_lock'
+# 'TempFiles': This is a variable containing a list of Files to remove
+#   when the script exits.
+# Make sure you always use $ARGS instead of $1, Note that $ARGS[0]
+#   correspond to $1, and $ARGS[1] correspong to $2 ...
+
+#
+####
+
+# Bootstrap{{{
+bootstrap="$(dirname "${0}")/.bootstrap"
+if [ -f "${bootstrap}" ]; then
+    # shellcheck source=/dev/null
+    source "${bootstrap}"
+else
+    echo "Cannot bootstrap"
+    exit 54
+fi
+unset bootstrap
+#}}}
+
+####
+# Functions
+
+# If you want to define a specific help for this script
+function help()
+{
+    print_info 0 "USAGE: tmx [-l|-d] <session_name|folder>"
+    print_info 0 "\t -l, --list   - list current sessions"
+    print_info 0 "\t -d, --detach - start a new session detached, useful for starting multiple sessions from a script"
+}
+
+function pushd() {
+    command pushd "$@" > /dev/null
+}
+
+function popd() {
+    command popd > /dev/null
+}
+
+#
+####
+
+####
+# Main
+
+sess=
+tmux_new_session_extras=()
+should_popd=false
+
+while [[ $# -ge 1 ]]; do
+    case "${1}" in
+        -h)
+            help
+            exit 0
+            ;;
+        -l|--list)
+            tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" ls
+            exit 0
+            ;;
+        -d|--detach)
+            tmux_new_session_extras=(${tmux_new_session_extras[@]} "-d")
+            shift
+            ;;
+        *)
+            # Make sure we have only one argument left
+            if [[ -n "${2}" ]]; then
+                help
+                exit 1
+            fi
+            sess="${1}"
+            shift
+            ;;
+    esac
+done
+
+# if the sess is an actual directory, go there first and set the sess to
+# empty to generate the session name from the path
+if [[ -d "${sess}" ]]; then
+    pushd "${sess}"
+    should_popd=true
+    sess=
+fi
+
+# if the session name was not given, generate one from the path
+if [ "x${sess}" = "x" ]; then
+    sess="${PWD##$GOPATH/src/}"
+fi
+
+# session name cannot contain a dot or a column
+# https://github.com/tmux/tmux/blob/76688d204071b76fd3388e46e944e4b917c09625/session.c#L232
+sess="$(echo "${sess}" | sed -e 's:\.:_:g' -e 's#:#_#g')"
+
+# start a tmux session with the first window being Vim. Conserve the
+# environment variables needed for profiling.
+if tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" list-sessions -F '#{session_name}' | grep -q -e "^${sess}\$"; then
+    tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" attach -t "${sess}"
+else
+    tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" new-session "${tmux_new_session_extras[@]}" -s "${sess}" \; \
+        set-environment ACTIVE_PROFILE "${ACTIVE_PROFILE}" \; \
+        set-environment SSH_AGENT_NAME "${ACTIVE_PROFILE}" \; \
+        new-window \; \
+        kill-window -t :0 \; \
+        new-window -t :0 'zsh -i -c vim' \;
+fi
+
+# if we did change directory, we must change the directory back
+if isTrue "${should_popd}"; then
+    popd
+fi
+
+#
+####
