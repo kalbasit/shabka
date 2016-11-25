@@ -51,6 +51,8 @@
 .ssh/id_boot2docker
 .ssh/id_boot2docker.pub
 .ssh/known_hosts
+.tmux/plugins/
+.tmux/resurrect/
 .tmux/ssh_vars
 .vim/.netrwhist
 .vim/_backup/
