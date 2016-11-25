@@ -1,0 +1,55 @@
+#
+# vim:ft=sh:fenc=UTF-8:ts=4:sts=4:sw=4:expandtab:foldmethod=marker:foldlevel=0:
+#
+# Some functions are taken from
+#       http://phraktured.net/config/
+#       http://www.downgra.de/dotfiles/
+
+# needNet()#{{{
+function needNet()
+{
+    # is it a sticky application ?{{{
+    if [ "${1}" = "-k" ]; then
+        KEEP=true
+        shift
+    else
+        KEEP=false
+    fi
+    #}}}
+    # Sanity checks{{{
+    if [ "${#}" -lt 1 ]; then
+        print_error 0 "Usage: needNet <command> [args...]"
+        return 1
+    fi
+    #}}}
+    # Global Variables{{{
+    COMMAND="${1}"
+    shift
+    ARGS=${@}
+    #}}}
+    # Launch the application.#{{{
+    # This loop will wait untill a connection is available
+    # and then launch the program.
+    (
+        while true; do
+            if ping -c 1 google.com &> /dev/null; then
+                "${COMMAND}" ${ARGS}
+                if isTrue ${KEEP}; then
+                    continue
+                else
+                    break
+                fi
+            else #* We couldn't connect, print a warning and sleep for 5 mins... *#
+                print_warning 0 "I couldn't ping google.com, retrying to launch ${COMMAND} in 30 seconds..."
+                sleep 30
+            fi
+        done
+    ) &
+    #}}}
+
+    unset COMMAND
+    unset ARGS
+    unset KEEP
+
+}
+#}}}
