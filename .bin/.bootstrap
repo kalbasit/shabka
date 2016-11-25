@@ -24,8 +24,9 @@
 ARGS=( ${@} )
 #}}}
 
-for i in isTrue isFalse isNumber inArray print_info print_error print_warning print_coloumn check_root need_root needNet not_root; do
-    source "${HOME}/.zsh/functions/${i}"
+for i in isTrue isFalse isNumber inArray print_info print_error print_warning check_root need_root needNet not_root; do
+    # shellcheck disable=SC1090
+    source "${HOME}/.zsh/functions/${i}.zsh"
 done
 
 # Some functions are taken from
