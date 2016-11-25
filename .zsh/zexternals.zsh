@@ -41,3 +41,8 @@ if [[ -d "${HOME}/.nvm" ]]; then
   export NVM_DIR="/home/kalbasit/.nvm"
   source "$NVM_DIR/nvm.sh"
 fi
+
+# load k8s completion
+if [[ -x $(which kubectl 2>/dev/null) ]]; then
+  source <(kubectl completion zsh)
+fi
