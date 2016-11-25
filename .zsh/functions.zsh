@@ -73,7 +73,7 @@ function inArray()
     needle="${1}"
     shift
     haystack=(${@})
-    for i in ${haystack[@]}; do
+    for i in "${haystack[@]}"; do
         [[ "${needle}" = "${i}" ]] && return 0
     done
     return 1
@@ -784,8 +784,18 @@ function pled() {
     plutil -convert binary1 ${1}
 }
 # }}}
-# cdc() {{{
-function cdc() {
-    cd "${GOPATH}/src/${@}"
+# ne() {{{
+function ne() {
+    # get the name from the arguments
+    local name="${1}"
+    if [[ "x${name}" = "x" ]]; then
+        print_error 0 "you must provide a name"
+        return 1
+    fi
+    # create the directory
+    mkdir -p "${GOPATH}/src/experimental/${name}"
+    # TODO: should I switch profile off? maybe have an argument for it?
+    tmx "${GOPATH}/src/experimental/${name}"
+    return 0
 }
 # }}}
