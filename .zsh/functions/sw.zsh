@@ -14,7 +14,7 @@ function sw() {
     # start personal
     sp kill
     tmx -n -d "${HOME}/.dotfiles"
-    for repo in github.com/kalbasit/{advantage2,tf-k8s,tf-vpc,tf-etcd}; do
+    for repo in github.com/kalbasit/{advantage2,tf-k8s,tf-vpc,tf-etcd,terraform}; do
         tmx -n -d "$GOPATH/src/${repo}"
     done
     # start publica
