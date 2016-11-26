@@ -29,3 +29,8 @@ alias irc='tmux attach -t irc || tmux new -s irc irssi'
 
 # General aliases
 alias -g rocker_auth="--auth kalbasit:\$(lpass show --password 4984935876)"
+
+# Mac only
+if [[ "$(uname)" = "Darwin" ]]; then
+  alias mac_install_cert='sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain'
+fi
