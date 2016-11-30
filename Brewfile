@@ -58,6 +58,7 @@ cask 'sequel-pro' # MySQL frontend supporting connections through a tunnel
 cask 'serial' # Serial Console communication
 cask 'skype'
 cask 'slack'
+cask 'spotify'
 cask 'sqlitebrowser'
 cask 'steam'
 cask 'synology-cloud-station-drive'
