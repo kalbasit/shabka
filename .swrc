@@ -1,0 +1,114 @@
+[
+    {
+        "profile": "publica",
+        "dir": "$GOPATH/src/github.com/publica-project/adctrl"
+    },
+    {
+        "profile": "publica",
+        "dir": "$GOPATH/src/github.com/publica-project/bootstrap-js"
+    },
+    {
+        "profile": "publica",
+        "dir": "$GOPATH/src/github.com/publica-project/console"
+    },
+    {
+        "profile": "publica",
+        "dir": "$GOPATH/src/github.com/publica-project/console-api"
+    },
+    {
+        "profile": "publica",
+        "dir": "$GOPATH/src/github.com/publica-project/demo"
+    },
+    {
+        "profile": "publica",
+        "dir": "$GOPATH/src/github.com/publica-project/deploy-tools"
+    },
+    {
+        "profile": "publica",
+        "dir": "$GOPATH/src/github.com/publica-project/emr"
+    },
+    {
+        "profile": "publica",
+        "dir": "$GOPATH/src/github.com/publica-project/grpc-logger"
+    },
+    {
+        "profile": "publica",
+        "dir": "$GOPATH/src/github.com/publica-project/homepage"
+    },
+    {
+        "profile": "publica",
+        "dir": "$GOPATH/src/github.com/publica-project/js-app"
+    },
+    {
+        "profile": "publica",
+        "dir": "$GOPATH/src/github.com/publica-project/js-utils"
+    },
+    {
+        "profile": "publica",
+        "dir": "$GOPATH/src/github.com/publica-project/kube-manifests"
+    },
+    {
+        "profile": "publica",
+        "dir": "$GOPATH/src/github.com/publica-project/pig"
+    },
+    {
+        "profile": "publica",
+        "dir": "$GOPATH/src/github.com/publica-project/protobuf-defs"
+    },
+    {
+        "profile": "publica",
+        "dir": "$GOPATH/src/github.com/publica-project/request-logger"
+    },
+    {
+        "profile": "publica",
+        "dir": "$GOPATH/src/github.com/publica-project/storm-s3"
+    },
+    {
+        "profile": "publica",
+        "dir": "$GOPATH/src/github.com/publica-project/terraform"
+    },
+    {
+        "profile": "publica",
+        "dir": "$GOPATH/src/github.com/publica-project/videojs-publica-ads"
+    },
+    {
+        "profile": "publica",
+        "dir": "$GOPATH/src/github.com/publica-project/website"
+    },
+    {
+        "profile": "personal",
+        "dir": "$GOPATH/src/github.com/kalbasit/advantage2"
+    },
+    {
+        "profile": "personal",
+        "dir": "$GOPATH/src/github.com/kalbasit/tf-k8s"
+    },
+    {
+        "profile": "personal",
+        "dir": "$GOPATH/src/github.com/kalbasit/tf-vpc"
+    },
+    {
+        "profile": "personal",
+        "dir": "$GOPATH/src/github.com/kalbasit/tf-etcd"
+    },
+    {
+        "profile": "personal",
+        "dir": "$GOPATH/src/github.com/kalbasit/network"
+    },
+    {
+        "profile": "personal",
+        "dir": "$GOPATH/src/github.com/kalbasit/terraform"
+    },
+    {
+        "profile": "personal",
+        "dir": "$GOPATH/src/github.com/kalbasit/kalbas.it"
+    },
+    {
+        "profile": "personal",
+        "dir": "$GOPATH/src/github.com/dailymotion/ad-controller"
+    },
+    {
+        "profile": "personal",
+        "dir": "$GOPATH/src/github.com/dailymotion/player"
+    }
+]
