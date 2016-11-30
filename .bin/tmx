@@ -55,9 +55,9 @@ unset bootstrap
 # If you want to define a specific help for this script
 function help()
 {
-    print_info 0 "USAGE: tmx [-l|-d] <session_name|folder>"
-    print_info 0 "\t -l, --list   - list current sessions"
-    print_info 0 "\t -d, --detach - start a new session detached, useful for starting multiple sessions from a script"
+    print_info "${log_depth}" "USAGE: tmx [-l|-d] <session_name|folder>"
+    print_info "${log_depth}" "\t -l, --list   - list current sessions"
+    print_info "${log_depth}" "\t -d, --detach - start a new session detached, useful for starting multiple sessions from a script"
 }
 
 function pushd() {
@@ -74,10 +74,12 @@ function popd() {
 ####
 # Main
 
-sess=
-tmux_new_session_extras=()
+ignore_session_exists=false
+log_depth=0
 new_session_only=false
+sess=
 should_popd=false
+tmux_new_session_extras=()
 
 while [[ $# -ge 1 ]]; do
     case "${1}" in
@@ -93,9 +95,17 @@ while [[ $# -ge 1 ]]; do
             new_session_only=true
             shift
             ;;
-        -d|--detach)
+        -i|--ignore-if-session-exists)
+            ignore_session_exists=true
+            shift
+            ;;
+        -d|--start-detached)
             tmux_new_session_extras=(${tmux_new_session_extras[@]} "-d")
             shift
+            ;;
+        --log-depth)
+            log_depth="${2}"
+            shift 2
             ;;
         *)
             # Make sure we have only one argument left
@@ -130,7 +140,9 @@ sess="$(echo "${sess}" | sed -e 's:\.:_:g' -e 's#:#_#g')"
 # environment variables needed for profiling.
 if tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" list-sessions -F '#{session_name}' | grep -q -e "^${sess}\$"; then
     if isTrue "${new_session_only}"; then
-        print_error 0 "the session ${sess} already exists, not attaching the session due to the --new flag"
+        if isFalse "${ignore_session_exists}"; then
+            print_error "${log_depth}" "the session ${sess} already exists, not attaching the session due to the --new flag"
+        fi
         exit 0
     fi
     tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" attach -t "${sess}"
