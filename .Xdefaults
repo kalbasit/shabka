@@ -1,6 +1,6 @@
-!-------------------------------------------------!
-!vim:fenc=UTF-8:nu:ai:si:et:ts=4:sw=4:ft=xdefaults!
-!-------------------------------------------------!
+!---------------------------------------------------!
+! vim:fenc=UTF-8:nu:ai:si:et:ts=4:sw=4:ft=xdefaults !
+!---------------------------------------------------!
 
 !-------------!
 ! Xft setting !
@@ -16,14 +16,13 @@ Xft.rgba:       rgb
 ! rxvt-unicode settings !
 !-----------------------!
 
-URxvt*boldFont:        xft:monaco:pixelsize=12:antialias=true:hinting=true:bold
-URxvt*bolditalicFont:  xft:monaco:pixelsize=12:antialias=true:hinting=true:bold:italic
+URxvt*boldFont:        xft:monaco:size=10:bold
+URxvt*bolditalicFont:  xft:monaco:size=10:bold:italic
 URxvt*cursorBlink:     true
-URxvt*cursorColor:     #FF0000
-URxvt*font:            xft:monaco:pixelsize=12:antialias=true:hinting=true
+URxvt*font:            xft:monaco:size=10
 URxvt*imLocale:        en_US.UTF-8
 URxvt*iso14755:        false
-URxvt*italicFont:      xft:monaco:pixelsize=12:antialias=true:hinting=true:italic
+URxvt*italicFont:      xft:monaco:size=10:italic
 URxvt*matcher.button:  1
 URxvt*perl-ext-common: default,matcher
 URxvt*saveLines:       32767
