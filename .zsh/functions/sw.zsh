@@ -22,6 +22,11 @@ function sw() {
             print_error 0 "profile cannot be empty"
             print_error 1 "$(jq -r .[${i}] "${rc}" )"
         fi
+        # make sure the path actually exists
+        if [[ ! -d "${dir}" ]]; then
+          print_error 0 "${dir} not existing, continuing..."
+          continue
+        fi
         print_info 0 "starting ${dir} under the ${profile} profile"
         sp "${profile}" 2
         tmx --log-depth 2 --ignore-if-session-exists --new --start-detached "${dir}"
