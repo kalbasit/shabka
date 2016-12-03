@@ -35,9 +35,10 @@ GO_BINARIES = [
   "github.com/pocke/lemonade",
 ]
 
-task :init => [:update_submodules, :switch_to_zsh, :link, :osx, :install_go_binaries]
+desc "run :update_submodules and :link"
+task :default => [:update_submodules, :link]
 
-task :default => [:update_submodules, :link, :vim_plug]
+desc "Link both private and public config files"
 task :link => [:link_dotfiles, :link_private]
 
 desc "Initialize the Mac"
