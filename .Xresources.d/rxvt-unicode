@@ -5,23 +5,39 @@
 !-----------------------!
 ! rxvt-unicode settings !
 !-----------------------!
+!
 
-URxvt*boldFont:        xft:monaco:size=10:bold
-URxvt*bolditalicFont:  xft:monaco:size=10:bold:italic
-URxvt*cursorBlink:     true
-URxvt*font:            xft:monaco:size=10
-URxvt*imLocale:        en_US.UTF-8
-URxvt*iso14755:        false
-URxvt*italicFont:      xft:monaco:size=10:italic
-URxvt*matcher.button:  1
+! visual settings
+URxvt*cursorBlink:  true
+URxvt*saveLines:    32767
+URxvt*scrollBar:    false
+URxvt*termName:     rxvt-unicode-256color
+URxvt*transparent:  false
+URxvt*urgentOnBell: true
+URxvt*visualBall:   true
+
+! font settings
+URxvt*boldFont:       xft:monaco:size=8:bold
+URxvt*bolditalicFont: xft:monaco:size=8:bold:italic
+URxvt*font:           xft:monaco:size=8
+URxvt*italicFont:     xft:monaco:size=8:italic
+URxvt*letterSpace:    -1
+
+! locale
+URxvt*imLocale: en_US.UTF-8
+URxvt*iso14755: false
+
+
+! extensions
 URxvt*perl-ext-common: default,matcher
-URxvt*saveLines:       32767
-URxvt*scrollBar:       false
-URxvt*termName:        rxvt-unicode-256color
-URxvt*transparent:     false
-URxvt*urgentOnBell:    true
-URxvt*urlLauncher:     chromium
-URxvt*visualBall:      true
+
+! extension:urlmatcher
+URxvt.keysym.M-u:         matcher:select
+URxvt.matcher.button:     1
+URxvt.matcher.rend.0:     Uline Bold fg5
+URxvt.urlLauncher:        /usr/bin/xdg-open
+URxvt.matcher.pattern.2:  \\B(/\\S+?):(\\d+)(?=:|$)
+URxvt.matcher.launcher.2: vim +$2 $1
 
 ! seoul256 (dark) theme adapted for URxvt
 URxvt*background:   #3a3a3a
