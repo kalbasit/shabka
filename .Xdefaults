@@ -31,7 +31,7 @@ URxvt*scrollBar:       false
 URxvt*termName:        rxvt-unicode-256color
 URxvt*transparent:     false
 URxvt*urgentOnBell:    true
-URxvt*urlLauncher:     google-chrome
+URxvt*urlLauncher:     chromium
 URxvt*visualBall:      true
 
 ! seoul256 (dark) theme adapted for URxvt
