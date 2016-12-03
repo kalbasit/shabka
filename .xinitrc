@@ -27,5 +27,17 @@ fi
 # set the keyboard delay to 200ms and the repeat rate to 30Hz
 xset r rate 200 30
 
+# hide mouse cursor when it isn't used
+unclutter -root -visible &
+
+# dynamic color temperature adjustment
+redshift -l 34.42:-122.11 -m randr -t 5500:4500 -g 0.75:0.75:0.75 &
+
+# composition manager
+compton -b
+
+# notification
+dunst -config "${HOME}/.dunstrc" &
+
 # start i3
 exec i3
