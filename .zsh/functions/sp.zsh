@@ -20,9 +20,9 @@ function sp() {
     if [[ "${#}" -eq "0" ]] || [[ "${requested_profile}" = "ls" ]]; then
         for pf in "${profiles[@]}"; do
             if [[ "x${pf}" = "x${ACTIVE_PROFILE}" ]]; then
-                print_info "${log_depth}" "${FG_GREEN}*${FG_CLEAR} ${pf}"
+                echo -e "$(for i in $(seq 1 ${log_depth}); do echo -ne " "; done)${FG_GREEN}*${FG_CLEAR} ${pf}"
             else
-                print_info "${log_depth}" "  ${pf}"
+                echo -e "$(for i in $(seq 1 ${log_depth}); do echo -ne " "; done)  ${pf}"
             fi
         done
     # are we loading the personal profile (i.e removing profiles?)
