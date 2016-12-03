@@ -2,5 +2,12 @@
 ! vim:fenc=UTF-8:nu:ai:si:et:ts=4:sw=4:ft=xdefaults:
 !---------------------------------------------------
 
-#include ".Xresources.d/xft"
-#include ".Xresources.d/rxvt-unicode"
+!-------------!
+! Xft setting !
+!-------------!
+
+Xft.dpi:        96
+Xft.antialias:  true
+Xft.hinting:    full
+Xft.hintstyle:  hintslight
+Xft.rgba:       rgb

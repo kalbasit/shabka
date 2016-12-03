@@ -1,0 +1,47 @@
+!---------------------------------------------------
+! vim:fenc=UTF-8:nu:ai:si:et:ts=4:sw=4:ft=xdefaults:
+!---------------------------------------------------
+
+!-----------------------!
+! rxvt-unicode settings !
+!-----------------------!
+
+URxvt*boldFont:        xft:monaco:size=10:bold
+URxvt*bolditalicFont:  xft:monaco:size=10:bold:italic
+URxvt*cursorBlink:     true
+URxvt*font:            xft:monaco:size=10
+URxvt*imLocale:        en_US.UTF-8
+URxvt*iso14755:        false
+URxvt*italicFont:      xft:monaco:size=10:italic
+URxvt*matcher.button:  1
+URxvt*perl-ext-common: default,matcher
+URxvt*saveLines:       32767
+URxvt*scrollBar:       false
+URxvt*termName:        rxvt-unicode-256color
+URxvt*transparent:     false
+URxvt*urgentOnBell:    true
+URxvt*urlLauncher:     chromium
+URxvt*visualBall:      true
+
+! seoul256 (dark) theme adapted for URxvt
+URxvt*background:   #3a3a3a
+URxvt*color0:       #4e4e4e
+URxvt*color10:      #87af87
+URxvt*color11:      #ffd787
+URxvt*color12:      #add4fb
+URxvt*color13:      #ffafaf
+URxvt*color14:      #87d7d7
+URxvt*color15:      #e4e4e4
+URxvt*color1:       #d68787
+URxvt*color2:       #5f865f
+URxvt*color3:       #d8af5f
+URxvt*color4:       #85add4
+URxvt*color5:       #d7afaf
+URxvt*color6:       #87afaf
+URxvt*color7:       #d0d0d0
+URxvt*color8:       #626262
+URxvt*color9:       #d75f87
+URxvt*colorBD:      #e4e4e4
+URxvt*cursorColor2: #3a3a3a
+URxvt*cursorColor:  #d0d0d0
+URxvt*foreground:   #d0d0d0
