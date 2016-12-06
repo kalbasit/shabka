@@ -85,6 +85,10 @@
     },
     {
         "profile": "personal",
+        "dir": "$GOPATH/src/github.com/kalbasit/i3-dynamic-workspaces"
+    },
+    {
+        "profile": "personal",
         "dir": "$GOPATH/src/github.com/kalbasit/tf-k8s"
     },
     {
