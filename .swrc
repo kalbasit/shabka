@@ -1,5 +1,9 @@
 [
     {
+        "profile": "personal",
+        "dir": "$GOPATH/src/gist.github.com/cvimrc"
+    },
+    {
         "profile": "publica",
         "dir": "$GOPATH/src/github.com/publica-project/adctrl"
     },
