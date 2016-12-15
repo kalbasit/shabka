@@ -1,3 +1,6 @@
 [submodule ".tmux/plugins/tpm"]
 	path = .tmux/plugins/tpm
 	url = https://github.com/tmux-plugins/tpm
+[submodule ".emacs.d/crotti_snippets"]
+	path = .emacs.d/crotti_snippets
+	url = https://github.com/AndreaCrotti/yasnippet-snippets.git
