@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TEMP="`mktemp /tmp/filters.XXXX`"
-sed -e 's/tag:new AND//g' "${HOME}/.notmuch/filters" > "${TEMP}"
+TEMP="$(mktemp /tmp/filters.XXXX)"
+sed -e 's/tag:new AND//g' "${HOME}/.mail/.notmuch/filters" > "${TEMP}"
 notmuch tag --batch --input="${TEMP}"
 rm -f "${TEMP}"
