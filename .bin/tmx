@@ -146,6 +146,11 @@ if tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" list-sessions -F '#{session_name}' 
         exit 0
     fi
     tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" attach -t "${sess}"
+elif [[ "${sess}" = "mail" ]]; then
+    tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" new-session "${tmux_new_session_extras[@]}" -s "${sess}" \; \
+        new-window \; \
+        kill-window -t :0 \; \
+        new-window -t :0 'zsh -i -c emacs' \;
 else
     tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" new-session "${tmux_new_session_extras[@]}" -s "${sess}" \; \
         set-environment ACTIVE_PROFILE "${ACTIVE_PROFILE}" \; \
