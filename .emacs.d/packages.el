@@ -30,13 +30,13 @@
                  nil ;; No extra headers
                  nil ;; No extra body text
                  "~/.signatures/personal")
-                ("dailymotion"
+                ("publica"
                  nil
-                 "Wael Nasreddine <wmn@dailymotion.com>" ;; Sender address
-                 "Dailymotion"
+                 "Wael Nasreddine <wael@getpublica.com>" ;; Sender address
+                 "publica"
                  nil
                  nil
-                 "~/.signatures/dailymotion")
+                 "~/.signatures/publica")
                ("talentoday"
                  nil
                  "Wael Nasreddine <wmn@talentoday.com>" ;; Sender address
@@ -47,9 +47,9 @@
         ;; Define the rules TODO: Add all of personal addresses
         (setq gnus-alias-identity-rules (quote
                                          (("personal" ("any" "wael.nasreddine@gmail.com" both) "personal")
-                                          ("dailymotion" ("any" "\\(wmn\\|w.nasreddine\\|wael.nasreddine\\)@dailymotion.com" both) "dailymotion")
+                                          ("publica" ("any" "wael@getpublica.com" both) "publica")
                                           ("talentoday" ("any" "\\(wmn\\|w.nasreddine\\|wael.nasreddine\\)@talentoday.com" both) "talentoday"))))
-        ;; Use "dailymotion" identity by default
+        ;; Use "personal" identity by default
         (setq gnus-alias-default-identity "personal")
         ;; Determine identity when message-mode loads
         (add-hook 'message-setup-hook 'gnus-alias-determine-identity))))
@@ -58,25 +58,24 @@
     (setq notmuch-saved-searches
           '((:name "flagged" :query "tag:flagged")
             (:name "deis-new" :query "tag:github::deis AND tag:unread")
-            (:name "phabricator-new" :query "tag:unread AND tag:dailymotion::phabricator")
-            (:name "jira-new" :query "tag:unread AND tag:dailymotion::jira")
-            (:name "inbox-dailymotion-new" :query "tag:dailymotion AND tag:unread AND tag:inbox")
-            (:name "dailymotion-jira-new" :query "tag:dailymotion AND tag:unread AND tag:jira")
+            (:name "phabricator-new" :query "tag:unread AND tag:publica::phabricator")
+            (:name "jira-new" :query "tag:unread AND tag:publica::jira")
+            (:name "inbox-publica-new" :query "tag:publica AND tag:unread AND tag:inbox")
+            (:name "publica-jira-new" :query "tag:publica AND tag:unread AND tag:jira")
             (:name "inbox-talentoday-new" :query "tag:talentoday AND tag:unread AND tag:inbox")
             (:name "inbox-personal-new" :query "tag:personal AND tag:unread AND tag:inbox")
             (:name "family-new" :query "tag:family AND tag:unread")
             (:name "wife-new" :query "tag:wife AND tag:unread")
             (:name "consulting-new" :query "tag:consulting AND tag:unread")
-            (:name "dailymotion-new" :query "tag:dailymotion AND tag:unread")
+            (:name "publica-new" :query "tag:publica AND tag:unread")
             (:name "personal-new" :query "tag:personal AND tag:unread")
-            (:name "dailymotion" :query "tag:dailymotion")
+            (:name "publica" :query "tag:publica")
             (:name "personal" :query "tag:personal")
             (:name "inbox-unread" :query "tag:inbox AND tag:unread")
             (:name "unread" :query "tag:unread")
             (:name "inbox" :query "tag:inbox")))
     (setq notmuch-address-command
           (f-expand "nottoomuch-addresses" (concat (f-full (getenv "HOME")) "/.bin")))
-    (notmuch-address-message-insinuate)
     (setq mail-envelope-from (quote header))
     (setq mail-specify-envelope-from t)
     (setq message-kill-buffer-on-exit t)
@@ -84,7 +83,7 @@
     (setq notmuch-fcc-dirs nil)
     (setq notmuch-search-oldest-first nil)
     (setq send-mail-function (quote sendmail-send-it))
-    (setq sendmail-program "/usr/local/bin/msmtp")
+    (setq sendmail-program "/usr/bin/msmtp")
     ;; Remove the blue color of flagged messages
     (setq notmuch-search-line-faces (quote
                                       (("flagged" . (:foreground nil)))))
