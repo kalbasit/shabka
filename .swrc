@@ -9,6 +9,10 @@
     },
     {
         "profile": "publica",
+        "dir": "$GOPATH/src/github.com/publica-project/asset-cacher"
+    },
+    {
+        "profile": "publica",
         "dir": "$GOPATH/src/github.com/publica-project/bootstrap-js"
     },
     {
@@ -62,6 +66,10 @@
     {
         "profile": "publica",
         "dir": "$GOPATH/src/github.com/publica-project/request-logger"
+    },
+    {
+        "profile": "publica",
+        "dir": "$GOPATH/src/github.com/publica-project/rsa"
     },
     {
         "profile": "publica",
@@ -126,5 +134,9 @@
     {
         "profile": "personal",
         "dir": "$GOPATH/src/github.com/dailymotion/player"
+    },
+    {
+        "profile": "personal",
+        "dir": "$HOME/.dotfiles"
     }
 ]
