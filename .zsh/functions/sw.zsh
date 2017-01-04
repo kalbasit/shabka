@@ -36,5 +36,5 @@ function sw() {
         sp "${current_profile}"
     fi
     # open the dotfiles tmux
-    tmx "${HOME}/.dotfiles"
+    tmx mail
 }
