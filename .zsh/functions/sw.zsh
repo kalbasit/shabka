@@ -10,8 +10,10 @@ function sw() {
 
     # compute the length of the rc file
     rc_length="$( jq length "${rc}" )"
+    debug "rc_length=${rc_length}"
     # record the current profile
     current_profile="${ACTIVE_PROFILE}"
+    debug "current_profile=${current_profile}"
     for (( i = 0; i < rc_length; i++)); do
         profile="$( jq -r ".[${i}] .profile" "${rc}" )"
         # TODO(kalbasit): I cannot figure out how to interpolate variables
