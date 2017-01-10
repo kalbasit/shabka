@@ -1,0 +1,33 @@
+" Always show tab numbers I hate counting
+set tabnumbers
+
+" Change your completion settings if you miss Firefox's AwesomeBar
+set complete=l
+
+" Change the hintchars to the home row in the Colemak keyboard
+set hintchars="arstneio"
+
+" Having to press Shift to go back is irretating, use gb instead of gT
+noremap gb gT
+
+" Open all commands in a newtab
+set newtab=all
+
+" Colemak mappins
+" n/o: left/right
+" i/e: up/down
+nnoremap n h
+nnoremap e j
+nnoremap i k
+nnoremap o l
+" l/L = back word/WORD
+" u/U = end of word/WORD
+" y/Y = forward word/WORD
+nnoremap l b
+nnoremap L B
+nnoremap u e
+nnoremap U E
+nnoremap y w
+nnoremap Y W
+
+" vim: set ft=vimperator:
