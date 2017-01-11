@@ -40,6 +40,8 @@ Plug 'tpope/vim-rails', { 'for': 'ruby' }
 Plug 'motus/pig.vim', { 'for': 'pig' }
 " HTML
 Plug 'mattn/emmet-vim', { 'for': ['html', 'css'] }
+" Vimperator
+Plug 'vimperator/vimperator.vim'
 
 """"""""""""""""
 " Colorschemes "
