@@ -1,11 +1,21 @@
-" Always show tab numbers I hate counting
-set tabnumbers
+"""""""""""""""""""
+" Firefox
 
-" Change your completion settings if you miss Firefox's AwesomeBar
-set complete=l
+
+"""""""""""""""""""
+" Settings
+
+" change the <Leader> to a comma
+let mapleader = ","
 
 " Change the hintchars to the home row in the Colemak keyboard
 set hintchars="arstneio"
+
+" set the correct status elements to show
+set status="input,location,bookmark,history,tabcount,position,zoomlevel"
+
+" Always show tab numbers I hate counting
+set tabnumbers
 
 " Having to press Shift to go back is irretating, use gb instead of gT
 noremap gb gT
@@ -13,21 +23,55 @@ noremap gb gT
 " Open all commands in a newtab
 set newtab=all
 
-" Colemak mappins
+"""""""""""""""""""
+" Mappings (Colemak keyboard layout). See https://github.com/kalbasit/advantage2
+
 " n/o: left/right
 " i/e: up/down
-nnoremap n h
-nnoremap e j
-nnoremap i k
-nnoremap o l
-" l/L = back word/WORD
-" u/U = end of word/WORD
-" y/Y = forward word/WORD
-nnoremap l b
-nnoremap L B
-nnoremap u e
-nnoremap U E
-nnoremap y w
-nnoremap Y W
+nnoremap n 3h
+nnoremap e 3j
+nnoremap i 3k
+nnoremap o 3l
 
-" vim: set ft=vimperator:
+" k/K: search forward, backward
+nnoremap k n
+nnoremap K N
+
+" E/I: previous/next tab
+" NOTE: These are reversed from Chrome, I use the "Tree Style Tab" extension
+" which displays the tabs in a vertical way so it makes more sense to go up and
+" down.
+nnoremap I gT
+nnoremap E gt
+
+" N/O: go back/forward
+nnoremap N :back<CR>
+nnoremap O :forward<CR>
+
+" Yank the frame URL
+" nnoremap cC
+" Yank the current URL
+nnoremap cc yy
+" Yank highlight
+" nnoremap ch
+" Yank URL with a hint
+nnoremap cg ;y
+
+" v/V: open the URL in the clipboard in the current tab / new tab.
+nnoremap v p
+nnoremap V P
+" y opens a new URL in the current tab
+" w opens a new URL in a new tab
+" Y opens a new URL (current page URL pre-filled) in the current tab
+" W opens a new URL (current page URL pre-filled) in the current tab
+nnoremap y o
+nnoremap w t
+nnoremap Y O
+nnoremap W T
+" reload the page skipping the cache
+nnoremap <Leader>r R
+" bind <Leader>b to switch buffer. Note that the <Space> forces the :buffer
+" command to enter in autocomplete mode.
+nnoremap <Leader>b :buffer<Space>
+
+" vim:sw=2 ts=2 et si fdm=marker ft=vimperator:
