@@ -85,6 +85,10 @@
     },
     {
         "profile": "publica",
+        "dir": "$GOPATH/src/github.com/publica-project/vast-client"
+    },
+    {
+        "profile": "publica",
         "dir": "$GOPATH/src/github.com/publica-project/videojs-publica-ads"
     },
     {
