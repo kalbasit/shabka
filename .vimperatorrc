@@ -5,6 +5,9 @@
 """""""""""""""""""
 " Settings
 
+" set the colorscheme
+colorscheme "indigo"
+
 " change the <Leader> to a comma
 let mapleader = ","
 
