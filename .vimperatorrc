@@ -27,6 +27,10 @@ noremap gb gT
 set newtab=all
 
 """""""""""""""""""
+" Commands
+command! reloadPlugins :js liberator.pluginFiles = {}; liberator.loadPlugins();
+
+"""""""""""""""""""
 " Mappings (Colemak keyboard layout). See https://github.com/kalbasit/advantage2
 
 " n/o: left/right
@@ -76,5 +80,12 @@ nnoremap <Leader>r R
 " bind <Leader>b to switch buffer. Note that the <Space> forces the :buffer
 " command to enter in autocomplete mode.
 nnoremap <Leader>b :buffer<Space>
+
+"""""""""""""""""""
+" Plugin mappins
+
+" getIP
+nmap ci :getIP<CR>
+
 
 " vim:sw=2 ts=2 et si fdm=marker ft=vimperator:
