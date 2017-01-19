@@ -2,7 +2,7 @@
 # -*- cperl -*-
 
 case $* in (''|--*) exec perl -x "$0" "$@" ;; (???*) ;; (*) exit 0 ;; esac
-grep -aiF "$*" "${HOME}/.notmuch/nottoomuch-addresses/addresses.active"
+grep -aiF "$*" "${HOME}/.mail/.notmuch/nottoomuch/addresses.active"
 case $? in 0|1) exit 0; esac
 exit $?
 
