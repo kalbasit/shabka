@@ -82,6 +82,9 @@ nnoremap cc yy
 " Yank URL with a hint
 nnoremap cg ;y
 
+" remap i to s
+nnoremap s i
+
 " v/V: open the URL in the clipboard in the current tab / new tab.
 nnoremap v p
 nnoremap V P
