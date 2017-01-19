@@ -1,6 +1,22 @@
 """""""""""""""""""
 " Firefox
 
+" do not open tabs in the background. When I hit F to open a hint in a new tab,
+" I usually like go to it right away. The new tab will be loaded in background
+" according to the browser.tabs.loadInBackground Firefox preference.
+set! browser.tabs.loadInBackground=false
+
+" set the default search provider to DuckDuckGo
+set! browser.startup.homepage=https://duckduckgo.com/
+
+" disable the warning when opening about:config
+set! general.warnOnAboutConfig=false
+
+" disable internal password manager, I prefer Lastpass.
+set! signon.rememberSignons=false
+
+" to prevent d on the last tab from closing the window:
+set! browser.tabs.closeWindowWithLastTab=false
 
 """""""""""""""""""
 " Settings
@@ -25,6 +41,8 @@ noremap gb gT
 
 " Open all commands in a newtab
 set newtab=all
+
+set editor=/usr/local/bin/gvim
 
 """""""""""""""""""
 " Commands
