@@ -5,6 +5,7 @@ tap 'grammarly/tap'
 tap 'homebrew/bundle'
 tap 'homebrew/dupes'
 tap 'homebrew/games'
+tap 'homebrew/science'
 tap 'neovim/neovim'
 
 # Casks
@@ -43,6 +44,7 @@ cask 'lantern'
 cask 'lastpass'
 cask 'licecap' # GIF screen recorder
 cask 'mactex'
+cask 'macvim'
 cask 'music-manager'
 cask 'netspot'
 cask 'nomachine'
@@ -53,6 +55,7 @@ cask 'plex-home-theater'
 cask 'polycom-realpresence-desktop'
 cask 'private-internet-access'
 cask 'real-vnc'
+cask 'rstudio'
 cask 'screenflick' # Screen recorder
 cask 'sequel-pro' # MySQL frontend supporting connections through a tunnel
 cask 'serial' # Serial Console communication
@@ -123,6 +126,7 @@ brew 'grammarly/tap/rocker-compose'
 brew 'graphviz'
 brew 'heroku-toolbelt'
 brew 'homebrew/games/git-game'
+brew 'homebrew/science/r'
 brew 'htop-osx'
 brew 'httpie'
 brew 'hugo'
