@@ -46,7 +46,8 @@ noremap gb gT
 " Open all commands in a newtab
 set newtab=all
 
-set editor=/usr/local/bin/gvim
+" open gVim when <c-i> is hit while editing a text area or an input.
+set editor="/usr/local/bin/gvim -f"
 
 """""""""""""""""""
 " Commands
