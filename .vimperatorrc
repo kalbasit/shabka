@@ -50,6 +50,22 @@ set newtab=all
 set editor="/usr/local/bin/gvim -f"
 
 """""""""""""""""""
+" Status bar
+
+" Change the color of the status bar when it's focused.
+" From: http://www.reddit.com/r/linux/comments/99d55/i_could_use_a_little_vimperator_help_also/
+javascript <<EOF
+  (function() {
+    var inputElement = document.getElementById('liberator-commandline-command');
+    function swapBGColor(event) {
+      inputElement.style.backgroundColor = event.type == "focus" ? "#413d42" : "";
+    }
+    inputElement.addEventListener('focus', swapBGColor, false);
+    inputElement.addEventListener('blur', swapBGColor, false);
+  })();
+EOF
+
+"""""""""""""""""""
 " Commands
 command! reloadPlugins :js liberator.pluginFiles = {}; liberator.loadPlugins();
 
