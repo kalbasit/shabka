@@ -45,6 +45,7 @@ cask 'lastpass'
 cask 'licecap' # GIF screen recorder
 cask 'mactex'
 cask 'macvim'
+cask 'multifirefox'
 cask 'music-manager'
 cask 'netspot'
 cask 'nomachine'
