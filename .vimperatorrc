@@ -18,6 +18,10 @@ set! signon.rememberSignons=false
 " to prevent d on the last tab from closing the window:
 set! browser.tabs.closeWindowWithLastTab=false
 
+" show javascript warnings and errors on the console
+set! javascript.options.strict=true
+set! javascript.options.showInConsole=true
+
 """""""""""""""""""
 " Settings
 
