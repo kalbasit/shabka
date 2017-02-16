@@ -40,6 +40,7 @@ cask 'insomniax'
 cask 'istat-menus'
 cask 'iterm2-beta'
 cask 'java'
+cask 'keybase'
 cask 'lantern'
 cask 'lastpass'
 cask 'licecap' # GIF screen recorder
@@ -136,7 +137,6 @@ brew 'iftop'
 brew 'irssi'
 brew 'jq'
 brew 'jrnl'
-brew 'keybase'
 brew 'kubernetes-cli'
 brew 'lastpass-cli', args: ['with-doc']
 brew 'libav' # dependency of youtube-dl
