@@ -9,6 +9,10 @@
     },
     {
         "profile": "publica",
+        "dir": "$GOPATH/src/github.com/publica-project/archive-stream-consumer"
+    },
+    {
+        "profile": "publica",
         "dir": "$GOPATH/src/github.com/publica-project/asset-cacher"
     },
     {
@@ -22,6 +26,10 @@
     {
         "profile": "publica",
         "dir": "$GOPATH/src/github.com/publica-project/console-api"
+    },
+    {
+        "profile": "publica",
+        "dir": "$GOPATH/src/github.com/publica-project/console_api_client"
     },
     {
         "profile": "publica",
@@ -54,6 +62,14 @@
     {
         "profile": "publica",
         "dir": "$GOPATH/src/github.com/publica-project/kube-manifests"
+    },
+    {
+        "profile": "publica",
+        "dir": "$GOPATH/src/github.com/publica-project/kube-manifests.wiki"
+    },
+    {
+        "profile": "publica",
+        "dir": "$GOPATH/src/github.com/publica-project/logger_enricher"
     },
     {
         "profile": "publica",
@@ -98,6 +114,10 @@
     {
         "profile": "personal",
         "dir": "$GOPATH/src/github.com/kalbasit/advantage2"
+    },
+    {
+        "profile": "personal",
+        "dir": "$GOPATH/src/github.com/kalbasit/aur"
     },
     {
         "profile": "personal",
