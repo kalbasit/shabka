@@ -71,6 +71,9 @@ endif
 if has("python")
   Plug 'sjl/gundo.vim', { 'on': 'GundoToggle' }
 endif
+if has("ruby")
+  Plug 'felipec/notmuch-vim'
+endif
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'bling/vim-airline'
 Plug 'tpope/vim-obsession'
