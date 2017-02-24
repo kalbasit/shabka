@@ -5,8 +5,7 @@
 #       http://phraktured.net/config/
 #       http://www.downgra.de/dotfiles/
 
-# nse()#{{{
-function nse (){
+function nse() { #{{{
     docker exec -it $1 bash
 }
 #}}}
