@@ -38,8 +38,18 @@ fi
 
 # Load nvm
 if [[ -d "${HOME}/.nvm" ]]; then
-  export NVM_DIR="/home/kalbasit/.nvm"
+  if [[ -z "${PUBLICA_NPM_TOKEN}" ]]; then
+    # set the PUBLICA_NPM_TOKEN to a bogus value, it will be loaded by the
+    # publica profile when it gets loaded
+    export PUBLICA_NPM_TOKEN="undefined"
+  fi
+  export NVM_DIR="${HOME}/.nvm"
   source "$NVM_DIR/nvm.sh"
+
+  # if a folder contains an .nvmrc, respect it
+  autoload -U add-zsh-hook
+  add-zsh-hook chpwd load_nvmrc
+  load_nvmrc
 fi
 
 # load k8s completion
