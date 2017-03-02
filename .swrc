@@ -81,6 +81,10 @@
     },
     {
         "profile": "publica",
+        "dir": "$GOPATH/src/github.com/publica-project/proxy-js"
+    },
+    {
+        "profile": "publica",
         "dir": "$GOPATH/src/github.com/publica-project/request-logger"
     },
     {
