@@ -343,7 +343,10 @@ let g:terraform_fmt_on_save = 1
 let g:go_fmt_command = "goimports"  " What to run on save.
 let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1
-let g:go_highlight_structs = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_types = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_build_constraints = 1
 " configure vim-go to show errors in the quickfix window and not the location list.
 let g:go_list_type = "quickfix"
 
