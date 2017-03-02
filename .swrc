@@ -13,10 +13,6 @@
     },
     {
         "profile": "publica",
-        "dir": "$GOPATH/src/github.com/publica-project/asset-cacher"
-    },
-    {
-        "profile": "publica",
         "dir": "$GOPATH/src/github.com/publica-project/bootstrap-js"
     },
     {
