@@ -197,13 +197,6 @@ else
 endif
 
 " }}}
-"" Nvim only settings{{{
-if has('nvim')
-  " settings that only applies on boot
-  if has('vim_starting')
-  endif
-endif
-" }}}
 "" ViM only settings, these are default in nvim. See nvim-defaults{{{
 if !has('nvim')
   set autoread                   " Automatically read a file that has changed on disk
