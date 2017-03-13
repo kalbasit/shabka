@@ -37,6 +37,14 @@
     },
     {
         "profile": "publica",
+        "dir": "$GOPATH/src/github.com/publica-project/docker-golang-libwurfl"
+    },
+    {
+        "profile": "publica",
+        "dir": "$GOPATH/src/github.com/publica-project/docker-images"
+    },
+    {
+        "profile": "publica",
         "dir": "$GOPATH/src/github.com/publica-project/emr"
     },
     {
