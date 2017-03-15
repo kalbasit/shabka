@@ -59,7 +59,7 @@ Plug 'nanotech/jellybeans.vim'
 " YouCompleteMe
 " Install the plugin separately for nvim and vim.
 if has('nvim')
-  Plug 'Valloric/YouCompleteMe', { 'dir': '~/.vim/bundle/nvim-YouCompleteMe', 'do': 'python2 install.py --clang-completer --system-libclang --gocode-completer --tern-completer --racer-completer' }
+  Plug 'Valloric/YouCompleteMe', { 'dir': '~/.vim/bundle/nvim-YouCompleteMe', 'do': 'python2 install.py --clang-completer --system-libclang --gocode-completer --tern-completer --racer-completer', 'tag': '650a19ba0ad4fb2c74ed7302256a815738eb7d23' }
 else
   Plug 'Valloric/YouCompleteMe', { 'dir': '~/.vim/bundle/vim-YouCompleteMe', 'do': 'python2 install.py --clang-completer --system-libclang --gocode-completer --tern-completer --racer-completer' }
 endif
