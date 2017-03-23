@@ -56,3 +56,8 @@ fi
 if [[ -x $(which kubectl 2>/dev/null) ]]; then
   source <(kubectl completion zsh)
 fi
+
+# load the Emscripten environment
+if [[ -d "/usr/lib/emsdk" ]]; then
+  pathmunge "/usr/lib/emsdk"
+fi
