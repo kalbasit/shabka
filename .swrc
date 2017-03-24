@@ -97,10 +97,6 @@
     },
     {
         "profile": "publica",
-        "dir": "$GOPATH/src/github.com/publica-project/storm-s3"
-    },
-    {
-        "profile": "publica",
         "dir": "$GOPATH/src/github.com/publica-project/terraform"
     },
     {
