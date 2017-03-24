@@ -37,6 +37,8 @@ function sw() {
     if [[ -n "${current_profile}" ]]; then
         sp "${current_profile}"
     fi
-    # open the dotfiles tmux
+    # open the irc
+    tmx --ignore-if-session-exists --new --start-detached irc
+    # open the mail
     tmx mail
 }
