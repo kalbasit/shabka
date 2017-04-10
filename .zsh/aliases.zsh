@@ -33,4 +33,10 @@ alias -g rocker_auth="--auth kalbasit:\$(lpass show --password 4984935876)"
 # Mac only
 if [[ "$(uname)" = "Darwin" ]]; then
   alias mac_install_cert='sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain'
+  alias upup='brew upgrade'
+fi
+
+# Linux only
+if [[ "$(uname)" = "Linux" ]]; then
+  alias upup='yaourt -Syu --aur'
 fi
