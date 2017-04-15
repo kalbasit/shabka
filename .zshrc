@@ -15,7 +15,7 @@ if [[ -z "$ZSH_CACHE_DIR" ]]; then
 fi
 
 # Figure out the SHORT hostname
-if [ -n "$commands[scutil]" ]; then
+if [[ -n "$commands[scutil]" ]]; then
   # OS X
   SHORT_HOST=$(scutil --get ComputerName)
 else
