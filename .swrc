@@ -81,6 +81,10 @@
     },
     {
         "profile": "publica",
+        "dir": "$GOPATH/src/github.com/publica-project/player-assets"
+    },
+    {
+        "profile": "publica",
         "dir": "$GOPATH/src/github.com/publica-project/protobuf-defs"
     },
     {
@@ -166,5 +170,9 @@
     {
         "profile": "personal",
         "dir": "$HOME/.dotfiles"
+    },
+    {
+        "profile": "personal",
+        "dir": "$HOME/.dotfiles/.private"
     }
 ]
