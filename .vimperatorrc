@@ -49,6 +49,9 @@ set newtab=all
 " open gVim when <c-i> is hit while editing a text area or an input.
 set editor="/usr/local/bin/gvim -f"
 
+" follow hints only after hitting <Enter>
+set followhints=1
+
 """""""""""""""""""
 " Status bar
 
@@ -67,7 +70,13 @@ EOF
 
 """""""""""""""""""
 " Commands
+
+" reloadPlugins reloads the plugins. This does not remove any previously
+" assigned mappings.
 command! reloadPlugins :js liberator.pluginFiles = {}; liberator.loadPlugins();
+
+" add a command for loading the config file
+command! sourcerc :source ~/.vimperatorrc
 
 """""""""""""""""""
 " Mappings (Colemak keyboard layout). See https://github.com/kalbasit/advantage2
