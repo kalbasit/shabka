@@ -10,6 +10,7 @@ tap 'neovim/neovim'
 
 # Casks
 cask '1password'
+cask 'league-of-legends' # GAME: http://na.leagueoflegends.com/en/
 cask 'alfred'
 cask 'angry-ip-scanner'
 cask 'arduino'
