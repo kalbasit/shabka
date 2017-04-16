@@ -78,8 +78,8 @@ ignore_session_exists=false
 log_depth=0
 new_session_only=false
 sess=
-should_popd=false
 tmux_new_session_extras=()
+session_start_dir="${HOME}"
 
 while [[ $# -ge 1 ]]; do
     case "${1}" in
@@ -122,9 +122,14 @@ done
 # if the sess is an actual directory, go there first and set the sess to
 # empty to generate the session name from the path
 if [[ -d "${sess}" ]]; then
+    # go to inside the directory
     pushd "${sess}"
-    should_popd=true
-    sess=
+    # changes the session_start_dir to PWD
+    session_start_dir="${PWD}"
+    # compute the appropriate session name withould $GOPATH/src
+    sess="${PWD##$GOPATH/src/}"
+    # go back to where we were
+    popd
 fi
 
 # if the session name was not given, generate one from the path
@@ -139,35 +144,33 @@ sess="$(echo "${sess}" | sed -e 's:\.:_:g' -e 's#:#_#g')"
 # start a tmux session with the first window being Vim. Conserve the
 # environment variables needed for profiling.
 if tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" list-sessions -F '#{session_name}' | grep -q -e "^${sess}\$"; then
+    # are we supposed to only create a new session?
     if isTrue "${new_session_only}"; then
         if isFalse "${ignore_session_exists}"; then
             print_error "${log_depth}" "the session ${sess} already exists, not attaching the session due to the --new flag"
+            exit 1
         fi
         exit 0
     fi
+    # if not, attach the currently running session
     tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" attach -t "${sess}"
 elif [[ "${sess}" = "mail" ]]; then
-    tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" new-session "${tmux_new_session_extras[@]}" -s "${sess}" \; \
+    tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" new-session -c "${session_start_dir}" "${tmux_new_session_extras[@]}" -s "${sess}" \; \
         new-window \; \
         kill-window -t :0 \; \
         new-window -t :0 'zsh -i -c emacs' \;
 elif [[ "${sess}" = "irc" ]]; then
-    tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" new-session "${tmux_new_session_extras[@]}" -s "${sess}" \; \
+    tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" new-session -c "${session_start_dir}" "${tmux_new_session_extras[@]}" -s "${sess}" \; \
         new-window \; \
         kill-window -t :0 \; \
         new-window -t :0 'zsh -i -c irssi' \;
 else
-    tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" new-session "${tmux_new_session_extras[@]}" -s "${sess}" \; \
+    tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" new-session -c "${session_start_dir}" "${tmux_new_session_extras[@]}" -s "${sess}" \; \
         set-environment ACTIVE_PROFILE "${ACTIVE_PROFILE}" \; \
         set-environment SSH_AGENT_NAME "${ACTIVE_PROFILE}" \; \
         new-window \; \
         kill-window -t :0 \; \
-        new-window -t :0 'zsh -i -c vim' \;
-fi
-
-# if we did change directory, we must change the directory back
-if isTrue "${should_popd}"; then
-    popd
+        new-window -t :0 'zsh -i -c /usr/bin/vim' \;
 fi
 
 #
