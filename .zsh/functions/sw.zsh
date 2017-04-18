@@ -31,14 +31,15 @@ function sw() {
         fi
         print_info 0 "starting ${dir} under the ${profile} profile"
         sp "${profile}" 2
-        tmx --log-depth 2 --ignore-if-session-exists --new --start-detached "${dir}"
+        tmx --log-depth 2 --new --start-detached "${dir}"
     done
     # restore the current profile
     if [[ -n "${current_profile}" ]]; then
         sp "${current_profile}"
     fi
-    # open the irc
-    tmx --ignore-if-session-exists --new --start-detached irc
-    # open the mail
-    tmx mail
+    # open IRC
+    # tmx --new --start-detached irc
+    tmx irc
+    # open mail
+    # tmx mail
 }

@@ -56,7 +56,10 @@ unset bootstrap
 function help()
 {
     print_info "${log_depth}" "USAGE: tmx [-l|-d] <session_name|folder>"
-    print_info "${log_depth}" "\t -l, --list   - list current sessions"
+    print_info "${log_depth}" "\t -h, --help            - this message"
+    print_info "${log_depth}" "\t -l, --list            - list current sessions"
+    print_info "${log_depth}" "\t -n, --new             - create a new session only (do not attach existing session)"
+    print_info "${log_depth}" "\t -d, --start-detached  - start the session but do not attach it. This is ignored if the session already exists"
     print_info "${log_depth}" "\t -d, --detach - start a new session detached, useful for starting multiple sessions from a script"
 }
 
@@ -74,7 +77,6 @@ function popd() {
 ####
 # Main
 
-ignore_session_exists=false
 log_depth=0
 new_session_only=false
 sess=
@@ -83,7 +85,7 @@ tmux_new_session_extras=()
 
 while [[ $# -ge 1 ]]; do
     case "${1}" in
-        -h)
+        -h|--help)
             help
             exit 0
             ;;
@@ -93,10 +95,6 @@ while [[ $# -ge 1 ]]; do
             ;;
         -n|--new)
             new_session_only=true
-            shift
-            ;;
-        -i|--ignore-if-session-exists)
-            ignore_session_exists=true
             shift
             ;;
         -d|--start-detached)
@@ -140,9 +138,6 @@ sess="$(echo "${sess}" | sed -e 's:\.:_:g' -e 's#:#_#g')"
 # environment variables needed for profiling.
 if tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" list-sessions -F '#{session_name}' | grep -q -e "^${sess}\$"; then
     if isTrue "${new_session_only}"; then
-        if isFalse "${ignore_session_exists}"; then
-            print_error "${log_depth}" "the session ${sess} already exists, not attaching the session due to the --new flag"
-        fi
         exit 0
     fi
     tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" attach -t "${sess}"
