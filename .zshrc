@@ -62,6 +62,9 @@ source "${THEMES_PATH}/${THEME}.zsh-theme"
 # Make sure TERM is sane
 export TERM=xterm-256color
 [ -n "$TMUX" ] && export TERM=screen-256color
+if [[ "$(uname)" = "Linux" ]]; then
+  export TERM=xterm-termite
+fi
 
 # If the ACTIVE_PROFILE is set, source the profile file and activate the profile
 if [[ -n "${ACTIVE_PROFILE}" ]]; then
