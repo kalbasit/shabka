@@ -93,8 +93,8 @@ bindsym $mod+Shift+x exec "i3-nagbar -t warning -m 'You pressed the exit shortcu
 # Applications
 set $mode_apps Chromium (w), Charles (c)
 mode "$mode_apps" {
-  bindsym w exec "chromium --proxy-pac-url=file:///home/kalbasit/.proxy.pac"
-  bindsym c exec "charles"
+  bindsym w exec chromium
+  bindsym c exec charles
 
   # back to normal: Enter or Escape
   bindsym Return mode "default"
