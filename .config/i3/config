@@ -160,6 +160,6 @@ bar {
   colors {
     background #3a3a3a
     statusline #d0d0d0
-    seperator  #4e4e4e
+    separator  #4e4e4e
   }
 }
