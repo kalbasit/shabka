@@ -4,7 +4,7 @@ if [ "$commands[(I)hub]" ] && [ "$commands[(I)ruby]" ]; then
     if declare -f _git > /dev/null; then
       _git
     fi
-    
+
     if declare -f _git_commands > /dev/null; then
         _hub_commands=(
             'alias:show shell instructions for wrapping git'
@@ -33,7 +33,7 @@ fi
 
 # Functions #################################################################
 
-# https://github.com/dbb 
+# https://github.com/dbb
 
 
 # empty_gh [NAME_OF_REPO]
@@ -87,11 +87,35 @@ exist_gh() { # [DIRECTORY]
 # git.io "GitHub URL"
 #
 # Shorten GitHub url, example:
-#   https://github.com/nvogel/dotzsh    >   http://git.io/8nU25w  
+#   https://github.com/nvogel/dotzsh    >   http://git.io/8nU25w
 # source: https://github.com/nvogel/dotzsh
 # documentation: https://github.com/blog/985-git-io-github-url-shortener
 #
 git.io() {curl -i -s http://git.io -F "url=$1" | grep "Location" | cut -f 2 -d " "}
 
-# End Functions #############################################################
+# github_commit_link [REF]
+#
+# Print the Github commit link for REF (default HEAD)
+github_commit_link() { # [REF]
+  # get the reference we need
+  local ref="${1:-HEAD}"
+  # compute the path to the root of the repository
+  local repo_dir="$(git rev-parse --show-toplevel)"
+  # validate we are under a Github repo
+  # TODO: must check the URL of the origin if this failed for repos outside
+  # $GOPATH
+  if ! echo "${repo_dir}" | grep -q -i '/github\.com/[^/]*/[^/]*'; then
+    print_error 0 "this only works for Github.com"
+    return 1
+  fi
+  # compute the user from the path
+  local user="$(basename "$(dirname "${repo_dir}")")"
+  # compute the repo from the path
+  local repo="$(basename "${repo_dir}")"
+  # get the commit from the ref
+  local commit="$(git show --no-patch --format="%H" "${ref}")"
+  # finally echo it
+  echo "https://github.com/${user}/${repo}/commit/${commit}"
+}
 
+# End Functions #############################################################
