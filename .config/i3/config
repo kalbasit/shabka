@@ -91,10 +91,11 @@ bindsym $mod+Shift+r restart; exec "notify-send 'i3 restarted'"
 bindsym $mod+Shift+x exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
 # Applications
-set $mode_apps Chromium (w), Charles (c)
+set $mode_apps Launch: (c)hromium, c(h)arles, (s)lack
 mode "$mode_apps" {
-  bindsym w exec chromium
-  bindsym c exec charles
+  bindsym c exec chromium
+  bindsym h exec charles
+  bindsym s exec slack
 
   # back to normal: Enter or Escape
   bindsym Return mode "default"
