@@ -164,3 +164,7 @@ bar {
     separator  #4e4e4e
   }
 }
+
+# application assignment
+assign [class="^Slack$"] slack
+assign [class="^com-xk72-charles-gui-.*$"] charles
