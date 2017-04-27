@@ -31,7 +31,7 @@ function sw() {
         fi
         print_info 0 "starting ${dir} under the ${profile} profile"
         sp "${profile}" 2
-        tmx --log-depth 2 --new --start-detached "${dir}"
+        tmx --log-depth 2 --new --start-detached --confirm-vim-start "${dir}"
     done
     # restore the current profile
     if [[ -n "${current_profile}" ]]; then
