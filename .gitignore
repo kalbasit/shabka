@@ -5,11 +5,15 @@
 *~
 .bin/launch_dm_iterm
 .byobu/.ssh-agent
+.config/Slack/
 .config/Transmission\ Remote\ GUI
 .config/acd-token.json
 .config/acd.json
+.config/autostart/
+.config/chromium/
 .config/configstore/
 .config/git/
+.config/google-chrome/
 .config/keybase
 .config/liteide/
 .config/pianobar
