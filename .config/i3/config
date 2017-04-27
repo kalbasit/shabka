@@ -181,3 +181,6 @@ bar {
 # application assignment
 assign [class="^Slack$"] slack
 assign [class="^com-xk72-charles-gui-.*$"] charles
+
+# finally, start a terminal and chrome in the `main` workspace
+exec i3-msg "workspace main; exec --no-startup-id /usr/bin/termite; exec --no-startup-id /usr/bin/chromium"
