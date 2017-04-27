@@ -56,11 +56,12 @@ unset bootstrap
 function help()
 {
     print_info "${log_depth}" "USAGE: tmx [-l|-d] <session_name|folder>"
-    print_info "${log_depth}" "\t -h, --help            - this message"
-    print_info "${log_depth}" "\t -l, --list            - list current sessions"
-    print_info "${log_depth}" "\t -n, --new             - create a new session only (do not attach existing session)"
-    print_info "${log_depth}" "\t -d, --start-detached  - start the session but do not attach it. This is ignored if the session already exists"
-    print_info "${log_depth}" "\t -d, --detach - start a new session detached, useful for starting multiple sessions from a script"
+    print_info "${log_depth}" "\t -h, --help                - this message"
+    print_info "${log_depth}" "\t -l, --list                - list current sessions"
+    print_info "${log_depth}" "\t -n, --new                 - create a new session only (do not attach existing session)"
+    print_info "${log_depth}" "\t -d, --start-detached      - start the session but do not attach it. This is ignored if the session already exists"
+    print_info "${log_depth}" "\t -c, --confirm-vim-start   - start the session but do not attach it. This is ignored if the session already exists"
+    print_info "${log_depth}" "\t -d, --detach              - start a new session detached, useful for starting multiple sessions from a script"
 }
 
 function pushd() {
@@ -81,6 +82,7 @@ log_depth=0
 new_session_only=false
 sess=
 should_popd=false
+confirm_vim_startup=false
 tmux_new_session_extras=()
 
 while [[ $# -ge 1 ]]; do
@@ -104,6 +106,10 @@ while [[ $# -ge 1 ]]; do
         --log-depth)
             log_depth="${2}"
             shift 2
+            ;;
+        -c|--confirm-vim-start)
+            confirm_vim_startup=true
+            shift
             ;;
         *)
             # Make sure we have only one argument left
@@ -152,12 +158,21 @@ elif [[ "${sess}" = "irc" ]]; then
         kill-window -t :0 \; \
         new-window -t :0 'zsh -i -c irssi' \;
 else
-    tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" new-session "${tmux_new_session_extras[@]}" -s "${sess}" \; \
-        set-environment ACTIVE_PROFILE "${ACTIVE_PROFILE}" \; \
-        set-environment SSH_AGENT_NAME "${ACTIVE_PROFILE}" \; \
-        new-window \; \
-        kill-window -t :0 \; \
-        new-window -t :0 'zsh -i -c vim' \;
+    if isTrue "${confirm_vim_startup}"; then
+        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" new-session "${tmux_new_session_extras[@]}" -s "${sess}" \; \
+            set-environment ACTIVE_PROFILE "${ACTIVE_PROFILE}" \; \
+            set-environment SSH_AGENT_NAME "${ACTIVE_PROFILE}" \; \
+            new-window \; \
+            kill-window -t :0 \; \
+            new-window -t :0 'zsh -i -c "echo \"Press Enter to start Vim \" && read && /usr/bin/vim"' \;
+    else
+        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" new-session "${tmux_new_session_extras[@]}" -s "${sess}" \; \
+            set-environment ACTIVE_PROFILE "${ACTIVE_PROFILE}" \; \
+            set-environment SSH_AGENT_NAME "${ACTIVE_PROFILE}" \; \
+            new-window \; \
+            kill-window -t :0 \; \
+            new-window -t :0 'zsh -i -c /usr/bin/vim' \;
+    fi
 fi
 
 # if we did change directory, we must change the directory back
