@@ -182,5 +182,9 @@ bar {
 assign [class="^Slack$"] slack
 assign [class="^com-xk72-charles-gui-.*$"] charles
 
+# assign workspaces to monitor
+workspace main output DP1
+workspace slack output DP1
+
 # finally, start a terminal and chrome in the `main` workspace
 exec i3-msg "workspace main; exec --no-startup-id /usr/bin/termite; exec --no-startup-id /usr/bin/chromium"
