@@ -60,7 +60,7 @@ function help()
     print_info "${log_depth}" "\t -l, --list                - list current sessions"
     print_info "${log_depth}" "\t -n, --new                 - create a new session only (do not attach existing session)"
     print_info "${log_depth}" "\t -d, --start-detached      - start the session but do not attach it. This is ignored if the session already exists"
-    print_info "${log_depth}" "\t -c, --confirm-vim-start   - start the session but do not attach it. This is ignored if the session already exists"
+    print_info "${log_depth}" "\t -c, --confirm-vim-start   - confirm before starting Vim, this is essentially a performance improvement"
     print_info "${log_depth}" "\t -d, --detach              - start a new session detached, useful for starting multiple sessions from a script"
 }
 
