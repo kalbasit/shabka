@@ -64,9 +64,6 @@ if [[ -d "${HOME}/.gem/ruby" ]]; then
   done
 fi
 
-pathmunge "${GOPATH}/src/github.com/phacility/arcanist/bin"
-pathmunge "${GOPATH}/src/github.com/google/bazel/output"
-
 # Export Github's token if it's readable.
 github_token_path="$HOME/.github_token"
 if [[ -r "${github_token_path}" ]]; then
