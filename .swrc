@@ -97,10 +97,6 @@
     },
     {
         "profile": "publica",
-        "dir": "$GOPATH/src/github.com/publica-project/rsa"
-    },
-    {
-        "profile": "publica",
         "dir": "$GOPATH/src/github.com/publica-project/terraform"
     },
     {
@@ -121,31 +117,7 @@
     },
     {
         "profile": "personal",
-        "dir": "$GOPATH/src/github.com/kalbasit/advantage2"
-    },
-    {
-        "profile": "personal",
-        "dir": "$GOPATH/src/github.com/kalbasit/aur"
-    },
-    {
-        "profile": "personal",
-        "dir": "$GOPATH/src/github.com/kalbasit/docker-images"
-    },
-    {
-        "profile": "personal",
         "dir": "$GOPATH/src/github.com/kalbasit/i3-dynamic-workspaces"
-    },
-    {
-        "profile": "personal",
-        "dir": "$GOPATH/src/github.com/kalbasit/tf-k8s"
-    },
-    {
-        "profile": "personal",
-        "dir": "$GOPATH/src/github.com/kalbasit/tf-vpc"
-    },
-    {
-        "profile": "personal",
-        "dir": "$GOPATH/src/github.com/kalbasit/tf-etcd"
     },
     {
         "profile": "personal",
@@ -158,14 +130,6 @@
     {
         "profile": "personal",
         "dir": "$GOPATH/src/github.com/kalbasit/kalbas.it"
-    },
-    {
-        "profile": "personal",
-        "dir": "$GOPATH/src/github.com/dailymotion/ad-controller"
-    },
-    {
-        "profile": "personal",
-        "dir": "$GOPATH/src/github.com/dailymotion/player"
     },
     {
         "profile": "personal",
