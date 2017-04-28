@@ -16,6 +16,7 @@ function sw() {
     debug "current_profile=${current_profile}"
     for (( i = 0; i < rc_length; i++)); do
         profile="$( jq -r ".[${i}] .profile" "${rc}" )"
+        sp "${profile}" 2
         # TODO(kalbasit): I cannot figure out how to interpolate variables
         # stored in the dir variable in rc. i.e it's always
         # $GOPATH/src/github.com/... and I cannot turn $GOPATH to the value
@@ -30,7 +31,6 @@ function sw() {
           continue
         fi
         print_info 0 "starting ${dir} under the ${profile} profile"
-        sp "${profile}" 2
         tmx --log-depth 2 --new --start-detached --confirm-vim-start "${dir}"
     done
     # restore the current profile
