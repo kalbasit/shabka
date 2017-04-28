@@ -12,7 +12,9 @@ setopt long_list_jobs
 export PAGER="less"
 export LESS="-R"
 
-export LC_CTYPE=$LANG
+## language support
+export LANG=en_US.UTF-8
+export LC_ALL="${LANG}"
 
 ## TODO: Make man pages colorful
 ## http://nion.modprobe.de/blog/archives/569-colored-manpages.html
