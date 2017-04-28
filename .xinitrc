@@ -57,6 +57,9 @@ dunst &
 # NOTE: disabled because I use nmcli
 # nm-applet &
 
+# start pulse audio
+start-pulseaudio-x11
+
 # change the resolution
 if xrandr | grep -q '^DP1 connected'; then
   xrandr --output eDP1 --mode 1920x1080 --output DP1 --auto --right-of eDP1
