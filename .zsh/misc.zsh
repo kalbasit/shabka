@@ -15,6 +15,7 @@ export LESS="-R"
 ## language support
 export LANG=en_US.UTF-8
 export LC_ALL="${LANG}"
+[[ -n "${LC_CTYPE}" ]] && unset LC_CTYPE
 
 ## TODO: Make man pages colorful
 ## http://nion.modprobe.de/blog/archives/569-colored-manpages.html
