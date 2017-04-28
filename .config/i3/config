@@ -91,6 +91,11 @@ bindsym $mod+Shift+r restart; exec "notify-send 'i3 restarted'"
 # exit i3 (logs you out of your X session)
 bindsym $mod+$alt+x exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
+# volume support
+bindsym XF86AudioRaiseVolume exec --no-startup-id "pactl set-sink-mute 0 false; pactl set-sink-volume 0 +5%"
+bindsym XF86AudioLowerVolume exec --no-startup-id "pactl set-sink-mute 0 false; pactl set-sink-volume 0 -5%"
+bindsym XF86AudioMute exec --no-startup-id "pactl set-sink-mute 0 toggle"
+
 # Applications
 set $mode_apps Launch: (c)hromium, c(h)arles, (s)lack
 mode "$mode_apps" {
