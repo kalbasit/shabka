@@ -24,5 +24,10 @@ dunst &
 # start pulse audio
 start-pulseaudio-x11
 
+# start the xss-lock that takes care of locking the screen when necessary.
+# https://www.mankier.com/1/xss-lock
+# TODO: select an image with `-i /path/to/img`
+xss-lock --notifier=/usr/bin/notify-send -- i3lock -n &
+
 # start i3
 exec dbus-launch i3 -V
