@@ -22,9 +22,9 @@ function _host_color() {
   fi
 }
 
-// _current_path returns the current path with every parent folder represented
-// by only the first char.
-// https://github.com/robbyrussell/oh-my-zsh/issues/5068
+# _current_path returns the current path with every parent folder represented
+# by only the first char.
+# https://github.com/robbyrussell/oh-my-zsh/issues/5068
 function _current_path() {
   echo /${(j:/:)${(M)${(s:/:)PWD:h}#(|.)[^.]}}/${PWD:t}
 }
