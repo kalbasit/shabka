@@ -22,9 +22,16 @@ function _host_color() {
   fi
 }
 
+// _current_path returns the current path with every parent folder represented
+// by only the first char.
+// https://github.com/robbyrussell/oh-my-zsh/issues/5068
+function _current_path() {
+  echo /${(j:/:)${(M)${(s:/:)PWD:h}#(|.)[^.]}}/${PWD:t}
+}
+
 ZSH_THEME_GIT_PROMPT_PREFIX=" [%{%F{blue}%}"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{%f%k%F{green}%}]"
 ZSH_THEME_GIT_PROMPT_DIRTY=" %{%F{red}%}*%{%f%k%}"
 ZSH_THEME_GIT_PROMPT_CLEAN=""
 
-PROMPT='%{%F{green}%}%n%{%F{blue}%}@$(_host_color)%m%{%F{green}%} %{%F{yellow}%}%~%{%F{green}%}$(git_prompt_info)$(_work_prompt_info)%E%{%f%k%} $(_prompt_char) %#%{%f%k%} '
+PROMPT='%{%F{green}%}%n%{%F{blue}%}@$(_host_color)%m%{%F{green}%} %{%F{yellow}%}$(_current_path)%{%F{green}%}$(git_prompt_info)$(_work_prompt_info)%E%{%f%k%} $(_prompt_char) %#%{%f%k%} '
