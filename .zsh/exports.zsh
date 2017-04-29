@@ -1,3 +1,4 @@
+export BROWSER="${HOME}/.bin/relay-browser"           # Set the browser to my relay browser
 export GPG_TTY="$(tty)"                               # GPG_TTY is needed for gpg with pinentry-curses
 export GLOBAL_GOPATH="${HOME}/code"
 export GOPATH="${GLOBAL_GOPATH}"

@@ -101,9 +101,10 @@ bindsym XF86MonBrightnessUp exec --no-startup-id "xbacklight -inc 5
 bindsym XF86MonBrightnessDown exec --no-startup-id "xbacklight -dec 5
 
 # Applications
-set $mode_apps Launch: (c)hromium, c(h)arles, (s)lack
+set $mode_apps Launch: Chromium (p)ersonal, Chromium p(u)blica, c(h)arles, (s)lack
 mode "$mode_apps" {
-  bindsym c exec chromium
+  bindsym p exec "relay-browser --profile personal"
+  bindsym u exec "relay-browser --profile publica"
   bindsym h exec charles
   bindsym s exec slack
 
@@ -197,4 +198,4 @@ workspace main output DP1
 workspace slack output DP1
 
 # finally, start a terminal and chrome in the `main` workspace
-exec i3-msg "workspace main; exec --no-startup-id /usr/bin/termite; exec --no-startup-id /usr/bin/chromium"
+exec i3-msg "workspace main; exec --no-startup-id /usr/bin/termite; exec --no-startup-id relay-browser --profile publica"

@@ -134,7 +134,7 @@
   dmenu = /usr/bin/dmenu -p dunst:
 
   # Browser for opening urls in context menu.
-  browser = /usr/bin/chromium
+  browser = /home/kalbasit/.bin/relay-browser
 
   # Align icons left/right/off
   icon_position = off
