@@ -193,8 +193,10 @@ bar {
 assign [class="^Slack$"] slack
 assign [class="^com-xk72-charles-gui-.*$"] charles
 
-# assign workspaces to monitor
+# assign important to my external monitor
 workspace main output DP1
+workspace personal output DP1
+workspace publica output DP1
 workspace slack output DP1
 
 # finally, start a terminal and chrome in the `main` workspace
