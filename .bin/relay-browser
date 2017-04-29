@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+set -e
+
+if [[ "${1}" = "--profile" ]]; then
+  profile="${2}"
+  shift 2
+fi
+
+if [[ -z "${profile}" ]]; then
+  items="personal\npublica\n"
+  profile=$(dmenu < <(echo -e "${items}"))
+fi
+
+case "${profile}" in
+  personal)
+    (exec chromium --user-data-dir="${HOME}/.config/chromium-personal" "${@}" &>/dev/null)&
+    ;;
+  publica)
+    (exec chromium --user-data-dir="${HOME}/.config/chromium-publica" "${@}" &>/dev/null)&
+    ;;
+  *)
+    echo -e "${profile} is not recognized"
+    ;;
+esac
