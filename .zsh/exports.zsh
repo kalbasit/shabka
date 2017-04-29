@@ -66,7 +66,7 @@ fi
 
 # Export Github's token if it's readable.
 github_token_path="$HOME/.github_token"
-if [[ -r "${github_token_path}" ]]; then
+if [[ "$(uname)" = "Darwin" ]] && [[ -r "${github_token_path}" ]]; then
   export HOMEBREW_GITHUB_API_TOKEN=`head -1 ${github_token_path}`
 fi
 unset github_token_path
