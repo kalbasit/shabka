@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -e
+
+eval "$( grep 'Exec=' /usr/share/applications/slack.desktop | sed 's#^Exec=\(.*\) %U#\1#g' )"
