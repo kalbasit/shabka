@@ -20,6 +20,10 @@ set $alt Mod1
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
 font pango:DejaVu Sans Mono 8
 
+# Colors
+# class                 border  backgr. text    indicator
+client.focused          #00FF00 #00FF00 #000000 #2e9ef4
+
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
