@@ -92,6 +92,11 @@ bindsym $mod+x [urgent=latest] focus
 bindsym $mod+space exec --no-startup-id "i3-dynamic-workspaces --switch-workspace"
 bindsym $mod+Shift+space exec --no-startup-id "i3-dynamic-workspaces --move-container-to-workspace"
 
+# switch between the current and the previously focused one
+bindsym $mod+b workspace back_and_forth
+bindsym $mod+Shift+b move container to workspace back_and_forth
+bindsym $mod+Tab workspace back_and_forth
+
 # reload the configuration file
 bindsym $mod+Shift+c reload; exec --no-startup-id "notify-send 'i3 configuration reloaded'"
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
