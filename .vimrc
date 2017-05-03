@@ -152,7 +152,6 @@ set whichwrap+=<,>,h,l          " backspace and cursor keys wrap to
 set wildchar=<TAB>              " Which character activates the wildmenu
 set winwidth=79                 " Set the minimum window width
 set diffopt+=iwhite             " Add ignorance of whitespace to diff
-set esckeys                     " allow cursor keys in insert mode
 set makeef=error.err            " When using make, where should it dump the file
 set noautowrite                 " safe automacially content
 set pastetoggle=<F12>           " Paste toggle on key F12!
@@ -199,6 +198,7 @@ endif
 " }}}
 "" ViM only settings, these are default in nvim. See nvim-defaults{{{
 if !has('nvim')
+  set esckeys                     " allow cursor keys in insert mode
   set autoread                   " Automatically read a file that has changed on disk
   set backspace=indent,eol,start " backspace through everything in insert mode
   set hlsearch                   " highlight matches
