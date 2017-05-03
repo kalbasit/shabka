@@ -99,15 +99,13 @@ function wait_for_tunnel_port() {
 function open_tunnel() {
     # open the tunnel
     ssh -f -N -L "${tunnel_port}:${mysql_host}:${mysql_port}" "${bastion_username}"@"${bastion_host}"
-    # wait for it to open
-    wait_for_tunnel_port
-    # return the pid
     # shellcheck disable=SC2009
     ssh_pid="$( ps aux | grep "[s]sh -f -N -L ${tunnel_port}:${mysql_host}:${mysql_port} ${bastion_username}@${bastion_host}" | awk '{print $2}' )"
     # define the cleanup (exit) to close the tunnel
     cleanup() {
-        print_info 0 "closing the tunnel"
-        kill "${ssh_pid}"
+        if [[ -n "${ssh_pid}" ]]; then
+            kill "${ssh_pid}"
+        fi
     }
     trap cleanup EXIT TERM INT
 }
@@ -216,4 +214,5 @@ done
 validate_options
 find_open_port
 open_tunnel
+wait_for_tunnel_port
 mycli --host "localhost" --port "${tunnel_port}" --user "${mysql_username}" --password "${mysql_password}" --database "${mysql_database}"
