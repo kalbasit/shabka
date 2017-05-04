@@ -101,6 +101,7 @@ zplug "simnalamburt/shellder", as:theme
 zplug "zsh-users/zsh-history-substring-search"
 zplug "hcgraf/zsh-sudo"
 zplug "plugins/git",   from:oh-my-zsh
+zplug "plugins/zsh_reload",   from:oh-my-zsh
 
 # Install any missing zplug plugin
 if ! zplug check; then
