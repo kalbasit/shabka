@@ -36,10 +36,15 @@ GO_BINARIES = [
 ]
 
 desc "run :update_submodules and :link"
-task :default => [:update_submodules, :link]
+task :default => [:update_submodules, :link, :lesskey]
 
 desc "Link both private and public config files"
 task :link => [:link_dotfiles, :link_private]
+
+desc "Generate lesskey"
+task :lesskey do
+  sh %Q{lesskey}
+end
 
 desc "Initialize the Mac"
 task :osx do
