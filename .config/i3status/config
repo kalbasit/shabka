@@ -12,6 +12,7 @@ general {
 }
 
 order += "load"
+order += "cpu_temperature 0"
 order += "disk /"
 order += "wireless _first_"
 order += "ipv6"
@@ -44,4 +45,8 @@ volume master {
         format = "♪: %volume"
         format_muted = "♪: muted (%volume)"
         device = "pulse:0"
+}
+
+cpu_temperature 0 {
+        format = "%degrees °C"
 }
