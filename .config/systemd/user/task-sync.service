@@ -6,3 +6,6 @@ ConditionFileIsExecutable=/usr/bin/task
 [Service]
 Type=oneshot
 ExecStart=/usr/bin/task sync
+
+[Install]
+WantedBy=default.target
