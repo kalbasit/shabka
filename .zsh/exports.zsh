@@ -4,8 +4,8 @@ export GLOBAL_GOPATH="${HOME}/code"
 export GOPATH="${GLOBAL_GOPATH}"
 export CDPATH="${GOPATH}/src:$cdpath"                 # Add $GOPATH/src to CDPATH
 export MYFS="${HOME}/.filesystem"                     # Make sure I always know about my filesystem.
-export EDITOR=nvim                                    # NeoVim simply rocks!!
-export SUDO_EDITOR=nvim                               # https://wiki.archlinux.org/index.php/security#Editing_files_using_sudo
+export EDITOR="$(which nvim)"                         # NeoVim simply rocks!!
+export SUDO_EDITOR="$(which nvim)"                    # https://wiki.archlinux.org/index.php/security#Editing_files_using_sudo
 export NOTMUCH_CONFIG="${HOME}/.mail/.notmuch/config" # the path to notmuch config file
 
 function pathmunge() {
