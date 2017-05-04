@@ -1,0 +1,9 @@
+[Unit]
+Description=Run bugwarrior-pull hourly and on boot
+
+[Timer]
+OnBootSec=15min
+OnUnitActiveSec=1h
+
+[Install]
+WantedBy=timers.target
