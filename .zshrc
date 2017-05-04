@@ -86,9 +86,7 @@ zplug "plugins/history",   from:oh-my-zsh
 zplug "plugins/github",   from:oh-my-zsh
 
 # Install any missing zplug plugin
-if ! zplug check; then
-  zplug install
-fi
+zplug check || zplug install
 
 # Then, source plugins and add commands to $PATH
 zplug load
