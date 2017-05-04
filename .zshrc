@@ -104,6 +104,7 @@ zplug "plugins/git",   from:oh-my-zsh
 zplug "plugins/zsh_reload",   from:oh-my-zsh
 zplug "plugins/extract",   from:oh-my-zsh
 zplug "plugins/command-not-found",   from:oh-my-zsh
+zplug "plugins/history",   from:oh-my-zsh
 
 # Install any missing zplug plugin
 if ! zplug check; then
