@@ -52,14 +52,14 @@ zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 zplug "simnalamburt/shellder", as:theme
 
 # plugins
-zplug "zsh-users/zsh-history-substring-search"
 zplug "hcgraf/zsh-sudo"
-zplug "plugins/git",   from:oh-my-zsh
-zplug "plugins/zsh_reload",   from:oh-my-zsh
-zplug "plugins/extract",   from:oh-my-zsh
-zplug "plugins/command-not-found",   from:oh-my-zsh
-zplug "plugins/history",   from:oh-my-zsh
-zplug "plugins/github",   from:oh-my-zsh
+zplug "plugins/command-not-found", from:oh-my-zsh
+zplug "plugins/extract",           from:oh-my-zsh
+zplug "plugins/git",               from:oh-my-zsh
+zplug "plugins/github",            from:oh-my-zsh
+zplug "plugins/history",           from:oh-my-zsh
+zplug "plugins/zsh_reload",        from:oh-my-zsh
+zplug "zsh-users/zsh-history-substring-search"
 
 # Install any missing zplug plugin
 zplug check || zplug install
