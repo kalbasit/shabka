@@ -8,4 +8,4 @@ o right-scroll
 
 #env
 
-LESS= --RAW-CONTROL-CHARS --quit-if-one-screen
+LESS= --RAW-CONTROL-CHARS --quit-if-one-screen --ignore-case
