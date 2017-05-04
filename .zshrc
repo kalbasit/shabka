@@ -1,11 +1,7 @@
 # ZSHRC
 
-# Which theme to use
-THEME="kalbasit"
-
 # Define paths
 ZSH="${ZDOTDIR:-$HOME}/.zsh"
-THEMES_PATH="${ZSH}/themes"
 
 # Set ZSH_CACHE_DIR to the path where cache files should be created
 # or else we will use the default cache/
@@ -40,9 +36,6 @@ if ! compaudit &>/dev/null; then
 else
   compinit -d "${ZSH_COMPDUMP}"
 fi
-
-# Load the theme
-source "${THEMES_PATH}/${THEME}.zsh-theme"
 
 # Make sure TERM is sane
 export TERM=xterm-256color
