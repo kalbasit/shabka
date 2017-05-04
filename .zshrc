@@ -95,7 +95,9 @@ source "${HOME}/.zplug/init.zsh"
 zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
 # load the shellder theme
-zplug 'simnalamburt/shellder', as:theme
+zplug "simnalamburt/shellder", as:theme
+
+zplug "zsh-users/zsh-history-substring-search"
 
 # Install any missing zplug plugin
 if ! zplug check; then
