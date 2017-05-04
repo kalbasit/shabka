@@ -77,3 +77,32 @@ fi
 [[ -r "${ZSH}/hosts/${SHORT_HOST}.zsh" ]] && source "${ZSH}/hosts/${SHORT_HOST}.zsh"
 
 ## END
+
+## ZPLUG
+
+# if zplug is not installed, do it
+if [[ ! -f "${HOME}/.zplug/init.zsh" ]]; then
+  if [[ -d "${HOME}/.zplug" ]]; then
+    echo "FATAL: ${HOME}/.zplug is present but the init.zsh is not"
+    return 1
+  fi
+  git clone https://github.com/zplug/zplug.git "${HOME}/.zplug"
+fi
+
+# Load zplug
+source "${HOME}/.zplug/init.zsh"
+# let zplug manage itself
+zplug 'zplug/zplug', hook-build:'zplug --self-manage'
+
+# load the shellder theme
+zplug 'simnalamburt/shellder', as:theme
+
+# Install any missing zplug plugin
+if ! zplug check; then
+  zplug install
+fi
+
+# Then, source plugins and add commands to $PATH
+zplug load
+
+## END
