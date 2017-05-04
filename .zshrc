@@ -5,7 +5,6 @@ THEME="kalbasit"
 
 # Define paths
 ZSH="${ZDOTDIR:-$HOME}/.zsh"
-PLUGINS_PATH="${ZSH}/plugins"
 THEMES_PATH="${ZSH}/themes"
 
 # Set ZSH_CACHE_DIR to the path where cache files should be created
@@ -31,12 +30,6 @@ for config (${ZSH}/*.zsh); do
 done
 unset config
 
-# Tell the completion where the plugins are
-for plugin (${PLUGINS_PATH}/*); do
-  fpath=("$plugin" $fpath)
-done
-unset plugin
-
 # Load all stock functions (from $fpath files) called below.
 autoload -U compaudit compinit
 # If completion insecurities exist, warn the user without enabling completions.
@@ -47,14 +40,6 @@ if ! compaudit &>/dev/null; then
 else
   compinit -d "${ZSH_COMPDUMP}"
 fi
-
-# Load all the plugins
-for plugin (${PLUGINS_PATH}/*); do
-  plugin="$(basename $plugin)"
-  plugin_path="${PLUGINS_PATH}/${plugin}/${plugin}.plugin.zsh"
-  [[ -r "${plugin_path}" ]] && source "${plugin_path}"
-done
-unset plugin plugin_path
 
 # Load the theme
 source "${THEMES_PATH}/${THEME}.zsh-theme"
