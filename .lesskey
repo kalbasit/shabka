@@ -1,0 +1,11 @@
+#command
+
+# Colemak vim-keybindings
+n left-scroll
+e forw-line
+i back-line
+o right-scroll
+
+#env
+
+LESS= --RAW-CONTROL-CHARS --quit-if-one-screen
