@@ -29,3 +29,10 @@ include /usr/share/doc/task/rc/dark-256.theme
 #include /usr/share/doc/task/rc/solarized-light-256.theme
 #include /usr/share/doc/task/rc/no-color.theme
 
+# InTheAM sync
+taskd.certificate=~/.task/inthe.am/private.certificate.pem
+taskd.key=~/.task/inthe.am/private.key.pem
+taskd.ca=~/.task/inthe.am/ca.cert.pem
+taskd.server=taskwarrior.inthe.am:53589
+taskd.credentials=inthe_am/wael.nasreddine/c469da3e-62ee-47c9-a7cc-45fd17d5a18a
+taskd.trust=ignore hostname
