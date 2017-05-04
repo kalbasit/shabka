@@ -99,6 +99,7 @@ zplug "simnalamburt/shellder", as:theme
 
 # plugins
 zplug "zsh-users/zsh-history-substring-search"
+zplug "hcgraf/zsh-sudo"
 zplug "plugins/git",   from:oh-my-zsh
 
 # Install any missing zplug plugin
