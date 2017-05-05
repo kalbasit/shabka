@@ -58,6 +58,7 @@ zplug "simnalamburt/shellder", as:theme
 zplug "Dbz/zsh-kubernetes"
 zplug "b4b4r07/emoji-cli"
 zplug "b4b4r07/enhancd",           use:init.sh
+zplug "denolfe/zsh-travis"
 zplug "hcgraf/zsh-sudo"
 zplug "molovo/tipz"
 zplug "peterhurford/git-it-on.zsh"
