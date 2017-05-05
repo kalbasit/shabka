@@ -1,15 +1,21 @@
 #!/bin/bash
 set -e
 
+# simplified pathmunge used for early X
+function _pathmunge() {
+  [[ ! -d "${1}" ]] && return
+  if ! [[ $PATH =~ (^|:)$1($|:) ]]; then
+    PATH=$1:$PATH
+  fi
+}
+
 if [[ -z "${XBASERC}" ]]; then
   export XBASERC="true"
 
-  # import ZSHRC which will also export my environment
-  export ZSH="${ZDOTDIR:-$HOME}/.zsh"
-  # shellcheck disable=SC1090
-  source "${HOME}/.zsh/exports.zsh"
-  # shellcheck disable=SC1090
-  source "${HOME}/.zsh/functions.zsh"
+  # add my bin folders to the PATH
+  _pathmunge "${HOME}/.bin"
+  _pathmunge "${HOME}/code/bin"
+  _pathmunge "${HOME}/.filesystem/bin"
 
   userresources="$HOME/.Xresources"
   usermodmap="$HOME/.Xmodmap"
@@ -38,3 +44,5 @@ if [[ -z "${XBASERC}" ]]; then
   # set beep to off
   xset b off
 fi
+
+unfunction _pathmunge
