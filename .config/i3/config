@@ -127,6 +127,9 @@ bindsym XF86AudioMute exec --no-startup-id "pactl set-sink-mute 0 toggle"
 bindsym XF86MonBrightnessUp exec --no-startup-id "xbacklight -inc 5
 bindsym XF86MonBrightnessDown exec --no-startup-id "xbacklight -dec 5
 
+# sleep support
+bindsym XF86PowerOff exec --no-startup-id "systemctl suspend"
+
 # Applications
 set $mode_apps Launch: Chromium (p)ersonal, Chromium p(u)blica, c(h)arles, (s)lack
 mode "$mode_apps" {
