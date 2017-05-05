@@ -65,6 +65,7 @@ zplug "plugins/git",               from:oh-my-zsh
 zplug "plugins/github",            from:oh-my-zsh
 zplug "plugins/history",           from:oh-my-zsh
 zplug "plugins/zsh_reload",        from:oh-my-zsh
+zplug "supercrabtree/k"
 zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-history-substring-search"
 zplug "zsh-users/zsh-syntax-highlighting"
