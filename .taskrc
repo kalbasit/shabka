@@ -38,9 +38,25 @@ taskd.credentials=inthe_am/wael.nasreddine/c469da3e-62ee-47c9-a7cc-45fd17d5a18a
 taskd.trust=ignore hostname
 
 
-# UDA settings
+# UDA settings for tasksh
 uda.reviewed.type=date
 uda.reviewed.label=Reviewed
+
+# Bugwarrior UDAs
+uda.jiraurl.type=string
+uda.jiraurl.label=Jira URL
+uda.jiraestimate.type=numeric
+uda.jiraestimate.label=Estimate
+uda.jirasummary.type=string
+uda.jirasummary.label=Jira Summary
+uda.jirafixversion.type=string
+uda.jirafixversion.label=Fix Version
+uda.jiraid.type=string
+uda.jiraid.label=Jira Issue ID
+uda.jiracreatedts.type=date
+uda.jiracreatedts.label=Created At
+uda.jiradescription.type=string
+uda.jiradescription.label=Jira Description
 
 # Report settings
 report._reviewed.description=Tasksh review report. Adjust the filter to your needs.
