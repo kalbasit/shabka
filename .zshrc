@@ -57,6 +57,7 @@ zplug "simnalamburt/shellder", as:theme
 # plugins
 zplug "b4b4r07/emoji-cli"
 zplug "hcgraf/zsh-sudo"
+zplug "molovo/tipz"
 zplug "plugins/command-not-found", from:oh-my-zsh
 zplug "plugins/extract",           from:oh-my-zsh
 zplug "plugins/git",               from:oh-my-zsh
