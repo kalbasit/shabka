@@ -55,6 +55,7 @@ zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 zplug "simnalamburt/shellder", as:theme
 
 # plugins
+zplug "Dbz/zsh-kubernetes"
 zplug "b4b4r07/emoji-cli"
 zplug "hcgraf/zsh-sudo"
 zplug "molovo/tipz"
