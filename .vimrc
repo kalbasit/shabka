@@ -65,6 +65,9 @@ else
 endif
 autocmd! User YouCompleteMe if !has('vim_starting') | call youcompleteme#Enable() | endif
 
+if executable("task")
+  Plug 'blindFS/vim-taskwarrior'
+endif
 if executable("curl")
   Plug 'mattn/webapi-vim' | Plug 'mattn/gist-vim', { 'on': 'Gist' }
 endif
