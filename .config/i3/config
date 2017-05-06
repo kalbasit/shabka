@@ -248,5 +248,5 @@ workspace personal output DP1
 workspace publica output DP1
 workspace slack output DP1
 
-# finally, start a terminal and chrome in the `main` workspace
-exec i3-msg "workspace main; exec --no-startup-id /usr/bin/termite; exec --no-startup-id relay-browser --profile publica"
+# finally, start a terminal in the personal workspace
+exec i3-msg "workspace personal; exec --no-startup-id /usr/bin/termite"
