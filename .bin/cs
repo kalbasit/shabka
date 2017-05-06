@@ -22,9 +22,12 @@
 #   USA.
 #
 
+set -e
+
 # Bootstrap{{{
-bootstrap="`dirname $0`/.bootstrap"
+bootstrap="$( dirname "${0}" )/.bootstrap"
 if [ -f "${bootstrap}" ]; then
+    # shellcheck disable=1090
     source "${bootstrap}"
 else
     echo "Cannot bootstrap"
@@ -33,14 +36,21 @@ fi
 unset bootstrap
 #}}}
 
+start_editor="true"
+if [[ "${1}" = "--no-editor" ]]; then
+    start_editor="false"
+    shift
+fi
+
 if [ "${#}" -ne "1" ]; then
-    print_error 0 "Usage: ${0} <script_name>."
+    print_error 0 "Usage: ${0} [--no-editor] <script_name>"
     exit 1
 fi
 
-cd "`dirname $0`"
+cd "$( dirname "${0}" )"
 if [ ! -f "${1}" ]; then
     cp .tmpl "${1}"
     chmod +x "${1}"
 fi
-$EDITOR "${1}"
+
+[[ "${start_editor}" = "true" ]] && $EDITOR "${1}"
