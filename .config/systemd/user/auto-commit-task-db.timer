@@ -1,9 +1,0 @@
-[Unit]
-Description=Commit task database twice an hour
-
-[Timer]
-OnCalendar=*:0/30
-Persistent=true
-
-[Install]
-WantedBy=timers.target
