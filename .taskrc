@@ -29,14 +29,12 @@ data.location=~/.task
 #include /usr/share/doc/task/rc/solarized-light-256.theme
 #include /usr/share/doc/task/rc/no-color.theme
 
-# InTheAM sync
-taskd.certificate=~/.task/inthe.am/private.certificate.pem
-taskd.key=~/.task/inthe.am/private.key.pem
-taskd.ca=~/.task/inthe.am/ca.cert.pem
-taskd.server=taskwarrior.inthe.am:53589
-taskd.credentials=inthe_am/wael.nasreddine/c469da3e-62ee-47c9-a7cc-45fd17d5a18a
-taskd.trust=ignore hostname
-
+# Taskserver sync
+taskd.certificate=~/.task/taskserver.nasreddine.com/taskserver.nasreddine.com.crt
+taskd.key=~/.task/taskserver.nasreddine.com/taskserver.nasreddine.com.key
+taskd.ca=~/.task/taskserver.nasreddine.com/ca.crt
+taskd.server=taskserver.nasreddine.com:53589
+taskd.credentials=Home\/Wael Nasreddine\/92d86b3f-aa16-412b-bfff-0050e8a5a50c
 
 # UDA settings for tasksh
 uda.reviewed.type=date
