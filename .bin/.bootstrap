@@ -24,9 +24,9 @@
 ARGS=( ${@} )
 #}}}
 # load the functions from ZSH#{{{
-for i in isTrue isFalse isNumber inArray print_info print_error print_warning check_root need_root needNet not_root debug; do
+for func in ${HOME}/.zsh/functions/*.zsh; do
     # shellcheck disable=SC1090
-    source "${HOME}/.zsh/functions/${i}.zsh"
+    source "${func}"
 done
 #}}}
 
