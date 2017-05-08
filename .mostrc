@@ -1,0 +1,5 @@
+% Colemak bindings
+setkey column_left  n
+setkey down         e
+setkey up           i
+setkey column_right o

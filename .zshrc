@@ -308,13 +308,10 @@ export MYFS="${HOME}/.filesystem"                     # Make sure I always know 
 export EDITOR="$(which nvim)"                         # NeoVim simply rocks!!
 export SUDO_EDITOR="$(which nvim)"                    # https://wiki.archlinux.org/index.php/security#Editing_files_using_sudo
 export NOTMUCH_CONFIG="${HOME}/.mail/.notmuch/config" # the path to notmuch config file
-export PAGER="less"
+export PAGER=most
 export LANG=en_US.UTF-8
 export LC_ALL="${LANG}"
 [[ -n "${LC_CTYPE}" ]] && unset LC_CTYPE
-
-## set LESS to empty, basically
-export LESS=
 
 function pathmunge() {
   [[ ! -d "${1}" ]] && return
