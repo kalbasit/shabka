@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# http://www.insanelymac.com/forum/topic/309654-run-vanilla-os-x-el-capitan-sierra-yosemite-or-mavericks-in-virtualbox-5010-on-a-windows-host/
 set -ex
 
 if [[ $# -ne 1 ]]; then
