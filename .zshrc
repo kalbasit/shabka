@@ -38,12 +38,14 @@ fi
 #####################################################################
 
 # if zplug is not installed, do it
-if [[ ! -f "${HOME}/.zplug/init.zsh" ]]; then
-  if [[ -d "${HOME}/.zplug" ]]; then
-    echo "FATAL: ${HOME}/.zplug is present but the init.zsh is not"
-    return 1
+if [[ -z "${TMUX}" ]]; then
+  if [[ ! -f "${HOME}/.zplug/init.zsh" ]]; then
+    if [[ -d "${HOME}/.zplug" ]]; then
+      echo "FATAL: ${HOME}/.zplug is present but the init.zsh is not"
+      return 1
+    fi
+    git clone https://github.com/zplug/zplug.git "${HOME}/.zplug"
   fi
-  git clone https://github.com/zplug/zplug.git "${HOME}/.zplug"
 fi
 
 # Load zplug
@@ -75,7 +77,9 @@ zplug "zsh-users/zsh-history-substring-search"
 zplug "zsh-users/zsh-syntax-highlighting"
 
 # Install any missing zplug plugin
-zplug check || zplug install
+if [[ -z "${TMUX}" ]]; then
+  zplug check || zplug install
+fi
 
 # Then, source plugins and add commands to $PATH
 zplug load
@@ -187,7 +191,7 @@ if [[ "$DISABLE_LS_COLORS" != "true" ]]; then
 
   # Find the option for using colors in ls, depending on the version: Linux or BSD
   if [[ "$(uname -s)" == "NetBSD" ]]; then
-    # On NetBSD, test if "gls" (GNU ls) is installed (this one supports colors); 
+    # On NetBSD, test if "gls" (GNU ls) is installed (this one supports colors);
     # otherwise, leave ls as is, because NetBSD's ls doesn't support -G
     gls --color -d . &>/dev/null 2>&1 && alias ls='gls --color=tty'
   elif [[ "$(uname -s)" == "OpenBSD" ]]; then
