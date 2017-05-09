@@ -74,10 +74,10 @@ bindsym $mod+u layout tabbed
 bindsym $mod+y layout toggle split
 
 # toggle tiling / floating
-#bindsym $mod+Shift+space floating toggle
+bindsym $alt+Shift+space floating toggle
 
 # change focus between tiling / floating windows
-#bindsym $mod+space focus mode_toggle
+bindsym $alt+space focus mode_toggle
 
 # focus the parent container
 # bindsym $mod+a focus parent
