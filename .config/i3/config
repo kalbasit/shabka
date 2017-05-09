@@ -162,10 +162,11 @@ bindsym $mod+r mode "resize"
 
 ## Manual management of external displays
 # Set the shortcuts and what they do
-set $mode_display Single Screen (s), Multiple screen (m)
+set $mode_display Laptop screen (l), Multiple screen (m), Wide screen (w)
 mode "$mode_display" {
-  bindsym m exec --no-startup-id xrandr --output eDP1 --mode 1920x1080 --output DP1 --auto --right-of eDP1 && xset r rate 200 30, mode "default"
-  bindsym s exec --no-startup-id xrandr --output eDP1 --mode 1920x1080 --output DP1 --off && xset r rate 200 30, mode "default"
+  bindsym l exec --no-startup-id xrandr --output eDP1 --mode 1920x1080 --output DP1 --off && xset r rate 200 30, mode "default"
+  bindsym m exec --no-startup-id xrandr --output eDP1 --mode 1920x1080 --output DP1 --mode 3440x1440 --right-of eDP1 && xset r rate 200 30, mode "default"
+  bindsym w exec --no-startup-id xrandr --output eDP1 --off --output DP1 --mode 3440x1440 && xset r rate 200 30, mode "default"
 
   # back to normal: Enter or Escape
   bindsym Return mode "default"
