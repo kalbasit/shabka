@@ -29,6 +29,10 @@ data.location=~/.task
 #include /usr/share/doc/task/rc/solarized-light-256.theme
 #include /usr/share/doc/task/rc/no-color.theme
 
+# Urgency settings
+urgency.user.tag.problem.coefficient=4.5
+urgency.user.tag.later.coefficient=-6.0
+
 # Taskserver sync
 taskd.certificate=~/.task/taskserver.nasreddine.com/taskserver.nasreddine.com.crt
 taskd.key=~/.task/taskserver.nasreddine.com/taskserver.nasreddine.com.key
