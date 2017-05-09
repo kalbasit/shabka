@@ -145,6 +145,7 @@ fi
 # Task
 alias t='task'
 alias ta='task add'
+alias tm='task project:morning'
 
 #####################################################################
 # colors
