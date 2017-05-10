@@ -571,6 +571,14 @@ if [[ -d "/usr/lib/emsdk" ]]; then
 fi
 
 #####################################################################
+# host overrides
+#####################################################################
+
+# Source host-specific settings if the exists. Keep this last so it can
+# overwrite any of the other settings.
+[[ -r "${HOME}/.zsh/hosts/${SHORT_HOST}.zsh" ]] && source "${HOME}/.zsh/hosts/${SHORT_HOST}.zsh"
+
+#####################################################################
 # Profile support
 #####################################################################
 
@@ -579,11 +587,3 @@ if [[ -n "${ACTIVE_PROFILE}" ]]; then
   source "${HOME}/.zsh/profiles/${ACTIVE_PROFILE}.zsh"
   pactivate
 fi
-
-#####################################################################
-# host overrides
-#####################################################################
-
-# Source host-specific settings if the exists. Keep this last so it can
-# overwrite any of the other settings.
-[[ -r "${HOME}/.zsh/hosts/${SHORT_HOST}.zsh" ]] && source "${HOME}/.zsh/hosts/${SHORT_HOST}.zsh"
