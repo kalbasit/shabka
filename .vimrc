@@ -96,7 +96,12 @@ Plug 'scrooloose/syntastic'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-eunuch', { 'on': ['Remove', 'Unlink', 'Move', 'Rename', 'Chmod', 'Mkdir', 'Find', 'Locate', 'Wall', 'SudoWrite', 'SudoEdit'] }
-Plug 'tpope/vim-fugitive', { 'on': ['Git', 'Gcd', 'Glcd', 'Gstatus', 'Gcommit', 'Gmerge', 'Gpull', 'Ggrep', 'Glgrep', 'Glog', 'Gllog', 'Ge', 'Gedit', 'Gpedit', 'Gsplit', 'Gvsplit', 'Gtabedit', 'Gread', 'Gwrite', 'Gw', 'Gwq', 'Gpush', 'Gfetch', 'Gdiff', 'Gvdiff', 'Gsdiff', 'Gbrowse'] }
+" vim-fugitive cannot be loaded lazily
+" https://github.com/junegunn/vim-plug/issues/164#issuecomment-73621232 There
+" is a way to do it
+" (https://github.com/junegunn/vim-plug/issues/525#issuecomment-256169881),
+" however, I chose to keep it simple
+Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 " disable unimpaired as there is no way to disable mappings and it's messing
