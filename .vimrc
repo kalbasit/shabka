@@ -126,7 +126,8 @@ endif
 "" Settings{{{
 ""
 
-color seoul256
+set background=dark
+colorscheme solarized
 
 let mapleader = ","             " set the mapleader
 set backup                      " enable backup, written to backupdir set below

@@ -1,22 +1,32 @@
 [options]
 font = Hack-Regular 10
 
+# Solarized dark color scheme: https://github.com/alpha-omega/termite-colors-solarized
+
 [colors]
-background = #3a3a3a
-foreground = #d0d0d0
-color0     = #4e4e4e
-color10    = #87af87
-color11    = #ffd787
-color12    = #add4fb
-color13    = #ffafaf
-color14    = #87d7d7
-color15    = #e4e4e4
-color1     = #d68787
-color2     = #5f865f
-color3     = #d8af5f
-color4     = #85add4
-color5     = #d7afaf
-color6     = #87afaf
-color7     = #d0d0d0
-color8     = #626262
-color9     = #d75f87
+foreground = #839496
+foreground_bold = #eee8d5
+#foreground_dim = #888888
+background = #002b36
+cursor = #93a1a1
+
+# if unset, will reverse foreground and background
+#highlight = #839496
+
+# colors from color0 to color254 can be set
+color0 = #073642
+color1 = #dc322f
+color2 = #859900
+color3 = #b58900
+color4 = #268bd2
+color5 = #d33682
+color6 = #2aa198
+color7 = #eee8d5
+color8 = #002b36
+color9 = #cb4b16
+color10 = #586e75
+color11 = #657b83
+color12 = #839496
+color13 = #6c71c4
+color14 = #93a1a1
+color15 = #fdf6e3
