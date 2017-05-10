@@ -34,6 +34,7 @@
   current-branch  = !git symbolic-ref -q HEAD | sed -e 's|^refs/heads/||'
   ci              = commit
   co              = checkout
+  cb              = checkout -b
   di              = diff
   dc              = diff --cached
   amend           = commit --amend
@@ -117,10 +118,15 @@
 # http# {{{
 [http]
   cookiefile = ~/.gitcookies
+[http "https://gopkg.in"]
+  followRedirects = true
 # }}}
+# url "https://github"# {{{
+[url "https://github"]
+  insteadOf = git://github
+# }}}
+
 
 #
 #   vim:ft=gitconfig:fenc=UTF-8:ts=2:sts=2:sw=2:expandtab:foldmethod=marker:foldlevel=0:
 #
-[url "https://github"]
-	insteadOf = git://github
