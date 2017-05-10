@@ -17,10 +17,10 @@ URxvt*urgentOnBell: true
 URxvt*visualBall:   true
 
 ! font settings
-URxvt*boldFont:       xft:monaco:size=10:bold
-URxvt*bolditalicFont: xft:monaco:size=10:bold:italic
-URxvt*font:           xft:monaco:size=10
-URxvt*italicFont:     xft:monaco:size=10:italic
+URxvt*boldFont:       xft:Hack-Regular:size=10:bold
+URxvt*bolditalicFont: xft:Hack-Regular:size=10:bold:italic
+URxvt*font:           xft:Hack-Regular:size=10
+URxvt*italicFont:     xft:Hack-Regular:size=10:italic
 URxvt*letterSpace:    -1
 
 ! locale
