@@ -293,8 +293,6 @@ fi
 # completion
 #####################################################################
 
-# fixme - the load process here seems a bit bizarre
-
 unsetopt menu_complete   # do not autoselect the first completion entry
 unsetopt flowcontrol
 setopt auto_menu         # show completion menu on succesive tab press
@@ -359,7 +357,7 @@ setopt pushdsilent
 setopt pushdtohome
 setopt auto_cd
 setopt multios
-setopt cdablevarS
+setopt cdablevars
 
 alias ..='cd ..'
 alias cd..='cd ..'
@@ -367,16 +365,6 @@ alias cd...='cd ../..'
 alias cd....='cd ../../..'
 alias cd.....='cd ../../../..'
 alias cd/='cd /'
-
-alias 1='cd -'
-alias 2='cd -2'
-alias 3='cd -3'
-alias 4='cd -4'
-alias 5='cd -5'
-alias 6='cd -6'
-alias 7='cd -7'
-alias 8='cd -8'
-alias 9='cd -9'
 
 alias md='mkdir -p'
 alias rd=rmdir
