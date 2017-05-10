@@ -513,8 +513,10 @@ fi
 # Load TheFuck
 [[ -x "$(which thefuck 2>/dev/null)" ]] && eval "$(thefuck --alias)"
 
-# Load iterm2 shell integration
-[[ -r "${HOME}/.iterm2_shell_integration.zsh" ]] && source "${HOME}/.iterm2_shell_integration.zsh"
+if [[ "$OSTYPE" = darwin* ]]; then
+  # Load iterm2 shell integration
+  [[ -r "${HOME}/.iterm2_shell_integration.zsh" ]] && source "${HOME}/.iterm2_shell_integration.zsh"
+fi
 
 # Load travis
 [[ -r "${HOME}/.travis/travis.sh" ]] && source "${HOME}/.travis/travis.sh"
