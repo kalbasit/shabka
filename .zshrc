@@ -417,8 +417,6 @@ fi
 bindkey -v                                            # Use vim key bindings
 export KEYTIMEOUT=1                                   # kill ZSH's lag when ESC is pressed in vim mode
 
-bindkey '\ew' kill-region                             # [Esc-w] - Kill from the cursor to the mark
-bindkey -s '\el' 'ls\n'                               # [Esc-l] - run command: ls
 bindkey '^r' history-incremental-search-backward      # [Ctrl-r] - Search backward incrementally for a specified string. The string may begin with ^ to anchor the search to the beginning of the line.
 if [[ "${terminfo[kpp]}" != "" ]]; then
   bindkey "${terminfo[kpp]}" up-line-or-history       # [PageUp] - Up a line of history
@@ -427,11 +425,17 @@ if [[ "${terminfo[knp]}" != "" ]]; then
   bindkey "${terminfo[knp]}" down-line-or-history     # [PageDown] - Down a line of history
 fi
 
+# start typing + [Up-Arrow] - fuzzy find history forward
 if [[ "${terminfo[kcuu1]}" != "" ]]; then
-  bindkey "${terminfo[kcuu1]}" up-line-or-search      # start typing + [Up-Arrow] - fuzzy find history forward
+  autoload -U up-line-or-beginning-search
+  zle -N up-line-or-beginning-search
+  bindkey "${terminfo[kcuu1]}" up-line-or-beginning-search
 fi
+# start typing + [Down-Arrow] - fuzzy find history backward
 if [[ "${terminfo[kcud1]}" != "" ]]; then
-  bindkey "${terminfo[kcud1]}" down-line-or-search    # start typing + [Down-Arrow] - fuzzy find history backward
+  autoload -U down-line-or-beginning-search
+  zle -N down-line-or-beginning-search
+  bindkey "${terminfo[kcud1]}" down-line-or-beginning-search
 fi
 
 if [[ "${terminfo[khome]}" != "" ]]; then
@@ -473,7 +477,7 @@ autoload -U url-quote-magic
 zle -N self-insert url-quote-magic
 
 ## file rename magick
-bindkey "^[m" copy-prev-shell-word
+bindkey "^y" copy-prev-shell-word
 
 ## jobs
 setopt long_list_jobs
