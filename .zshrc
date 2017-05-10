@@ -178,7 +178,6 @@ alias blaze=bazel
 alias comp=docker-compose
 alias e="${EDITOR:-vim}"
 alias gl='github_commit_link'
-alias history='fc -fl 1'
 alias http='http --print=HhBb'
 alias irc='tmux attach -t irc || tmux new -s irc irssi'
 alias mach=docker-machine
@@ -379,6 +378,11 @@ alias d='dirs -v | head -10'
 [[ -z $HISTFILE ]] && export HISTFILE=${ZDOTDIR:-$HOME}/.zsh_history
 export HISTSIZE=100000
 export SAVEHIST=100000
+
+# show dates as "mm/dd/yyyy"
+# use 'fc -El 1' for "dd.mm.yyyy"
+# use 'fc -il 1' for "yyyy-mm-dd"
+alias history='fc -fl 1'
 
 setopt append_history
 setopt extended_history
