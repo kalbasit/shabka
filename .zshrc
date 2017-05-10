@@ -2,9 +2,6 @@
 # core
 #####################################################################
 
-# Define the location of the .zsh folder
-ZSH="${ZDOTDIR:-$HOME}/.zsh"
-
 # Figure out the SHORT hostname
 if [[ -n "$commands[scutil]" ]]; then
   # OS X
@@ -82,7 +79,7 @@ zplug load
 # functions
 #####################################################################
 
-for func in ${ZSH}/functions/*.zsh; do
+for func in ${HOME}/.zsh/functions/*.zsh; do
     # shellcheck disable=SC1090
     source "${func}"
 done
@@ -722,7 +719,7 @@ fi
 
 # If the ACTIVE_PROFILE is set, source the profile file and activate the profile
 if [[ -n "${ACTIVE_PROFILE}" ]]; then
-  source "${ZSH}/profiles/${ACTIVE_PROFILE}.zsh"
+  source "${HOME}/.zsh/profiles/${ACTIVE_PROFILE}.zsh"
   pactivate
 fi
 
@@ -732,4 +729,4 @@ fi
 
 # Source host-specific settings if the exists. Keep this last so it can
 # overwrite any of the other settings.
-[[ -r "${ZSH}/hosts/${SHORT_HOST}.zsh" ]] && source "${ZSH}/hosts/${SHORT_HOST}.zsh"
+[[ -r "${HOME}/.zsh/hosts/${SHORT_HOST}.zsh" ]] && source "${HOME}/.zsh/hosts/${SHORT_HOST}.zsh"
