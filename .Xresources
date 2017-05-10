@@ -3,4 +3,5 @@
 !---------------------------------------------------
 
 #include ".Xresources.d/xft"
+#include ".Xresources.d/seoul256"
 #include ".Xresources.d/rxvt-unicode"
