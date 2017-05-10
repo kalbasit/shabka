@@ -5,12 +5,6 @@
 # Define the location of the .zsh folder
 ZSH="${ZDOTDIR:-$HOME}/.zsh"
 
-# Set ZSH_CACHE_DIR to the path where cache files should be created
-# or else we will use the default cache/
-if [[ -z "$ZSH_CACHE_DIR" ]]; then
-  ZSH_CACHE_DIR="$ZSH/cache"
-fi
-
 # Figure out the SHORT hostname
 if [[ -n "$commands[scutil]" ]]; then
   # OS X
@@ -238,10 +232,6 @@ zstyle ':completion:*:*:*:*:processes' command "ps -u `whoami` -o pid,user,comm 
 # disable named-directories autocompletion
 zstyle ':completion:*:cd:*' tag-order local-directories directory-stack path-directories
 cdpath=(.)
-
-# Use caching so that commands like apt and dpkg complete are useable
-zstyle ':completion::complete:*' use-cache 1
-zstyle ':completion::complete:*' cache-path $ZSH/cache/
 
 # Don't complete uninteresting users
 zstyle ':completion:*:*:*:users' ignored-patterns \
