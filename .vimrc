@@ -81,6 +81,7 @@ Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 Plug 'bling/vim-airline'
 Plug 'tpope/vim-obsession'
 Plug 'bronson/vim-trailing-whitespace'
+Plug 'mhinz/vim-signify'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'ervandew/screen', { 'on': 'ScreenShell' }
