@@ -10,22 +10,6 @@ else
   SHORT_HOST=${HOST/.*/}
 fi
 
-# Save the location of the current completion dump file.
-if [ -z "$ZSH_COMPDUMP" ]; then
-  ZSH_COMPDUMP="${ZDOTDIR:-${HOME}}/.zcompdump-${SHORT_HOST}-${ZSH_VERSION}"
-fi
-
-# Load all stock functions (from $fpath files) called below.
-autoload -U compaudit compinit
-# If completion insecurities exist, warn the user without enabling completions.
-if ! compaudit &>/dev/null; then
-  # This function resides in the "lib/compfix.zsh" script sourced above.
-  handle_completion_insecurities
-  # Else, enable and cache completions to the desired file.
-else
-  compinit -d "${ZSH_COMPDUMP}"
-fi
-
 #####################################################################
 # zplug
 #####################################################################
@@ -62,7 +46,6 @@ zplug "plugins/extract",           from:oh-my-zsh
 zplug "plugins/git",               from:oh-my-zsh
 zplug "plugins/github",            from:oh-my-zsh
 zplug "plugins/history",           from:oh-my-zsh
-zplug "plugins/zsh_reload",        from:oh-my-zsh
 zplug "supercrabtree/k"
 zplug "zlsun/solarized-man"
 zplug "zsh-users/zsh-completions"
