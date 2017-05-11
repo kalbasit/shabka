@@ -86,13 +86,25 @@ unmap('_D');
 
 // save the originals into an alias so there will be no dependency or order
 // issue
-vmap('_k', 'k');
+vmap('_h',  'h');
+vmap('_j',  'j');
+vmap('_k',  'k');
+vmap('_l',  'l');
 
 // remove the one we backed up
+vunmap('h');
+vunmap('j');
 vunmap('k');
+vunmap('l');
 
 // map the Colemak bindings
-vmap('i', '_k') // backward line
+vmap('n',  '_h');  // backward character
+vmap('e',  '_j');  // forward line
+vmap('i',  '_k');  // backward line
+vmap('o',  '_l');  // forward character
 
 // finally remove what we have saved
-vunmap('_k')
+vunmap('_h');
+vunmap('_j');
+vunmap('_k');
+vunmap('_l');
