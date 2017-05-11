@@ -64,6 +64,9 @@ unset bootstrap
 # Open a sudo-session
 sudo-session 15m
 
+# reload the systemd daemoe
+sudo systemctl daemon-reload
+
 # stop NetworkManager
 sudo systemctl stop NetworkManager.service
 
