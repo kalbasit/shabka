@@ -4,6 +4,9 @@
 Hints.characters = "arstneio";
 settings.smoothScroll = false;
 
+// END Settings
+//////////////////////////////////////
+
 //////////////////////////////////////
 // Colemak bindings
 
@@ -108,3 +111,28 @@ vunmap('_h');
 vunmap('_j');
 vunmap('_k');
 vunmap('_l');
+
+// END Colemak bindings
+//////////////////////////////////////
+
+//////////////////////////////////////
+// Custom functions
+
+
+function copyLastElementInPath() {
+  var locationParts = window.location.href.split("/");
+  var lastElement = locationParts[locationParts.length-1].split("#")[0].split("?")[0];
+  Front.writeClipboard(lastElement);
+  Front.showBanner("Copied " + lastElement + " to the clipboard.");
+}
+
+// END Custom functions
+//////////////////////////////////////
+
+//////////////////////////////////////
+// Custom bindings
+
+mapkey('cb', '#7Copy the last element of the path in the URL', copyLastElementInPath);
+
+// END Custom bindings
+//////////////////////////////////////
