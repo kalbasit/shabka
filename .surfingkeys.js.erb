@@ -359,6 +359,7 @@ function openAlternate() {
 mapkey('cb', '#7Copy the last element of the path in the URL', copyLastElementInPath);
 mapkey(',.', '#8Open alternate', openAlternate);
 mapkey(',r', '#4Reload the page skipping the cache', 'RUNTIME("reloadTab", { nocache: true })');
+mapkey('sr', '#11Reload settings', 'RUNTIME("loadSettingsFromUrl", {url: "file://<%= ENV['HOME'] %>/.surfingkeys.js"})');
 
 // END Custom bindings
 //////////////////////////////////////
