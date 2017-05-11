@@ -105,12 +105,6 @@ bindsym $mod+m exec i3-input -F 'mark %s' -l 1 -P 'Mark: '
 # goto mark
 bindsym $mod+apostrophe exec i3-input -F '[con_mark="%s"] focus' -l 1 -P 'Go to: '
 
-# Make the currently focused window a scratchpad
-bindsym $mod+Shift+minus move scratchpad
-
-# Show the first scratchpad window
-bindsym $mod+minus scratchpad show
-
 # reload the configuration file
 bindsym $mod+Shift+c reload; exec --no-startup-id "notify-send 'i3 configuration reloaded'"
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
@@ -139,6 +133,7 @@ mode "$mode_apps" {
   bindsym u exec relay-browser --profile publica, mode "default"
   bindsym h exec charles, mode "default"
   bindsym s exec slack, mode "default"
+  bindsym i exec termite --title=irc --exec="tmx irc", mode "default"
 
   # back to normal: Enter or Escape
   bindsym Return mode "default"
@@ -239,11 +234,22 @@ assign [class="^Slack$"] slack
 assign [class="^com-xk72-charles-gui-.*$"] charles
 assign [class="^VirtualBox"] virtualbox
 
-# assign important to my external monitor
+# assign important spaces to my external monitor
 workspace main output DP1
 workspace personal output DP1
 workspace publica output DP1
 workspace slack output DP1
+
+## Scratchpad support
+
+# Make the currently focused window a scratchpad
+bindsym $mod+Shift+minus move scratchpad
+
+# Show Whatsapp scratchpad
+bindsym $alt+w [class="^whats-app-nativefier*"] scratchpad show
+
+# IRC scatchpad
+bindsym $alt+i [class="^Termite" title="^irc"] scratchpad show
 
 # finally, start a terminal in the personal workspace
 exec i3-msg "workspace personal; exec --no-startup-id /usr/bin/termite"
