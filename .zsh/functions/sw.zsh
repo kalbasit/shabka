@@ -37,9 +37,6 @@ function sw() {
     if [[ -n "${current_profile}" ]]; then
         sp "${current_profile}"
     fi
-    # open IRC
-    # tmx --new --start-detached irc
-    tmx irc
-    # open mail
-    # tmx mail
+    # allow the user to select the client
+    tmx --select-client
 }
