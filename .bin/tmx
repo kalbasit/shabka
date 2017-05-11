@@ -58,6 +58,7 @@ function help()
     print_info "${log_depth}" "USAGE: tmx [-l|-d] <session_name|folder>"
     print_info "${log_depth}" "\t -h, --help                - this message"
     print_info "${log_depth}" "\t -l, --list                - list current sessions"
+    print_info "${log_depth}" "\t -s, --select-client       - show a list of clients to choose one from"
     print_info "${log_depth}" "\t -n, --new                 - create a new session only (do not attach existing session)"
     print_info "${log_depth}" "\t -d, --start-detached      - start the session but do not attach it. This is ignored if the session already exists"
     print_info "${log_depth}" "\t -c, --confirm-vim-start   - confirm before starting Vim, this is essentially a performance improvement"
@@ -94,6 +95,12 @@ while [[ $# -ge 1 ]]; do
         -l|--list)
             tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" ls
             exit 0
+            ;;
+        -s|--select-client)
+            select sel in $(tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" ls -F '#S'); do
+                tmux attach -t "$sel"
+                exit 0
+            done
             ;;
         -n|--new)
             new_session_only=true
