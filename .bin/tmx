@@ -97,10 +97,9 @@ while [[ $# -ge 1 ]]; do
             exit 0
             ;;
         -s|--select-client)
-            select sel in $(tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" ls -F '#S'); do
-                tmux attach -t "$sel"
-                exit 0
-            done
+            sess="$( tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" ls -F '#S' | fzf )"
+            tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" attach -t "${sess}"
+            exit 0
             ;;
         -n|--new)
             new_session_only=true
