@@ -134,6 +134,7 @@ mode "$mode_apps" {
   bindsym h exec charles, mode "default"
   bindsym s exec slack, mode "default"
   bindsym i exec termite --title=irc --exec="tmx irc", mode "default"
+  bindsym w exec whatsapp-web-desktop, mode "default"
 
   # back to normal: Enter or Escape
   bindsym Return mode "default"
@@ -242,6 +243,12 @@ workspace slack output DP1
 
 ## Scratchpad support
 
+# Move IRC to scratchpad
+for_window [class="^Termite" title="^irc"] move scratchpad
+
+# Move Whatsapp to scratchpad
+for_window [class="^whats-app-nativefier*"] move scratchpad
+
 # Make the currently focused window a scratchpad
 bindsym $mod+Shift+minus move scratchpad
 
@@ -251,5 +258,7 @@ bindsym $alt+w [class="^whats-app-nativefier*"] scratchpad show
 # IRC scatchpad
 bindsym $alt+i [class="^Termite" title="^irc"] scratchpad show
 
-# finally, start a terminal in the personal workspace
+# finally, start a terminal in the personal workspace and all expected scratchpads
+exec termite --title=irc --exec="tmx irc"
+exec whatsapp-web-desktop
 exec i3-msg "workspace personal; exec --no-startup-id /usr/bin/termite"
