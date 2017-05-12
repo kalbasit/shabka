@@ -8,21 +8,17 @@
 github_commit_link() { # [REF]
   # get the reference we need
   local ref="${1:-HEAD}"
-  # compute the path to the root of the repository
-  local repo_dir="$(git rev-parse --show-toplevel)"
+  # compute the GOPATH format of the URL of origin
+  local gfrp="$( git_gopath_formatted_repo_path )"
   # validate we are under a Github repo
   # TODO: must check the URL of the origin if this failed for repos outside
   # $GOPATH
-  if ! echo "${repo_dir}" | grep -q -i '/github\.com/[^/]*/[^/]*'; then
+  if ! echo "${gfrp}" | grep -q -i 'github\.com/[^/]*/[^/]*'; then
     print_error 0 "this only works for Github.com"
     return 1
   fi
-  # compute the user from the path
-  local user="$(basename "$(dirname "${repo_dir}")")"
-  # compute the repo from the path
-  local repo="$(basename "${repo_dir}")"
   # get the commit from the ref
   local commit="$(git show --no-patch --format="%H" "${ref}")"
   # finally echo it
-  echo "https://github.com/${user}/${repo}/commit/${commit}"
+  echo "https://${gfrp}/commit/${commit}"
 }
