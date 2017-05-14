@@ -30,6 +30,16 @@ floating_modifier $mod
 # focus should not follow the mouse pointer
 focus_follows_mouse no
 
+# keep the urgency border of a window for 500ms
+force_display_urgency_hint 500 ms
+
+# on window activation, just set the urgency hint. The default behavior is to
+# set the urgency hint if the window is not on the active workspace, and to
+# focus the window on an active workspace. It does surprise me sometimes and I
+# would like to keep it simple by having to manually switch to the urgent
+# window.
+focus_on_window_activation urgent
+
 # start a terminal
 bindsym $mod+Return exec i3-sensible-terminal
 
