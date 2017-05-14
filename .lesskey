@@ -5,6 +5,8 @@ n left-scroll
 e forw-line
 i back-line
 o right-scroll
+k repeat-search
+K reverse-search
 
 #env
 
