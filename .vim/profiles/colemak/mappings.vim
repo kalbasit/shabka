@@ -26,6 +26,28 @@ imap <c-x><c-j> <plug>(fzf-complete-file-ag)
 imap <c-x><c-l> <plug>(fzf-complete-line)
 
 """"""""""
+" Golang "
+""""""""""
+
+" map the textobj mappings: See settings.vim
+" See https://github.com/fatih/vim-go/blob/eb739e185e4729a0ef172da3afed4777d8f64ee6/ftplugin/go.vim#L43
+au FileType go onoremap <buffer> <silent> af :<c-u>call go#textobj#Function('a')<cr>
+au FileType go onoremap <buffer> <silent> rf :<c-u>call go#textobj#Function('i')<cr>
+
+au FileType go xnoremap <buffer> <silent> af :<c-u>call go#textobj#Function('a')<cr>
+au FileType go xnoremap <buffer> <silent> rf :<c-u>call go#textobj#Function('i')<cr>
+
+" Remap ]] and [[ to jump betweeen functions as they are useless in Go
+au FileType go nnoremap <buffer> <silent> ]] :<c-u>call go#textobj#FunctionJump('n', 'next')<cr>
+au FileType go nnoremap <buffer> <silent> [[ :<c-u>call go#textobj#FunctionJump('n', 'prev')<cr>
+
+au FileType go onoremap <buffer> <silent> ]] :<c-u>call go#textobj#FunctionJump('o', 'next')<cr>
+au FileType go onoremap <buffer> <silent> [[ :<c-u>call go#textobj#FunctionJump('o', 'prev')<cr>
+
+au FileType go xnoremap <buffer> <silent> ]] :<c-u>call go#textobj#FunctionJump('v', 'next')<cr>
+au FileType go xnoremap <buffer> <silent> [[ :<c-u>call go#textobj#FunctionJump('v', 'prev')<cr>
+
+""""""""""
 " Custom "
 """"""""""
 
