@@ -299,6 +299,9 @@ setopt auto_menu         # show completion menu on succesive tab press
 setopt complete_in_word
 setopt always_to_end
 
+# allow selection of the item in the autocomplete menu
+zstyle ':completion:*:*:*:*:*' menu select
+
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z-_}={A-Za-z_-}' 'r:|=*' 'l:|=* r:|=*'
 
 zstyle ':completion:*' list-colors ''
