@@ -110,7 +110,7 @@ export SUDO_EDITOR="$(which nvim)"
 export NOTMUCH_CONFIG="${HOME}/.mail/.notmuch/config"
 
 # Set the pager
-export PAGER=most
+export PAGER=less
 
 # Set the language support
 export LANG=en_US.UTF-8
