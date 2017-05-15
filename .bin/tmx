@@ -59,6 +59,7 @@ function help()
     print_info "${log_depth}" "\t -h, --help                - this message"
     print_info "${log_depth}" "\t -l, --list                - list current sessions"
     print_info "${log_depth}" "\t -s, --select-client       - show a list of clients to choose one from"
+    print_info "${log_depth}" "\t -k, --kill-pane           - kill the pane after the client has been switched; only relevant with --select-client"
     print_info "${log_depth}" "\t -n, --new                 - create a new session only (do not attach existing session)"
     print_info "${log_depth}" "\t -d, --start-detached      - start the session but do not attach it. This is ignored if the session already exists"
     print_info "${log_depth}" "\t -c, --confirm-vim-start   - confirm before starting Vim, this is essentially a performance improvement"
@@ -80,6 +81,7 @@ function popd() {
 # Main
 
 confirm_vim_startup=false
+kill_pane=false
 list_sessions=false
 log_depth=0
 new_session_only=false
@@ -96,6 +98,10 @@ while [[ $# -ge 1 ]]; do
             ;;
         -l|--list)
             list_sessions=true
+            shift
+            ;;
+        -k|--kill-pane)
+            kill_pane=true
             shift
             ;;
         -s|--select-client)
@@ -150,6 +156,10 @@ if isTrue "${select_session}"; then
     if [[ -n "${TMUX}" ]]; then
         # switch to the selected session
         tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" switch-client -t "${sess}"
+        # kill the current pane if requested
+        if isTrue "${kill_pane}"; then
+            tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" kill-pane
+        fi
     else
         tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" attach -t "${sess}"
     fi
