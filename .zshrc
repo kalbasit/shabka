@@ -520,7 +520,7 @@ fi
 [[ -r "${HOME}/.travis/travis.sh" ]] && source "${HOME}/.travis/travis.sh"
 
 # Load FZF
-[[ -f "${HOME}/.fzf.zsh" ]] && source "${HOME}/.fzf.zsh"
+[[ -r "${HOME}/.fzf.zsh" ]] && source "${HOME}/.fzf.zsh"
 
 # Load SSH agents
 [[ -x "${HOME}/.bin/ssh-agents" ]] && eval `ssh-agents $SHELL`
