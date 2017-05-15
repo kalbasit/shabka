@@ -10,4 +10,6 @@ K reverse-search
 
 #env
 
-LESS= --RAW-CONTROL-CHARS --quit-if-one-screen --ignore-case
+# NOTE: use --quit-if-one-screen only if --no-init is set. Otherwise less will
+# print nothing and exits which looks like it's crashing.
+LESS= --RAW-CONTROL-CHARS --no-init --quit-if-one-screen --ignore-case
