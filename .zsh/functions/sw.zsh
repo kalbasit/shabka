@@ -37,6 +37,6 @@ function sw() {
     if [[ -n "${current_profile}" ]]; then
         sp "${current_profile}"
     fi
-    # allow the user to select the client
-    tmx --select-client
+    # allow the user to select the session
+    tmx --select-session
 }

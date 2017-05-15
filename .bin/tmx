@@ -58,8 +58,8 @@ function help()
     print_info "${log_depth}" "USAGE: tmx [-l|-d] <session_name|folder>"
     print_info "${log_depth}" "\t -h, --help                - this message"
     print_info "${log_depth}" "\t -l, --list                - list current sessions"
-    print_info "${log_depth}" "\t -s, --select-client       - show a list of clients to choose one from"
-    print_info "${log_depth}" "\t -k, --kill-pane           - kill the pane after the client has been switched; only relevant with --select-client"
+    print_info "${log_depth}" "\t -s, --select-session      - fuzzy-select a session"
+    print_info "${log_depth}" "\t -k, --kill-pane           - kill the pane after the session has been switched; only relevant with --select-session"
     print_info "${log_depth}" "\t -n, --new                 - create a new session only (do not attach existing session)"
     print_info "${log_depth}" "\t -d, --start-detached      - start the session but do not attach it. This is ignored if the session already exists"
     print_info "${log_depth}" "\t -c, --confirm-vim-start   - confirm before starting Vim, this is essentially a performance improvement"
@@ -104,7 +104,7 @@ while [[ $# -ge 1 ]]; do
             kill_pane=true
             shift
             ;;
-        -s|--select-client)
+        -s|--select-session)
             select_session=true
             shift
             ;;
