@@ -98,7 +98,11 @@ while [[ $# -ge 1 ]]; do
             ;;
         -s|--select-client)
             sess="$( tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" ls -F '#S' | fzf )"
-            tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" attach -t "${sess}"
+            if [[ -n "${TMUX}" ]]; then
+                tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" switch-client -t "${sess}"
+            else
+                tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" attach -t "${sess}"
+            fi
             exit 0
             ;;
         -n|--new)
