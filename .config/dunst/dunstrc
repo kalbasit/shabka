@@ -131,7 +131,7 @@
   startup_notification = false
 
   # dmenu path.
-  dmenu = /usr/bin/dmenu -p dunst:
+  dmenu = /usr/bin/rofi -dmenu -p dunst:
 
   # Browser for opening urls in context menu.
   browser = /home/kalbasit/.bin/relay-browser
