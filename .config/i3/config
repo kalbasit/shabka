@@ -99,8 +99,8 @@ bindsym $mod+x [urgent=latest] focus
 #bindsym $mod+d focus child
 
 # dynamic workspaces
-bindsym $mod+space exec --no-startup-id "i3-dynamic-workspaces --switch-workspace"
-bindsym $mod+Shift+space exec --no-startup-id "i3-dynamic-workspaces --move-container-to-workspace"
+bindsym $mod+space exec --no-startup-id "rofi -show Workspaces"
+bindsym $mod+Shift+space exec --no-startup-id "rofi -show MoveContainer"
 bindsym $mod+Shift+w exec i3-input -F 'rename workspace to %s' -P 'New name: '
 
 # switch between the current and the previously focused one
