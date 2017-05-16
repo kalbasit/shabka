@@ -61,6 +61,7 @@ function help()
     print_info "${log_depth}" "\t -s, --select-session      - fuzzy-select a session"
     print_info "${log_depth}" "\t -k, --kill-pane           - kill the pane after the session has been switched; only relevant with --select-session"
     print_info "${log_depth}" "\t -n, --new                 - create a new session only (do not attach existing session)"
+    print_info "${log_depth}" "\t -L, --socket-name         - use a different socket than the default"
     print_info "${log_depth}" "\t -d, --start-detached      - start the session but do not attach it. This is ignored if the session already exists"
     print_info "${log_depth}" "\t -c, --confirm-vim-start   - confirm before starting Vim, this is essentially a performance improvement"
     print_info "${log_depth}" "\t -d, --detach              - start a new session detached, useful for starting multiple sessions from a script"
@@ -89,6 +90,7 @@ select_session=false
 sess=
 should_popd=false
 tmux_new_session_extras=()
+tmux_socket_name=default
 
 while [[ $# -ge 1 ]]; do
     case "${1}" in
@@ -116,8 +118,22 @@ while [[ $# -ge 1 ]]; do
             tmux_new_session_extras=(${tmux_new_session_extras[@]} "-d")
             shift
             ;;
+        -L|--socket-name)
+            tmux_socket_name="${2}"
+            if [[ -z "${tmux_socket_name}" ]]; then
+                print_error "${log_depth}" "--socket-name requires an argument"
+                help
+                exit 1
+            fi
+            shift 2
+            ;;
         --log-depth)
             log_depth="${2}"
+            if [[ -z "${log_depth}" ]]; then
+                print_error "${log_depth}" "--log-depth requires an argument"
+                help
+                exit 1
+            fi
             shift 2
             ;;
         -c|--confirm-vim-start)
@@ -138,7 +154,7 @@ done
 
 # are we listing the sessions?
 if isTrue "${list_sessions}"; then
-    tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" ls
+    tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" ls
     exit 0
 
 fi
@@ -146,7 +162,7 @@ fi
 # are selecting the session?
 if isTrue "${select_session}"; then
     # select the session
-    sess="$( tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" ls -F '#S' | fzf )"
+    sess="$( tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" ls -F '#S' | fzf )"
     # make sure a session was selected
     if [[ -z "${sess}" ]]; then
         print_error 0 "no session were selected"
@@ -155,13 +171,13 @@ if isTrue "${select_session}"; then
     # attach or switch to the session
     if [[ -n "${TMUX}" ]]; then
         # switch to the selected session
-        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" switch-client -t "${sess}"
+        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" switch-client -t "${sess}"
         # kill the current pane if requested
         if isTrue "${kill_pane}"; then
-            tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" kill-pane
+            tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" kill-pane
         fi
     else
-        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" attach -t "${sess}"
+        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" attach -t "${sess}"
     fi
     exit 0
 fi
@@ -185,31 +201,31 @@ sess="$(echo "${sess}" | sed -e 's:\.:_:g' -e 's#:#_#g')"
 
 # start a tmux session with the first window being Vim. Conserve the
 # environment variables needed for profiling.
-if tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" list-sessions -F '#{session_name}' | grep -q -e "^${sess}\$"; then
+if tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" list-sessions -F '#{session_name}' | grep -q -e "^${sess}\$"; then
     if isTrue "${new_session_only}"; then
         exit 0
     fi
-    tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" attach -t "${sess}"
+    tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" attach -t "${sess}"
 elif [[ "${sess}" = "mail" ]]; then
-    tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" new-session "${tmux_new_session_extras[@]}" -s "${sess}" \; \
+    tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" new-session "${tmux_new_session_extras[@]}" -s "${sess}" \; \
         new-window \; \
         kill-window -t :0 \; \
         new-window -t :0 'zsh -i -c emacs' \;
 elif [[ "${sess}" = "irc" ]]; then
-    tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" new-session "${tmux_new_session_extras[@]}" -s "${sess}" \; \
+    tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" new-session "${tmux_new_session_extras[@]}" -s "${sess}" \; \
         new-window \; \
         kill-window -t :0 \; \
         new-window -t :0 'zsh -i -c irssi' \;
 else
     if isTrue "${confirm_vim_startup}"; then
-        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" new-session "${tmux_new_session_extras[@]}" -s "${sess}" \; \
+        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" new-session "${tmux_new_session_extras[@]}" -s "${sess}" \; \
             set-environment ACTIVE_PROFILE "${ACTIVE_PROFILE}" \; \
             set-environment SSH_AGENT_NAME "${ACTIVE_PROFILE}" \; \
             new-window \; \
             kill-window -t :0 \; \
             new-window -t :0 'zsh -i -c "echo \"Press Enter to start Vim \" && read && /usr/bin/vim"' \;
     else
-        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" new-session "${tmux_new_session_extras[@]}" -s "${sess}" \; \
+        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" new-session "${tmux_new_session_extras[@]}" -s "${sess}" \; \
             set-environment ACTIVE_PROFILE "${ACTIVE_PROFILE}" \; \
             set-environment SSH_AGENT_NAME "${ACTIVE_PROFILE}" \; \
             new-window \; \
