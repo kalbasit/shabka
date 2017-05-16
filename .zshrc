@@ -31,7 +31,7 @@ source "${HOME}/.zplug/init.zsh"
 zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
 # load the shellder theme
-zplug "simnalamburt/shellder", as:theme
+zplug "kalbasit/shellder", as:theme
 
 # plugins
 zplug "Dbz/zsh-kubernetes"
