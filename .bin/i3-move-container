@@ -71,6 +71,8 @@ unset bootstrap
 # Main
 
 if [[ -z "${*}" ]]; then
+    # we need the back and forth first
+    echo back_and_forth
     # get the list of workspaces that are not empty
     i3-msg -t get_workspaces | jq -r '.[] | if .visible == false then .name else empty end'
 else
