@@ -30,7 +30,7 @@ function sw() {
           print_error 0 "${dir} not existing, continuing..."
           continue
         fi
-        print_info 0 "starting ${dir} under the ${profile} profile"
+        print_info 0 "starting or attaching ${dir} under the ${profile} profile"
         tmx --log-depth 2 --new --start-detached --confirm-vim-start "${dir}"
     done
     # restore the current profile
