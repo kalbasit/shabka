@@ -195,6 +195,7 @@ alias tm='task project:morning'
 alias utf8test='curl -L https://github.com/tmux/tmux/raw/master/tools/UTF-8-demo.txt'
 alias vi="${EDITOR:-vim}"
 alias vim="${EDITOR:-vim}"
+alias ll="ls -la"
 
 # Always enable colored `grep` output
 # Note: `GREP_OPTIONS="--color=auto"` is deprecated, hence the alias usage.
@@ -566,6 +567,10 @@ fi
 # load the Emscripten environment
 if [[ -d "/usr/lib/emsdk" ]]; then
   pathmunge "/usr/lib/emsdk"
+fi
+
+if [[ -x $(which docker-machine 2>/dev/null) ]]; then
+  eval $(docker-machine env)
 fi
 
 #####################################################################
