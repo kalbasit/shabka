@@ -137,13 +137,13 @@ bindsym Shift+XF86MonBrightnessDown exec --no-startup-id "xbacklight -dec 1
 bindsym XF86PowerOff exec --no-startup-id "systemctl suspend"
 
 # Applications
-set $mode_apps Launch: Chromium (p)ersonal, Chromium p(u)blica, c(h)arles, (s)lack
+set $mode_apps Launch: Chromium (p)ersonal, Chromium p(u)blica, (c)harles, (s)lack, (i)rc, (w)hatsapp
 mode "$mode_apps" {
   bindsym p exec relay-browser --profile personal, mode "default"
   bindsym u exec relay-browser --profile publica, mode "default"
-  bindsym h exec charles, mode "default"
+  bindsym c exec charles, mode "default"
   bindsym s exec slack, mode "default"
-  bindsym i exec termite --title=irc --exec="tmx irc", mode "default"
+  bindsym i exec termite --title=irc --exec="tmx -L irc irc", mode "default"
   bindsym w exec whatsapp-web-desktop, mode "default"
 
   # back to normal: Enter or Escape
@@ -269,6 +269,6 @@ bindsym $alt+w [class="^whats-app-nativefier*"] scratchpad show
 bindsym $alt+i [class="^Termite" title="^irc"] scratchpad show
 
 # finally, start a terminal in the personal workspace and all expected scratchpads
-exec termite --title=irc --exec="tmx irc"
+exec termite --title=irc --exec="tmx -L irc irc"
 exec whatsapp-web-desktop
 exec i3-msg "workspace personal; exec --no-startup-id /usr/bin/termite"
