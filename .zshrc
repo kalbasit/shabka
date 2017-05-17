@@ -139,20 +139,6 @@ pathmunge "${HOME}/.rbenv/bin"
 # add pyenv
 pathmunge "${HOME}/.pyenv/bin"
 
-# Export MySQL credentials if it's readable
-mysql_credentials_path="$HOME/.my.cnf"
-if [[ -r "${mysql_credentials_path}" ]]; then
-  user="`cat "$mysql_credentials_path" | grep "user" | cut -d= -f2 | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'`"
-  pass="`cat "$mysql_credentials_path" | grep "password" | cut -d= -f2 | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'`"
-
-  if [ "x${user}" != "x" ]; then
-    export MYSQL_USERNAME="${user}"
-    export MYSQL_PASSWORD="${pass}"
-  fi
-  unset user pass
-fi
-unset mysql_credentials_path
-
 # use git ls-tree to speed up FZF. Fall back to find if no current folder is
 # not under Git.
 export FZF_DEFAULT_COMMAND='
