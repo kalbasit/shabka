@@ -11,7 +11,14 @@
 #####################################################################
 
 # Load zplug
-source "${HOME}/.zplug/init.zsh"
+if [[ -r "${HOME}/.zplug/init.zsh" ]]; then
+  source "${HOME}/.zplug/init.zsh"
+else
+  echo -e "zplug cannot be found at ${HOME}/.zplug/init.zsh"
+  echo -e "run the following command and then restart your shell"
+  echo -e "git clone https://github.com/zplug/zplug.git /tmp/zplug && source /tmp/zplug/init.zsh && source ~/.zshrc && zplug install"
+  whence -w zplug | grep function || return 1
+fi
 
 # let zplug manage itself
 zplug 'zplug/zplug', hook-build:'zplug --self-manage'
