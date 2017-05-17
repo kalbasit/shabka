@@ -51,7 +51,7 @@ GO_BINARIES = [
 ]
 
 desc "run :update_submodules and :link"
-task :default => [:update_submodules, :update_completions, :link, :lesskey]
+task :default => [:update_submodules, :update_completions, :install_zplug, :link, :lesskey]
 
 desc "Link both private and public config files"
 task :link => [:link_dotfiles, :link_private]
@@ -59,6 +59,13 @@ task :link => [:link_dotfiles, :link_private]
 desc "Generate lesskey"
 task :lesskey do
   sh %Q{lesskey}
+end
+
+desc "install zplug if not available"
+task :install_zplug do
+  if !File.exists?(File.join(DOTFILES_PATH, ".zplug"))
+    sh %Q{git clone https://github.com/zplug/zplug.git #{File.join(DOTFILES_PATH, ".zplug")}}
+  end
 end
 
 desc "Update ZSH completions"

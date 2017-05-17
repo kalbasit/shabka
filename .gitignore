@@ -71,6 +71,7 @@
 .viminfo*
 .viminfo,!
 .xinitrc-sessions
+.zplug/
 .zsh/cache/
 .zsh/completions/
 .zsh/profiles

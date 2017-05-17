@@ -14,17 +14,6 @@ fi
 # zplug
 #####################################################################
 
-# if zplug is not installed, do it
-if [[ -z "${TMUX}" ]]; then
-  if [[ ! -f "${HOME}/.zplug/init.zsh" ]]; then
-    if [[ -d "${HOME}/.zplug" ]]; then
-      echo "FATAL: ${HOME}/.zplug is present but the init.zsh is not"
-      return 1
-    fi
-    git clone https://github.com/zplug/zplug.git "${HOME}/.zplug"
-  fi
-fi
-
 # Load zplug
 source "${HOME}/.zplug/init.zsh"
 # let zplug manage itself
