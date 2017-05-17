@@ -26,10 +26,6 @@ systemctl --user restart dunst.service
 # start the xss-lock that takes care of locking the screen when necessary.
 systemctl --user restart xss-lock.service
 
-# start nm-applet
-# NOTE: disabled because I use nmcli
-# nm-applet &
-
 # start pulse audio
 start-pulseaudio-x11
 
