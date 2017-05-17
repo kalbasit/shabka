@@ -152,6 +152,9 @@ fi
 # add rbenv
 pathmunge "${HOME}/.rbenv/bin"
 
+# add pyenv
+pathmunge "${HOME}/.pyenv/bin"
+
 # Export MySQL credentials if it's readable
 mysql_credentials_path="$HOME/.my.cnf"
 if [[ -r "${mysql_credentials_path}" ]]; then
@@ -556,8 +559,12 @@ fi
 
 # Load pyenv
 if [[ -d "${HOME}/.pyenv" ]]; then
-  pathmunge "${HOME}/.pyenv/bin"
-  eval "$(pyenv init --no-rehash -)"
+  lazyLoadPyenv() {
+    unalias pyenv
+    unfunction lazyLoadPyenv
+    eval "$(pyenv init --no-rehash -)"
+  }
+  alias pyenv=lazyLoadPyenv
 fi
 
 # Load nvm
