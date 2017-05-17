@@ -34,4 +34,4 @@ systemctl --user restart xss-lock.service
 start-pulseaudio-x11
 
 # start i3
-exec dbus-launch i3 -V
+exec i3 -V
