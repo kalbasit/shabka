@@ -341,6 +341,7 @@ expand-or-complete-with-dots() {
 zle -N expand-or-complete-with-dots
 bindkey "^I" expand-or-complete-with-dots
 
+fpath+="${HOME}/.zsh/completions"
 
 #####################################################################
 # directories
@@ -557,11 +558,6 @@ if [[ -n "${nvm_init}" ]]; then
   load_nvmrc
 fi
 unset nvm_init
-
-# load k8s completion
-if [[ -x $(which kubectl 2>/dev/null) ]]; then
-  source <(kubectl completion zsh)
-fi
 
 # load the Emscripten environment
 if [[ -d "/usr/lib/emsdk" ]]; then

@@ -4,6 +4,21 @@ require 'rake'
 require 'erb'
 require 'open-uri'
 
+# Cross-platform way of finding an executable in the $PATH.
+#
+#   which('ruby') #=> /usr/bin/ruby
+# Credit: mislav at http://stackoverflow.com/a/5471032
+def which(cmd)
+  exts = ENV['PATHEXT'] ? ENV['PATHEXT'].split(';') : ['']
+  ENV['PATH'].split(File::PATH_SEPARATOR).each do |path|
+    exts.each { |ext|
+      exe = File.join(path, "#{cmd}#{ext}")
+      return exe if File.executable?(exe) && !File.directory?(exe)
+    }
+  end
+  return nil
+end
+
 DOTFILES_PATH = File.expand_path("../", __FILE__)
 PRIVATE_PATH = File.expand_path(File.join(DOTFILES_PATH, ".private"))
 IGNORED_FILES = [
@@ -36,7 +51,7 @@ GO_BINARIES = [
 ]
 
 desc "run :update_submodules and :link"
-task :default => [:update_submodules, :link, :lesskey]
+task :default => [:update_submodules, :update_completions, :link, :lesskey]
 
 desc "Link both private and public config files"
 task :link => [:link_dotfiles, :link_private]
@@ -44,6 +59,14 @@ task :link => [:link_dotfiles, :link_private]
 desc "Generate lesskey"
 task :lesskey do
   sh %Q{lesskey}
+end
+
+desc "Update ZSH completions"
+task :update_completions do
+  if which("kubectl") != ""
+    mkdir_p File.join(DOTFILES_PATH, ".zsh", "completions")
+    sh %Q{kubectl completion zsh > #{File.join(DOTFILES_PATH, ".zsh", "completions", "_kubectl")}}
+  end
 end
 
 desc "Initialize the Mac"

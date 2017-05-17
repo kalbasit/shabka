@@ -72,6 +72,7 @@
 .viminfo,!
 .xinitrc-sessions
 .zsh/cache/
+.zsh/completions/
 .zsh/profiles
 Package Control.last-run
 drafts/
