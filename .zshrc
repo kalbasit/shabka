@@ -147,7 +147,6 @@ export FZF_DEFAULT_COMMAND='
 # aliases
 #####################################################################
 
-# Aliases
 alias blaze=bazel
 alias comp=docker-compose
 alias e="${EDITOR:-vim}"
