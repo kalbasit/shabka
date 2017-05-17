@@ -539,11 +539,8 @@ if [[ -d "${HOME}/.pyenv" ]]; then
 fi
 
 # Load nvm
-if [[ -f "/usr/share/nvm/init-nvm.sh" ]]; then
-  nvm_init="/usr/share/nvm/init-nvm.sh"
-elif [[ -f "${HOME}/.nvm/nvm.sh" ]]; then
-  nvm_init="${HOME}/.nvm/nvm.sh"
-fi
+[[ -f "/usr/share/nvm/init-nvm.sh" ]] && nvm_init="/usr/share/nvm/init-nvm.sh"
+[[ -f "${HOME}/.nvm/nvm.sh" ]] && nvm_init="${HOME}/.nvm/nvm.sh"
 if [[ -n "${nvm_init}" ]]; then
   if [[ -z "${PUBLICA_NPM_TOKEN}" ]]; then
     # set the PUBLICA_NPM_TOKEN to a bogus value, it will be loaded by the
