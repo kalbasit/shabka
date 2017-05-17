@@ -2,13 +2,9 @@
 # core
 #####################################################################
 
-# Figure out the SHORT hostname
-if [[ "$OSTYPE" = darwin* ]]; then
-  # macOS's $HOST changes with dhcp, etc. Use ComputerName if possible.
-  SHORT_HOST=$(scutil --get ComputerName 2>/dev/null) || SHORT_HOST=${HOST/.*/}
-else
-  SHORT_HOST=${HOST/.*/}
-fi
+# macOS's $HOST changes with dhcp, etc. Use ComputerName if possible.
+[[ "$OSTYPE" = darwin* ]] && SHORT_HOST="$( scutil --get ComputerName 2>/dev/null )"
+[[ -z "${SHORT_HOST}" ]] && SHORT_HOST="${HOST/.*/}"
 
 #####################################################################
 # zplug
@@ -16,6 +12,7 @@ fi
 
 # Load zplug
 source "${HOME}/.zplug/init.zsh"
+
 # let zplug manage itself
 zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
@@ -50,8 +47,8 @@ zplug load
 #####################################################################
 
 for func in ${HOME}/.zsh/functions/*.zsh; do
-    # shellcheck disable=SC1090
-    source "${func}"
+  # shellcheck disable=SC1090
+  source "${func}"
 done
 
 #####################################################################
@@ -87,8 +84,8 @@ export GOPATH="${GLOBAL_GOPATH}"
 export MYFS="${HOME}/.filesystem"
 
 # Set the editor
-export EDITOR="$(which nvim)"
-export SUDO_EDITOR="$(which nvim)"
+export EDITOR=nvim
+export SUDO_EDITOR=nvim
 
 # Set the notmuch config
 export NOTMUCH_CONFIG="${HOME}/.mail/.notmuch/config"
@@ -129,7 +126,7 @@ fi
 # Add all rubygems bin dir
 if [[ -d "${HOME}/.gem/ruby" ]]; then
   for dir in $HOME/.gem/ruby/*/bin; do
-    pathmunge "${dir}"
+    pathmunge "${dir}" after
   done
 fi
 
@@ -150,31 +147,29 @@ export FZF_DEFAULT_COMMAND='
 # aliases
 #####################################################################
 
-# Conditional aliases
-[[ -x "`which ack-grep 2> /dev/null`" ]] && alias ack="ack-grep -il"
-
 # Aliases
 alias blaze=bazel
 alias comp=docker-compose
 alias e="${EDITOR:-vim}"
 alias gl='github_commit_link'
 alias http='http --print=HhBb'
-alias irc='tmux attach -t irc || tmux new -s irc irssi'
+alias irc='tmx -L irc irc'
+alias ll="ls -la"
 alias mach=docker-machine
 alias pw="ps aux | grep -v grep | grep -e"
 alias remove_created_containers="docker rm -v \$(docker ps -a -q -f status=created)"
-alias remove_dangling_images="docker rmi \$(docker images -f "dangling=true" -q)"
+alias remove_dangling_images="docker rmi \$(docker images -f dangling=true -q)"
 alias remove_dead_containers="docker rm -v \$(docker ps -a -q -f status=exited)"
 alias rot13="tr '[A-Za-z]' '[N-ZA-Mn-za-m]'"
 alias rserve_this="ruby -rrack -e \"Rack::Handler::WEBrick.run Rack::Directory.new('.')\""
 alias serve_this="python2 -m SimpleHTTPServer"
 alias t='task'
 alias ta='task add'
+alias td='task project:dotfiles'
 alias tm='task project:morning'
 alias utf8test='curl -L https://github.com/tmux/tmux/raw/master/tools/UTF-8-demo.txt'
-alias vi="${EDITOR:-vim}"
-alias vim="${EDITOR:-vim}"
-alias ll="ls -la"
+alias vi=e
+alias vim=e
 
 # Always enable colored `grep` output
 # Note: `GREP_OPTIONS="--color=auto"` is deprecated, hence the alias usage.
