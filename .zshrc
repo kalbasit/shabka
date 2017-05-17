@@ -20,6 +20,9 @@ else
   whence -w zplug | grep function || return 1
 fi
 
+# speed up zplug. See https://github.com/zplug/zplug/issues/368#issuecomment-282566102
+__zplug::io::file::generate
+
 # let zplug manage itself
 zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
