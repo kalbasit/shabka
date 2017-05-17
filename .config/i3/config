@@ -174,7 +174,7 @@ mode "$mode_display" {
   bindsym Return mode "default"
   bindsym Escape mode "default"
 }
-bindsym $mod+s mode "$mode_display"
+bindsym $mod+$alt+s mode "$mode_display"
 
 ## Management of Proxy
 set $mode_proxy Charles Proxy(c), Direct (d)
