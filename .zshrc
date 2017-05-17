@@ -42,11 +42,6 @@ zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-history-substring-search"
 zplug "zsh-users/zsh-syntax-highlighting"
 
-# Install any missing zplug plugin
-if [[ -z "${TMUX}" ]]; then
-  zplug check || zplug install
-fi
-
 # Then, source plugins and add commands to $PATH
 zplug load
 
