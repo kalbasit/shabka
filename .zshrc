@@ -522,7 +522,15 @@ if [[ "$OSTYPE" = darwin* ]]; then
 fi
 
 # Load TheFuck
-[[ -x "$(which thefuck 2>/dev/null)" ]] && eval "$(thefuck --alias)"
+if [[ -x "$(which thefuck 2>/dev/null)" ]]; then
+  # Lazy load TheFuck
+  lazyLoadFuck () {
+    unalias fuck
+    unfunction lazyLoadFuck
+    eval "$(thefuck --alias)"
+  }
+  alias fuck=lazyLoadFuck
+fi
 
 # Load travis
 [[ -r "${HOME}/.travis/travis.sh" ]] && source "${HOME}/.travis/travis.sh"
