@@ -149,6 +149,9 @@ if [[ -d "${HOME}/.gem/ruby" ]]; then
   done
 fi
 
+# add rbenv
+pathmunge "${HOME}/.rbenv/bin"
+
 # Export MySQL credentials if it's readable
 mysql_credentials_path="$HOME/.my.cnf"
 if [[ -r "${mysql_credentials_path}" ]]; then
@@ -543,8 +546,12 @@ fi
 
 # Load rbenv
 if [[ -d "${HOME}/.rbenv" ]]; then
-  pathmunge "${HOME}/.rbenv/bin"
-  eval "$(rbenv init --no-rehash -)"
+  lazyLoadRbenv() {
+    unalias rbenv
+    unfunction lazyLoadRbenv
+    eval "$(rbenv init --no-rehash -)"
+  }
+  alias rbenv=lazyLoadRbenv
 fi
 
 # Load pyenv
