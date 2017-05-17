@@ -568,20 +568,32 @@ if [[ -d "${HOME}/.pyenv" ]]; then
 fi
 
 # Load nvm
-[[ -f "/usr/share/nvm/init-nvm.sh" ]] && nvm_init="/usr/share/nvm/init-nvm.sh"
-[[ -f "${HOME}/.nvm/nvm.sh" ]] && nvm_init="${HOME}/.nvm/nvm.sh"
-if [[ -n "${nvm_init}" ]]; then
-  # set the PUBLICA_NPM_TOKEN to a bogus value, it will be loaded by the
-  # publica profile when it gets loaded
-  [[ -z "${PUBLICA_NPM_TOKEN}" ]] && export PUBLICA_NPM_TOKEN="undefined"
-  source "${nvm_init}"
+[[ -f "/usr/share/nvm/init-nvm.sh" ]] && export NVM_INIT="/usr/share/nvm/init-nvm.sh"
+[[ -f "${HOME}/.nvm/nvm.sh" ]] && export NVM_INIT="${HOME}/.nvm/nvm.sh"
+if [[ -n "${NVM_INIT}" ]]; then
+  # define the lazy loading
+  lazyLoadNvm() {
+    unalias nvm
+    unfunction lazyLoadNvm
 
-  # if a folder contains an .nvmrc, respect it
-  autoload -U add-zsh-hook
-  add-zsh-hook chpwd load_nvmrc
-  load_nvmrc
+    # set the PUBLICA_NPM_TOKEN to a bogus value, it will be loaded by the
+    # publica profile when it gets loaded
+    [[ -z "${PUBLICA_NPM_TOKEN}" ]] && export PUBLICA_NPM_TOKEN="undefined"
+
+    # source the init
+    source "${NVM_INIT}"
+
+    # we do not need the NVM_INIT anymore
+    unset NVM_INIT
+
+    # if a folder contains an .nvmrc, respect it
+    autoload -U add-zsh-hook
+    add-zsh-hook chpwd load_nvmrc
+  }
+  alias nvm=lazyLoadNvm
+else
+  unset NVM_INIT
 fi
-unset nvm_init
 
 #####################################################################
 # host overrides
