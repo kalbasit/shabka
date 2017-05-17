@@ -20,8 +20,8 @@ systemctl --user restart redshift.service
 # composition manager
 systemctl --user restart compton.service
 
-# notification
-dunst &
+# notification daemon
+systemctl --user restart dunst.service
 
 # start nm-applet
 # NOTE: disabled because I use nmcli
