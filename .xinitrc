@@ -23,17 +23,15 @@ systemctl --user restart compton.service
 # notification daemon
 systemctl --user restart dunst.service
 
+# start the xss-lock that takes care of locking the screen when necessary.
+systemctl --user restart xss-lock.service
+
 # start nm-applet
 # NOTE: disabled because I use nmcli
 # nm-applet &
 
 # start pulse audio
 start-pulseaudio-x11
-
-# start the xss-lock that takes care of locking the screen when necessary.
-# https://www.mankier.com/1/xss-lock
-# TODO: select an image with `-i /path/to/img`
-xss-lock --notifier=dim-screen -- i3lock -n &
 
 # start i3
 exec dbus-launch i3 -V
