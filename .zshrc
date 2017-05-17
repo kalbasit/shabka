@@ -509,7 +509,9 @@ export TERM=xterm-256color
 if [[ "$OSTYPE" = darwin* ]]; then
   if [[ -x $(which brew 2>/dev/null) ]]; then
     # Load autojump
-    [[ -s "$(brew --prefix)/etc/profile.d/autojump.sh" ]] && source "$(brew --prefix)/etc/profile.d/autojump.sh"
+    autojump_path="$(brew --prefix)/etc/profile.d/autojump.sh"
+    [[ -r "${autojump_path}" ]] && source "${autojump_path}"
+    unset autojump_path
 
     # Export CFLAGS and LDFLAGS
     export CGO_CFLAGS="-I/usr/local/include"
