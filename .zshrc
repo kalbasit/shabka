@@ -32,22 +32,22 @@ zplug "kalbasit/shellder", as:theme
 # plugins
 zplug "Dbz/zsh-kubernetes"
 zplug "b4b4r07/emoji-cli"
-zplug "b4b4r07/enhancd",           use:init.sh
+zplug "b4b4r07/enhancd",                     use:init.sh
 zplug "denolfe/zsh-travis"
 zplug "hcgraf/zsh-sudo"
 zplug "jreese/zsh-titles"
 zplug "molovo/tipz"
 zplug "peterhurford/git-it-on.zsh"
-zplug "plugins/command-not-found", from:oh-my-zsh
-zplug "plugins/extract",           from:oh-my-zsh
-zplug "plugins/git",               from:oh-my-zsh
-zplug "plugins/github",            from:oh-my-zsh
-zplug "plugins/history",           from:oh-my-zsh
+zplug "plugins/command-not-found",           from:oh-my-zsh
+zplug "plugins/extract",                     from:oh-my-zsh
+zplug "plugins/git",                         from:oh-my-zsh
+zplug "plugins/github",                      from:oh-my-zsh
+zplug "plugins/history",                     from:oh-my-zsh
 zplug "supercrabtree/k"
 zplug "zlsun/solarized-man"
 zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-history-substring-search"
-zplug "zsh-users/zsh-syntax-highlighting"
+zplug "zsh-users/zsh-syntax-highlighting",   defer:2
 
 # Then, source plugins and add commands to $PATH
 zplug load
