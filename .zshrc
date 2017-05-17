@@ -120,6 +120,9 @@ export LC_ALL="${LANG}"
 # We need our bin folder
 pathmunge "${HOME}/.bin"
 
+# load the Emscripten environment
+pathmunge "/usr/lib/emsdk"
+
 # We need Go's bin folder
 pathmunge "${GOPATH}/bin"
 
@@ -489,33 +492,37 @@ setopt long_list_jobs
 
 # Make sure TERM is sane
 export TERM=xterm-256color
-[ -n "$TMUX" ] && export TERM=screen-256color
-if [[ "$OSTYPE" = linux* ]]; then
-  export TERM=xterm-termite
-fi
+[[ -n "$TMUX" ]] && export TERM=screen-256color
+[[ "$OSTYPE" = linux* ]] && export TERM=xterm-termite
 
 #####################################################################
 # Externals
 #####################################################################
 
-if [[ -x $(which brew 2>/dev/null) ]]; then
-  # Load autojump
-  [[ -s "$(brew --prefix)/etc/profile.d/autojump.sh" ]] && source "$(brew --prefix)/etc/profile.d/autojump.sh"
+# Mac only externals
+if [[ "$OSTYPE" = darwin* ]]; then
+  if [[ -x $(which brew 2>/dev/null) ]]; then
+    # Load autojump
+    [[ -s "$(brew --prefix)/etc/profile.d/autojump.sh" ]] && source "$(brew --prefix)/etc/profile.d/autojump.sh"
 
-  # Export CFLAGS and LDFLAGS
-  export CGO_CFLAGS="-I/usr/local/include"
-  export CGO_CPPFLAGS="${CGO_CFLAGS}"
-  export CGO_CXXFLAGS="${CGO_CFLAGS}"
-  export CGO_LDFLAGS="-L/usr/local/lib"
+    # Export CFLAGS and LDFLAGS
+    export CGO_CFLAGS="-I/usr/local/include"
+    export CGO_CPPFLAGS="${CGO_CFLAGS}"
+    export CGO_CXXFLAGS="${CGO_CFLAGS}"
+    export CGO_LDFLAGS="-L/usr/local/lib"
+  fi
+
+  # Load iterm2 shell integration
+  [[ -r "${HOME}/.iterm2_shell_integration.zsh" ]] && source "${HOME}/.iterm2_shell_integration.zsh"
+
+  # Load the docker machine environmen
+  if [[ -x $(which docker-machine 2>/dev/null) ]]; then
+    eval $(docker-machine env)
+  fi
 fi
 
 # Load TheFuck
 [[ -x "$(which thefuck 2>/dev/null)" ]] && eval "$(thefuck --alias)"
-
-if [[ "$OSTYPE" = darwin* ]]; then
-  # Load iterm2 shell integration
-  [[ -r "${HOME}/.iterm2_shell_integration.zsh" ]] && source "${HOME}/.iterm2_shell_integration.zsh"
-fi
 
 # Load travis
 [[ -r "${HOME}/.travis/travis.sh" ]] && source "${HOME}/.travis/travis.sh"
@@ -524,7 +531,7 @@ fi
 [[ -r "${HOME}/.fzf.zsh" ]] && source "${HOME}/.fzf.zsh"
 
 # Load SSH agents
-[[ -x "${HOME}/.bin/ssh-agents" ]] && eval `ssh-agents $SHELL`
+[[ -x "${HOME}/.bin/ssh-agents" ]] && eval "$( ssh-agents $SHELL )"
 
 # Load rbenv
 if [[ -d "${HOME}/.rbenv" ]]; then
@@ -542,11 +549,9 @@ fi
 [[ -f "/usr/share/nvm/init-nvm.sh" ]] && nvm_init="/usr/share/nvm/init-nvm.sh"
 [[ -f "${HOME}/.nvm/nvm.sh" ]] && nvm_init="${HOME}/.nvm/nvm.sh"
 if [[ -n "${nvm_init}" ]]; then
-  if [[ -z "${PUBLICA_NPM_TOKEN}" ]]; then
-    # set the PUBLICA_NPM_TOKEN to a bogus value, it will be loaded by the
-    # publica profile when it gets loaded
-    export PUBLICA_NPM_TOKEN="undefined"
-  fi
+  # set the PUBLICA_NPM_TOKEN to a bogus value, it will be loaded by the
+  # publica profile when it gets loaded
+  [[ -z "${PUBLICA_NPM_TOKEN}" ]] && export PUBLICA_NPM_TOKEN="undefined"
   source "${nvm_init}"
 
   # if a folder contains an .nvmrc, respect it
@@ -555,15 +560,6 @@ if [[ -n "${nvm_init}" ]]; then
   load_nvmrc
 fi
 unset nvm_init
-
-# load the Emscripten environment
-if [[ -d "/usr/lib/emsdk" ]]; then
-  pathmunge "/usr/lib/emsdk"
-fi
-
-if [[ -x $(which docker-machine 2>/dev/null) ]]; then
-  eval $(docker-machine env)
-fi
 
 #####################################################################
 # host overrides
