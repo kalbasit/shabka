@@ -18,7 +18,7 @@ fi
 systemctl --user restart redshift.service
 
 # composition manager
-compton --dbus &
+systemctl --user restart compton.service
 
 # notification
 dunst &
