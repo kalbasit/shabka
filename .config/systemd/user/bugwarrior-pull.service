@@ -2,7 +2,6 @@
 Description=bugwarrior-pull
 
 [Service]
-Environment="DISPLAY=:0"
 ExecStart=/usr/bin/bugwarrior-pull
 Type=oneshot
 
