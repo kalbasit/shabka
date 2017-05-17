@@ -52,6 +52,11 @@ zplug "zsh-users/zsh-syntax-highlighting",   defer:2
 # Then, source plugins and add commands to $PATH
 zplug load
 
+if zplug check b4b4r07/enhancd; then
+  # setting if enhancd is available
+  export ENHANCD_FILTER=fzf-tmux
+fi
+
 #####################################################################
 # functions
 #####################################################################
