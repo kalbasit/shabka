@@ -558,10 +558,6 @@ if [[ -n "${NVM_INIT}" ]]; then
     unalias npm
     unfunction lazyLoadNpm
 
-    # set the PUBLICA_NPM_TOKEN to a bogus value, it will be loaded by the
-    # publica profile when it gets loaded
-    [[ -z "${PUBLICA_NPM_TOKEN}" ]] && export PUBLICA_NPM_TOKEN="undefined"
-
     # source the init
     source "${NVM_INIT}"
 
