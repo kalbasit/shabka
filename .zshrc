@@ -555,6 +555,8 @@ if [[ -n "${NVM_INIT}" ]]; then
   lazyLoadNvm() {
     unalias nvm
     unfunction lazyLoadNvm
+    unalias npm
+    unfunction lazyLoadNpm
 
     # set the PUBLICA_NPM_TOKEN to a bogus value, it will be loaded by the
     # publica profile when it gets loaded
@@ -571,6 +573,18 @@ if [[ -n "${NVM_INIT}" ]]; then
     add-zsh-hook chpwd load_nvmrc
   }
   alias nvm=lazyLoadNvm
+
+  # lazyLoadNpm is a function to load nvm. It will only be called if
+  # lazyLoadNvm was never called before.
+  lazyLoadNpm() {
+    # call lazyLoadNvm so it loads the actual npm, it will also remove this
+    # function and the alias set to it.
+    lazyLoadNvm
+
+    # call the actual npm which is loaded by now
+    npm $@
+  }
+  alias npm=lazyLoadNpm
 else
   unset NVM_INIT
 fi
