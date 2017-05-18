@@ -605,4 +605,6 @@ fi
 if [[ -n "${ACTIVE_PROFILE}" ]]; then
   source "${HOME}/.zsh/profiles/${ACTIVE_PROFILE}.zsh"
   pactivate
+
+  unfunction pload pactivate pdeactivate
 fi
