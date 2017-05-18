@@ -1,2478 +1,2553 @@
-use strict; # use warnings;
+use strict;
+use warnings;
 
-# {{{ debug
+our $VERSION = '1.4'; # b46fded611292cb
+our %IRSSI = (
+    authors     => 'Nei',
+    contact     => 'Nei @ anti@conference.jabber.teamidiot.de',
+    url         => "http://anti.teamidiot.de/",
+    name        => 'adv_windowlist',
+    description => 'Adds a permanent advanced window list on the right or in a status bar.',
+    sbitems     => 'awl_shared',
+    license     => 'GNU GPLv2 or later',
+   );
 
-#BEGIN {
-#	open STDERR, '>', '/home/ailin/wlstatwarnings';
-#};
+# UPGRADE NOTE
+# ============
+# for users of 0.7 or earlier series, please note that appearance
+# settings have moved to /format, i.e. inside your theme!
+# the fifo (screen) has been replaced by an external viewer script
 
-# FIXME COULD SOMEONE PLEASE TELL ME HOW TO SHUT UP
-#
-# ...
-# Variable "*" will not stay shared at (eval *) line *.
-# Variable "*" will not stay shared at (eval *) line *.
-# ...
-# Can't locate package Irssi::Nick for @Irssi::Irc::Nick::ISA at (eval *) line *.
-# ...
-#
-# THANKS
-
-# }}}
-
-# if you don't know how to operate folds, type zn
-
-# {{{ header
-
-use Irssi (); # which is the minimum required version of Irssi ?
-use Irssi::TextUI;
-
-use vars qw($VERSION %IRSSI);
-
-$VERSION = '0.6ca';
-%IRSSI = (
-	original_authors => q(BC-bd,        Veli,          Timo Sirainen, ).
-	                    q(Wouter Coekaerts,    Jean-Yves Lefort), # (decadix)
-	original_contact => q(bd@bc-bd.org, veli@piipiip.net, tss@iki.fi, ).
-	                    q(wouter@coekaerts.be, jylefort@brutele.be),
-	authors          => q(Nei),
-	contact          => q(Nei @ anti@conference.jabber.teamidiot.de),
-	url              =>  "http://anti.teamidiot.de/",
-	name             => q(awl),
-	description      => q(Adds a permanent advanced window list on the right or ).
-	                    q(in a statusbar.),
-	description2     => q(Based on chanact.pl which was apparently based on ).
-	                    q(lightbar.c and nicklist.pl with various other ideas ).
-	                    q(from random scripts.),
-	license          => q(GNU GPLv2 or later),
-);
-
-# }}}
-
-# {{{ *** D O C U M E N T A T I O N ***
-
-# adapted by Nei
-
-###############
-# {{{ original comment
-# ###########
-# # Adds new powerful and customizable [Act: ...] item (chanelnames,modes,alias).
-# # Lets you give alias characters to windows so that you can select those with
-# # meta-<char>.
-# #
-# # for irssi 0.8.2 by bd@bc-bd.org
-# #
-# # inspired by chanlist.pl by 'cumol@hammerhart.de'
-# #
-# #########
-# # {{{ Contributors
-# #########
-# #
-# # veli@piipiip.net   /window_alias code
-# # qrczak@knm.org.pl  chanact_abbreviate_names
-# # qerub@home.se      Extra chanact_show_mode and chanact_chop_status
-# # }}}
-# }}}
-# 
-# {{{ FURTHER THANKS TO
-# ############
-# # buu, fxn, Somni, Khisanth, integral, tybalt89   for much support in any aspect perl
-# # and the channel in general ( #perl @ freenode ) and especially the ir_* functions
-# #
-# # Valentin 'senneth' Batz ( vb@g-23.org ) for the pointer to grep.pl, continuous support
-# #                                         and help in digging up ir_strip_codes
-# #
-# # OnetrixNET technology networks for the debian environment
-# #
-# # Monkey-Pirate.com / Spaceman Spiff for the webspace
-# #
-# }}}
-
-######
-# {{{ M A I N    P R O B L E M
-#####
-#
-# It is impossible to place the awl on a statusbar together with other items,
-# because I do not know how to calculate the size that it is going to get
-# granted, and therefore I cannot do the linebreaks properly.
-# This is what is missing to make a nice script out of awl.
-# If you have any ideas, please contact me ASAP :).
-# }}}
-######
-
-######
-# {{{ UTF-8 PROBLEM
-#####
-#
-# Please help me find a solution to this:
-# this be your statusbar, it is using up the maximum term size
-# [[1=1]#abc [2=2]#defghi]
-# 
-# now consider this example:i
-# "ascii" characters are marked with ., utf-8 characters with *
-# [[1=1]#... [2=2]#...***]
-#
-# you should think that this is how it would be displayed? WRONG!
-# [[1=1]#... [2=2]#...***   ]
-#
-# this is what Irssi does.. I believe my length calculating code to be correct,
-# however, I'd love to be proven wrong (or receive any other fix, too, of
-# course!)
-# }}}
-######
-
-#########
-# {{{ USAGE
-###
-#
+# Usage
+# =====
 # copy the script to ~/.irssi/scripts/
 #
 # In irssi:
 #
-#		/script load awl
+#		/run adv_windowlist
 #
+# In your shell (for example a tmux split):
+#
+#		perl ~/.irssi/scripts/adv_windowlist.pl
+#
+# To use sbar mode instead:
+#
+#		/toggle awl_viewer
 #
 # Hint: to get rid of the old [Act:] display
 #     /statusbar window remove act
 #
 # to get it back:
 #     /statusbar window add -after lag -priority 10 act
-# }}}
-##########
-# {{{ OPTIONS
-########
+
+# Options
+# =======
+# formats can be cleared with /format -delete
 #
-# {{{ /set awl_display_nokey <string>
-#     /set awl_display_key <string>
-#     /set awl_display_nokey_active <string>
-#     /set awl_display_key_active <string>
-#     * string : Format String for one window. The following $'s are expanded:
-#         $C : Name
-#         $N : Number of the Window
-#         $Q : meta-Keymap
-#         $H : Start highlighting
-#         $S : Stop highlighting
-#             /+++++++++++++++++++++++++++++++++,
-#            | ****  I M P O R T A N T :  ****  |
-#            |                                  |
-#            | don't forget  to use  $S  if you |
-#            | used $H before!                  |
-#            |                                  |
-#            '+++++++++++++++++++++++++++++++++/
-#       XXX NOTE ON *_active: there is a BUG somewhere in the length
-#       XXX calculation. currently it's best to NOT remove $H/$S from those
-#       XXX settings if you use it in the non-active settings.
-# }}}
-# {{{ /set awl_separator <string>
-#     * string : Charater to use between the channel entries
-#     you'll need to escape " " space and "$" like this:
-#     "/set awl_separator \ "
-#     "/set awl_separator \$"
-#     and {}% like this:
-#     "/set awl_separator %{"
-#     "/set awl_separator %}"
-#     "/set awl_separator %%"
-#     (reason being, that the separator is used inside a {format })
-# }}}
-# {{{ /set awl_prefer_name <ON|OFF>
-#     * this setting decides whether awl will use the active_name (OFF) or the
-#       window name as the name/caption in awl_display_*.
-#       That way you can rename windows using /window name myownname.
-# }}}
-# {{{ /set awl_hide_data <num>
-#     * num : hide the window if its data_level is below num
-#     set it to 0 to basically disable this feature,
-#               1 if you don't want windows without activity to be shown
-#               2 to show only those windows with channel text or hilight
-#               3 to show only windows with hilight
-# }}}
-# {{{ /set awl_maxlines <num>
-#     * num : number of lines to use for the window list (0 to disable, negative
-#       lock)
-# }}}
-# {{{ /set awl_columns <num>
-#     * num : number of columns to use in screen mode (0 for unlimited)
-# }}}
-# {{{ /set awl_block <num>
-#     * num : width of a column in screen mode (negative values = block display)
-#             /+++++++++++++++++++++++++++++++++,
-#            | ******  W A R N I N G !  ******  |
-#            |                                  |
-#            | If  your  block  display  looks  |
-#            | DISTORTED,  you need to add the  |
-#            | following  line to your  .theme  |
-#            | file under                       |
-#            |     abstracts = {             :  |
-#            |                                  |
-#            |       sb_act_none = "%n$*";      |
-#            |                                  |
-#            '+++++++++++++++++++++++++++++++++/
-#.02:08:26. < shi>  Irssi::current_theme()->get_format <.. can this be used?
-# }}}
-# {{{ /set awl_sbar_maxlength <ON|OFF>
-#     * if you enable the maxlength setting, the block width will be used as a
-#       maximum length for the non-block statusbar mode too.
-# }}}
-# {{{ /set awl_height_adjust <num>
-#     * num : how many lines to leave empty in screen mode
-# }}}
-# {{{ /set awl_sort <-data_level|-last_line|refnum>
-#     * you can change the window sort order with this variable
-#         -data_level : sort windows with hilight first
-#         -last_line  : sort windows in order of activity
-#         refnum      : sort windows by window number
-# }}}
-# {{{ /set awl_placement <top|bottom>
-#     /set awl_position <num>
-#     * these settings correspond to /statusbar because awl will create
-#       statusbars for you
-#     (see /help statusbar to learn more)
-# }}}
-# {{{ /set awl_all_disable <ON|OFF>
-#     * if you set awl_all_disable to ON, awl will also remove the
-#       last statusbar it created if it is empty.
-#       As you might guess, this only makes sense with awl_hide_data > 0 ;)
-# }}}
-# {{{ /set awl_automode <sbar|screen|emulate_lightbar>
-#     * this setting defines whether the window list is shown in statusbars or
-#       whether the screen hack is used (from nicklist.pl)
-# }}}
-# }}}
-##########
-# {{{ COMMANDS
-########
-# {{{ /awl paste <ON|OFF|TOGGLE>
-#     * enables or disables the screen hack windowlist. This is useful when you
-#       want to mark & copy text that you want to paste somewhere (hence the
-#       name). (ON means AWL disabled!)
-#       This is nicely bound to a function key for example.
-# }}}
-# {{{ /awl redraw
-#     * redraws the screen hack windowlist. There are many occasions where the
-#       screen hack windowlist can get destroyed so you can use this command to
-#       fix it.
-# }}}
-# }}}
-###
-# {{{ WISHES
-####
+# /format awl_display_(no)key(_active|_visible) <string>
+# * string : Format String for one window. The following $'s are expanded:
+#     $C : Name
+#     $N : Number of the Window
+#     $Q : meta-Keymap
+#     $H : Start hilighting
+#     $S : Stop hilighting
+#         /+++++++++++++++++++++++++++++++++,
+#        | ****  I M P O R T A N T :  ****  |
+#        |                                  |
+#        | don't forget  to use  $S  if you |
+#        | used $H before!                  |
+#        |                                  |
+#        '+++++++++++++++++++++++++++++++++/
+#   key     : a key binding that goes to this window could be detected in /bind
+#   nokey   : no such key binding was detected
+#   active  : window would receive the input you are currently typing
+#   visible : window is also visible on screen but not active (a split window)
 #
-# if you fiddle with my mess, provide me with your fixes so I can benefit as well
+# /format awl_name_display <string>
+# * string : Format String for window names
+#     $0 : name as formatted by the settings
 #
+# /format awl_display_header <string>
+# * string : Format String for this header line. The following $'s are expanded:
+#     $C : network tag
+#
+# /format awl_separator(2) <string>
+# * string : Character to use between the channel entries
+# variant 2 can be used for alternating separators (only in status bar
+# without block display)
+#
+# /format awl_abbrev_chars <string>
+# * string : Character to use when shortening long names. The second character
+#   will be used if two blocks need to be filled.
+#
+# /format awl_title <string>
+# * string : Text to display in the title string or title bar
+#
+# /format awl_viewer_item_bg <string>
+# * string : Format String specifying the viewer's item background colour
+#
+# /set awl_prefer_name <ON|OFF>
+# * this setting decides whether awl will use the active_name (OFF) or the
+#   window name as the name/caption in awl_display_*.
+#   That way you can rename windows using /window name myownname.
+#
+# /set awl_hide_empty <num>
+# * if visible windows without items should be hidden from the window list
+# set it to 0 to show all windows
+#           1 to hide visible windows without items (negative exempt
+#           active window)
+#
+# /set awl_hide_data <num>
+# * num : hide the window if its data_level is below num
+# set it to 0 to basically disable this feature,
+#           1 if you don't want windows without activity to be shown
+#           2 to show only those windows with channel text or hilight
+#           3 to show only windows with hilight (negative exempt active window)
+#
+# /set awl_hide_name_data <num>
+# * num : hide the name of the window if its data_level is below num
+#   (only works in status bar without block display)
+# you will want to change your formats to add $H...$S around $Q or $N
+# if you plan to use this
+#
+# /set awl_maxlines <num>
+# * num : number of lines to use for the window list (0 to disable, negative
+#   lock)
+#
+# /set awl_maxcolumns <num>
+# * num : number of columns to use for the window list when using the
+#   tmux integration (0 to disable)
+#
+# /set awl_block <num>
+# * num : width of a column in viewer mode (negative values = block
+#   display in status bar mode)
+#         /+++++++++++++++++++++++++++++++++,
+#        | ******  W A R N I N G !  ******  |
+#        |                                  |
+#        | If  your  block  display  looks  |
+#        | DISTORTED,  you need to add the  |
+#        | following  line to your  .theme  |
+#        | file under                       |
+#        |     abstracts = {             :  |
+#        |                                  |
+#        |       sb_act_none = "%K$*";      |
+#        |                                  |
+#        '+++++++++++++++++++++++++++++++++/
+#
+# /set awl_sbar_maxlength <ON|OFF>
+# * if you enable the maxlength setting, the block width will be used as a
+#   maximum length for the non-block status bar mode too.
+#
+# /set awl_height_adjust <num>
+# * num : how many lines to leave empty in viewer mode
+#
+# /set awl_sort <-data_level|-last_line|refnum>
+# * you can change the window sort order with this variable
+#     -data_level : sort windows with hilight first
+#     -last_line  : sort windows in order of activity
+#     refnum      : sort windows by window number
+#     active/server/tag : sort by server name
+#   "-" reverses the sort order
+#   typechecks are supported via ::, e.g. active::Query or active::Irc::Query
+#   undefinedness can be checked with ~, e.g. ~active
+#   string comparison can be done with =, e.g. name=(status)
+#   to make sort case insensitive, use #i, e.g. name#i
+#   any key in the window hash can be tested, e.g. active/chat_type=XMPP
+#   multiple criteria can be separated with , or +, e.g. -data_level+-last_line
+#
+# /set awl_placement <top|bottom>
+# /set awl_position <num>
+# * these settings correspond to /statusbar because awl will create
+#   status bars for you
+# (see /help statusbar to learn more)
+#
+# /set awl_all_disable <ON|OFF>
+# * if you set awl_all_disable to ON, awl will also remove the
+#   last status bar it created if it is empty.
+#   As you might guess, this only makes sense with awl_hide_data > 0 ;)
+#
+# /set awl_viewer <ON|OFF>
+# * enable the external viewer script
+#
+# /set awl_viewer_launch <ON|OFF>
+# * try to auto-launch the viewer under tmux or with a shell command
+#   /awl restart is required all auto-launch related settings to take
+#   effect
+#
+# /set awl_viewer_tmux_position <left|top|right|bottom|custom>
+# * try to split in this direction when using tmux for the viewer
+#   custom : use custom_command setting
+#
+# /set awl_viewer_xwin_command <shell command>
+# * custom command to run in order to start the viewer when irssi is
+#   running under X
+#   %A  - gets replaced by the command to run the viewer
+#   %qA - additionally quote the command
+#
+# /set awl_viewer_custom_command <shell command>
+# * custom command to run in order to start the viewer
+#
+# /set awl_viewer_launch_env <string>
+# * specific environment settings for use on viewer auto-launch,
+#   without the AWL_ prefix
+#
+# /set awl_shared_sbar <left<right|OFF>
+# * share a status bar for the first awl item, you will need to manually
+#   /statusbar window add -after lag -priority 10 awl_shared
+#     left   : space in cells occupied on the left of status bar
+#     right  : space occupied on the right
+# Note: you need to replace "left" AND "right" with the appropriate numbers!
+#
+# /set awl_path <path>
+# * path to the file which the viewer script reads
+#
+# /set fancy_abbrev <no|head|strict|fancy>
+# * how to shorten too long names
+#     no     : shorten in the middle
+#     head   : always cut off the ends
+#     strict : shorten repeating substrings
+#     fancy  : combination of no+strict
+#
+# /set awl_custom_xform <perl code>
+# * specify a custom routine to transform window names
+#   example: s/^#// remove the #-mark of IRC channels
+#   the special flags $CHANNEL / $TAG / $QUERY / $NAME can be
+#   tested in conditionals
+#
+# /set awl_last_line_shade <timeout>
+# * set timeout to shade activity base colours, to enable
+#   you also need to add +-last_line to awl_sort
+#   (requires 256 colour support)
+#
+# /set awl_no_mode_hint <ON|OFF>
+# * whether to show the hint of running the viewer script in the
+#   status bar
+#
+# /set awl_mouse <ON|OFF>
+# * enable the terminal mouse in irssi
+# (use the awl-patched mouse.pl for gestures and commands if you need
+# them and disable mouse_escape)
+#
+# /set awl_mouse_offset <num>
+# * specifies where on the screen is the awl status bar
+#   (0 = on top/bottom, 1 = one additional line in between,
+#   e.g. prompt)
+#   you MUST set this correctly otherwise the mouse coordinates will
+#   be off
+#
+# /set mouse_scroll <num>
+# * how many lines the mouse wheel scrolls
+#
+# /set mouse_escape <num>
+# * seconds to disable the mouse, when not clicked on the windowlist
+#
+
+# Commands
+# ========
+# /awl redraw
+# * redraws the windowlist. There may be occasions where the
+#   windowlist can get destroyed so you can use this command to
+#   force a redraw.
+#
+# /awl restart
+# * restart the connection to the viewer script.
+
+# Viewer script
+# =============
+# When run from the command line, adv_windowlist acts as the viewer
+# script to be used together with the irssi script to display the
+# window list in a sidebar/terminal of its own.
+#
+# One optional parameter is accepted, the awl_path
+#
+# The viewer can be configured by three environment variables:
+#
+# AWL_HI9=1
+# * interpret %9 as high-intensity toggle instead of bold. This had
+#   been the default prior to version 0.9b8
+#
+# AWL_AUTOFOCUS=0
+# * disable auto-focus behaviour when activating a window
+#
+# AWL_NOTITLE=1
+# * disable the title bar
+
 # Nei =^.^= ( anti@conference.jabber.teamidiot.de )
-# }}}
 
-# }}}
+no warnings 'redefine';
+use constant IN_IRSSI => __PACKAGE__ ne 'main' || $ENV{IRSSI_MOCK};
+use constant SCRIPT_FILE => __FILE__;
+no if !IN_IRSSI, strict => (qw(subs refs));
+use if IN_IRSSI, Irssi => ();
+use if IN_IRSSI, 'Irssi::TextUI' => ();
+use v5.10;
+use Encode;
+use Storable ();
+use IO::Socket::UNIX;
+use List::Util qw(min max reduce);
+use Hash::Util qw(lock_keys);
+use Text::ParseWords qw(shellwords);
 
-# {{{ modules
+BEGIN {
+    if ($] < 5.012) {
+	*CORE::GLOBAL::length = *CORE::GLOBAL::length = sub (_) {
+	    defined $_[0] ? CORE::length($_[0]) : undef
+	};
+	*Irssi::active_win = {}; # hide incorrect warning
+    }
+}
 
-#use Class::Classless;
-#use Term::Info;
+unless (IN_IRSSI) {
+    local *_ = \@ARGV;
+    &AwlViewer::main;
+    exit;
+}
 
-# }}}
 
-# {{{ global variables
+use constant GLOB_QUEUE_TIMER => 100;
 
-my $replaces = '[=]'; # AARGH!!! (chars that are always surrounded by weird
-                      # colour codes by Irssi)
-
-my $actString = [];   # statusbar texts
+our $BLOCK_ALL;  # localized blocker
+my @actString;   # status bar texts
+my @win_items;
 my $currentLines = 0;
-my $resetNeeded;      # layout/screen has changed, redo everything
-my $needRemake;       # "normal" changes
-#my $callcount = 0;
-sub GLOB_QUEUE_TIMER () { 100 }
-my $globTime = undef; # timer to limit remake() calls
+my %awins;
+my $globTime;    # timer to limit remake calls
 
-
-my $SCREEN_MODE;
-my $DISABLE_SCREEN_TEMP;
-my $currentColumns = 0;
-my $screenResizing;
+my %CHANGED;
+my $VIEWER_MODE;
+my $MOUSE_ON;
+my %mouse_coords;
+my %statusbars;
+my %S; # settings
+my $settings_str = '';
+my $window_sort_func;
+my $custom_xform;
+my ($sb_base_width, $sb_base_width_pre, $sb_base_width_post);
+my $print_text_activity;
+my $shade_line_timer;
 my ($screenHeight, $screenWidth);
-my $screenansi = bless {
-	NAME => 'Screen::ANSI',
-	PARENTS => [],
-	METHODS => {
-		dcs   => sub { "\033P" },
-		st    => sub { "\033\\"},
-	}
-}, 'Class::Classless::X';
-#my $terminfo = new Term::Info 'xterm'; # xterm here, make this modular
-# {{{{{{{{{{{{{{{
-my $terminfo = bless { # xterm here, make this modular
-	NAME => 'Term::Info::xterm',
-	PARENTS => [],
-	METHODS => {
- # 	civis=\E[?25l,
-		civis => sub { "\033[?25l" },
- # 	sc=\E7,
-		sc    => sub { "\0337" },
- # 	cup=\E[%i%p1%d;%p2%dH,
-		cup   => sub { shift;shift; "\033[" . ($_[0] + 1) . ';' . ($_[1] + 1) . 'H' },
- # 	el=\E[K,
-		el    => sub { "\033[K" },
- # 	rc=\E8,
-		rc    => sub { "\0338" },
- # 	cnorm=\E[?25h,
-		cnorm => sub { "\033[?25h" },
- # 	setab=\E[4%p1%dm,
-		setab => sub { shift;shift; "\033[4" . $_[0] . 'm' },
- # 	setaf=\E[3%p1%dm,
-		setaf => sub { shift;shift; "\033[3" . $_[0] . 'm' },
- # 	bold=\E[1m,
-		bold  => sub { "\033[1m" },
- # 	blink=\E[5m,
-		blink => sub { "\033[5m" },
- # 	rev=\E[7m,
-		rev   => sub { "\033[7m" },
- # 	op=\E[39;49m,
-		op    => sub { "\033[39;49m" },
-	}
-}, 'Class::Classless::X';
-# }}}}}}}}}}}}}}}
+my %viewer;
 
+my (%keymap, %nummap, %wnmap, %specialmap, %wnmap_exp, %custom_key_map);
+my %banned_channels;
+my %abbrev_cache;
 
-sub setc () {
-	$IRSSI{'name'}
-}
+use constant setc => 'awl';
+
 sub set ($) {
-	setc . '_' . shift
+    setc . '_' . $_[0]
 }
 
-# }}}
-
-
-# {{{ sbar mode
-
-my %statusbars;       # currently active statusbars
-
-# maybe I should just tie the array ?
 sub add_statusbar {
-	for (@_) {
-		# add subs
-		for my $l ($_) { {
-			no strict 'refs'; # :P
-			*{set$l} = sub { awl($l, @_) };
-		}; }
-		Irssi::command('statusbar ' . (set$_) . ' reset');
-		Irssi::command('statusbar ' . (set$_) . ' enable');
-		if (lc Irssi::settings_get_str(set 'placement') eq 'top') {
-			Irssi::command('statusbar ' . (set$_) . ' placement top');
-		}
-		if ((my $x = int Irssi::settings_get_int(set 'position')) != 0) {
-			Irssi::command('statusbar ' . (set$_) . ' position ' . $x);
-		}
-		Irssi::command('statusbar ' . (set$_) . ' add -priority 100 -alignment left barstart');
-		Irssi::command('statusbar ' . (set$_) . ' add ' . (set$_));
-		Irssi::command('statusbar ' . (set$_) . ' add -priority 100 -alignment right barend');
-		Irssi::command('statusbar ' . (set$_) . ' disable');
-		Irssi::statusbar_item_register(set$_, '$0', set$_);
-		$statusbars{$_} = {};
+    for (@_) {
+	# add subs
+	my $l = set $_;
+	{
+	    my $close = $_;
+	    no strict 'refs';
+	    *{$l} = sub { awl($close, @_) };
 	}
+	Irssi::command("statusbar $l reset");
+	Irssi::command("statusbar $l enable");
+	if (lc $S{placement} eq 'top') {
+	    Irssi::command("statusbar $l placement top");
+	}
+	if (my $x = $S{position}) {
+	    Irssi::command("statusbar $l position $x");
+	}
+	Irssi::command("statusbar $l add -priority 100 -alignment left barstart");
+	Irssi::command("statusbar $l add $l");
+	Irssi::command("statusbar $l add -priority 100 -alignment right barend");
+	Irssi::command("statusbar $l disable");
+	Irssi::statusbar_item_register($l, '$0', $l);
+	$statusbars{$_} = 1;
+	Irssi::command("statusbar $l enable");
+    }
 }
 
 sub remove_statusbar {
-	for (@_) {
-		Irssi::command('statusbar ' . (set$_) . ' reset');
-		Irssi::statusbar_item_unregister(set$_); # XXX does this actually work ?
-		# DO NOT REMOVE the sub before you have unregistered it :))
-		for my $l ($_) { {
-			no strict 'refs';
-			undef &{set$l};
-		}; }
-		delete $statusbars{$_};
+    for (@_) {
+	my $l = set $_;
+	Irssi::command("statusbar $l disable");
+	Irssi::command("statusbar $l reset");
+	Irssi::statusbar_item_unregister($l);
+	{
+	    no strict 'refs';
+	    undef &{$l};
 	}
+	delete $statusbars{$_};
+    }
 }
+
+my $awl_shared_empty = sub {
+    return if $BLOCK_ALL;
+    my ($item, $get_size_only) = @_;
+    $item->default_handler($get_size_only, '', '', 0);
+};
 
 sub syncLines {
-	my $temp = $currentLines;
-	$currentLines = @$actString;
-	#Irssi::print("current lines: $temp new lines: $currentLines");
-	my $currMaxLines = Irssi::settings_get_int(set 'maxlines');
-	if ($currMaxLines > 0 and @$actString > $currMaxLines) {
-		$currentLines = $currMaxLines;
-	}
-	elsif ($currMaxLines < 0) {
-		$currentLines = abs($currMaxLines);
-	}
-	return if ($temp == $currentLines);
-	if ($currentLines > $temp) {
-		for ($temp .. ($currentLines - 1)) {
-			add_statusbar($_);
-			Irssi::command('statusbar ' . (set$_) . ' enable');
+    my $maxLines = $S{maxlines};
+    my $newLines = ($maxLines > 0 and @actString > $maxLines) ?
+	$maxLines :
+    ($maxLines < 0) ?
+	-$maxLines :
+	    @actString;
+    $currentLines = 1 if !$currentLines && $S{shared_sbar};
+    if ($S{shared_sbar} && !$statusbars{shared}) {
+	my $l = set 'shared';
+	{
+	    no strict 'refs';
+	    *{$l} = sub {
+		return if $BLOCK_ALL;
+		my ($item, $get_size_only) = @_;
+
+		my $text = $actString[0];
+		my $title = _get_format(set 'title');
+		if (length $title) {
+		    $title =~ s{\\(.)|(.)}{
+			defined $2 ? quotemeta $2
+			    : $1 eq 'V' ? '\u'
+			    : $1 eq ':' ? quotemeta ':%n'
+			    : $1 =~ /^[uUFQE]$/ ? "\\$1"
+			    : quotemeta "\\$1"
+			}sge;
+		    $title = eval qq{"$title"};
+		    $title .= ' ';
 		}
+		my $pat = defined $text ? "{sb $title\$*}" : '{sb }';
+		$text //= '';
+		$item->default_handler($get_size_only, $pat, $text, 0);
+	    };
 	}
-	else {
-		for ($_ = ($temp - 1); $_ >= $currentLines; $_--) {
-			Irssi::command('statusbar ' . (set$_) . ' disable');
-			remove_statusbar($_);
-		}
+	$statusbars{shared} = 1;
+	remove_statusbar (0) if $statusbars{0};
+    }
+    elsif ($statusbars{shared} && !$S{shared_sbar}) {
+	add_statusbar (0) if $currentLines && $newLines;
+	delete $statusbars{shared};
+	my $l = set 'shared';
+	{
+	    no strict 'refs';
+	    *{$l} = $awl_shared_empty;
 	}
+    }
+    if ($currentLines == $newLines) { return; }
+    elsif ($newLines > $currentLines) {
+	add_statusbar ($currentLines .. ($newLines - 1));
+    }
+    else {
+	remove_statusbar (reverse ($newLines .. ($currentLines - 1)));
+    }
+    $currentLines = $newLines;
 }
 
-# FIXME implement $get_size_only check, and user $item->{min|max-size} ??
 sub awl {
-	my ($line, $item, $get_size_only) = @_;
+    return if $BLOCK_ALL;
+    my ($line, $item, $get_size_only) = @_;
 
-	if ($needRemake) {
-		$needRemake = undef;
-		remake();
-	}
-
-	my $text = $actString->[$line];  # DO NOT set the actual $actString->[$line] to '' here or
-	$text = '' unless defined $text; # you'll screw up the statusbar counter ($currentLines)
-	$item->default_handler($get_size_only, $text, '', 1);
+    my $text = $actString[$line];
+    my $pat = defined $text ? '{sb $*}' : '{sb }';
+    $text //= '';
+    $item->default_handler($get_size_only, $pat, $text, 0);
 }
 
 # remove old statusbars
-my %killBar;
-sub get_old_status {
-	my ($textDest, $cont, $cont_stripped) = @_;
-	if ($textDest->{'level'} == 524288 and $textDest->{'target'} eq ''
-			and !defined($textDest->{'server'})
-	) {
-		my $name = quotemeta(set '');
-		if ($cont_stripped =~ m/^$name(\d+)\s/) { $killBar{$1} = {}; }
-		Irssi::signal_stop();
-	}
+{ my %killBar;
+  sub get_old_status {
+      my ($textDest, $cont, $cont_stripped) = @_;
+      if ($textDest->{level} == 524288 and $textDest->{target} eq '' and !defined $textDest->{server}) {
+	  my $name = quotemeta(set '');
+	  if ($cont_stripped =~ m/^$name(\d+)\s/) { $killBar{$1} = 1; }
+	  Irssi::signal_stop;
+      }
+  }
+  sub killOldStatus {
+      %killBar = ();
+      Irssi::signal_add_first('print text' => 'get_old_status');
+      Irssi::command('statusbar');
+      Irssi::signal_remove('print text' => 'get_old_status');
+      remove_statusbar(keys %killBar);
+  }
 }
-sub killOldStatus {
-	%killBar = ();
-	Irssi::signal_add_first('print text' => 'get_old_status');
-	Irssi::command('statusbar');
-	Irssi::signal_remove('print text' => 'get_old_status');
-	remove_statusbar(keys %killBar);
+
+sub _add_map {
+    my ($type, $target, $map) = @_;
+    ($type->{$target}) = sort { length $a <=> length $b || $a cmp $b }
+	$map, exists $type->{$target} ? $type->{$target} : ();
 }
-#killOldStatus();
-
-# end sbar mode }}}
-
-
-# {{{ keymaps
-
-my %keymap;
 
 sub get_keymap {
-	my ($textDest, undef, $cont_stripped) = @_;
-	if ($textDest->{'level'} == 524288 and $textDest->{'target'} eq ''
-			and !defined($textDest->{'server'})
-	) {
-		if ($cont_stripped =~ m/((?:meta-)+)(.)\s+change_window (\d+)/) {
-			my ($level, $key, $window) = ($1, $2, $3);
-			my $numlevel = ($level =~ y/-//) - 1;
-			$keymap{$window} = ('-' x $numlevel) . "$key";
+    my ($textDest, undef, $cont_stripped) = @_;
+    if ($textDest->{level} == 524288 and $textDest->{target} eq '' and !defined $textDest->{server}) {
+	my $one_meta_or_ctrl_key = qr/((?:meta-)*?)(?:(meta-|\^)(\S)|(\w+))/;
+	$cont_stripped = as_uni($cont_stripped);
+	if ($cont_stripped =~ m/((?:$one_meta_or_ctrl_key-)*$one_meta_or_ctrl_key)\s+(.*)$/) {
+	    my ($combo, $command) = ($1, $10);
+	    my $map = '';
+	    while ($combo =~ s/(?:-|^)$one_meta_or_ctrl_key$//) {
+		my ($level, $ctl, $key, $nkey) = ($1, $2, $3, $4);
+		my $numlevel = ($level =~ y/-//);
+		$ctl = '' if !$ctl || $ctl ne '^';
+		$map = ('-' x ($numlevel%2)) . ('+' x ($numlevel/2)) .
+		    $ctl . (defined $key ? $key : "\01$nkey\01") . $map;
+	    }
+	    for ($command) {
+		last unless length $map;
+		if (/^change_window (\d+)/i) {
+		    _add_map(\%nummap, $1, $map);
 		}
-		Irssi::signal_stop();
+		elsif (/^(?:command window goto|change_window) (\S+)/i) {
+		    my $window = $1;
+		    if ($window !~ /\D/) {
+			_add_map(\%nummap, $window, $map);
+		    }
+		    elsif (lc $window eq 'active') {
+			_add_map(\%specialmap, '_active', $map);
+		    }
+		    else {
+			_add_map(\%wnmap, $window, $map);
+		    }
+		}
+		elsif (/^(?:active_window|command (ack))/i) {
+		    _add_map(\%specialmap, '_active', $map);
+		    $viewer{use_ack} = !!$1;
+		}
+		elsif (/^command window last/i) {
+		    _add_map(\%specialmap, '_last', $map);
+		}
+		elsif (/^(?:upper_window|command window up)/i) {
+		    _add_map(\%specialmap, '_up', $map);
+		}
+		elsif (/^(?:lower_window|command window down)/i) {
+		    _add_map(\%specialmap, '_down', $map);
+		}
+		elsif (/^key\s+(\w+)/i) {
+		    $custom_key_map{$1} = $map;
+		}
+	    }
 	}
+	Irssi::signal_stop;
+    }
 }
 
 sub update_keymap {
-	%keymap = ();
-	Irssi::signal_remove('command bind' => 'watch_keymap');
-	Irssi::signal_add_first('print text' => 'get_keymap');
-	Irssi::command('bind'); # stolen from grep
-	Irssi::signal_remove('print text' => 'get_keymap');
-	Irssi::signal_add('command bind' => 'watch_keymap');
-	Irssi::timeout_add_once(100, 'eventChanged', undef);
+    %nummap = %wnmap = %specialmap = %custom_key_map = ();
+    Irssi::signal_remove('command bind' => 'watch_keymap');
+    Irssi::signal_add_first('print text' => 'get_keymap');
+    Irssi::command('bind');
+    Irssi::signal_remove('print text' => 'get_keymap');
+    for (keys %custom_key_map) {
+	if (exists $custom_key_map{$_} &&
+		$custom_key_map{$_} =~ s/\01(\w+)\01/exists $custom_key_map{$1} ? $custom_key_map{$1} : "\02"/ge) {
+	    if ($custom_key_map{$_} =~ /\02/) {
+		delete $custom_key_map{$_};
+	    }
+	    else {
+		redo;
+	    }
+	}
+    }
+    for my $keymap (\(%specialmap, %wnmap, %nummap)) {
+	for (keys %$keymap) {
+	    if ($keymap->{$_} =~ s/\01(\w+)\01/exists $custom_key_map{$1} ? $custom_key_map{$1} : "\02"/ge) {
+		if ($keymap->{$_} =~ /\02/) {
+		    delete $keymap->{$_};
+		}
+	    }
+	}
+    }
+    Irssi::signal_add('command bind' => 'watch_keymap');
+    delete $viewer{client_keymap};
+    &wl_changed;
 }
 
 # watch keymap changes
 sub watch_keymap {
-	Irssi::timeout_add_once(1000, 'update_keymap', undef);
+    Irssi::timeout_add_once(1000, 'update_keymap', undef);
 }
 
-update_keymap();
-
-# end keymaps }}}
-
-# {{{ format handling
-
-# a bad way do do expansions but who cares
-sub expand {
-	my ($string, %format) = @_;
-	my ($exp, $repl);
-	$string =~ s/\$$exp/$repl/g while (($exp, $repl) = each(%format));
-	return $string;
+{ my %strip_table = (
+    # fe-common::core::formats.c:format_expand_styles
+    #      delete                format_backs  format_fores bold_fores   other stuff
+    (map { $_ => '' } (split //, '04261537' .  'kbgcrmyw' . 'KBGCRMYW' . 'U9_8I:|FnN>#[' . 'pP')),
+    #      escape
+    (map { $_ => $_ } (split //, '{}%')),
+   );
+  sub ir_strip_codes { # strip %codes
+      my $o = shift;
+      $o =~ s/(%(%|Z.{6}|z.{6}|X..|x..|.))/exists $strip_table{$2} ? $strip_table{$2} :
+	  $2 =~ m{x(?:0[a-f]|[1-6][0-9a-z]|7[a-x])|z[0-9a-f]{6}}i ? '' : $1/gex;
+      $o
+  }
 }
-
-my %strip_table = (
-	# fe-common::core::formats.c:format_expand_styles
-	#      delete                format_backs  format_fores bold_fores   other stuff
-	(map { $_ => '' } (split //, '04261537' .  'kbgcrmyw' . 'KBGCRMYW' . 'U9_8:|FnN>#[')),
-	#      escape
-	(map { $_ => $_ } (split //, '{}%')),
-);
-sub ir_strip_codes { # strip %codes
-	my $o = shift;
-	$o =~ s/(%(.))/exists $strip_table{$2} ? $strip_table{$2} : $1/gex;
-	$o
-}
-
+## ir_parse_special -- wrapper around parse_special
+## $i - input format
+## $args - array ref of arguments to format
+## $win - different target window (default current window)
+## $flags - different kind of escape flags (default 4|8)
+## returns formatted str
 sub ir_parse_special {
-	my $o; my $i = shift;
-	#if ($_[0]) { # for the future?!?
-	#	eval {
-	#		$o = $_[0]->parse_special($i);
-	#	};
-	#	unless ($@) {
-	#		return $o;
-	#	}
-	#}
-	my $win = shift || Irssi::active_win();
-	my $server = Irssi::active_server();
-	if (ref $win and ref $win->{'active'}) {
-		$o = $win->{'active'}->parse_special($i);
-	}
-	elsif (ref $win and ref $win->{'active_server'}) {
-		$o = $win->{'active_server'}->parse_special($i);
-	}
-	elsif (ref $server) {
-		$o =  $server->parse_special($i);
-	}
-	else {
-		$o = Irssi::parse_special($i);
-	}
-	$o
-}
-sub ir_parse_special_protected {
-	my $o; my $i = shift;
-	$i =~ s/
-		( \\. ) | # skip over escapes (maybe)
-		( \$[^% $\]+ ) # catch special variables
-	/
-		if ($1) { $1 }
-		elsif ($2) { my $i2 = $2; ir_fe(ir_parse_special($i2, @_)) }
-		else { $& }
-	/gex;
-	$i
+    my $o;
+    my $i = shift;
+    my $args = shift // [];
+    y/ /\177/ for @$args; # hack to escape spaces
+    my $win = shift || Irssi::active_win;
+    my $flags = shift // 0x4|0x8;
+    my @cmd_args = ($i, (join ' ', @$args), $flags);
+    my $server = Irssi::active_server();
+    if (ref $win and ref $win->{active}) {
+	$o = $win->{active}->parse_special(@cmd_args);
+    }
+    elsif (ref $win and ref $win->{active_server}) {
+	$o = $win->{active_server}->parse_special(@cmd_args);
+    }
+    elsif (ref $server) {
+	$o =  $server->parse_special(@cmd_args);
+    }
+    else {
+	$o = &Irssi::parse_special(@cmd_args);
+    }
+    $o =~ y/\177/ /;
+    $o
 }
 
+sub sb_format_expand { # Irssi::current_theme->format_expand wrapper
+    Irssi::current_theme->format_expand(
+	$_[0],
+	(
+	    Irssi::EXPAND_FLAG_IGNORE_REPLACES
+		    |
+	    ($_[1] ? 0 : Irssi::EXPAND_FLAG_IGNORE_EMPTY)
+	)
+    )
+}
 
-sub sb_ctfe { # Irssi::current_theme->format_expand wrapper
-	Irssi::current_theme->format_expand(
-		shift,
-		(
-			Irssi::EXPAND_FLAG_IGNORE_REPLACES
-				|
-			($_[0]?0:Irssi::EXPAND_FLAG_IGNORE_EMPTY)
-		)
-	)
+{ my $term_type = Irssi::version > 20040819 ? 'term_charset' : 'term_type';
+  local $@;
+  eval { require Text::CharWidth; };
+  unless ($@) {
+      *screen_length = sub { Text::CharWidth::mbswidth($_[0]) };
+  }
+  else {
+      my $err = $@; chomp $err; $err =~ s/\sat .* line \d+\.$//;
+      #Irssi::print("%_$IRSSI{name}: warning:%_ Text::CharWidth module failed to load. Length calculation may be off! Error was:");
+      print "%_$IRSSI{name}:%_ $err";
+      *screen_length = sub {
+	  my $temp = shift;
+	  if (lc Irssi::settings_get_str($term_type) eq 'utf-8') {
+	      Encode::_utf8_on($temp);
+	  }
+	  length($temp)
+      };
+  }
+  sub as_uni {
+      no warnings 'utf8';
+      Encode::decode(Irssi::settings_get_str($term_type), $_[0], 0)
+  }
+  sub as_tc {
+      Encode::encode(Irssi::settings_get_str($term_type), $_[0], 0)
+  }
 }
-sub sb_expand { # expand {format }s (and apply parse_special for $vars)
-	ir_parse_special(
-		sb_ctfe(shift)
-	)
-}
-sub sb_strip {
-	ir_strip_codes(
-		sb_expand(shift)
-	); # does this get us the actual length of that s*ty bar :P ?
-}
+
 sub sb_length {
-	# unicode cludge, d*mn broken Irssi
-	# screw it, this will fail from broken joining anyway (and cause warnings)
-	my $term_type = 'term_type';
-	if (Irssi::version > 20040819) { # this is probably wrong, but I don't know
-		                              # when the setting name got changed
-		$term_type = 'term_charset';
+    screen_length(ir_strip_codes($_[0]))
+}
+
+sub run_custom_xform {
+    local $@;
+    eval {
+	$custom_xform->()
+    };
+    if ($@) {
+	$@ =~ /^(.*)/;
+	print '%_'.(set 'custom_xform').'%_ died (disabling): '.$1;
+	$custom_xform = undef;
+    }
+}
+
+sub remove_uniform {
+    my $o = shift;
+    $o =~ s/^xmpp:(.*?[%@]).+\.[^.]+$/$1/ or
+	$o =~ s#^psyc://.+\.[^.]+/([@~].*)$#$1#;
+    if ($custom_xform) {
+	run_custom_xform() for $o;
+    }
+    $o
+}
+
+sub remove_uniform_vars {
+    my $win = shift;
+    my $name = __PACKAGE__ . '::custom_xform::' . $win->{active}{type}
+	if ref $win->{active} && $win->{active}{type};
+    no strict 'refs';
+    local ${$name} = 1 if $name;
+    remove_uniform(+shift);
+}
+
+sub lc1459 {
+    my $x = shift;
+    $x =~ y/][\\^/}{|~/;
+    lc $x
+}
+
+sub window_list {
+    sort $window_sort_func Irssi::windows;
+}
+
+sub _calculate_abbrev {
+    my ($wins, $abbrevList) = @_;
+    if ($S{fancy_abbrev} !~ /^(no|off|head)/i) {
+	my @nameList = map { ref $_ ? remove_uniform_vars($_, as_uni($_->get_active_name) // '') : '' } @$wins;
+	for (my $i = 0; $i < @nameList - 1; ++$i) {
+	    my ($x, $y) = ($nameList[$i], $nameList[$i + 1]);
+	    s/^[+#!=]// for $x, $y;
+	    my $res = exists $abbrev_cache{$x}{$y} ? $abbrev_cache{$x}{$y}
+		: $abbrev_cache{$x}{$y} = string_LCSS($x, $y);
+	    if (defined $res) {
+		for ($nameList[$i], $nameList[$i + 1]) {
+		    $abbrevList->{$_} //= int((index $_, $res) + (length $res) / 2);
+		}
+	    }
 	}
-	#if (lc Irssi::settings_get_str($term_type) eq '8bit'
-	#		or Irssi::settings_get_str($term_type) =~ /^iso/i
-	#) {
-	#	length(sb_strip(shift))
-	#}
-	#else {
-	my $temp = sb_strip(shift);
-	# try to get the displayed width
-	my $length;
-	eval {
-		require Text::CharWidth;
-		$length = Text::CharWidth::mbswidth($temp);
+    }
+}
+
+my %act_last_line_shades = (
+    r => [qw[ 50 40 30 20 ]],
+    g => [qw[ 1O 1I 1C 16 ]],
+    y => [qw[ 5O 4I 3C 26 ]],
+    b => [qw[ 15 14 13 12 ]],
+    m => [qw[ 54 43 32 21 ]],
+    c => [qw[ 1S 1L 1E 17 ]],
+    w => [qw[ 7W 7T 7Q 3E ]],
+    K => [qw[ 7M 7K 27 7H ]],
+    R => [qw[ 60 50 40 30 ]],
+    G => [qw[ 1U 1O 1I 1C ]],
+    Y => [qw[ 6U 5O 4I 3C ]],
+    B => [qw[ 2B 2A 29 28 ]],
+    M => [qw[ 65 54 43 32 ]],
+    C => [qw[ 1Z 1S 1L 1E ]],
+    W => [qw[ 6Z 5S 7R 7O ]],
+   );
+
+sub _format_display {
+    my (undef, $format, $cformat, $hilight, $name, $number, $key, $win) = @_;
+    if ($print_text_activity && $S{line_shade}) {
+	my @hilight_code = split /\177/, sb_format_expand("{$hilight \177}"), 2;
+	my $max_time = max(1, log($S{line_shade}) - log(1000));
+	my $time_delta = min(3, min($max_time, log(max(1, time - $win->{last_line}))) / $max_time * 3);
+	if ($hilight_code[0] =~ /%(.)/ && exists $act_last_line_shades{$1}) {
+	    $hilight = 'sb_act_hilight_color %X'.$act_last_line_shades{$1}[$time_delta];
+	}
+    }
+    $cformat = '$0' unless length $cformat;
+    my %map = ('$C' => $cformat, '$N' => '$1', '$Q' => '$2');
+    $format =~ s<(\$.)><$map{$1}//$1>ge;
+    $format =~ s<\$H((?:\$.|[^\$])*?)\$S><{$hilight $1%n}>g;
+    my @ret = ir_parse_special(sb_format_expand($format), [$name, $number, $key], $win);
+    @ret
+}
+
+sub _get_format {
+    Irssi::current_theme->get_format(__PACKAGE__, @_)
+}
+
+sub _calculate_items {
+    my ($wins, $abbrevList) = @_;
+
+    my $display_header = _get_format(set 'display_header');
+    my $name_format = _get_format(set 'name_display');
+    my $abbrev_chars = as_uni(_get_format(set 'abbrev_chars'));
+
+    my %displays;
+
+    my $active = Irssi::active_win;
+    @win_items = ();
+    %keymap = (%nummap, %wnmap_exp);
+
+    my ($numPad, $keyPad) = (0, 0);
+    if ($VIEWER_MODE or $S{block} < 0) {
+	$numPad = length((sort { length $b <=> length $a } keys %keymap)[0]) // 0;
+	$keyPad = length((sort { length $b <=> length $a } values %keymap)[0]) // 0;
+    }
+    my $last_net;
+    my ($abbrev1, $abbrev2) = $abbrev_chars =~ /(\X)(.*)/;
+    my @abbrev_chars = ('~', "\x{301c}");
+    unless (defined $abbrev1 && screen_length(as_tc($abbrev1)) == 1) { $abbrev1 = $abbrev_chars[0] }
+    unless (length $abbrev2) {
+	$abbrev2 = $abbrev1;
+	if ($abbrev1 eq $abbrev_chars[0]) {
+	    $abbrev2 = $abbrev_chars[1];
+	}
+	else {
+	    $abbrev2 = $abbrev1;
+	}
+    }
+    if (screen_length(as_tc($abbrev2)) == 1) {
+	$abbrev2 x= 2;
+    }
+    while (screen_length(as_tc($abbrev2)) > 2) {
+	chop $abbrev2;
+    }
+    unless (screen_length(as_tc($abbrev2)) == 2) {
+	$abbrev2 = $abbrev_chars[1];
+    }
+    for my $win (@$wins) {
+	my $global_tag_header_mode;
+
+	next unless ref $win;
+
+	my $backup_win = Storable::dclone($win);
+	delete $backup_win->{active} unless ref $backup_win->{active};
+
+	$global_tag_header_mode =
+	    $display_header && ($last_net // '') ne ($backup_win->{active}{server}{tag} // '');
+
+	if ($win->{data_level} < abs $S{hide_data}
+		&& ($win->{refnum} != $active->{refnum} || 0 <= $S{hide_data})) {
+	    next; }
+	elsif (exists $awins{$win->{refnum}} && $S{hide_empty} && !$win->items
+		&& ($win->{refnum} != $active->{refnum} || 0 <= $S{hide_empty})) {
+	    next; }
+
+	my $colour = $win->{hilight_color} // '';
+	my $hilight = do {
+	    if    ($win->{data_level} == 0) { 'sb_act_none'; }
+	    elsif ($win->{data_level} == 1) { 'sb_act_text'; }
+	    elsif ($win->{data_level} == 2) { 'sb_act_msg'; }
+	    elsif ($colour           ne '') { "sb_act_hilight_color $colour"; }
+	    elsif ($win->{data_level} == 3) { 'sb_act_hilight'; }
+	    else                            { 'sb_act_special'; }
 	};
-	unless ($@) {
-		return $length;
+	my $number = $win->{refnum};
+
+	my ($name, $display, $cdisplay);
+	if ($global_tag_header_mode) {
+	    $display = $display_header;
+	    $name = as_uni($backup_win->{active}{server}{tag}) // '';
+	    if ($custom_xform) {
+		no strict 'refs';
+		local ${ __PACKAGE__ . '::custom_xform::TAG' } = 1;
+		run_custom_xform() for $name;
+	    }
 	}
 	else {
-		if (lc Irssi::settings_get_str($term_type) eq 'utf-8') {
-			# try to switch on utf8
-			eval {
-				no warnings;
-				require Encode;
-				#$temp = Encode::decode_utf8($temp); # thanks for the hint, but I have my
-				#                                    # reasons for _utf8_on
-				Encode::_utf8_on($temp);
-			};
+	    my @display = ('display_nokey');
+	    if (defined $keymap{$number} and $keymap{$number} ne '') {
+		unshift @display, map { (my $cpy = $_) =~ s/_no/_/; $cpy } @display;
+	    }
+	    if (exists $awins{$number}) {
+		unshift @display, map { my $cpy = $_; $cpy .= '_visible'; $cpy } @display;
+	    }
+	    if ($active->{refnum} == $number) {
+		unshift @display, map { my $cpy = $_; $cpy .= '_active'; $cpy }
+		    grep { !/_visible$/ } @display;
+	    }
+	    $display = (grep { length $_ }
+			       map { $displays{$_} //= _get_format(set $_) }
+				   @display)[0];
+	    $cdisplay = $name_format;
+	    $name = as_uni($win->get_active_name) // '';
+	    $name = '*' if $S{banned_on} and exists $banned_channels{lc1459($name)};
+	    $name = remove_uniform_vars($win, $name) if $name ne '*';
+	    if ($name ne '*' and $win->{name} ne '' and $S{prefer_name}) {
+		$name = as_uni($win->{name});
+		if ($custom_xform) {
+		    no strict 'refs';
+		    local ${ __PACKAGE__ . '::custom_xform::NAME' } = 1;
+		    run_custom_xform() for $name;
 		}
-		# there is nothing more I can do
-		length($temp)
-	}
-	#}
-}
+	    }
 
-# !!! G*DD*MN Irssi is adding an additional layer of backslashitis per { } layer
-# !!! AND I still don't know what I need to escape.
-# !!! and NOONE else seems to know or care either.
-# !!! f*ck open source. I mean it.
-# XXX any Irssi::print debug statement leads to SEGFAULT - why ?
-
-# major parts of the idea by buu (#perl @ freenode)
-# thanks to fxn and Somni for debugging
-#	while ($_[0] =~ /(.)/g) {
-#		my $c = $1; # XXX sooo... goto kills $1
-#		if ($q eq '%') { goto ESC; }
-
-## <freenode:#perl:tybalt89> s/%(.)|(\{)|(\})|(\\|\$)/$1?$1:$2?($level++,$2):$3?($level>$min_level&&$level--,$3):'\\'x(2**$level-1).$4/ge;  # untested...
-sub ir_escape {
-	my $min_level = $_[1] || 0; my $level = $min_level;
-	my $o = shift;
-	$o =~ s/
-		(	%.	)	| # $1
-		(	\{	)	| # $2
-		(	\}	)	| # $3
-		(	\\	)	| # $4
-		(	\$(?=[^\\])	)	| # $5
-		(	\$	) # $6
-	/
-		if ($1) { $1 } # %. escape
-		elsif ($2) { $level++; $2 } # { nesting start
-		elsif ($3) { if ($level > $min_level) { $level--; } $3 } # } nesting end
-		elsif ($4) { '\\'x(2**$level) } # \ needs \\escaping
-		elsif ($5) { '\\'x(2**$level-1) . '$' . '\\'x(2**$level-1) } # and $ needs even more because of "parse_special"
-		else { '\\'x(2**$level-1) . '$' } # $ needs \$ escaping
-	/gex;
-	$o
-}
-#sub ir_escape {
-#	my $min_level = $_[1] || 0; my $level = $min_level;
-#	my $o = shift;
-#	$o =~ s/
-#		(	%.	)	| # $1
-#		(	\{	)	| # $2
-#		(	\}	)	| # $3
-#		(	\\	|	\$	)	# $4
-#	/
-#		if ($1) { $1 } # %. escape
-#		elsif ($2) { $level++; $2 } # { nesting start
-#		elsif ($3) { if ($level > $min_level) { $level--; } $3 } # } nesting end
-#		else { '\\'x(2**($level-1)-1) . $4 } # \ or $ needs \\escaping
-#	/gex;
-#	$o
-#}
-
-sub ir_fe { # try to fix format stuff
-	my $x = shift;
-	# XXX why do I have to use two/four % here instead of one/two ??
-	# answer: you screwed up in ir_escape
-	$x =~ s/([%{}])/%$1/g;
-	#$x =~ s/(\\|\$|[ ])/\\$1/g; # XXX HOW CAN I HANDLE THE SPACES CORRECTLY XXX
-	$x =~ s/(\\|\$)/\\$1/g;
-	#$x =~ s/(\$(?=.))|(\$)/$1?"\\\$\\":"\\\$"/ge; # I think this should be here
-	#                                              # (logic), but it doesn't work
-	#                                              # that way :P
-	#$x =~ s/\\/\\\\/g; # that's right, escape escapes
-	$x
-}
-sub ir_ve { # escapes special vars but leave colours alone
-	my $x = shift;
-	#$x =~ s/([%{}])/%$1/g;
-	$x =~ s/(\\|\$|[ ])/\\$1/g;
-	$x
-}
-
-my %ansi_table;
-{
-	my ($i, $j, $k) = (0, 0, 0);
-	%ansi_table = (
-		# fe-common::core::formats.c:format_expand_styles
-		#      do                                              format_backs
-		(map { $_ => $terminfo->setab($i++) } (split //, '01234567' )),
-		#      do                                              format_fores
-		(map { $_ => $terminfo->setaf($j++) } (split //, 'krgybmcw' )),
-		#      do                                              bold_fores
-		(map { $_ => $terminfo->bold() .
-		             $terminfo->setaf($k++) } (split //, 'KRGYBMCW')),
-		# reset
-		#(map { $_ => $terminfo->op() } (split //, 'nN')),
-		(map { $_ => $terminfo->op() } (split //, 'n')),
-		(map { $_ => "\033[0m" } (split //, 'N')), # XXX quick and DIRTY
-		# flash/bright
-		F => $terminfo->blink(),
-		# reverse
-		8 => $terminfo->rev(),
-		# bold
-		(map { $_ => $terminfo->bold() } (split //, '9_')),
-		#      delete                other stuff
-		(map { $_ => '' } (split //, ':|>#[')),
-		#      escape
-		(map { $_ => $_ } (split //, '{}%')),
-	)
-}
-sub formats_to_ansi_basic {
-	my $o = shift;
-	$o =~ s/(%(.))/exists $ansi_table{$2} ? $ansi_table{$2} : $1/gex;
-	$o
-}
-
-sub lc1459 ($) { my $x = shift; $x =~ y/A-Z][\^/a-z}{|~/; $x }
-Irssi::settings_add_str(setc, 'banned_channels', '');
-Irssi::settings_add_bool(setc, 'banned_channels_on', 0);
-my %banned_channels = map { lc1459($_) => undef }
-split ' ', Irssi::settings_get_str('banned_channels');
-Irssi::settings_add_str(setc, 'fancy_abbrev', 'fancy');
-
-# }}}
-
-# {{{ main
-
-sub remake () {
-	#$callcount++;
-	#my $xx = $callcount; Irssi::print("starting remake [ $xx ]");
-	my ($hilight, $number, $display);
-	my $separator = '{sb_act_sep ' . Irssi::settings_get_str(set 'separator') .
-		'}';
-	my $custSort = Irssi::settings_get_str(set 'sort');
-	my $custSortDir = 1;
-	if ($custSort =~ /^[-!](.*)/) {
-		$custSortDir = -1;
-		$custSort = $1;
+	    if (!$VIEWER_MODE && $S{block} >= 0 && $S{hide_name}
+		&& $win->{data_level} < abs $S{hide_name}
+		&& ($win->{refnum} != $active->{refnum} || 0 <= $S{hide_name})) {
+		$name = '';
+		$cdisplay = '';
+	    }
 	}
 
-	my @wins = 
-		sort {
-			(
-				( (int($a->{$custSort}) <=> int($b->{$custSort})) * $custSortDir )
-					||
-				($a->{'refnum'} <=> $b->{'refnum'})
-			)
-		} Irssi::windows;
-	my $block = Irssi::settings_get_int(set 'block');
-	my $columns = $currentColumns;
-	my $oldActString = $actString if $SCREEN_MODE;
-	$actString = $SCREEN_MODE ? ['   A W L'] : [];
-	my $line = $SCREEN_MODE ? 1 : 0;
-	my $width = $SCREEN_MODE
-			?
-		$screenWidth - abs($block)*$columns + 1
-			:
-		([Irssi::windows]->[0]{'width'} - sb_length('{sb x}'));
-	my $height = $screenHeight - abs(Irssi::settings_get_int(set
-			'height_adjust'));
-	my ($numPad, $keyPad) = (0, 0);
-	my %abbrevList;
-	if ($SCREEN_MODE or Irssi::settings_get_bool(set 'sbar_maxlength')
-			or ($block < 0)
-	) {
-		%abbrevList = ();
-		if (Irssi::settings_get_str('fancy_abbrev') !~ /^(no|off|head)/i) {
-			my @nameList = map { ref $_ ? $_->get_active_name : '' } @wins;
-			for (my $i = 0; $i < @nameList - 1; ++$i) {
-				my ($x, $y) = ($nameList[$i], $nameList[$i + 1]);
-				for ($x, $y) { s/^[+#!=]// }
-				my $res = Algorithm::LCSS::LCSS($x, $y);
-				if (defined $res) {
-					#Irssi::print("common pattern $x $y : $res");
-					#Irssi::print("found at $nameList[$i] ".index($nameList[$i],
-					#		$res));
-					$abbrevList{$nameList[$i]} = int (index($nameList[$i], $res) +
-						(length($res) / 2));
-					#Irssi::print("found at ".$nameList[$i+1]." ".index($nameList[$i+1],
-					#		$res));
-					$abbrevList{$nameList[$i+1]} = int (index($nameList[$i+1], $res) +
-						(length($res) / 2));
-				}
-			}
-		}
-		if ($SCREEN_MODE or ($block < 0)) {
-			$numPad = length((sort { length($b) <=> length($a) } keys %keymap)[0]);
-			$keyPad = length((sort { length($b) <=> length($a) } values %keymap)[0]);
-		}
-	}
-	if ($SCREEN_MODE) {
-		print STDERR $screenansi->dcs().
-		             $terminfo->civis().
-						 $terminfo->sc().
-						 $screenansi->st();
-		if (@$oldActString < 1) {
-			print STDERR $screenansi->dcs().
-							 $terminfo->cup(0, $width).
-			             $actString->[0].
-							 $terminfo->el().
-			             $screenansi->st();
-		}
-	}
-	foreach my $win (@wins) {
-		unless ($SCREEN_MODE) {
-			$actString->[$line] = '' unless defined $actString->[$line]
-					or Irssi::settings_get_bool(set 'all_disable');
-		}
-
-		# all stolen from chanact, what does this code do and why do we need it ?
-		!ref($win) && next;
-
-		my $name = $win->get_active_name;
-		$name = '*' if (Irssi::settings_get_bool('banned_channels_on') and exists
-			$banned_channels{lc1459($name)});
-		$name = $win->{'name'} if $name ne '*' and $win->{'name'} ne ''
-			and Irssi::settings_get_bool(set 'prefer_name');
-		my $active = $win->{'active'};
-		my $colour = $win->{'hilight_color'};
-		if (!defined $colour) { $colour = ''; }
-
-		if ($win->{'data_level'} < Irssi::settings_get_int(set 'hide_data')) {
-			next; } # for Geert
-		if    ($win->{'data_level'} == 0) { $hilight = '{sb_act_none '; }
-		elsif ($win->{'data_level'} == 1) { $hilight = '{sb_act_text '; }
-		elsif ($win->{'data_level'} == 2) { $hilight = '{sb_act_msg '; }
-		elsif ($colour             ne '') { $hilight = "{sb_act_hilight_color $colour "; }
-		elsif ($win->{'data_level'} == 3) { $hilight = '{sb_act_hilight '; }
-		else                              { $hilight = '{sb_act_special '; }
-
-		$number = $win->{'refnum'};
-		my @display = ('display_nokey');
-		if (defined $keymap{$number} and $keymap{$number} ne '') {
-			unshift @display, map { (my $cpy = $_) =~ s/_no/_/; $cpy } @display;
-		}
-		if (Irssi::active_win->{'refnum'} == $number) {
-			unshift @display, map { my $cpy = $_; $cpy .= '_active'; $cpy } @display;
-		}
-		#Irssi::print("win $number [@display]: " . join '.', split //, join '<<', map {
-			#		Irssi::settings_get_str(set $_) } @display);
-		$display = (grep { $_ }
-			map { Irssi::settings_get_str(set $_) }
-			@display)[0];
-			#Irssi::print("win $number : " . join '.', split //, $display);
-
-		if ($SCREEN_MODE or Irssi::settings_get_bool(set 'sbar_maxlength')
-				or ($block < 0)
-		) {
-			my $baseLength = sb_length(ir_escape(ir_ve(ir_parse_special_protected(sb_ctfe(
-				'{sb_background}' . expand($display,
-				C => ir_fe('x'),
-				N => $number . (' 'x($numPad - length($number))),
-				Q => ir_fe((' 'x($keyPad - length($keymap{$number}))) . $keymap{$number}),
-				H => $hilight,
-				S => '}{sb_background}'
-			), 1), $win)))) - 1;
-			my $diff = abs($block) - (length($name) + $baseLength);
-			if ($diff < 0) { # too long
-				if (abs($diff) >= length($name)) { $name = '' } # forget it
-				elsif (abs($diff) + 1 >= length($name)) { $name = substr($name,
-						0, 1); }
-				else {
-					my $middle = exists $abbrevList{$name} ?
-					(($abbrevList{$name} + (2*(length($name) / 2)))/3) :
-						((Irssi::settings_get_str('fancy_abbrev') =~ /^head/i) ?
-								length($name) :
-						(length($name) / 2));
-					my $cut = int($middle - (abs($diff) / 2) + .55); 
-					$cut = 1 if $cut < 1;
-					$cut = length($name) - abs($diff) - 1 if $cut > (length($name) -
-						abs($diff) - 1);
-					$name = substr($name, 0, $cut) . '~' . substr($name, $cut +
-						abs($diff) + 1);
-				}
-			}
-			elsif ($SCREEN_MODE or ($block < 0)) {
-				$name .= (' ' x $diff);
-			}
-		}
-
-		my $add = ir_ve(ir_parse_special_protected(sb_ctfe('{sb_background}' . expand($display,
-			C => ir_fe($name),
-			N => $number . (' 'x($numPad - length($number))),
-			Q => ir_fe((' 'x($keyPad - length($keymap{$number}))) . $keymap{$number}),
-			H => $hilight,
-			S => '}{sb_background}'
-		), 1), $win));
-		if ($SCREEN_MODE) {
-			$actString->[$line] = $add;
-			if ((!defined $oldActString->[$line]
-					or $oldActString->[$line] ne $actString->[$line])
-					and
-				$line <= ($columns * $height)
-			) {
-				print STDERR $screenansi->dcs().
-								 $terminfo->cup(($line-1) % $height+1, $width + (
-									 abs($block) * int(($line-1) / $height))).
-				formats_to_ansi_basic(sb_expand(ir_escape($actString->[$line]))).
-								#$terminfo->el().
-								 $screenansi->st();
-			}
-			$line++;
-		}
+	$display = "$display%n";
+	my $num_ent = (' 'x max(0,$numPad - length $number)) . $number;
+	my $key_ent = exists $keymap{$number} ? ((' 'x max(0,$keyPad - length $keymap{$number})) . $keymap{$number}) : ' 'x$keyPad;
+	if ($VIEWER_MODE or $S{sbar_maxlen} or $S{block} < 0) {
+	    my $baseLength = sb_length(_format_display(
+		'', $display, $cdisplay, $hilight,
+		'x', # placeholder
+		$num_ent,
+		$key_ent,
+		$win)) - 1;
+	    my $diff = (abs $S{block}) - (screen_length(as_tc($name)) + $baseLength);
+	    if ($diff < 0) { # too long
+		my $screen_length = screen_length(as_tc($name));
+		if ((abs $diff) >= $screen_length) { $name = '' } # forget it
+		elsif ((abs $diff) + screen_length(as_tc(substr($name, 0, 1))) >= $screen_length) { $name = substr($name, 0, 1); }
 		else {
-			#$temp =~ s/\{\S+?(?:\s(.*?))?\}/$1/g;
-			#$temp =~ s/\\\\\\\\/\\/g; # XXX I'm actually guessing here, someone point me
-			#                          # XXX to docs please
-			$actString->[$line] = '' unless defined $actString->[$line];
-
-			# XXX how can I check whether the content still fits in the bar? this would
-			# XXX allow awlstatus to reside on a statusbar together with other items...
-			if (sb_length(ir_escape($actString->[$line] . $add)) >= $width) {
-				# XXX doesn't correctly handle utf-8 multibyte ... help !!?
-				$actString->[$line] .= ' ' x ($width - sb_length(ir_escape(
-					$actString->[$line])));
-				$line++;
+		    my $ulen = length $name;
+		    my $middle2 = exists $abbrevList->{$name} ?
+			($S{fancy_strict}) ?
+			    2* $abbrevList->{$name} :
+			   (2*($abbrevList->{$name} + $ulen) / 3) :
+			       ($S{fancy_head}) ?
+				2*$ulen :
+				    $ulen;
+		    my $first = 1;
+		    while (length $name > 1) {
+			my $cp = $middle2 >= 0 ? $middle2/2 : -1; # clearing position
+			my $rm = 2;
+			# if character at end is wider than 1 cell -> replace it with ~
+			if (screen_length(as_tc(substr $name, $cp, 1)) > 1) {
+			    if ($first || $cp < 0) {
+				$rm = 1;
+				$first = undef;
+			    }
 			}
-			$actString->[$line] .= $add . $separator;
-			# XXX if I use these prints, output layout gets screwed up... why ?
-			#Irssi::print("line $line: ".$actString->[$line]);
-			#Irssi::print("temp $line: ".$temp);
+			elsif ($cp < 0) { # elsif at end -> replace last 2 characters
+			    --$cp;
+			}
+			(substr $name, $cp, $rm) = $abbrev1;
+			if ($cp > -1 && $rm > 1) {
+			    --$middle2;
+			}
+			my $sl = screen_length(as_tc($name));
+			if ($sl + $baseLength < abs $S{block}) {
+			    (substr $name, ($middle2+1)/2, 1) = $abbrev2;
+			    last;
+			}
+			elsif ($sl + $baseLength == abs $S{block}) {
+			    last;
+			}
+		    }
 		}
+	    }
+	    elsif ($VIEWER_MODE or $S{block} < 0) {
+		$name .= (' ' x $diff);
+	    }
 	}
 
-	if ($SCREEN_MODE) {
-		while ($line <= ($columns * $height)) {
-			print STDERR $screenansi->dcs().
-							 $terminfo->cup(($line-1) % $height+1, $width + (
-								 abs($block) * int(($line-1) / $height))).
-							 $terminfo->el().
-							 $screenansi->st();
-			$line++;
-		}
-		print STDERR $screenansi->dcs().
-						 $terminfo->rc().
-		             $terminfo->cnorm().
-						 $screenansi->st();
+	push @win_items, _format_display(
+	    '', $display, $cdisplay, $hilight,
+	    as_tc($name),
+	    $num_ent,
+	    as_tc($key_ent),
+	    $win);
+
+	if ($global_tag_header_mode) {
+	    $last_net = $backup_win->{active}{server}{tag};
+	    redo;
 	}
-	else {
-		# XXX the Irssi::print statements lead to the MOST WEIRD results
-		# e.g.: the loop gets executed TWICE for p > 0 ?!?
-		for (my $p = 0; $p < @$actString; $p++) { # wrap each line in {sb }, escape it
-			my $x = $actString->[$p];              # properly, etc.
-			$x =~ s/\Q$separator\E([ ]*)$/$1/;
-			#Irssi::print("[$p]".'current:'.join'.',split//,sb_strip(ir_escape($x,0)));
-			#Irssi::print("assumed length before:".sb_length(ir_escape($x,0)));
-			$x = "{sb $x}";
-			#Irssi::print("[$p]".'new:'.join'.',split//,sb_expand(ir_escape($x,0)));
-			#Irssi::print("[$p]".'new:'.join'.',split//,ir_escape($x,0));
-			#Irssi::print("assumed length after:".sb_length(ir_escape($x,0)));
-			$x = ir_escape($x);
-			#Irssi::print("[$p]".'REALnew:'.join'.',split//,sb_strip($x));
-			$actString->[$p] = $x;
-			# XXX any Irssi::print debug statement leads to SEGFAULT (sometimes) - why ?
-		}
-	}
-	#Irssi::print("remake [ $xx ] finished");
+
+	$mouse_coords{refnum}{$#win_items} = $number;
+    }
 }
 
-sub awlHasChanged () {
-	$globTime = undef;
-	my $temp = ($SCREEN_MODE ?
-		"\\\n" . Irssi::settings_get_int(set 'block').
-		Irssi::settings_get_int(set 'height_adjust')
-		: "!\n" . Irssi::settings_get_str(set 'placement').
-		Irssi::settings_get_int(set 'position')).
-		Irssi::settings_get_str(set 'automode');
-	if ($temp ne $resetNeeded) { wlreset(); return; }
-	#Irssi::print("awl has changed, calls to remake so far: $callcount");
-	$needRemake = 1;
+sub _spread_items {
+    my $width = [Irssi::windows]->[0]{width} - $sb_base_width - 1;
+    my @separator = _get_format(set 'separator');
+    if ($S{block} >= 0) {
+	my $sep2 = _get_format(set 'separator2');
+	push @separator, $sep2 if length $sep2 && $sep2 ne $separator[0];
+    }
+    $separator[0] .= '%n';
+    my @sepLen = map { sb_length($_) } @separator;
 
-	#remake();
-	if (
-		($SCREEN_MODE and !$DISABLE_SCREEN_TEMP)
-			or
-		($needRemake and Irssi::settings_get_bool(set 'all_disable'))
-			or
-		(!Irssi::settings_get_bool(set 'all_disable') and $currentLines < 1)
-	) {
-		$needRemake = undef;
-		remake();
+    @actString = ();
+    my $curLine;
+    my $curLen = 0;
+    if ($S{shared_sbar}) {
+	$curLen += $S{shared_sbar}[0] + 2;
+	$width -= $S{shared_sbar}[2];
+    }
+    my $mouse_header_check = 0;
+    for my $it (@win_items) {
+	my $itemLen = sb_length($it);
+	if ($curLen) {
+	    if ($curLen + $itemLen + $sepLen[$mouse_header_check % @sepLen] > $width) {
+		$width += $S{shared_sbar}[2]
+		    if !@actString && $S{shared_sbar};
+		push @actString, $curLine;
+		$curLine = undef;
+		$curLen = 0;
+	    }
+	    elsif (defined $curLine) {
+		$curLine .= $separator[$mouse_header_check % @separator];
+		$curLen += $sepLen[$mouse_header_check % @sepLen];
+	    }
 	}
-
-	unless ($SCREEN_MODE) {
-		# XXX Irssi crashes if I try to do this without timer, why ? What's the minimum
-		# XXX delay I need to use in the timer ?
-		Irssi::timeout_add_once(100, 'syncLines', undef);
-
-		for (keys %statusbars) {
-			Irssi::statusbar_items_redraw(set$_);
-		}
+	$curLine .= $it;
+	if (exists $mouse_coords{refnum}{$mouse_header_check}) {
+	    $mouse_coords{scalar @actString}{ $_ } = $mouse_coords{refnum}{$mouse_header_check}
+		for $curLen .. $curLen + $itemLen - 1;
 	}
-	else {
-		Irssi::timeout_add_once(100, 'syncColumns', undef);
-	}
+	$curLen += $itemLen;
+    }
+    continue {
+	++$mouse_header_check;
+    }
+    $curLen -= $S{shared_sbar}[0]
+	if !@actString && $S{shared_sbar};
+    push @actString, $curLine if $curLen;
 }
 
-sub eventChanged () { # Implement a change queue/blocker -.-)
-	if (defined $globTime) {
-		Irssi::timeout_remove($globTime);
-	} # delay the update further
-	$globTime = Irssi::timeout_add_once(GLOB_QUEUE_TIMER, 'awlHasChanged', undef);
+sub remake {
+    my %abbrevList;
+    my @wins = window_list();
+    if ($VIEWER_MODE or $S{sbar_maxlen} or $S{block} < 0) {
+	_calculate_abbrev(\@wins, \%abbrevList);
+    }
+
+    %mouse_coords = ( refnum => +{} );
+    _calculate_items(\@wins, \%abbrevList);
+
+    unless ($VIEWER_MODE) {
+	_spread_items();
+
+	push @actString, undef unless @actString || $S{all_disable};
+    }
 }
 
-# }}}
+sub update_wl {
+    return if $BLOCK_ALL;
+    remake();
 
+    Irssi::statusbar_items_redraw(set $_) for keys %statusbars;
 
-# {{{ screen mode
+    unless ($VIEWER_MODE) {
+	Irssi::timeout_add_once(100, 'syncLines', undef);
+    }
+    else {
+	syncViewer();
+    }
+}
 
 sub screenFullRedraw {
-	my ($window) = @_;
-	if (!ref $window or $window->{'refnum'} == Irssi::active_win->{'refnum'}) {
-		$actString = [];
-		eventChanged();
-	}
+    my ($window) = @_;
+    if (!ref $window or $window->{refnum} == Irssi::active_win->{refnum}) {
+	$viewer{fullRedraw} = 1 if $viewer{client};
+	$settings_str = '';
+	&setup_changed;
+    }
 }
 
-sub screenSize { # from nicklist.pl
-	$screenResizing = 1;
-	# fit screen
-	system 'screen -x '.$ENV{'STY'}.' -X fit';
-	# get size
-	my ($row, $col) = split ' ', `stty size`;
-	# set screen width
-	$screenWidth = $col-1;
-	$screenHeight = $row-1;
-	
-	# on some recent systems, "screen -X fit; screen -X width -w 50" doesn't work, needs a sleep in between the 2 commands
-	# so we wait a second before setting the width
-	Irssi::timeout_add_once(100, sub {
-		my ($new_irssi_width) = @_;
-		$new_irssi_width -= abs(Irssi::settings_get_int(set
-				'block'))*$currentColumns - 1;
-		system 'screen -x '.$ENV{'STY'}.' -X width -w ' . $new_irssi_width;
-		# and then we wait another second for the resizing, and then redraw.
-		Irssi::timeout_add_once(10,sub {$screenResizing = 0; screenFullRedraw()}, []);
-	}, $screenWidth);
+sub restartViewerServer {
+    if ($VIEWER_MODE) {
+	stop_viewer();
+	start_viewer();
+    }
 }
 
-sub screenOff {
-	my ($unloadMode) = @_;
-	Irssi::signal_remove('gui print text finished' => 'screenFullRedraw');
-	Irssi::signal_remove('gui page scrolled' => 'screenFullRedraw');
-	Irssi::signal_remove('window changed' => 'screenFullRedraw');
-	Irssi::signal_remove('window changed automatic' => 'screenFullRedraw');
-	if ($unloadMode) {
-		Irssi::signal_remove('terminal resized' => 'resizeTerm');
-	}
-	system 'screen -x '.$ENV{'STY'}.' -X fit';
+sub _simple_quote {
+    my @r = map {
+	my $x = $_;
+	$x =~ s/'/'"'"'/g;
+	$x = "'$x'";
+    } @_;
+    wantarray ? @r : shift @r
 }
 
-sub syncColumns {
-	return if (@$actString == 0);
-	my $temp = $currentColumns;
-	#Irssi::print("current columns $temp");
-	my $height = $screenHeight - abs(Irssi::settings_get_int(set
-			'height_adjust'));
-	$currentColumns = int(($#$actString-1) / $height) + 1;
-	#Irssi::print("objects in actstring:".scalar(@$actString).", screen height:".
-	#	$height);
-	my $currMaxColumns = Irssi::settings_get_int(set 'columns');
-	if ($currMaxColumns > 0 and $currentColumns > $currMaxColumns) {
-		$currentColumns = $currMaxColumns;
+sub _viewer_command_replace_format {
+    my ($ecmd, @args) = @_;
+    my $file = _simple_quote(SCRIPT_FILE());
+    my $path = _simple_quote($viewer{path});
+    my @env;
+    for my $env (shellwords($S{viewer_launch_env})) {
+	if ($env =~ /^(\w+)(?:=(.*))$/) {
+	    push @env, "AWL_$1=$2"
 	}
-	elsif ($currMaxColumns < 0) {
-		$currentColumns = abs($currMaxColumns);
+    }
+    my $cmd = join ' ',
+	(@env ? ('env', _simple_quote(@env)) : ()),
+	'perl', $file, '-1', _simple_quote(@args), $path;
+    $ecmd =~ s{%(%|\w+)}{
+	my $sub = $1;
+	if ($sub eq '%') {
+	    '%'
 	}
-	return if ($temp == $currentColumns);
-	screenSize();
+	elsif ($sub =~ /^(q*)A(.*)/) {
+	    my $ret = $cmd;
+	    for (1..length $1) {
+		$ret = _simple_quote($ret);
+	    }
+	    "$ret$2"
+	}
+	else {
+	    "%$sub"
+	}
+    }gex;
+    $ecmd
 }
 
-#$needRemake = 1;
-sub resizeTerm () {
-	if ($SCREEN_MODE and !$screenResizing) {
-		$screenResizing = 1;
-		Irssi::timeout_add_once(10, 'screenSize', undef);
+sub start_viewer {
+    unlink $viewer{path} if -S $viewer{path} || -p _;
+
+    $viewer{server} = IO::Socket::UNIX->new(
+	Type => SOCK_STREAM,
+	Local => $viewer{path},
+	Listen => 1
+       );
+    unless ($viewer{server}) {
+	$viewer{msg} = "Viewer: $!";
+	$viewer{retry} = Irssi::timeout_add_once(5000, 'retry_viewer', 1);
+	return;
+    }
+    $viewer{server}->blocking(0);
+    set_viewer_mode_hint();
+    $viewer{server_tag} = Irssi::input_add($viewer{server}->fileno, INPUT_READ, 'vi_connected', undef);
+
+    if ($S{viewer_launch}) {
+	if (length $ENV{TMUX_PANE} && length $ENV{TMUX} && lc $S{viewer_tmux_position} ne 'custom') {
+	    my $cmd = _viewer_command_replace_format('%qA', '-p', lc $S{viewer_tmux_position});
+	    Irssi::command("exec - tmux neww -d $cmd 2>&1 &");
 	}
-	Irssi::timeout_add_once(100, 'eventChanged', undef);
+	elsif (length $ENV{WINDOWID} && length $ENV{DISPLAY} && length $S{viewer_xwin_command} && $S{viewer_xwin_command} =~ /\S/) {
+	    my $cmd = _viewer_command_replace_format($S{viewer_xwin_command});
+	    Irssi::command("exec - $cmd 2>&1 &");
+	}
+	elsif (length $S{viewer_custom_command} && $S{viewer_custom_command} =~ /\S/) {
+	    my $cmd = _viewer_command_replace_format($S{viewer_custom_command});
+	    Irssi::command("exec - $cmd 2>&1 &");
+	}
+    }
 }
 
-# }}}
+sub set_viewer_mode_hint {
+    return unless $viewer{server};
+    if ($S{no_mode_hint}) {
+	$viewer{msg} = undef;
+    }
+    else {
+	my ($name) = __PACKAGE__ =~ /::([^:]+)$/;
+	$viewer{msg} = "Run $name from the shell or switch to sbar mode";
+    }
+}
 
+sub retry_viewer {
+    start_viewer();
+}
 
-# {{{ settings add
+sub vi_close_client {
+    Irssi::input_remove(delete $viewer{client_tag}) if exists $viewer{client_tag};
+    $viewer{client}->close if $viewer{client};
+    delete $viewer{client};
+    delete $viewer{client_keymap};
+    delete $viewer{client_settings};
+    delete $viewer{client_env};
+    delete $viewer{fullRedraw};
+}
 
-Irssi::settings_add_str(setc, set 'display_nokey', '[$N]$H$C$S');
-Irssi::settings_add_str(setc, set 'display_key', '[$Q=$N]$H$C$S');
-Irssi::settings_add_str(setc, set 'display_nokey_active', '');
-Irssi::settings_add_str(setc, set 'display_key_active', '');
-Irssi::settings_add_str(setc, set 'separator', "\\ ");
-Irssi::settings_add_bool(setc, set 'prefer_name', 0);
-Irssi::settings_add_int(setc, set 'hide_data', 0);
-Irssi::settings_add_int(setc, set 'maxlines', 9);
-Irssi::settings_add_int(setc, set 'columns', 1);
-Irssi::settings_add_int(setc, set 'block', 20);
-Irssi::settings_add_bool(setc, set 'sbar_maxlength', 0);
-Irssi::settings_add_int(setc, set 'height_adjust', 2);
-Irssi::settings_add_str(setc, set 'sort', 'refnum');
-Irssi::settings_add_str(setc, set 'placement', 'bottom');
-Irssi::settings_add_int(setc, set 'position', 0);
-Irssi::settings_add_bool(setc, set 'all_disable', 0);
-Irssi::settings_add_str(setc, set 'automode', 'sbar');
+sub vi_connected {
+    vi_close_client();
+    $viewer{client} = $viewer{server}->accept or return;
+    $viewer{client}->blocking(0);
+    $viewer{client_tag} = Irssi::input_add($viewer{client}->fileno, INPUT_READ, 'vi_clientinput', undef);
+    syncViewer();
+}
 
-# }}}
+use constant VIEWER_BLOCK_SIZE => 1024;
+sub vi_clientinput {
+    if ($viewer{client}->read(my $buf, VIEWER_BLOCK_SIZE)) {
+	$viewer{rcvbuf} .= $buf;
+	if ($viewer{rcvbuf} =~ s/^(?:(active|\d+)|(last|up|down))\n//igm) {
+	    if (defined $2) {
+		Irssi::command("window $2");
+	    }
+	    elsif (lc $1 eq 'active' && $viewer{use_ack}) {
+		Irssi::command("ack");
+	    }
+	    else {
+		Irssi::command("window goto $1");
+	    }
+	}
+    }
+    else {
+	vi_close_client();
+	Irssi::timeout_add_once(100, 'syncViewer', undef);
+    }
+}
 
+sub stop_viewer {
+    Irssi::timeout_remove(delete $viewer{retry}) if exists $viewer{retry};
+    vi_close_client();
+    Irssi::input_remove(delete $viewer{server_tag}) if exists $viewer{server_tag};
+    return unless $viewer{server};
+    $viewer{server}->close;
+    delete $viewer{server};
+}
+sub _encode_var {
+    my $str;
+    while (@_) {
+	my ($name, $var) = splice @_, 0, 2;
+	my $type = ref $var ? $var =~ /HASH/ ? 'map' : $var =~ /ARRAY/ ? 'list' : '' : '';
+	$str .= "\n\U$name$type\_begin\n";
+	if ($type eq 'map') {
+	    no warnings 'numeric';
+	    $str .= " $_\n ${$var}{$_}\n" for sort { $a <=> $b || $a cmp $b } keys %$var;
+	}
+	elsif ($type eq 'list') {
+	    $str .= " $_\n" for @$var;
+	}
+	else {
+	    $str .= " $var\n";
+	}
+	$str .= "\U$name$type\_end\n";
+    }
+    $str
+}
+sub syncViewer {
+    if ($viewer{client}) {
+	@actString = ();
+	if ($currentLines) {
+	    killOldStatus();
+	    $currentLines = 0;
+	}
+	my $str;
+	unless ($viewer{client_keymap}) {
+	    $str .= _encode_var('key', +{ %nummap, %specialmap });
+	    $viewer{client_keymap} = 1;
+	}
+	unless ($viewer{client_settings}) {
+	    $str .= _encode_var(
+		block => $S{block},
+		ha => $S{height_adjust},
+		mc => $S{maxcolumns},
+		ml => $S{maxlines},
+	       );
+	    $viewer{client_settings} = 1;
+	}
+	unless ($viewer{client_env}) {
+	    $str .= _encode_var(irssienv => +{
+		length $ENV{TMUX_PANE} && length $ENV{TMUX} ?
+		     (tmux_pane => $ENV{TMUX_PANE},
+		      tmux_srv => $ENV{TMUX}) : (),
+		length $ENV{WINDOWID} ?
+		     (xwinid => $ENV{WINDOWID}) : (),
+	       });
+	    $viewer{client_env} = 1;
+	}
+	my $separator = _get_format(set 'separator');
+	my $sepLen = sb_length($separator);
+	my $item_bg = _get_format(set 'viewer_item_bg');
+	my $title = _get_format(set 'title');
+	if (length $title) {
+	    $title =~ s{\\(.)|(.)}{
+		defined $2 ? quotemeta $2
+		    : $1 eq 'V' ? '\U'
+		    : $1 eq ':' ? quotemeta '%N'
+		    : $1 =~ /^[uUFQE]$/ ? "\\$1"
+		    : quotemeta "\\$1"
+		}sge;
+	    $title = eval qq{"$title"};
+	}
+	$str .= _encode_var(redraw => 1) if delete $viewer{fullRedraw};
+	$str .= _encode_var(separator => $separator,
+			    seplen => $sepLen,
+			    itembg => $item_bg,
+			    title => $title,
+			    mouse => $mouse_coords{refnum},
+			    key2 => \%wnmap_exp,
+			    win => \@win_items);
 
-# {{{ init
-
-sub wlreset {
-	$actString = [];
-	$currentLines = 0; # 1; # mhmmmm .. we actually enable one line down there so
-	                        # let's try this.
-	#update_keymap();
+	my $was = $viewer{client}->blocking(1);
+	$viewer{client}->print($str);
+	$viewer{client}->blocking($was);
+    }
+    elsif ($viewer{server}) {
+	if (defined $viewer{msg}) {
+	    @actString = ((uc setc()).": $viewer{msg}");
+	}
+	else {
+	    @actString = ();
+	}
+    }
+    elsif (defined $viewer{msg}) {
+	@actString = ((uc setc()).": $viewer{msg}");
+    }
+    if (@actString) {
+	Irssi::timeout_add_once(100, 'syncLines', undef);
+    }
+    elsif ($currentLines) {
 	killOldStatus();
-	# Register statusbar
-	#add_statusbar(0);
-	#Irssi::command('statusbar wl0 enable');
-	my $was_screen_mode = $SCREEN_MODE;
-	if ($SCREEN_MODE = (Irssi::settings_get_str(set 'automode') =~ /screen/i)
-			and
-		!$was_screen_mode
-	) {
-		if (!defined $ENV{'STY'}) {
-			Irssi::print('Screen mode can only be used in GNU screen but no '.
-				'screen was found.', MSGLEVEL_CLIENTERROR);
-			$SCREEN_MODE = undef;
-		}
-		else {
-			Irssi::signal_add_last('gui print text finished' => 'screenFullRedraw');
-			Irssi::signal_add_last('gui page scrolled' => 'screenFullRedraw');
-			Irssi::signal_add('window changed' => 'screenFullRedraw');
-			Irssi::signal_add('window changed automatic' => 'screenFullRedraw');
-		}
-	}
-	elsif ($was_screen_mode and !$SCREEN_MODE) {
-		screenOff();
-	}
-	$resetNeeded = ($SCREEN_MODE ?
-		"\\\n" . Irssi::settings_get_int(set 'block').
-		Irssi::settings_get_int(set 'height_adjust')
-		: "!\n" . Irssi::settings_get_str(set 'placement').
-		Irssi::settings_get_int(set 'position')).
-		Irssi::settings_get_str(set 'automode');
-	resizeTerm();
+	$currentLines = 0;
+    }
 }
 
-wlreset();
+sub reset_awl {
+    Irssi::timeout_remove($shade_line_timer) if $shade_line_timer; $shade_line_timer = undef;
+    my $was_sort = $S{sort} // '';
+    my $was_xform = $S{xform} // '';
+    my $was_shared = $S{shared_sbar};
+    my $was_no_hint = $S{no_mode_hint};
+    %S = (
+	sort	      => Irssi::settings_get_str( set 'sort'),
+	fancy_abbrev  => Irssi::settings_get_str('fancy_abbrev'),
+	xform	      => Irssi::settings_get_str( set 'custom_xform'),
+	block	      => Irssi::settings_get_int( set 'block'),
+	banned_on     => Irssi::settings_get_bool('banned_channels_on'),
+	prefer_name   => Irssi::settings_get_bool(set 'prefer_name'),
+	hide_data     => Irssi::settings_get_int( set 'hide_data'),
+	hide_name     => Irssi::settings_get_int( set 'hide_name_data'),
+	hide_empty    => Irssi::settings_get_int( set 'hide_empty'),
+	sbar_maxlen   => Irssi::settings_get_bool(set 'sbar_maxlength'),
+	placement     => Irssi::settings_get_str( set 'placement'),
+	position      => Irssi::settings_get_int( set 'position'),
+	maxlines      => Irssi::settings_get_int( set 'maxlines'),
+	maxcolumns    => Irssi::settings_get_int( set 'maxcolumns'),
+	all_disable   => Irssi::settings_get_bool(set 'all_disable'),
+	height_adjust => Irssi::settings_get_int( set 'height_adjust'),
+	mouse_offset  => Irssi::settings_get_int( set 'mouse_offset'),
+	mouse_scroll  => Irssi::settings_get_int( 'mouse_scroll'),
+	mouse_escape  => Irssi::settings_get_int( 'mouse_escape'),
+	line_shade    => Irssi::settings_get_time(set 'last_line_shade'),
+	no_mode_hint  => Irssi::settings_get_bool(set 'no_mode_hint'),
+	viewer_launch	      => Irssi::settings_get_bool(set 'viewer_launch'),
+	viewer_launch_env     => Irssi::settings_get_str(set 'viewer_launch_env'),
+	viewer_xwin_command   => Irssi::settings_get_str(set 'viewer_xwin_command'),
+	viewer_custom_command => Irssi::settings_get_str(set 'viewer_custom_command'),
+	viewer_tmux_position  => Irssi::settings_get_str(set 'viewer_tmux_position'),
+	);
+    $S{fancy_strict} = $S{fancy_abbrev} =~ /^strict/i;
+    $S{fancy_head} = $S{fancy_abbrev} =~ /^head/i;
+    my $shared = Irssi::settings_get_str(set 'shared_sbar');
+    if ($shared =~ /^(\d+)([<])(\d+)$/) {
+	$S{shared_sbar} = [$1, $2, $3];
+    }
+    else {
+	Irssi::settings_set_str(set 'shared_sbar', 'OFF');
+	$S{shared_sbar} = undef;
+    }
+    lock_keys(%S);
+    if ($was_sort ne $S{sort}) {
+	$print_text_activity = undef;
+	my @sort_order = grep { @$_ > 4 } map {
+	    s/^\s*//;
+	    my $reverse = s/^\W*\K[-!]//;
+	    my $undef_check = s/^\W*\K~// ? 1 : undef;
+	    my $equal_check = s/=(.*)\s?$// ? $1 : undef;
+	    s/\s*$//;
+	    my $ignore_case = s/#i$// ? 1 : undef;
 
-# }}}
+	    $print_text_activity = 1 if $_ eq 'last_line';
 
+	    my @path = split '/';
+	    my $class_check = @path && $path[-1] =~ s/(::.*)$// ? $1 : undef;
 
-# {{{ unload/deinit
+	    [ $reverse ? -1 : 1, $undef_check, $equal_check, $class_check, $ignore_case, @path ]
+	} "$S{sort}," =~ /([^+,]*|[^+,]*=[^,]*?\s(?=\+)|[^+,]*=[^,]*)[+,]/g;
+	$window_sort_func = sub {
+	    no warnings qw(numeric uninitialized);
+	    for my $so (@sort_order) {
+		my @x = map {
+		    my $ret = 0;
+		    $_ = lc1459($_) if defined $_ && !ref $_ && $so->[4];
+		    $ret = $_ eq ($so->[4] ? lc1459($so->[2]) : $so->[2]) ? 1 : -1 if defined $so->[2];
+		    $ret = defined $_ ? ($ret || -3) : 3 if $so->[1];
+		    $ret = ref $_ && $_->isa('Irssi'.$so->[3]) ? 2 : ($ret || -2) if $so->[3];
+		    -$ret || $_
+		}
+		map {
+		    reduce { return unless ref $a; $a->{$b} } $_, @{$so}[5..$#$so]
+		} $a, $b;
+		return ((($x[0] <=> $x[1] || $x[0] cmp $x[1]) * $so->[0]) || next);
+	    }
+	    return ($a->{refnum} <=> $b->{refnum});
+	};
+    }
+    if ($was_xform ne $S{xform}) {
+	if ($S{xform} !~ /\S/) {
+	    $custom_xform = undef;
+	}
+	else {
+	    my $script_pkg = __PACKAGE__ . '::custom_xform';
+	    local $@;
+	    $custom_xform = eval qq{
+package $script_pkg;
+use strict;
+no warnings;
+our (\$QUERY, \$CHANNEL, \$TAG, \$NAME);
+return sub {
+# line 1 @{[ set 'custom_xform' ]}\n$S{xform}\n}};
+	    if ($@) {
+		$@ =~ /^(.*)/;
+		print '%_'.(set 'custom_xform').'%_ did not compile: '.$1;
+	    }
+	}
+    }
 
-my $Unload;
-sub unload ($$$) {
-	$Unload = 1;
-	# pretend we didn't do anything ASAP
-	Irssi::timeout_add_once(10, sub { $Unload = undef; }, undef);
+    my $new_settings = join "\n", $VIEWER_MODE
+	 ? ("\\", $S{block}, $S{height_adjust}, $S{maxlines}, $S{maxcolumns})
+	 : ("!", $S{placement}, $S{position});
+
+    if ($settings_str ne $new_settings) {
+	@actString = ();
+	%abbrev_cache = ();
+	$currentLines = 0;
+	killOldStatus();
+	delete $viewer{client_settings};
+	$settings_str = $new_settings;
+    }
+
+    my $was_mouse_mode = $MOUSE_ON;
+    if ($MOUSE_ON = Irssi::settings_get_bool(set 'mouse') and !$was_mouse_mode) {
+	install_mouse();
+    }
+    elsif ($was_mouse_mode and !$MOUSE_ON) {
+	uninstall_mouse();
+    }
+
+    my $path = Irssi::settings_get_str(set 'path');
+    my $was_viewer_mode = $VIEWER_MODE;
+    if ($was_viewer_mode &&
+	defined $viewer{path} && $viewer{path} ne $path) {
+	stop_viewer();
+	$was_viewer_mode = 0;
+    }
+    elsif ($was_viewer_mode && $S{no_mode_hint} != $was_no_hint + 0) {
+	set_viewer_mode_hint();
+    }
+    $viewer{path} = $path;
+    if ($VIEWER_MODE = Irssi::settings_get_bool(set 'viewer') and !$was_viewer_mode) {
+	start_viewer();
+    }
+    elsif ($was_viewer_mode and !$VIEWER_MODE) {
+	stop_viewer();
+    }
+
+    %banned_channels = map { lc1459(to_uni($_)) => undef }
+	split ' ', Irssi::settings_get_str('banned_channels');
+
+    my @sb_base = split /\177/, sb_format_expand("{sbstart}{sb \177}{sbend}"), 2;
+    $sb_base_width_pre = sb_length($sb_base[0]);
+    $sb_base_width_post = max 0, sb_length($sb_base[1])-1;
+    $sb_base_width = $sb_base_width_pre + $sb_base_width_post;
+
+    if ($print_text_activity && $S{line_shade}) {
+	$shade_line_timer = Irssi::timeout_add(max(10 * GLOB_QUEUE_TIMER, 100*$S{line_shade}**(1/3)), 'wl_changed', undef);
+    }
+
+    $CHANGED{AWINS} = 1;
 }
-# last try to catch a sigsegv
-Irssi::signal_add_first('gui exit' => sub { $Unload = undef; });
+
+sub stop_mouse_tracking {
+    print STDERR "\e[?1005l\e[?1000l";
+}
+sub start_mouse_tracking {
+    print STDERR "\e[?1000h\e[?1005h";
+}
+sub install_mouse {
+    Irssi::command_bind('mouse_xterm' => 'mouse_xterm');
+    Irssi::command('^bind meta-[M command mouse_xterm');
+    Irssi::signal_add_first('gui key pressed' => 'mouse_key_hook');
+    start_mouse_tracking();
+}
+sub uninstall_mouse {
+    stop_mouse_tracking();
+    Irssi::signal_remove('gui key pressed' => 'mouse_key_hook');
+    Irssi::command('^bind -delete meta-[M');
+    Irssi::command_unbind('mouse_xterm' => 'mouse_xterm');
+}
+
+sub awl_mouse_event {
+    return if $VIEWER_MODE;
+    if ((($_[0] == 3 and $_[3] == 0)
+	     || $_[0] == 64 || $_[0] == 65) and
+	    $_[1] == $_[4] and $_[2] == $_[5]) {
+	my $top = lc $S{placement} eq 'top';
+	my ($pos, $line) = @_[1 .. 2];
+	unless ($top) {
+	    $line -= $screenHeight;
+	    $line += $currentLines;
+	    $line += $S{mouse_offset};
+	}
+	else {
+	    $line -= $S{mouse_offset};
+	}
+	$pos -= $sb_base_width_pre;
+	return if $line < 0 || $line >= $currentLines;
+	if ($_[0] == 64) {
+	    Irssi::command('window up');
+	}
+	elsif ($_[0] == 65) {
+	    Irssi::command('window down');
+	}
+	elsif (exists $mouse_coords{$line}{$pos}) {
+	    my $win = $mouse_coords{$line}{$pos};
+	    Irssi::command('window ' . $win);
+	}
+	Irssi::signal_stop;
+    }
+}
+
+sub mouse_scroll_event {
+    return unless $S{mouse_scroll};
+    if (($_[3] == 64 or $_[3] == 65) and
+	    $_[0] == $_[3] and $_[1] == $_[4] and $_[2] == $_[5]) {
+	my $cmd = 'scrollback goto ' . ($_[3] == 64 ? '-' : '+') . $S{mouse_scroll};
+	Irssi::active_win->command($cmd);
+	Irssi::signal_stop;
+    }
+    elsif ($_[0] == 64 or $_[0] == 65) {
+	Irssi::signal_stop;
+    }
+}
+
+sub mouse_escape {
+    return unless $S{mouse_escape} > 0;
+    if ($_[0] == 3) {
+	my $tm = $S{mouse_escape};
+	$tm *= 1000 if $tm < 1000;
+	stop_mouse_tracking();
+	Irssi::timeout_add_once($tm, 'start_mouse_tracking', undef);
+	Irssi::signal_stop;
+    }
+}
+
 sub UNLOAD {
-	# this might well crash Irssi... try /eval /script unload someotherscript ;
-	# /quit (= SEGFAULT !)
-	if ($Unload) {
-		$actString = ['']; # syncLines(); # XXX Irssi crashes when trying to disable
-		killOldStatus();                  # XXX all statusbars ?
-		if ($SCREEN_MODE) {
-			screenOff('unload mode');
-		}
-	}
+    @actString = ();
+    killOldStatus();
+    stop_viewer() if $VIEWER_MODE;
+    uninstall_mouse() if $MOUSE_ON;
 }
-
-# }}}
-
-
-# {{{ signals
 
 sub addPrintTextHook { # update on print text
-	return if $_[0]->{'level'} == 262144 and $_[0]->{'target'} eq ''
-			and !defined($_[0]->{'server'});
-	if (Irssi::settings_get_str(set 'sort') =~ /^[-!]?last_line$/) {
-		Irssi::timeout_add_once(100, 'eventChanged', undef);
-	}
+    return unless defined $^S;
+    return if $BLOCK_ALL;
+    return unless $print_text_activity;
+    return if $_[0]->{level} == 262144 and $_[0]->{target} eq ''
+	and !defined($_[0]->{server});
+    &wl_changed;
 }
 
-#sub _x { my ($x, $y) = @_; ($x, sub { Irssi::print('-->signal '.$x); eval "$y();"; }) }
-#sub _x { @_ }
-Irssi::signal_add_first(
-	'command script unload' => 'unload'
-);
-Irssi::signal_add_last({
-	'setup changed' => 'eventChanged',
-	'print text' => 'addPrintTextHook',
-	'terminal resized' => 'resizeTerm',
-	'setup reread' => 'wlreset',
-	'window hilight' => 'eventChanged',
-});
-Irssi::signal_add({
-	'window created' => 'eventChanged',
-	'window destroyed' => 'eventChanged',
-	'window name changed' => 'eventChanged',
-	'window refnum changed' => 'eventChanged',
-	'window changed' => 'eventChanged',
-	'window changed automatic' => 'eventChanged',
-});
+sub block_event_window_change {
+    Irssi::signal_stop;
+}
 
-#Irssi::signal_add('nick mode changed', 'chanactHasChanged'); # relicts
+sub update_awins {
+    my @wins = Irssi::windows;
+    local $BLOCK_ALL = 1;
+    Irssi::signal_add_first('window changed' => 'block_event_window_change');
+    my $bwin =
+	my $awin = Irssi::active_win;
+    my $lwin;
+    my $defer_irssi_broken_last;
+    unless ($wins[0]{refnum} == $awin->{refnum}) {
+	# special case: more than 1 last win, so /win last;
+	# /win last doesn't come back to the current window. eg. after
+	# connect & autojoin; we can't handle this situation, bail out
+	$defer_irssi_broken_last = 1;
+    }
+    else {
+	$awin->command('window last');
+	$lwin = Irssi::active_win;
+	$lwin->command('window last');
+	$defer_irssi_broken_last = $lwin->{refnum} == $bwin->{refnum};
+    }
+    my $awin_counter = 0;
+    Irssi::signal_remove('window changed' => 'block_event_window_change');
+    unless ($defer_irssi_broken_last) {
+	# we need to keep the fe-windows code running here
+	Irssi::signal_add_priority('window changed' => 'block_event_window_change', -99);
+	%awins = %wnmap_exp = ();
+	do {
+	    Irssi::active_win->command('window up');
+	    $awin = Irssi::active_win;
+	    $awins{$awin->{refnum}} = undef;
+	    ++$awin_counter;
+	} until ($awin->{refnum} == $bwin->{refnum} || $awin_counter >= @wins);
+	Irssi::signal_remove('window changed' => 'block_event_window_change');
 
-# }}}
+	Irssi::signal_add_first('window changed' => 'block_event_window_change');
+	for my $key (keys %wnmap) {
+	    next unless Irssi::window_find_name($key) || Irssi::window_find_item($key);
+	    $awin->command("window goto $key");
+	    my $cwin = Irssi::active_win;
+	    $wnmap_exp{ $cwin->{refnum} } = $wnmap{$key};
+	    $cwin->command('window last')
+		if $cwin->{refnum} != $awin->{refnum};
+	}
+	for my $win (reverse @wins) { # restore original window order
+	    Irssi::active_win->command('window '.$win->{refnum});
+	}
+	$awin->command('window '.$lwin->{refnum}); # restore last win
+	Irssi::active_win->command('window last');
+	Irssi::signal_remove('window changed' => 'block_event_window_change');
+    }
+    $CHANGED{WL} = 1;
+}
 
-# {{{ commands
+sub resizeTerm {
+    if (defined (my $r = `stty size 2>/dev/null`)) {
+	($screenHeight, $screenWidth) = split ' ', $r;
+	$CHANGED{SETUP} = 1;
+    }
+    else {
+	$CHANGED{SIZE} = 1;
+    }
+}
 
+sub awl_refresh {
+    $globTime = undef;
+    resizeTerm()   if delete $CHANGED{SIZE};
+    reset_awl()    if delete $CHANGED{SETUP};
+    update_awins() if delete $CHANGED{AWINS};
+    update_wl()    if delete $CHANGED{WL};
+}
+
+sub termsize_changed { $CHANGED{SIZE}  = 1; &queue_refresh; }
+sub setup_changed    { $CHANGED{SETUP} = 1; &queue_refresh; }
+sub awins_changed    { $CHANGED{AWINS} = 1; &queue_refresh; }
+sub wl_changed       { $CHANGED{WL}    = 1; &queue_refresh; }
+
+sub window_changed {
+    &awins_changed if $_[1];
+}
+
+sub queue_refresh {
+    return if $BLOCK_ALL;
+    Irssi::timeout_remove($globTime)
+	    if defined $globTime; # delay the update further
+    $globTime = Irssi::timeout_add_once(GLOB_QUEUE_TIMER, 'awl_refresh', undef);
+}
+
+sub awl_init {
+    termsize_changed();
+    update_keymap();
+}
 
 sub runsub {
-	my ($cmd) = @_;
-	sub {
-		my ($data, $server, $item) = @_;
-		Irssi::command_runsub($cmd, $data, $server, $item);
-	};
+    my $cmd = shift;
+    sub {
+	my ($data, $server, $item) = @_;
+	Irssi::command_runsub($cmd, $data, $server, $item);
+    };
 }
+
+Irssi::signal_register({
+    'gui mouse' => [qw/int int int int int int/],
+   });
+{ my $broken_expandos = (Irssi::version >= 20081128 && Irssi::version < 20110210)
+      ? sub { my $x = shift; $x =~ s/\$\{cumode_space\}/ /; $x } : undef;
+  Irssi::theme_register([
+    map { $broken_expandos ? $broken_expandos->($_) : $_ }
+    set 'display_nokey'		=>   '$N${cumode_space}$H$C$S',
+    set 'display_key'		=>   '$Q${cumode_space}$H$C$S',
+    set 'display_nokey_visible' => '%2$N${cumode_space}$H$C$S',
+    set 'display_key_visible'	=> '%2$Q${cumode_space}$H$C$S',
+    set 'display_nokey_active'	=> '%1$N${cumode_space}$H$C$S',
+    set 'display_key_active'	=> '%1$Q${cumode_space}$H$C$S',
+    set 'display_header'	=> '%8$C|${N}',
+    set 'name_display'		=> '$0',
+    set 'separator'		=> ' ',
+    set 'separator2'		=> '',
+    set 'abbrev_chars'		=> "~\x{301c}",
+    set 'viewer_item_bg'	=> sb_format_expand('{sb_background}'),
+    set 'title'			=> '\V'.setc().'\:',
+   ]);
+}
+Irssi::settings_add_bool(setc, set 'prefer_name',    0); #
+Irssi::settings_add_int( setc, set 'hide_empty',     0); #
+Irssi::settings_add_int( setc, set 'hide_data',      0); #
+Irssi::settings_add_int( setc, set 'hide_name_data', 0); #
+Irssi::settings_add_int( setc, set 'maxlines',       9); #
+Irssi::settings_add_int( setc, set 'maxcolumns',     4); #
+Irssi::settings_add_int( setc, set 'block',          15); #
+Irssi::settings_add_bool(setc, set 'sbar_maxlength', 1); #
+Irssi::settings_add_int( setc, set 'height_adjust',  2); #
+Irssi::settings_add_str( setc, set 'sort',           'refnum'); #
+Irssi::settings_add_str( setc, set 'placement',      'bottom'); #
+Irssi::settings_add_int( setc, set 'position',       0); #
+Irssi::settings_add_bool(setc, set 'all_disable',    1); #
+Irssi::settings_add_bool(setc, set 'viewer',         1); #
+Irssi::settings_add_str( setc, set 'shared_sbar',    'OFF'); #
+Irssi::settings_add_bool(setc, set 'mouse',          0); #
+Irssi::settings_add_str( setc, set 'path', Irssi::get_irssi_dir . '/_windowlist'); #
+Irssi::settings_add_str( setc, set 'custom_xform',   ''); #
+Irssi::settings_add_time(setc, set 'last_line_shade', '0'); #
+Irssi::settings_add_int( setc, set 'mouse_offset',   1); #
+Irssi::settings_add_int( setc, 'mouse_scroll',       3); #
+Irssi::settings_add_int( setc, 'mouse_escape',       1); #
+Irssi::settings_add_str( setc, 'banned_channels',    '');
+Irssi::settings_add_bool(setc, 'banned_channels_on', 1);
+Irssi::settings_add_str( setc, 'fancy_abbrev',       'fancy'); #
+Irssi::settings_add_bool(setc, set 'no_mode_hint',   0); #
+Irssi::settings_add_bool(setc, set 'viewer_launch',  1); #
+Irssi::settings_add_str( setc, set 'viewer_launch_env',  ''); #
+Irssi::settings_add_str( setc, set 'viewer_tmux_position',  'left'); #
+Irssi::settings_add_str( setc, set 'viewer_xwin_command',  'xterm +sb -e %A'); #
+Irssi::settings_add_str( setc, set 'viewer_custom_command',  ''); #
+
+Irssi::signal_add_last({
+    'setup changed'    => 'setup_changed',
+    'print text'       => 'addPrintTextHook',
+    'terminal resized' => 'termsize_changed',
+    'setup reread'     => 'screenFullRedraw',
+    'window hilight'   => 'wl_changed',
+    'command format'   => 'wl_changed',
+});
+Irssi::signal_add({
+    'window changed'	       => 'window_changed',
+    'window item changed'      => 'wl_changed',
+    'window changed automatic' => 'window_changed',
+    'window created'	       => 'awins_changed',
+    'window destroyed'	       => 'awins_changed',
+    'window name changed'      => 'wl_changed',
+    'window refnum changed'    => 'wl_changed',
+});
+Irssi::signal_add_last('gui mouse' => 'mouse_escape');
+Irssi::signal_add_last('gui mouse' => 'mouse_scroll_event');
+Irssi::signal_add_last('gui mouse' => 'awl_mouse_event');
 Irssi::command_bind( setc() => runsub(setc()) );
-Irssi::command_bind( setc() . ' paste' => runsub(setc() . ' paste') );
-Irssi::command_bind(
-	setc() . ' paste on' => sub {
-		return unless $SCREEN_MODE;
-		my $was_disabled = $DISABLE_SCREEN_TEMP;
-		$DISABLE_SCREEN_TEMP = 1;
-		Irssi::print('Paste mode is now ON, '.uc(setc()).' is temporarily '.
-		             'disabled.');
-		if (!$was_disabled) {
-			$screenResizing = 1;
-			screenOff();
-		}
-	}
-);
-Irssi::command_bind(
-	setc() . ' paste off' => sub {
-		return unless $SCREEN_MODE;
-		my $was_disabled = $DISABLE_SCREEN_TEMP;
-		$DISABLE_SCREEN_TEMP = undef;
-		Irssi::print('Paste mode is now OFF, '.uc(setc()).' is enabled.');
-		if ($was_disabled) {
-			$SCREEN_MODE = undef;
-			$screenResizing = 0;
-			wlreset();
-		}
-	}
-);
-Irssi::command_bind(
-	setc() . ' paste toggle' => sub {
-		if ($DISABLE_SCREEN_TEMP) {
-			Irssi::command(setc() . ' paste off');
-		}
-		else {
-			Irssi::command(setc() . ' paste on');
-		}
-	}
-);
-Irssi::command_bind(
-	setc() . ' redraw' => sub {
-		return unless $SCREEN_MODE;
-		screenFullRedraw();
-	}
-);
-		
+Irssi::command_bind( setc() . ' redraw' => 'screenFullRedraw' );
+Irssi::command_bind( setc() . ' restart' => 'restartViewerServer' );
 
-# }}}
-
-# {{{ Algorithm::LCSS module
 {
-	package Algorithm::Diff;
-	# Skip to first "=head" line for documentation.
-	use strict;
-
-	use integer;    # see below in _replaceNextLargerWith() for mod to make
-						 # if you don't use this
-
-	# McIlroy-Hunt diff algorithm
-	# Adapted from the Smalltalk code of Mario I. Wolczko, <mario@wolczko.com>
-	# by Ned Konz, perl@bike-nomad.com
-	# Updates by Tye McQueen, http://perlmonks.org/?node=tye
-
-	# Create a hash that maps each element of $aCollection to the set of
-	# positions it occupies in $aCollection, restricted to the elements
-	# within the range of indexes specified by $start and $end.
-	# The fourth parameter is a subroutine reference that will be called to
-	# generate a string to use as a key.
-	# Additional parameters, if any, will be passed to this subroutine.
-	#
-	# my $hashRef = _withPositionsOfInInterval( \@array, $start, $end, $keyGen );
-
-	sub _withPositionsOfInInterval
-	{
-		 my $aCollection = shift;    # array ref
-		 my $start       = shift;
-		 my $end         = shift;
-		 my $keyGen      = shift;
-		 my %d;
-		 my $index;
-		 for ( $index = $start ; $index <= $end ; $index++ )
-		 {
-			  my $element = $aCollection->[$index];
-			  my $key = &$keyGen( $element, @_ );
-			  if ( exists( $d{$key} ) )
-			  {
-					unshift ( @{ $d{$key} }, $index );
-			  }
-			  else
-			  {
-					$d{$key} = [$index];
-			  }
-		 }
-		 return wantarray ? %d : \%d;
-	}
-
-	# Find the place at which aValue would normally be inserted into the
-	# array. If that place is already occupied by aValue, do nothing, and
-	# return undef. If the place does not exist (i.e., it is off the end of
-	# the array), add it to the end, otherwise replace the element at that
-	# point with aValue.  It is assumed that the array's values are numeric.
-	# This is where the bulk (75%) of the time is spent in this module, so
-	# try to make it fast!
-
-	sub _replaceNextLargerWith
-	{
-		 my ( $array, $aValue, $high ) = @_;
-		 $high ||= $#$array;
-
-		 # off the end?
-		 if ( $high == -1 || $aValue > $array->[-1] )
-		 {
-			  push ( @$array, $aValue );
-			  return $high + 1;
-		 }
-
-		 # binary search for insertion point...
-		 my $low = 0;
-		 my $index;
-		 my $found;
-		 while ( $low <= $high )
-		 {
-			  $index = ( $high + $low ) / 2;
-
-			  # $index = int(( $high + $low ) / 2);  # without 'use integer'
-			  $found = $array->[$index];
-
-			  if ( $aValue == $found )
-			  {
-					return undef;
-			  }
-			  elsif ( $aValue > $found )
-			  {
-					$low = $index + 1;
-			  }
-			  else
-			  {
-					$high = $index - 1;
-			  }
-		 }
-
-		 # now insertion point is in $low.
-		 $array->[$low] = $aValue;    # overwrite next larger
-		 return $low;
-	}
-
-	# This method computes the longest common subsequence in $a and $b.
-
-	# Result is array or ref, whose contents is such that
-	#   $a->[ $i ] == $b->[ $result[ $i ] ]
-	# foreach $i in ( 0 .. $#result ) if $result[ $i ] is defined.
-
-	# An additional argument may be passed; this is a hash or key generating
-	# function that should return a string that uniquely identifies the given
-	# element.  It should be the case that if the key is the same, the elements
-	# will compare the same. If this parameter is undef or missing, the key
-	# will be the element as a string.
-
-	# By default, comparisons will use "eq" and elements will be turned into keys
-	# using the default stringizing operator '""'.
-
-	# Additional parameters, if any, will be passed to the key generation
-	# routine.
-
-	sub _longestCommonSubsequence
-	{
-		 my $a        = shift;    # array ref or hash ref
-		 my $b        = shift;    # array ref or hash ref
-		 my $counting = shift;    # scalar
-		 my $keyGen   = shift;    # code ref
-		 my $compare;             # code ref
-
-		 if ( ref($a) eq 'HASH' )
-		 {                        # prepared hash must be in $b
-			  my $tmp = $b;
-			  $b = $a;
-			  $a = $tmp;
-		 }
-
-		 # Check for bogus (non-ref) argument values
-		 if ( !ref($a) || !ref($b) )
-		 {
-			  my @callerInfo = caller(1);
-			  die 'error: must pass array or hash references to ' . $callerInfo[3];
-		 }
-
-		 # set up code refs
-		 # Note that these are optimized.
-		 if ( !defined($keyGen) )    # optimize for strings
-		 {
-			  $keyGen = sub { $_[0] };
-			  $compare = sub { my ( $a, $b ) = @_; $a eq $b };
-		 }
-		 else
-		 {
-			  $compare = sub {
-					my $a = shift;
-					my $b = shift;
-					&$keyGen( $a, @_ ) eq &$keyGen( $b, @_ );
-			  };
-		 }
-
-		 my ( $aStart, $aFinish, $matchVector ) = ( 0, $#$a, [] );
-		 my ( $prunedCount, $bMatches ) = ( 0, {} );
-
-		 if ( ref($b) eq 'HASH' )    # was $bMatches prepared for us?
-		 {
-			  $bMatches = $b;
-		 }
-		 else
-		 {
-			  my ( $bStart, $bFinish ) = ( 0, $#$b );
-
-			  # First we prune off any common elements at the beginning
-			  while ( $aStart <= $aFinish
-					and $bStart <= $bFinish
-					and &$compare( $a->[$aStart], $b->[$bStart], @_ ) )
-			  {
-					$matchVector->[ $aStart++ ] = $bStart++;
-					$prunedCount++;
-			  }
-
-			  # now the end
-			  while ( $aStart <= $aFinish
-					and $bStart <= $bFinish
-					and &$compare( $a->[$aFinish], $b->[$bFinish], @_ ) )
-			  {
-					$matchVector->[ $aFinish-- ] = $bFinish--;
-					$prunedCount++;
-			  }
-
-			  # Now compute the equivalence classes of positions of elements
-			  $bMatches =
-				 _withPositionsOfInInterval( $b, $bStart, $bFinish, $keyGen, @_ );
-		 }
-		 my $thresh = [];
-		 my $links  = [];
-
-		 my ( $i, $ai, $j, $k );
-		 for ( $i = $aStart ; $i <= $aFinish ; $i++ )
-		 {
-			  $ai = &$keyGen( $a->[$i], @_ );
-			  if ( exists( $bMatches->{$ai} ) )
-			  {
-					$k = 0;
-					for $j ( @{ $bMatches->{$ai} } )
-					{
-
-						 # optimization: most of the time this will be true
-						 if ( $k and $thresh->[$k] > $j and $thresh->[ $k - 1 ] < $j )
-						 {
-							  $thresh->[$k] = $j;
-						 }
-						 else
-						 {
-							  $k = _replaceNextLargerWith( $thresh, $j, $k );
-						 }
-
-						 # oddly, it's faster to always test this (CPU cache?).
-						 if ( defined($k) )
-						 {
-							  $links->[$k] =
-								 [ ( $k ? $links->[ $k - 1 ] : undef ), $i, $j ];
-						 }
-					}
-			  }
-		 }
-
-		 if (@$thresh)
-		 {
-			  return $prunedCount + @$thresh if $counting;
-			  for ( my $link = $links->[$#$thresh] ; $link ; $link = $link->[0] )
-			  {
-					$matchVector->[ $link->[1] ] = $link->[2];
-			  }
-		 }
-		 elsif ($counting)
-		 {
-			  return $prunedCount;
-		 }
-
-		 return wantarray ? @$matchVector : $matchVector;
-	}
-
-	sub traverse_sequences
-	{
-		 my $a                 = shift;          # array ref
-		 my $b                 = shift;          # array ref
-		 my $callbacks         = shift || {};
-		 my $keyGen            = shift;
-		 my $matchCallback     = $callbacks->{'MATCH'} || sub { };
-		 my $discardACallback  = $callbacks->{'DISCARD_A'} || sub { };
-		 my $finishedACallback = $callbacks->{'A_FINISHED'};
-		 my $discardBCallback  = $callbacks->{'DISCARD_B'} || sub { };
-		 my $finishedBCallback = $callbacks->{'B_FINISHED'};
-		 my $matchVector = _longestCommonSubsequence( $a, $b, 0, $keyGen, @_ );
-
-		 # Process all the lines in @$matchVector
-		 my $lastA = $#$a;
-		 my $lastB = $#$b;
-		 my $bi    = 0;
-		 my $ai;
-
-		 for ( $ai = 0 ; $ai <= $#$matchVector ; $ai++ )
-		 {
-			  my $bLine = $matchVector->[$ai];
-			  if ( defined($bLine) )    # matched
-			  {
-					&$discardBCallback( $ai, $bi++, @_ ) while $bi < $bLine;
-					&$matchCallback( $ai,    $bi++, @_ );
-			  }
-			  else
-			  {
-					&$discardACallback( $ai, $bi, @_ );
-			  }
-		 }
-
-		 # The last entry (if any) processed was a match.
-		 # $ai and $bi point just past the last matching lines in their sequences.
-
-		 while ( $ai <= $lastA or $bi <= $lastB )
-		 {
-
-			  # last A?
-			  if ( $ai == $lastA + 1 and $bi <= $lastB )
-			  {
-					if ( defined($finishedACallback) )
-					{
-						 &$finishedACallback( $lastA, @_ );
-						 $finishedACallback = undef;
-					}
-					else
-					{
-						 &$discardBCallback( $ai, $bi++, @_ ) while $bi <= $lastB;
-					}
-			  }
-
-			  # last B?
-			  if ( $bi == $lastB + 1 and $ai <= $lastA )
-			  {
-					if ( defined($finishedBCallback) )
-					{
-						 &$finishedBCallback( $lastB, @_ );
-						 $finishedBCallback = undef;
-					}
-					else
-					{
-						 &$discardACallback( $ai++, $bi, @_ ) while $ai <= $lastA;
-					}
-			  }
-
-			  &$discardACallback( $ai++, $bi, @_ ) if $ai <= $lastA;
-			  &$discardBCallback( $ai, $bi++, @_ ) if $bi <= $lastB;
-		 }
-
-		 return 1;
-	}
-
-	sub traverse_balanced
-	{
-		 my $a                 = shift;              # array ref
-		 my $b                 = shift;              # array ref
-		 my $callbacks         = shift || {};
-		 my $keyGen            = shift;
-		 my $matchCallback     = $callbacks->{'MATCH'} || sub { };
-		 my $discardACallback  = $callbacks->{'DISCARD_A'} || sub { };
-		 my $discardBCallback  = $callbacks->{'DISCARD_B'} || sub { };
-		 my $changeCallback    = $callbacks->{'CHANGE'};
-		 my $matchVector = _longestCommonSubsequence( $a, $b, 0, $keyGen, @_ );
-
-		 # Process all the lines in match vector
-		 my $lastA = $#$a;
-		 my $lastB = $#$b;
-		 my $bi    = 0;
-		 my $ai    = 0;
-		 my $ma    = -1;
-		 my $mb;
-
-		 while (1)
-		 {
-
-			  # Find next match indices $ma and $mb
-			  do {
-					$ma++;
-			  } while(
-						 $ma <= $#$matchVector
-					&&  !defined $matchVector->[$ma]
-			  );
-
-			  last if $ma > $#$matchVector;    # end of matchVector?
-			  $mb = $matchVector->[$ma];
-
-			  # Proceed with discard a/b or change events until
-			  # next match
-			  while ( $ai < $ma || $bi < $mb )
-			  {
-
-					if ( $ai < $ma && $bi < $mb )
-					{
-
-						 # Change
-						 if ( defined $changeCallback )
-						 {
-							  &$changeCallback( $ai++, $bi++, @_ );
-						 }
-						 else
-						 {
-							  &$discardACallback( $ai++, $bi, @_ );
-							  &$discardBCallback( $ai, $bi++, @_ );
-						 }
-					}
-					elsif ( $ai < $ma )
-					{
-						 &$discardACallback( $ai++, $bi, @_ );
-					}
-					else
-					{
-
-						 # $bi < $mb
-						 &$discardBCallback( $ai, $bi++, @_ );
-					}
-			  }
-
-			  # Match
-			  &$matchCallback( $ai++, $bi++, @_ );
-		 }
-
-		 while ( $ai <= $lastA || $bi <= $lastB )
-		 {
-			  if ( $ai <= $lastA && $bi <= $lastB )
-			  {
-
-					# Change
-					if ( defined $changeCallback )
-					{
-						 &$changeCallback( $ai++, $bi++, @_ );
-					}
-					else
-					{
-						 &$discardACallback( $ai++, $bi, @_ );
-						 &$discardBCallback( $ai, $bi++, @_ );
-					}
-			  }
-			  elsif ( $ai <= $lastA )
-			  {
-					&$discardACallback( $ai++, $bi, @_ );
-			  }
-			  else
-			  {
-
-					# $bi <= $lastB
-					&$discardBCallback( $ai, $bi++, @_ );
-			  }
-		 }
-
-		 return 1;
-	}
-
-	sub prepare
-	{
-		 my $a       = shift;    # array ref
-		 my $keyGen  = shift;    # code ref
-
-		 # set up code ref
-		 $keyGen = sub { $_[0] } unless defined($keyGen);
-
-		 return scalar _withPositionsOfInInterval( $a, 0, $#$a, $keyGen, @_ );
-	}
-
-	sub LCS
-	{
-		 my $a = shift;                  # array ref
-		 my $b = shift;                  # array ref or hash ref
-		 my $matchVector = _longestCommonSubsequence( $a, $b, 0, @_ );
-		 my @retval;
-		 my $i;
-		 for ( $i = 0 ; $i <= $#$matchVector ; $i++ )
-		 {
-			  if ( defined( $matchVector->[$i] ) )
-			  {
-					push ( @retval, $a->[$i] );
-			  }
-		 }
-		 return wantarray ? @retval : \@retval;
-	}
-
-	sub LCS_length
-	{
-		 my $a = shift;                          # array ref
-		 my $b = shift;                          # array ref or hash ref
-		 return _longestCommonSubsequence( $a, $b, 1, @_ );
-	}
-
-	sub LCSidx
-	{
-		 my $a= shift @_;
-		 my $b= shift @_;
-		 my $match= _longestCommonSubsequence( $a, $b, 0, @_ );
-		 my @am= grep defined $match->[$_], 0..$#$match;
-		 my @bm= @{$match}[@am];
-		 return \@am, \@bm;
-	}
-
-	sub compact_diff
-	{
-		 my $a= shift @_;
-		 my $b= shift @_;
-		 my( $am, $bm )= LCSidx( $a, $b, @_ );
-		 my @cdiff;
-		 my( $ai, $bi )= ( 0, 0 );
-		 push @cdiff, $ai, $bi;
-		 while( 1 ) {
-			  while(  @$am  &&  $ai == $am->[0]  &&  $bi == $bm->[0]  ) {
-					shift @$am;
-					shift @$bm;
-					++$ai, ++$bi;
-			  }
-			  push @cdiff, $ai, $bi;
-			  last   if  ! @$am;
-			  $ai = $am->[0];
-			  $bi = $bm->[0];
-			  push @cdiff, $ai, $bi;
-		 }
-		 push @cdiff, 0+@$a, 0+@$b
-			  if  $ai < @$a || $bi < @$b;
-		 return wantarray ? @cdiff : \@cdiff;
-	}
-
-	sub diff
-	{
-		 my $a      = shift;    # array ref
-		 my $b      = shift;    # array ref
-		 my $retval = [];
-		 my $hunk   = [];
-		 my $discard = sub {
-			  push @$hunk, [ '-', $_[0], $a->[ $_[0] ] ];
-		 };
-		 my $add = sub {
-			  push @$hunk, [ '+', $_[1], $b->[ $_[1] ] ];
-		 };
-		 my $match = sub {
-			  push @$retval, $hunk
-					if 0 < @$hunk;
-			  $hunk = []
-		 };
-		 traverse_sequences( $a, $b,
-			  { MATCH => $match, DISCARD_A => $discard, DISCARD_B => $add }, @_ );
-		 &$match();
-		 return wantarray ? @$retval : $retval;
-	}
-
-	sub sdiff
-	{
-		 my $a      = shift;    # array ref
-		 my $b      = shift;    # array ref
-		 my $retval = [];
-		 my $discard = sub { push ( @$retval, [ '-', $a->[ $_[0] ], "" ] ) };
-		 my $add = sub { push ( @$retval, [ '+', "", $b->[ $_[1] ] ] ) };
-		 my $change = sub {
-			  push ( @$retval, [ 'c', $a->[ $_[0] ], $b->[ $_[1] ] ] );
-		 };
-		 my $match = sub {
-			  push ( @$retval, [ 'u', $a->[ $_[0] ], $b->[ $_[1] ] ] );
-		 };
-		 traverse_balanced(
-			  $a,
-			  $b,
-			  {
-					MATCH     => $match,
-					DISCARD_A => $discard,
-					DISCARD_B => $add,
-					CHANGE    => $change,
-			  },
-			  @_
-		 );
-		 return wantarray ? @$retval : $retval;
-	}
-
-	########################################
-	my $Root= __PACKAGE__;
-	package Algorithm::Diff::_impl;
-	use strict;
-
-	sub _Idx()  { 0 } # $me->[_Idx]: Ref to array of hunk indices
-					# 1   # $me->[1]: Ref to first sequence
-					# 2   # $me->[2]: Ref to second sequence
-	sub _End()  { 3 } # $me->[_End]: Diff between forward and reverse pos
-	sub _Same() { 4 } # $me->[_Same]: 1 if pos 1 contains unchanged items
-	sub _Base() { 5 } # $me->[_Base]: Added to range's min and max
-	sub _Pos()  { 6 } # $me->[_Pos]: Which hunk is currently selected
-	sub _Off()  { 7 } # $me->[_Off]: Offset into _Idx for current position
-	sub _Min() { -2 } # Added to _Off to get min instead of max+1
-
-	sub Die
-	{
-		 require Carp;
-		 Carp::confess( @_ );
-	}
-
-	sub _ChkPos
-	{
-		 my( $me )= @_;
-		 return   if  $me->[_Pos];
-		 my $meth= ( caller(1) )[3];
-		 Die( "Called $meth on 'reset' object" );
-	}
-
-	sub _ChkSeq
-	{
-		 my( $me, $seq )= @_;
-		 return $seq + $me->[_Off]
-			  if  1 == $seq  ||  2 == $seq;
-		 my $meth= ( caller(1) )[3];
-		 Die( "$meth: Invalid sequence number ($seq); must be 1 or 2" );
-	}
-
-	sub getObjPkg
-	{
-		 my( $us )= @_;
-		 return ref $us   if  ref $us;
-		 return $us . "::_obj";
-	}
-
-	sub new
-	{
-		 my( $us, $seq1, $seq2, $opts ) = @_;
-		 my @args;
-		 for( $opts->{keyGen} ) {
-			  push @args, $_   if  $_;
-		 }
-		 for( $opts->{keyGenArgs} ) {
-			  push @args, @$_   if  $_;
-		 }
-		 my $cdif= Algorithm::Diff::compact_diff( $seq1, $seq2, @args );
-		 my $same= 1;
-		 if(  0 == $cdif->[2]  &&  0 == $cdif->[3]  ) {
-			  $same= 0;
-			  splice @$cdif, 0, 2;
-		 }
-		 my @obj= ( $cdif, $seq1, $seq2 );
-		 $obj[_End] = (1+@$cdif)/2;
-		 $obj[_Same] = $same;
-		 $obj[_Base] = 0;
-		 my $me = bless \@obj, $us->getObjPkg();
-		 $me->Reset( 0 );
-		 return $me;
-	}
-
-	sub Reset
-	{
-		 my( $me, $pos )= @_;
-		 $pos= int( $pos || 0 );
-		 $pos += $me->[_End]
-			  if  $pos < 0;
-		 $pos= 0
-			  if  $pos < 0  ||  $me->[_End] <= $pos;
-		 $me->[_Pos]= $pos || !1;
-		 $me->[_Off]= 2*$pos - 1;
-		 return $me;
-	}
-
-	sub Base
-	{
-		 my( $me, $base )= @_;
-		 my $oldBase= $me->[_Base];
-		 $me->[_Base]= 0+$base   if  defined $base;
-		 return $oldBase;
-	}
-
-	sub Copy
-	{
-		 my( $me, $pos, $base )= @_;
-		 my @obj= @$me;
-		 my $you= bless \@obj, ref($me);
-		 $you->Reset( $pos )   if  defined $pos;
-		 $you->Base( $base );
-		 return $you;
-	}
-
-	sub Next {
-		 my( $me, $steps )= @_;
-		 $steps= 1   if  ! defined $steps;
-		 if( $steps ) {
-			  my $pos= $me->[_Pos];
-			  my $new= $pos + $steps;
-			  $new= 0   if  $pos  &&  $new < 0;
-			  $me->Reset( $new )
-		 }
-		 return $me->[_Pos];
-	}
-
-	sub Prev {
-		 my( $me, $steps )= @_;
-		 $steps= 1   if  ! defined $steps;
-		 my $pos= $me->Next(-$steps);
-		 $pos -= $me->[_End]   if  $pos;
-		 return $pos;
-	}
-
-	sub Diff {
-		 my( $me )= @_;
-		 $me->_ChkPos();
-		 return 0   if  $me->[_Same] == ( 1 & $me->[_Pos] );
-		 my $ret= 0;
-		 my $off= $me->[_Off];
-		 for my $seq ( 1, 2 ) {
-			  $ret |= $seq
-					if  $me->[_Idx][ $off + $seq + _Min ]
-					<   $me->[_Idx][ $off + $seq ];
-		 }
-		 return $ret;
-	}
-
-	sub Min {
-		 my( $me, $seq, $base )= @_;
-		 $me->_ChkPos();
-		 my $off= $me->_ChkSeq($seq);
-		 $base= $me->[_Base] if !defined $base;
-		 return $base + $me->[_Idx][ $off + _Min ];
-	}
-
-	sub Max {
-		 my( $me, $seq, $base )= @_;
-		 $me->_ChkPos();
-		 my $off= $me->_ChkSeq($seq);
-		 $base= $me->[_Base] if !defined $base;
-		 return $base + $me->[_Idx][ $off ] -1;
-	}
-
-	sub Range {
-		 my( $me, $seq, $base )= @_;
-		 $me->_ChkPos();
-		 my $off = $me->_ChkSeq($seq);
-		 if( !wantarray ) {
-			  return  $me->[_Idx][ $off ]
-					-   $me->[_Idx][ $off + _Min ];
-		 }
-		 $base= $me->[_Base] if !defined $base;
-		 return  ( $base + $me->[_Idx][ $off + _Min ] )
-			  ..  ( $base + $me->[_Idx][ $off ] - 1 );
-	}
-
-	sub Items {
-		 my( $me, $seq )= @_;
-		 $me->_ChkPos();
-		 my $off = $me->_ChkSeq($seq);
-		 if( !wantarray ) {
-			  return  $me->[_Idx][ $off ]
-					-   $me->[_Idx][ $off + _Min ];
-		 }
-		 return
-			  @{$me->[$seq]}[
-						 $me->[_Idx][ $off + _Min ]
-					..  ( $me->[_Idx][ $off ] - 1 )
-			  ];
-	}
-
-	sub Same {
-		 my( $me )= @_;
-		 $me->_ChkPos();
-		 return wantarray ? () : 0
-			  if  $me->[_Same] != ( 1 & $me->[_Pos] );
-		 return $me->Items(1);
-	}
-
-	my %getName;
-		 %getName= (
-			  same => \&Same,
-			  diff => \&Diff,
-			  base => \&Base,
-			  min  => \&Min,
-			  max  => \&Max,
-			  range=> \&Range,
-			  items=> \&Items, # same thing
-		 );
-
-	sub Get
-	{
-		 my $me= shift @_;
-		 $me->_ChkPos();
-		 my @value;
-		 for my $arg (  @_  ) {
-			  for my $word (  split ' ', $arg  ) {
-					my $meth;
-					if(     $word !~ /^(-?\d+)?([a-zA-Z]+)([12])?$/
-						 ||  not  $meth= $getName{ lc $2 }
-					) {
-						 Die( $Root, ", Get: Invalid request ($word)" );
-					}
-					my( $base, $name, $seq )= ( $1, $2, $3 );
-					push @value, scalar(
-						 4 == length($name)
-							  ? $meth->( $me )
-							  : $meth->( $me, $seq, $base )
-					);
-			  }
-		 }
-		 if(  wantarray  ) {
-			  return @value;
-		 } elsif(  1 == @value  ) {
-			  return $value[0];
-		 }
-		 Die( 0+@value, " values requested from ",
-			  $Root, "'s Get in scalar context" );
-	}
-
-
-	my $Obj= getObjPkg($Root);
+    my $l = set 'shared';
+    {
 	no strict 'refs';
+	*{$l} = $awl_shared_empty;
+    }
+    Irssi::statusbar_item_register($l, '$0', $l);
+}
 
-	for my $meth (  qw( new getObjPkg )  ) {
-		 *{$Root."::".$meth} = \&{$meth};
-		 *{$Obj ."::".$meth} = \&{$meth};
+awl_init();
+
+# Mouse script based on irssi mouse patch by mirage
+{ my $mouse_status = -1; # -1:off 0,1,2:filling mouse_combo
+  my @mouse_combo; # 0:button 1:x 2:y
+  my @mouse_previous; # previous contents of mouse_combo
+
+  sub mouse_xterm_off {
+      $mouse_status = -1;
+  }
+  sub mouse_xterm {
+      $mouse_status = 0;
+      Irssi::timeout_add_once(10, 'mouse_xterm_off', undef);
+  }
+
+  sub mouse_key_hook {
+      my ($key) = @_;
+      if ($mouse_status != -1) {
+	  if ($mouse_status == 0) {
+	      @mouse_previous = @mouse_combo;
+		  #if @mouse_combo && $mouse_combo[0] < 64;
+	  }
+	  $mouse_combo[$mouse_status] = $key - 32;
+	  $mouse_status++;
+	  if ($mouse_status == 3) {
+	      $mouse_status = -1;
+	      # match screen coordinates
+	      $mouse_combo[1]--;
+	      $mouse_combo[2]--;
+	      Irssi::signal_emit('gui mouse', @mouse_combo[0 .. 2], @mouse_previous[0 .. 2]);
+	  }
+	  Irssi::signal_stop;
+      }
+  }
+}
+
+sub string_LCSS {
+    my $str = join "\0", @_;
+    (sort { length $b <=> length $a } $str =~ /(?=(.+).*\0.*\1)/g)[0]
+}
+
+# workaround for issue #271
+{ package Irssi::Nick }
+
+# workaround for issue #572
+@Irssi::UI::Exec::ISA = 'Irssi::Windowitem'
+    if Irssi::version >= 20140822 && Irssi::version <= 20161101 && !@Irssi::UI::Exec::ISA;
+
+UNITCHECK
+{ package AwlViewer;
+  use strict;
+  use warnings;
+  no warnings 'redefine';
+  use Encode;
+  use IO::Socket::UNIX;
+  use IO::Select;
+  use List::Util qw(max);
+  use constant BLOCK_SIZE => 1024;
+  use constant RECONNECT_TIME => 5;
+
+  my $sockpath;
+
+  our $VERSION = '0.8';
+
+  our ($got_int, $resized, $timeout);
+
+  my %vars;
+  my (%c2w, @seqlist);
+  my %mouse_coords;
+  my (@mouse, @last_mouse);
+  my ($err, $sock, $loop);
+  my ($keybuf, $rcvbuf);
+  my @screen;
+  my ($screenHeight, $screenWidth);
+  my ($disp_update, $fs_open, $one_shot_integration, $one_shot_resize);
+  my $integration_position;
+  my $show_title_bar;
+
+  sub connect_it {
+      $sock = IO::Socket::UNIX->new(
+	  Type => SOCK_STREAM,
+	  Peer => $sockpath,
+	 );
+      unless ($sock) {
+	  $err = $!;
+	  return;
+      }
+      $sock->blocking(0);
+      $loop->add($sock);
+  }
+
+  sub remove_conn {
+      my $fh = shift;
+      $loop->remove($fh);
+      $fh->close;
+      $sock = undef;
+      %vars = ();
+      @screen = ();
+  }
+
+  { package Terminfo; # xterm
+    sub civis      { "\e[?25l" }
+    sub sc	   { "\e7" }
+    sub cup	   { "\e[" . ($_[0] + 1) . ';' . ($_[1] + 1) . 'H' }
+    sub el	   { "\e[K" }
+    sub rc	   { "\e8" }
+    sub cnorm      { "\e[?25h" }
+    sub setab      { "\e[4" . $_[0] . 'm' }
+    sub setaf      { "\e[3" . $_[0] . 'm' }
+    sub setaf16    { "\e[9" . $_[0] . 'm' }
+    sub setab16    { "\e[10" . $_[0] . 'm' }
+    sub setaf256   { "\e[38;5;" . $_[0] . 'm' }
+    sub setab256   { "\e[48;5;" . $_[0] . 'm' }
+    sub sgr0       { "\e[0m" }
+    sub bold       { "\e[1m" }
+    sub it         { "\e[3m" }
+    sub ul         { "\e[4m" }
+    sub blink      { "\e[5m" }
+    sub rev	   { "\e[7m" }
+    sub op	   { "\e[39;49m" }
+    sub exit_bold  { "\e[22m" }
+    sub exit_it    { "\e[23m" }
+    sub exit_ul    { "\e[24m" }
+    sub exit_blink { "\e[25m" }
+    sub exit_rev   { "\e[27m" }
+    sub smcup      { "\e[?1049h" }
+    sub rmcup      { "\e[?1049l" }
+    sub smmouse    { "\e[?1000h\e[?1005h" }
+    sub rmmouse    { "\e[?1005l\e[?1000l" }
+  }
+
+  sub init {
+      $sockpath = shift // "$ENV{HOME}/.irssi/_windowlist";
+      STDOUT->autoflush(1);
+      printf "\r%swaiting for %s...", Terminfo::sc, $::IRSSI{name};
+
+      `stty -icanon -echo`;
+
+      $loop = IO::Select->new;
+      STDIN->blocking(0);
+      $loop->add(\*STDIN);
+
+      $SIG{INT} = sub {
+	  $got_int = 1
+      };
+      $SIG{WINCH} = sub {
+	  $resized = 1
+      };
+
+      $resized = 3;
+
+      $disp_update = 2;
+
+      $show_title_bar = 1;
+  }
+
+  sub enter_fs {
+      return if $fs_open;
+      safe_print(Terminfo::rc, Terminfo::smcup, Terminfo::civis, Terminfo::smmouse);
+      $fs_open = 1;
+  }
+
+  sub leave_fs {
+      return unless $fs_open;
+      safe_print(Terminfo::rmmouse, Terminfo::cnorm, Terminfo::rmcup);
+      safe_print(sprintf "\r%swaiting for %s...", Terminfo::sc, $::IRSSI{name}) if $_[0];
+
+      $fs_open = 0;
+  }
+
+  sub end_prog {
+      leave_fs();
+      STDIN->blocking(1);
+      `stty sane`;
+      printf "\r%s%sthanks for using %s\n", Terminfo::rc, Terminfo::el, $::IRSSI{name};
+  }
+
+  sub safe_print {
+      my $st = STDIN->blocking(1);
+      print @_;
+      STDIN->blocking($st);
+  }
+
+  sub safe_qx {
+      my $st = STDIN->blocking(1);
+      my $ret = `$_[0]`;
+      STDIN->blocking($st);
+      $ret
+  }
+
+  sub safe_print_sock {
+      return unless $sock;
+      my $was = $sock->blocking(1);
+      $sock->print(@_);
+      $sock->blocking($was);
+  }
+
+  sub process_recv {
+      my $need = 0;
+      while ($rcvbuf =~ s/\n(.+)_BEGIN\n((?: .*\n)*)\1_END\n//) {
+	  my $var = lc $1;
+	  my $data = $2;
+	  my @data = split "\n ", "\n$data ", -1;
+	  shift @data; pop @data;
+	  my $itembg = $vars{itembg};
+	  if ($var =~ s/list$//) {
+	      $vars{$var} = \@data;
+	  }
+	  elsif ($var =~ s/map$//) {
+	      $vars{$var} = +{ @data };
+	  }
+	  else {
+	      $vars{$var} = join "\n", @data;
+	  }
+	  $need = 1 if $var eq 'win';
+	  $need = 1 if $var eq 'redraw' && $vars{$var};
+	  if (($itembg//'') ne ($vars{itembg}//'')) {
+	      $need = $vars{redraw} = 1;
+	  }
+	  _build_keymap() if $var eq 'key2';
+      }
+      $need
+  }
+
+  { my %ansi_table;
+    my ($i, $j, $k) = (0, 0, 0);
+    my %term_state;
+    sub reset_term_state { my %old_term = %term_state; %term_state = (); %old_term }
+    sub set_term_state { my %old_term = %term_state; %term_state = @_; %old_term }
+    %ansi_table = (
+	# fe-common::core::formats.c:format_expand_styles
+	(map { my $t = $i++; ($_ => sub { my $n = $term_state{hicolor} ? \&Terminfo::setab16 : \&Terminfo::setab;
+					  $n->($t) }) } (split //, '01234567' )),
+	(map { my $t = $j++; ($_ => sub { my $n = $term_state{hicolor} ? \&Terminfo::setaf16 : \&Terminfo::setaf;
+					  $n->($t) }) } (split //, 'krgybmcw' )),
+	(map { my $t = $k++; ($_ => sub { my $n = $term_state{hicolor} ? \&Terminfo::setaf : \&Terminfo::setaf16;
+					  $n->($t) }) } (split //, 'KRGYBMCW')),
+	# reset
+	n => sub { $term_state{hicolor} = 0; my $r = Terminfo::op;
+		   for (qw(blink rev bold)) {
+		       $r .= Terminfo->can("exit_$_")->() if delete $term_state{$_};
+		   }
+		   {
+		       local $ansi_table{n} = $ansi_table{N};
+		       $r .= formats_to_ansi_basic($vars{itembg});
+		   }
+		   $r
+	       },
+	N => sub { reset_term_state(); Terminfo::sgr0 },
+	# flash/bright
+	F => sub { my $n = 'blink'; my $e = ($term_state{$n} ^= 1) ? $n : "exit_$n"; Terminfo->can($e)->() },
+	# reverse
+	8 => sub { my $n = 'rev'; my $e = ($term_state{$n} ^= 1) ? $n : "exit_$n"; Terminfo->can($e)->() },
+	# bold
+	"_" => sub { my $n = 'bold'; my $e = ($term_state{$n} ^= 1) ? $n : "exit_$n"; Terminfo->can($e)->() },
+	# underline
+	U => sub { my $n = 'ul'; my $e = ($term_state{$n} ^= 1) ? $n : "exit_$n"; Terminfo->can($e)->() },
+	# italic
+	I => sub { my $n = 'it'; my $e = ($term_state{$n} ^= 1) ? $n : "exit_$n"; Terminfo->can($e)->() },
+	# bold, used as colour modifier if AWL_HI9 is set
+	9 => $ENV{AWL_HI9} ? sub { $term_state{hicolor} ^= 1; '' }
+	    : sub { my $n = 'bold'; my $e = ($term_state{$n} ^= 1) ? $n : "exit_$n"; Terminfo->can($e)->() },
+	#      delete                other stuff
+	(map { $_ => sub { '' } } (split //, ':|>#[')),
+	#      escape
+	(map { my $close = $_; $_ => sub { $close } } (split //, '{}%')),
+       );
+    for my $base (0 .. 15) {
+	my $close = $base;
+	my $idx = ($close&8) | ($close&4)>>2 | ($close&2) | ($close&1)<<2;
+	$ansi_table{ (sprintf "x0%x", $close) } =
+	    $ansi_table{ (sprintf "x0%X", $close) } =
+		sub { Terminfo::setab256($idx) };
+	$ansi_table{ (sprintf "X0%x", $close) } =
+	    $ansi_table{ (sprintf "X0%X", $close) } =
+		sub { Terminfo::setaf256($idx) };
+    }
+    for my $plane (1 .. 6) {
+	for my $coord (0 .. 35) {
+	    my $close = 16 + ($plane-1) * 36 + $coord;
+	    my $ch = $coord < 10 ? $coord : chr( $coord - 10 + ord 'a' );
+	    $ansi_table{ "x$plane$ch" } =
+		$ansi_table{ "x$plane\U$ch" } =
+		    sub { Terminfo::setab256($close) };
+	    $ansi_table{ "X$plane$ch" } =
+		$ansi_table{ "X$plane\U$ch" } =
+		    sub { Terminfo::setaf256($close) };
 	}
-	for my $meth (  qw(
-		 Next Prev Reset Copy Base Diff
-		 Same Items Range Min Max Get
-		 _ChkPos _ChkSeq
-	)  ) {
-		 *{$Obj."::".$meth} = \&{$meth};
-	}
+    }
+    for my $gray (0 .. 23) {
+	my $close = 232 + $gray;
+	my $ch = chr( $gray + ord 'a' );
+	$ansi_table{ "x7$ch" } =
+	    $ansi_table{ "x7\U$ch" } =
+		sub { Terminfo::setab256($close) };
+	$ansi_table{ "X7$ch" } =
+	    $ansi_table{ "X7\U$ch" } =
+		sub { Terminfo::setaf256($close) };
+    }
+    sub formats_to_ansi_basic {
+	my $o = shift;
+	$o =~ s/(%(X..|x..|.))/exists $ansi_table{$2} ? $ansi_table{$2}->() : $1/gex;
+	$o
+    }
+  }
 
-};
-{
-	package Algorithm::LCSS;
+  sub _header {
+      my $str = $vars{title} // uc ::setc();
+      my $ccs = qr/%(?:X(?:[1-6][0-9A-Z]|7[A-X])|[0-9BCFGIKMNRUWY_])/i;
+      (my $stripstr = $str) =~ s/($ccs)//g;
+      my $space = int( ((abs $vars{block}) - length $stripstr) / (1 + length $stripstr));
+      if ($space > 0) {
+	  my $ss = ' ' x $space;
+	  my @x = $str =~ /((?:$ccs)*\X(?:(?:$ccs)*$)?)/g;
+	  $str = join $ss, '', @x, '';
+      }
+      ($stripstr = $str) =~ s/($ccs)//g;
+      my $pad = max 0, (abs $vars{block}) - length $stripstr;
+      $str = ' ' x ($pad/2) . $str . ' ' x ($pad/2 + $pad%2);
+      $str
+  }
 
-	use strict;
-	{
-		no strict 'refs';
-		*traverse_sequences = \&Algorithm::Diff::traverse_sequences;
-	}
+  sub _add_item {
+      my ($i, $j, $c, $wi, $screen, $mouse) = @_;
+      $screen->[$i][$j] = "%N%n$wi";
+      if (exists $vars{mouse}{$c - 1}) {
+	  $mouse->[$i][$j] = $vars{mouse}{$c - 1};
+      }
+  }
+  sub update_screen {
+      $disp_update = 0;
+      unless ($sock && exists $vars{seplen} && exists $vars{block}) {
+	  leave_fs(1);
+	  return;
+      }
+      enter_fs();
+      @screen = () if delete $vars{redraw};
+      %mouse_coords = ();
+      my $ncols = ($vars{seplen} + abs $vars{block}) ?
+	  int( ($screenWidth + $vars{seplen}) / ($vars{seplen} + abs $vars{block}) ) : 0;
+      my $xenl = ($vars{seplen} + abs $vars{block})
+	  && $ncols > int( ($screenWidth + $vars{seplen} - 1) / ($vars{seplen} + abs $vars{block}) );
+      my $nrows = $screenHeight - $vars{ha};
+      my @wi = @{$vars{win}//[]};
+      my $max_items = $ncols * $nrows;
+      my $c = $show_title_bar ? 1 : 0;
+      my $items = @wi + $c;
+      my $titems = $items > $max_items ? $max_items : $items;
+      my $i = 0;
+      my $j = 0;
+      my @new_screen;
+      my @new_mouse;
+      $new_screen[0][0] = _header() #. ' ' x $vars{seplen}
+	  if $show_title_bar;
+      unless ($nrows > $ncols) { # line layout
+	  ++$j if $show_title_bar;
+	  for my $wi (@wi) {
+	      if ($j >= $ncols) {
+		  $j = 0;
+		  ++$i;
+	      }
+	      last if $i >= $nrows;
+	      _add_item($i, $j, $show_title_bar ? $c : $c + 1,
+			$wi, \@new_screen, \@new_mouse);
+	      if ($c + 1 < $titems && $j + 1 < $ncols) {
+		  $new_screen[$i][$j] .= $vars{separator};
+	      }
+	      ++$j;
+	      ++$c;
+	  }
+      }
+      else { # column layout
+	  ++$i if $show_title_bar;
+	  for my $wi (@wi) {
+	      if ($i >= $nrows) {
+		  $i = 0;
+		  ++$j;
+	      }
+	      last if $j >= $ncols;
+	      _add_item($i, $j, $show_title_bar ? $c : $c + 1,
+			$wi, \@new_screen, \@new_mouse);
+	      if ($c + $nrows < $titems) {
+		  $new_screen[$i][$j] .= $vars{separator};
+	      }
+	      ++$i;
+	      ++$c;
+	  }
+      }
+      my $step = $vars{seplen} + abs $vars{block};
+      $i = 0;
+      my $str = Terminfo::sc . Terminfo::sgr0;
+      for (my $i = 0; $i < @new_screen; ++$i) {
+	  for (my $j = 0; $j < @{$new_screen[$i]}; ++$j) {
+	      if (defined $new_mouse[$i] && defined $new_mouse[$i][$j]) {
+		  my $from = $j * $step;
+		  $mouse_coords{$i}{$_} = $new_mouse[$i][$j]
+		      for $from .. $from + abs $vars{block};
+	      }
+	      next if defined $screen[$i] && defined $screen[$i][$j]
+		  && $screen[$i][$j] eq $new_screen[$i][$j];
+	      $str .= Terminfo::cup($i, $j * $step)
+		   .  formats_to_ansi_basic($new_screen[$i][$j])
+		   .  Terminfo::sgr0;
+	      $str .= Terminfo::el if $j == $#{$new_screen[$i]} && (!$xenl || $j + 1 != $ncols);
+	  }
+      }
+      for (@new_screen .. $screenHeight - 1) {
+	  if (!@screen || defined $screen[$_]) {
+	      $str .= Terminfo::cup($_, 0) . Terminfo::sgr0 . Terminfo::el;
+	  }
+      }
+      $str .= Terminfo::rc;
+      safe_print $str;
+      @screen = @new_screen;
+  }
 
-	sub _tokenize { [split //, $_[0]] }
+  sub handle_resize {
+      if (defined (my $r = safe_qx('stty size'))) {
+	  ($screenHeight, $screenWidth) = split ' ', $r;
+	  $resized = 0;
+	  @screen = ();
+	  $disp_update = 1;
+	  if ($one_shot_integration == 2) {
+	      $one_shot_resize--;
+	  }
+      }
+      else {
+      }
+  }
 
-	sub CSS {
-		 my $is_array = ref $_[0] eq 'ARRAY' ? 1 : 0;
-		 my ( $seq1, $seq2, @match, $from_match );
-		 my $i = 0;
-		 if ( $is_array ) {
-			  $seq1 = $_[0];
-			  $seq2 = $_[1];
-			  traverse_sequences( $seq1, $seq2, {
-					MATCH => sub { push @{$match[$i]}, $seq1->[$_[0]]; $from_match = 1 },
-					DISCARD_A => sub { do{$i++; $from_match = 0} if $from_match },
-					DISCARD_B => sub { do{$i++; $from_match = 0} if $from_match },
-			  });
-		 }
-		 else {
-			  $seq1 = _tokenize($_[0]);
-			  $seq2 = _tokenize($_[1]);
-			  traverse_sequences( $seq1, $seq2, {
-					MATCH => sub { $match[$i] .= $seq1->[$_[0]]; $from_match = 1 },
-					DISCARD_A => sub { do{$i++; $from_match = 0} if $from_match },
-					DISCARD_B => sub { do{$i++; $from_match = 0} if $from_match },
-			  });
-		 }
-	  return \@match;
-	}
+  sub _build_keymap {
+      %c2w = reverse( %{$vars{key}}, %{$vars{key2}} );
+      if (!grep { /^[+-]./ } keys %c2w) {
+	  %c2w = (%c2w, map { ("-$_" => $c2w{$_}) } grep { !/^\^./ } keys %c2w);
+      }
+      %c2w = map {
+	  my $key = $_;
+	  s{^(-)?(\+)?(\^)?(.)}{
+	      join '', (
+		  ($1 ? "\e" : ''),
+		  ($2 ? "\e\e" : ''),
+		  ($3 ? "$4"^"@" : $4)
+		 )
+	  }e;
+	  $_ => $c2w{$key}
+      } keys %c2w;
+      @seqlist = sort { length $b <=> length $a } keys %c2w;
+  }
 
-	sub CSS_Sorted {
-		 my $match = CSS(@_);
-		 if ( ref $_[0] eq 'ARRAY' ) {
-			 @$match = map{$_->[0]}sort{$b->[1]<=>$a->[1]}map{[$_,scalar(@$_)]}@$match
-		 }
-		 else {
-			 @$match = map{$_->[0]}sort{$b->[1]<=>$a->[1]}map{[$_,length($_)]}@$match
-		 }
-	  return $match;
-	}
+  sub _match_tmux {
+      length $ENV{TMUX} && exists $vars{irssienv}{tmux_srv} && length $vars{irssienv}{tmux_pane}
+	  && $ENV{TMUX} eq $vars{irssienv}{tmux_srv}
+  }
 
-	sub LCSS {
-		 my $is_array = ref $_[0] eq 'ARRAY' ? 1 : 0;
-		 my $css = CSS(@_);
-		 my $index;
-		 my $length = 0;
-		 if ( $is_array ) {
-			  for( my $i = 0; $i < @$css; $i++ ) {
-					next unless @{$css->[$i]}>$length;
-					$index = $i;
-					$length = @{$css->[$i]};
+  sub process_keys {
+      Encode::_utf8_on($keybuf);
+      my $win;
+      my $use_mouse;
+      my $maybe;
+  KEY: while (length $keybuf && !$maybe) {
+	  $maybe = 0;
+	  if ($keybuf =~ s/^\e\[M(.)(.)(.)//) {
+	      @last_mouse = @mouse;# if @mouse && $mouse[0] < 64;
+	      @mouse = map { -32 + ord } ($1, $2, $3);
+	      $use_mouse = 1;
+	      next KEY;
+	  }
+	  for my $s (@seqlist) {
+	      if ($keybuf =~ s/^\Q$s//) {
+		  $win = $c2w{$s};
+		  $use_mouse = 0;
+		  next KEY;
+	      }
+	      elsif (length $keybuf < length $s && $s =~ /^\Q$keybuf/) {
+		  $maybe = 1;
+	      }
+	  }
+	  unless ($maybe) {
+	      substr $keybuf, 0, 1, '';
+	  }
+      }
+      if ($use_mouse && @mouse && @last_mouse &&
+	      $mouse[2] == $last_mouse[2] &&
+		  $mouse[1] == $last_mouse[1] &&
+		      ($mouse[0] == 3 || $mouse[0] == 64 || $mouse[0] == 65)) {
+	  if ($mouse[0] == 64) {
+	      $win = 'up';
+	  }
+	  elsif ($mouse[0] == 65) {
+	      $win = 'down';
+	  }
+	  elsif (exists $mouse_coords{$mouse[2] - 1}{$mouse[1] - 1}) {
+	      $win = $mouse_coords{$mouse[2] - 1}{$mouse[1] - 1};
+	  }
+	  elsif ($mouse[2] == 1 && $mouse[1] <= abs $vars{block}) {
+	      $win = $last_mouse[0] != 0 ? 'last' : 'active';
+	  }
+	  else {
+	  }
+      }
+      if (defined $win) {
+	  $win =~ s/^_//;
+	  safe_print_sock("$win\n");
+	  if (!exists $ENV{AWL_AUTOFOCUS} || $ENV{AWL_AUTOFOCUS}) {
+	      if (_match_tmux()) {
+		  safe_qx("tmux selectp -t $vars{irssienv}{tmux_pane} 2>&1");
+	      }
+	      elsif (exists $vars{irssienv}{xwinid}) {
+		  safe_qx("wmctrl -ia $vars{irssienv}{xwinid} 2>/dev/null");
+	      }
+	  }
+      }
+      Encode::_utf8_off($keybuf);
+  }
+
+  sub check_integration {
+      return unless $vars{irssienv};
+      return unless $sock && exists $vars{seplen} && exists $vars{block};
+      if ($one_shot_integration == 1) {
+	  my $nrows = $screenHeight - $vars{ha};
+	  my $ncols = ($vars{seplen} + abs $vars{block}) ? int( ($screenWidth + $vars{seplen}) / ($vars{seplen} + abs $vars{block}) ) : 0;
+	  my $items = ($show_title_bar ? 1 : 0) + @{$vars{win}//[]};
+	  my $dcols_required = $nrows ? int($items/$nrows) + !!($items%$nrows) : 0;
+	  my $rows_required = $ncols ? int($items/$ncols) + !!($items%$ncols) : 0;
+	  $rows_required = abs $vars{ml}
+	      if ($vars{ml} < 0 || ($vars{ml} > 0 && $rows_required > $vars{ml}));
+	  $dcols_required = abs $vars{mc}
+	      if ($vars{mc} < 0 || ($vars{mc} > 0 && $dcols_required > $vars{mc}));
+	  my $rows = $rows_required + $vars{ha};
+	  my $cols = ($dcols_required * ($vars{seplen} + abs $vars{block})) - $vars{seplen};
+	  if (_match_tmux()) {
+	      # int( ($screenWidth + $vars{seplen}) / ($vars{seplen} + abs $vars{block}) );
+	      my ($pos_flag, $before);
+	      if ($integration_position eq 'left') {
+		  $pos_flag = 'h';
+		  $before = 1;
+	      }
+	      elsif ($integration_position eq 'top') {
+		  $pos_flag = 'v';
+		  $before = 1;
+	      }
+	      elsif ($integration_position eq 'right') {
+		  $pos_flag = 'h';
+	      }
+	      else {
+		  $pos_flag = 'v';
+	      }
+	      my @cmd = "joinp -d$pos_flag -s $ENV{TMUX_PANE} -t $vars{irssienv}{tmux_pane}";
+	      push @cmd, "swapp -d -t $ENV{TMUX_PANE} -s $vars{irssienv}{tmux_pane}"
+		  if $before;
+	      $cols = max($cols, 2);
+	      $rows = max($rows, 2);
+
+	      safe_qx("tmux " . (join " \\\; ", @cmd) . " 2>&1");
+	  }
+	  else {
+	      $resized = 1;
+	      #safe_qx("resize -s $screenHeight $cols 2>&1")
+		#  if $cols > 0;
+	  }
+	  $one_shot_integration++;
+	  if ($resized == 1) {
+	      handle_resize();
+	      resize_integration();
+	  }
+      }
+      elsif ($one_shot_integration == 2) {
+	  resize_integration(1);
+      }
+  }
+
+  sub resize_integration {
+      return unless $one_shot_integration;
+      return unless ($one_shot_resize//0) < 0 || shift;
+      my $nrows = $screenHeight - $vars{ha};
+      my $ncols = ($vars{seplen} + abs $vars{block}) ? int( ($screenWidth + $vars{seplen}) / ($vars{seplen} + abs $vars{block}) ) : 0;
+      my $items = ($show_title_bar ? 1 : 0) + @{$vars{win}//[]};
+      my $dcols_required = $nrows ? (int($items/$nrows) + !!($items%$nrows)) : 0;
+      my $rows_required = $ncols ? int($items/$ncols) + !!($items%$ncols) : 0;
+      $rows_required = abs $vars{ml}
+	  if ($vars{ml} < 0 || ($vars{ml} > 0 && $rows_required > $vars{ml}));
+      $dcols_required = abs $vars{mc}
+	  if ($vars{mc} < 0 || ($vars{mc} > 0 && $dcols_required > $vars{mc}));
+      my $rows = $rows_required + $vars{ha};
+      my $cols = ($dcols_required * ($vars{seplen} + abs $vars{block})) - $vars{seplen};
+      if (_match_tmux()) {
+	  my $pos_flag;
+	  my $before = 0;
+	  if ($integration_position eq 'left') {
+	      $pos_flag = 'h';
+	      $before = 1;
+	  }
+	  elsif ($integration_position eq 'top') {
+	      $pos_flag = 'v';
+	      $before = 1;
+	  }
+	  elsif ($integration_position eq 'right') {
+	      $pos_flag = 'h';
+	  }
+	  else {
+	      $pos_flag = 'v';
+	  }
+	  my @cmd;
+	  # hard tmux limits
+	  $cols = max($cols, 2);
+	  $rows = max($rows, 2);
+	  if ($pos_flag eq 'h' && $cols != $screenWidth) {
+	      my $change = $screenWidth - $cols;
+	      my $dir = ($before ^ ($change<0)) ? 'L' : 'R';
+	      push @cmd, "resizep -$dir -t $ENV{TMUX_PANE} @{[abs $change]}";
+	      #push @cmd, "resizep -x $cols -t $ENV{TMUX_PANE}";
+	      $one_shot_resize = 1;
+	  }
+	  if ($pos_flag eq 'v' && $rows != $screenHeight) {
+	      #push @cmd, "resizep -y $rows -t $ENV{TMUX_PANE}";
+	      my $change = $screenHeight - $rows;
+	      my $dir = ($before ^ ($change<0)) ? 'U' : 'D';
+	      push @cmd, "resizep -$dir -t $ENV{TMUX_PANE} @{[abs $change]}";
+	      $one_shot_resize = 1;
+	  }
+
+	  safe_qx("tmux " . (join " \\\; ", @cmd) . " 2>&1")
+	      if @cmd;
+      }
+      else {
+	  $cols = max($cols, 1);
+	  $rows = max($rows, 1);
+	  unless ($nrows > $ncols) { # line layout
+	      if ($rows != $screenHeight) {
+		  safe_qx("resize -s $rows $screenWidth 2>&1");
+		  $one_shot_resize = 1;
+	      }
+	  }
+	  else {
+	      if ($cols != $screenWidth) {
+		  safe_qx("resize -s $screenHeight $cols 2>&1");
+		  $one_shot_resize = 1;
+	      }
+	  }
+      }
+      if ($resized == 1) {
+	  handle_resize();
+      }
+  }
+
+  sub init_integration {
+      return unless $one_shot_integration;
+      if (_match_tmux()) {
+      }
+      else {
+      }
+      safe_print("\e]2;".(uc ::setc())."\e\\");
+  }
+
+  sub main {
+      require Getopt::Std;
+      my %opts;
+      Getopt::Std::getopts('1p:', \%opts);
+      my $one_shot = $opts{1};
+      $integration_position = $opts{p};
+      $one_shot_integration = 0+!!$one_shot;
+      #shift if @_ && $_[0] eq '--';
+      &init;
+      $show_title_bar = 0 if $ENV{AWL_NOTITLE};
+      init_integration();
+      until ($got_int) {
+	  $timeout = undef;
+	  if ($resized) {
+	      if ($resized == 1) {
+		  $timeout = 1;
+		  $resized++;
+	      }
+	      else {
+		  handle_resize();
+		  resize_integration();
+	      }
+	  }
+	  unless ($sock || $timeout) {
+	      connect_it();
+	  }
+	  $timeout ||= RECONNECT_TIME unless $sock;
+	  update_screen() if $disp_update;
+      SELECT: while (my @read = $loop->can_read($timeout)) {
+	      for my $fh (@read) {
+		  if ($fh == \*STDIN) {
+		      if (read STDIN, my $buf, BLOCK_SIZE) {
+			  do {
+			      $keybuf .= $buf;
+			  } while read STDIN, $buf, BLOCK_SIZE;
+		      }
+		      else {
+			  $got_int = 1;
+			  last SELECT;
+		      }
+		  }
+		  else {
+		      if ($fh->read(my $buf, BLOCK_SIZE)) {
+			  do {
+			      $rcvbuf .= $buf;
+			  } while $fh->read($buf, BLOCK_SIZE);
+		      }
+		      else {
+			  $disp_update = 1;
+			  remove_conn($fh);
+			  if ($one_shot) {
+			      $got_int = 1;
+			      last SELECT;
 			  }
-		 }
-		 else {
-			  for( my $i = 0; $i < @$css; $i++ ) {
-					next unless length($css->[$i])>$length;
-					$index = $i;
-					$length = length($css->[$i]);
-			  }
-		 }
-	  return $css->[$index];
-	}
-
-};
-# }}}
-#{{{ Class::Classless module
-{
-	package Class::Classless;
-	use strict;
-	use vars qw(@ISA);
-	use Carp;
-
-	@ISA = ();
-
-	###########################################################################
-
-	@Class::Classless::X::ISA = ();
-
-	###########################################################################
-	###########################################################################
-
-	sub Class::Classless::X::AUTOLOAD {
-	  # This's the big dispatcher.
-	  
-	  my $it = shift @_;
-	  my $m =  ($Class::Classless::X::AUTOLOAD =~ m/([^:]+)$/s ) 
-					 ? $1 : $Class::Classless::X::AUTOLOAD;
-
-	  croak "Can't call Class::Classless methods (like $m) without an object"
-		 unless ref $it;  # sanity, basically.
-
-	  my $prevstate;
-	  $prevstate = ${shift @_}
-		if scalar(@_) && defined($_[0]) &&
-			ref($_[0]) eq 'Class::Classless::CALLSTATE::SHIMMY'
-	  ;   # A shim!  we were called via $callstate->NEXT
-
-	  my $no_fail = $prevstate ? $prevstate->[3] : undef;
-	  my $i       = $prevstate ? ($prevstate->[1] + 1) : 0;
-		# where to start scanning
-	  my $lineage;
-
-	  # Get the linearization of the ISA tree
-	  if($prevstate) {
-		 $lineage = $prevstate->[2];
-	  } elsif(defined $it->{'ISA_CACHE'} and ref $it->{'ISA_CACHE'} ){
-		 $lineage = $it->{'ISA_CACHE'};
-	  } else {
-		 $lineage = [ &Class::Classless::X::ISA_TREE($it) ];
+			  $timeout ||= RECONNECT_TIME;
+		      }
+		  }
+	      }
+	      $disp_update |= process_recv() if length $rcvbuf;
+	      process_keys() if length $keybuf;
+	      check_integration() if $one_shot;
+	      update_screen() if $disp_update;
 	  }
-
-	  # Was:
-	  #my @lineage =
-	  #  $prevstate ? @{$prevstate->[2]}
-	  #             : &Class::Classless::X::ISA_TREE($it);
-	  # # Get the linearization of the ISA tree
-	  # # ISA-memoization happens in the ISA_TREE function.
-	  
-	  for(; $i < @$lineage; ++$i) {
-
-		 if( !defined($no_fail) and exists($lineage->[$i]{'NO_FAIL'}) ) {
-			$no_fail = ($lineage->[$i]{'NO_FAIL'} || 0);
-			# so the first NO_FAIL sets it
-		 }
-
-		 if(     ref($lineage->[$i]{'METHODS'}     || 0)  # sanity
-			&& exists($lineage->[$i]{'METHODS'}{$m})
-		 ){
-			# We found what we were after.  Now see what to do with it.
-			my $v = $lineage->[$i]{'METHODS'}{$m};
-			return $v unless defined $v and ref $v;
-
-			if(ref($v) eq 'CODE') { # normal case, I expect!
-			  # Used to have copying of the arglist here.
-			  #  But it was apparently useless, so I deleted it
-			  unshift @_, 
-				 $it,                   # $_[0]    -- target object
-				 # a NEW callstate
-				 bless([$m, $i, $lineage, $no_fail, $prevstate ? 1 : 0],
-						 'Class::Classless::CALLSTATE'
-						),                # $_[1]    -- the callstate
-			  ;
-			  goto &{ $v }; # yes, magic goto!  bimskalabim!
-			}
-			return @$v if ref($v) eq '_deref_array';
-			return $$v if ref($v) eq '_deref_scalar';
-			return $v; # fallthru
-		 }
+	  continue {
 	  }
+      }
+      end_prog();
+  }
+}
 
-	  if($m eq 'DESTROY') { # mitigate DESTROY-lookup failure at global destruction
-		 # should be impossible
-	  } else {
-		 if($no_fail || 0) {
-			return;
-		 }
-		 croak "Can't find ", $prevstate ? 'NEXT method' : 'method',
-				 " $m in ", $it->{'NAME'} || $it,
-				 " or any ancestors\n";
-	  }
-	}
+1;
 
-	###########################################################################
-	###########################################################################
-
-	sub Class::Classless::X::DESTROY {
-	  # noop
-	}
-
-	###########################################################################
-	sub Class::Classless::X::ISA_TREE {
-	  # The linearizer!
-	  # Returns the search path for $_[0], starting with $_[0]
-	  # Possibly memoized.
-
-	  # I stopped being able to understand this algorithm about five
-	  #  minutes after I wrote it.
-	  use strict;
-	  
-	  my $set_cache = 0; # flag to set the cache on the way out
-	  
-	  if(exists($_[0]{'ISA_CACHE'})) {
-		 return    @{$_[0]{'ISA_CACHE'}}
-		  if defined $_[0]{'ISA_CACHE'}
-			  and ref $_[0]{'ISA_CACHE'};
-		  
-		 # Otherwise, if exists but is not a ref, it's a signal that it should
-		 #  be replaced at the earliest, with a listref
-		 $set_cache = 1;
-	  }
-	  
-	  my $has_mi = 0; # set to 0 on the first node we see with 2 parents!
-	  # First, just figure out what's in the tree.
-	  my %last_child = ($_[0] => 1); # as if already seen
-
-	  # if $last_child{$x} == $y, that means:
-	  #  1) incidentally, we've passed the node $x before.
-	  #  2) $x is the last child of $y,
-	  #     so that means that $y can be pushed to the stack only after
-	  #      we've pushed $x to the stack.
-	  
-	  my @tree_nodes;
-	  {
-		 my $current;
-		 my @in_stack = ($_[0]);
-		 while(@in_stack) {
-			next unless
-			 defined($current = shift @in_stack)
-			 && ref($current) # sanity
-			 && ref($current->{'PARENTS'} || 0) # sanity
-			;
-
-			push @tree_nodes, $current;
-
-			$has_mi = 1 if @{$current->{'PARENTS'}} > 1;
-			unshift
-			  @in_stack,
-			  map {
-				 if(exists $last_child{$_}) { # seen before!
-					$last_child{$_} = $current;
-					(); # seen -- don't re-explore
-				 } else { # first time seen
-					$last_child{$_} = $current;
-					$_; # first time seen -- explore now
-				 }
-			  }
-			  @{$current->{'PARENTS'}}
-			;
-		 }
-
-		 # If there was no MI, then that first scan was sufficient.
-		 unless($has_mi) {
-			$_[0]{'ISA_CACHE'} = \@tree_nodes if $set_cache;
-			return @tree_nodes;
-		 }
-
-		 # Otherwise, toss this list and rescan, consulting %last_child
-	  }
-
-	  # $last_child{$parent} holds the last (or only) child of $parent
-	  # in this tree.  When walking the tree this time, only that
-	  # child is authorized to put its parent on the @in_stack.
-	  # And that's the only way a node can get added to @in_stack,
-	  # except for $_[0] (the start node) being there at the beginning.
-
-	  # Now, walk again, but this time exploring parents the LAST
-	  # time seen in the tree, not the first.
-
-	  my @out;
-	  {
-		 my $current;
-		 my @in_stack = ($_[0]);
-		 while(@in_stack) {
-			next unless defined($current = shift @in_stack) && ref($current);
-			push @out, $current; # finally.
-			unshift
-			  @in_stack,
-			  grep(
-				 (
-					defined($_) # sanity
-					&& ref($_)  # sanity
-					&& $last_child{$_} eq $current,
-				 ),
-				 # I'm lastborn (or onlyborn) of this parent
-				 # so it's OK to explore now
-				 @{$current->{'PARENTS'}}
-			  )
-			 if ref($current->{'PARENTS'} || 0) # sanity
-			;
-		 }
-
-		 unless(scalar(@out) == scalar(keys(%last_child))) {
-			# the counts should be equal
-			my %good_ones;
-			@good_ones{@out} = ();
-			croak
-			  "ISA tree for " .
-			  ($_[0]{'NAME'} || $_[0]) .
-			  " is apparently cyclic, probably involving the nodes " .
-			  nodelist( grep { ref($_) && !exists $good_ones{$_} }
-				 values(%last_child) )
-			  . "\n";
-		 }
-	  }
-	  #print "Contents of out: ", nodelist(@out), "\n";
-	  
-	  $_[0]{'ISA_CACHE'} = \@out if $set_cache;
-	  return @out;
-	}
-
-	###########################################################################
-
-	sub Class::Classless::X::can { # NOT like UNIVERSAL::can ...
-	  # return 1 if $it is capable of the method given -- otherwise 0
-	  my($it, $m) = @_[0,1];
-	  return undef unless ref $it;
-
-	  croak "undef is not a valid method name"       unless defined($m);
-	  croak "null-string is not a valid method name" unless length($m);
-
-	  foreach my $o (&Class::Classless::X::ISA_TREE($it)) {
-		 return 1
-		  if  ref($o->{'METHODS'} || 0)   # sanity
-			&& exists $o->{'METHODS'}{$m};
-	  }
-
-	  return 0;
-	}
-
-
-	###########################################################################
-
-	sub Class::Classless::X::isa { # Like UNIVERSAL::isa
-	  # Returns true for $X->isa($Y) iff $Y is $X or is an ancestor of $X.
-
-	  return unless ref($_[0]) && ref($_[1]);
-	  return scalar(grep {$_ eq $_[1]} &Class::Classless::X::ISA_TREE($_[0])); 
-	}
-
-	###########################################################################
-
-	sub nodelist { join ', ', map { "" . ($_->{'NAME'} || $_) . ""} @_ }
-
-	###########################################################################
-	###########################################################################
-	###########################################################################
-	# Methods for the CALLSTATE class.
-	#  Basically, CALLSTATE objects represent the state of the dispatcher,
-	#   frozen at the moment when the method call was dispatched to the
-	#   appropriate sub.
-	#  In the grand scheme of things, this needn't be a class -- I could
-	#   have just made the callstate data-object be a hash with documented
-	#   keys, or a closure that responded to only certain parameters,
-	#   etc.  But I like it this way.  And I like being able to say simply
-	#   $cs->NEXT
-	#  Yes, these are a bit cryptically written, but it's behoovy for
-	#   them to be very very efficient.
-
-	@Class::Classless::ISA = ();
-	sub Class::Classless::CALLSTATE::found_name { $_[0][0] }
-		#  the method name called and found
-	sub Class::Classless::CALLSTATE::found_depth { $_[0][1] }
-		#  my depth in the lineage
-	sub Class::Classless::CALLSTATE::lineage { @{$_[0][2]} }
-		#  my lineage
-	sub Class::Classless::CALLSTATE::target { $_[0][2][  0          ] }
-		#  the object that's the target -- same as $_[0] for the method called
-	sub Class::Classless::CALLSTATE::home   { $_[0][2][  $_[0][1]   ] }
-		#  the object I was found in
-	sub Class::Classless::CALLSTATE::sub_found {
-	  $_[0][2][  $_[0][1]   ]{'METHODS'}{ $_[0][0] }
-	}  #  the routine called
-
-	sub Class::Classless::CALLSTATE::no_fail          {  $_[0][3]         }
-	sub Class::Classless::CALLSTATE::set_no_fail_true {  $_[0][3] = 1     }
-	sub Class::Classless::CALLSTATE::set_fail_false   {  $_[0][3] = 0     }
-	sub Class::Classless::CALLSTATE::set_fail_undef   {  $_[0][3] = undef }
-
-	sub Class::Classless::CALLSTATE::via_next         {  $_[0][4] }
-
-	sub Class::Classless::CALLSTATE::NEXT {
-	  #croak "NEXT needs at least one argument: \$cs->NEXT('method'...)"
-	  # unless @_ > 1;
-		# no longer true.
-	  my $cs = shift @_;
-	  my $m  = shift @_; # which may be (or come out) undef...
-	  $m = $cs->[0] unless defined $m; #  the method name called and found
-
-	  ($cs->[2][0])->$m(
-		 bless( \$cs, 'Class::Classless::CALLSTATE::SHIMMY' ),
-		 @_
-	  );
-	}
-
-	###########################################################################
-};
-#}}}
-
-###############
-###
+# Changelog
+# =========
+# 1.4
+# - fix line wrapping in some themes, reported by justanotherbody
+# - fix named window key detection, reported by madduck
+# - make title (in viewer and shared_sbar) configurable
 #
-# {{{ *** C h a n g e l o g ***
+# 1.3 - workaround for irssi issue #572
+# 1.2 - new format to choose abbreviation character
+# 1.1 - infinite loop on shortening certain window names reported by Kalan
 #
-# 0.6ca
+# 1.0
+# - new awl_viewer_launch setting and an array of related settings
+# - fixed regression bug /exec -interactive
+# - fixed some warnings in perl 5.10 reported by kl3
+# - workaround for crash due to infinite recursion in irssi's Perl
+#   error handling
+#
+# 0.9
+# - fix endless loop in awin detection code!
+# - correct colour swap in awl_viewer
+# - fix passing of alternate socket path to the viewer
+# - potential undefinedness in mouse refnum hinted at by Canopus
+# - fixed regression bug /exec -interactive
+# - add case-insensitive modifier to awl_sort
+# - run custom_xform on awl_prefer_name also
+# - avoid inconsistent active window state after awin detection
+#   reported by ss
+# - revert %9-hack in the viewer prompted by discussion with pierrot
+# - fix new warning in perl 5.22
+#
+# 0.8
+# - replace fifo mode with external viewer script
+# - remove bundled cpan modules
+# - work around bogus irssi warning
+# - improve mouse support
+# - workaround for broken cumode in irssi 0.8.15
+# - fix handling of non-meta windows (uninitialized warning)
+# - add 256 colour support, strip true colour codes
+# - fix totally bogus $N padding reported by Ed S.
+# - make /window goto #name mappings work but ignore non-existant ones
+# - improve incomplete reads reported by bcode
+# - fix single % in awl_viewer reported by bcode
+# - add support for key bindings by nike and ferret
+# - coerce utf8 key binds
+# - add settings: custom_xform, last_line_shade, hide_name_data
+# - abbreviations were broken in some cases
+# - fix some misuse of / as cmdchar in mouse script reported by bcode
+# - add shared status bar mode
+# - ${type} variables for custom_xform setting
+# - crash if custom_xform had runtime error
+# - update sorting documentation
+# - fix odd case in size calculation noted by lasers
+# - add missing font styles to the viewer reported by ishanyx
+# - add italic
+#
+# 0.7g
+# - remove screen support and replace it with fifo support
+# - add double-width support to the shortener
+# - correct documentation regarding $T vs. display_header
+# - add missing refresh for window item changed (thanks vague)
+# - add visible windows
+# - add exemptions for active window
+# - workaround for hiding the window changes from trackbar
+# - hack to force 16colours in screen mode
+# - remember last window (reported by earthnative)
+# - wrong window focus on new queries (reported by emsid)
+# - dataloss bug on trying to remember last window
+#
+# 0.6d+
+# - add support for network headers
+# - fixed regression bug /exec -interactive
+#
+# 0.6ca+
 # - add screen support (from nicklist.pl)
-# - rename to adv_windowlist.pl (advanced window list) since it isn't just a
-#   window list status bar (wlstat) anymore
 # - names can now have a max length and window names can be used
-# - fixed a bug with block display in screen mode and statusbar mode
+# - fixed a bug with block display in screen mode and status bar mode
 # - added space handling to ir_fe and removed it again
 # - now handling formats on my own
+# - started to work on $tag display
 # - added warning about missing sb_act_none abstract leading to
 # - display*active settings
 # - added warning about the bug in awl_display_(no)key_active settings
+# - mouse hack
 #
 # 0.5d
-# - add setting to also hide the last statusbar if empty (awl_all_disable)
+# - add setting to also hide the last status bar if empty (awl_all_disable)
 # - reverted to old utf8 code to also calculate broken utf8 length correctly
-# - simplified dealing with statusbars in wlreset
+# - simplified dealing with status bars in wlreset
 # - added a little tweak for the renamed term_type somewhere after Irssi 0.8.9
 # - fixed bug in handling channel #$$
-# - typo on line 200 spotted by f0rked
 # - reset background colour at the beginning of an entry
-# 
+#
 # 0.4d
-# - fixed order of disabling statusbars
+# - fixed order of disabling status bars
 # - several attempts at special chars, without any real success
 #   and much more weird new bugs caused by this
 # - setting to specify sort order
 # - reduced timeout values
-# - added awl_hide_data for Geert Hauwaerts ( geert@irssi.org ) :)
+# - added awl_hide_data
 # - make it so the dynamic sub is actually deleted
 # - fix a bug with removing of the last separator
 # - take into consideration parse_special
-# 
+#
 # 0.3b
-# - automatically kill old statusbars
+# - automatically kill old status bars
 # - reset on /reload
 # - position/placement settings
 #
 # 0.2
 # - automated retrieval of key bindings (thanks grep.pl authors)
-# - improved removing of statusbars
+# - improved removing of status bars
 # - got rid of status chop
 #
 # 0.1
-# - rewritten to suit my needs
-# - based on chanact 0.5.5
-# }}}
-# vim: se fdm=marker tw=80 :
+# - Based on chanact.pl which was apparently based on lightbar.c and
+#   nicklist.pl with various other ideas from random scripts.
