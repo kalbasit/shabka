@@ -601,6 +601,14 @@ fi
 # Profile support
 #####################################################################
 
+# load all the profiles
+for p in ${HOME}/.zsh/profiles/*.zsh; do
+  source "${p}"
+  pload
+
+  unfunction pload pactivate pdeactivate
+done
+
 # If the ACTIVE_PROFILE is set, source the profile file and activate the profile
 if [[ -n "${ACTIVE_PROFILE}" ]]; then
   source "${HOME}/.zsh/profiles/${ACTIVE_PROFILE}.zsh"
