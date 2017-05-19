@@ -148,6 +148,17 @@ mode "$mode_apps" {
 }
 bindsym $mod+a mode "$mode_apps"
 
+# System commands
+set $mode_system System: Backup to (m)adea
+mode "$mode_system" {
+  bindsym m exec gksu systemctl start snap-sync@e6437994-dced-4441-a3af-344694bb7f37.service, mode "default"
+
+  # back to normal: Enter or Escape
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+}
+bindsym $mod+s mode "$mode_system"
+
 # resize window (you can also use the mouse for that)
 mode "resize" {
   # These bindings trigger as soon as you enter the resize mode
