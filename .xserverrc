@@ -1,2 +1,6 @@
 #!/bin/sh
+
+# start the server on the same VT it started from. This will prevent someone
+# from <C-A-F1> to switch to the starting console and kill X to gain access to
+# the system.
 exec /usr/bin/X -nolisten tcp "$@" vt$XDG_VTNR
