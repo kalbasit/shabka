@@ -283,7 +283,7 @@ for_window [class="Chromium" instance="crx_jjbjdleccaiklfpcblgekgmjadjdclkp"] mo
 bindsym $mod+Shift+minus move scratchpad
 
 # Make the currently focused window a scratchpad
-bindsym $mod+minus scratchpad show
+bindsym $mod+$alt+minus scratchpad show
 
 # Show Whatsapp scratchpad
 bindsym $alt+w [class="^whats-app-nativefier*"] scratchpad show
