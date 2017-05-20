@@ -264,15 +264,19 @@ workspace slack output DP1
 ## Scratchpad support
 
 # Move IRC to scratchpad
+for_window [class="^Termite" title="^irc"] sticky enable
 for_window [class="^Termite" title="^irc"] move scratchpad
 
 # Move vit to scratchpad
+for_window [class="^Termite" title="^vit"] sticky enable
 for_window [class="^Termite" title="^vit"] move scratchpad
 
 # Move Whatsapp to scratchpad
+for_window [class="^whats-app-nativefier*"] sticky enable
 for_window [class="^whats-app-nativefier*"] move scratchpad
 
 # Move Pulse to the scratchpad
+for_window [class="Chromium" instance="crx_jjbjdleccaiklfpcblgekgmjadjdclkp"] sticky enable
 for_window [class="Chromium" instance="crx_jjbjdleccaiklfpcblgekgmjadjdclkp"] move scratchpad
 
 # Make the currently focused window a scratchpad
