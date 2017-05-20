@@ -1,0 +1,8 @@
+[Unit]
+Description=Gwall
+
+[Service]
+ExecStart=/home/kalbasit/.bin/Gwall
+
+[Install]
+WantedBy=default.target
