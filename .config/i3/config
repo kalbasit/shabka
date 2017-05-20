@@ -275,6 +275,9 @@ for_window [class="^whats-app-nativefier*"] move scratchpad
 # Make the currently focused window a scratchpad
 bindsym $mod+Shift+minus move scratchpad
 
+# Make the currently focused window a scratchpad
+bindsym $mod+minus scratchpad show
+
 # Show Whatsapp scratchpad
 bindsym $alt+w [class="^whats-app-nativefier*"] scratchpad show
 
