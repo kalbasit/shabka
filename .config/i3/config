@@ -133,7 +133,7 @@ bindsym Shift+XF86MonBrightnessDown exec --no-startup-id "xbacklight -dec 1
 bindsym XF86PowerOff exec --no-startup-id "systemctl suspend"
 
 # Applications
-set $mode_apps Launch: Chromium (p)ersonal, Chromium p(u)blica, (c)harles, (s)lack, (i)rc, (w)hatsapp, (v)it
+set $mode_apps Launch: Chromium (p)ersonal, Chromium p(u)blica, (c)harles, (s)lack, (i)rc, (w)hatsapp, (v)it, (t)eamviewr
 mode "$mode_apps" {
   bindsym p exec relay-browser --profile personal, mode "default"
   bindsym u exec relay-browser --profile publica, mode "default"
@@ -142,6 +142,7 @@ mode "$mode_apps" {
   bindsym i exec termite --title=irc --exec="tmx -L irc irc", mode "default"
   bindsym w exec whatsapp-web-desktop, mode "default"
   bindsym v exec termite --title=vit --exec="vit", mode "default"
+  bindsym t exec myteamviewer, mode "default"
 
   # back to normal: Enter or Escape
   bindsym Return mode "default"
