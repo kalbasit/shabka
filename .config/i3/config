@@ -272,6 +272,9 @@ for_window [class="^Termite" title="^vit"] move scratchpad
 # Move Whatsapp to scratchpad
 for_window [class="^whats-app-nativefier*"] move scratchpad
 
+# Move Pulse to the scratchpad
+for_window [class="Chromium" instance="crx_jjbjdleccaiklfpcblgekgmjadjdclkp"] move scratchpad
+
 # Make the currently focused window a scratchpad
 bindsym $mod+Shift+minus move scratchpad
 
@@ -286,6 +289,8 @@ bindsym $alt+i [class="^Termite" title="^irc"] scratchpad show
 
 # Vit scatchpad
 bindsym $alt+v [class="^Termite" title="^vit"] scratchpad show
+
+bindsym $alt+p [class="Chromium" instance="crx_jjbjdleccaiklfpcblgekgmjadjdclkp"] scratchpad show
 
 # finally, start a terminal in the personal workspace and all expected scratchpads
 exec termite --title=irc --exec="tmx -L irc irc"
