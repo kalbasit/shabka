@@ -215,20 +215,6 @@ mode "$mod+$alt_display" {
 }
 bindsym $mod+$alt+d mode "$mod+$alt_display"
 
-# Management of Proxy
-# TODO(T::cc441562-34f7-4b38-882a-0a28eda6614b): remove this in favor of
-# SurfingKeys control of the proxy
-set $mod+$alt_proxy (c)harles, (d)irect
-mode "$mod+$alt_proxy" {
-  bindsym d exec $nosid ln -sf /home/kalbasit/.dotfiles/.proxy-direct.pac /home/kalbasit/.proxy.pac && notify-send 'Charles proxy disabled', mode "default"
-  bindsym c exec $nosid ln -sf /home/kalbasit/.dotfiles/.proxy-charles.pac /home/kalbasit/.proxy.pac && notify-send 'Charles proxy enabled', mode "default"
-
-  # back to normal: Enter or Escape
-  bindsym Return mode "default"
-  bindsym Escape mode "default"
-}
-bindsym $mod+$alt+x mode "$mod+$alt_proxy"
-
 # Keyboard layout selection
 set $mod+$alt_keyboard (q)werty, (c)olemak
 mode "$mod+$alt_keyboard" {

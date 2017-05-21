@@ -1,8 +1,19 @@
 //////////////////////////////////////
 // Settings
 
+// hint characters for Colemak
 Hints.characters = "arstneio";
+
+// turn off smoothscroll
 settings.smoothScroll = false;
+
+// proxy settings, set it to Charles proxy but unused by default.
+// setProxy 127.0.0.1:8888;
+// setProxyMode direct;
+RUNTIME('updateProxy', {
+  mode: "direct",
+  proxy: "127.0.0.1:8888"
+});
 
 // END Settings
 //////////////////////////////////////
