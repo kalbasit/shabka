@@ -181,13 +181,12 @@ inside_tmux="$( test -n "${TMUX}" && echo true || echo false )"
 # remove the TMUX from the environment to force creating of another session
 unset TMUX
 
-# declare the projects which is an associated array. We then use build_projects
-# to build the array
-typeset -a projects
-build_projects
-
 # are selecting the session?
 if isTrue "${select_session}"; then
+    # declare the projects which is an associated array. We then use build_projects
+    # to build the array
+    typeset -a projects
+    build_projects
     # select the session
     selected_sess="$( for i in ${projects[@]}; do echo "${i}"; done | fzf )"
     if [[ -z "${selected_sess}" ]]; then
