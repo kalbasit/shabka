@@ -139,7 +139,7 @@ Plug 'tpope/vim-eunuch', { 'on': ['Remove', 'Unlink', 'Move', 'Rename', 'Chmod',
 " is a way to do it
 " (https://github.com/junegunn/vim-plug/issues/525#issuecomment-256169881),
 " however, I chose to keep it simple
-Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-fugitive' | Plug 'tpope/vim-rhubarb'
 
 " surround
 Plug 'tpope/vim-surround' | Plug 'tpope/vim-repeat'
