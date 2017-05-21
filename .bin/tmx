@@ -37,6 +37,7 @@ set -e
 #
 ####
 
+####
 # Bootstrap{{{
 bootstrap="$(dirname "${0}")/.bootstrap"
 if [ -f "${bootstrap}" ]; then
@@ -48,9 +49,10 @@ else
 fi
 unset bootstrap
 #}}}
+####
 
 ####
-# Functions
+# Functions{{{
 
 # If you want to define a specific help for this script
 function help()
@@ -93,11 +95,11 @@ function build_projects() {
     done
 }
 
-#
+#}}}
 ####
 
 ####
-# Options
+# Options{{{
 
 confirm_vim_startup=false
 kill_pane=false
@@ -153,11 +155,11 @@ while [[ $# -ge 1 ]]; do
     esac
 done
 
-#
+#}}}
 ####
 
 ####
-# Main
+# Main{{{
 
 # start with an empty sess and an empty profile
 selected_sess=
@@ -258,5 +260,5 @@ else
     tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" attach -t "${sess}"
 fi
 
-#
+#}}}
 ####
