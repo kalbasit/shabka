@@ -227,30 +227,24 @@ if ! tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" list-ses
     # start a new shell on window 1
     tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" new-window -t "${sess}:1"
 
-    # remove the first window as it will be replaced the main app for the session
+    # re-create the first window
     tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" kill-window -t "${sess}:0"
+    tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" new-window -t "${sess}:0"
 
+    # start the main program
     if [[ "${sess}" = "mail" ]]; then
-        TMUX= tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" new-session -d -s "${sess}" \; \
-            new-window \; \
-            kill-window -t :0 \; \
-            new-window -t :0 'zsh -i -c emacs' \;
+        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${sess}:0" 'clear; emacs' Enter
     elif [[ "${sess}" = "irc" ]]; then
-        TMUX= tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" new-session -d -s "${sess}" \; \
-            new-window \; \
-            kill-window -t :0 \; \
-            new-window -t :0 'zsh -i -c irssi' \;
+        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${sess}:0" 'clear; irssi' Enter
     else
-
         # start vim
         if isTrue "${confirm_vim_startup}"; then
-            tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" new-window -t "${sess}:0" 'zsh -i -c "echo \"Press Enter to start Vim \" && read && /usr/bin/vim"'
+            tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${sess}:0" 'clear; echo "Press Enter to start Vim "; read; vim' Enter
         else
-            tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" new-window -t "${sess}:0" 'zsh -i -c /usr/bin/vim'
+            tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${sess}:0" 'clear; vim' Enter
         fi
     fi
 fi
-
 
 # attach the session now
 if isTrue "${inside_tmux}"; then
