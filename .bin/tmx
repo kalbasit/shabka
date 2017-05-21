@@ -67,7 +67,7 @@ function build_projects() {
     local dir=
     local i=
     local profile=
-    local rc="${HOME}/.swrc"
+    local rc="${HOME}/.tmxrc"
     local rc_length=
 
     # compute the length of the rc file
