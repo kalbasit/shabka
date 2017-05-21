@@ -602,13 +602,13 @@ for p in ${HOME}/.zsh/profiles/*.zsh; do
   source "${p}"
   pload
 
-  unfunction pload pactivate pdeactivate
+  unfunction pcode pload pactivate pdeactivate
 done
 
 # If the ACTIVE_PROFILE is set, source the profile file and activate the profile
-if [[ -n "${ACTIVE_PROFILE}" ]]; then
+if [[ -n "${ACTIVE_PROFILE}" ]] && [[ -r "${HOME}/.zsh/profiles/${ACTIVE_PROFILE}.zsh" ]]; then
   source "${HOME}/.zsh/profiles/${ACTIVE_PROFILE}.zsh"
   pactivate
 
-  unfunction pload pactivate pdeactivate
+  unfunction pcode pload pactivate pdeactivate
 fi
