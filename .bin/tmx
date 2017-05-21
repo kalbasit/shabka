@@ -63,6 +63,7 @@ function help()
     print_info "${log_depth}" "\t -k, --kill-pane           - kill the pane after the session has been switched; only relevant with --select-session and within TMUX"
     print_info "${log_depth}" "\t -L, --socket-name         - use a different socket than the default"
     print_info "${log_depth}" "\t -c, --confirm-vim-start   - confirm before starting Vim, this is essentially a performance improvement"
+    print_info "${log_depth}" "\t -p, --profile             - the profile to use. This is only relevant if a new session is going to be started"
 }
 
 function build_projects() {
@@ -106,6 +107,8 @@ kill_pane=false
 log_depth=0
 select_session=false
 tmux_socket_name=default
+profile=
+sess=
 
 while [[ $# -ge 1 ]]; do
     case "${1}" in
@@ -143,9 +146,19 @@ while [[ $# -ge 1 ]]; do
             confirm_vim_startup=true
             shift
             ;;
+        -p|--profile)
+            profile="${2}"
+            if [[ -z "${profile}" ]]; then
+                print_error "${log_depth}" "--profile requires an argument"
+                help
+                exit 1
+            fi
+            shift 2
+            ;;
         *)
             # Make sure we have only one argument left
             if [[ -n "${2}" ]]; then
+                print_error "${log_depth}" "can only have one argument, the path to start a session in"
                 help
                 exit 1
             fi
@@ -163,8 +176,6 @@ done
 
 # start with an empty sess and an empty profile
 selected_sess=
-sess=
-profile=
 inside_tmux="$( test -n "${TMUX}" && echo true || echo false )"
 
 # remove the TMUX from the environment to force creating of another session
