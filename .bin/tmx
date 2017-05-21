@@ -89,14 +89,7 @@ function build_projects() {
             continue
         fi
         # add this project to the hash
-        projects[${dir}]="${profile}"
-    done
-}
-
-# get the list of projects without the profile
-function sessions_for_projects() {
-    for k in "${(@k)projects}"; do
-        echo "${k}"
+        projects+=( "${profile}:${dir}" )
     done
 }
 
@@ -167,6 +160,7 @@ done
 # Main
 
 # start with an empty sess and an empty profile
+selected_sess=
 sess=
 profile=
 inside_tmux="$( test -n "${TMUX}" && echo true || echo false )"
@@ -176,21 +170,20 @@ unset TMUX
 
 # declare the projects which is an associated array. We then use build_projects
 # to build the array
-typeset -A projects
+typeset -a projects
 build_projects
 
 # are selecting the session?
 if isTrue "${select_session}"; then
     # select the session
-    sess="$( sessions_for_projects | fzf )"
-    debug "sess=${sess}"
-    # make sure a session was selected
-    if [[ -z "${sess}" ]]; then
+    selected_sess="$( for i in ${projects[@]}; do echo "${i}"; done | fzf )"
+    if [[ -z "${selected_sess}" ]]; then
         print_error 0 "no session were selected"
         exit 1
     fi
-    # compute the profile from the session
-    profile="${projects[$sess]}"
+    profile="$(echo "${selected_sess}" | cut -d: -f1)"
+    sess="$(echo "${selected_sess}" | cut -d: -f2)"
+    debug "sess=${sess}"
     debug "profile=${profile}"
 fi
 
