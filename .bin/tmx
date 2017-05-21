@@ -219,12 +219,7 @@ debug "sess=${sess}"
 if [[ -d "${sess}" ]]; then
     # go inside the folder
     cd "${sess}"
-    # set the session back to empty, it will be re-calculated in the next block
-    sess=
-fi
-
-# if the session name was not given, generate one from the path
-if [ "x${sess}" = "x" ]; then
+    # compute the session name from the path, remove HOME/GOPATH
     sess="${PWD##$GOPATH/src/}"
 fi
 
