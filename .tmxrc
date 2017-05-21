@@ -121,6 +121,10 @@
     },
     {
         "profile": "personal",
+        "dir": "$GOPATH/src/github.com/kalbasit/shellder"
+    },
+    {
+        "profile": "personal",
         "dir": "$GOPATH/src/github.com/kalbasit/terraform"
     },
     {
