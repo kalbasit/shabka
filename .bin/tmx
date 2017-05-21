@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 #
 #   vim:ft=sh:fenc=UTF-8:ts=4:sts=4:sw=4:expandtab:foldmethod=marker:foldlevel=0:
 #
@@ -57,39 +57,52 @@ function help()
 {
     print_info "${log_depth}" "USAGE: tmx [-l|-d] <session_name|folder>"
     print_info "${log_depth}" "\t -h, --help                - this message"
-    print_info "${log_depth}" "\t -l, --list                - list current sessions"
     print_info "${log_depth}" "\t -s, --select-session      - fuzzy-select a session"
-    print_info "${log_depth}" "\t -k, --kill-pane           - kill the pane after the session has been switched; only relevant with --select-session"
-    print_info "${log_depth}" "\t -n, --new                 - create a new session only (do not attach existing session)"
+    print_info "${log_depth}" "\t -k, --kill-pane           - kill the pane after the session has been switched; only relevant with --select-session and within TMUX"
     print_info "${log_depth}" "\t -L, --socket-name         - use a different socket than the default"
-    print_info "${log_depth}" "\t -d, --start-detached      - start the session but do not attach it. This is ignored if the session already exists"
     print_info "${log_depth}" "\t -c, --confirm-vim-start   - confirm before starting Vim, this is essentially a performance improvement"
-    print_info "${log_depth}" "\t -d, --detach              - start a new session detached, useful for starting multiple sessions from a script"
 }
 
-function pushd() {
-    command pushd "$@" > /dev/null
-}
+function build_projects() {
+    local dir=
+    local i=
+    local profile=
+    local rc="${HOME}/.tmxrc"
+    local rc_length=
 
-function popd() {
-    command popd > /dev/null
+    # compute the length of the rc file
+    rc_length="$( jq length "${rc}" )"
+    debug "rc_length=${rc_length}"
+    for (( i = 0; i < rc_length; i++)); do
+        # extract the profile for this project
+        profile="$( jq -r ".[${i}] .profile" "${rc}" )"
+        if [[ -z "${profile}" ]]; then
+            print_error 0 "profile cannot be empty, this project will be ignored"
+            print_error 1 "$(jq -r .[${i}] "${rc}" )"
+            continue
+        fi
+        # extract the folder for this project
+        dir="$( jq -r ".[${i}] .dir" "${rc}" )"
+        if [[ -z "${dir}" ]]; then
+            print_error 0 "dir cannot be empty, this project will be ignored"
+            print_error 1 "$(jq -r .[${i}] "${rc}" )"
+            continue
+        fi
+        # add this project to the hash
+        projects+=( "${profile}:${dir}" )
+    done
 }
 
 #
 ####
 
 ####
-# Main
+# Options
 
 confirm_vim_startup=false
 kill_pane=false
-list_sessions=false
 log_depth=0
-new_session_only=false
 select_session=false
-sess=
-should_popd=false
-tmux_new_session_extras=()
 tmux_socket_name=default
 
 while [[ $# -ge 1 ]]; do
@@ -98,24 +111,12 @@ while [[ $# -ge 1 ]]; do
             help
             exit 0
             ;;
-        -l|--list)
-            list_sessions=true
-            shift
-            ;;
         -k|--kill-pane)
             kill_pane=true
             shift
             ;;
         -s|--select-session)
             select_session=true
-            shift
-            ;;
-        -n|--new)
-            new_session_only=true
-            shift
-            ;;
-        -d|--start-detached)
-            tmux_new_session_extras=(${tmux_new_session_extras[@]} "-d")
             shift
             ;;
         -L|--socket-name)
@@ -152,41 +153,56 @@ while [[ $# -ge 1 ]]; do
     esac
 done
 
-# are we listing the sessions?
-if isTrue "${list_sessions}"; then
-    tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" ls
-    exit 0
+#
+####
 
-fi
+####
+# Main
+
+# start with an empty sess and an empty profile
+selected_sess=
+sess=
+profile=
+inside_tmux="$( test -n "${TMUX}" && echo true || echo false )"
+
+# remove the TMUX from the environment to force creating of another session
+unset TMUX
+
+# declare the projects which is an associated array. We then use build_projects
+# to build the array
+typeset -a projects
+build_projects
 
 # are selecting the session?
 if isTrue "${select_session}"; then
     # select the session
-    sess="$( tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" ls -F '#S' | fzf )"
-    # make sure a session was selected
-    if [[ -z "${sess}" ]]; then
+    selected_sess="$( for i in ${projects[@]}; do echo "${i}"; done | fzf )"
+    if [[ -z "${selected_sess}" ]]; then
         print_error 0 "no session were selected"
         exit 1
     fi
-    # attach or switch to the session
-    if [[ -n "${TMUX}" ]]; then
-        # switch to the selected session
-        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" switch-client -t "${sess}"
-        # kill the current pane if requested
-        if isTrue "${kill_pane}"; then
-            tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" kill-pane
-        fi
-    else
-        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" attach -t "${sess}"
-    fi
-    exit 0
+    profile="$(echo "${selected_sess}" | cut -d: -f1)"
+    sess="$(echo "${selected_sess}" | cut -d: -f2)"
+    debug "sess=${sess}"
+    debug "profile=${profile}"
 fi
+
+# if we have selected a profile, source it so we can execute the prepare
+if [[ -n "${profile}" ]] && [[ -r "${HOME}/.zsh/profiles/${profile}.zsh" ]]; then
+    source "${HOME}/.zsh/profiles/${profile}.zsh"
+    pcode
+fi
+
+# expand any variable stored in the sess name
+sess="$( eval "echo $sess" )"
+debug "sess=${sess}"
 
 # if the sess is an actual directory, go there first and set the sess to
 # empty to generate the session name from the path
 if [[ -d "${sess}" ]]; then
-    pushd "${sess}"
-    should_popd=true
+    # go inside the folder
+    cd "${sess}"
+    # set the session back to empty, it will be re-calculated in the next block
     sess=
 fi
 
@@ -199,44 +215,53 @@ fi
 # https://github.com/tmux/tmux/blob/76688d204071b76fd3388e46e944e4b917c09625/session.c#L232
 sess="$(echo "${sess}" | sed -e 's:\.:_:g' -e 's#:#_#g')"
 
-# start a tmux session with the first window being Vim. Conserve the
-# environment variables needed for profiling.
-if tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" list-sessions -F '#{session_name}' | grep -q -e "^${sess}\$"; then
-    if isTrue "${new_session_only}"; then
-        exit 0
-    fi
-    tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" attach -t "${sess}"
-elif [[ "${sess}" = "mail" ]]; then
-    tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" new-session "${tmux_new_session_extras[@]}" -s "${sess}" \; \
-        new-window \; \
-        kill-window -t :0 \; \
-        new-window -t :0 'zsh -i -c emacs' \;
-elif [[ "${sess}" = "irc" ]]; then
-    tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" new-session "${tmux_new_session_extras[@]}" -s "${sess}" \; \
-        new-window \; \
-        kill-window -t :0 \; \
-        new-window -t :0 'zsh -i -c irssi' \;
-else
-    if isTrue "${confirm_vim_startup}"; then
-        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" new-session "${tmux_new_session_extras[@]}" -s "${sess}" \; \
-            set-environment ACTIVE_PROFILE "${ACTIVE_PROFILE}" \; \
-            set-environment SSH_AGENT_NAME "${ACTIVE_PROFILE}" \; \
+# start a session if one does not exist for it yet
+if ! tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" list-sessions -F '#{session_name}' | grep -q -e "^${sess}\$"; then
+    # start the new tmux session
+    tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" new-session -d -s "${sess}"
+
+    # add the ACTIVE_PROFILE to the environment of the session
+    tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" set-environment -t "${sess}" ACTIVE_PROFILE "${profile}"
+    tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" set-environment -t "${sess}" SSH_AGENT_NAME "${profile}"
+
+    # start a new shell on window 1
+    tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" new-window -t "${sess}:1"
+
+    # remove the first window as it will be replaced the main app for the session
+    tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" kill-window -t "${sess}:0"
+
+    if [[ "${sess}" = "mail" ]]; then
+        TMUX= tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" new-session -d -s "${sess}" \; \
             new-window \; \
             kill-window -t :0 \; \
-            new-window -t :0 'zsh -i -c "echo \"Press Enter to start Vim \" && read && /usr/bin/vim"' \;
+            new-window -t :0 'zsh -i -c emacs' \;
+    elif [[ "${sess}" = "irc" ]]; then
+        TMUX= tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" new-session -d -s "${sess}" \; \
+            new-window \; \
+            kill-window -t :0 \; \
+            new-window -t :0 'zsh -i -c irssi' \;
     else
-        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" new-session "${tmux_new_session_extras[@]}" -s "${sess}" \; \
-            set-environment ACTIVE_PROFILE "${ACTIVE_PROFILE}" \; \
-            set-environment SSH_AGENT_NAME "${ACTIVE_PROFILE}" \; \
-            new-window \; \
-            kill-window -t :0 \; \
-            new-window -t :0 'zsh -i -c /usr/bin/vim' \;
+
+        # start vim
+        if isTrue "${confirm_vim_startup}"; then
+            tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" new-window -t "${sess}:0" 'zsh -i -c "echo \"Press Enter to start Vim \" && read && /usr/bin/vim"'
+        else
+            tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" new-window -t "${sess}:0" 'zsh -i -c /usr/bin/vim'
+        fi
     fi
 fi
 
-# if we did change directory, we must change the directory back
-if isTrue "${should_popd}"; then
-    popd
+
+# attach the session now
+if isTrue "${inside_tmux}"; then
+    # switch to the selected session
+    tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" switch-client -t "${sess}"
+    # kill the current pane if requested
+    if isTrue "${kill_pane}"; then
+        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" kill-pane
+    fi
+else
+    tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" attach -t "${sess}"
 fi
 
 #
