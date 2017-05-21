@@ -31,7 +31,6 @@ Plug 'sheerun/vim-polyglot'
 Plug 'hashivim/vim-terraform'
 " Go
 Plug 'fatih/vim-go', { 'for': 'go' } | Plug 'majutsushi/tagbar'
-Plug 'garyburd/go-explorer', { 'for': 'go' }
 " CSV
 Plug 'chrisbra/csv.vim', { 'for': 'csv' }
 " Ruby/Rails
@@ -40,21 +39,16 @@ Plug 'tpope/vim-rails', { 'for': 'ruby' }
 Plug 'motus/pig.vim', { 'for': 'pig' }
 " HTML
 Plug 'mattn/emmet-vim', { 'for': ['html', 'css'] }
-" Vimperator
-Plug 'vimperator/vimperator.vim'
 
 """"""""""""""""
 " Colorschemes "
 """"""""""""""""
 Plug 'altercation/vim-colors-solarized'
 Plug 'junegunn/seoul256.vim'
-Plug 'fatih/molokai'
-Plug 'vim-scripts/summerfruit256.vim'
-Plug 'nanotech/jellybeans.vim'
 
-"""""""""
-" Tools "
-"""""""""
+""""""""""""""""""""""""""
+" AutoComplete & Snippet "
+""""""""""""""""""""""""""
 
 " YouCompleteMe
 " Install the plugin separately for nvim and vim.
@@ -65,56 +59,107 @@ else
 endif
 autocmd! User YouCompleteMe if !has('vim_starting') | call youcompleteme#Enable() | endif
 
+" ultisnips is triggered with <tab>
+Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+
+" Supertab is used to setup YCM and Ultisnips together
+Plug 'ervandew/supertab'
+
+"""""""""""""""
+" Look & Feel "
+"""""""""""""""
+
+" airline is a status bar
+Plug 'bling/vim-airline'
+
+" fzf for fuzzy-search a file
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all --no-update-rc' } | Plug 'junegunn/fzf.vim'
+
+"""""""""""""
+" Externals "
+"""""""""""""
+
 if executable("task")
   Plug 'blindFS/vim-taskwarrior'
 endif
 if executable("curl")
   Plug 'mattn/webapi-vim' | Plug 'mattn/gist-vim', { 'on': 'Gist' }
 endif
+
+" load editorconfig if available
+Plug 'editorconfig/editorconfig-vim'
+
+"""""""""""
+" Editing "
+"""""""""""
+
 if has("python")
   Plug 'sjl/gundo.vim', { 'on': 'GundoToggle' }
 endif
-if has("ruby")
-  Plug 'felipec/notmuch-vim'
-endif
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
-Plug 'bling/vim-airline'
-Plug 'tpope/vim-obsession'
-Plug 'bronson/vim-trailing-whitespace'
+
+" show trailing whitespace in red. It also strips whitespace on save (See
+" settings for it below). To disable it, use :ToggleStripWhitespaceOnSave and
+" to strip manually do :StripWhiteSpace
+Plug 'ntpeters/vim-better-whitespace'
+
+" show git status in the sign column next to every line
 Plug 'mhinz/vim-signify'
-Plug 'christoomey/vim-tmux-navigator'
-Plug 'editorconfig/editorconfig-vim'
-Plug 'ervandew/screen', { 'on': 'ScreenShell' }
-Plug 'ervandew/supertab'
+
+" TODO: are you being used?
+" Plug 'christoomey/vim-tmux-navigator'
+
+" auto insert the closing pair
 Plug 'jiangmiao/auto-pairs'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all --no-update-rc' } | Plug 'junegunn/fzf.vim'
+
+" align visual blocks
 Plug 'junegunn/vim-easy-align', { 'on': ['<Plug>(EasyAlign)', 'EasyAlign'] }
-Plug 'junegunn/vim-github-dashboard', { 'on': ['GHDashboard', 'GHActivity']      }
+
+" sort visual block
 Plug 'navicore/vissort.vim', { 'on': 'Vissort' }
+
+" file browesr
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+
+" check file for errors
 Plug 'scrooloose/syntastic'
+
+" multiple cursors
 Plug 'terryma/vim-multiple-cursors'
+
+" auto insert the end of a block, for example in Ruby tying `do<CR>` will
+" automatically insert `end` on the third line
 Plug 'tpope/vim-endwise'
+
+" Commands for file management and editing
 Plug 'tpope/vim-eunuch', { 'on': ['Remove', 'Unlink', 'Move', 'Rename', 'Chmod', 'Mkdir', 'Find', 'Locate', 'Wall', 'SudoWrite', 'SudoEdit'] }
-" vim-fugitive cannot be loaded lazily
+
+" Git!
+" NOTE: vim-fugitive cannot be loaded lazily
 " https://github.com/junegunn/vim-plug/issues/164#issuecomment-73621232 There
 " is a way to do it
 " (https://github.com/junegunn/vim-plug/issues/525#issuecomment-256169881),
 " however, I chose to keep it simple
 Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-surround'
-" disable unimpaired as there is no way to disable mappings and it's messing
-" up with my colemak mappins. (mapped yo and yO).
-" Plug 'tpope/vim-unimpaired'
+
+" surround
+Plug 'tpope/vim-surround' | Plug 'tpope/vim-repeat'
+
+" C-a and C-x to increment/decrement dates/times
+Plug 'tpope/vim-speeddating' | Plug 'tpope/vim-repeat'
+
+" like tmux prefix + z. Zoom on one buffer
 Plug 'troydm/zoomwintab.vim', { 'on': 'ZoomWinTabToggle' }
-Plug 'tyru/caw.vim' " Comment plugin:
-                    " - gci / gcui to comment/uncomment the current line
-                    " - gco to insert a new line below the current line and
-                    "   start a comment.
-                    " - gcO to insert a new line above the current line and
-                    "   start a comment.
-                    " - gcw / gcuw to comment / uncomment a block (/* ... */)
+
+" Comment plugin:
+" - gci / gcui to comment/uncomment the current line
+" - gco to insert a new line below the current line and
+"   start a comment.
+" - gcO to insert a new line above the current line and
+"   start a comment.
+" - gcw / gcuw to comment / uncomment a block (/* ... */)
+Plug 'tyru/caw.vim'
+
+" Remove EOL on save
 Plug 'vim-scripts/PreserveNoEOL'
 
 exe 'source ' . g:kb_profiles[g:kb_profile] . '/plug.vim'
@@ -441,6 +486,11 @@ let g:tagbar_type_go = {
 ""}}}
 "" AutoPairs{{{
 let g:AutoPairsMultilineClose = 0
+"}}}
+"" BetterWhitespace{{{
+
+autocmd BufEnter * EnableStripWhitespaceOnSave
+
 "}}}
 "" Surround{{{
 let g:surround_no_mappings = 1
