@@ -205,6 +205,11 @@ if [[ -n "${profile}" ]] && [[ -r "${HOME}/.zsh/profiles/${profile}.zsh" ]]; the
     pcode
 fi
 
+# if the sess is empty, set it to the dotfiles
+if [[ -z "${sess}" ]]; then
+    sess="${HOME}/.dotfiles"
+fi
+
 # expand any variable stored in the sess name
 sess="$( eval "echo $sess" )"
 debug "sess=${sess}"
