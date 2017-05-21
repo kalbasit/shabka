@@ -217,6 +217,9 @@ fi
 # https://github.com/tmux/tmux/blob/76688d204071b76fd3388e46e944e4b917c09625/session.c#L232
 sess="$(echo "${sess}" | sed -e 's:\.:_:g' -e 's#:#_#g')"
 
+# make sure a server is running
+tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" start-server
+
 # start a session if one does not exist for it yet
 if ! tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" list-sessions -F '#{session_name}' | grep -q -e "^${sess}\$"; then
     # start the new tmux session
