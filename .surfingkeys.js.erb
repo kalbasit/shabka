@@ -8,7 +8,7 @@ settings.hintAlign = "left";
 Hints.characters = "arstneio";
 
 // intercept all error pages so Surfing keys can work on them
-settings.interceptedErrors = ["*"]
+settings.interceptedErrors = ["*"];
 
 // turn off smoothscroll
 settings.smoothScroll = false;
@@ -25,7 +25,7 @@ settings.newTabPosition = "right";
 // proxy settings, set it to Charles proxy but unused by default.
 // setProxy 127.0.0.1:8888;
 // setProxyMode direct;
-RUNTIME('updateProxy', {
+RUNTIME("updateProxy", {
   mode: "direct",
   proxy: "127.0.0.1:8888"
 });
@@ -43,106 +43,106 @@ settings.clickableSelector = "*.jfk-button, *.goog-flat-menu-button";
 
 // save the originals into an alias so there will be no dependency or order
 // issue
-map('_h',  'h');
-map('_j',  'j');
-map('_k',  'k');
-map('_l',  'l');
-map('_n',  'n');
-map('_N',  'N');
-map('_R',  'R');
-map('_af', 'af');
-map('_v',  'v');
-map('_V',  'V');
-map('_yt', 'yt');
-map('_yy', 'yy');
-map('_yl', 'yl');
-map('_yf', 'yf');
-map('_S',  'S');
-map('_D',  'D');
-map('_I', 'I');
+map("_h",  "h");
+map("_j",  "j");
+map("_k",  "k");
+map("_l",  "l");
+map("_n",  "n");
+map("_N",  "N");
+map("_R",  "R");
+map("_af", "af");
+map("_v",  "v");
+map("_V",  "V");
+map("_yt", "yt");
+map("_yy", "yy");
+map("_yl", "yl");
+map("_yf", "yf");
+map("_S",  "S");
+map("_D",  "D");
+map("_I", "I");
 
 // remove the one we backed up
-unmap('h');
-unmap('j');
-unmap('k');
-unmap('l');
-unmap('n');
-unmap('N');
-unmap('R');
-unmap('af');
-unmap('v');
-unmap('V');
-unmap('yt');
-unmap('yy');
-unmap('yl');
-unmap('yf');
-unmap('S');
-unmap('D');
-unmap('I');
+unmap("h");
+unmap("j");
+unmap("k");
+unmap("l");
+unmap("n");
+unmap("N");
+unmap("R");
+unmap("af");
+unmap("v");
+unmap("V");
+unmap("yt");
+unmap("yy");
+unmap("yl");
+unmap("yf");
+unmap("S");
+unmap("D");
+unmap("I");
 
 // map the Colemak bindings
-map('n',  '_h');  // scroll left
-map('e',  '_j');  // scroll down
-map('i',  '_k');  // scroll up
-map('o',  '_l');  // scroll right
-map('k',  '_n');  // find next
-map('K',  '_N');  // find previous
-map('I',  '_R');  // go one tab right
-map('F',  '_af'); // open hint in a new tab
-map('a',  '_v');  // Toggle visual mode
-map('A',  '_V');  // Restore visual mode
-map('ct', '_yt'); // duplicate current page
-map('cc', '_yy'); // copy current page URL
-map('cl', '_yl'); // copy current page's title
-map('cf', '_yf'); // copy form data in JSON on current page
-map('N',  '_S');  // go back in history
-map('O',  '_D');  // go forward in history
-map('v', '_I');   // open editor for input
+map("n",  "_h");  // scroll left
+map("e",  "_j");  // scroll down
+map("i",  "_k");  // scroll up
+map("o",  "_l");  // scroll right
+map("k",  "_n");  // find next
+map("K",  "_N");  // find previous
+map("I",  "_R");  // go one tab right
+map("F",  "_af"); // open hint in a new tab
+map("a",  "_v");  // Toggle visual mode
+map("A",  "_V");  // Restore visual mode
+map("ct", "_yt"); // duplicate current page
+map("cc", "_yy"); // copy current page URL
+map("cl", "_yl"); // copy current page"s title
+map("cf", "_yf"); // copy form data in JSON on current page
+map("N",  "_S");  // go back in history
+map("O",  "_D");  // go forward in history
+map("v", "_I");   // open editor for input
 
 // finally remove what we have saved
-unmap('_h');
-unmap('_j');
-unmap('_k');
-unmap('_l');
-unmap('_n');
-unmap('_N');
-unmap('_R');
-unmap('_af');
-unmap('_v');
-unmap('_V');
-unmap('_yt');
-unmap('_yy');
-unmap('_yl');
-unmap('_yf');
-unmap('_S');
-unmap('_D');
+unmap("_h");
+unmap("_j");
+unmap("_k");
+unmap("_l");
+unmap("_n");
+unmap("_N");
+unmap("_R");
+unmap("_af");
+unmap("_v");
+unmap("_V");
+unmap("_yt");
+unmap("_yy");
+unmap("_yl");
+unmap("_yf");
+unmap("_S");
+unmap("_D");
 
 // visual mode
 
 // save the originals into an alias so there will be no dependency or order
 // issue
-vmap('_h',  'h');
-vmap('_j',  'j');
-vmap('_k',  'k');
-vmap('_l',  'l');
+vmap("_h",  "h");
+vmap("_j",  "j");
+vmap("_k",  "k");
+vmap("_l",  "l");
 
 // remove the one we backed up
-vunmap('h');
-vunmap('j');
-vunmap('k');
-vunmap('l');
+vunmap("h");
+vunmap("j");
+vunmap("k");
+vunmap("l");
 
 // map the Colemak bindings
-vmap('n',  '_h');  // backward character
-vmap('e',  '_j');  // forward line
-vmap('i',  '_k');  // backward line
-vmap('o',  '_l');  // forward character
+vmap("n",  "_h");  // backward character
+vmap("e",  "_j");  // forward line
+vmap("i",  "_k");  // backward line
+vmap("o",  "_l");  // forward character
 
 // finally remove what we have saved
-vunmap('_h');
-vunmap('_j');
-vunmap('_k');
-vunmap('_l');
+vunmap("_h");
+vunmap("_j");
+vunmap("_k");
+vunmap("_l");
 
 // END Colemak bindings
 //////////////////////////////////////
@@ -169,10 +169,10 @@ function copyLastElementInPath() {
 //
 // openAlternate requires the username and the api_token in order to work.  The
 // username and the api_token must be stored in the chrome storage. To set them
-// in the storage, execute the following in the chrome console on Surfingkey's
+// in the storage, execute the following in the chrome console on Surfingkey"s
 // background page:
-//   chrome.storage.sync.set({'github_api_username': '...'});
-//   chrome.storage.sync.set({'github_api_token': '...'});
+//   chrome.storage.sync.set({"github_api_username": "..."});
+//   chrome.storage.sync.set({"github_api_token": "..."});
 function openAlternate() {
   // start by splitting the path by slashes, ignoring the first slash to
   // prevent having the first element an empty string
@@ -363,9 +363,9 @@ function openAlternate() {
   function openAlternateFile() {
     var file = pp[pp.length - 1];
     if (file.match(/_test\.go$/) !== null) {
-      window.location.href = window.location.href.replace('_test.go', '.go');
+      window.location.href = window.location.href.replace("_test.go", ".go");
     } else if (file.match(/\.go$/) !== null) {
-      window.location.href = window.location.href.replace('.go', '_test.go');
+      window.location.href = window.location.href.replace(".go", "_test.go");
     }
   }
 
@@ -388,16 +388,16 @@ function openAlternate() {
 //////////////////////////////////////
 // Custom bindings
 
-mapkey('cb', '#7Copy the last element of the path in the URL', copyLastElementInPath);
-mapkey(',.', '#8Open alternate', openAlternate);
-mapkey(',r', '#4Reload the page skipping the cache', function() {
+mapkey("cb", "#7Copy the last element of the path in the URL", copyLastElementInPath);
+mapkey(",.", "#8Open alternate", openAlternate);
+mapkey(",r", "#4Reload the page skipping the cache", function() {
   RUNTIME("reloadTab", {
     nocache: true
   });
 });
-mapkey('sr', '#11Reload settings', function() {
+mapkey("sr", "#11Reload settings", function() {
   RUNTIME("loadSettingsFromUrl", {
-    url: "file://<%= ENV['HOME'] %>/.surfingkeys.js"
+    url: "file://<%= ENV["HOME"] %>/.surfingkeys.js"
   });
 });
 
