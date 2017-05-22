@@ -63,6 +63,7 @@ map("_yf", "yf");
 map("_S",  "S");
 map("_D",  "D");
 map("_I", "I");
+map("<Alt-_p>", "<Alt-p>");
 
 // remove the one we backed up
 unmap("h");
@@ -82,25 +83,27 @@ unmap("yf");
 unmap("S");
 unmap("D");
 unmap("I");
+unmap("<Alt-p>");
 
 // map the Colemak bindings
-map("n",  "_h");  // scroll left
-map("e",  "_j");  // scroll down
-map("i",  "_k");  // scroll up
-map("o",  "_l");  // scroll right
-map("k",  "_n");  // find next
-map("K",  "_N");  // find previous
-map("I",  "_R");  // go one tab right
-map("F",  "_af"); // open hint in a new tab
-map("a",  "_v");  // Toggle visual mode
-map("A",  "_V");  // Restore visual mode
-map("ct", "_yt"); // duplicate current page
-map("cc", "_yy"); // copy current page URL
-map("cl", "_yl"); // copy current page"s title
-map("cf", "_yf"); // copy form data in JSON on current page
-map("N",  "_S");  // go back in history
-map("O",  "_D");  // go forward in history
-map("v", "_I");   // open editor for input
+map("n",  "_h");        // scroll left
+map("e",  "_j");        // scroll down
+map("i",  "_k");        // scroll up
+map("o",  "_l");        // scroll right
+map("k",  "_n");        // find next
+map("K",  "_N");        // find previous
+map("I",  "_R");        // go one tab right
+map("F",  "_af");       // open hint in a new tab
+map("a",  "_v");        // Toggle visual mode
+map("A",  "_V");        // Restore visual mode
+map("ct", "_yt");       // duplicate current page
+map("cc", "_yy");       // copy current page URL
+map("cl", "_yl");       // copy current page"s title
+map("cf", "_yf");       // copy form data in JSON on current page
+map("N",  "_S");        // go back in history
+map("O",  "_D");        // go forward in history
+map("v", "_I");         // open editor for input
+map("gp", "<Alt-_p>");  // pin tab
 
 // finally remove what we have saved
 unmap("_h");
@@ -119,6 +122,7 @@ unmap("_yl");
 unmap("_yf");
 unmap("_S");
 unmap("_D");
+unmap("<Alt-_p>");
 
 // visual mode
 
