@@ -26,7 +26,8 @@ function sp() {
             fi
         done
     # are we loading the personal profile (i.e removing profiles?)
-    elif [[ "${requested_profile}" = "kill" ]] || [[ "${requested_profile}" = "personal" ]]; then
+    # are we killing the profile?
+    elif [[ "${requested_profile}" = "kill" ]]; then
         if [[ -n "${ACTIVE_PROFILE}" ]]; then
             # shellcheck disable=SC1090
             source "${HOME}/.zsh/profiles/${ACTIVE_PROFILE}.zsh"
@@ -47,7 +48,7 @@ function sp() {
         # shellcheck disable=SC1090
         source "${HOME}/.zsh/profiles/${requested_profile}.zsh"
         pactivate
-        # let the terminal know whick profile is loaded and which ssh-agent to
+        # let the terminal know which profile is loaded and which ssh-agent to
         # use
         export ACTIVE_PROFILE="${requested_profile}"
         export SSH_AGENT_NAME="${requested_profile}"
