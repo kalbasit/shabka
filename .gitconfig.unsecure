@@ -35,6 +35,7 @@
   ci              = commit
   co              = checkout
   cb              = checkout -b
+  cbw             = !git checkout -b $(i3-msg -t get_workspaces | jq -r '.[] | if .visible == true then .name else empty end')
   di              = diff
   dc              = diff --cached
   amend           = commit --amend
