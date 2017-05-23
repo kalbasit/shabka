@@ -432,13 +432,6 @@ let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 let g:UltiSnipsEditSplit="vertical"
 
 " }}}
-"" ScreenShell{{{
-""
-
-let g:ScreenImpl = "Tmux"
-let g:ScreenShellTmuxInitArgs = '-2'
-
-" }}}
 "" EasyAlign{{{
 vmap ga <Plug>(EasyAlign)
 "" }}}
