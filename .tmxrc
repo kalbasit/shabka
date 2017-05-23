@@ -129,7 +129,15 @@
     },
     {
         "profile": "personal",
+        "dir": "$GOPATH/src/github.com/kalbasit/transmuter"
+    },
+    {
+        "profile": "personal",
         "dir": "$GOPATH/src/github.com/kalbasit/kalbas.it"
+    },
+    {
+        "profile": "personal",
+        "dir": "$GOPATH/src/gopkg.in/acd.v0"
     },
     {
         "profile": "personal",
