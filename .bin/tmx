@@ -251,6 +251,8 @@ if ! tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" list-ses
         tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${sess}:0" 'clear; emacs' Enter
     elif [[ "${sess}" = "irc" ]]; then
         tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${sess}:0" 'clear; irssi' Enter
+    elif [[ "${sess}" = "task" ]]; then
+        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${sess}:0" 'clear; vim +:TW' Enter
     else
         # start vim
         if isTrue "${confirm_vim_startup}"; then
