@@ -36,6 +36,7 @@
 .filesystem/bin/ssx-agents
 .irssi/config
 .irssi/config.autosave
+.irssi/scripts/old/
 .irssi/seen.dat
 .lib/launch_dm_iterm.scpt
 .local/share/gvfs-metadata
