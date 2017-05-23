@@ -134,10 +134,11 @@ bindsym $mod+Return exec i3-sensible-terminal
 #########
 
 # Window Manager mode, this mode allows me to control i3
-set $mod+$alt_wm WM: (r) Reload i3, (e) Restart i3
+set $mod+$alt_wm WM: (r) Reload i3, (e) Restart i3, (x) xset keyboard repeat
 mode "$mod+$alt_wm" {
   bindsym r reload; exec $nosid "notify-send 'i3 configuration reloaded'", mode "default"
   bindsym e restart; exec $nosid "notify-send 'i3 restarted'", mode "default"
+  bindsym x exec $nosid "xset r rate 200 30"; exec $nosid "notify-send 'keyboard repeat set'", mode "default"
 
   # back to normal: Enter or Escape
   bindsym Return mode "default"
