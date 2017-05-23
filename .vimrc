@@ -424,7 +424,7 @@ augroup TaskwarriorMapping
     autocmd!
     autocmd FileType taskreport nmap <silent> <buffer> A        <Plug>(taskwarrior_annotate)
     autocmd FileType taskreport nmap <silent> <buffer> x        <Plug>(taskwarrior_denotate)
-    autocmd FileType taskreport nmap <silent> <buffer> o        <Plug>(taskwarrior_open_annotate)
+    autocmd FileType taskreport nmap <silent> <buffer> p        <Plug>(taskwarrior_open_annotate)
     autocmd FileType taskreport nmap <silent> <buffer> D        <Plug>(taskwarrior_remove)
     autocmd FileType taskreport nmap <silent> <buffer> <Del>    <Plug>(taskwarrior_delete)
     autocmd FileType taskreport nmap <silent> <buffer> a        <Plug>(taskwarrior_new)
@@ -438,7 +438,7 @@ augroup TaskwarriorMapping
     autocmd FileType taskreport nmap <silent> <buffer> S        <Plug>(taskwarrior_sync)
     autocmd FileType taskreport nmap <silent> <buffer> m        <Plug>(taskwarrior_modify_field)
     autocmd FileType taskreport nmap <silent> <buffer> M        <Plug>(taskwarrior_modify_task)
-    autocmd FileType taskreport nmap <silent> <buffer> p        <Plug>(taskwarrior_paste)
+    autocmd FileType taskreport nmap <silent> <buffer> v        <Plug>(taskwarrior_paste)
     autocmd FileType taskreport nmap <silent> <buffer> +        <Plug>(taskwarrior_start_task)
     autocmd FileType taskreport nmap <silent> <buffer> -        <Plug>(taskwarrior_stop_task)
     autocmd FileType taskreport nmap <silent> <buffer> <Space>  <Plug>(taskwarrior_select)
