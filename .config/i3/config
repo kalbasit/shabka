@@ -134,8 +134,8 @@ bindsym $mod+Return exec i3-sensible-terminal
 #########
 
 # Window Manager mode, this mode allows me to control i3
-set $mod+$alt_wm WM: (r) Reload i3, (e) Restart i3, (x) xset keyboard repeat
-mode "$mod+$alt_wm" {
+set $mode_wm WM: (r) Reload i3, (e) Restart i3, (x) xset keyboard repeat
+mode "$mode_wm" {
   bindsym r reload; exec $nosid "notify-send 'i3 configuration reloaded'", mode "default"
   bindsym e restart; exec $nosid "notify-send 'i3 restarted'", mode "default"
   bindsym x exec $nosid "xset r rate 200 30"; exec $nosid "notify-send 'keyboard repeat set'", mode "default"
@@ -144,11 +144,11 @@ mode "$mod+$alt_wm" {
   bindsym Return mode "default"
   bindsym Escape mode "default"
 }
-bindsym $mod+$alt+w mode "$mod+$alt_wm"
+bindsym $mod+$alt+w mode "$mode_wm"
 
 # Application launcher
-set $mod+$alt_apps Launch: (p) Chromium personal, (u) Chromium publica, (c) Charles, (s) Slack, (i) Irc, (w) Whatsapp, (v) Vit, (t) Teamviewer
-mode "$mod+$alt_apps" {
+set $mode_apps Launch: (p) Chromium personal, (u) Chromium publica, (c) Charles, (s) Slack, (i) Irc, (w) Whatsapp, (v) Vit, (t) Teamviewer
+mode "$mode_apps" {
   bindsym p exec relay-browser --profile personal, mode "default"
   bindsym u exec relay-browser --profile publica, mode "default"
   bindsym c exec charles, mode "default"
@@ -162,11 +162,11 @@ mode "$mod+$alt_apps" {
   bindsym Return mode "default"
   bindsym Escape mode "default"
 }
-bindsym $mod+$alt+a mode "$mod+$alt_apps"
+bindsym $mod+$alt+a mode "$mode_apps"
 
 # System commands
-set $mod+$alt_system System: (b) Backup to Madea, (c) Connect to B&W P7
-mode "$mod+$alt_system" {
+set $mode_system System: (b) Backup to Madea, (c) Connect to B&W P7
+mode "$mode_system" {
   bindsym b exec gksu systemctl start snap-sync@e6437994-dced-4441-a3af-344694bb7f37.service, mode "default"
   bindsym c exec $nosid bluetoothctl <<< $'connect EC:66:D1:93:2C:C2', mode "default"
 
@@ -174,7 +174,7 @@ mode "$mod+$alt_system" {
   bindsym Return mode "default"
   bindsym Escape mode "default"
 }
-bindsym $mod+$alt+s mode "$mod+$alt_system"
+bindsym $mod+$alt+s mode "$mode_system"
 
 # resize window (you can also use the mouse for that)
 set $resize_mode resize
@@ -204,8 +204,8 @@ mode "$resize_mode" {
 bindsym $mod+$alt+r mode "$resize_mode"
 
 # Display mode allows output/resolution selection
-set $mod+$alt_display (l) Laptop screen, (m) Multiple screen, (w) Wide screen
-mode "$mod+$alt_display" {
+set $mode_display (l) Laptop screen, (m) Multiple screen, (w) Wide screen
+mode "$mode_display" {
   bindsym l exec $nosid xrandr --output eDP1 --mode 1920x1080 --output DP1 --off && xset r rate 200 30, mode "default"
   bindsym m exec $nosid xrandr --output eDP1 --mode 1920x1080 --output DP1 --mode 3440x1440 --right-of eDP1 && xset r rate 200 30, mode "default"
   bindsym w exec $nosid xrandr --output eDP1 --off --output DP1 --mode 3440x1440 && xset r rate 200 30, mode "default"
@@ -214,11 +214,11 @@ mode "$mod+$alt_display" {
   bindsym Return mode "default"
   bindsym Escape mode "default"
 }
-bindsym $mod+$alt+d mode "$mod+$alt_display"
+bindsym $mod+$alt+d mode "$mode_display"
 
 # Keyboard layout selection
-set $mod+$alt_keyboard (q) Qwerty, (c) Colemak
-mode "$mod+$alt_keyboard" {
+set $mode_keyboard (q) Qwerty, (c) Colemak
+mode "$mode_keyboard" {
   bindsym q exec $nosid setxkbmap us && xmodmap ~/.Xmodmap && notify-send 'keyboard switch to Qwerty', mode "default"
   bindsym c exec $nosid setxkbmap us -variant colemak && xmodmap ~/.Xmodmap && notify-send 'keyboard switch to Colemak', mode "default"
 
@@ -226,11 +226,11 @@ mode "$mod+$alt_keyboard" {
   bindsym Return mode "default"
   bindsym Escape mode "default"
 }
-bindsym $mod+$alt+k mode "$mod+$alt_keyboard"
+bindsym $mod+$alt+k mode "$mode_keyboard"
 
 ## Management of power
-set $mod+$alt_power System: (l) lock, (o) logout, (s) suspend, (h) hibernate, (r) reboot, (Shift+s) shutdown
-mode "$mod+$alt_power" {
+set $mode_power System: (l) lock, (o) logout, (s) suspend, (h) hibernate, (r) reboot, (Shift+s) shutdown
+mode "$mode_power" {
   bindsym l exec $nosid $locker, mode "default"
   bindsym o exec $nosid i3-msg exit
   bindsym s exec $nosid $locker && systemctl suspend, mode "default"
@@ -242,7 +242,7 @@ mode "$mod+$alt_power" {
   bindsym Return mode "default"
   bindsym Escape mode "default"
 }
-bindsym $mod+$alt+p mode "$mod+$alt_power"
+bindsym $mod+$alt+p mode "$mode_power"
 
 #######
 # Bar #
