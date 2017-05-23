@@ -418,11 +418,9 @@ if [[ "${terminfo[knp]}" != "" ]]; then
 fi
 
 # start typing + [Up-Arrow] - fuzzy find history forward
-bindkey -M vicmd 'i' history-substring-search-up
 [[ "${terminfo[kcuu1]}" != "" ]] && bindkey "${terminfo[kcuu1]}" history-substring-search-up
 
 # start typing + [Down-Arrow] - fuzzy find history backward
-bindkey -M vicmd 'e' history-substring-search-down
 [[ "${terminfo[kcud1]}" != "" ]] && bindkey "${terminfo[kcud1]}" history-substring-search-down
 
 if [[ "${terminfo[khome]}" != "" ]]; then
@@ -456,6 +454,189 @@ zle -N edit-command-line
 bindkey -M vicmd v edit-command-line
 
 #####################################################################
+# Colemak key bindings
+#####################################################################
+
+# Credit: https://bazaar.launchpad.net/~akiva/colemak.vim/trunk/view/head:/.zshrc
+
+# vi-backward-char (unbound) (^H h ^?) (ESC-[D)
+#   Move backward one character, without changing lines.
+bindkey -M vicmd 'n' vi-backward-char
+bindkey -M vicmd '^[n' vi-backward-char
+bindkey -M visual 'n' vi-backward-char
+
+# vi-forward-char (unbound) (space l) (ESC-[C)
+#   Move forward one character.
+bindkey -M vicmd 'o' vi-forward-char
+bindkey -M vicmd '^[o' vi-forward-char
+bindkey -M visual 'o' vi-forward-char
+
+# up-line (unbound) (unbound) (unbound)
+#   Move up a line in the buffer.
+bindkey -M vicmd 'i' up-line-or-history
+bindkey -M vicmd '^[i' history-substring-search-up
+bindkey -M visual 'i' up-line-or-history
+
+# down-line (unbound) (unbound) (unbound)
+#   Move down a line in the buffer.
+bindkey -M vicmd 'e' down-line-or-history
+bindkey -M vicmd '^[e' history-substring-search-down
+bindkey -M visual 'e' down-line-or-history
+
+# vi-backward-blank-word (unbound) (B) (unbound)
+#   Move backward one word, where a word is defined as a series of non-blank
+#   characters.
+bindkey -M vicmd 'l' vi-backward-blank-word
+bindkey -M vicmd '^[l' vi-backward-blank-word
+bindkey -M visual 'l' vi-backward-blank-word
+
+# vi-forward-blank-word (unbound) (B) (unbound)
+#   Move forward one word, where a word is defined as a series of non-blank
+#   characters.
+bindkey -M vicmd 'w' vi-forward-blank-word
+bindkey -M vicmd '^[w' vi-forward-blank-word
+bindkey -M visual 'w' vi-forward-blank-word
+
+# vi-backward-blank-word-end (unbound) (gE) (unbound)
+#   Move to the end of the previous word, where a word is defined as a series
+#   of non-blank characters.
+bindkey -M vicmd 'L' vi-backward-blank-word-end
+bindkey -M vicmd '^[L' vi-backward-blank-word-end
+bindkey -M visual 'L' vi-backward-blank-word-end
+
+# vi-forward-blank-word-end (unbound) (E) (unbound)
+#   Move to the end of the current word, or, if at the end of the current word,
+#   to the end of the next word, where a word is defined as a series of
+#   non-blank characters.
+bindkey -M vicmd 'Y' vi-forward-blank-word-end
+bindkey -M vicmd '^[Y' vi-forward-blank-word-end
+bindkey -M visual 'Y' vi-forward-blank-word-end
+
+# vi-repeat-search (unbound) (n) (unbound)
+#   Repeat the last vi history search.
+bindkey -M vicmd 'k' vi-repeat-search
+bindkey -M vicmd '^[k' vi-repeat-search
+bindkey -M isearch '^[k' vi-repeat-search
+bindkey -M isearch '^[u' vi-repeat-search
+
+# vi-rev-repeat-search (unbound) (N) (unbound)
+#   Repeat the last vi history search, but in reverse.
+bindkey -M vicmd 'K' vi-rev-repeat-search
+bindkey -M vicmd '^[K' vi-rev-repeat-search
+bindkey -M isearch '^[K' vi-rev-repeat-search
+bindkey -M isearch '^[e' vi-rev-repeat-search
+
+# vi-pound-insert
+#   If there is no # character at the beginning of the buffer, add one to the
+#   beginning of each line. If there is one, remove a # from each line that
+#   has one. In either case, accept the current line. The INTERACTIVE_COMMENTS
+#   option must be set for this to have any usefulness.
+bindkey -M vicmd '#' vi-pound-insert
+bindkey -M vicmd '^[#' vi-pound-insert
+bindkey -M visual '#' vi-pound-insert
+
+# vi-add-next (unbound) (a) (unbound)
+#   Enter insert mode after the current cursor position, without changing lines.
+bindkey -M vicmd 't' vi-add-next
+bindkey -M vicmd '^[t' vi-add-next
+bindkey -M visual 't' vi-add-next
+
+# vi-add-eol (unbound) (A) (unbound)
+#   Move to the end of the line and enter insert mode.
+bindkey -M vicmd 'T' vi-add-eol
+bindkey -M vicmd '^[T' vi-add-eol
+bindkey -M visual 'T' vi-add-eol
+
+# vi-change (unbound) (c) (unbound)
+#   Read a movement command from the keyboard, and kill from the cursor
+#   position to the endpoint of the movement. Then enter insert mode. If the
+#   command is vi-change, change the current line. For compatibility with vi,
+#   if the command is vi-forward-word or vi-forward-blank-word, the whitespace
+#   after the word is not included. If you prefer the more consistent behaviour
+#   with the whitespace included use the following key binding:
+#     bindkey -a -s cw dwi
+bindkey -M vicmd 'w' vi-change
+bindkey -M vicmd '^[w' vi-change
+bindkey -M visual 'w' vi-change
+
+# vi-change-eol (unbound) (C) (unbound)
+#  Kill to the end of the line and enter insert mode.
+bindkey -M vicmd 'W' vi-change-eol
+bindkey -M vicmd '^[W' vi-change-eol
+bindkey -M visual 'W' vi-change-eol
+
+# vi-change-whole-line (unbound) (S) (unbound)
+#  Kill the current line and enter insert mode.
+bindkey -M vicmd 'ww' vi-change-whole-line
+bindkey -M vicmd '^[w^[w' vi-change-whole-line
+bindkey -M visual 'ww' vi-change-whole-line
+
+# vi-insert (unbound) (i) (unbound)
+#   Enter insert mode.
+bindkey -M vicmd 's' vi-insert
+bindkey -M vicmd '^[s' vi-insert
+bindkey -M visual 's' vi-insert
+
+# vi-insert-bol (unbound) (I) (unbound)
+#   Move to the first non-blank character on the line and enter insert mode.
+bindkey -M vicmd 'S' vi-insert-bol
+bindkey -M vicmd '^[S' vi-insert-bol
+bindkey -M visual 'S' vi-insert-bol
+
+# vi-open-line-above (unbound) (H) (unbound)
+#   Open a line above the cursor and enter insert mode.
+bindkey -M vicmd 'H' vi-open-line-above
+bindkey -M vicmd '^[H' vi-open-line-above
+bindkey -M visual 'H' vi-open-line-above
+
+# vi-open-line-below (unbound) (h) (unbound)
+#   Open a line below the cursor and enter insert mode.
+bindkey -M vicmd 'h' vi-open-line-below
+bindkey -M vicmd '^[h' vi-open-line-below
+bindkey -M visual 'h' vi-open-line-below
+
+# vi-yank (unbound) (y) (unbound)
+#   Read a movement command from the keyboard, and copy the region from the
+#   cursor position to the endpoint of the movement into the kill buffer. If
+#   the command is vi-yank, copy the current line.
+bindkey -M vicmd 'c' vi-yank
+bindkey -M vicmd '^[c' vi-yank
+bindkey -M visual 'c' vi-yank
+
+# vi-yank-whole-line (unbound) (Y) (unbound)
+#   Copy the current line into the kill buffer.
+bindkey -M vicmd 'C' vi-yank-whole-line
+bindkey -M vicmd '^[C' vi-yank-whole-line
+bindkey -M visual 'C' vi-yank-whole-line
+
+
+# vi-put-before (unbound) (P) (unbound)
+#   Insert the contents of the kill buffer before the cursor. If the kill
+#   buffer contains a sequence of lines (as opposed to characters), paste
+#   it above the current line.
+bindkey -M vicmd 'V' vi-put-before
+
+# vi-put-after (unbound) (p) (unbound)
+#  Insert the contents of the kill buffer after the cursor. If the kill buffer
+#  contains a sequence of lines (as opposed to characters), paste it below the
+#  current line.
+bindkey -M vicmd 'v' vi-put-after
+
+# visual-mode (unbound) (v) (unbound)
+#  Toggle vim-style visual selection mode. If line-wise visual mode is
+#  currently enabled then it is changed to being character-wise. If used
+#  following an operator, it forces the subsequent movement command to be
+#  treated as a character-wise movement.
+bindkey -M vicmd 'a' visual-mode
+
+# visual-line-mode (unbound) (V) (unbound)
+#  Toggle vim-style line-wise visual selection mode. If character-wise visual
+#  mode is currently enabled then it is changed to being line-wise. If used
+#  following an operator, it forces the subsequent movement command to be
+#  treated as a line-wise movement.
+bindkey -M vicmd 'A' visual-line-mode
+
+#####################################################################
 # misc
 #####################################################################
 
@@ -468,6 +649,9 @@ bindkey "^y" copy-prev-shell-word
 
 ## jobs
 setopt long_list_jobs
+
+## enable comments
+setopt interactivecomments
 
 
 #####################################################################
