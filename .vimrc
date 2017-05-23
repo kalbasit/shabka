@@ -80,8 +80,12 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all --no-update-rc' }
 """""""""""""
 
 if executable("task")
-  Plug 'blindFS/vim-taskwarrior'
+  " revert to the original fork when
+  " https://github.com/blindFS/vim-taskwarrior/pull/137 is merged
+  " Plug 'blindFS/vim-taskwarrior'
+  Plug 'kalbasit/vim-taskwarrior', { 'tag': 'add_option_disable_mappings' }
 endif
+
 if executable("curl")
   Plug 'mattn/webapi-vim' | Plug 'mattn/gist-vim', { 'on': 'Gist' }
 endif
@@ -404,6 +408,47 @@ let g:go_highlight_operators = 1
 let g:go_highlight_build_constraints = 1
 " configure vim-go to show errors in the quickfix window and not the location list.
 let g:go_list_type = "quickfix"
+
+" }}}
+"" TaskWarrior{{{
+""
+
+" set the size to 30%. Default: 15%
+let g:task_info_size = 30
+
+" disable the default mappings. Default: 0
+let g:task_disable_mappings = 1
+
+" mappings
+augroup TaskwarriorMapping
+    autocmd!
+    autocmd FileType taskreport nmap <silent> <buffer> A        <Plug>(taskwarrior_annotate)
+    autocmd FileType taskreport nmap <silent> <buffer> x        <Plug>(taskwarrior_denotate)
+    autocmd FileType taskreport nmap <silent> <buffer> o        <Plug>(taskwarrior_open_annotate)
+    autocmd FileType taskreport nmap <silent> <buffer> D        <Plug>(taskwarrior_remove)
+    autocmd FileType taskreport nmap <silent> <buffer> <Del>    <Plug>(taskwarrior_delete)
+    autocmd FileType taskreport nmap <silent> <buffer> a        <Plug>(taskwarrior_new)
+    autocmd FileType taskreport nmap <silent> <buffer> c        <Plug>(taskwarrior_command)
+    autocmd FileType taskreport nmap <silent> <buffer> d        <Plug>(taskwarrior_done)
+    autocmd FileType taskreport nmap <silent> <buffer> r        <Plug>(taskwarrior_report)
+    autocmd FileType taskreport nmap <silent> <buffer> R        <Plug>(taskwarrior_refresh)
+    autocmd FileType taskreport nmap <silent> <buffer> X        <Plug>(taskwarrior_clear_completed)
+    autocmd FileType taskreport nmap <silent> <buffer> u        <Plug>(taskwarrior_undo)
+    autocmd FileType taskreport nmap <silent> <buffer> U        <Plug>(taskwarrior_urgency)
+    autocmd FileType taskreport nmap <silent> <buffer> S        <Plug>(taskwarrior_sync)
+    autocmd FileType taskreport nmap <silent> <buffer> m        <Plug>(taskwarrior_modify_field)
+    autocmd FileType taskreport nmap <silent> <buffer> M        <Plug>(taskwarrior_modify_task)
+    autocmd FileType taskreport nmap <silent> <buffer> p        <Plug>(taskwarrior_paste)
+    autocmd FileType taskreport nmap <silent> <buffer> +        <Plug>(taskwarrior_start_task)
+    autocmd FileType taskreport nmap <silent> <buffer> -        <Plug>(taskwarrior_stop_task)
+    autocmd FileType taskreport nmap <silent> <buffer> <Space>  <Plug>(taskwarrior_select)
+    autocmd FileType taskreport nmap <silent> <buffer> <C-A>    <Plug>(taskwarrior_increase)
+    autocmd FileType taskreport nmap <silent> <buffer> <C-X>    <Plug>(taskwarrior_decrease)
+    autocmd FileType taskreport vmap <silent> <buffer> d        <Plug>(taskwarrior_visual_done)
+    autocmd FileType taskreport vmap <silent> <buffer> D        <Plug>(taskwarrior_visual_delete)
+    autocmd FileType taskreport vmap <silent> <buffer> <Del>    <Plug>(taskwarrior_visual_delete)
+    autocmd FileType taskreport vmap <silent> <buffer> <Space>  <Plug>(taskwarrior_visual_select)
+augroup END
 
 " }}}
 "" Polyglot{{{
