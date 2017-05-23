@@ -147,7 +147,7 @@ mode "$mode_wm" {
 bindsym $mod+$alt+w mode "$mode_wm"
 
 # Application launcher
-set $mode_apps Launch: (p) Chromium personal, (u) Chromium publica, (c) Charles, (s) Slack, (i) Irc, (w) Whatsapp, (v) Vit, (t) Teamviewer
+set $mode_apps Launch: (p) Chromium personal, (u) Chromium publica, (c) Charles, (s) Slack, (i) Irc, (w) Whatsapp, (a) TaskWarrior, (t) Teamviewer
 mode "$mode_apps" {
   bindsym p exec relay-browser --profile personal, mode "default"
   bindsym u exec relay-browser --profile publica, mode "default"
@@ -155,7 +155,7 @@ mode "$mode_apps" {
   bindsym s exec slack, mode "default"
   bindsym i exec termite --title=irc --exec="tmx -L irc irc", mode "default"
   bindsym w exec whatsapp-web-desktop, mode "default"
-  bindsym v exec termite --title=vit --exec="vit", mode "default"
+  bindsym a exec termite --title=TaskWarrior --exec="tmx -L task task", mode "default"
   bindsym t exec myteamviewer, mode "default"
 
   # back to normal: Enter or Escape
@@ -296,10 +296,10 @@ for_window [class="^Termite" title="^irc"] sticky enable
 for_window [class="^Termite" title="^irc"] move scratchpad
 bindsym $alt+i [class="^Termite" title="^irc"] scratchpad show
 
-# Vit
-for_window [class="^Termite" title="^vit"] sticky enable
-for_window [class="^Termite" title="^vit"] move scratchpad
-bindsym $alt+v [class="^Termite" title="^vit"] scratchpad show
+# TaskWarrior
+for_window [class="^Termite" title="^TaskWarrior"] sticky enable
+for_window [class="^Termite" title="^TaskWarrior"] move scratchpad
+bindsym $alt+a [class="^Termite" title="^TaskWarrior"] scratchpad show
 
 # Whatsapp
 for_window [class="^whats-app-nativefier*"] sticky enable
@@ -317,6 +317,7 @@ bindsym $alt+p [class="Chromium" instance="crx_jjbjdleccaiklfpcblgekgmjadjdclkp"
 
 exec $nosid termite --title=irc --exec="tmx -L irc irc"
 exec $nosid termite --title=vit --exec="vit"
+exec $nosid termite --title=TaskWarrior --exec="tmx -L task task"
 exec $nosid whatsapp-web-desktop
 
 # Start the personal terminal on the personal workspace
