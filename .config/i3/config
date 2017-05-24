@@ -137,11 +137,10 @@ bindsym $mod+Return exec i3-sensible-terminal
 #########
 
 # Window Manager mode, this mode allows me to control i3
-set $mode_wm WM: (r) Reload i3, (e) Restart i3, (x) xset keyboard repeat
+set $mode_wm WM: (r) Reload i3, (e) Restart i3
 mode "$mode_wm" {
   bindsym r reload; exec $nosid "notify-send 'i3 configuration reloaded'", mode "default"
   bindsym e restart; exec $nosid "notify-send 'i3 restarted'", mode "default"
-  bindsym x exec $nosid "xset r rate 200 30"; exec $nosid "notify-send 'keyboard repeat set'", mode "default"
 
   # back to normal: Enter or Escape
   bindsym Return mode "default"
@@ -209,9 +208,9 @@ bindsym $mod+$alt+r mode "$resize_mode"
 # Display mode allows output/resolution selection
 set $mode_display (l) Laptop screen, (m) Multiple screen, (w) Wide screen
 mode "$mode_display" {
-  bindsym l exec $nosid xrandr --output eDP1 --mode 1920x1080 --output DP1 --off && xset r rate 200 30, mode "default"
-  bindsym m exec $nosid xrandr --output eDP1 --mode 1920x1080 --output DP1 --mode 3440x1440 --right-of eDP1 && xset r rate 200 30, mode "default"
-  bindsym w exec $nosid xrandr --output eDP1 --off --output DP1 --mode 3440x1440 && xset r rate 200 30, mode "default"
+  bindsym l exec $nosid xrandr --output eDP1 --mode 1920x1080 --output DP1 --off, mode "default"
+  bindsym m exec $nosid xrandr --output eDP1 --mode 1920x1080 --output DP1 --mode 3440x1440 --right-of eDP1, mode "default"
+  bindsym w exec $nosid xrandr --output eDP1 --off --output DP1 --mode 3440x1440, mode "default"
 
   # back to normal: Enter or Escape
   bindsym Return mode "default"

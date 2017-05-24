@@ -45,9 +45,6 @@ if [[ -z "${XBASERC}" ]]; then
     xrandr --output eDP1 --mode 1920x1080
   fi
 
-  # set the keyboard delay to 200ms and the repeat rate to 30Hz
-  xset r rate 200 30
-
   # set beep to off
   xset b off
 fi
