@@ -1,0 +1,9 @@
+[Unit]
+Description=Locks the screen on suspend/hibernate
+
+[Service]
+ExecStart=/usr/bin/xss-lock --notifier=dim-screen --transfer-sleep-lock /usr/share/doc/xss-lock/transfer-sleep-lock-i3lock.sh
+Restart=always
+
+[Install]
+WantedBy=default.target
