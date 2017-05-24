@@ -15,10 +15,10 @@ font pango:DejaVu Sans Mono 8
 
 # Colors
 # class                   border  backgr. text    indicator
-client.focused            #859900 #859900 #fdf6e3 #6c71c4
-client.focused_inactive   #073642 #073642 #eee8d5 #6c71c4
-client.unfocused          #073642 #073642 #93a1a1 #586e75
-client.urgent             #d33682 #d33682 #fdf6e3 #dc322f
+client.focused            #5f865f #5f865f #e4e4e4 #ffafaf
+client.focused_inactive   #4e4e4e #4e4e4e #d0d0d0 #ffafaf
+client.unfocused          #4e4e4e #4e4e4e #87d7d7 #87af87
+client.urgent             #d7afaf #d7afaf #e4e4e4 #d68787
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -263,13 +263,13 @@ bar {
 
   # setup colors
   colors {
-    separator #dc322f
-    background #002b36
-    statusline #268bd2
-    focused_workspace #fdf6e3 #859900 #fdf6e3
-    active_workspace #fdf6e3 #6c71c4 #fdf6e3
-    inactive_workspace #586e75 #93a1a1 #002b36
-    urgent_workspace #d33682 #d33682 #fdf6e3
+    separator #d68787
+    background #626262
+    statusline #85add4
+    focused_workspace #e4e4e4 #5f865f #e4e4e4
+    active_workspace #e4e4e4 #ffafaf #e4e4e4
+    inactive_workspace #87af87 #87d7d7 #626262
+    urgent_workspace #d7afaf #d7afaf #e4e4e4
   }
 }
 
