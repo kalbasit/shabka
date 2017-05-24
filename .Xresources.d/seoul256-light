@@ -1,0 +1,27 @@
+!---------------------------------------------------
+! vim:fenc=UTF-8:nu:ai:si:et:ts=4:sw=4:ft=xdefaults:
+!---------------------------------------------------
+
+! seoul256 (light) theme
+*background:   #dadada
+*foreground:   #4e4e4e
+*colorBD:      #3a3a3a
+*cursorColor:  #4e4e4e
+*cursorColor2: #dadada
+
+*color0:       #4e4e4e
+*color1:       #af5f5f
+*color2:       #5f885f
+*color3:       #af8760
+*color4:       #5f87ae
+*color5:       #875f87
+*color6:       #5f8787
+*color7:       #e4e4e4
+*color8:       #3a3a3a
+*color9:       #870100
+*color10:      #005f00
+*color11:      #d8865f
+*color12:      #0087af
+*color13:      #87025f
+*color14:      #008787
+*color15:      #eeeeee

@@ -181,8 +181,8 @@ endif
 "" Settings{{{
 ""
 
-set background=dark
-colorscheme solarized
+" set background=dark
+colorscheme seoul256
 
 let mapleader = ","             " set the mapleader
 set backup                      " enable backup, written to backupdir set below
@@ -487,7 +487,12 @@ nmap <Leader>go :GundoToggle<CR>
 nmap <Leader>zo :ZoomWinTabToggle<CR>
 "" }}}
 "" Airline{{{
+
 let g:airline#extensions#tabline#enabled = 1
+
+" use seoul256 theme
+let g:airline_theme='seoul256'
+
 "" }}}
 "" Syntastic{{{
 let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
