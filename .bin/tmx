@@ -92,8 +92,13 @@ function build_projects() {
             continue
         fi
         # add this project to the hash
-        projects+=( "${profile}:${dir}" )
+        projects+=( "${profile}@${dir}" )
     done
+    # append running sessions, and for each session change '_DOT_' to '.' and
+    # the '_COLUMN_' to ':'
+    projects+=( $( tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" ls -F '#S' | sed -e 's:_DOT_:\.:g' -e 's#_COLUMN_#:#g' ) )
+    # remove duplicates
+    projects=( $(echo "${projects[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' ') )
 }
 
 #}}}
@@ -107,8 +112,9 @@ kill_pane=false
 log_depth=0
 select_session=false
 tmux_socket_name=default
-profile=
+profile=personal
 sess=
+sess_dir=
 
 while [[ $# -ge 1 ]]; do
     case "${1}" in
@@ -162,7 +168,30 @@ while [[ $# -ge 1 ]]; do
                 help
                 exit 1
             fi
-            sess="${1}"
+            # make sure it is a folder or yell
+            if ! [[ -d "${1}" ]]; then
+                print_error "${log_depth}" "${sess} is not a folder"
+                help
+                exit 1
+            fi
+            # assign the first argument to sess
+            sess="$( cd "${1}" && pwd )"
+            debug "sess=${sess}"
+            # source the profile so we get the correct GOPATH
+            if [[ -n "${profile}" ]] && [[ -r "${HOME}/.zsh/profiles/${profile}.zsh" ]]; then
+                # shellcheck disable=SC1090
+                source "${HOME}/.zsh/profiles/${profile}.zsh"
+                pcode
+            fi
+            # replace $GOPATH with \$GOPATH and $HOME with \$HOME
+            sess="$( echo "${sess}" | sed -e "s:$GOPATH:\$GOPATH:g" -e "s:$HOME:\$HOME:g" )"
+            debug "sess=${sess}"
+            # assign the sess_dir
+            sess_dir="${sess}"
+            debug "sess_dir=${sess_dir}"
+            # add the profile to the sess
+            sess="${profile}@${sess}"
+            debug "sess=${sess}"
             shift
             ;;
     esac
@@ -174,8 +203,7 @@ done
 ####
 # Main{{{
 
-# start with an empty sess and an empty profile
-selected_sess=
+# start with an empty sess_dir and an empty profile
 inside_tmux="$( test -n "${TMUX}" && echo true || echo false )"
 
 # remove the TMUX from the environment to force creating of another session
@@ -187,45 +215,48 @@ if isTrue "${select_session}"; then
     # to build the array
     typeset -a projects
     build_projects
+    debug "projects=${projects[*]}"
     # select the session
-    selected_sess="$( for i in ${projects[@]}; do echo "${i}"; done | fzf )"
-    if [[ -z "${selected_sess}" ]]; then
+    sess="$( for i in "${projects[@]}"; do echo "${i}"; done | fzf )"
+    if [[ -z "${sess}" ]]; then
         print_error 0 "no session were selected"
         exit 1
     fi
-    profile="$(echo "${selected_sess}" | cut -d: -f1)"
-    sess="$(echo "${selected_sess}" | cut -d: -f2)"
+    profile="$(echo "${sess}" | cut -d@ -f1)"
+    sess_dir="$(echo "${sess}" | cut -d@ -f2)"
     debug "sess=${sess}"
+    debug "sess_dir=${sess_dir}"
     debug "profile=${profile}"
 fi
 
-# if we have selected a profile, source it so we can execute the prepare
+# source the profile so we get the correct GOPATH
 if [[ -n "${profile}" ]] && [[ -r "${HOME}/.zsh/profiles/${profile}.zsh" ]]; then
+    # shellcheck disable=SC1090
     source "${HOME}/.zsh/profiles/${profile}.zsh"
     pcode
 fi
 
 # if the sess is empty, set it to the dotfiles
 if [[ -z "${sess}" ]]; then
-    sess="${HOME}/.dotfiles"
+    sess="personal@\$HOME/.dotfiles"
+    sess_dir="${HOME}/.dotfiles"
+    profile="personal"
 fi
 
 # expand any variable stored in the sess name
-sess="$( eval "echo $sess" )"
-debug "sess=${sess}"
+sess_dir="$( eval "echo ${sess_dir}" )"
+debug "eval(sess_dir)=${sess_dir}"
 
 # if the sess is an actual directory, go there first and set the sess to
 # empty to generate the session name from the path
-if [[ -d "${sess}" ]]; then
+if [[ -d "${sess_dir}" ]]; then
     # go inside the folder
-    cd "${sess}"
-    # compute the session name from the path, remove HOME/GOPATH
-    sess="${PWD##$GOPATH/src/}"
+    cd "${sess_dir}"
 fi
 
 # session name cannot contain a dot or a column
 # https://github.com/tmux/tmux/blob/76688d204071b76fd3388e46e944e4b917c09625/session.c#L232
-sess="$(echo "${sess}" | sed -e 's:\.:_:g' -e 's#:#_#g')"
+sess="$(echo "${sess}" | sed -e 's:\.:_DOT_:g' -e 's#:#_COLUMN_#g')"
 
 # make sure a server is running
 tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" start-server
