@@ -44,9 +44,6 @@ if [[ -z "${XBASERC}" ]]; then
   else
     xrandr --output eDP1 --mode 1920x1080
   fi
-
-  # set beep to off
-  xset b off
 fi
 
 unset -f _pathmunge
