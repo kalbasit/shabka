@@ -101,6 +101,9 @@ if has("python")
   Plug 'sjl/gundo.vim', { 'on': 'GundoToggle' }
 endif
 
+" this script will explode arrays, functions arguments into a multi-line
+Plug 'FooSoft/vim-argwrap'
+
 " show trailing whitespace in red. It also strips whitespace on save (See
 " settings for it below). To disable it, use :ToggleStripWhitespaceOnSave and
 " to strip manually do :StripWhiteSpace
@@ -492,6 +495,11 @@ let g:airline#extensions#tabline#enabled = 1
 
 " use seoul256 theme
 let g:airline_theme='seoul256'
+
+"" }}}
+"" ArgWrap{{{
+
+nnoremap <silent> <leader>a :ArgWrap<CR>
 
 "" }}}
 "" Syntastic{{{
