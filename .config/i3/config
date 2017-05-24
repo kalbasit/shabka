@@ -323,7 +323,6 @@ bindsym $alt+p [class="Chromium" instance="crx_jjbjdleccaiklfpcblgekgmjadjdclkp"
 ##############
 
 exec $nosid termite --title=irc --exec="tmx -L irc irc"
-exec $nosid termite --title=vit --exec="vit"
 exec $nosid termite --title=TaskWarrior --exec="tmx -L task task"
 exec $nosid whatsapp-web-desktop
 
