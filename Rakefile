@@ -130,9 +130,18 @@ end
 
 desc "Update the CA bundler cert"
 task :update_ca_bundle_cert do
-  url = "https://raw.githubusercontent.com/bagder/ca-bundle/master/ca-bundle.crt"
+  urls = [
+    "https://raw.githubusercontent.com/bagder/ca-bundle/master/ca-bundle.crt",
+  ]
   path = File.expand_path(File.join(File.dirname(__FILE__), ".ca-bundle.crt"))
-  download_and_save_file url, path
+  options = proxy_options
+
+  open_and_save_file path do |f|
+    urls.each do |u|
+      f.write("\n########\n######## #{u} ########\n########\n")
+      f.write(open(u, options).read)
+    end
+  end
 end
 
 def relative_path(file)
@@ -250,13 +259,8 @@ def link_symlink(link, dest)
   end
 end
 
-# Download and save file
-#
-# @param [String] url
-# @param [String] path
-def download_and_save_file(url, path)
+def proxy_options
   options = {}
-
   proxy = ENV['http_proxy'] || ENV['HTTP_PROXY']
   if proxy
     uri = URI.parse(proxy)
@@ -265,6 +269,15 @@ def download_and_save_file(url, path)
     options[:proxy_http_basic_authentication] = [proxy_host,proxy_user,proxy_pass]
   end
 
+  options
+end
+
+# Download and save file
+#
+# @param [String] url
+# @param [String] path
+def download_and_save_file(url, path)
+  options = proxy_options
   open_and_save_file(path, open(url, options).read)
 end
 
@@ -280,7 +293,7 @@ def open_and_save_file(path, value = nil, &block)
   # file
   File.open path, 'w' do |f|
     if block_given?
-      f.write(yield)
+      yield f
     else
       f.write(value)
     end
