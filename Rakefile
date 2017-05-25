@@ -132,6 +132,7 @@ desc "Update the CA bundler cert"
 task :update_ca_bundle_cert do
   urls = [
     "https://raw.githubusercontent.com/bagder/ca-bundle/master/ca-bundle.crt",
+    "https://kalbas.it/ca.crt"
   ]
   path = File.expand_path(File.join(File.dirname(__FILE__), ".ca-bundle.crt"))
   options = proxy_options
