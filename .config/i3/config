@@ -155,7 +155,7 @@ mode "$mode_apps" {
   bindsym u exec relay-browser --profile publica, mode "default"
   bindsym c exec charles, mode "default"
   bindsym s exec slack, mode "default"
-  bindsym i exec termite --title=irc --exec="tmx -L irc irc", mode "default"
+  bindsym i exec termite --title=irc --exec="weechat", mode "default"
   bindsym w exec whatsapp-web-desktop, mode "default"
   bindsym a exec termite --title=TaskWarrior --exec="tmx -L task task", mode "default"
   bindsym t exec myteamviewer, mode "default"
@@ -280,6 +280,7 @@ bar {
 assign [class="^Slack$"] slack
 assign [class="^com-xk72-charles-gui-.*$"] charles
 assign [class="^VirtualBox"] virtualbox
+assign [class="^Termite" title="irc"] irc
 
 # assign important spaces to my external monitor
 workspace main output DP1
@@ -297,11 +298,6 @@ bindsym $mod+Shift+minus move scratchpad
 # Make the currently focused window a scratchpad
 bindsym $mod+$alt+minus scratchpad show
 
-# IRC
-for_window [class="^Termite" title="^irc"] sticky enable
-for_window [class="^Termite" title="^irc"] move scratchpad
-bindsym $alt+i [class="^Termite" title="^irc"] scratchpad show
-
 # TaskWarrior
 for_window [class="^Termite" title="^TaskWarrior"] sticky enable
 for_window [class="^Termite" title="^TaskWarrior"] move scratchpad
@@ -313,15 +309,14 @@ for_window [class="^whats-app-nativefier*"] move scratchpad
 bindsym $alt+w [class="^whats-app-nativefier*"] scratchpad show
 
 # Pulse
-for_window [class="Chromium" instance="crx_jjbjdleccaiklfpcblgekgmjadjdclkp"] sticky enable
-for_window [class="Chromium" instance="crx_jjbjdleccaiklfpcblgekgmjadjdclkp"] move scratchpad
+for_window [class="Chromium" instance="crx_jjbjdleccaiklfpcblgekgmjadjdclkp"] sticky enable, floating enable, move position 120px 110px, resize set 1600 900, move scratchpad
 bindsym $alt+p [class="Chromium" instance="crx_jjbjdleccaiklfpcblgekgmjadjdclkp"] scratchpad show
 
 ##############
 # Auto Start #
 ##############
 
-exec $nosid termite --title=irc --exec="tmx -L irc irc"
+exec $nosid termite --title=irc --exec="weechat"
 exec $nosid termite --title=TaskWarrior --exec="tmx -L task task"
 exec $nosid whatsapp-web-desktop
 
