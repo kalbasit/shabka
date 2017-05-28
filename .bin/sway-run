@@ -1,0 +1,43 @@
+#!/bin/bash
+set -ex
+
+# simplified pathmunge used for early X
+function _pathmunge() {
+  [[ ! -d "${1}" ]] && return
+  if ! [[ $PATH =~ (^|:)$1($|:) ]]; then
+    PATH=$1:$PATH
+  fi
+}
+
+# initialize the PATH
+export PATH="/usr/local/sbin:/usr/local/bin:/usr/bin"
+
+# Important variable
+export BROWSER="${HOME}/.bin/relay-browser"
+export EDITOR="nvim"
+export LANG=en_US.UTF-8
+export LC_ALL="${LANG}"
+export MYFS="${HOME}/.filesystem"
+export SUDO_EDITOR="nvim"
+export TERM=termite
+
+# add my bin folders to the PATH
+_pathmunge "${HOME}/.bin"
+_pathmunge "${HOME}/code/bin"
+_pathmunge "${HOME}/.filesystem/bin"
+
+# make java applications look decent
+export _JAVA_AWT_WM_NONREPARENTING=1
+
+# sway-specific setting
+export XKB_DEFAULT_OPTIONS=ctrl:nocaps
+export WLC_REPEAT_DELAY=200
+export WLC_REPEAT_RATE=30
+export XKB_DEFAULT_VARIANT=colemak
+# export GTK_IM_MOUDLE=ibus
+# export XMODIFIERS=@im=ibus
+# export QT_IM_MODULE=ibus
+
+unset -f _pathmunge
+
+sway 2> ~/.sway.log
