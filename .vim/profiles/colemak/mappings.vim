@@ -63,6 +63,12 @@ vmap <F1> <ESC>
 nmap <F1> <ESC>
 imap <F1> <ESC>
 
+" split navigation
+nnoremap <A-n> <C-W><C-H>
+nnoremap <A-e> <C-W><C-J>
+nnoremap <A-i> <C-W><C-K>
+nnoremap <A-o> <C-W><C-L>
+
 " format the entire file
 nnoremap <leader>= :normal! gg=G``<CR>
 

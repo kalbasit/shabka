@@ -536,7 +536,14 @@ let g:tagbar_type_go = {
 \ }
 ""}}}
 "" AutoPairs{{{
+
+" do not jump to the next line if there's only whitespace after the closing
+" pair
 let g:AutoPairsMultilineClose = 0
+
+" disable shortcuts, <A-n> conflicts with Colemak movement
+let g:AutoPairsShortcutJump = ''
+
 "}}}
 "" BetterWhitespace{{{
 
