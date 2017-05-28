@@ -261,7 +261,7 @@ bindsym $mod+$alt+k mode "$mode_keyboard"
 set $mode_power System: (l) lock, (o) logout, (s) suspend, (h) hibernate, (r) reboot, (Shift+s) shutdown
 mode "$mode_power" {
   bindsym l exec $nosid $locker, mode "default"
-  bindsym o exec $nosid i3-msg exit
+  bindsym o exit
   bindsym s exec $nosid $locker && systemctl suspend, mode "default"
   bindsym h exec $nosid $locker && systemctl hibernate, mode "default"
   bindsym r exec $nosid systemctl reboot
