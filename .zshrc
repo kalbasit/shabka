@@ -180,6 +180,7 @@ alias remove_dangling_images="docker rmi \$(docker images -f dangling=true -q)"
 alias remove_dead_containers="docker rm -v \$(docker ps -a -q -f status=exited)"
 alias rot13="tr '[A-Za-z]' '[N-ZA-Mn-za-m]'"
 alias rserve_this="ruby -rrack -e \"Rack::Handler::WEBrick.run Rack::Directory.new('.')\""
+alias s='tmx -s'
 alias serve_this="python2 -m SimpleHTTPServer"
 alias t='task'
 alias ta='task add'
