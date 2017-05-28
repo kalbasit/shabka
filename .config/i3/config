@@ -79,7 +79,7 @@ bindsym $mod+f fullscreen toggle
 bindsym $mod+Shift+q kill
 
 # start rofi run
-bindsym $mod+r exec "rofi -show run"
+bindsym $mod+r exec $nosid rofi -show run
 
 # rename workspace
 bindsym $mod+Shift+w exec i3-input -F 'rename workspace to %s' -P 'New name: '
@@ -89,8 +89,8 @@ bindsym $mod+Tab workspace back_and_forth
 bindsym $mod+Shift+Tab move container to workspace back_and_forth
 
 # dynamic workspaces
-bindsym $mod+space exec $nosid "rofi -show Workspaces"
-bindsym $mod+Shift+space exec $nosid "rofi -show MoveContainer"
+bindsym $mod+space exec $nosid rofi -show Workspaces
+bindsym $mod+Shift+space exec $nosid rofi -show MoveContainer
 
 # change container layout (stacked, tabbed, toggle split)
 bindsym $mod+l layout stacking
@@ -112,15 +112,15 @@ bindsym $mod+m exec i3-input -F 'mark %s' -l 1 -P 'Mark: '
 bindsym $mod+apostrophe exec i3-input -F '[con_mark="%s"] focus' -l 1 -P 'Go to: '
 
 # volume support
-bindsym XF86AudioRaiseVolume exec $nosid "pactl set-sink-mute 0 false; pactl set-sink-volume 0 +5%"
-bindsym XF86AudioLowerVolume exec $nosid "pactl set-sink-mute 0 false; pactl set-sink-volume 0 -5%"
-bindsym XF86AudioMute exec $nosid "pactl set-sink-mute 0 toggle"
+bindsym XF86AudioRaiseVolume exec $nosid pactl set-sink-mute 0 false, exec $nosid pactl set-sink-volume 0 +5%
+bindsym XF86AudioLowerVolume exec $nosid pactl set-sink-mute 0 false, exec $nosid pactl set-sink-volume 0 -5%
+bindsym XF86AudioMute exec $nosid pactl set-sink-mute 0 toggle
 
 # brightness support
-bindsym XF86MonBrightnessUp exec $nosid "xbacklight -inc 5
-bindsym XF86MonBrightnessDown exec $nosid "xbacklight -dec 5
-bindsym Shift+XF86MonBrightnessUp exec $nosid "xbacklight -inc 1
-bindsym Shift+XF86MonBrightnessDown exec $nosid "xbacklight -dec 1
+bindsym XF86MonBrightnessUp exec $nosid xbacklight -inc 5
+bindsym XF86MonBrightnessDown exec $nosid xbacklight -dec 5
+bindsym Shift+XF86MonBrightnessUp exec $nosid xbacklight -inc 1
+bindsym Shift+XF86MonBrightnessDown exec $nosid xbacklight -dec 1
 
 # sleep support
 bindsym XF86PowerOff exec $nosid $locker && systemctl suspend
@@ -139,8 +139,8 @@ bindsym $mod+Return exec termite
 # Window Manager mode, this mode allows me to control i3
 set $mode_wm WM: (r) Reload i3, (e) Restart i3
 mode "$mode_wm" {
-  bindsym r reload; exec $nosid "notify-send 'i3 configuration reloaded'", mode "default"
-  bindsym e restart; exec $nosid "notify-send 'i3 restarted'", mode "default"
+  bindsym r reload; exec $nosid notify-send 'i3 configuration reloaded', mode "default"
+  bindsym e restart; exec $nosid notify-send 'i3 restarted', mode "default"
 
   # back to normal: Enter or Escape
   bindsym Return mode "default"
@@ -155,7 +155,7 @@ mode "$mode_apps" {
   bindsym u exec relay-browser --profile publica, mode "default"
   bindsym c exec charles, mode "default"
   bindsym s exec slack, mode "default"
-  bindsym i exec termite --title=irc --exec="weechat", mode "default"
+  bindsym i exec termite --title=irc --exec=weechat, mode "default"
   bindsym w exec whatsapp-web-desktop, mode "default"
   bindsym a exec termite --title=TaskWarrior --exec="tmx -L task task", mode "default"
   bindsym t exec myteamviewer, mode "default"
