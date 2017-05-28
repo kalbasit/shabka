@@ -205,6 +205,33 @@ mode "$resize_mode" {
 }
 bindsym $mod+$alt+r mode "$resize_mode"
 
+# move window (you can also use the mouse for that)
+set $move_mode move
+mode "$move_mode" {
+  # Micro movement
+  bindsym Control+n move left 10 px
+  bindsym Control+e move down 10 px
+  bindsym Control+i move up 10 px
+  bindsym Control+o move right 10 px
+
+  # # Normal resizing
+  bindsym n move left 50 px
+  bindsym e move down 50 px
+  bindsym i move up 50 px
+  bindsym o move right 50 px
+  #
+  # # Macro resizing
+  bindsym Shift+n move left 100 px
+  bindsym Shift+e move down 100 px
+  bindsym Shift+i move up 100 px
+  bindsym Shift+o move right 100 px
+
+  # back to normal: Enter or Escape
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+}
+bindsym $mod+$alt+m mode "$move_mode"
+
 # Display mode allows output/resolution selection
 set $mode_display (l) Laptop screen, (m) Multiple screen, (w) Wide screen
 mode "$mode_display" {
