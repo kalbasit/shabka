@@ -326,17 +326,15 @@ bindsym $mod+Shift+minus move scratchpad
 bindsym $mod+$alt+minus scratchpad show
 
 # TaskWarrior
-for_window [class="^Termite" title="^TaskWarrior"] sticky enable
-for_window [class="^Termite" title="^TaskWarrior"] move scratchpad
+for_window [class="^Termite" title="^TaskWarrior"] sticky enable, floating enable, move scratchpad
 bindsym $alt+a [class="^Termite" title="^TaskWarrior"] scratchpad show
 
 # Whatsapp
-for_window [class="^whats-app-nativefier*"] sticky enable
-for_window [class="^whats-app-nativefier*"] move scratchpad
+for_window [class="^whats-app-nativefier*"] sticky enable, floating enable, move scratchpad
 bindsym $alt+w [class="^whats-app-nativefier*"] scratchpad show
 
 # Pulse
-for_window [class="Chromium" instance="crx_jjbjdleccaiklfpcblgekgmjadjdclkp"] sticky enable, floating enable, move position 120px 110px, resize set 1600 900, move scratchpad
+for_window [class="Chromium" instance="crx_jjbjdleccaiklfpcblgekgmjadjdclkp"] sticky enable, floating enable, move scratchpad
 bindsym $alt+p [class="Chromium" instance="crx_jjbjdleccaiklfpcblgekgmjadjdclkp"] scratchpad show
 
 ##############
