@@ -221,18 +221,6 @@ setopt pushdtohome
 # whenever you need them using ‘fc -RI’.
 setopt sharehistory
 
-# Commands are being read from the standard input. Commands are read from
-# standard input if no command is specified with -c and no file of commands is
-# specified. If SHIN_STDIN is set explicitly on the command line, any argument
-# that would otherwise have been taken as a file to run will instead be treated
-# as a normal positional parameter. Note that setting or unsetting this option
-# on the command line does not necessarily affect the state the option will
-# have while the shell is running - that is purely an indicator of whether or
-# not commands are actually being read from standard input. The value of this
-# option can only be changed via flags supplied at invocation of the shell. It
-# cannot be changed once zsh is running.
-setopt shinstdin
-
 # Use the zsh line editor. Set by default in interactive shells connected to a
 # terminal.
 setopt zle
