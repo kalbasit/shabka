@@ -154,14 +154,6 @@ setopt histverify
 # specified by $SAVEHIST (see also the HIST_SAVE_BY_COPY option).
 setopt incappendhistory
 
-# This is an interactive shell. This option is set upon initialisation if the
-# standard input is a tty and commands are being read from standard input. (See
-# the discussion of SHIN_STDIN.) This heuristic may be overridden by specifying
-# a state for this option on the command line. The value of this option can
-# only be changed via flags supplied at invocation of the shell. It cannot be
-# changed once zsh is running.
-setopt interactive
-
 # Allow comments even in interactive shells.
 setopt interactivecomments
 
