@@ -27,6 +27,9 @@ if [[ -z "${XBASERC}" ]]; then
   _pathmunge "${HOME}/code/bin"
   _pathmunge "${HOME}/.filesystem/bin"
 
+  # change the keyboard to Colemak
+  setxkbmap us -variant colemak
+
   # merge in defaults and keymaps
   userresources="$HOME/.Xresources"
   usermodmap="$HOME/.Xmodmap"
@@ -36,7 +39,6 @@ if [[ -z "${XBASERC}" ]]; then
   [[ -f "${sysmodmap}" ]] && xmodmap "${sysmodmap}"
   [[ -f "${userresources}" ]] && xrdb -merge "${userresources}"
   [[ -f "${usermodmap}" ]] && xmodmap "${usermodmap}"
-
 
   # change the resolution
   if xrandr | grep -q '^DP1 connected'; then
