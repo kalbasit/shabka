@@ -230,7 +230,7 @@ while [[ $# -ge 1 ]]; do
             fi
             # make sure it is a folder or yell
             if ! [[ -d "${1}" ]]; then
-                print_error "${log_depth}" "${sess} is not a folder"
+                print_error "${log_depth}" "${1} is not a folder"
                 help
                 exit 1
             fi
