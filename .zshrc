@@ -71,7 +71,7 @@ fi
 # inserted or menu completion is performed.
 setopt alwaystoend
 
-# If a command is issued that can’t be executed as a normal command, and the
+# If a command is issued that can't be executed as a normal command, and the
 # command is the name of a directory, perform the cd command to that directory.
 # This option is only applicable if the option SHIN_STDIN is set, i.e. if
 # commands are being read from standard input. The option is designed for
@@ -142,7 +142,7 @@ setopt histignoredups
 # another command, type a space and press return.
 setopt histignorespace
 
-# Whenever the user enters a line with history expansion, don’t execute the
+# Whenever the user enters a line with history expansion, don't execute the
 # line directly; instead, perform history expansion and reload the line into
 # the editing buffer.
 setopt histverify
@@ -182,7 +182,7 @@ setopt nomenucomplete
 # command status.
 setopt promptsubst
 
-# Don’t push multiple copies of the same directory onto the directory stack.
+# Don't push multiple copies of the same directory onto the directory stack.
 setopt pushdignoredups
 
 # Exchanges the meanings of ‘+’ and ‘-’ when used with a number to specify a
