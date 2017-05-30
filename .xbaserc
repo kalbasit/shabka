@@ -27,9 +27,6 @@ if [[ -z "${XBASERC}" ]]; then
   _pathmunge "${HOME}/code/bin"
   _pathmunge "${HOME}/.filesystem/bin"
 
-  # change the keyboard to Colemak
-  setxkbmap us -variant colemak
-
   # merge in defaults and keymaps
   userresources="$HOME/.Xresources"
   usermodmap="$HOME/.Xmodmap"
