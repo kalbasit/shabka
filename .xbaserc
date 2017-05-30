@@ -26,6 +26,7 @@ if [[ -z "${XBASERC}" ]]; then
   _pathmunge "${HOME}/.bin"
   _pathmunge "${HOME}/code/bin"
   _pathmunge "${HOME}/.filesystem/bin"
+  _pathmunge "${MYFS}/opt/rofi-clipboard-manager"
 
   # merge in defaults and keymaps
   userresources="$HOME/.Xresources"

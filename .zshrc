@@ -815,6 +815,9 @@ if [[ "$OSTYPE" = darwin* ]]; then
   fi
 fi
 
+# Load rofi clipboard manager
+pathmunge "${MYFS}/opt/rofi-clipboard-manager"
+
 # Load TheFuck
 if [[ -x "$(which thefuck 2>/dev/null)" ]]; then
   # Lazy load TheFuck

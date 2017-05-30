@@ -125,6 +125,9 @@ bindsym Shift+XF86MonBrightnessDown exec $nosid xbacklight -dec 1
 # sleep support
 bindsym XF86PowerOff exec $nosid $locker && systemctl suspend
 
+# clipboard history
+bindsym $mod+$alt+c exec rofi -modi "clipboard:mclip.py menu" -show clipboard && mclip.py paste
+
 ################
 # Applications #
 ################
@@ -344,6 +347,7 @@ bindsym $alt+p [class="Chromium" instance="crx_jjbjdleccaiklfpcblgekgmjadjdclkp"
 exec $nosid termite --title=irc --exec="weechat"
 exec $nosid termite --title=TaskWarrior --exec="tmx -L task task"
 exec $nosid whatsapp-web-desktop
+exec $nosid mclip.py daemon
 
 # Start the personal terminal on the personal workspace
 exec i3-msg "workspace personal; exec $nosid /usr/bin/termite"
