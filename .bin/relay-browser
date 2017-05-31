@@ -7,7 +7,7 @@ if [[ "${1}" = "--profile" ]]; then
 fi
 
 if [[ -z "${profile}" ]]; then
-  items="personal\npublica\n"
+  items="personal\npublica\ntalentoday\n"
   profile=$(rofi -dmenu < <(echo -e "${items}"))
 fi
 
@@ -17,6 +17,9 @@ case "${profile}" in
     ;;
   publica)
     (exec chromium --user-data-dir="${HOME}/.config/chromium-publica" "${@}" &>/dev/null)&
+    ;;
+  talentoday)
+    (exec chromium --user-data-dir="${HOME}/.config/chromium-talentoday" "${@}" &>/dev/null)&
     ;;
   *)
     echo -e "${profile} is not recognized"
