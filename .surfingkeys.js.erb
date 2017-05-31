@@ -428,6 +428,11 @@ mapkey("spl", "#13Set Proxy to Charles", function() {
     proxy: "127.0.0.1:8888"
   });
 });
+mapkey('su', '#4Edit current URL with vim editor', function() {
+    Front.showEditor(window.location.href, function(data) {
+        window.location.href = data;
+    }, 'url');
+});
 
 // END Custom bindings
 //////////////////////////////////////
