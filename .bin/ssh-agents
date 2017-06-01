@@ -9,7 +9,7 @@ unset SSH_AUTH_SOCK SSH_AGENT_PID
 USER_SHELL=$1
 
 # setup the initial pssh to use current SSH_AGENT_NAME or ACTIVE_PROFILE
-pssh() {
+function pssh() {
   export SSH_AGENT_NAME="${SSH_AGENT_NAME:-${ACTIVE_PROFILE}}"
 }
 
@@ -29,7 +29,7 @@ fi
 
 # Path where we store the ssh-agent environment variables, so that
 # multiple sessions may look for an existing agent.
-SSH_AGENT_FILE="{$HOME}/.ssh/${SSH_AGENT_NAME}/agent"
+SSH_AGENT_FILE="${HOME}/.ssh/${SSH_AGENT_NAME}/agent"
 if [[ ! -w "$( dirname "${SSH_AGENT_FILE}" )" ]]; then
   exit # do not spawn an agent if we cannot write to $HOME.
 fi
@@ -48,7 +48,7 @@ function start_ssh_agent() {
   agent_status=$?
 
   # Does our environment point to an agent now?
-  if [ $agent_status -eq 2 ]; then
+  if [[ "${agent_status}" -eq 2 ]]; then
     # No.  Start an ssh-agent, saving the environment variables.
     if ssh-agent -s > "${SSH_AGENT_FILE}"; then
       echo "Failed to start the ssh-agent." >&2
