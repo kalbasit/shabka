@@ -93,6 +93,10 @@ endif
 " load editorconfig if available
 Plug 'editorconfig/editorconfig-vim'
 
+if executable("ag")
+  Plug 'mileszs/ack.vim'
+endif
+
 """""""""""
 " Editing "
 """""""""""
@@ -495,6 +499,18 @@ let g:airline#extensions#tabline#enabled = 1
 
 " use seoul256 theme
 let g:airline_theme='seoul256'
+
+"" }}}
+"" Ack{{{
+
+let g:ackprg = 'ag --vimgrep --smart-case'
+cnoreabbrev ag Ack
+cnoreabbrev aG Ack
+cnoreabbrev Ag Ack
+cnoreabbrev AG Ack
+
+map <Leader>/ :Ack<space>
+
 
 "" }}}
 "" ArgWrap{{{
