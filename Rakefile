@@ -51,7 +51,7 @@ GO_BINARIES = [
 ]
 
 desc "run :update_submodules and :link"
-task :default => [:update_submodules, :update_completions, :link, :lesskey]
+task :default => [:update_submodules, :update_completions, :link, :lesskey, :gen_ca_bundle_cert]
 
 desc "Link both private and public config files"
 task :link => [:link_dotfiles, :link_private]
@@ -128,18 +128,18 @@ task :update_submodules do
   sh %Q{git submodule update --init > /dev/null}
 end
 
-desc "Update the CA bundler cert"
-task :update_ca_bundle_cert do
+desc "Generate the CA bundler cert"
+task :gen_ca_bundle_cert do
   urls = [
     "https://raw.githubusercontent.com/bagder/ca-bundle/master/ca-bundle.crt",
     "https://kalbas.it/ca.crt"
   ]
-  path = File.expand_path(File.join(File.dirname(__FILE__), ".ca-bundle.crt"))
+  path = File.expand_path(File.join(ENV["HOME"], ".ca-bundle.crt"))
   options = proxy_options
 
   open_and_save_file path do |f|
     urls.each do |u|
-      f.write("\n########\n######## #{u} ########\n########\n")
+      f.write("\n########\n######## #{u}\n########\n")
       f.write(open(u, options).read)
     end
   end
@@ -289,7 +289,7 @@ end
 # @param [&block]
 def open_and_save_file(path, value = nil, &block)
   # Make sure the directory up to the folder exists
-  mkdir_p File.dirname(path)
+  mkdir_p File.dirname(path) unless File.exist?(File.dirname(path))
   # Open the file and use either the block or the value to write the
   # file
   File.open path, 'w' do |f|
