@@ -311,13 +311,6 @@ pathmunge "${HOME}/.rbenv/bin"
 # add pyenv
 pathmunge "${HOME}/.pyenv/bin"
 
-# use git ls-tree to speed up FZF. Fall back to find if no current folder is
-# not under Git.
-export FZF_DEFAULT_COMMAND='
-  (git ls-tree -r --name-only HEAD ||
-   find . -path "*/\.*" -prune -o -type f -print -o -type l -print |
-      sed s/^..//) 2> /dev/null'
-
 #####################################################################
 # aliases
 #####################################################################
@@ -834,6 +827,14 @@ fi
 
 # Load FZF
 [[ -r "${HOME}/.fzf.zsh" ]] && source "${HOME}/.fzf.zsh"
+if [[ -x $(which ag 2>/dev/null) ]]; then
+  export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
+else
+  # use git ls-tree to speed up FZF. Fall back to find if no current folder is
+  # not under Git.
+  export FZF_DEFAULT_COMMAND='(git ls-tree -r --name-only HEAD || find . -path "*/\.*" -prune -o -type f -print -o -type l -print | sed s/^..//) 2> /dev/null'
+fi
+
 
 # Load SSH agents
 [[ -x "${HOME}/.bin/ssh-agents" ]] && eval "$( ssh-agents $SHELL )"

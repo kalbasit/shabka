@@ -579,20 +579,6 @@ let g:fzf_action = {
   \ 'ctrl-s': 'split',
   \ 'ctrl-v': 'vsplit' }
 
-" https://github.com/junegunn/fzf.vim/issues/133
-if executable("ag")
-  function! s:with_agignore(bang, args)
-    let agignore = '/tmp/agignore-for-fzf'
-    let entries = split(&wildignore, ',')
-    let source = 'ag --path-to-agignore '.agignore.' -g ""'
-    call writefile(entries, agignore)
-    call fzf#vim#files(a:args, extend(fzf#vim#layout(a:bang), {'source': source}))
-  endfunction
-
-  autocmd VimEnter * command! -bang -nargs=? -complete=dir Files
-        \ call s:with_agignore(<bang>0, <q-args>)<Paste>
-endif
-
 if has('nvim')
   function! s:fzf_statusline()
     " Override statusline as you like
