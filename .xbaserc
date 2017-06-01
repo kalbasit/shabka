@@ -33,10 +33,10 @@ if [[ -z "${XBASERC}" ]]; then
   usermodmap="$HOME/.Xmodmap"
   sysresources="/etc/X11/xinit/.Xresources"
   sysmodmap="/etc/X11/xinit/.Xmodmap"
-  [[ -f "${sysresources}" ]] && xrdb -merge "${sysresources}"
-  [[ -f "${sysmodmap}" ]] && xmodmap "${sysmodmap}"
-  [[ -f "${userresources}" ]] && xrdb -merge "${userresources}"
-  [[ -f "${usermodmap}" ]] && xmodmap "${usermodmap}"
+  [[ -r "${sysresources}" ]] && xrdb -merge "${sysresources}"
+  [[ -r "${sysmodmap}" ]] && xmodmap "${sysmodmap}"
+  [[ -r "${userresources}" ]] && xrdb -merge "${userresources}"
+  [[ -r "${usermodmap}" ]] && xmodmap "${usermodmap}"
 
   # change the resolution
   if xrandr | grep -q '^DP1 connected'; then
