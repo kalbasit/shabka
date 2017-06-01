@@ -7,7 +7,7 @@ if [[ "${1}" = "--profile" ]]; then
 fi
 
 if [[ -z "${profile}" ]]; then
-  items="personal\npublica\ntalentoday\n"
+  items="personal\npublica\ntalentoday"
   profile=$(rofi -dmenu < <(echo -e "${items}"))
 fi
 
