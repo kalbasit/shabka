@@ -53,9 +53,9 @@ Plug 'junegunn/seoul256.vim'
 " YouCompleteMe
 " Install the plugin separately for nvim and vim.
 if has('nvim')
-  Plug 'Valloric/YouCompleteMe', { 'dir': '~/.vim/bundle/nvim-YouCompleteMe', 'do': 'python2 install.py --clang-completer --system-libclang --gocode-completer --tern-completer --racer-completer' }
+  Plug 'Valloric/YouCompleteMe', { 'dir': '~/.vim/bundle/nvim-YouCompleteMe', 'do': 'python2 install.py --clang-completer --system-libclang --gocode-completer --racer-completer' }
 else
-  Plug 'Valloric/YouCompleteMe', { 'dir': '~/.vim/bundle/vim-YouCompleteMe', 'do': 'python2 install.py --clang-completer --system-libclang --gocode-completer --tern-completer --racer-completer' }
+  Plug 'Valloric/YouCompleteMe', { 'dir': '~/.vim/bundle/vim-YouCompleteMe', 'do': 'python2 install.py --clang-completer --system-libclang --gocode-completer --racer-completer' }
 endif
 autocmd! User YouCompleteMe if !has('vim_starting') | call youcompleteme#Enable() | endif
 
