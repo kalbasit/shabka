@@ -1,23 +1,43 @@
 #!/bin/bash
 
-# The shell to which we tailor export/setent statements.
-USER_SHELL=$1
-
-# Path where we store the ssh-agent environment variables, so that
-# multiple sessions may look for an existing agent.
-SSH_AGENT_NAME="${SSH_AGENT_NAME:-personal}"
-SSH_AGENT_FILE="$HOME/.ssh/$SSH_AGENT_NAME/agent"
-if [[ ! -w $(dirname $SSH_AGENT_FILE) ]]; then
-  exit # do not spawn an agent if we cannot write to $HOME.
-fi
+set -e
 
 # Forget any currently running agent
 unset SSH_AUTH_SOCK SSH_AGENT_PID
 
+# The shell to which we tailor export/setent statements.
+USER_SHELL=$1
+
+# setup the initial pssh to use current SSH_AGENT_NAME or ACTIVE_PROFILE
+pssh() {
+  export SSH_AGENT_NAME="${SSH_AGENT_NAME:-${ACTIVE_PROFILE}}"
+}
+
+# Source the active profile so it overloads the pssh
+if [[ -n "${ACTIVE_PROFILE}" ]] && [[ -r "${HOME}/.zsh/profiles/${ACTIVE_PROFILE}" ]]; then
+  # shellcheck disable=SC1090
+  source "${HOME}/.zsh/profiles/${ACTIVE_PROFILE}"
+fi
+
+# call pssh to setup SSH_AGENT_NAME
+pssh
+
+# no SSH_AGENT_NAME? exit
+if [[ -z "${SSH_AGENT_NAME}" ]]; then
+  exit 0
+fi
+
+# Path where we store the ssh-agent environment variables, so that
+# multiple sessions may look for an existing agent.
+SSH_AGENT_FILE="{$HOME}/.ssh/${SSH_AGENT_NAME}/agent"
+if [[ ! -w "$( dirname "${SSH_AGENT_FILE}" )" ]]; then
+  exit # do not spawn an agent if we cannot write to $HOME.
+fi
+
 function start_ssh_agent() {
   # No. Try to get the environment variables from the file.
-  if [ -f $SSH_AGENT_FILE ] ; then
-    eval `cat $SSH_AGENT_FILE | grep -v echo`
+  if [[ -f "${SSH_AGENT_FILE}" ]] ; then
+    eval "$( grep -v echo "${SSH_AGENT_FILE}" )"
   fi
 
   # Exit status of ssh-add
@@ -30,16 +50,15 @@ function start_ssh_agent() {
   # Does our environment point to an agent now?
   if [ $agent_status -eq 2 ]; then
     # No.  Start an ssh-agent, saving the environment variables.
-    ssh-agent -s > $SSH_AGENT_FILE
-    if [ $? -ne 0 ]; then
+    if ssh-agent -s > "${SSH_AGENT_FILE}"; then
       echo "Failed to start the ssh-agent." >&2
       return
     fi
-    eval `cat $SSH_AGENT_FILE | grep -v echo`
+    eval "$( grep -v echo "${SSH_AGENT_FILE}" )"
   fi
 
   # Add all of the keys
-  for key in $(find "${HOME}/.ssh/$SSH_AGENT_NAME/" -not -name '*.pub' -not -name agent -type f | sed -e 's://:/:g'); do
+  for key in $(find "${HOME}/.ssh/${SSH_AGENT_NAME}/" -not -name '*.pub' -not -name agent -type f | sed -e 's://:/:g'); do
     ssh-add "${key}" < /dev/null > /dev/null 2>&1
   done
 }
@@ -51,25 +70,17 @@ function export_env() {
   # and maybe others).  Other folks can add detection for more
   # esoteric shells as needed.
 
-  if [ "${USER_SHELL##*/}" = "tcsh" ] ; then
-    for var in $* ; do
-      if [ -n "${!var}" ] ; then
+  for var in "${@}" ; do
+    if [[ -n "${!var}" ]] ; then
+      if [ "${USER_SHELL##*/}" = "tcsh" ] ; then
         echo "setenv $var ${!var};"
-      fi
-    done
-  elif [ "${USER_SHELL##*/}" = "fish" ] ; then
-    for var in $* ; do
-      if [ -n "${!var}" ] ; then
+      elif [ "${USER_SHELL##*/}" = "fish" ] ; then
         echo "set -Ux $var ${!var};"
-      fi
-    done
-  else
-    for var in $* ; do
-      if [ -n "${!var}" ] ; then
+      else
         echo "$var=${!var}; export $var;"
       fi
-    done
-  fi
+    fi
+  done
 }
 
 start_ssh_agent
