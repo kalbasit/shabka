@@ -61,7 +61,7 @@
   st              = status
   sta             = ls-files --exclude-per-directory=.gitignore --exclude-from=.git/info/exclude -t -o -u -s -m -d
   stc             = diff --stat --name-status --cached
-  stu             = status --uno
+  stu             = status -uno
   top             = !eval cd "$(pwd)/$(git rev-parse --show-cdup)" && pwd
   track           = checkout -t # Usage: git track origin/feature-123-login-form
   unstage         = reset HEAD --
