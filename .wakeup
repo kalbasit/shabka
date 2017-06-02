@@ -1,4 +1,0 @@
-#!/bin/sh
-
-sleep 5
-sudo $HOME/.bin/restart_blued
