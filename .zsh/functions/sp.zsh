@@ -1,6 +1,5 @@
-# sp stands for switch profile and it is designed to change the work profile of
-# the terminal by calling the appropriate pactivate() and pdeactivate() on the
-# profile
+# sp stands for switch profile. When invoked, it will source the requested
+# profile and calls pactivate to activate it
 function sp() {
     local profiles=()
     local requested_profile="${1}"
@@ -54,4 +53,18 @@ function sp() {
         eval "$( ssh-agents "$SHELL" )"
     fi
 }
-#}}}
+
+# _sp is for ZSH completion
+function _sp() {
+  local profiles=("kill")
+  local i=
+  local p=
+
+  for i in ${HOME}/.zsh/profiles/*.zsh; do
+    p="$( basename "${i}" )"
+    profiles=(${profiles[@]} ${p%%.zsh})
+  done
+
+  _arguments "1: :(${profiles[*]})"
+}
+compdef _sp sp
