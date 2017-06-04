@@ -66,6 +66,8 @@ function help()
     print_info "${log_depth}" "\t -L, --socket-name         - use a different socket than the default"
     print_info "${log_depth}" "\t -c, --confirm-vim-start   - confirm before starting Vim, this is essentially a performance improvement"
     print_info "${log_depth}" "\t -p, --profile             - the profile to use. This is only relevant if a new session is going to be started"
+    print_info "${log_depth}" "\t -vs, --vim-save-close-all  - Vim: save and close all files"
+    print_info "${log_depth}" "\t -ve, --vim-exit            - Vim: save and exit"
 }
 
 function build_projects() {
@@ -169,6 +171,8 @@ tmux_socket_name=default
 profile=personal
 sess=
 sess_dir=
+vim_save_close_all_files=false
+vim_exit=false
 
 while [[ $# -ge 1 ]]; do
     case "${1}" in
@@ -214,6 +218,14 @@ while [[ $# -ge 1 ]]; do
                 exit 1
             fi
             shift 2
+            ;;
+        -vs|--vim-save-close-all)
+            vim_save_close_all_files=true
+            shift
+            ;;
+        -ve|--vim-exit)
+            vim_exit=true
+            shift
             ;;
         *)
             # Make sure we have only one argument left
@@ -262,6 +274,40 @@ done
 
 ####
 # Main{{{
+
+# should we ask vim to save all files and close them?
+if isTrue "${vim_save_close_all_files}"; then
+    debug "going to ask Vim to save all files and close them"
+    for session in $(tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" list-sessions -F '#{session_name}'); do
+        # Send the escape key, in the case we are in a vim like program. This is
+        # repeated because the send-key command is not waiting for vim to complete
+        # its action... also sending a sleep 1 command seems to fuck up the loop.
+        for _ in {1..25}; do
+            tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${session}:0" 'C-['
+        done
+        # send ,wa (which saves all buffers)
+        # send ,ww (which will close all buffers)
+        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${session}:0" , w a , w w
+    done
+    exit 0
+fi
+
+# should we ask vim to exit?
+if isTrue "${vim_exit}"; then
+    debug "going to ask Vim to exit"
+    for session in $(tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" list-sessions -F '#{session_name}'); do
+        # Send the escape key, in the case we are in a vim like program. This is
+        # repeated because the send-key command is not waiting for vim to complete
+        # its action... also sending a sleep 1 command seems to fuck up the loop.
+        # Credit: https://gist.github.com/debugish/2773454
+        for _ in {1..25}; do
+            tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${session}:0" 'C-['
+        done
+        # ask Vim to exit
+        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${session}:0" : x a C-m
+    done
+    exit 0
+fi
 
 # start with an empty sess_dir and an empty profile
 inside_tmux="$( test -n "${TMUX}" && echo true || echo false )"
