@@ -79,21 +79,21 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all --no-update-rc' }
 " Externals "
 """""""""""""
 
-if executable("task")
+if executable('task')
   " revert to the original fork when
   " https://github.com/blindFS/vim-taskwarrior/pull/137 is merged
   " Plug 'blindFS/vim-taskwarrior'
   Plug 'kalbasit/vim-taskwarrior', { 'tag': 'add_option_disable_mappings' }
 endif
 
-if executable("curl")
+if executable('curl')
   Plug 'mattn/webapi-vim' | Plug 'mattn/gist-vim', { 'on': 'Gist' }
 endif
 
 " load editorconfig if available
 Plug 'editorconfig/editorconfig-vim'
 
-if executable("ag")
+if executable('ag')
   Plug 'mileszs/ack.vim'
 endif
 
