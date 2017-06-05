@@ -138,9 +138,11 @@ task :gen_ca_bundle_cert do
   options = proxy_options
 
   open_and_save_file path do |f|
+    sep=""
     urls.each do |u|
-      f.write("\n########\n######## #{u}\n########\n")
+      f.write("#{sep}########\n######## #{u}\n########\n")
       f.write(open(u, options).read)
+      sep="\n"
     end
   end
 end
