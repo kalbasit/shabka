@@ -19,6 +19,7 @@ if [[ -z "${XBASERC}" ]]; then
   export LANG=en_US.UTF-8
   export LC_ALL="${LANG}"
   export MYFS="${HOME}/.filesystem"
+  export NOTMUCH_CONFIG="${HOME}/.mail/.notmuch/config"
   export SUDO_EDITOR="nvim"
   export TERMINAL=termite
 
