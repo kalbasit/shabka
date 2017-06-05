@@ -43,12 +43,8 @@
 (setq echo-keystrokes 0.1)
 
 ;; Set default browser
-(setq browse-url-browser-function 'browse-url-generic)
-; (setq browse-url-generic-program
-;       (cond
-;         ((memq window-system '(mac ns)) "open")
-;         (linux (executable-find "google-chrome"))
-;         ))
+(setq browse-url-browser-function 'browse-url-generic
+      browse-url-generic-program "relay-browser")
 
 ;; Initial major mode is Emacs Lisp mode
 (setq initial-major-mode 'emacs-lisp-mode)
