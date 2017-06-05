@@ -117,6 +117,10 @@
     },
     {
         "profile": "personal",
+        "dir": "$GOPATH/src/github.com/gmuch/gmuch"
+    },
+    {
+        "profile": "personal",
         "dir": "$GOPATH/src/github.com/kalbasit/docker-images"
     },
     {
