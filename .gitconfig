@@ -33,11 +33,11 @@
   amend           = commit --amend
   cat             = -p cat-file -p
   cb              = checkout -b
-  cbw             = !git checkout -b $(i3-msg -t get_workspaces | jq -r '.[] | if .visible == true then .name else empty end')
+  cbw             = !git checkout -b $(i3-msg -t get_workspaces | jq -r '.[] | if .focused == true then .name else empty end')
   ci              = commit
   co              = checkout
   co-branch       = "!f() { git checkout-index -a -f --prefix=${1}/; }; f"
-  cow             = !git checkout $(i3-msg -t get_workspaces | jq -r '.[] | if .visible == true then .name else empty end')
+  cow             = !git checkout $(i3-msg -t get_workspaces | jq -r '.[] | if .focused == true then .name else empty end')
   credit          = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
   current-branch  = !git symbolic-ref -q HEAD | sed -e 's|^refs/heads/||'
   dc              = diff --cached
