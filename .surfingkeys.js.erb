@@ -275,7 +275,7 @@ function openAlternate(newTab) {
         var api_pull_url = "https://api.github.com/repos" + repoPath() + "/pulls/" + pp[3];
         // make an XHR Request to Github to find the URL
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", api_pull_url, true);
+        xhr.open("GET", api_pull_url);
         xhr.setRequestHeader("Authorization", "Basic " + btoa(username + ":" + password));
         xhr.onreadystatechange = function() {
           if (xhr.readyState === 4) {
@@ -285,12 +285,13 @@ function openAlternate(newTab) {
                 reject("statuses href not found in " + xhr.responseText);
                 return;
               }
+              // make a new request to fetch the Travis link from the status
               var innerXhr = new XMLHttpRequest();
-              innerXhr.open("GET", pr._links.statuses.href, true);
+              innerXhr.open("GET", pr._links.statuses.href);
               innerXhr.setRequestHeader("Authorization", "Basic " + btoa(username + ":" + password));
               innerXhr.onreadystatechange = function() {
                 if (innerXhr.readyState === 4) {
-                  if (xhr.status >= 200 && xhr.status < 299) {
+                  if (innerXhr.status >= 200 && innerXhr.status < 299) {
                     var statuses = JSON.parse(innerXhr.responseText);
                     for (var i = 0; i < statuses.length; i++) {
                       var status = statuses[i];
@@ -301,7 +302,7 @@ function openAlternate(newTab) {
                     }
                     reject("did not find the status continuous-integration/travis-ci/push in " + JSON.stringify(statuses));
                   } else {
-                    reject("got " + xhr.statusText + " in the HTTP request to " + pr._links.statuses.href);
+                    reject("got " + innerXhr.statusText + " in the HTTP request to " + pr._links.statuses.href);
                     return;
                   }
                 }
@@ -336,9 +337,7 @@ function openAlternate(newTab) {
                 openURL(url);
               })
               .catch(function(error) {
-                if (error !== "") {
-                  Front.showBanner(error);
-                }
+                Front.showBanner("error fetching the Travis URL: " + JSON.stringify(error));
                 setTimeout(function() {
                   openURL(targetURL);
                 }, 1000);
@@ -363,9 +362,7 @@ function openAlternate(newTab) {
               openURL(url);
             })
             .catch(function(error) {
-              if (error !== "") {
-                Front.showBanner(error);
-              }
+              Front.showBanner("error fetching the Github URL: " + JSON.stringify(error));
               setTimeout(function() {
                 openURL("https://github.com" + rp);
               }, 1000);
