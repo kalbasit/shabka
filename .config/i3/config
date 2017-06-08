@@ -66,6 +66,9 @@ bindsym $mod+$alt+n focus output left
 bindsym $mod+Shift+$alt+o move workspace to output right
 bindsym $mod+Shift+$alt+n move workspace to output left
 
+# toggle sticky
+bindsym $mod+s sticky toggle
+
 # toggle tiling / floating
 bindsym $alt+Shift+space floating toggle
 
