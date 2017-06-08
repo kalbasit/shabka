@@ -221,6 +221,12 @@ setopt zle
 # functions
 #####################################################################
 
+# have returns 0 if $1 is callable (alias, function or a binary)
+# Credit: https://github.com/Daenyth/dotfiles/blob/a22723420e780f04a77ebab8dd2737cfaba43c42/.bashrc#L47
+function have() {
+  type "$1" &>/dev/null
+}
+
 for func in ${HOME}/.zsh/functions/*.zsh; do
   # shellcheck disable=SC1090
   source "${func}"
@@ -786,7 +792,7 @@ export TERM=xterm-256color
 
 # Mac only externals
 if [[ "$OSTYPE" = darwin* ]]; then
-  if [[ -x $(which brew 2>/dev/null) ]]; then
+  if have brew; then
     # Load autojump
     autojump_path="$(brew --prefix)/etc/profile.d/autojump.sh"
     [[ -r "${autojump_path}" ]] && source "${autojump_path}"
@@ -803,7 +809,7 @@ if [[ "$OSTYPE" = darwin* ]]; then
   [[ -r "${HOME}/.iterm2_shell_integration.zsh" ]] && source "${HOME}/.iterm2_shell_integration.zsh"
 
   # Load the docker machine environmen
-  if [[ -x $(which docker-machine 2>/dev/null) ]]; then
+  if have docker-machine; then
     eval $(docker-machine env)
   fi
 fi
@@ -812,7 +818,7 @@ fi
 pathmunge "${MYFS}/opt/rofi-clipboard-manager"
 
 # Load TheFuck
-if [[ -x "$(which thefuck 2>/dev/null)" ]]; then
+if have thefuck; then
   # Lazy load TheFuck
   lazyLoadFuck () {
     unalias fuck
@@ -827,7 +833,7 @@ fi
 
 # Load FZF
 [[ -r "${HOME}/.fzf.zsh" ]] && source "${HOME}/.fzf.zsh"
-if [[ -x $(which ag 2>/dev/null) ]]; then
+if have ag; then
   export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
 else
   # use git ls-tree to speed up FZF. Fall back to find if no current folder is

@@ -5,11 +5,10 @@
 #       http://phraktured.net/config/
 #       http://www.downgra.de/dotfiles/
 
-# sapg()#{{{
 # generate passwords with apg
 function sapg()
 {
-    if [[ -f $(which apg) ]]; then
+    if have apg; then
         if [[ "${1}" == "-h" ]]; then
             print_error 0 "usage: ${0} <pwlen> <number of passwords>"
         else
@@ -24,4 +23,3 @@ function sapg()
         return 1
     fi
 }
-#}}}

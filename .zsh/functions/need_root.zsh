@@ -5,12 +5,11 @@
 #       http://phraktured.net/config/
 #       http://www.downgra.de/dotfiles/
 
-# need_root()#{{{
 function need_root()
 {
     if ! check_root; then
         print_warning 0 "Re-Running the script under root."
-        if [ -x "$(/usr/bin/which sudo 2> /dev/null)" ]; then
+        if have sudo; then
             if yes 'NOPASS' | sudo -S -l 2> /dev/null | grep -q "NOPASSWD"; then
                 sudo "${0}" ${@}
             else
@@ -42,4 +41,3 @@ function need_root()
         return 0
     fi
 }
-#}}}

@@ -99,7 +99,7 @@ Example: `~/.dotfiles/.private/.zsh/profiles/dailymotion.zsh`:
 function pactivate() {
   alias dev='ssh -A dev'
 
-  if [[ -x `which docker-machine 2>/dev/null` ]]; then
+  if have docker-machine; then
     export DMX_EVE_URL="//${DOCKER_MACHINE_DEV_IP}:1234"
     export DMX_JWT_SECRET="some-long-big-secret"
     export DMX_API_URL="//${DOCKER_MACHINE_DEV_IP}:5678"
@@ -116,6 +116,16 @@ function pdeactivate() {
   unalias dev 2> /dev/null
   unset DMX_EVE_URL DMX_JWT_SECRET DMX_API_URL \
   FLEETCTL_TUNNEL DEISCTL_TUNNEL AWS_PROFILE DEIS_PROFILE AWS_CLI_PROFILE
+}
+```
+
+P.S: the function have above is defined as follows:
+
+```
+# have returns 0 if $1 is callable (alias, function or a binary)
+# Credit: https://github.com/Daenyth/dotfiles/blob/a22723420e780f04a77ebab8dd2737cfaba43c42/.bashrc#L47
+function have() {
+  type "$1" &>/dev/null
 }
 ```
 
