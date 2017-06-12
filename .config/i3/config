@@ -319,7 +319,12 @@ assign [class="^Termite" title="irc"] irc
 workspace main output DP1
 workspace personal output DP1
 workspace publica output DP1
-workspace slack output DP1
+workspace irc output DP1
+workspace mail output DP1
+
+# assign less side apps to the laptop
+workspace slack output eDP1
+workspace entertainment output eDP1
 
 ######################
 # Scratchpad support #
