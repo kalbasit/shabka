@@ -116,7 +116,6 @@ function attach() {
 
         # add the ACTIVE_PROFILE to the environment of the session
         tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" set-environment -t "${sess}" ACTIVE_PROFILE "${profile}"
-        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" set-environment -t "${sess}" SSH_AGENT_NAME "${profile}"
 
         # start a new shell on window 1
         tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" new-window -t "${sess}:1"

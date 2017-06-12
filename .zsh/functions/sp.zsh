@@ -50,9 +50,7 @@ function sp() {
         # let the terminal know which profile is loaded and which ssh-agent to
         # use
         export ACTIVE_PROFILE="${requested_profile}"
-        export SSH_AGENT_NAME="${requested_profile}"
-        unset SSH_AGENT_PID SSH_AUTH_SOCK
-        eval "$(ssh-agents "$SHELL")"
+        eval "$( ssh-agents "$SHELL" )"
     fi
 }
 
