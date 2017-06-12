@@ -691,6 +691,7 @@ mapkey("sr", "#11Reload settings", function() {
   RUNTIME("loadSettingsFromUrl", {
     url: "file://<%= ENV["HOME"] %>/.surfingkeys.js"
   });
+  Front.showBanner('settings were reloaded');
 });
 mapkey("spl", "#13Set Proxy to Charles", function() {
   // setProxy 127.0.0.1:8888;
