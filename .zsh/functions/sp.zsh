@@ -56,17 +56,19 @@ function sp() {
     fi
 }
 
-# _sp is for ZSH completion
-function _sp() {
-  local profiles=("kill")
-  local i=
-  local p=
+if have compdef; then
+  # _sp is for ZSH completion
+  function _sp() {
+    local profiles=("kill")
+    local i=
+    local p=
 
-  for i in ${HOME}/.zsh/profiles/*.zsh; do
-    p="$( basename "${i}" )"
-    profiles=(${profiles[@]} ${p%%.zsh})
-  done
+    for i in ${HOME}/.zsh/profiles/*.zsh; do
+      p="$( basename "${i}" )"
+      profiles=(${profiles[@]} ${p%%.zsh})
+    done
 
-  _arguments "1: :(${profiles[*]})"
-}
-compdef _sp sp
+    _arguments "1: :(${profiles[*]})"
+  }
+  compdef _sp sp
+fi
