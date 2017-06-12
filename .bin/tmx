@@ -59,7 +59,7 @@ unset bootstrap
 # If you want to define a specific help for this script
 function help()
 {
-    print_info "${log_depth}" "USAGE: tmx [-l|-d] <session_name|folder>"
+    print_info "${log_depth}" "USAGE: tmx [options] <session_name|folder>"
     print_info "${log_depth}" "\t -h, --help                - this message"
     print_info "${log_depth}" "\t -s, --select-session      - fuzzy-select a session"
     print_info "${log_depth}" "\t -k, --kill-pane           - kill the pane after the session has been switched; only relevant with --select-session and within TMUX"
