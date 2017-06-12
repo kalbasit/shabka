@@ -33,4 +33,4 @@ systemctl --user restart gwall.service
 start-pulseaudio-x11
 
 # start i3
-exec i3 -V
+exec i3
