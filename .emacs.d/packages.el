@@ -47,7 +47,7 @@
         ;; Define the rules TODO: Add all of personal addresses
         (setq gnus-alias-identity-rules (quote
                                          (("personal" ("any" "wael.nasreddine@gmail.com" both) "personal")
-                                          ("publica" ("any" "wael@getpublica.com" both) "publica")
+                                          ("publica" ("any" "wael@\\(getpublica\\|publica-project\\).com" both) "publica")
                                           ("talentoday" ("any" "\\(wmn\\|w.nasreddine\\|wael.nasreddine\\)@talentoday.com" both) "talentoday"))))
         ;; Use "personal" identity by default
         (setq gnus-alias-default-identity "personal")
