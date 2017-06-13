@@ -193,42 +193,43 @@ endif
 " set background=dark
 colorscheme seoul256
 
-let mapleader = ","             " set the mapleader
-set backup                      " enable backup, written to backupdir set below
-set backupdir^=~/.vim/_backup// " where to put backup files.
-set cmdheight=2                 " the height of the command line, giving it a high
-                                " number can prevent the "Hit ENTER to continue" but
-                                " will shorten the editor.
-set colorcolumn=80              " Display a color column
-set complete=.,w,b,t,i          " Same as default except that I remove the 'u' option
-set directory^=~/.vim/_swap//   " where to put swap files.
-set hidden                      " you can change buffer without saving
-set ignorecase                  " searches are case insensitive...
-set lz                          " do not redraw while running macros (much faster) (LazyRedraw)
-set matchtime=2                 " how many tenths of a second to blink matching brackets for
-set noerrorbells                " don't make noise
-set novisualbell                " don't blink
-set number                      " turn on line numbers but display them as relative to the current line
-set report=1                    " tell us when anything is changed via :...
-set ruler                       " Always show current positions along the bottom
-set shortmess=atTIc             " shortens messages to avoid 'press a key' prompt
-set showmatch                   " show matching brackets
-set smartcase                   " ... unless they contain at least one capital letter
-set scrolloff=5                 " Keep 10 lines (top/bottom) for scope
-set undodir^=~/.vim/_undo//     " where to put undo files.
-set whichwrap+=<,>,h,l          " backspace and cursor keys wrap to
-set wildchar=<TAB>              " Which character activates the wildmenu
-set winwidth=79                 " Set the minimum window width
-set diffopt+=iwhite             " Add ignorance of whitespace to diff
-set makeef=error.err            " When using make, where should it dump the file
-set noautowrite                 " safe automacially content
-set pastetoggle=<F12>           " Paste toggle on key F12!
-set shell=/bin/bash             " Use bash no matter what shell are we running
-set showfulltag                 " When completing by tag, show the whole tag, not just the function name
-set spell                       " Turn on spellcheck.
-set splitbelow                  " Always split under
-set splitright                  " Always split on the right
-set startofline                 " Move the cursor to the first non-blank of the line
+let mapleader = ","                    " set the mapleader
+set backup                             " enable backup, written to backupdir set below
+set backupdir^=~/.vim/_backup//        " where to put backup files.
+set cmdheight=2                        " the height of the command line, giving it a high
+                                       " number can prevent the "Hit ENTER to continue" but
+                                       " will shorten the editor.
+set colorcolumn=80                     " Display a color column
+set complete=.,w,b,t,i                 " Same as default except that I remove the 'u' option
+set completeopt=menu,noinsert,noselect " Enable completion menu and disable insert/select
+set directory^=~/.vim/_swap//          " where to put swap files.
+set hidden                             " you can change buffer without saving
+set ignorecase                         " searches are case insensitive...
+set lz                                 " do not redraw while running macros (much faster) (LazyRedraw)
+set matchtime=2                        " how many tenths of a second to blink matching brackets for
+set noerrorbells                       " don't make noise
+set novisualbell                       " don't blink
+set number                             " turn on line numbers but display them as relative to the current line
+set report=1                           " tell us when anything is changed via :...
+set ruler                              " Always show current positions along the bottom
+set shortmess=atTIc                    " shortens messages to avoid 'press a key' prompt
+set showmatch                          " show matching brackets
+set smartcase                          " ... unless they contain at least one capital letter
+set scrolloff=5                        " Keep 10 lines (top/bottom) for scope
+set undodir^=~/.vim/_undo//            " where to put undo files.
+set whichwrap+=<,>,h,l                 " backspace and cursor keys wrap to
+set wildchar=<TAB>                     " Which character activates the wildmenu
+set winwidth=79                        " Set the minimum window width
+set diffopt+=iwhite                    " Add ignorance of whitespace to diff
+set makeef=error.err                   " When using make, where should it dump the file
+set noautowrite                        " safe automacially content
+set pastetoggle=<F12>                  " Paste toggle on key F12!
+set shell=/bin/bash                    " Use bash no matter what shell are we running
+set showfulltag                        " When completing by tag, show the whole tag, not just the function name
+set spell                              " Turn on spellcheck.
+set splitbelow                         " Always split under
+set splitright                         " Always split on the right
+set startofline                        " Move the cursor to the first non-blank of the line
 
 if v:version >= 703
   set cursorline     " cursor line highlighting
