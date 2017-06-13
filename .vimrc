@@ -90,9 +90,6 @@ if executable('curl')
   Plug 'mattn/webapi-vim' | Plug 'mattn/gist-vim', { 'on': 'Gist' }
 endif
 
-" load editorconfig if available
-Plug 'editorconfig/editorconfig-vim'
-
 if executable('ag')
   Plug 'mileszs/ack.vim'
 endif
@@ -104,6 +101,9 @@ endif
 if has("python")
   Plug 'sjl/gundo.vim', { 'on': 'GundoToggle' }
 endif
+
+" load editorconfig if available
+Plug 'editorconfig/editorconfig-vim'
 
 " this script will explode arrays, functions arguments into a multi-line
 Plug 'FooSoft/vim-argwrap'
