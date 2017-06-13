@@ -52,8 +52,16 @@ Plug 'junegunn/seoul256.vim'
 
 " deoplete for nvim, YouCompleteMe for vim
 if has('nvim')
+  " the main plugin
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  " Golang support
   Plug 'zchee/deoplete-go', { 'do': 'make && mkdir -p ~/.cache/deoplete/go'}
+  " Typescript support
+  Plug 'mhartington/nvim-typescript'
+  " Ruby support
+  Plug 'fishbullet/deoplete-ruby'
+  " ZSH support
+  Plug 'zchee/deoplete-zsh'
 else
   Plug 'Valloric/YouCompleteMe', { 'dir': '~/.vim/bundle/vim-YouCompleteMe', 'do': 'python2 install.py --clang-completer --system-libclang --gocode-completer --racer-completer' }
   autocmd! User YouCompleteMe if !has('vim_starting') | call youcompleteme#Enable() | endif
