@@ -67,12 +67,6 @@ else
   autocmd! User YouCompleteMe if !has('vim_starting') | call youcompleteme#Enable() | endif
 endif
 
-" ultisnips is triggered with <tab>
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
-
-" Supertab is used to setup YCM and Ultisnips together
-Plug 'ervandew/supertab'
-
 """""""""""""""
 " Look & Feel "
 """""""""""""""
@@ -470,26 +464,6 @@ augroup END
 ""
 
 let g:polyglot_disabled = ['go', 'terraform', 'csv', 'ruby']
-
-" }}}
-"" UltiSnips{{{
-""
-
-let g:ycm_autoclose_preview_window_after_completion = 1
-let g:ycm_autoclose_preview_window_after_insertion = 1
-
-" make YCM compatible with UltiSnips (using supertab)
-let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
-let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
-let g:SuperTabDefaultCompletionType = '<C-n>'
-
-" better key bindings for UltiSnipsExpandTrigger
-let g:UltiSnipsExpandTrigger = "<tab>"
-let g:UltiSnipsJumpForwardTrigger = "<tab>"
-let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
-
-" :UltiSnipsEdit Split vertically
-let g:UltiSnipsEditSplit="vertical"
 
 " }}}
 "" EasyAlign{{{
