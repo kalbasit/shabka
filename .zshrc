@@ -930,3 +930,12 @@ if [[ -n "${ACTIVE_PROFILE}" ]] && [[ -r "${HOME}/.zsh/profiles/${ACTIVE_PROFILE
 
   unfunction pcode pload pactivate pdeactivate
 fi
+
+#####################################################################
+# Welcome notes
+#####################################################################
+
+if [[ -o interactive ]]; then
+  have pom && pom
+  have fortune && fortune -c
+fi
