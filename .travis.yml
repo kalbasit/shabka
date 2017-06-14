@@ -4,4 +4,4 @@ services:
 before_script:
   - yes 'y' | rake
 script:
-  - docker run --rm -v $(PWD):/app:ro koalaman/shellcheck /app/.bin/*)
+  - for i in $(find .bin -type f); do docker run --rm -v "${PWD}":/app:ro koalaman/shellcheck -e SC1071,SC1090 /app/$i; done
