@@ -1,11 +1,7 @@
-language: bash
-addons:
-  apt:
-    sources:
-      - debian-sid    # Grab ShellCheck from the Debian repo
-    packages:
-      - shellcheck
+language: c
+services:
+  - docker
 before_script:
   - yes 'y' | rake
 script:
-  - shellcheck -e SC1071,SC1090 .bin/*
+  - docker run --rm -v $(PWD):/app:ro koalaman/shellcheck /app/.bin/*)
