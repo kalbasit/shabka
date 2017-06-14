@@ -1,80 +1,44 @@
 #!/usr/bin/env bash
 #
-#   vim:ft=sh:fenc=UTF-8:ts=4:sts=4:sw=4:expandtab:foldmethod=marker:foldlevel=0:
+# vim:foldmethod=marker:foldlevel=0:
 #
-#   Copyright (c) 2010 Wael Nasreddine <wael.nasreddine@gmail.com>
+# Copyright (c) 2014-2017 Wael Nasreddine <wael.nasreddine@gmail.com>
 #
-#   This program is free software; you can redistribute it and/or modify
-#   it under the terms of the GNU General Public License as published by
-#   the Free Software Foundation; either version 2 of the License, or
-#   (at your option) any later version.
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
 #
-#   This program is distributed in the hope that it will be useful,
-#   but WITHOUT ANY WARRANTY; without even the implied warranty of
-#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#   GNU General Public License for more details.
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
 #
-#   You should have received a copy of the GNU General Public License
-#   along with this program; if not, write to the Free Software
-#   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
-#   USA.
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
 #
-
-####
-# Notes
-
-# Don't use the following variables in your script, they are reserved
-#   to the Functions uses
-# 'LOCK': This is a variable used by the functions 'lock_script' and
-#   'free_lock'
-# 'TempFiles': This is a variable containing a list of Files to remove
-#   when the script exits.
-# Make sure you always use $ARGS instead of $1, Note that $ARGS[0]
-#   correspond to $1, and $ARGS[1] correspong to $2 ...
-
-#
-####
-
-####
-# Options
-
-# Change this option to true to enable options parsing
-ParseOptions=false
-
-#
-####
 
 # Bootstrap{{{
 bootstrap="$(dirname "$0")/.bootstrap"
 if [ -f "${bootstrap}" ]; then
-    source "${bootstrap}"
+  source "${bootstrap}"
 else
-    echo "Cannot bootstrap"
-    exit 54
+  echo "Cannot bootstrap"
+  exit 54
 fi
 unset bootstrap
 #}}}
-
-####
-# Functions
-
-# If you want to define a specific help for this script
-#function help()
-#{
-#    # print_info goes here
-#}
-
-#
-####
-
-####
-# Main
+# Main {{{
 
 if synclient -l | grep TouchpadOff | grep -q 0; then
-    synclient TouchpadOff=1
+  synclient TouchpadOff=1
 else
-    synclient TouchpadOff=0
+  synclient TouchpadOff=0
 fi
 
-#
-####
+# }}}

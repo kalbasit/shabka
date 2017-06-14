@@ -1,164 +1,147 @@
 #!/usr/bin/env bash
 #
-#   vim:ft=sh:fenc=UTF-8:ts=4:sts=4:sw=4:expandtab:foldmethod=marker:foldlevel=0:
+# vim:foldmethod=marker:foldlevel=0:
 #
-#   Copyright (c) 2010 Wael Nasreddine <wael.nasreddine@gmail.com>
+# Copyright (c) 2014-2017 Wael Nasreddine <wael.nasreddine@gmail.com>
 #
-#   This program is free software; you can redistribute it and/or modify
-#   it under the terms of the GNU General Public License as published by
-#   the Free Software Foundation; either version 2 of the License, or
-#   (at your option) any later version.
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
 #
-#   This program is distributed in the hope that it will be useful,
-#   but WITHOUT ANY WARRANTY; without even the implied warranty of
-#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#   GNU General Public License for more details.
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
 #
-#   You should have received a copy of the GNU General Public License
-#   along with this program; if not, write to the Free Software
-#   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
-#   USA.
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
 #
 
 set -e
 
-####
-# Notes
-
-# Don't use the following variables in your script, they are reserved
-#   to the Functions uses
-# 'LOCK': This is a variable used by the functions 'lock_script' and
-#   'free_lock'
-# 'TempFiles': This is a variable containing a list of Files to remove
-#   when the script exits.
-# Make sure you always use $ARGS instead of $1, Note that $ARGS[0]
-#   correspond to $1, and $ARGS[1] correspong to $2 ...
-
-#
-####
-
 # Bootstrap{{{
 bootstrap="$(dirname "${0}")/.bootstrap"
 if [ -f "${bootstrap}" ]; then
-    # shellcheck source=/dev/null
-    source "${bootstrap}"
+  # shellcheck source=/dev/null
+  source "${bootstrap}"
 else
-    echo "Cannot bootstrap"
-    exit 54
+  echo "Cannot bootstrap"
+  exit 54
 fi
 unset bootstrap
 #}}}
-
-####
-# Functions
+# Functions {{{
 
 # If you want to define a specific help for this script
 function help()
 {
-    print_info "${log_depth}" "USAGE: tmycli [options]"
-    print_info "${log_depth}" "\t -h, --help                - this message"
-    print_info "${log_depth}" "\t -b, --bastion             - the bastion host [Default: ${bastion_host}]"
-    print_info "${log_depth}" "\t -w, --bastion-user        - the username for SSH to the bastion host [Default: ${bastion_username}]"
-    print_info "${log_depth}" "\t -h, --host                - the database host [Default: ${mysql_host}]"
-    print_info "${log_depth}" "\t -o, --port                - the database port [Default: ${mysql_port}]"
-    print_info "${log_depth}" "\t -u, --username            - the username of the database host [Default: ${mysql_username}]"
-    print_info "${log_depth}" "\t -p, --password            - the password of the database host [Default:${mysql_password}]"
-    print_info "${log_depth}" "\t -d, --database            - the database name [Default:${mysql_database}]"
+  print_info "${log_depth}" "USAGE: tmycli [options]"
+  print_info "${log_depth}" "\t -h, --help                - this message"
+  print_info "${log_depth}" "\t -b, --bastion             - the bastion host [Default: ${bastion_host}]"
+  print_info "${log_depth}" "\t -w, --bastion-user        - the username for SSH to the bastion host [Default: ${bastion_username}]"
+  print_info "${log_depth}" "\t -h, --host                - the database host [Default: ${mysql_host}]"
+  print_info "${log_depth}" "\t -o, --port                - the database port [Default: ${mysql_port}]"
+  print_info "${log_depth}" "\t -u, --username            - the username of the database host [Default: ${mysql_username}]"
+  print_info "${log_depth}" "\t -p, --password            - the password of the database host [Default:${mysql_password}]"
+  print_info "${log_depth}" "\t -d, --database            - the database name [Default:${mysql_database}]"
 }
 
 function find_open_port() {
-    if [[ "$( uname )" = "Darwin" ]]; then
-        while [[ "$( netstat -anp tcp | awk "\$6 == \"LISTEN\" && \$4 ~ \".${tunnel_port}\"" | wc -l)" -gt 0 ]]; do
-            tunnel_port=$(( tunnel_port + 1 ))
-        done
-    elif [[ "$( uname )" = "Linux" ]]; then
-        while [[ "$( netstat -lnt | awk "\$6 == \"LISTEN\" && \$4 ~ \".${tunnel_port}\"" | wc -l)" -gt 0 ]]; do
-            tunnel_port=$(( tunnel_port + 1 ))
-        done
-    else
-        print_error 0 "$( uname ) is not supported"
-        exit 1
-    fi
+  if [[ "$( uname )" = "Darwin" ]]; then
+    while [[ "$( netstat -anp tcp | awk "\$6 == \"LISTEN\" && \$4 ~ \".${tunnel_port}\"" | wc -l)" -gt 0 ]]; do
+      tunnel_port=$(( tunnel_port + 1 ))
+    done
+  elif [[ "$( uname )" = "Linux" ]]; then
+    while [[ "$( netstat -lnt | awk "\$6 == \"LISTEN\" && \$4 ~ \".${tunnel_port}\"" | wc -l)" -gt 0 ]]; do
+      tunnel_port=$(( tunnel_port + 1 ))
+    done
+  else
+    print_error 0 "$( uname ) is not supported"
+    exit 1
+  fi
 }
 
 function wait_for_tunnel_port() {
-    if [[ "$( uname )" = "Darwin" ]]; then
-        while [[ "$( netstat -anp tcp | awk "\$6 == \"LISTEN\" && \$4 ~ \".${tunnel_port}\"" | wc -l)" -eq 0 ]]; do
-            sleep 0.3
-        done
-    elif [[ "$( uname )" = "Linux" ]]; then
-        while [[ "$( netstat -lnt | awk "\$6 == \"LISTEN\" && \$4 ~ \".${tunnel_port}\"" | wc -l)" -eq 0 ]]; do
-            sleep 0.3
-        done
-    else
-        print_error 0 "$( uname ) is not supported"
-        exit 1
-    fi
+  if [[ "$( uname )" = "Darwin" ]]; then
+    while [[ "$( netstat -anp tcp | awk "\$6 == \"LISTEN\" && \$4 ~ \".${tunnel_port}\"" | wc -l)" -eq 0 ]]; do
+      sleep 0.3
+    done
+  elif [[ "$( uname )" = "Linux" ]]; then
+    while [[ "$( netstat -lnt | awk "\$6 == \"LISTEN\" && \$4 ~ \".${tunnel_port}\"" | wc -l)" -eq 0 ]]; do
+      sleep 0.3
+    done
+  else
+    print_error 0 "$( uname ) is not supported"
+    exit 1
+  fi
 }
 
 function open_tunnel() {
-    # open the tunnel
-    ssh -f -N -L "${tunnel_port}:${mysql_host}:${mysql_port}" "${bastion_username}"@"${bastion_host}"
-    # shellcheck disable=SC2009
-    ssh_pid="$( ps aux | grep "[s]sh -f -N -L ${tunnel_port}:${mysql_host}:${mysql_port} ${bastion_username}@${bastion_host}" | awk '{print $2}' )"
-    # define the cleanup (exit) to close the tunnel
-    cleanup() {
-        if [[ -n "${ssh_pid}" ]]; then
-            kill "${ssh_pid}"
-        fi
-    }
-    trap cleanup EXIT TERM INT
+  # open the tunnel
+  ssh -f -N -L "${tunnel_port}:${mysql_host}:${mysql_port}" "${bastion_username}"@"${bastion_host}"
+  # shellcheck disable=SC2009
+  ssh_pid="$( ps aux | grep "[s]sh -f -N -L ${tunnel_port}:${mysql_host}:${mysql_port} ${bastion_username}@${bastion_host}" | awk '{print $2}' )"
+  # define the cleanup (exit) to close the tunnel
+  cleanup() {
+    if [[ -n "${ssh_pid}" ]]; then
+      kill "${ssh_pid}"
+    fi
+  }
+  trap cleanup EXIT TERM INT
 }
 
 
 function validate_options() {
-    if [[ -z "${tunnel_port}" ]]; then
-        print_error 0 "tunnel_port is not defined, aborting..."
-        help
-        exit 1
-    fi
-    if [[ -z "${bastion_host}" ]]; then
-        print_error 0 "bastion_host is not defined, aborting..."
-        help
-        exit 1
-    fi
-    if [[ -z "${bastion_username}" ]]; then
-        print_error 0 "bastion_username is not defined, aborting..."
-        help
-        exit 1
-    fi
-    if [[ -z "${mysql_host}" ]]; then
-        print_error 0 "mysql_host is not defined, aborting..."
-        help
-        exit 1
-    fi
-    if [[ -z "${mysql_port}" ]]; then
-        print_error 0 "mysql_port is not defined, aborting..."
-        help
-        exit 1
-    fi
-    if [[ -z "${mysql_username}" ]]; then
-        print_error 0 "mysql_username is not defined, aborting..."
-        help
-        exit 1
-    fi
-    if [[ -z "${mysql_password}" ]]; then
-        print_error 0 "mysql_password is not defined, aborting..."
-        help
-        exit 1
-    fi
-    if [[ -z "${mysql_database}" ]]; then
-        print_error 0 "mysql_database is not defined, aborting..."
-        help
-        exit 1
-    fi
+  if [[ -z "${tunnel_port}" ]]; then
+    print_error 0 "tunnel_port is not defined, aborting..."
+    help
+    exit 1
+  fi
+  if [[ -z "${bastion_host}" ]]; then
+    print_error 0 "bastion_host is not defined, aborting..."
+    help
+    exit 1
+  fi
+  if [[ -z "${bastion_username}" ]]; then
+    print_error 0 "bastion_username is not defined, aborting..."
+    help
+    exit 1
+  fi
+  if [[ -z "${mysql_host}" ]]; then
+    print_error 0 "mysql_host is not defined, aborting..."
+    help
+    exit 1
+  fi
+  if [[ -z "${mysql_port}" ]]; then
+    print_error 0 "mysql_port is not defined, aborting..."
+    help
+    exit 1
+  fi
+  if [[ -z "${mysql_username}" ]]; then
+    print_error 0 "mysql_username is not defined, aborting..."
+    help
+    exit 1
+  fi
+  if [[ -z "${mysql_password}" ]]; then
+    print_error 0 "mysql_password is not defined, aborting..."
+    help
+    exit 1
+  fi
+  if [[ -z "${mysql_database}" ]]; then
+    print_error 0 "mysql_database is not defined, aborting..."
+    help
+    exit 1
+  fi
 }
 
-#
-####
-
-####
-# Main
+# }}}
+# Main {{{
 
 log_depth=0
 tunnel_port=13300
@@ -171,44 +154,44 @@ mysql_password=
 mysql_database=
 
 while [[ $# -ge 1 ]]; do
-    case "${1}" in
-        -h|--help)
-            help
-            exit 0
-            ;;
-        -b|--bastion)
-            bastion_host="${2}"
-            shift 2
-            ;;
-        -w|--bastion-user)
-            bastion_username=${2}
-            shift 2
-            ;;
-        -h|--host)
-            mysql_host=${2}
-            shift 2
-            ;;
-        -o|--port)
-            mysql_port=${2}
-            shift 2
-            ;;
-        -u|--username)
-            mysql_username=${2}
-            shift 2
-            ;;
-        -p|--password)
-            mysql_password=${2}
-            shift 2
-            ;;
-        -d|--database)
-            mysql_database=${2}
-            shift 2
-            ;;
-        *)
-            help
-            exit 1
-            ;;
-    esac
+  case "${1}" in
+    -h|--help)
+      help
+      exit 0
+      ;;
+    -b|--bastion)
+      bastion_host="${2}"
+      shift 2
+      ;;
+    -w|--bastion-user)
+      bastion_username=${2}
+      shift 2
+      ;;
+    -h|--host)
+      mysql_host=${2}
+      shift 2
+      ;;
+    -o|--port)
+      mysql_port=${2}
+      shift 2
+      ;;
+    -u|--username)
+      mysql_username=${2}
+      shift 2
+      ;;
+    -p|--password)
+      mysql_password=${2}
+      shift 2
+      ;;
+    -d|--database)
+      mysql_database=${2}
+      shift 2
+      ;;
+    *)
+      help
+      exit 1
+      ;;
+  esac
 done
 
 validate_options
@@ -216,3 +199,5 @@ find_open_port
 open_tunnel
 wait_for_tunnel_port
 mycli --host "localhost" --port "${tunnel_port}" --user "${mysql_username}" --password "${mysql_password}" --database "${mysql_database}"
+
+# }}}
