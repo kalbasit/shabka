@@ -35,15 +35,6 @@
 #
 ####
 
-####
-# Options
-
-# Change this option to true to enable options parsing
-ParseOptions=false
-
-#
-####
-
 # Bootstrap{{{
 bootstrap="`dirname $0`/.bootstrap"
 if [ -f "${bootstrap}" ]; then
