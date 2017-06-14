@@ -136,9 +136,9 @@ function attach() {
 # Options {{{
 
 declare -A special_sess
-special_sess[irc]=irssi
-special_sess[mail]=emacs
-special_sess[task]="vim +:TW"
+special_sess["irc"]=irssi
+special_sess["mail"]=emacs
+special_sess["task"]="vim +:TW"
 
 confirm_vim_startup=false
 kill_pane=false
