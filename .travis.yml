@@ -2,10 +2,10 @@ language: bash
 addons:
   apt:
     sources:
-    - debian-sid    # Grab ShellCheck from the Debian repo
+      - debian-sid    # Grab ShellCheck from the Debian repo
     packages:
-    - shellcheck
+      - shellcheck
 before_script:
-  - rake
+  - yes 'y' | rake
 script:
   - shellcheck -e SC1071 .bin/*

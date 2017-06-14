@@ -1,5 +1,3 @@
-# TODO: WOW! Refactor!!
-
 require 'rake'
 require 'erb'
 require 'open-uri'
