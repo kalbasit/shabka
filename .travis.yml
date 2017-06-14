@@ -1,0 +1,11 @@
+language: bash
+addons:
+  apt:
+    sources:
+    - debian-sid    # Grab ShellCheck from the Debian repo
+    packages:
+    - shellcheck
+before_script:
+  - rake
+script:
+  - shellcheck -e SC1071 .bin/*
