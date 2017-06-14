@@ -1,0 +1,8 @@
+[Unit]
+Description=Archive Downloads weekly
+
+[Timer]
+OnCalendar=weekly
+
+[Install]
+WantedBy=timers.target
