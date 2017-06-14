@@ -8,4 +8,4 @@ addons:
 before_script:
   - yes 'y' | rake
 script:
-  - shellcheck -e SC1071 .bin/*
+  - shellcheck -e SC1071,SC1090 .bin/*
