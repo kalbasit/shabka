@@ -63,7 +63,7 @@ end
 
 desc "Update ZSH completions"
 task :update_completions do
-  if which("kubectl") != ""
+  if which("kubectl")
     mkdir_p File.join(DOTFILES_PATH, ".zsh", "completions")
     sh %Q{kubectl completion zsh > #{File.join(DOTFILES_PATH, ".zsh", "completions", "_kubectl")}}
   end
