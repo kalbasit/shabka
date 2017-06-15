@@ -40,7 +40,6 @@ zplug "b4b4r07/enhancd",                     use:init.sh
 zplug "denolfe/zsh-travis"
 zplug "hcgraf/zsh-sudo"
 zplug "jreese/zsh-titles"
-zplug "molovo/tipz"
 zplug "peterhurford/git-it-on.zsh"
 zplug "plugins/command-not-found",           from:oh-my-zsh
 zplug "plugins/extract",                     from:oh-my-zsh
