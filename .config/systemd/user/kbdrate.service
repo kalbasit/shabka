@@ -9,4 +9,4 @@ StandardOutput=tty
 ExecStart=/usr/bin/kbdrate -s -d 300 -r 30
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target
