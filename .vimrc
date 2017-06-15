@@ -393,6 +393,7 @@ if has("autocmd")
   endif
 
   " Go
+  au FileType go nmap <Leader>gc <Plug>(go-doc)
   au FileType go nmap <Leader>gd <Plug>(go-def)
   au FileType go nmap <Leader>gi <Plug>(go-info)
   au FileType go nmap <Leader>gds <Plug>(go-def-split)
@@ -418,6 +419,7 @@ let g:go_highlight_operators = 1
 let g:go_highlight_build_constraints = 1
 " configure vim-go to show errors in the quickfix window and not the location list.
 let g:go_list_type = "quickfix"
+let g:go_doc_keywordprg_enabled = 0 " do not assign K to GoDoc as it conflicts with Colemak
 
 " }}}
 "" TaskWarrior{{{
