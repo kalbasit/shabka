@@ -1,1 +1,0 @@
-../scriptassist.pl
