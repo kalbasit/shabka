@@ -118,9 +118,6 @@ Plug 'ntpeters/vim-better-whitespace'
 " show git status in the sign column next to every line
 Plug 'mhinz/vim-signify'
 
-" TODO: are you being used?
-" Plug 'christoomey/vim-tmux-navigator'
-
 " auto insert the closing pair
 Plug 'jiangmiao/auto-pairs'
 
