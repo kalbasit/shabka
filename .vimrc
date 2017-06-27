@@ -127,7 +127,7 @@ Plug 'junegunn/vim-easy-align', { 'on': ['<Plug>(EasyAlign)', 'EasyAlign'] }
 " sort visual block
 Plug 'navicore/vissort.vim', { 'on': 'Vissort' }
 
-" file browesr
+" file browser
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 
 " check file for errors
@@ -322,7 +322,10 @@ set wildignore+=*.swp,*~,._*
 set wildignore+=*/Godeps/_workspace/*
 
 " Disable the vendor directory Go 1.5+
-set wildignore+=*/vendor/*
+" TODO: This setting makes it impossible for me to go ahead and open files
+" inside the vendor directory. Does removing it affects my workflow? Does fzf
+" still ignores based on .gitignore?
+" set wildignore+=*/vendor/*
 
 " Disable node/TypeScript
 set wildignore+=*/node_modules/*,*/typings/*,*/dist/*
