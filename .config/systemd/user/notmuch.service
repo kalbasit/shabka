@@ -5,7 +5,7 @@ After=offlineimap.service
 
 [Service]
 ExecStartPre=/bin/sh -c "docker inspect notmuch >/dev/null 2>&1 && docker rm -f notmuch || true"
-ExecStartPre=/usr/bin/docker create --name notmuch -e SLEEP_IN_SECONDS=60 -e NOTMUCH_CONFIG=/home/kalbasit/.mail/.notmuch/config -v /home/kalbasit/.mail:/home/kalbasit/.mail quay.io/kalbasit/notmuch
+ExecStartPre=/usr/bin/docker create --name notmuch -e SLEEP_IN_SECONDS=60 -e XDG_CONFIG_HOME=/home/kalbasit/.config -e NOTMUCH_CONFIG=/home/kalbasit/.mail/.notmuch/config -v /usr/bin/nottoomuch-addresses.sh:/usr/bin/nottoomuch-addresses.sh:ro -v /home/kalbasit/.mail/.notmuch/nottoomuch:/home/kalbasit/.config/nottoomuch -v /home/kalbasit/.mail:/home/kalbasit/.mail quay.io/kalbasit/notmuch
 ExecStart=/usr/bin/docker start -a notmuch
 ExecStop=-/usr/bin/docker stop notmuch
 ExecStopPost=/usr/bin/docker rm -f notmuch
