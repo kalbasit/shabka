@@ -96,8 +96,16 @@ end
 
 desc "Install Go Binaries"
 task :install_go_binaries do
-  GO_BINARIES.each do |binary|
-    sh %Q{go get -u #{binary}}
+  # record the current GOPATH and switch to the global one
+  oldGoPath = ENV["GOPATH"]
+  ENV["GOPATH"] = ENV["GLOBAL_GOPATH"]
+  # Install the binaries and restore the GOPATH
+  begin
+    GO_BINARIES.each do |binary|
+      sh %Q{go get -u #{binary}}
+    end
+  ensure
+    ENV["GOPATH"] = oldGoPath
   end
 end
 
