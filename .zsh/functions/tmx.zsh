@@ -1,6 +1,5 @@
 tmx() {
-  {
-    # If you want to define a specific help for this script
+  { # Begin "always" block so we can unfunction the internal functions at the end
     function $0_help()
     {
       print_info "${log_depth}" "USAGE: tmx [options] <session_name|folder>"
@@ -70,8 +69,7 @@ tmx() {
 
         # start the main program
         if [[ -n "${special_sess[$sess]}" ]]; then
-          cmd="${special_sess[$sess]}"
-          tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${sess}:0" "clear; $cmd" Enter
+          tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${sess}:0" "clear; ${special_sess[$sess]}" Enter
         else
           # start vim
           if isTrue "${confirm_vim_startup}"; then
