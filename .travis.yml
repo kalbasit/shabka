@@ -1,6 +1,4 @@
 language: c
-services:
-  - docker
 before_script:
   - yes 'y' | rake
 script:
