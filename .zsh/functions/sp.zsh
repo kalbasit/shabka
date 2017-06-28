@@ -31,6 +31,10 @@ function sp() {
             # shellcheck disable=SC1090
             source "${HOME}/.zsh/profiles/${ACTIVE_PROFILE}.zsh"
             pdeactivate
+            # make sure we have a GOPATH
+            if [[ -z "${GOPATH}" ]]; then
+              export GOPATH="${GLOBAL_GOPATH}"
+            fi
             unset ACTIVE_PROFILE SSH_AGENT_PID SSH_AUTH_SOCK SSH_AGENT_NAME
             eval "$(ssh-agents "$SHELL")"
         fi
@@ -47,6 +51,10 @@ function sp() {
         # shellcheck disable=SC1090
         source "${HOME}/.zsh/profiles/${requested_profile}.zsh"
         pactivate
+        # make sure we have a GOPATH
+        if [[ -z "${GOPATH}" ]]; then
+          export GOPATH="${GLOBAL_GOPATH}"
+        fi
         # let the terminal know which profile is loaded and which ssh-agent to
         # use
         export ACTIVE_PROFILE="${requested_profile}"
