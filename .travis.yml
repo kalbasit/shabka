@@ -1,0 +1,16 @@
+language: c
+services:
+  - docker
+before_script:
+  - yes 'y' | rake
+script:
+  - rm "${HOME}/.zshrc"
+  - touch "${HOME}/.zshrc"
+  - zsh
+  - env > /tmp/a
+  - yes 'y' | rake
+  - source "${HOME}/.zshrc"
+  - zplug install
+  - source "${HOME}/.zshrc"
+  - env > /tmp/b
+  - diff -Naur /tmp/a /tmp/b
