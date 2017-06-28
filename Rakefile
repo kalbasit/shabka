@@ -34,7 +34,7 @@ IGNORED_FILES = [
 ]
 
 GO_BINARIES = [
-  "github.com/Masterminds/glide",
+  "github.com/3rf/codecoroner",
   "github.com/codegangsta/gin",
   "github.com/golang/lint/golint",
   "github.com/golang/protobuf/protoc-gen-go",
@@ -48,6 +48,7 @@ GO_BINARIES = [
   "github.com/tools/godep",
   "golang.org/x/tools/cmd/cover",
   "golang.org/x/tools/cmd/stringer",
+  "honnef.co/go/tools/cmd/unused",
 ]
 
 desc "run :update_submodules and :link"
