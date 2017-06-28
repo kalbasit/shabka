@@ -68,5 +68,6 @@ report._reviewed.sort=reviewed+,modified+
 report._reviewed.filter=( reviewed.none: or reviewed.before:now-1week ) and ( +PENDING or +WAITING )
 
 # Context definition
-context.home=+home
+context.opensource=+opensource
+context.personal=+personal
 context.publica=+publica
