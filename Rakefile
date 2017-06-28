@@ -34,20 +34,20 @@ IGNORED_FILES = [
 ]
 
 GO_BINARIES = [
-  "github.com/monochromegane/the_platinum_searcher/cmd/pt",
-  "github.com/smartystreets/goconvey",
+  "github.com/Masterminds/glide",
+  "github.com/codegangsta/gin",
+  "github.com/golang/lint/golint",
+  "github.com/golang/protobuf/protoc-gen-go",
   "github.com/jteeuwen/go-bindata/go-bindata",
+  "github.com/kardianos/govendor",
+  "github.com/monochromegane/the_platinum_searcher/cmd/pt",
+  "github.com/peco/peco/cmd/peco",
+  "github.com/pocke/lemonade",
+  "github.com/smartystreets/goconvey",
+  "github.com/spf13/cobra/cobra",
   "github.com/tools/godep",
   "golang.org/x/tools/cmd/cover",
-  "github.com/golang/lint/golint",
-  "github.com/codegangsta/gin",
-  "github.com/peco/peco/cmd/peco",
   "golang.org/x/tools/cmd/stringer",
-  "github.com/golang/protobuf/protoc-gen-go",
-  "github.com/Masterminds/glide",
-  "github.com/kardianos/govendor",
-  "github.com/spf13/cobra/cobra",
-  "github.com/pocke/lemonade",
 ]
 
 desc "run :update_submodules and :link"
