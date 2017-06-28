@@ -227,7 +227,6 @@ function have() {
 }
 
 for func in ${HOME}/.zsh/functions/*.zsh; do
-  # shellcheck disable=SC1090
   source "${func}"
 done
 
