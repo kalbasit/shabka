@@ -33,6 +33,7 @@ include /usr/share/doc/task/rc/solarized-dark-256.theme
 urgency.user.tag.problem.coefficient=4.5
 urgency.user.tag.later.coefficient=-6.0
 urgency.user.tag.waiting.coefficient=-12.0
+urgency.user.tag.backlog.coefficient=-20.0
 
 # Taskserver sync
 taskd.certificate=~/.task/taskserver.nasreddine.com/taskserver.nasreddine.com.crt
@@ -60,6 +61,12 @@ uda.jiracreatedts.type=date
 uda.jiracreatedts.label=Created At
 uda.jiradescription.type=string
 uda.jiradescription.label=Jira Description
+
+# TrelloWarrior UDA
+uda.trelloid.type=string
+uda.trelloid.label=Trello ID
+uda.trellolistname.type=string
+uda.trellolistname.label=Trello List Name
 
 # Report settings
 report._reviewed.description=Tasksh review report. Adjust the filter to your needs.
