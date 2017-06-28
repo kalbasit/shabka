@@ -227,6 +227,7 @@ fpath=("${HOME}/.zsh/functions" $fpath)
 for func in ${HOME}/.zsh/functions/*; do
   autoload -U "$(basename ${func})"
 done
+unset func
 
 #####################################################################
 # exports
