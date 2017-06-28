@@ -1,297 +1,301 @@
-function tmx() {
-  # If you want to define a specific help for this script
-  local function help()
+tmx() {
   {
-    print_info "${log_depth}" "USAGE: tmx [options] <session_name|folder>"
-    print_info "${log_depth}" "\t -h, --help                - this message"
-    print_info "${log_depth}" "\t -s, --select-session      - fuzzy-select a session"
-    print_info "${log_depth}" "\t -k, --kill-pane           - kill the pane after the session has been switched; only relevant with --select-session and within TMUX"
-    print_info "${log_depth}" "\t -L, --socket-name         - use a different socket than the default"
-    print_info "${log_depth}" "\t -c, --confirm-vim-start   - confirm before starting Vim, this is essentially a performance improvement"
-    print_info "${log_depth}" "\t -p, --profile             - the profile to use. This is only relevant if a new session is going to be started"
-    print_info "${log_depth}" "\t -vs, --vim-save-close-all  - Vim: save and close all files"
-    print_info "${log_depth}" "\t -ve, --vim-exit            - Vim: save and exit"
-  }
+    # If you want to define a specific help for this script
+    function $0_help()
+    {
+      print_info "${log_depth}" "USAGE: tmx [options] <session_name|folder>"
+      print_info "${log_depth}" "\t -h, --help                - this message"
+      print_info "${log_depth}" "\t -s, --select-session      - fuzzy-select a session"
+      print_info "${log_depth}" "\t -k, --kill-pane           - kill the pane after the session has been switched; only relevant with --select-session and within TMUX"
+      print_info "${log_depth}" "\t -L, --socket-name         - use a different socket than the default"
+      print_info "${log_depth}" "\t -c, --confirm-vim-start   - confirm before starting Vim, this is essentially a performance improvement"
+      print_info "${log_depth}" "\t -p, --profile             - the profile to use. This is only relevant if a new session is going to be started"
+      print_info "${log_depth}" "\t -vs, --vim-save-close-all  - Vim: save and close all files"
+      print_info "${log_depth}" "\t -ve, --vim-exit            - Vim: save and exit"
+    }
 
-  local function build_projects() {
-    local dir=
-    local i=
-    local profile=
-    local rc="${HOME}/.tmxrc"
-    local rc_length=
+    function $0_build_projects() {
+      local dir=
+      local i=
+      local profile=
+      local rc="${HOME}/.tmxrc"
+      local rc_length=
 
-    # compute the length of the rc file
-    rc_length="$( jq length "${rc}" )"
-    debug "rc_length=${rc_length}"
-    for (( i = 0; i < rc_length; i++)); do
-      # extract the profile for this project
-      profile="$( jq -r ".[${i}] .profile" "${rc}" )"
-      if [[ -z "${profile}" ]]; then
-        print_error 0 "profile cannot be empty, this project will be ignored"
-        print_error 1 "$(jq -r .[${i}] "${rc}" )"
-        continue
-      fi
-      # extract the folder for this project
-      dir="$( jq -r ".[${i}] .dir" "${rc}" )"
-      if [[ -z "${dir}" ]]; then
-        print_error 0 "dir cannot be empty, this project will be ignored"
-        print_error 1 "$(jq -r .[${i}] "${rc}" )"
-        continue
-      fi
-      # add this project to the hash
-      projects+=( "${profile}@${dir}" )
-    done
-    # append running sessions, and for each session change '_DOT_' to '.' and
-    # the '_COLUMN_' to ':'
-    projects+=( $( tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" ls -F '#S' | sed -e 's:_DOT_:\.:g' -e 's#_COLUMN_#:#g' ) )
-    # remove duplicates
-    projects=( $(echo "${projects[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' ') )
-  }
-
-  local function attach() {
-    # make sure a server is running
-    tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" start-server
-
-    # start a session if one does not exist for it yet
-    if ! tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" list-sessions -F '#{session_name}' | grep -q -e "^${sess}\$"; then
-      # start the new tmux session
-      env --unset=TMUX tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" new-session -d -s "${sess}"
-
-      # add the ACTIVE_PROFILE to the environment of the session
-      tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" set-environment -t "${sess}" ACTIVE_PROFILE "${profile}"
-
-      # start a new shell on window 1
-      tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" new-window -t "${sess}:1"
-
-      # re-create the first window
-      tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" kill-window -t "${sess}:0"
-      tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" new-window -t "${sess}:0"
-
-      # start the main program
-      if [[ -n "${special_sess[$sess]}" ]]; then
-        cmd="${special_sess[$sess]}"
-        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${sess}:0" "clear; $cmd" Enter
-      else
-        # start vim
-        if isTrue "${confirm_vim_startup}"; then
-          tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${sess}:0" 'clear; echo "Press Enter to start Vim "; read; vim' Enter
-        else
-          tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${sess}:0" 'clear; vim' Enter
-        fi
-      fi
-    fi
-
-    # attach the session now
-    if isTrue "${inside_tmux}"; then
-      # switch to the selected session
-      tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" switch-client -t "${sess}"
-      # kill the current pane if requested
-      if isTrue "${kill_pane}"; then
-        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" kill-pane
-      fi
-    else
-      tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" attach -t "${sess}"
-    fi
-  }
-
-  declare -A special_sess
-  special_sess[irc]=irssi
-  special_sess[mail]=emacs
-  special_sess[task]="vim +:TW"
-
-  local confirm_vim_startup=false
-  local kill_pane=false
-  local log_depth=0
-  local select_session=false
-  local tmux_socket_name=default
-  local profile=personal
-  local sess=
-  local sess_dir=
-  local vim_save_close_all_files=false
-  local vim_exit=false
-
-  while [[ $# -ge 1 ]]; do
-    case "${1}" in
-      -h|--help)
-        help
-        return 0
-        ;;
-      -k|--kill-pane)
-        kill_pane=true
-        shift
-        ;;
-      -s|--select-session)
-        select_session=true
-        shift
-        ;;
-      -L|--socket-name)
-        tmux_socket_name="${2}"
-        if [[ -z "${tmux_socket_name}" ]]; then
-          print_error "${log_depth}" "--socket-name requires an argument"
-          help
-          return 1
-        fi
-        shift 2
-        ;;
-      --log-depth)
-        log_depth="${2}"
-        if [[ -z "${log_depth}" ]]; then
-          print_error "${log_depth}" "--log-depth requires an argument"
-          help
-          return 1
-        fi
-        shift 2
-        ;;
-      -c|--confirm-vim-start)
-        confirm_vim_startup=true
-        shift
-        ;;
-      -p|--profile)
-        profile="${2}"
+      # compute the length of the rc file
+      rc_length="$( jq length "${rc}" )"
+      debug "rc_length=${rc_length}"
+      for (( i = 0; i < rc_length; i++)); do
+        # extract the profile for this project
+        profile="$( jq -r ".[${i}] .profile" "${rc}" )"
         if [[ -z "${profile}" ]]; then
-          print_error "${log_depth}" "--profile requires an argument"
-          help
-          return 1
+          print_error 0 "profile cannot be empty, this project will be ignored"
+          print_error 1 "$(jq -r .[${i}] "${rc}" )"
+          continue
         fi
-        shift 2
-        ;;
-      -vs|--vim-save-close-all)
-        vim_save_close_all_files=true
-        shift
-        ;;
-      -ve|--vim-exit)
-        vim_exit=true
-        shift
-        ;;
-      *)
-        # Make sure we have only one argument left
-        if [[ -n "${2}" ]]; then
-          print_error "${log_depth}" "can only have one argument, the path to start a session in"
-          help
-          return 1
+        # extract the folder for this project
+        dir="$( jq -r ".[${i}] .dir" "${rc}" )"
+        if [[ -z "${dir}" ]]; then
+          print_error 0 "dir cannot be empty, this project will be ignored"
+          print_error 1 "$(jq -r .[${i}] "${rc}" )"
+          continue
         fi
-        # is it a special case?
-        if [[ -n "${special_sess[$1]}" ]]; then
-          sess="${1}"
-          attach
+        # add this project to the hash
+        projects+=( "${profile}@${dir}" )
+      done
+      # append running sessions, and for each session change '_DOT_' to '.' and
+      # the '_COLUMN_' to ':'
+      projects+=( $( tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" ls -F '#S' | sed -e 's:_DOT_:\.:g' -e 's#_COLUMN_#:#g' ) )
+      # remove duplicates
+      projects=( $(echo "${projects[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' ') )
+    }
+
+    function $0_attach() {
+      # make sure a server is running
+      tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" start-server
+
+      # start a session if one does not exist for it yet
+      if ! tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" list-sessions -F '#{session_name}' | grep -q -e "^${sess}\$"; then
+        # start the new tmux session
+        env --unset=TMUX tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" new-session -d -s "${sess}"
+
+        # add the ACTIVE_PROFILE to the environment of the session
+        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" set-environment -t "${sess}" ACTIVE_PROFILE "${profile}"
+
+        # start a new shell on window 1
+        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" new-window -t "${sess}:1"
+
+        # re-create the first window
+        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" kill-window -t "${sess}:0"
+        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" new-window -t "${sess}:0"
+
+        # start the main program
+        if [[ -n "${special_sess[$sess]}" ]]; then
+          cmd="${special_sess[$sess]}"
+          tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${sess}:0" "clear; $cmd" Enter
+        else
+          # start vim
+          if isTrue "${confirm_vim_startup}"; then
+            tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${sess}:0" 'clear; echo "Press Enter to start Vim "; read; vim' Enter
+          else
+            tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${sess}:0" 'clear; vim' Enter
+          fi
+        fi
+      fi
+
+      # attach the session now
+      if isTrue "${inside_tmux}"; then
+        # switch to the selected session
+        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" switch-client -t "${sess}"
+        # kill the current pane if requested
+        if isTrue "${kill_pane}"; then
+          tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" kill-pane
+        fi
+      else
+        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" attach -t "${sess}"
+      fi
+    }
+
+    declare -A special_sess
+    special_sess[irc]=irssi
+    special_sess[mail]=emacs
+    special_sess[task]="vim +:TW"
+
+    local confirm_vim_startup=false
+    local kill_pane=false
+    local log_depth=0
+    local select_session=false
+    local tmux_socket_name=default
+    local profile=personal
+    local sess=
+    local sess_dir=
+    local vim_save_close_all_files=false
+    local vim_exit=false
+
+    while [[ $# -ge 1 ]]; do
+      case "${1}" in
+        -h|--help)
+          $0_help
           return 0
-        fi
-        # make sure it is a folder or yell
-        if ! [[ -d "${1}" ]]; then
-          print_error "${log_depth}" "${1} is not a folder"
-          help
-          return 1
-        fi
-        # assign the first argument to sess
-        sess="$( cd "${1}" && pwd )"
-        debug "sess=${sess}"
-        # source the profile so we get the correct GOPATH
-        if [[ -n "${profile}" ]] && [[ -r "${HOME}/.zsh/profiles/${profile}.zsh" ]]; then
-          # shellcheck disable=SC1090
-          source "${HOME}/.zsh/profiles/${profile}.zsh"
-          pcode
-        fi
-        # replace $GOPATH with \$GOPATH and $HOME with \$HOME
-        sess="$( echo "${sess}" | sed -e "s:$GOPATH:\$GOPATH:g" -e "s:$HOME:\$HOME:g" )"
-        debug "sess=${sess}"
-        # assign the sess_dir
-        sess_dir="${sess}"
-        debug "sess_dir=${sess_dir}"
-        # add the profile to the sess
-        sess="${profile}@${sess}"
-        debug "sess=${sess}"
-        shift
-        ;;
-    esac
-  done
-
-  # should we ask vim to save all files and close them?
-  if isTrue "${vim_save_close_all_files}"; then
-    debug "going to ask Vim to save all files and close them"
-    local session=
-    for session in $(tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" list-sessions -F '#{session_name}'); do
-      # Send the escape key, in the case we are in a vim like program. This is
-      # repeated because the send-key command is not waiting for vim to complete
-      # its action... also sending a sleep 1 command seems to fuck up the loop.
-      for _ in {1..25}; do
-        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${session}:0" 'C-['
-      done
-      # send ,wa (which saves all buffers)
-      # send ,ww (which will close all buffers)
-      tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${session}:0" , w a , w w
+          ;;
+        -k|--kill-pane)
+          kill_pane=true
+          shift
+          ;;
+        -s|--select-session)
+          select_session=true
+          shift
+          ;;
+        -L|--socket-name)
+          tmux_socket_name="${2}"
+          if [[ -z "${tmux_socket_name}" ]]; then
+            print_error "${log_depth}" "--socket-name requires an argument"
+            $0_help
+            return 1
+          fi
+          shift 2
+          ;;
+        --log-depth)
+          log_depth="${2}"
+          if [[ -z "${log_depth}" ]]; then
+            print_error "${log_depth}" "--log-depth requires an argument"
+            $0_help
+            return 1
+          fi
+          shift 2
+          ;;
+        -c|--confirm-vim-start)
+          confirm_vim_startup=true
+          shift
+          ;;
+        -p|--profile)
+          profile="${2}"
+          if [[ -z "${profile}" ]]; then
+            print_error "${log_depth}" "--profile requires an argument"
+            $0_help
+            return 1
+          fi
+          shift 2
+          ;;
+        -vs|--vim-save-close-all)
+          vim_save_close_all_files=true
+          shift
+          ;;
+        -ve|--vim-exit)
+          vim_exit=true
+          shift
+          ;;
+        *)
+          # Make sure we have only one argument left
+          if [[ -n "${2}" ]]; then
+            print_error "${log_depth}" "can only have one argument, the path to start a session in"
+            $0_help
+            return 1
+          fi
+          # is it a special case?
+          if [[ -n "${special_sess[$1]}" ]]; then
+            sess="${1}"
+            $0_attach
+            return 0
+          fi
+          # make sure it is a folder or yell
+          if ! [[ -d "${1}" ]]; then
+            print_error "${log_depth}" "${1} is not a folder"
+            $0_help
+            return 1
+          fi
+          # assign the first argument to sess
+          sess="$( cd "${1}" && pwd )"
+          debug "sess=${sess}"
+          # source the profile so we get the correct GOPATH
+          if [[ -n "${profile}" ]] && [[ -r "${HOME}/.zsh/profiles/${profile}.zsh" ]]; then
+            # shellcheck disable=SC1090
+            source "${HOME}/.zsh/profiles/${profile}.zsh"
+            pcode
+          fi
+          # replace $GOPATH with \$GOPATH and $HOME with \$HOME
+          sess="$( echo "${sess}" | sed -e "s:$GOPATH:\$GOPATH:g" -e "s:$HOME:\$HOME:g" )"
+          debug "sess=${sess}"
+          # assign the sess_dir
+          sess_dir="${sess}"
+          debug "sess_dir=${sess_dir}"
+          # add the profile to the sess
+          sess="${profile}@${sess}"
+          debug "sess=${sess}"
+          shift
+          ;;
+      esac
     done
-    return 0
-  fi
 
-  # should we ask vim to exit?
-  if isTrue "${vim_exit}"; then
-    debug "going to ask Vim to exit"
-    local session=
-    for session in $(tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" list-sessions -F '#{session_name}'); do
-      # Send the escape key, in the case we are in a vim like program. This is
-      # repeated because the send-key command is not waiting for vim to complete
-      # its action... also sending a sleep 1 command seems to fuck up the loop.
-      # Credit: https://gist.github.com/debugish/2773454
-      for _ in {1..25}; do
-        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${session}:0" 'C-['
+    # should we ask vim to save all files and close them?
+    if isTrue "${vim_save_close_all_files}"; then
+      debug "going to ask Vim to save all files and close them"
+      local session=
+      for session in $(tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" list-sessions -F '#{session_name}'); do
+        # Send the escape key, in the case we are in a vim like program. This is
+        # repeated because the send-key command is not waiting for vim to complete
+        # its action... also sending a sleep 1 command seems to fuck up the loop.
+        for _ in {1..25}; do
+          tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${session}:0" 'C-['
+        done
+        # send ,wa (which saves all buffers)
+        # send ,ww (which will close all buffers)
+        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${session}:0" , w a , w w
       done
-      # ask Vim to exit
-      tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${session}:0" : x a C-m
-    done
-    return 0
-  fi
-
-  # start with an empty sess_dir and an empty profile
-  local inside_tmux="$( test -n "${TMUX}" && echo true || echo false )"
-
-  # are selecting the session?
-  if isTrue "${select_session}"; then
-    # declare the projects which is an associated array. We then use build_projects
-    # to build the array
-    typeset -a projects
-    build_projects
-    debug "projects=${projects[*]}"
-    # select the session
-    sess="$( for i in "${projects[@]}"; do echo "${i}"; done | fzf )"
-    if [[ -z "${sess}" ]]; then
-      print_error 0 "no session were selected"
-      return 1
+      return 0
     fi
-    profile="$(echo "${sess}" | cut -d@ -f1)"
-    sess_dir="$(echo "${sess}" | cut -d@ -f2)"
-    debug "sess=${sess}"
-    debug "sess_dir=${sess_dir}"
-    debug "profile=${profile}"
-  fi
 
-  # source the profile so we get the correct GOPATH
-  if [[ -n "${profile}" ]] && [[ -r "${HOME}/.zsh/profiles/${profile}.zsh" ]]; then
-    source "${HOME}/.zsh/profiles/${profile}.zsh"
-    pcode
-  fi
+    # should we ask vim to exit?
+    if isTrue "${vim_exit}"; then
+      debug "going to ask Vim to exit"
+      local session=
+      for session in $(tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" list-sessions -F '#{session_name}'); do
+        # Send the escape key, in the case we are in a vim like program. This is
+        # repeated because the send-key command is not waiting for vim to complete
+        # its action... also sending a sleep 1 command seems to fuck up the loop.
+        # Credit: https://gist.github.com/debugish/2773454
+        for _ in {1..25}; do
+          tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${session}:0" 'C-['
+        done
+        # ask Vim to exit
+        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${session}:0" : x a C-m
+      done
+      return 0
+    fi
 
-  # if the sess is empty, set it to the dotfiles
-  if [[ -z "${sess}" ]]; then
-    sess="personal@\$HOME/.dotfiles"
-    sess_dir="${HOME}/.dotfiles"
-    profile="personal"
-  fi
+    # start with an empty sess_dir and an empty profile
+    local inside_tmux="$( test -n "${TMUX}" && echo true || echo false )"
 
-  # expand any variable stored in the sess name
-  sess_dir="$( eval "echo ${sess_dir}" )"
-  debug "eval(sess_dir)=${sess_dir}"
+    # are selecting the session?
+    if isTrue "${select_session}"; then
+      # declare the projects which is an associated array. We then use build_projects
+      # to build the array
+      typeset -a projects
+      $0_build_projects
+      debug "projects=${projects[*]}"
+      # select the session
+      sess="$( for i in "${projects[@]}"; do echo "${i}"; done | fzf )"
+      if [[ -z "${sess}" ]]; then
+        print_error 0 "no session were selected"
+        return 1
+      fi
+      profile="$(echo "${sess}" | cut -d@ -f1)"
+      sess_dir="$(echo "${sess}" | cut -d@ -f2)"
+      debug "sess=${sess}"
+      debug "sess_dir=${sess_dir}"
+      debug "profile=${profile}"
+    fi
 
-  # if the sess is an actual directory, go there first and set the sess to
-  # empty to generate the session name from the path
-  if [[ -d "${sess_dir}" ]]; then
-    # go inside the folder
-    cd "${sess_dir}"
-  fi
+    # source the profile so we get the correct GOPATH
+    if [[ -n "${profile}" ]] && [[ -r "${HOME}/.zsh/profiles/${profile}.zsh" ]]; then
+      source "${HOME}/.zsh/profiles/${profile}.zsh"
+      pcode
+    fi
 
-  # session name cannot contain a dot or a column
-  # https://github.com/tmux/tmux/blob/76688d204071b76fd3388e46e944e4b917c09625/session.c#L232
-  sess="$(echo "${sess}" | sed -e 's:\.:_DOT_:g' -e 's#:#_COLUMN_#g')"
+    # if the sess is empty, set it to the dotfiles
+    if [[ -z "${sess}" ]]; then
+      sess="personal@\$HOME/.dotfiles"
+      sess_dir="${HOME}/.dotfiles"
+      profile="personal"
+    fi
 
-  # create a new session if necessary, and attach it
-  attach
+    # expand any variable stored in the sess name
+    sess_dir="$( eval "echo ${sess_dir}" )"
+    debug "eval(sess_dir)=${sess_dir}"
+
+    # if the sess is an actual directory, go there first and set the sess to
+    # empty to generate the session name from the path
+    if [[ -d "${sess_dir}" ]]; then
+      # go inside the folder
+      cd "${sess_dir}"
+    fi
+
+    # session name cannot contain a dot or a column
+    # https://github.com/tmux/tmux/blob/76688d204071b76fd3388e46e944e4b917c09625/session.c#L232
+    sess="$(echo "${sess}" | sed -e 's:\.:_DOT_:g' -e 's#:#_COLUMN_#g')"
+
+    # create a new session if necessary, and attach it
+    $0_attach
+  } always {
+    unfunction -m "$0_*"
+  }
 }
