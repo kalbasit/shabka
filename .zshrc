@@ -220,6 +220,10 @@ setopt zle
 # functions
 #####################################################################
 
+# add the zsh functions to the fpath
+fpath=("${HOME}/.zsh/functions" $fpath)
+autoload tmx
+
 # have returns 0 if $1 is callable (alias, function or a binary)
 # Credit: https://github.com/Daenyth/dotfiles/blob/a22723420e780f04a77ebab8dd2737cfaba43c42/.bashrc#L47
 function have() {
