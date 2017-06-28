@@ -222,16 +222,10 @@ setopt zle
 
 # add the zsh functions to the fpath
 fpath=("${HOME}/.zsh/functions" $fpath)
-autoload -U tmx
 
-# have returns 0 if $1 is callable (alias, function or a binary)
-# Credit: https://github.com/Daenyth/dotfiles/blob/a22723420e780f04a77ebab8dd2737cfaba43c42/.bashrc#L47
-function have() {
-  type "$1" &>/dev/null
-}
-
-for func in ${HOME}/.zsh/functions/*.zsh; do
-  source "${func}"
+# autoload all of the functions
+for func in ${HOME}/.zsh/functions/*; do
+  autoload -U "$(basename ${func})"
 done
 
 #####################################################################
