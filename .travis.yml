@@ -1,5 +1,9 @@
 language: c
 sudo: false
+addons:
+  apt:
+    packages:
+    - zsh
 before_script:
   - yes 'y' | rake
 script:
