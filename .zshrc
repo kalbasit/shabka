@@ -278,43 +278,43 @@ export LC_ALL="${LANG}"
 [[ -n "${LC_CTYPE}" ]] && unset LC_CTYPE
 
 # We need our bin folder
-pathmunge "${HOME}/.bin"
+pathappend PATH "${HOME}/.bin"
 
 # load the Emscripten environment
-pathmunge "/usr/lib/emsdk"
+pathappend PATH "/usr/lib/emsdk"
 
 # We need Go's bin folder
-pathmunge "${GOPATH}/bin"
+pathappend PATH "${GOPATH}/bin"
 
 # Anything got installed into MYFS?
-pathmunge "${MYFS}/bin"
-pathmunge "${MYFS}/opt/go_appengine"
+pathappend PATH "${MYFS}/bin"
+pathappend PATH "${MYFS}/opt/go_appengine"
 if [[ -d "${MYFS}" ]]; then
   if [[ -d "${MYFS}/opt" ]]; then
     for dir in `find "${MYFS}/opt" -maxdepth 1 -mindepth 1 -type d`; do
       if [[ -d "${dir}/bin" ]]; then
-        pathmunge "${dir}/bin" after
+        pathappend PATH "${dir}/bin" after
       fi
     done
   fi
 
   # Make LD can find our files.
-  # TODO(T::f7612ca5-40c1-4107-bb5d-4f81cdedeb50): generelize pathmunge into append so I can use it for PATH or any other variable
+  # TODO(T::f7612ca5-40c1-4107-bb5d-4f81cdedeb50): generelize pathappend PATH into append so I can use it for PATH or any other variable
   export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${MYFS}/lib"
 fi
 
 # Add all rubygems bin dir
 if [[ -d "${HOME}/.gem/ruby" ]]; then
   for dir in $HOME/.gem/ruby/*/bin; do
-    pathmunge "${dir}" after
+    pathappend PATH "${dir}" after
   done
 fi
 
 # add rbenv
-pathmunge "${HOME}/.rbenv/bin"
+pathappend PATH "${HOME}/.rbenv/bin"
 
 # add pyenv
-pathmunge "${HOME}/.pyenv/bin"
+pathappend PATH "${HOME}/.pyenv/bin"
 
 #####################################################################
 # aliases
@@ -814,7 +814,7 @@ if [[ "$OSTYPE" = darwin* ]]; then
 fi
 
 # Load rofi clipboard manager
-pathmunge "${MYFS}/opt/rofi-clipboard-manager"
+pathappend PATH "${MYFS}/opt/rofi-clipboard-manager"
 
 # Load TheFuck
 if have thefuck; then

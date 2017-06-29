@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ex
 
-# simplified pathmunge used for early X
+# simplified pathappend used for early X
 function _pathmunge() {
   [[ ! -d "${1}" ]] && return
   if ! [[ $PATH =~ (^|:)$1($|:) ]]; then
