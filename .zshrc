@@ -293,7 +293,7 @@ if [[ -d "${MYFS}" ]]; then
   if [[ -d "${MYFS}/opt" ]]; then
     for dir in `find "${MYFS}/opt" -maxdepth 1 -mindepth 1 -type d`; do
       if [[ -d "${dir}/bin" ]]; then
-        pathappend PATH "${dir}/bin" after
+        pathappend PATH "${dir}/bin"
       fi
     done
   fi
@@ -302,10 +302,18 @@ if [[ -d "${MYFS}" ]]; then
   pathappend LD_LIBRARY_PATH "${MYFS}/lib"
 fi
 
+# add any libexec directory
+if [[ -d "${HOME}/.libexec" ]]; then
+  for dir in $(find "${HOME}/.libexec" -maxdepth 1 -mindepth 1 -type d); do
+    pathappend PATH "${dir}"
+  done
+fi
+pathappend PATH "${HOME}/.libexec"
+
 # Add all rubygems bin dir
 if [[ -d "${HOME}/.gem/ruby" ]]; then
   for dir in $HOME/.gem/ruby/*/bin; do
-    pathappend PATH "${dir}" after
+    pathappend PATH "${dir}"
   done
 fi
 
