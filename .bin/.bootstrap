@@ -25,7 +25,7 @@ ARGS=( ${@} )
 #}}}
 # load the functions from ZSH#{{{
 for func in ${HOME}/.zsh/functions/*; do
-    if [[ "$(basename "${func}")" != "tmx" ]]; then
+    if ! grep -q '} always {' "${func}"; then
         # shellcheck disable=SC1090
         source "${func}"
     fi
