@@ -278,23 +278,21 @@ export LC_ALL="${LANG}"
 [[ -n "${LC_CTYPE}" ]] && unset LC_CTYPE
 
 # We need our bin folder
-pathappend PATH "${HOME}/.bin"
+pathprepend PATH "${HOME}/.bin"
 
 # load the Emscripten environment
-pathappend PATH "/usr/lib/emsdk"
+pathprepend PATH "/usr/lib/emsdk"
 
 # We need Go's bin folder
-pathappend PATH "${GOPATH}/bin"
+pathprepend PATH "${GOPATH}/bin"
 
 # Anything got installed into MYFS?
-pathappend PATH "${MYFS}/bin"
+pathprepend PATH "${MYFS}/bin"
 pathappend PATH "${MYFS}/opt/go_appengine"
 if [[ -d "${MYFS}" ]]; then
   if [[ -d "${MYFS}/opt" ]]; then
-    for dir in `find "${MYFS}/opt" -maxdepth 1 -mindepth 1 -type d`; do
-      if [[ -d "${dir}/bin" ]]; then
-        pathappend PATH "${dir}/bin"
-      fi
+    for dir in ${MYFS}/opt/*/bin; do
+      [[ -d "${dir}" ]] && pathappend PATH "${dir}"
     done
   fi
 
@@ -304,11 +302,10 @@ fi
 
 # add any libexec directory
 if [[ -d "${HOME}/.libexec" ]]; then
-  for dir in $(find "${HOME}/.libexec" -maxdepth 1 -mindepth 1 -type d); do
-    pathappend PATH "${dir}"
+  for dir in ${HOME}/.libexec/*; do
+    [[ -d "${dir}" ]] && pathappend PATH "${dir}"
   done
 fi
-pathappend PATH "${HOME}/.libexec"
 
 # Add all rubygems bin dir
 if [[ -d "${HOME}/.gem/ruby" ]]; then
@@ -318,10 +315,10 @@ if [[ -d "${HOME}/.gem/ruby" ]]; then
 fi
 
 # add rbenv
-pathappend PATH "${HOME}/.rbenv/bin"
+pathprepend PATH "${HOME}/.rbenv/bin"
 
 # add pyenv
-pathappend PATH "${HOME}/.pyenv/bin"
+pathprepend PATH "${HOME}/.pyenv/bin"
 
 #####################################################################
 # aliases
@@ -819,9 +816,6 @@ if [[ "$OSTYPE" = darwin* ]]; then
     eval $(docker-machine env)
   fi
 fi
-
-# Load rofi clipboard manager
-pathappend PATH "${MYFS}/opt/rofi-clipboard-manager"
 
 # Load TheFuck
 if have thefuck; then
