@@ -9,12 +9,9 @@ before_script:
 script:
   - rm "${HOME}/.zshrc"
   - touch "${HOME}/.zshrc"
-  - zsh
-  - git clone https://github.com/zplug/zplug.git /tmp/zplug && source /tmp/zplug/init.zsh && source ~/.zshrc && zplug install
-  - env > /tmp/a
+  - zsh -i -c "git clone https://github.com/zplug/zplug.git /tmp/zplug && source /tmp/zplug/init.zsh && source ~/.zshrc && zplug install"
+  - zsh -i -c "env > /tmp/a"
   - yes 'y' | rake
-  - source "${HOME}/.zshrc"
-  - zplug install
-  - source "${HOME}/.zshrc"
-  - env > /tmp/b
+  - zsh -i -c "zplug install"
+  - zsh -i -c "env > /tmp/b"
   - diff -Naur /tmp/a /tmp/b
