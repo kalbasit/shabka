@@ -53,7 +53,7 @@ fade_brightness() {
     set_brightness "${1}"
   else
     local level
-    for level in $(eval echo "{$(get_brightness)..$1}"); do
+    for level in $(eval echo {$(get_brightness)..$1}); do
       set_brightness "${level}"
       sleep $fade_step_time
     done
