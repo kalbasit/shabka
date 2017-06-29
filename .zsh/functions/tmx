@@ -90,7 +90,7 @@ tmx() {
       fi
 
       # attach the session now
-      if isTrue "${inside_tmux}"; then
+      if [[ -n "${TMUX}" ]]; then
         # switch to the selected session
         tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" switch-client -t "${sess}"
         # kill the current pane if requested
@@ -248,9 +248,6 @@ tmx() {
       done
       return 0
     fi
-
-    # start with an empty sess_dir and an empty profile
-    local inside_tmux="$( test -n "${TMUX}" && echo true || echo false )"
 
     # are selecting the session?
     if isTrue "${select_session}"; then
