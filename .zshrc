@@ -266,7 +266,8 @@ export EDITOR=nvim
 export SUDO_EDITOR=nvim
 
 # Set the notmuch config
-export NOTMUCH_CONFIG="${HOME}/.mail/.notmuch/config"
+export NOTMUCH_HOME="${HOME}/.mail/.notmuch"
+export NOTMUCH_CONFIG="${NOTMUCH_HOME}/config"
 
 # Set the pager
 export PAGER=less
