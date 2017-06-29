@@ -7,8 +7,7 @@ addons:
 before_script:
   - yes 'y' | rake
 script:
-  - rm "${HOME}/.zshrc"
-  - touch "${HOME}/.zshrc"
+  - :> "${HOME}/.zshrc"
   - zsh -i -c "env > /tmp/a"
   - yes 'y' | rake
   - zsh -i -c "git clone https://github.com/zplug/zplug.git /tmp/zplug && source /tmp/zplug/init.zsh && source ~/.zshrc && zplug install"
