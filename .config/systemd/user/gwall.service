@@ -2,7 +2,7 @@
 Description=Gwall
 
 [Service]
-ExecStart=/home/kalbasit/.bin/Gwall
+ExecStart=/home/kalbasit/.bin/gwall
 
 [Install]
 WantedBy=default.target
