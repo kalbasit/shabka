@@ -1,11 +1,11 @@
 #
-# vim:ft=zsh:fenc=UTF-8:ts=4:sts=4:sw=4:expandtab:foldmethod=marker:foldlevel=0:
+# vim:ft=zsh:
 #
 
 # github_commit_link [REF]
 #
 # Print the Github commit link for REF (default HEAD)
-github_commit_link() { # [REF]
+github_commit_link() {
   # get the reference we need
   local ref="${1:-HEAD}"
   # compute the GOPATH format of the URL of origin

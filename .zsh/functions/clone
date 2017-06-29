@@ -1,26 +1,53 @@
+#
+# vim:ft=zsh:
+#
+
 function clone() { # URL
-  if [[ "${1}" = "--profile" ]]; then
-    local profile="${2}"
-    shift 2
-    # source the profile so we get the correct GOPATH
-    if [[ -n "${profile}" ]] && [[ -r "${HOME}/.zsh/profiles/${profile}.zsh" ]]; then
-      # shellcheck disable=SC1090
-      source "${HOME}/.zsh/profiles/${profile}.zsh"
-      pcode
+  { # Begin "always" block so we can unfunction the internal functions at the end
+    function $0_help()
+    {
+      print_info "${log_depth}" "USAGE: clone [options] <URL>"
+      print_info "${log_depth}" "\t -h, --help                - this message"
+      print_info "${log_depth}" "\t -p, --profile             - the profile to use. This is only relevant if a new session is going to be started"
+    }
+
+    while [[ $# -ge 1 ]]; do
+      case "${1}" in
+        -p|--profile)
+          local profile="${2}"
+          shift 2
+          # source the profile so we get the correct GOPATH
+          if [[ -n "${profile}" ]] && [[ -r "${HOME}/.zsh/profiles/${profile}.zsh" ]]; then
+            # shellcheck disable=SC1090
+            source "${HOME}/.zsh/profiles/${profile}.zsh"
+            pcode
+          fi
+          ;;
+        -*)
+          $0_help
+          return 1
+          ;;
+        *)
+          local url="${1}"
+          shift
+          ;;
+      esac
+    done
+
+    # compute the GOPATH format of the URL of origin
+    local gfrp="$( git_gopath_formatted_repo_path "${url}" )"
+    # compute the path of the clone
+    local clone_path="${GOPATH}/src/${gfrp}"
+    # make sure we do not clone an already cloned repo
+    if [[ -e "${clone_path}" ]]; then
+      print_error 0 "${clone_path} already exists"
+      return 1
     fi
-  fi
-  local url="${1}"
-  # compute the GOPATH format of the URL of origin
-  local gfrp="$( git_gopath_formatted_repo_path "${url}" )"
-  # compute the path of the clone
-  local clone_path="${GOPATH}/src/${gfrp}"
-  # make sure we do not clone an already cloned repo
-  if [[ -e "${clone_path}" ]]; then
-    print_error 0 "${clone_path} already exists"
-    return 1
-  fi
-  # make sure the directory is avalable
-  mkdir -p "$(dirname "${clone_path}")"
-  # clone it now
-  git clone "${url}" "${clone_path}"
+    # make sure the directory is avalable
+    mkdir -p "$(dirname "${clone_path}")"
+    # clone it now
+    git clone "${url}" "${clone_path}"
+  } always {
+    unfunction -m "$0_*"
+  }
 }

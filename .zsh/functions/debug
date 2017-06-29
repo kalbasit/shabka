@@ -1,3 +1,7 @@
+#
+# vim:ft=zsh:
+#
+
 function debug() {
   if isTrue "${DEBUG}"; then
     echo -e "[DEBUG][${funcstack[2]}()] ${@}"

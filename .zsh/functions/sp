@@ -1,3 +1,7 @@
+#
+# vim:ft=zsh:
+#
+
 # sp stands for switch profile. When invoked, it will source the requested
 # profile and calls pactivate to activate it
 function sp() {
