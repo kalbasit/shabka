@@ -89,7 +89,7 @@ function ssh-agents() {
     # export the variables required to access the SSH agent
     $0_export_env SSH_AUTH_SOCK SSH_AGENT_PID
   } always {
+    unfunction pssh
     unfunction -m "$0_*"
-    unfunction -m pssh
   }
 }
