@@ -5,6 +5,7 @@ script:
   - rm "${HOME}/.zshrc"
   - touch "${HOME}/.zshrc"
   - zsh
+  - git clone https://github.com/zplug/zplug.git /tmp/zplug && source /tmp/zplug/init.zsh && source ~/.zshrc && zplug install
   - env > /tmp/a
   - yes 'y' | rake
   - source "${HOME}/.zshrc"
