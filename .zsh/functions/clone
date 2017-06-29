@@ -24,4 +24,3 @@ function clone() { # URL
   # clone it now
   git clone "${url}" "${clone_path}"
 }
-

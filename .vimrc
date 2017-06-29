@@ -118,9 +118,6 @@ Plug 'ntpeters/vim-better-whitespace'
 " show git status in the sign column next to every line
 Plug 'mhinz/vim-signify'
 
-" TODO: are you being used?
-" Plug 'christoomey/vim-tmux-navigator'
-
 " auto insert the closing pair
 Plug 'jiangmiao/auto-pairs'
 
@@ -130,7 +127,7 @@ Plug 'junegunn/vim-easy-align', { 'on': ['<Plug>(EasyAlign)', 'EasyAlign'] }
 " sort visual block
 Plug 'navicore/vissort.vim', { 'on': 'Vissort' }
 
-" file browesr
+" file browser
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 
 " check file for errors
@@ -325,7 +322,10 @@ set wildignore+=*.swp,*~,._*
 set wildignore+=*/Godeps/_workspace/*
 
 " Disable the vendor directory Go 1.5+
-set wildignore+=*/vendor/*
+" TODO: This setting makes it impossible for me to go ahead and open files
+" inside the vendor directory. Does removing it affects my workflow? Does fzf
+" still ignores based on .gitignore?
+" set wildignore+=*/vendor/*
 
 " Disable node/TypeScript
 set wildignore+=*/node_modules/*,*/typings/*,*/dist/*
@@ -393,10 +393,11 @@ if has("autocmd")
   endif
 
   " Go
+  au FileType go nmap <Leader>gc <Plug>(go-doc)
   au FileType go nmap <Leader>gd <Plug>(go-def)
+  au FileType go nmap <Leader>sgd <Plug>(go-def-split)
+  au FileType go nmap <Leader>vgd <Plug>(go-def-vertical)
   au FileType go nmap <Leader>gi <Plug>(go-info)
-  au FileType go nmap <Leader>gds <Plug>(go-def-split)
-  au FileType go nmap <Leader>gdv <Plug>(go-def-vertical)
 endif
 
 " }}}

@@ -1,1 +1,0 @@
-../slack_complete.pl

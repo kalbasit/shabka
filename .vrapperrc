@@ -1,4 +1,5 @@
 " vrapper
+" Vim for eclipse: https://github.com/vrapper/vrapper
 
 " Settings {{{
 set ignorecase

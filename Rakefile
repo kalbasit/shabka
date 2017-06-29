@@ -32,20 +32,21 @@ IGNORED_FILES = [
 ]
 
 GO_BINARIES = [
-  "github.com/monochromegane/the_platinum_searcher/cmd/pt",
-  "github.com/smartystreets/goconvey",
+  "github.com/3rf/codecoroner",
+  "github.com/codegangsta/gin",
+  "github.com/golang/lint/golint",
+  "github.com/golang/protobuf/protoc-gen-go",
   "github.com/jteeuwen/go-bindata/go-bindata",
+  "github.com/kardianos/govendor",
+  "github.com/monochromegane/the_platinum_searcher/cmd/pt",
+  "github.com/peco/peco/cmd/peco",
+  "github.com/pocke/lemonade",
+  "github.com/smartystreets/goconvey",
+  "github.com/spf13/cobra/cobra",
   "github.com/tools/godep",
   "golang.org/x/tools/cmd/cover",
-  "github.com/golang/lint/golint",
-  "github.com/codegangsta/gin",
-  "github.com/peco/peco/cmd/peco",
   "golang.org/x/tools/cmd/stringer",
-  "github.com/golang/protobuf/protoc-gen-go",
-  "github.com/Masterminds/glide",
-  "github.com/kardianos/govendor",
-  "github.com/spf13/cobra/cobra",
-  "github.com/pocke/lemonade",
+  "honnef.co/go/tools/cmd/unused",
 ]
 
 desc "run :update_submodules and :link"
@@ -94,8 +95,16 @@ end
 
 desc "Install Go Binaries"
 task :install_go_binaries do
-  GO_BINARIES.each do |binary|
-    sh %Q{go get -u #{binary}}
+  # record the current GOPATH and switch to the global one
+  oldGoPath = ENV["GOPATH"]
+  ENV["GOPATH"] = ENV["GLOBAL_GOPATH"]
+  # Install the binaries and restore the GOPATH
+  begin
+    GO_BINARIES.each do |binary|
+      sh %Q{go get -u #{binary}}
+    end
+  ensure
+    ENV["GOPATH"] = oldGoPath
   end
 end
 

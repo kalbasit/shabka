@@ -40,7 +40,6 @@ zplug "b4b4r07/enhancd",                     use:init.sh
 zplug "denolfe/zsh-travis"
 zplug "hcgraf/zsh-sudo"
 zplug "jreese/zsh-titles"
-zplug "molovo/tipz"
 zplug "peterhurford/git-it-on.zsh"
 zplug "plugins/command-not-found",           from:oh-my-zsh
 zplug "plugins/extract",                     from:oh-my-zsh
@@ -221,16 +220,14 @@ setopt zle
 # functions
 #####################################################################
 
-# have returns 0 if $1 is callable (alias, function or a binary)
-# Credit: https://github.com/Daenyth/dotfiles/blob/a22723420e780f04a77ebab8dd2737cfaba43c42/.bashrc#L47
-function have() {
-  type "$1" &>/dev/null
-}
+# add the zsh functions to the fpath
+fpath=("${HOME}/.zsh/functions" $fpath)
 
-for func in ${HOME}/.zsh/functions/*.zsh; do
-  # shellcheck disable=SC1090
-  source "${func}"
+# autoload all of the functions
+for func in ${HOME}/.zsh/functions/*; do
+  autoload -U "$(basename ${func})"
 done
+unset func
 
 #####################################################################
 # exports

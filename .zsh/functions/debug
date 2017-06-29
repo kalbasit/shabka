@@ -1,0 +1,5 @@
+function debug() {
+  if isTrue "${DEBUG}"; then
+    echo -e "[DEBUG][${funcstack[2]}()] ${@}"
+  fi
+}

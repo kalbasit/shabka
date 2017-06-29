@@ -1,4 +1,5 @@
 #!/bin/bash
+# https://wiki.archlinux.org/index.php/Xinit#Making_a_DE.2FWM_choice
 set -e
 
 # source the base
@@ -15,7 +16,8 @@ if [[ -d /etc/X11/xinit/xinitrc.d ]]; then
 fi
 
 # dynamic color temperature adjustment
-systemctl --user restart redshift.service
+# TODO: fix the timing of redshift
+# systemctl --user restart redshift.service
 
 # composition manager
 systemctl --user restart compton.service
