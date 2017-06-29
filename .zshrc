@@ -13,51 +13,51 @@
 # Load zplug
 if [[ -r "${HOME}/.zplug/init.zsh" ]]; then
   source "${HOME}/.zplug/init.zsh"
+
+  # speed up zplug. See https://github.com/zplug/zplug/issues/368#issuecomment-282566102
+  __zplug::io::file::generate
+
+  # let zplug manage itself
+  zplug 'zplug/zplug', hook-build:'zplug --self-manage'
+
+  # load the shellder theme
+  zplug "kalbasit/shellder", as:theme
+
+  # plugins
+  zplug "Dbz/zsh-kubernetes"
+  zplug "b4b4r07/emoji-cli"
+  zplug "b4b4r07/enhancd",                     use:init.sh
+  zplug "denolfe/zsh-travis"
+  zplug "hcgraf/zsh-sudo"
+  zplug "jreese/zsh-titles"
+  zplug "peterhurford/git-it-on.zsh"
+  zplug "plugins/command-not-found",           from:oh-my-zsh
+  zplug "plugins/extract",                     from:oh-my-zsh
+  zplug "plugins/git",                         from:oh-my-zsh
+  zplug "plugins/github",                      from:oh-my-zsh
+  zplug "plugins/history",                     from:oh-my-zsh
+  zplug "supercrabtree/k"
+  zplug "zlsun/solarized-man"
+  zplug "zsh-users/zsh-completions"
+  zplug "zsh-users/zsh-history-substring-search"
+  zplug "zsh-users/zsh-syntax-highlighting",   defer:2
+
+  # Then, source plugins and add commands to $PATH
+  zplug load
+
+  if zplug check b4b4r07/enhancd; then
+    # setting if enhancd is available
+    export ENHANCD_FILTER=fzf-tmux
+  fi
 else
   # instructions on how to get zplug installed
   echo -e "zplug cannot be found at ${HOME}/.zplug/init.zsh"
   echo -e "run the following command and then restart your shell"
-  echo -e "git clone https://github.com/zplug/zplug.git /tmp/zplug && source /tmp/zplug/init.zsh && source ~/.zshrc && zplug install"
+  echo -e "git clone https://github.com/zplug/zplug.git /tmp/zplug && source /tmp/zplug/init.zsh && zplug install"
   # stop here but only if zplug is not available. It can only be avaliable here
   # if zplug was sourced but `zplug install` was not called yet. See the
   # installation command above
-  whence -w zplug | grep function || return 1
-fi
-
-# speed up zplug. See https://github.com/zplug/zplug/issues/368#issuecomment-282566102
-__zplug::io::file::generate
-
-# let zplug manage itself
-zplug 'zplug/zplug', hook-build:'zplug --self-manage'
-
-# load the shellder theme
-zplug "kalbasit/shellder", as:theme
-
-# plugins
-zplug "Dbz/zsh-kubernetes"
-zplug "b4b4r07/emoji-cli"
-zplug "b4b4r07/enhancd",                     use:init.sh
-zplug "denolfe/zsh-travis"
-zplug "hcgraf/zsh-sudo"
-zplug "jreese/zsh-titles"
-zplug "peterhurford/git-it-on.zsh"
-zplug "plugins/command-not-found",           from:oh-my-zsh
-zplug "plugins/extract",                     from:oh-my-zsh
-zplug "plugins/git",                         from:oh-my-zsh
-zplug "plugins/github",                      from:oh-my-zsh
-zplug "plugins/history",                     from:oh-my-zsh
-zplug "supercrabtree/k"
-zplug "zlsun/solarized-man"
-zplug "zsh-users/zsh-completions"
-zplug "zsh-users/zsh-history-substring-search"
-zplug "zsh-users/zsh-syntax-highlighting",   defer:2
-
-# Then, source plugins and add commands to $PATH
-zplug load
-
-if zplug check b4b4r07/enhancd; then
-  # setting if enhancd is available
-  export ENHANCD_FILTER=fzf-tmux
+  # whence -w zplug | grep function || return 1
 fi
 
 #####################################################################
