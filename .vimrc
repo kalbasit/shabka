@@ -1,13 +1,5 @@
 " vim:foldmethod=marker:foldlevel=0:
 
-"" Profiles{{{
-
-if !exists('g:kb_profile')
-  let g:kb_profile = 'colemak'
-endif
-let g:kb_profiles = { 'qwerty': expand("~/.vim/profiles/qwerty"), 'colemak': expand("~/.vim/profiles/colemak") }
-
-" }}}
 "" Plug{{{
 ""
 
@@ -70,6 +62,9 @@ endif
 """""""""""""""
 " Look & Feel "
 """""""""""""""
+
+" colemak bindings
+Plug 'kalbasit/vim-colemak'
 
 " airline is a status bar
 Plug 'bling/vim-airline'
@@ -171,8 +166,6 @@ Plug 'tyru/caw.vim'
 
 " Remove EOL on save
 Plug 'vim-scripts/PreserveNoEOL'
-
-exe 'source ' . g:kb_profiles[g:kb_profile] . '/plug.vim'
 
 " All of your Plugins must be added before the following line
 call plug#end()
@@ -420,6 +413,16 @@ let g:go_highlight_build_constraints = 1
 " configure vim-go to show errors in the quickfix window and not the location list.
 let g:go_list_type = "quickfix"
 
+" disable the default mapping {if} and {af}, conflicts with Colemak
+" See mappings.vim for remapping
+let g:go_textobj_enabled = 0
+
+" disable go doc mapprings
+let g:go_doc_keywordprg_enabled = 0
+
+" disable go def mappings
+let g:go_def_mapping_enabled = 0
+
 " }}}
 "" TaskWarrior{{{
 ""
@@ -500,6 +503,14 @@ if has('nvim')
 endif
 
 "" }}}
+"" Ruby{{{
+""
+
+" disable the default mapping {if} and {af}, conflicts with Colemak
+" See mappings.vim for remapping
+let g:no_ruby_maps = 1
+
+" }}}
 "" Ack{{{
 
 let g:ackprg = 'ag --vimgrep --smart-case'
@@ -595,9 +606,6 @@ endif
 "" EditorConfig {{{
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 "" }}}
-"" Profile settings {{{
-exe 'source ' . g:kb_profiles[g:kb_profile] . '/settings.vim'
-"" }}}
 "" Command-Line Mappings {{{
 ""
 
@@ -613,12 +621,295 @@ command! Xa :xa
 "" General Mappings (Normal, Visual, Operator-pending) {{{
 ""
 
-exe 'source ' . g:kb_profiles[g:kb_profile] . '/mappings.vim'
+""""""""""""
+" Surround "
+""""""""""""
+
+" Copied from https://github.com/tpope/vim-surround/blob/e49d6c2459e0f5569ff2d533b4df995dd7f98313/plugin/surround.vim#L578-L596
+" TODO: complete as needed
+nmap ws  <Plug>Csurround
+
+"""""""
+" FZF "
+"""""""
+
+" mapping for files and buffers
+nmap <Leader>f :Files<CR>
+nmap <Leader>b :Buffers<CR>
+
+" Mapping selecting mappings
+nmap <leader><tab> <plug>(fzf-maps-n)
+xmap <leader><tab> <plug>(fzf-maps-x)
+omap <leader><tab> <plug>(fzf-maps-o)
+
+" Insert mode completion
+imap <c-x><c-k> <plug>(fzf-complete-word)
+imap <c-x><c-f> <plug>(fzf-complete-path)
+imap <c-x><c-j> <plug>(fzf-complete-file-ag)
+imap <c-x><c-l> <plug>(fzf-complete-line)
+
+""""""""""
+" Golang "
+""""""""""
+
+" map the textobj mappings: See settings.vim
+" See https://github.com/fatih/vim-go/blob/eb739e185e4729a0ef172da3afed4777d8f64ee6/ftplugin/go.vim#L43
+au FileType go onoremap <buffer> <silent> af :<c-u>call go#textobj#Function('a')<cr>
+au FileType go onoremap <buffer> <silent> rf :<c-u>call go#textobj#Function('i')<cr>
+
+au FileType go xnoremap <buffer> <silent> af :<c-u>call go#textobj#Function('a')<cr>
+au FileType go xnoremap <buffer> <silent> rf :<c-u>call go#textobj#Function('i')<cr>
+
+" Remap ]] and [[ to jump betweeen functions as they are useless in Go
+au FileType go nnoremap <buffer> <silent> ]] :<c-u>call go#textobj#FunctionJump('n', 'next')<cr>
+au FileType go nnoremap <buffer> <silent> [[ :<c-u>call go#textobj#FunctionJump('n', 'prev')<cr>
+
+au FileType go onoremap <buffer> <silent> ]] :<c-u>call go#textobj#FunctionJump('o', 'next')<cr>
+au FileType go onoremap <buffer> <silent> [[ :<c-u>call go#textobj#FunctionJump('o', 'prev')<cr>
+
+au FileType go xnoremap <buffer> <silent> ]] :<c-u>call go#textobj#FunctionJump('v', 'next')<cr>
+au FileType go xnoremap <buffer> <silent> [[ :<c-u>call go#textobj#FunctionJump('v', 'prev')<cr>
+
+""""""""""
+" Custom "
+""""""""""
+
+vnoremap <leader>rv :call ExtractVariable()<cr>
+nnoremap <leader>ri :call InlineVariable()<cr>
+
+nnoremap <leader>. :call OpenTestAlternate()<cr>
+nnoremap <leader><leader> <c-^>
+
+" Remap F1 to ESC
+map <F1> <ESC>
+vmap <F1> <ESC>
+nmap <F1> <ESC>
+imap <F1> <ESC>
+
+" split navigation
+nnoremap <A-n> <C-W><C-H>
+nnoremap <A-e> <C-W><C-J>
+nnoremap <A-i> <C-W><C-K>
+nnoremap <A-o> <C-W><C-L>
+
+" format the entire file
+nnoremap <leader>= :normal! gg=G``<CR>
+
+" upper/lower word
+" TODO: fix these mappings
+nmap <leader>u mQviwU`Q
+nmap <leader>l mQviwu`Q
+
+" upper/lower first char of word
+" TODO: fix these mappings
+nmap <leader>U mQgewvU`Q
+nmap <leader>L mQgewvu`Q
+
+" cd to the directory containing the file in the buffer
+nmap <silent> <leader>cd :lcd %:h<CR>
+
+" Create the directory containing the file in the buffer
+nmap <silent> <leader>md :!mkdir -p %:p:h<CR>
+
+" Some helpers to edit mode
+" http://vimcasts.org/e/14
+nmap <leader>ew :e <C-R>=expand('%:h').'/'<cr>
+nmap <leader>es :sp <C-R>=expand('%:h').'/'<cr>
+nmap <leader>ev :vsp <C-R>=expand('%:h').'/'<cr>
+nmap <leader>et :tabe <C-R>=expand('%:h').'/'<cr>
+
+" Swap two words
+nmap <silent>gw :s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3\2\1/<CR>`'
+
+" Underline the current line with '='
+nmap <silent> <leader>ul :t.<CR>Ar=
+
+" find merge conflict markers
+nmap <silent> \fc <ESC>/\v^[<=>]{7}( .*\|$)<CR>
+
+" Toggle hlsearch with <leader>hs
+nmap <leader>hs :set hlsearch! hlsearch?<CR>
+
+" Bubble single lines
+nmap <C-i> [e
+nmap <C-e> ]e
+
+" Bubble multiple lines
+vmap <C-i> [egv
+vmap <C-e> ]egv
+
+" save all buffers
+nmap <silent> <leader>ww :wall<cr>
+
+" Wipe out all buffers
+if has('nvim')
+  nmap <silent> <leader>wa :execute 'bdelete' join(filter(range(1, bufnr('$')), 'bufexists(v:val) && getbufvar(v:val, "&buftype") isnot# "terminal"'))<cr>
+elseif has("patch-7.4.585")
+  nmap <silent> <leader>wa :enew \| 1,$bd<cr>
+else
+  nmap <silent> <leader>wa :1,9000bd<cr>
+endif
+
+" clear the search buffer when hitting return
+nnoremap <CR> :nohlsearch<cr>
+
+" Don't use Ex mode, use Q for formatting
+map Q gq
+
+" make horizontal scrolling easier
+nmap <silent> <C-o> 10jl
+nmap <silent> <C-i> 10jh
+
+" Add/Remove lineend from listchars
+nmap <leader>sle :set listchars+=eol:$<CR>
+nmap <leader>hle :set listchars-=eol:$<CR>
 
 " }}}
 "" Functions {{{
 ""
 
-exe 'source ' . g:kb_profiles[g:kb_profile] . '/functions.vim'
+function! PreviewHeightWorkAround()
+  if &previewwindow
+    " See http://stackoverflow.com/a/30771487/301730
+    exec 'wincmd K'
+    exec 'setlocal winheight='.&previewheight
+  endif
+endfunction
+
+function! ExtractVariable()
+  let name = input("Variable name: ")
+  if name == ''
+    return
+  endif
+  " Enter visual mode (not sure why this is needed since we're already in
+  " visual mode anyway)
+  normal! ga
+
+  " Replace selected text with the variable name
+  exec "normal c" . name
+  " Define the variable on the line above
+  if &ft = "go"
+    exec "normal! H" . name . " := "
+  else
+    exec "normal! H" . name . " = "
+  endif
+  " Paste the original selected text to be the variable value
+  normal! $p
+endfunction
+
+" TODO: candidate for removal
+function! ShowRoutes()
+  " Requires 'scratch' plugin
+  :topleft 100 :split __Routes__
+  " Make sure Vim doesn't write __Routes__ as a file
+  :set buftype=nofile
+  " Delete everything
+  :normal 1GdG
+  " Put routes output in buffer
+  :0r! rake -s routes
+  " Size window to number of lines (1 plus rake output length)
+  :exec ":normal " . line("$") . _ "
+  " Move cursor to bottom
+  :normal 1GG
+  " Delete empty trailing line
+  :normal dd
+endfunction
+
+function! InlineVariable()
+  " Copy the variable under the cursor into the 'a' register
+  :let l:tmp_a = @a
+  :normal "acrw
+  " Delete variable and equals sign
+  :normal 2daW
+  " Delete the expression into the 'b' register
+  :let l:tmp_b = @b
+  :normal "bd$
+  " Delete the remnants of the line
+  :normal dd
+  " Go to the end of the previous line so we can start our search for the
+  " usage of the variable to replace. Doing '0' instead of 'k$' doesn't
+  " work; I'm not sure why.
+  normal i$
+  " Find the next occurence of the variable
+  exec '/\<' . @a . '\>'
+  " Replace that occurence with the text we yanked
+  exec ':.s/\<' . @a . '\>/' . @b
+  :let @a = l:tmp_a
+  :let @b = l:tmp_b
+endfunction
+
+function! OpenTestAlternate()
+  let current_file = expand("%")
+  let new_file = current_file
+
+  if match(current_file, '\.go$') != -1
+    let new_file = AlternateGoFile(current_file)
+  elseif match(current_file, '\.py$') != -1
+    let new_file = AlternatePythonFile(current_file)
+  elseif match(current_file, '\.rb$') != -1 || match(current_file, '\.rake$') != -1
+    let new_file = AlternateRubyFile(current_file)
+  endif
+
+  " Open the alternate file or self if the rules don't match
+  exec ':e ' . new_file
+endfunction
+
+function! AlternateGoFile(current_file)
+  let new_file = a:current_file
+  if match(a:current_file, '_test\.go$') != -1
+    " We are in the test file
+    let new_file = substitute(a:current_file, '_test\.go$', '.go', '')
+  else
+    " We are in the production code file
+    let new_file = substitute(a:current_file, '\.go$', '_test.go', '')
+  endif
+
+  return new_file
+endfunction
+
+function! AlternatePythonFile(current_file)
+  let new_file = a:current_file
+  if match(a:current_file, '_test\.py$') != -1
+    " We are in the test file
+    let new_file = substitute(a:current_file, '_test\.py$', '.py', '')
+  else
+    " We are in the production code file
+    let new_file = substitute(a:current_file, '\.py$', '_test.py', '')
+  endif
+
+  return new_file
+endfunction
+
+function! AlternateRubyFile(current_file)
+  let new_file = a:current_file
+  let in_spec = match(a:current_file, '^spec/') != -1
+  let going_to_spec = !in_spec
+  let rakefile = match(a:current_file, '\.rake$') != -1
+  let in_app = match(a:current_file, '\<controllers\>') != -1 || match(a:current_file, '\<models\>') != -1 || match(a:current_file, '\<views\>') != -1
+  if going_to_spec
+    if in_app
+      let new_file = substitute(new_file, '^app/', '', '')
+    end
+    if rakefile
+      let new_file = substitute(new_file, '\.rake$', '_spec.rb', '')
+    else
+      let new_file = substitute(new_file, '\.rb$', '_spec.rb', '')
+    end
+    let new_file = 'spec/' . new_file
+  else
+    let new_file = substitute(new_file, '_spec\.rb$', '.rb', '')
+    let new_file = substitute(new_file, '^spec/', '', '')
+    if in_app
+      let new_file = 'app/' . new_file
+    end
+
+    if !filereadable(new_file)
+      let spec_file = substitute(new_file, '\.rb$', '.rake', '')
+      if filereadable(spec_file)
+        let new_file = spec_file
+      endif
+    endif
+  endif
+endfunction
 
 " }}}
