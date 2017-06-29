@@ -1,11 +1,17 @@
 #!/bin/bash
 set -e
 
-# simplified pathmunge used for early X
-function _pathmunge() {
-  [[ ! -d "${1}" ]] && return
-  if ! [[ $PATH =~ (^|:)$1($|:) ]]; then
-    PATH=$1:$PATH
+# simplified pathprepend used for early X
+function _pathprepend() {
+  if [[ -d "${1}" ]] && ! [[ $PATH =~ (^|:)$1($|:) ]]; then
+    PATH="$1:$PATH"
+  fi
+}
+
+# simplified pathappend used for early X
+function _pathappend() {
+  if [[ -d "${1}" ]] && ! [[ $PATH =~ (^|:)$1($|:) ]]; then
+    PATH="$PATH:$1"
   fi
 }
 
@@ -24,10 +30,19 @@ if [[ -z "${XBASERC}" ]]; then
   export TERMINAL=termite
 
   # add my bin folders to the PATH
-  _pathmunge "${HOME}/.bin"
-  _pathmunge "${HOME}/code/bin"
-  _pathmunge "${MYFS}/bin"
-  _pathmunge "${MYFS}/opt/rofi-clipboard-manager"
+  _pathprepend "${HOME}/.bin"
+  _pathprepend "${HOME}/code/bin"
+  _pathprepend "${MYFS}/bin"
+  if [[ -d "${MYFS}/opt" ]]; then
+    for dir in ${MYFS}/opt/*/bin; do
+      _pathappend "${dir}"
+    done
+  fi
+  if [[ -d "${HOME}/.libexec" ]]; then
+    for dir in ${HOME}/.libexec/*; do
+      _pathappend "${dir}"
+    done
+  fi
 
   # merge in defaults and keymaps
   userresources="$HOME/.Xresources"
@@ -47,4 +62,5 @@ if [[ -z "${XBASERC}" ]]; then
   fi
 fi
 
-unset -f _pathmunge
+unset -f _pathprepend
+unset -f _pathappend

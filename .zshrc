@@ -292,7 +292,7 @@ pathappend PATH "${MYFS}/opt/go_appengine"
 if [[ -d "${MYFS}" ]]; then
   if [[ -d "${MYFS}/opt" ]]; then
     for dir in ${MYFS}/opt/*/bin; do
-      [[ -d "${dir}" ]] && pathappend PATH "${dir}"
+      pathappend PATH "${dir}"
     done
   fi
 
@@ -303,7 +303,7 @@ fi
 # add any libexec directory
 if [[ -d "${HOME}/.libexec" ]]; then
   for dir in ${HOME}/.libexec/*; do
-    [[ -d "${dir}" ]] && pathappend PATH "${dir}"
+    pathappend PATH "${dir}"
   done
 fi
 

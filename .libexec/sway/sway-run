@@ -1,11 +1,17 @@
 #!/bin/bash
-set -ex
+set -e
+
+# simplified pathprepend used for early X
+function _pathprepend() {
+  if [[ -d "${1}" ]] && ! [[ $PATH =~ (^|:)$1($|:) ]]; then
+    PATH="$1:$PATH"
+  fi
+}
 
 # simplified pathappend used for early X
-function _pathmunge() {
-  [[ ! -d "${1}" ]] && return
-  if ! [[ $PATH =~ (^|:)$1($|:) ]]; then
-    PATH=$1:$PATH
+function _pathappend() {
+  if [[ -d "${1}" ]] && ! [[ $PATH =~ (^|:)$1($|:) ]]; then
+    PATH="$PATH:$1"
   fi
 }
 
@@ -22,9 +28,19 @@ export SUDO_EDITOR="nvim"
 export TERM=termite
 
 # add my bin folders to the PATH
-_pathmunge "${HOME}/.bin"
-_pathmunge "${HOME}/code/bin"
-_pathmunge "${MYFS}/bin"
+_pathprepend "${HOME}/.bin"
+_pathprepend "${HOME}/code/bin"
+_pathprepend "${MYFS}/bin"
+if [[ -d "${MYFS}/opt" ]]; then
+  for dir in ${MYFS}/opt/*/bin; do
+    _pathappend "${dir}"
+  done
+fi
+if [[ -d "${HOME}/.libexec" ]]; then
+  for dir in ${HOME}/.libexec/*; do
+    _pathappend "${dir}"
+  done
+fi
 
 # make java applications look decent
 export _JAVA_AWT_WM_NONREPARENTING=1
@@ -38,6 +54,7 @@ export XKB_DEFAULT_VARIANT=colemak
 # export XMODIFIERS=@im=ibus
 # export QT_IM_MODULE=ibus
 
-unset -f _pathmunge
+unset -f _pathprepend
+unset -f _pathappend
 
 sway 2> ~/.sway.log
