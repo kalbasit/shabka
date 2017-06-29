@@ -1,31 +1,30 @@
 #!/usr/bin/env bash
 #
-# vim:foldmethod=marker:foldlevel=0:
+#   vim:ft=sh:fenc=UTF-8:ts=4:sts=4:sw=4:expandtab:foldmethod=marker:foldlevel=0:
 #
-# Copyright (c) 2014-2017 Wael Nasreddine <wael.nasreddine@gmail.com>
+#   $Id: rmjunk 783 2008-03-24 12:20:18Z wael $
 #
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
+#   This script will remove junk files from / or $@
+#   Copyright (C) 2006, Wael Nasreddine <wael.nasreddine@gmail.com>
 #
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
+#   This program is free software; you can redistribute it and/or
+#   modify it under the terms of the GNU General Public License
+#   as published by the Free Software Foundation; either version 2
+#   of the License, or (at your option) any later version.
 #
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 
 handle_interrupt () {
     echo -e "${FG_RED_B}Aborting...${FG_CLEAR}"
-    rm -f "${LOCK}" "${TMP}" "${FILE}"
+    rm -f ${LOCK} ${TMP} ${FILE}
     exit 130
 }
 
@@ -50,34 +49,34 @@ TMP="$(mktemp /tmp/rmjunk.XXXXXXX)"
 FILE="$(mktemp /tmp/rmjunk.XXXXXXX)"
 
 # Put the header in the file, preparing to fill it
-echo "=== Files to remove (you may delete items from it) ===" > "${FILE}"
+echo "=== Files to remove (you may delete items from it) ===" > ${FILE}
 
 # Find all junkie files in $@ or /
-find "${@-.}" \
+find ${@-.} \
     \( -name "*~" -type f \) \
     -o \( -name "*.pacorig" -type f \) \
     -o \( -name "*.pacnew" -type f \) \
     -o \( -name "*.pacsave" -type f \) \
     -o \( -name "*.orig" -type f \) \
     -o \( -name "*.rej" -type f \) \
-    >> "${TMP}" 2> /dev/null
+    >> ${TMP} 2> /dev/null
 
 # Sorting/filtering all the files into ${FILE}
 # Remove non-writable files.
-for i in $(uniq "${TMP}" | sort); do
-    if [ -w "${i}" ]; then
-        echo "${i}" >> "${FILE}"
+for i in $(cat ${TMP} | uniq | sort); do
+    if [ -w ${i} ]; then
+        echo ${i} >> ${FILE}
     fi
 done
 
 # Launching the editor so the user can remove
 # Files from the rm command
 echo -e "${FG_BLUE_B}Launching editor...${FG_CLEAR}"
-"${EDITOR}" "${FILE}"
+${EDITOR} ${FILE}
 
 # Removing files
-files=($(grep -v "=== Files to remove (you may delete items from it) ===" "${FILE}"))
-rm -f "${files[@]}"
+files=($(cat ${FILE} | grep -v "=== Files to remove (you may delete items from it) ==="))
+rm -f ${files[@]}
 
 # Remove temporary files and lock file
-rm -f "${FILE}" "${TMP}" "${LOCK}"
+rm -f ${FILE} ${TMP} ${LOCK}

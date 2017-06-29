@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# vim:foldmethod=marker:foldlevel=0:
+# vim:ft=sh:fenc=UTF-8:ts=4:sts=4:sw=4:expandtab:foldmethod=marker:foldlevel=0:
 #
 # Copyright (c) 2014-2017 Wael Nasreddine <wael.nasreddine@gmail.com>
 #
@@ -21,19 +21,23 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-#
 
-# Bootstrap {{{
+####
+# Bootstrap{{{
 bootstrap="$(dirname "${0}")/.bootstrap"
 if [ -f "${bootstrap}" ]; then
-  source "${bootstrap}"
+    # shellcheck source=/dev/null
+    source "${bootstrap}"
 else
-  echo "Cannot bootstrap"
-  exit 54
+    echo "Cannot bootstrap"
+    exit 54
 fi
 unset bootstrap
-# }}}
-# Functions {{{
+#}}}
+####
+
+####
+# Functions{{{
 
 # setup the initial pssh to use current SSH_AGENT_NAME or ACTIVE_PROFILE
 function pssh() {
@@ -90,8 +94,11 @@ function export_env() {
   done
 }
 
-# }}}
-# Main {{{
+#}}}
+####
+
+####
+# Main{{{
 
 # Forget any currently running agent
 unset SSH_AUTH_SOCK SSH_AGENT_PID
@@ -127,4 +134,5 @@ start_ssh_agent
 # export the variables required to access the SSH agent
 export_env SSH_AUTH_SOCK SSH_AGENT_PID
 
-# }}}
+#}}}
+####
