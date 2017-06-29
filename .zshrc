@@ -299,8 +299,7 @@ if [[ -d "${MYFS}" ]]; then
   fi
 
   # Make LD can find our files.
-  # TODO(T::f7612ca5-40c1-4107-bb5d-4f81cdedeb50): generelize pathappend PATH into append so I can use it for PATH or any other variable
-  export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${MYFS}/lib"
+  pathappend LD_LIBRARY_PATH "${MYFS}/lib"
 fi
 
 # Add all rubygems bin dir
