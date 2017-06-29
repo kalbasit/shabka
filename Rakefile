@@ -167,7 +167,14 @@ task :gen_local_bin do
   end
 end
 
-task :generate => [:gen_ca_bundle_cert, :gen_local_bin]
+desc "Download the iterm shell integration"
+task :download_iterm_shell_integration do
+  if (/darwin/ =~ RUBY_PLATFORM) != nil
+    download_and_save_file("https://iterm2.com/misc/zsh_startup.in", File.expand_path(File.join(ENV["HOME"], ".iterm2_shell_integration.zsh")))
+  end
+end
+
+task :generate => [:gen_ca_bundle_cert, :gen_local_bin, :download_iterm_shell_integration]
 
 def relative_path(file)
   return file.gsub("#{PRIVATE_PATH}/", "").gsub("#{DOTFILES_PATH}/", "")
