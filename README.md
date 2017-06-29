@@ -131,7 +131,7 @@ function have() {
 
 ## SSH Agents
 
-The ssh agents is managed by [`~/.bin/ssh-agents`][7] which is loaded on
+The ssh agents is managed by [`~/.zsh/functions/ssh-agents`][7] which is loaded on
 startup of ZSH. It assigns an agent for each profile, so when you switch
 profiles, you will also switch the ssh agent and the keys it manages.
 
@@ -153,4 +153,4 @@ should live under `~/.ssh/personal` and not `~/.ssh`.
 [4]: https://github.com/kalbasit/dotfiles/blob/master/.vimrc#L3
 [5]: https://github.com/kalbasit/dotfiles/blob/master/Rakefile#L21
 [6]: https://github.com/mathiasbynens/dotfiles/blob/master/.osx
-[7]: https://github.com/kalbasit/dotfiles/blob/master/.bin/ssh-agents
+[7]: https://github.com/kalbasit/dotfiles/blob/master/.zsh/functions/ssh-agents

@@ -40,7 +40,7 @@ function sp() {
         export GOPATH="${GLOBAL_GOPATH}"
       fi
       unset ACTIVE_PROFILE SSH_AGENT_PID SSH_AUTH_SOCK SSH_AGENT_NAME
-      eval "$(ssh-agents "$SHELL")"
+      eval "$(ssh-agents)"
     fi
     # are we actually loading a profile?
   else
@@ -62,7 +62,7 @@ function sp() {
     # let the terminal know which profile is loaded and which ssh-agent to
     # use
     export ACTIVE_PROFILE="${requested_profile}"
-    eval "$( ssh-agents "$SHELL" )"
+    eval "$(ssh-agents)"
   fi
 }
 

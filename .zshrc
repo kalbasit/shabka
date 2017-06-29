@@ -849,7 +849,7 @@ fi
 
 
 # Load SSH agents
-[[ -x "${HOME}/.bin/ssh-agents" ]] && eval "$( ssh-agents $SHELL )"
+[[ -x "${HOME}/.bin/ssh-agents" ]] && eval "$(ssh-agents)"
 
 # Load rbenv
 if [[ -d "${HOME}/.rbenv" ]]; then
