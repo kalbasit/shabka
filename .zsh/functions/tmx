@@ -58,30 +58,35 @@ tmx() {
 
       # start a session if one does not exist for it yet
       if ! tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" list-sessions -F '#{session_name}' | grep -q -e "^${sess}\$"; then
-        # start the new tmux session
-        env --unset=TMUX tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" new-session -d -s "${sess}"
+        { # begin an always block
+          pushd "${sess_dir}"
+          # start the new tmux session
+          env --unset=TMUX tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" new-session -d -s "${sess}"
 
-        # add the ACTIVE_PROFILE to the environment of the session
-        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" set-environment -t "${sess}" ACTIVE_PROFILE "${profile}"
+          # add the ACTIVE_PROFILE to the environment of the session
+          tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" set-environment -t "${sess}" ACTIVE_PROFILE "${profile}"
 
-        # start a new shell on window 1
-        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" new-window -t "${sess}:1"
+          # start a new shell on window 1
+          tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" new-window -t "${sess}:1"
 
-        # re-create the first window
-        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" kill-window -t "${sess}:0"
-        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" new-window -t "${sess}:0"
+          # re-create the first window
+          tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" kill-window -t "${sess}:0"
+          tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" new-window -t "${sess}:0"
 
-        # start the main program
-        if [[ -n "${special_sess[$sess]}" ]]; then
-          tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${sess}:0" "clear; ${special_sess[$sess]}" Enter
-        else
-          # start vim
-          if isTrue "${confirm_vim_startup}"; then
-            tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${sess}:0" 'clear; echo "Press Enter to start Vim "; read; vim' Enter
+          # start the main program
+          if [[ -n "${special_sess[$sess]}" ]]; then
+            tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${sess}:0" "clear; ${special_sess[$sess]}" Enter
           else
-            tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${sess}:0" 'clear; vim' Enter
+            # start vim
+            if isTrue "${confirm_vim_startup}"; then
+              tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${sess}:0" 'clear; echo "Press Enter to start Vim "; read; vim' Enter
+            else
+              tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${sess}:0" 'clear; vim' Enter
+            fi
           fi
-        fi
+        } always {
+          popd
+        }
       fi
 
       # attach the session now
@@ -283,13 +288,6 @@ tmx() {
     # expand any variable stored in the sess name
     sess_dir="$( eval "echo ${sess_dir}" )"
     debug "eval(sess_dir)=${sess_dir}"
-
-    # if the sess is an actual directory, go there first and set the sess to
-    # empty to generate the session name from the path
-    if [[ -d "${sess_dir}" ]]; then
-      # go inside the folder
-      cd "${sess_dir}"
-    fi
 
     # session name cannot contain a dot or a column
     # https://github.com/tmux/tmux/blob/76688d204071b76fd3388e46e944e4b917c09625/session.c#L232
