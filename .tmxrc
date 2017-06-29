@@ -125,6 +125,10 @@
     },
     {
         "profile": "personal",
+        "dir": "$GOPATH/src/github.com/kalbasit/dotfiles"
+    },
+    {
+        "profile": "personal",
         "dir": "$GOPATH/src/github.com/kalbasit/network"
     },
     {
