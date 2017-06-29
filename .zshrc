@@ -17,7 +17,7 @@ else
   # instructions on how to get zplug installed
   echo -e "zplug cannot be found at ${HOME}/.zplug/init.zsh"
   echo -e "run the following command and then restart your shell"
-  echo -e "git clone https://github.com/zplug/zplug.git /tmp/zplug && source /tmp/zplug/init.zsh && source ~/.zshrc && zplug install"
+  echo -e "git clone https://github.com/zplug/zplug.git /tmp/zplug && source /tmp/zplug/init.zsh && zplug install"
   # stop here but only if zplug is not available. It can only be avaliable here
   # if zplug was sourced but `zplug install` was not called yet. See the
   # installation command above
