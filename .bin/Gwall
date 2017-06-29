@@ -1,26 +1,26 @@
 #!/usr/bin/env bash
 #
-# vim:ft=sh:fenc=UTF-8:ts=4:sts=4:sw=4:expandtab:foldmethod=marker:foldlevel=0:
+#  vim:ft=sh:fenc=UTF-8:ts=4:sts=4:sw=4:expandtab:foldmethod=marker:foldlevel=0:
 #
-# Copyright (c) 2014-2017 Wael Nasreddine <wael.nasreddine@gmail.com>
+#  $Id: Gwall 954 2008-04-14 16:25:02Z wael $
 #
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
+#  This script will load a random wallpaper on each boot.
+#  Copyright (C) 2006, Wael Nasreddine <wael.nasreddine@gmail.com>
 #
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
+#  This program is free software; you can redistribute it and/or
+#  modify it under the terms of the GNU General Public License
+#  as published by the Free Software Foundation; either version 2
+#  of the License, or (at your option) any later version.
 #
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software
+#  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+#
 
 # Bootstrap{{{
 bootstrap="`dirname $0`/.bootstrap"
@@ -117,11 +117,11 @@ EOF
 fi
 #}}}
 # If the program is disabled just set the pre-defined wallpaper.#{{{
-if [[ ! -z "${DISABLE}" ]] && [[ "${DISABLE}" = "true" ]] && [[ "${PROG}" = "feh" ]]; then
+if [ ! -z "${DISABLE}" -a "${DISABLE}" = "true" -a "${PROG}" = "feh" ]; then
   # Setting wallpaper
-  "${PROG}" "${ARGS}" "$(cat ~/.fehbg)"
+  ${PROG} ${ARGS} $(cat ~/.fehbg)
   exit $?
-elif [[ ! -z "${DISABLE}" ]] && [[ "${DISABLE}" = "true" ]] && [[ "${PROG}" = "gconftool-2" ]]; then
+elif [ ! -z "${DISABLE}" -a "${DISABLE}" = "true" -a "${PROG}" = "gconftool-2" ]; then
   # There's no need to set anything up, this is handled by Gnome.
   exit 0
 fi
@@ -138,7 +138,7 @@ if [ ${#FOLDERS[@]} -lt 1 ]; then
   print_error 0 "Please add folders to FOLDERS array in ~/.gwallrc"
   exit 1
 fi
-for folder in "${FOLDERS[@]}"; do
+for folder in ${FOLDERS[@]}; do
   [ ! -d "${folder}" ] && \
     print_warning 0 "The folder '${folder}' does not exist, please review the FOLDERS array in ~/.gwallrc"
 done
@@ -149,7 +149,7 @@ fi
 #}}}
 # Build the images array#{{{
 images=()
-for folder in "${FOLDERS[@]}"; do
+for folder in ${FOLDERS[@]}; do
   # make sure folder does exist
   [ ! -d "${folder}" ] && \
     continue
