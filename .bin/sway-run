@@ -17,14 +17,14 @@ export BROWSER="${HOME}/.bin/relay-browser"
 export EDITOR="nvim"
 export LANG=en_US.UTF-8
 export LC_ALL="${LANG}"
-export MYFS="${HOME}/.filesystem"
+export MYFS="${HOME}/.local"
 export SUDO_EDITOR="nvim"
 export TERM=termite
 
 # add my bin folders to the PATH
 _pathmunge "${HOME}/.bin"
 _pathmunge "${HOME}/code/bin"
-_pathmunge "${HOME}/.filesystem/bin"
+_pathmunge "${MYFS}/bin"
 
 # make java applications look decent
 export _JAVA_AWT_WM_NONREPARENTING=1

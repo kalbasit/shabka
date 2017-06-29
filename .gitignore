@@ -33,8 +33,6 @@
 .emacs.d/recentf
 .emacs.d/smex-items
 .emacs.d/url/cache
-.filesystem/
-.filesystem/bin/ssx-agents
 .irssi/config
 .irssi/config.autosave
 .irssi/scripts/old/

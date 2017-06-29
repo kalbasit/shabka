@@ -18,7 +18,7 @@ if [[ -z "${XBASERC}" ]]; then
   export EDITOR="nvim"
   export LANG=en_US.UTF-8
   export LC_ALL="${LANG}"
-  export MYFS="${HOME}/.filesystem"
+  export MYFS="${HOME}/.local"
   export NOTMUCH_CONFIG="${HOME}/.mail/.notmuch/config"
   export SUDO_EDITOR="nvim"
   export TERMINAL=termite
@@ -26,7 +26,7 @@ if [[ -z "${XBASERC}" ]]; then
   # add my bin folders to the PATH
   _pathmunge "${HOME}/.bin"
   _pathmunge "${HOME}/code/bin"
-  _pathmunge "${HOME}/.filesystem/bin"
+  _pathmunge "${MYFS}/bin"
   _pathmunge "${MYFS}/opt/rofi-clipboard-manager"
 
   # merge in defaults and keymaps

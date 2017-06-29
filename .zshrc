@@ -259,7 +259,7 @@ export GLOBAL_GOPATH="${HOME}/code"
 export GOPATH="${GLOBAL_GOPATH}"
 
 # Set MYFS to my filesysemt
-export MYFS="${HOME}/.filesystem"
+export MYFS="${HOME}/.local"
 
 # Set the editor
 export EDITOR=nvim
@@ -298,7 +298,8 @@ if [[ -d "${MYFS}" ]]; then
   fi
 
   # Make LD can find our files.
-  export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${HOME}/.filesystem/lib"
+  # TODO(T::f7612ca5-40c1-4107-bb5d-4f81cdedeb50): generelize pathmunge into append so I can use it for PATH or any other variable
+  export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${MYFS}/lib"
 fi
 
 # Add all rubygems bin dir
