@@ -49,8 +49,12 @@ GO_BINARIES = [
   "honnef.co/go/tools/cmd/unused",
 ]
 
+LOCAL_BINARIES = [
+  "https://github.com/junegunn/dotfiles/raw/master/bin/tmuxwords.rb",
+]
+
 desc "run :update_submodules and :link"
-task :default => [:update_submodules, :update_completions, :link, :lesskey, :gen_ca_bundle_cert]
+task :default => [:update_submodules, :update_completions, :link, :lesskey, :generate]
 
 desc "Link both private and public config files"
 task :link => [:link_dotfiles, :link_private]
@@ -153,6 +157,17 @@ task :gen_ca_bundle_cert do
     end
   end
 end
+
+desc "Genereate the local binaries"
+task :gen_local_bin do
+  LOCAL_BINARIES.each do |u|
+    p = File.expand_path(File.join(ENV["MYFS"], "bin", File.basename(u)))
+    download_and_save_file(u, p)
+    File.chmod(0755, p)
+  end
+end
+
+task :generate => [:gen_ca_bundle_cert, :gen_local_bin]
 
 def relative_path(file)
   return file.gsub("#{PRIVATE_PATH}/", "").gsub("#{DOTFILES_PATH}/", "")
