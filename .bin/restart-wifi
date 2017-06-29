@@ -23,15 +23,19 @@
 set -e
 
 # reload the systemd daemoe
+echo ">>> reloading the systemd daemon"
 sudo systemctl daemon-reload
 
 # stop NetworkManager
+echo ">>> stopping NetworkManager"
 sudo systemctl stop NetworkManager.service
+sleep 3
 
 # turn down the wifi card
-sleep 3
+echo ">>> turning down the Wifi card"
 sudo ip link set dev wlp58s0 down
+sleep 3
 
 # start the NetworkManager service
-sleep 3
+echo ">>> starting NetworkManager"
 sudo systemctl start NetworkManager.service
