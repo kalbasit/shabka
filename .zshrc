@@ -42,6 +42,9 @@ zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-history-substring-search"
 zplug "zsh-users/zsh-syntax-highlighting",   defer:2
 
+# Install if not installed
+zplug check || zplug install
+
 # Then, source plugins and add commands to $PATH
 zplug load
 
