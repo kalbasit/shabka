@@ -53,7 +53,6 @@ LOCAL_BINARIES = [
   "https://github.com/junegunn/dotfiles/raw/master/bin/tmuxwords.rb",
 ]
 
-desc "run :update_submodules and :link"
 task :default => [:update_submodules, :update_completions, :link, :lesskey, :generate]
 
 desc "Link both private and public config files"
@@ -64,22 +63,17 @@ task :lesskey do
   sh %Q{lesskey}
 end
 
+desc "Install all vim plugins"
+task :vim_plug do
+  sh %Q{vim +PlugUpgrade +PlugInstall +PlugUpdate +qall}
+end
+
 desc "Update ZSH completions"
 task :update_completions do
   if which("kubectl")
     mkdir_p File.join(DOTFILES_PATH, ".zsh", "completions")
     sh %Q{kubectl completion zsh > #{File.join(DOTFILES_PATH, ".zsh", "completions", "_kubectl")}}
   end
-end
-
-desc "Initialize the Mac"
-task :osx do
-  sh %Q{#{DOTFILES_PATH}/.osx} if (/darwin/ =~ RUBY_PLATFORM) != nil
-end
-
-desc "Run brew bundle"
-task :brew_bundle do
-  sh %Q{brew bundle}
 end
 
 desc "update README's TOC"
@@ -112,32 +106,13 @@ task :install_go_binaries do
   end
 end
 
-desc "Install all vim plugins"
-task :vim_plug do
-  sh %Q{vim +PlugUpgrade +PlugInstall +PlugUpdate +qall}
-end
-
-desc "Switch your shell to ZSH from #{ENV["SHELL"]}"
-task :switch_to_zsh do
-  if ENV["SHELL"] =~ /zsh/
-    puts "using zsh"
-  else
-    print "switch to zsh? (recommended) [yn] "
-    case $stdin.gets.chomp
-    when 'y'
-      puts "switching to zsh"
-      sh %Q{chsh -s `which zsh`}
-    else
-      puts "skipping zsh"
-    end
-  end
-end
-
 desc "Initialize and update submodules to the latest version"
 task :update_submodules do
   puts "Updating the submodules"
   sh %Q{git submodule update --init > /dev/null}
 end
+
+task :generate => [:gen_ca_bundle_cert, :gen_local_bin, :download_iterm_shell_integration]
 
 desc "Generate the CA bundler cert"
 task :gen_ca_bundle_cert do
@@ -173,8 +148,6 @@ task :download_iterm_shell_integration do
     download_and_save_file("https://iterm2.com/misc/zsh_startup.in", File.expand_path(File.join(ENV["HOME"], ".iterm2_shell_integration.zsh")))
   end
 end
-
-task :generate => [:gen_ca_bundle_cert, :gen_local_bin, :download_iterm_shell_integration]
 
 def relative_path(file)
   return file.gsub("#{PRIVATE_PATH}/", "").gsub("#{DOTFILES_PATH}/", "")
