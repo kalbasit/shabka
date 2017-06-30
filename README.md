@@ -2,9 +2,10 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
-- [Kalbasit's dotfiles](#kalbasits-dotfiles)
+- [Kalbasit's dotfiles with Colemak bindings](#kalbasits-dotfiles-with-colemak-bindings)
 - [Installation](#installation)
   - [First installation](#first-installation)
+    - [OSX](#osx)
   - [Subsequent linking](#subsequent-linking)
 - [Keeping private things private](#keeping-private-things-private)
 - [ZSH personal/work profiles](#zsh-personalwork-profiles)
@@ -14,7 +15,7 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Kalbasit's dotfiles
+# Kalbasit's dotfiles with Colemak bindings
 
 ![Screenshot of my shell](http://i.imgur.com/8TnOljy.png)
 
@@ -32,32 +33,33 @@ path `~/.dotfiles`.
 
 ## First installation
 
-Before installing the dotfiles, you should rename the computer to your
-liking. `sed -e 's:crator:mycomputer:g' -i ~/.dotfiles/.osx`
-
 On the first installation, you should run `rake init` which will:
 
-- Initialize OSX, only if ran on OSX. Thanks to [`@mathiasbynens`][6]
-  for the idea!
-  - Make sure to read over [`.osx`][1] and modify it to your liking.
-  - The OSX script will:
-    - Install XCode CLI.
-    - Install rbenv, installs the latest ruby version and installs
-      `bundler` and `git-smart`.
-    - Install homebrew, homebrew-bundle and run `brew bundle` which will
-      install everything mentioned in [`Brewfile`][2].
-    - Run `~/.dotfiles/.private/.osx` if it exists. This allows you to
-      add any extra setup steps that are private. I use this file to
-      insert Divvy's License and add custom search domains to all
-      interfaces.
+- initialize Vim
+- Install rbenv, the latest Ruby and bundler/git-smart
+- Install Go binaries
+
+It will also run the default tasks (that run with simple `rake`):
 - Update submodules.
-- Switch to ZSH.
 - Link everything from `~/.dotfiles` to the home directory.
 - Link everything from `~/.dotfiles/.private` **if it exists**, this is
   the perfect place for you to keep private things. See [Keeping things
   private private][3] for more information.
-- Install all of Vim plugins, as specified in [`.vimrc`][4]
-- Install Go binaries, as specified in [`Rakefile`][5]
+
+### OSX
+
+For OSX, run [`.osx`][1] binary. Make sure to read it over and modify it
+to your liking, you might want to change the computer hostname for
+example `sed -e 's:cratos:mycomputer:g' -i .osx`
+
+The OSX script will:
+- Install XCode CLI.
+- Install homebrew, homebrew-bundle and run `brew bundle` which will
+  install everything mentioned in [`Brewfile`][2].
+- Run `~/.dotfiles/.private/.osx` if it exists. This allows you to
+  add any extra setup steps that are private. I use this file to
+  insert Divvy's License and add custom search domains to all
+  interfaces.
 
 ## Subsequent linking
 

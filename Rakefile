@@ -53,6 +53,51 @@ LOCAL_BINARIES = [
   "https://github.com/junegunn/dotfiles/raw/master/bin/tmuxwords.rb",
 ]
 
+### Initialize
+
+desc "initialize the home directory"
+task :init => [:default, :vim_plug, :install_rbenv, :install_go_binaries]
+
+desc "Install all vim plugins"
+task :vim_plug do
+  sh %Q{vim +PlugUpgrade +PlugInstall +PlugUpdate +qall}
+end
+
+desc "install rbenv"
+task :install_rbenv do
+  sh <<-EOF
+    curl https://raw.githubusercontent.com/fesplugas/rbenv-installer/master/bin/rbenv-installer | bash
+    export PATH="${HOME}/.rbenv/bin:$PATH"
+    eval "$(rbenv init --no-rehash -)"
+    ruby_version="`curl -s https://raw.githubusercontent.com/postmodern/ruby-versions/master/ruby/versions.txt | tail -1`"
+    rbenv install "${ruby_version}"
+    rbenv global "${ruby_version}"
+    gem install bundler git-smart
+  EOF
+end
+
+desc "Install Go Binaries"
+task :install_go_binaries do
+  # record the current GOPATH and switch to the global one
+  oldGoPath = ENV["GOPATH"]
+  if ENV["GLOBAL_GOPATH"].nil?
+    ENV["GOPATH"] = File.join(ENV["HOME"], "code")
+  else
+    ENV["GOPATH"] = ENV["GLOBAL_GOPATH"]
+  end
+  # Install the binaries and restore the GOPATH
+  begin
+    GO_BINARIES.each do |binary|
+      sh %Q{go get -u #{binary}}
+    end
+  ensure
+    ENV["GOPATH"] = oldGoPath
+  end
+end
+
+### Default
+
+desc "run the default tasks"
 task :default => [:update_submodules, :update_completions, :link, :lesskey, :generate]
 
 desc "Link both private and public config files"
@@ -61,11 +106,6 @@ task :link => [:link_dotfiles, :link_private]
 desc "Generate lesskey"
 task :lesskey do
   sh %Q{lesskey}
-end
-
-desc "Install all vim plugins"
-task :vim_plug do
-  sh %Q{vim +PlugUpgrade +PlugInstall +PlugUpdate +qall}
 end
 
 desc "Update ZSH completions"
@@ -91,26 +131,13 @@ task :link_private do
   link_folder(PRIVATE_PATH, ENV["HOME"]) if File.exists?(PRIVATE_PATH)
 end
 
-desc "Install Go Binaries"
-task :install_go_binaries do
-  # record the current GOPATH and switch to the global one
-  oldGoPath = ENV["GOPATH"]
-  ENV["GOPATH"] = ENV["GLOBAL_GOPATH"]
-  # Install the binaries and restore the GOPATH
-  begin
-    GO_BINARIES.each do |binary|
-      sh %Q{go get -u #{binary}}
-    end
-  ensure
-    ENV["GOPATH"] = oldGoPath
-  end
-end
-
 desc "Initialize and update submodules to the latest version"
 task :update_submodules do
   puts "Updating the submodules"
   sh %Q{git submodule update --init > /dev/null}
 end
+
+### Generate
 
 task :generate => [:gen_ca_bundle_cert, :gen_local_bin, :download_iterm_shell_integration]
 

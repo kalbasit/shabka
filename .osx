@@ -43,20 +43,6 @@ if ! grep -q /usr/local/bin/zsh /etc/shells; then
 fi
 
 ###############################################################################
-# rbenv                                                                       #
-###############################################################################
-
-if [[ ! -d "${HOME}/.rbenv" ]]; then
-  curl https://raw.githubusercontent.com/fesplugas/rbenv-installer/master/bin/rbenv-installer | bash
-  export PATH="${HOME}/.rbenv/bin:$PATH"
-  eval "$(rbenv init --no-rehash -)"
-  ruby_version="`curl -s https://raw.githubusercontent.com/postmodern/ruby-versions/master/ruby/versions.txt | tail -1`"
-  rbenv install "${ruby_version}"
-  rbenv global "${ruby_version}"
-  gem install bundler git-smart
-fi
-
-###############################################################################
 # NPM                                                                         #
 ###############################################################################
 
