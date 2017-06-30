@@ -11,18 +11,8 @@
 #####################################################################
 
 # Load zplug
-if [[ -r "${HOME}/.zplug/init.zsh" ]]; then
-  source "${HOME}/.zplug/init.zsh"
-else
-  # instructions on how to get zplug installed
-  echo -e "zplug cannot be found at ${HOME}/.zplug/init.zsh"
-  echo -e "run the following command and then restart your shell"
-  echo -e "git clone https://github.com/zplug/zplug.git /tmp/zplug && source /tmp/zplug/init.zsh && source ~/.zshrc && zplug install"
-  # stop here but only if zplug is not available. It can only be avaliable here
-  # if zplug was sourced but `zplug install` was not called yet. See the
-  # installation command above
-  whence -w zplug | grep function || return 1
-fi
+[[ ! -r "${HOME}/.zplug/init.zsh" ]] && git clone https://github.com/zplug/zplug.git "${HOME}/.zplug"
+source "${HOME}/.zplug/init.zsh"
 
 # speed up zplug. See https://github.com/zplug/zplug/issues/368#issuecomment-282566102
 __zplug::io::file::generate
