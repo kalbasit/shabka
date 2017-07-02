@@ -1,0 +1,29 @@
+#
+# vim:ft=zsh:
+#
+
+function mount.encfs() {
+  { # begin an always block
+    function $0_help() {
+      print_info "${log_depth}" "USAGE: mount.encfs [options] lo_file"
+      print_info "${log_depth}" "\t -h, --help                - this message"
+    }
+    local lo_file="${1}"
+    if [[ ! -f "${lo_file}" ]]; then
+      $0_help
+      return 1
+    fi
+    # make sure we have a sudo session
+    sudo -v
+    # open the encrypted volume
+    local name="$(basename ${lo_file})"
+    print_info "${log_depth}" "opening the encrypted device ${lo_file} as ${name}"
+    sudo cryptsetup open --type plain "${lo_file}" "${name}" || return 1
+    # mount the filesystem
+    print_info "${log_depth}" "mounting the device"
+    sudo mkdir -p "/mnt/${name}"
+    sudo mount "/dev/mapper/${name}" "/mnt/${name}" || return 1
+  } always {
+    unfunction -m "$0_*"
+  }
+}

@@ -2,8 +2,7 @@
 # vim:ft=zsh:
 #
 
-function check_root()
-{
+function check_root() {
   if [ "$(id -u)" != "0" ]; then
     return 1
   else
