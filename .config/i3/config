@@ -323,7 +323,6 @@ workspace irc output DP1
 workspace mail output DP1
 
 # assign less side apps to the laptop
-workspace slack output eDP1
 workspace entertainment output eDP1
 
 ######################
