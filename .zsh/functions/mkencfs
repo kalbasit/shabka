@@ -43,7 +43,7 @@ function mkencfs() {
         *)
           # Make sure we have only one argument left
           if [[ -n "${2}" ]]; then
-            print_error "${log_depth}" "can only have one argument, the lo_file of the volume"
+            print_error "${log_depth}" "must only have one argument, the lo_file of the volume"
             $0_help
             return 1
           fi
