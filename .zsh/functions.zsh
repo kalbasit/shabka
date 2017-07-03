@@ -1,5 +1,5 @@
 # add the zsh functions to the fpath
-fpath=("${HOME}/.zsh/functions" $fpath)
+fpath+="${HOME}/.zsh/functions"
 
 # load the important functions
 source "${HOME}/.zsh/functions/have"

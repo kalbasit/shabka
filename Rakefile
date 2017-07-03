@@ -145,7 +145,7 @@ desc "Generate the CA bundler cert"
 task :gen_ca_bundle_cert do
   urls = [
     "https://raw.githubusercontent.com/bagder/ca-bundle/master/ca-bundle.crt",
-    "https://kalbas.it/ca.crt"
+    "https://kalbas.it/ca.crt",
   ]
   path = File.expand_path(File.join(ENV["HOME"], ".ca-bundle.crt"))
   options = proxy_options

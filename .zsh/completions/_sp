@@ -1,0 +1,17 @@
+#
+# vim:ft=zsh:
+#
+
+# _sp is for ZSH completion
+function _sp() {
+  local profiles=("kill")
+  local i=
+  local p=
+
+  for i in ${HOME}/.zsh/profiles/*.zsh; do
+    p="$( basename "${i}" )"
+    profiles=(${profiles[@]} ${p%%.zsh})
+  done
+
+  _arguments "1: :(${profiles[*]})"
+}
