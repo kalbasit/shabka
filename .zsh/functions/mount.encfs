@@ -8,10 +8,12 @@ function mount.encfs() {
       print_info "${log_depth}" "USAGE: mount.encfs [options] lo_file"
       print_info "${log_depth}" "\t -h, --help\t- this message"
       print_info "${log_depth}" "\t     --lp_id\t- The ID of the lastpass entry containing the password"
+      print_info "${log_depth}" "\t     --ro\n- Mount as read-only"
     }
 
     local lo_file=
     local lp_id=
+    local mount_options=noatime
 
     while [[ $# -ge 1 ]]; do
       case "${1}" in
@@ -27,6 +29,10 @@ function mount.encfs() {
             return 1
           fi
           shift 2
+          ;;
+        --ro)
+          mount_options="${mount_options},ro"
+          shift
           ;;
         *)
           # Make sure we have only one argument left
@@ -54,7 +60,7 @@ function mount.encfs() {
     # mount the filesystem
     print_info "${log_depth}" "mounting the device"
     sudo mkdir -p "/mnt/${name}"
-    sudo mount "/dev/mapper/${name}" "/mnt/${name}" || return 1
+    sudo mount -o "${mount_options}" "/dev/mapper/${name}" "/mnt/${name}" || return 1
   } always {
     unfunction -m "$0_*"
   }
