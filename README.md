@@ -121,7 +121,7 @@ function pdeactivate() {
 }
 ```
 
-P.S: the function have above is defined as follows:
+P.S: the function `have` above is defined as follows:
 
 ```
 # have returns 0 if $1 is callable (alias, function or a binary)
