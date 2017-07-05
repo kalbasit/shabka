@@ -242,7 +242,7 @@ export BROWSER="${HOME}/.bin/relay-browser"
 
 # Set the GOPATH
 export GLOBAL_GOPATH="${HOME}/code"
-export GOPATH="${GLOBAL_GOPATH}"
+pathprepend PATH "${GLOBAL_GOPATH}/bin"
 
 # Set MYFS to my filesysemt
 export MYFS="${HOME}/.local"
@@ -268,9 +268,6 @@ pathprepend PATH "${HOME}/.bin"
 
 # load the Emscripten environment
 pathprepend PATH "/usr/lib/emsdk"
-
-# We need Go's bin folder
-pathprepend PATH "${GOPATH}/bin"
 
 # Anything got installed into MYFS?
 pathprepend PATH "${MYFS}/bin"
