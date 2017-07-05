@@ -5,11 +5,13 @@
 # Usage: alias_function new_name old_name
 # Credit: http://mivok.net/2009/09/20/bashfunctionoverrist.html
 alias_function() {
-  if [[ "${1}" = "-h" ]] || [[ "${1}" = "--help" ]]; then
-    echo "Usage: alias_function new_name old_name"
-    return 0
+  if [[ "${1}" = "-h" || "${1}" = "--help" ]]; then
+    print_info "${log_depth:-0}" "Usage: alias_function <new_name> <old_name>"
+    return
   fi
-  local ORIG_FUNC=$(declare -f $2)
-  local NEWNAME_FUNC="$1${ORIG_FUNC#$2}"
-  eval "$NEWNAME_FUNC"
+
+  # save the function in a variable
+  local orig_func=$(declare -f "${2}")
+  # declare $1 (the new name) with the body of the original function
+  eval "$1${orig_func#$2}"
 }

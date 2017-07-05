@@ -8,13 +8,15 @@ tmx() {
     {
       print_info "${log_depth}" "USAGE: tmx [options] <session_name|folder>"
       print_info "${log_depth}" "\t -h, --help                - this message"
+      print_info "${log_depth}" "\t     --log-depth           - change the depth of the log Default: ${log_depth}"
       print_info "${log_depth}" "\t -s, --select-session      - fuzzy-select a session"
       print_info "${log_depth}" "\t -k, --kill-pane           - kill the pane after the session has been switched; only relevant with --select-session and within TMUX"
       print_info "${log_depth}" "\t -L, --socket-name         - use a different socket than the default"
       print_info "${log_depth}" "\t -c, --confirm-vim-start   - confirm before starting Vim, this is essentially a performance improvement"
       print_info "${log_depth}" "\t -p, --profile             - the profile to use. This is only relevant if a new session is going to be started"
-      print_info "${log_depth}" "\t -vs, --vim-save-close-all  - Vim: save and close all files"
-      print_info "${log_depth}" "\t -ve, --vim-exit            - Vim: save and exit"
+      print_info "${log_depth}" "\t -vs, --vim-save-close-all - Vim: save and close all files"
+      print_info "${log_depth}" "\t -ve, --vim-exit           - Vim: save and exit"
+      print_info "${log_depth}" "\t      --exit               - Kill the TMUX server, will exit any Open vim session"
     }
 
     function $0_build_projects() {
@@ -107,7 +109,7 @@ tmx() {
     special_sess[mail]=emacs
     special_sess[task]="vim +:TW"
 
-    local current_gopath="${GOPATH}" # this is used to restore the GOPATH
+    local orig_gopath="${GOPATH}" # this is used to restore the GOPATH
     local confirm_vim_startup=false
     local kill_pane=false
     local log_depth=0
@@ -118,12 +120,22 @@ tmx() {
     local sess_dir=
     local vim_save_close_all_files=false
     local vim_exit=false
+    local tmux_exit=false
 
     while [[ $# -ge 1 ]]; do
       case "${1}" in
         -h|--help)
           $0_help
           return 0
+          ;;
+        --log-depth)
+          log_depth="${2}"
+          if [[ -z "${log_depth}" ]]; then
+            print_error "${log_depth}" "--log-depth requires an argument"
+            $0_help
+            return 1
+          fi
+          shift 2
           ;;
         -k|--kill-pane)
           kill_pane=true
@@ -137,15 +149,6 @@ tmx() {
           tmux_socket_name="${2}"
           if [[ -z "${tmux_socket_name}" ]]; then
             print_error "${log_depth}" "--socket-name requires an argument"
-            $0_help
-            return 1
-          fi
-          shift 2
-          ;;
-        --log-depth)
-          log_depth="${2}"
-          if [[ -z "${log_depth}" ]]; then
-            print_error "${log_depth}" "--log-depth requires an argument"
             $0_help
             return 1
           fi
@@ -170,6 +173,11 @@ tmx() {
           ;;
         -ve|--vim-exit)
           vim_exit=true
+          shift
+          ;;
+        --exit)
+          vim_exit=true
+          tmux_exit=true
           shift
           ;;
         *)
@@ -247,8 +255,15 @@ tmx() {
         # ask Vim to exit
         tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${session}:0" : x a C-m
       done
+      # should we ask tmux to exit?
+      if isTrue "${tmux_exit}"; then
+        debug "going to ask Tmux to exit"
+        tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" kill-server
+        return $?
+      fi
       return 0
     fi
+
 
     # are selecting the session?
     if isTrue "${select_session}"; then
@@ -295,6 +310,6 @@ tmx() {
     $0_attach
   } always {
     unfunction -m "$0_*"
-    export GOPATH="${current_gopath}"
+    export GOPATH="${orig_gopath}"
   }
 }

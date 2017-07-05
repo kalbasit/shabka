@@ -3,27 +3,50 @@
 #
 
 function gcim() {
-  local message="${@}"
-  local project=""
-  local branch=""
-  local story=""
+  { # begin the always block
+    function $0_help()
+    {
+      print_info "${log_depth}" "USAGE: tmx [options] <session_name|folder>"
+      print_info "${log_depth}" "\t -h, --help        - this message"
+      print_info "${log_depth}" "\t     --log-depth   - change the depth of the log Default: ${log_depth}"
+    }
 
-  if [[ "x$(git rev-parse --git-dir 2> /dev/null)" != "x" ]]; then
-    branch="$(current_branch)"
-    story="$(echo "${branch}" | grep '^[A-Z][A-Z]*-[[:digit:]][[:digit:]]*$')"
-  else
-    echo "You must be under a git repository to use gcim"
-    return 1
-  fi
+    while [[ $# -ge 1 ]]; do
+      case "${1}" in
+        -h|--help)
+          $0_help
+          return 0
+          ;;
+        --log-depth)
+          log_depth="${2}"
+          if [[ -z "${log_depth}" ]]; then
+            print_error "${log_depth}" "--log-depth requires an argument"
+            $0_help
+            return 1
+          fi
+          shift 2
+          ;;
+        *)
+          local message="${@}"
+          break
+          ;;
+      esac
+    done
 
-  if [[ -z "${message}" ]]; then
-    echo "USAGE: gcim <message>"
-    return 1
-  fi
+    if [[ "x$(git rev-parse --git-dir 2> /dev/null)" = "x" ]]; then
+      print_error 0 "not inside a git repository"
+      return 1
+    fi
 
-  if [[ "x${story}" != "x" ]]; then
-    git commit -m "${message} (${story})"
-  else
-    git commit -m "${message}"
-  fi
+    local branch="$(current_branch)"
+    local story="$(echo "${branch}" | grep '^[[:alpha:]][[:alpha:]]*-[[:digit:]][[:digit:]]*$')"
+
+    if [[ "x${story}" != "x" ]]; then
+      git commit -m "${message} (${story})"
+    else
+      git commit -m "${message}"
+    fi
+  } always {
+    unfunction -m "$0_*"
+  }
 }

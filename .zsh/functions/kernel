@@ -6,6 +6,7 @@ function kernel() {
   local ks="http://www.kernel.org";
   local kver="$2"
   local kmaj=$(echo "$kver" | awk -F"." '{print $1"."$2}')
+
   case "$1" in
     "help" | "-h" | "--help")
       echo "kernel help | -h | --help   - show this help"

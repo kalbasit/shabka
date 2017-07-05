@@ -11,8 +11,6 @@ github_commit_link() {
   # compute the GOPATH format of the URL of origin
   local gfrp="$( git_gopath_formatted_repo_path )"
   # validate we are under a Github repo
-  # TODO: must check the URL of the origin if this failed for repos outside
-  # $GOPATH
   if ! echo "${gfrp}" | grep -q -i 'github\.com/[^/]*/[^/]*'; then
     print_error 0 "this only works for Github.com"
     return 1

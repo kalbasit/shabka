@@ -6,68 +6,101 @@
 # profile and calls pactivate to activate it
 function sp() {
   {
-    local profiles=()
-    local requested_profile="${1}"
-    local log_depth="${2}"
-    local pf=
+    function $0_help() {
+      print_info "${log_depth}" "USAGE: sp [options] profile"
+      print_info "${log_depth}" "\t -h, --help        - this message"
+      print_info "${log_depth}" "\t     --log-depth   - change the depth of the log Default: ${log_depth}"
+      print_info "${log_depth}" "\t -l, --list        - list the profiles"
+      print_info "${log_depth}" "\t -k, --kill        - kill the profile"
+    }
 
-    # sanity check
-    if ! [[ "${log_depth}" -ge 0 ]]; then
-      log_depth=0
-    fi
     # load the available profiles, call pload
+    local pf=
+    local profiles=()
     for pf in ${HOME}/.zsh/profiles/*.zsh; do
       source "${pf}"
       pload
       f="$(basename "${pf}")"
       profiles=(${profiles[@]} ${f%%.zsh})
     done
-    # are we only trying to list the available profiles?
-    if [[ "${#}" -eq "0" ]] || [[ "${requested_profile}" = "ls" ]]; then
-      for pf in "${profiles[@]}"; do
-        if [[ "x${pf}" = "x${ACTIVE_PROFILE}" ]]; then
-          echo -e "$(for i in $(seq 1 ${log_depth}); do echo -ne " "; done)${FG_GREEN}*${FG_CLEAR} ${pf}"
-        else
-          echo -e "$(for i in $(seq 1 ${log_depth}); do echo -ne " "; done)  ${pf}"
-        fi
-      done
-      # are we loading the personal profile (i.e removing profiles?)
-      # are we killing the profile?
-    elif [[ "${requested_profile}" = "kill" ]]; then
-      if [[ -n "${ACTIVE_PROFILE}" ]]; then
-        # shellcheck disable=SC1090
-        source "${HOME}/.zsh/profiles/${ACTIVE_PROFILE}.zsh"
-        pdeactivate
-        # make sure we have a GOPATH
-        if [[ -z "${GOPATH}" ]]; then
-          export GOPATH="${GLOBAL_GOPATH}"
-        fi
-        unset ACTIVE_PROFILE SSH_AGENT_PID SSH_AUTH_SOCK SSH_AGENT_NAME
-        eval "$(ssh-agents)"
-      fi
-      # are we actually loading a profile?
-    else
-      if [[ ! -r "${HOME}/.zsh/profiles/${requested_profile}.zsh" ]]; then
-        print_error "${log_depth}" "profile ${HOME}/.zsh/profiles/${requested_profile}.zsh not found"
-        return 1
-      fi
 
-      # unload the current profile
-      sp kill
-      # activate the profile
-      # shellcheck disable=SC1090
-      source "${HOME}/.zsh/profiles/${requested_profile}.zsh"
-      pactivate
-      # make sure we have a GOPATH
-      if [[ -z "${GOPATH}" ]]; then
-        export GOPATH="${GLOBAL_GOPATH}"
-      fi
-      # let the terminal know which profile is loaded and which ssh-agent to
-      # use
-      export ACTIVE_PROFILE="${requested_profile}"
-      eval "$(ssh-agents)"
+    local requested_profile=
+    local log_depth=0
+
+    while [[ $# -ge 1 ]]; do
+      case "${1}" in
+        -h|--help)
+          $0_help
+          return 0
+          ;;
+        --log-depth)
+          log_depth="${2}"
+          if [[ -z "${log_depth}" ]]; then
+            print_error "${log_depth}" "--log-depth requires an argument"
+            $0_help
+            return 1
+          fi
+          shift 2
+          ;;
+        -l|--list)
+          for pf in "${profiles[@]}"; do
+            if [[ "x${pf}" = "x${ACTIVE_PROFILE}" ]]; then
+              echo -e "$(for i in $(seq 1 ${log_depth}); do echo -ne " "; done)${FG_GREEN}*${FG_CLEAR} ${pf}"
+            else
+              echo -e "$(for i in $(seq 1 ${log_depth}); do echo -ne " "; done)  ${pf}"
+            fi
+          done
+          return
+          ;;
+        -k|--kill)
+          if [[ -n "${ACTIVE_PROFILE}" ]]; then
+            # shellcheck disable=SC1090
+            source "${HOME}/.zsh/profiles/${ACTIVE_PROFILE}.zsh"
+            pdeactivate
+            # make sure we have a GOPATH
+            if [[ -z "${GOPATH}" ]]; then
+              export GOPATH="${GLOBAL_GOPATH}"
+            fi
+            unset ACTIVE_PROFILE SSH_AGENT_PID SSH_AUTH_SOCK SSH_AGENT_NAME
+            eval "$(ssh-agents)"
+          fi
+          return
+          ;;
+        *)
+          # Make sure we have only one argument left
+          if [[ -n "${2}" ]]; then
+            print_error "${log_depth}" "must only have one argument, the profile to load"
+            $0_help
+            return 1
+          fi
+          # set the profile
+          requested_profile="${1}"
+          shift
+          ;;
+      esac
+    done
+
+    if [[ ! -r "${HOME}/.zsh/profiles/${requested_profile}.zsh" ]]; then
+      print_error "${log_depth}" "profile ${HOME}/.zsh/profiles/${requested_profile}.zsh not found"
+      return 1
     fi
+
+    # unload the current profile
+    sp --kill
+    # activate the profile
+    # shellcheck disable=SC1090
+    source "${HOME}/.zsh/profiles/${requested_profile}.zsh"
+    pactivate
+    # make sure we have a GOPATH
+    if [[ -z "${GOPATH}" ]]; then
+      export GOPATH="${GLOBAL_GOPATH}"
+    fi
+    # let the terminal know which profile is loaded and which ssh-agent to
+    # use
+    export ACTIVE_PROFILE="${requested_profile}"
+    eval "$(ssh-agents)"
   } always {
+    unfunction -m "$0_*"
     unfunction pcode pload pactivate pdeactivate
   }
 }

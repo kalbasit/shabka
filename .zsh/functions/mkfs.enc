@@ -6,9 +6,10 @@ function mkfs.enc() {
   { # begin an always block
     function $0_help() {
       print_info "${log_depth}" "USAGE: mkfs.enc [options] lo_file"
-      print_info "${log_depth}" "\t -h, --help                - this message"
-      print_info "${log_depth}" "\t     --bs                  - set the bs of the dd command. Default: ${bs}"
-      print_info "${log_depth}" "\t     --count               - set the count of the dd command. Default: ${count}"
+      print_info "${log_depth}" "\t -h, --help        - this message"
+      print_info "${log_depth}" "\t     --log-depth   - change the depth of the log Default: ${log_depth}"
+      print_info "${log_depth}" "\t     --bs          - set the bs of the dd command. Default: ${bs}"
+      print_info "${log_depth}" "\t     --count       - set the count of the dd command. Default: ${count}"
     }
 
     local bs=1M
@@ -21,6 +22,15 @@ function mkfs.enc() {
         -h|--help)
           $0_help
           return 0
+          ;;
+        --log-depth)
+          log_depth="${2}"
+          if [[ -z "${log_depth}" ]]; then
+            print_error "${log_depth}" "--log-depth requires an argument"
+            $0_help
+            return 1
+          fi
+          shift 2
           ;;
         --bs)
           bs="${2}"

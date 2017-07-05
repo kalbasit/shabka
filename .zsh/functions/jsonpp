@@ -3,6 +3,15 @@
 #
 
 function jsonpp() {
+  if ! have python; then
+    print_error 0 "You must have python installed for this work"
+    return 1
+  fi
+  if ! have pygmentize; then
+    print_error 0 "You must have pygmentize installed for this work"
+    return 1
+  fi
+
   if [[ "${#}" -eq 0 ]]; then
     python -m json.tool | pygmentize -l javascript
   else

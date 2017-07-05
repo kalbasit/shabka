@@ -6,10 +6,12 @@ function clone() { # URL
   { # Begin "always" block so we can unfunction the internal functions at the end
     function $0_help()
     {
-      print_info "${log_depth}" "USAGE: clone [options] <URL>"
-      print_info "${log_depth}" "\t -h, --help                - this message"
-      print_info "${log_depth}" "\t -p, --profile             - the profile to use. This is only relevant if a new session is going to be started"
+      print_info 0 "USAGE: clone [options] <URL>"
+      print_info 0 "\t -h, --help     - this message"
+      print_info 0 "\t -p, --profile  - the profile to use. This is only relevant if a new session is going to be started"
     }
+
+    local orig_gopath="${GOPATH}"
 
     while [[ $# -ge 1 ]]; do
       case "${1}" in
@@ -49,5 +51,6 @@ function clone() { # URL
     git clone "${url}" "${clone_path}"
   } always {
     unfunction -m "$0_*"
+    export GOPATH="${orig_gopath}"
   }
 }

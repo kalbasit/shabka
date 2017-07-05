@@ -6,9 +6,10 @@ function mount.enc() {
   { # begin an always block
     function $0_help() {
       print_info "${log_depth}" "USAGE: mount.enc [options] lo_file"
-      print_info "${log_depth}" "\t -h, --help\t- this message"
-      print_info "${log_depth}" "\t     --lp_id\t- The ID of the lastpass entry containing the password"
-      print_info "${log_depth}" "\t     --ro\n- Mount as read-only"
+      print_info "${log_depth}" "\t -h, --help        - this message"
+      print_info "${log_depth}" "\t     --log-depth   - change the depth of the log Default: ${log_depth}"
+      print_info "${log_depth}" "\t     --lp_id       - The ID of the lastpass entry containing the password"
+      print_info "${log_depth}" "\t     --ro          - Mount as read-only"
     }
 
     local lo_file=
@@ -20,6 +21,15 @@ function mount.enc() {
         -h|--help)
           $0_help
           return 0
+          ;;
+        --log-depth)
+          log_depth="${2}"
+          if [[ -z "${log_depth}" ]]; then
+            print_error "${log_depth}" "--log-depth requires an argument"
+            $0_help
+            return 1
+          fi
+          shift 2
           ;;
         --lp_id)
           lp_id="${2}"
