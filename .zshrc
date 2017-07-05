@@ -472,8 +472,6 @@ expand-or-complete-with-dots() {
 zle -N expand-or-complete-with-dots
 bindkey "^I" expand-or-complete-with-dots
 
-fpath+="${HOME}/.zsh/completions"
-
 #####################################################################
 # directories
 #####################################################################
