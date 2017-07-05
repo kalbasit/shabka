@@ -81,8 +81,11 @@ bindsym $mod+f fullscreen toggle
 # kill focused window
 bindsym $mod+Shift+q kill
 
-# start rofi run
+# rofi run
 bindsym $mod+r exec rofi -show run
+
+# list open windows to switch to
+bindsym $alt+Tab exec rofi -show window
 
 # rename workspace
 bindsym $mod+Shift+w exec i3-input -F 'rename workspace to %s' -P 'New name: '
