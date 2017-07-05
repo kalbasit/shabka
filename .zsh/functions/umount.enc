@@ -2,10 +2,10 @@
 # vim:ft=zsh:
 #
 
-function umount.encfs() {
+function umount.enc() {
   { # begin an always block
     function $0_help() {
-      print_info "${log_depth}" "USAGE: mount.encfs [options] lo_file"
+      print_info "${log_depth}" "USAGE: umount.enc [options] lo_file"
       print_info "${log_depth}" "\t -h, --help                - this message"
     }
     local lo_file="${1}"

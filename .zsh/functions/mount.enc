@@ -2,10 +2,10 @@
 # vim:ft=zsh:
 #
 
-function mount.encfs() {
+function mount.enc() {
   { # begin an always block
     function $0_help() {
-      print_info "${log_depth}" "USAGE: mount.encfs [options] lo_file"
+      print_info "${log_depth}" "USAGE: mount.enc [options] lo_file"
       print_info "${log_depth}" "\t -h, --help\t- this message"
       print_info "${log_depth}" "\t     --lp_id\t- The ID of the lastpass entry containing the password"
       print_info "${log_depth}" "\t     --ro\n- Mount as read-only"

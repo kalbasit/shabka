@@ -2,10 +2,10 @@
 # vim:ft=zsh:
 #
 
-function mkencfs() {
+function mkfs.enc() {
   { # begin an always block
     function $0_help() {
-      print_info "${log_depth}" "USAGE: mkencfs [options] lo_file"
+      print_info "${log_depth}" "USAGE: mkfs.enc [options] lo_file"
       print_info "${log_depth}" "\t -h, --help                - this message"
       print_info "${log_depth}" "\t     --bs                  - set the bs of the dd command. Default: ${bs}"
       print_info "${log_depth}" "\t     --count               - set the count of the dd command. Default: ${count}"
