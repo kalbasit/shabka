@@ -6,17 +6,23 @@ fpath+="${HOME}/.zsh/completions"
 source "${HOME}/.zsh/functions/debug"
 source "${HOME}/.zsh/functions/have"
 source "${HOME}/.zsh/functions/is_func"
+source "${HOME}/.zsh/functions/pathappend"
+source "${HOME}/.zsh/functions/pathprepend"
+source "${HOME}/.zsh/functions/pathunmunge"
 source "${HOME}/.zsh/functions/sp"
 source "${HOME}/.zsh/functions/ssh-agents"
 
 # autoload all of the functions
 for func in ${HOME}/.zsh/functions/*; do
   case "$(basename ${func})" in
-    debug)      ;;
-    have)       ;;
-    is_func)    ;;
-    sp)         ;;
-    ssh-agents) ;;
+    debug)       ;;
+    have)        ;;
+    is_func)     ;;
+    pathappend)  ;;
+    pathprepend) ;;
+    pathunmunge) ;;
+    sp)          ;;
+    ssh-agents)  ;;
     *)
       autoload -U "$(basename ${func})"
       ;;
