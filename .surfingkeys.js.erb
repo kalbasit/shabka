@@ -214,6 +214,67 @@ onAceVimKeymapInit(function(dk) {
       }
     },
 
+    // movement by word
+    {
+      keys: 'y',
+      type: 'motion',
+      motion: 'moveByWords',
+      motionArgs: {
+        forward: true,
+        wordEnd: false
+      }
+    },
+    {
+      keys: 'Y',
+      type: 'motion',
+      motion: 'moveByWords',
+      motionArgs: {
+        forward: true,
+        wordEnd: false,
+        bigWord: true
+      }
+    },
+    {
+      keys: 'u',
+      type: 'motion',
+      motion: 'moveByWords',
+      motionArgs: {
+        forward: true,
+        wordEnd: true,
+        inclusive: true
+      }
+    },
+    {
+      keys: 'U',
+      type: 'motion',
+      motion: 'moveByWords',
+      motionArgs: {
+        forward: true,
+        wordEnd: true,
+        bigWord: true,
+        inclusive: true
+      }
+    },
+    {
+      keys: 'l',
+      type: 'motion',
+      motion: 'moveByWords',
+      motionArgs: {
+        forward: false,
+        wordEnd: false
+      }
+    },
+    {
+      keys: 'L',
+      type: 'motion',
+      motion: 'moveByWords',
+      motionArgs: {
+        forward: false,
+        wordEnd: false,
+        bigWord: true
+      }
+    },
+
     // find next
     {
       keys: 'k',
