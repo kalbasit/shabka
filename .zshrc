@@ -11,7 +11,7 @@
 #####################################################################
 
 # Load zplug
-[[ ! -r "${HOME}/.zplug/init.zsh" ]] && git clone https://github.com/zplug/zplug.git "${HOME}/.zplug"
+[[ -r "${HOME}/.zplug/init.zsh" ]] || git clone https://github.com/zplug/zplug.git "${HOME}/.zplug"
 source "${HOME}/.zplug/init.zsh"
 
 # speed up zplug. See https://github.com/zplug/zplug/issues/368#issuecomment-282566102
@@ -827,10 +827,6 @@ else
   export FZF_DEFAULT_COMMAND='(git ls-tree -r --name-only HEAD || find . -path "*/\.*" -prune -o -type f -print -o -type l -print | sed s/^..//) 2> /dev/null'
 fi
 
-
-# Load SSH agents
-[[ -x "${HOME}/.bin/ssh-agents" ]] && eval "$(ssh-agents)"
-
 # Load rbenv
 if [[ -d "${HOME}/.rbenv" ]]; then
   lazyLoadRbenv() {
@@ -901,21 +897,8 @@ fi
 # Profile support
 #####################################################################
 
-# load all the profiles
-for p in ${HOME}/.zsh/profiles/*.zsh; do
-  source "${p}"
-  pload
-
-  unfunction pcode pload pactivate pdeactivate
-done
-
-# If the ACTIVE_PROFILE is set, source the profile file and activate the profile
-if [[ -n "${ACTIVE_PROFILE}" ]] && [[ -r "${HOME}/.zsh/profiles/${ACTIVE_PROFILE}.zsh" ]]; then
-  source "${HOME}/.zsh/profiles/${ACTIVE_PROFILE}.zsh"
-  pactivate
-
-  unfunction pcode pload pactivate pdeactivate
-fi
+# load the active profile or personal if no active profile
+sp "${ACTIVE_PROFILE:-personal}"
 
 #####################################################################
 # Welcome notes
