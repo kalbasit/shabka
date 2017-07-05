@@ -107,6 +107,7 @@ tmx() {
     special_sess[mail]=emacs
     special_sess[task]="vim +:TW"
 
+    local current_gopath="${GOPATH}" # this is used to restore the GOPATH
     local confirm_vim_startup=false
     local kill_pane=false
     local log_depth=0
@@ -294,5 +295,6 @@ tmx() {
     $0_attach
   } always {
     unfunction -m "$0_*"
+    export GOPATH="${current_gopath}"
   }
 }
