@@ -5,3 +5,5 @@ rofi.modi: window,run,ssh,Workspaces:i3-switch-workspaces,MoveContainer:i3-move-
 ! Font to use
 ! Default:  mono 12
 rofi.font: HackRegular 12
+
+#include "/usr/share/rofi/themes/Adapta-Nokto.theme"
