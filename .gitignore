@@ -37,6 +37,7 @@
 .irssi/config.autosave
 .irssi/scripts/old/
 .irssi/seen.dat
+.local/bin/tmuxwords.rb
 .local/share/gvfs-metadata
 .notmuch/compose/
 .notmuch/log
