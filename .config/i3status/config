@@ -14,11 +14,17 @@ general {
 order += "load"
 order += "cpu_temperature 0"
 order += "disk /"
+order += "ethernet enp57s0u1u2u1"
 order += "wireless _first_"
 order += "ipv6"
 order += "battery all"
 order += "volume master"
 order += "tztime local"
+
+ethernet enp57s0u1u2u1 {
+        format_up = "E: %ip (%speed)"
+        format_down = "E: down"
+}
 
 wireless _first_ {
         format_up = "W: (%quality at %essid) %ip"
