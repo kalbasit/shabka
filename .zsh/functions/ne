@@ -11,7 +11,6 @@ function ne() {
   fi
   # create the directory
   mkdir -p "${GOPATH}/src/experimental/${name}"
-  # TODO: should I switch profile off? maybe have an argument for it?
-  tmx "${GOPATH}/src/experimental/${name}"
+  tmx --profile "${ACTIVE_PROFILE:-personal}" "${GOPATH}/src/experimental/${name}"
   return 0
 }
