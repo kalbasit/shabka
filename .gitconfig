@@ -10,7 +10,7 @@
 # }}}
 # help# {{{
 [help]
-  autocorrect = 1
+  autocorrect = 30
 # }}}
 # core# {{{
 [core]
