@@ -14,13 +14,13 @@ general {
 order += "load"
 order += "cpu_temperature 0"
 order += "disk /"
-order += "ethernet enp57s0u1u2u1"
+order += "ethernet eth_usbc_juiced"
 order += "wireless _first_"
 order += "battery all"
 order += "volume master"
 order += "tztime local"
 
-ethernet enp57s0u1u2u1 {
+ethernet eth_usbc_juiced {
         format_up = "E: %ip (%speed)"
         format_down = "E: down"
 }
