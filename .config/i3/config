@@ -325,8 +325,8 @@ workspace publica output DP1
 workspace irc output DP1
 workspace mail output DP1
 
-# assign less side apps to the laptop
-workspace entertainment output eDP1
+# assign side apps to the laptop
+workspace media output eDP1
 
 ######################
 # Scratchpad support #
