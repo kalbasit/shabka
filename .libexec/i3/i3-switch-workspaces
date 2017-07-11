@@ -23,7 +23,7 @@
 if [[ -z "${*}" ]]; then
   # we need the back and forth first
   echo back_and_forth
-  # get the list of workspaces that are not empty
+  # get a list of workspaces except for the one focused
   i3-msg -t get_workspaces | jq -r '.[] | if .focused == false then .name else empty end'
 else
   # switch to the given workspace

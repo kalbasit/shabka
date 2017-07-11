@@ -45,6 +45,9 @@ fi
 # make java applications look decent
 export _JAVA_AWT_WM_NONREPARENTING=1
 
+# ask GTK applications to use the Wayland backend
+export GDK_BACKEND=wayland
+
 # sway-specific setting
 export XKB_DEFAULT_OPTIONS=ctrl:nocaps
 export WLC_REPEAT_DELAY=200
