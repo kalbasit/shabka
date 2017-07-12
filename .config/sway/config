@@ -1,0 +1,370 @@
+###################
+# Output settings #
+###################
+
+output eDP1 res 3200x1800 pos 0,0 scale 2
+output DP1 res 3440x1440 pos 3200,0
+
+#################
+# Core settings #
+#################
+
+# variables
+
+set $mod Mod4
+set $alt Mod1
+set $nosid --no-startup-id
+set $locker i3lock && sleep 1
+
+# Font for window titles. Will also be used by the bar unless a different font
+# is used in the bar {} block below.
+font pango:DejaVu Sans Mono 8
+
+# Colors
+# class                   border  backgr. text    indicator
+client.focused            #5f865f #5f865f #e4e4e4 #ffafaf
+client.focused_inactive   #4e4e4e #4e4e4e #d0d0d0 #ffafaf
+client.unfocused          #4e4e4e #4e4e4e #87d7d7 #87af87
+client.urgent             #ff0000 #ff0000 #e4e4e4 #d68787
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# focus should not follow the mouse pointer
+focus_follows_mouse no
+
+# keep the urgency border of a window for 500ms
+force_display_urgency_hint 500 ms
+
+# on window activation, just set the urgency hint. The default behavior is to
+# set the urgency hint if the window is not on the active workspace, and to
+# focus the window on an active workspace. It does surprise me sometimes and I
+# would like to keep it simple by having to manually switch to the urgent
+# window.
+focus_on_window_activation urgent
+
+############
+# Bindings #
+############
+
+# change focus
+bindsym $mod+n focus left
+bindsym $mod+e focus down
+bindsym $mod+i focus up
+bindsym $mod+o focus right
+
+# move focused window
+bindsym $mod+Shift+n move left
+bindsym $mod+Shift+e move down
+bindsym $mod+Shift+i move up
+bindsym $mod+Shift+o move right
+
+# split in horizontal orientation
+bindsym $mod+h split h
+
+# split in vertical orientation
+bindsym $mod+v split v
+
+# change focus between output
+bindsym $mod+$alt+o focus output right
+bindsym $mod+$alt+n focus output left
+
+# move workspaces between monitors
+bindsym $mod+Shift+$alt+o move workspace to output right
+bindsym $mod+Shift+$alt+n move workspace to output left
+
+# toggle sticky
+bindsym $mod+s sticky toggle
+
+# toggle tiling / floating
+bindsym $alt+Shift+space floating toggle
+
+# change focus between tiling / floating windows
+bindsym $alt+space focus mode_toggle
+
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen toggle
+
+# kill focused window
+bindsym $mod+Shift+q kill
+
+# rofi run
+bindsym $mod+r exec rofi -show run
+
+# list open windows to switch to
+bindsym $alt+Tab exec rofi -show window
+
+# rename workspace
+bindsym $mod+Shift+w exec i3-input -F 'rename workspace to %s' -P 'New name: '
+
+# switch between the current and the previously focused one
+bindsym $mod+Tab workspace back_and_forth
+bindsym $mod+Shift+Tab move container to workspace back_and_forth
+
+# dynamic workspaces
+bindsym $mod+space exec rofi -show Workspaces
+bindsym $mod+Shift+space exec rofi -show MoveContainer
+
+# change container layout (stacked, tabbed, toggle split)
+bindsym $mod+l layout stacking
+bindsym $mod+u layout tabbed
+bindsym $mod+y layout toggle split
+
+# focus the parent container
+bindsym $mod+a focus parent
+
+# focus the child container
+bindsym $mod+d focus child
+
+# focus the urgent window
+bindsym $mod+x [urgent=latest] focus
+
+# mark current window / goto mark
+# https://github.com/tybitsfox/i3msg/blob/master/.i3/config
+bindsym $mod+m exec i3-input -F 'mark %s' -l 1 -P 'Mark: '
+bindsym $mod+apostrophe exec i3-input -F '[con_mark="%s"] focus' -l 1 -P 'Go to: '
+
+# volume support
+bindsym XF86AudioRaiseVolume exec $nosid pactl set-sink-mute 0 false, exec $nosid pactl set-sink-volume 0 +5%
+bindsym XF86AudioLowerVolume exec $nosid pactl set-sink-mute 0 false, exec $nosid pactl set-sink-volume 0 -5%
+bindsym XF86AudioMute exec $nosid pactl set-sink-mute 0 toggle
+
+# brightness support
+bindsym XF86MonBrightnessUp exec $nosid xbacklight -inc 5
+bindsym XF86MonBrightnessDown exec $nosid xbacklight -dec 5
+bindsym Shift+XF86MonBrightnessUp exec $nosid xbacklight -inc 1
+bindsym Shift+XF86MonBrightnessDown exec $nosid xbacklight -dec 1
+
+# sleep support
+bindsym XF86PowerOff exec $nosid $locker && systemctl suspend
+
+# clipboard history
+bindsym $mod+$alt+c exec rofi -modi "clipboard:mclip.py menu" -show clipboard && mclip.py paste
+
+################
+# Applications #
+################
+
+# start a terminal
+bindsym $mod+Return exec termite
+
+#########
+# Modes #
+#########
+
+# Window Manager mode, this mode allows me to control i3
+set $mode_wm WM: (r) Reload i3, (e) Restart i3
+mode "$mode_wm" {
+  bindsym r reload; exec $nosid notify-send 'i3 configuration reloaded', mode "default"
+  bindsym e restart; exec $nosid notify-send 'i3 restarted', mode "default"
+
+  # back to normal: Enter or Escape
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+}
+bindsym $mod+$alt+w mode "$mode_wm"
+
+# Application launcher
+set $mode_apps Launch: (p) Chromium personal, (u) Chromium publica, (c) Charles, (s) Slack, (i) Irc, (w) Whatsapp, (a) TaskWarrior, (t) Teamviewer
+mode "$mode_apps" {
+  bindsym p exec relay-browser --profile personal, mode "default"
+  bindsym u exec relay-browser --profile publica, mode "default"
+  bindsym c exec charles, mode "default"
+  bindsym s exec slack, mode "default"
+  bindsym i exec termite --title=irc --exec=weechat, mode "default"
+  bindsym w exec whatsapp-web-desktop, mode "default"
+  bindsym a exec termite --title=TaskWarrior --exec="tmx -L task task", mode "default"
+  bindsym t exec myteamviewer, mode "default"
+
+  # back to normal: Enter or Escape
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+}
+bindsym $mod+$alt+a mode "$mode_apps"
+
+# System commands
+set $mode_system System: (b) Backup to Madea, (c) Connect to B&W P7
+mode "$mode_system" {
+  bindsym b exec gksu systemctl start snap-sync@e6437994-dced-4441-a3af-344694bb7f37.service, mode "default"
+  bindsym c exec $nosid bluetoothctl <<< $'connect EC:66:D1:93:2C:C2', mode "default"
+
+  # back to normal: Enter or Escape
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+}
+bindsym $mod+$alt+s mode "$mode_system"
+
+# resize window (you can also use the mouse for that)
+set $resize_mode resize
+mode "$resize_mode" {
+  # Micro resizement
+  bindsym Control+n resize shrink width 10 px or 1 ppt
+  bindsym Control+e resize grow height 10 px or 1 ppt
+  bindsym Control+i resize shrink height 10 px or 1 ppt
+  bindsym Control+o resize grow width 10 px or 1 ppt
+
+  # Normal resizing
+  bindsym n resize shrink width 50 px or 5 ppt
+  bindsym e resize grow height 50 px or 5 ppt
+  bindsym i resize shrink height 50 px or 5 ppt
+  bindsym o resize grow width 50 px or 5 ppt
+
+  # Macro resizing
+  bindsym Shift+n resize shrink width 100 px or 10 ppt
+  bindsym Shift+e resize grow height 100 px or 10 ppt
+  bindsym Shift+i resize shrink height 100 px or 10 ppt
+  bindsym Shift+o resize grow width 100 px or 10 ppt
+
+  # back to normal: Enter or Escape
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+}
+bindsym $mod+$alt+r mode "$resize_mode"
+
+# move window (you can also use the mouse for that)
+set $move_mode move
+mode "$move_mode" {
+  # Micro movement
+  bindsym Control+n move left 10 px
+  bindsym Control+e move down 10 px
+  bindsym Control+i move up 10 px
+  bindsym Control+o move right 10 px
+
+  # # Normal resizing
+  bindsym n move left 50 px
+  bindsym e move down 50 px
+  bindsym i move up 50 px
+  bindsym o move right 50 px
+  #
+  # # Macro resizing
+  bindsym Shift+n move left 100 px
+  bindsym Shift+e move down 100 px
+  bindsym Shift+i move up 100 px
+  bindsym Shift+o move right 100 px
+
+  # back to normal: Enter or Escape
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+}
+bindsym $mod+$alt+m mode "$move_mode"
+
+# Display mode allows output/resolution selection
+set $mode_display (l) Laptop screen, (m) Multiple screen, (w) Wide screen
+mode "$mode_display" {
+  bindsym l exec $nosid xrandr --output eDP1 --mode 1920x1080 --output DP1 --off, mode "default"
+  bindsym m exec $nosid xrandr --output eDP1 --mode 1920x1080 --output DP1 --mode 3440x1440 --right-of eDP1, mode "default"
+  bindsym w exec $nosid xrandr --output eDP1 --off --output DP1 --mode 3440x1440, mode "default"
+
+  # back to normal: Enter or Escape
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+}
+bindsym $mod+$alt+d mode "$mode_display"
+
+# Keyboard layout selection
+set $mode_keyboard (q) Qwerty, (c) Colemak
+mode "$mode_keyboard" {
+  bindsym q exec $nosid setxkbmap us && xmodmap ~/.Xmodmap && notify-send 'keyboard switch to Qwerty', mode "default"
+  bindsym c exec $nosid setxkbmap us -variant colemak && xmodmap ~/.Xmodmap && notify-send 'keyboard switch to Colemak', mode "default"
+
+  # back to normal: Enter or Escape
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+}
+bindsym $mod+$alt+k mode "$mode_keyboard"
+
+## Management of power
+set $mode_power System: (l) lock, (o) logout, (s) suspend, (h) hibernate, (r) reboot, (Shift+s) shutdown
+mode "$mode_power" {
+  bindsym l exec $nosid $locker, mode "default"
+  bindsym o exit
+  bindsym s exec $nosid $locker && systemctl suspend, mode "default"
+  bindsym h exec $nosid $locker && systemctl hibernate, mode "default"
+  bindsym r exec $nosid systemctl reboot
+  bindsym Shift+s exec $nosid systemctl poweroff -i
+
+  # back to normal: Enter or Escape
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+}
+bindsym $mod+$alt+p mode "$mode_power"
+
+#######
+# Bar #
+#######
+
+# Start i3bar to display a workspace bar (plus the system information i3status
+# finds out, if available)
+bar {
+  # put the bar on the top
+  position top
+  # use i3status for the bar
+  status_command i3status
+  # disable clicking on workspace buttons
+  bindsym button1 nop
+
+  # setup colors
+  colors {
+    separator #d68787
+    background #626262
+    statusline #00ff00
+    focused_workspace #e4e4e4 #5f865f #e4e4e4
+    active_workspace #e4e4e4 #ffafaf #e4e4e4
+    inactive_workspace #87af87 #87d7d7 #626262
+    urgent_workspace #ff0000 #ff0000 #e4e4e4
+  }
+}
+
+########################
+# Workspace assignment #
+########################
+
+# application assignment
+assign [class="^Slack$"] → slack
+assign [class="^com-xk72-charles-gui-.*$"] → charles
+assign [class="^VirtualBox"] → virtualbox
+assign [class="^Termite" title="irc"] → irc
+
+# assign important spaces to my external monitor
+workspace main output DP1
+workspace personal output DP1
+workspace publica output DP1
+workspace irc output DP1
+workspace mail output DP1
+
+# assign side apps to the laptop
+workspace media output eDP1
+
+######################
+# Scratchpad support #
+######################
+
+# Make the currently focused window a scratchpad
+bindsym $mod+Shift+minus move scratchpad
+
+# Make the currently focused window a scratchpad
+bindsym $mod+$alt+minus scratchpad show
+
+# TaskWarrior
+for_window [class="^Termite" title="^TaskWarrior"] sticky enable, floating enable, move scratchpad
+bindsym $alt+a [class="^Termite" title="^TaskWarrior"] scratchpad show
+
+# Whatsapp
+for_window [class="^whats-app-nativefier*"] sticky enable, floating enable, move scratchpad
+bindsym $alt+w [class="^whats-app-nativefier*"] scratchpad show
+
+# Pulse
+for_window [class="Chromium" instance="crx_jjbjdleccaiklfpcblgekgmjadjdclkp"] sticky enable, floating enable, move scratchpad
+bindsym $alt+p [class="Chromium" instance="crx_jjbjdleccaiklfpcblgekgmjadjdclkp"] scratchpad show
+
+##############
+# Auto Start #
+##############
+
+exec $nosid termite --title=irc --exec="weechat"
+exec $nosid termite --title=TaskWarrior --exec="tmx -L task task"
+exec $nosid whatsapp-web-desktop
+exec $nosid mclip.py daemon
+
+# Start the personal terminal on the personal workspace
+exec i3-msg "workspace personal; exec $nosid /usr/bin/termite"
