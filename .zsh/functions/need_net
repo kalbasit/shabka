@@ -2,7 +2,7 @@
 # vim:ft=zsh:
 #
 
-function needNet()
+function need_net()
 {
   # is it a sticky application?
   if [[ "${1}" = "-k" ]]; then
@@ -13,7 +13,7 @@ function needNet()
   fi
   # Sanity checks
   if [ "${#}" -lt 1 ]; then
-    print_error 0 "Usage: needNet <command> [args...]"
+    print_error 0 "Usage: need_net <command> [args...]"
     return 1
   fi
   # Global Variables
