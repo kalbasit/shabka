@@ -133,7 +133,7 @@ fi
 #}}
 # Record the PID
 # but only if we are rotating..
-if is_true "${ROTATE}" && isNumber "${ROTATE_SLEEP}"; then
+if is_true "${ROTATE}" && is_number "${ROTATE_SLEEP}"; then
   echo "$!" > "${HOME}/.gwall.pid"
 fi
 # Set the wallpaper.
@@ -147,7 +147,7 @@ while true; do
 
   # Setting wallpaper
   "${PROG}" "${ARGS}" "${images[$rand]}"
-  if is_true "${ROTATE}" && isNumber "${ROTATE_SLEEP}"; then
+  if is_true "${ROTATE}" && is_number "${ROTATE_SLEEP}"; then
     sleep "${ROTATE_SLEEP}"
     continue
   else
