@@ -677,7 +677,8 @@ au FileType go xnoremap <buffer> <silent> [[ :<c-u>call go#textobj#FunctionJump(
 vnoremap <leader>rv :call ExtractVariable()<cr>
 nnoremap <leader>ri :call InlineVariable()<cr>
 
-nnoremap <leader>. :call OpenTestAlternate()<cr>
+nnoremap <leader>. :call OpenTestAlternate("")<cr>
+nnoremap g<leader>. :call OpenTestAlternate("vsplit")<cr>
 nnoremap <leader><leader> <c-^>
 
 " Remap F1 to ESC
@@ -838,7 +839,7 @@ function! InlineVariable()
   :let @b = l:tmp_b
 endfunction
 
-function! OpenTestAlternate()
+function! OpenTestAlternate(position)
   let current_file = expand("%")
   let new_file = current_file
 
@@ -851,7 +852,13 @@ function! OpenTestAlternate()
   endif
 
   " Open the alternate file or self if the rules don't match
-  exec ':e ' . new_file
+  if a:position == "split"
+    exec ':sp ' . new_file
+  elseif a:position == "vsplit"
+    exec ':vsp ' . new_file
+  else
+    exec ':e ' . new_file
+  endif
 endfunction
 
 function! AlternateGoFile(current_file)
