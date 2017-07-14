@@ -2,7 +2,7 @@
 # vim:ft=zsh:
 #
 
-tmx() {
+function tmx() {
   { # Begin "always" block so we can unfunction the internal functions at the end
     function $0_help()
     {

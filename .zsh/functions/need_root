@@ -2,8 +2,7 @@
 # vim:ft=zsh:
 #
 
-function need_root()
-{
+function need_root() {
   if ! check_root; then
     print_warning 0 "Re-Running the script under root."
     if have sudo; then

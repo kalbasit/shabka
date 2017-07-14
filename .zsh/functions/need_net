@@ -2,8 +2,7 @@
 # vim:ft=zsh:
 #
 
-function need_net()
-{
+function need_net() {
   # is it a sticky application?
   if [[ "${1}" = "-k" ]]; then
     KEEP=true

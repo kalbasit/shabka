@@ -2,8 +2,7 @@
 # vim:ft=zsh:
 #
 
-function scprsa()
-{
+function scprsa() {
   if [[ -z "$1" ]]; then
     print_error 0 "!! You need to enter a hostname in order to send your public key !!"
   else

@@ -5,7 +5,7 @@
 # github_commit_link [REF]
 #
 # Print the Github commit link for REF (default HEAD)
-github_commit_link() {
+function github_commit_link() {
   # get the reference we need
   local ref="${1:-HEAD}"
   # compute the GOPATH format of the URL of origin

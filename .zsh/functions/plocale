@@ -3,8 +3,7 @@
 #
 
 # print current settings of LC_*
-function plocale()
-{
+function plocale() {
   print_info 0 "Current settings of LC_*"
   print_info 2 "LANG=${LANG}"
   print_info 2 "LC_ALL=${LC_ALL}"

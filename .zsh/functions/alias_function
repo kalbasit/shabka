@@ -4,7 +4,7 @@
 
 # Usage: alias_function new_name old_name
 # Credit: http://mivok.net/2009/09/20/bashfunctionoverrist.html
-alias_function() {
+function alias_function() {
   if [[ "${1}" = "-h" || "${1}" = "--help" ]]; then
     print_info "${log_depth:-0}" "Usage: alias_function <new_name> <old_name>"
     return

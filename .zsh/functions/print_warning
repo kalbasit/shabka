@@ -2,7 +2,6 @@
 # vim:ft=zsh:
 #
 
-function print_warning()
-{
+function print_warning() {
   GOOD="${WARN}" print_info "${@}"
 }

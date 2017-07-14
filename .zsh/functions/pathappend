@@ -2,7 +2,7 @@
 # vim:ft=zsh:
 #
 
-pathappend() {
+function pathappend() {
   local var="${1}"
   shift
   while [[ $# -ge 1 ]]; do

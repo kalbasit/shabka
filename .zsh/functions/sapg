@@ -3,8 +3,7 @@
 #
 
 # generate passwords with apg
-function sapg()
-{
+function sapg() {
   if have apg; then
     if [[ "${1}" == "-h" ]]; then
       print_error 0 "usage: ${0} <pwlen> <number of passwords>"
