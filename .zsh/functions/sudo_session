@@ -3,11 +3,11 @@
 #
 
 # Credit to @cowboy https://gist.github.com/cowboy/3118588
-function sudo-session() {
+function sudo_session() {
   { # Begin "always" block so we can unfunction the internal functions at the end
     function $0_help()
     {
-      print_info "${log_depth}" "USAGE: sudo-session [duration]"
+      print_info "${log_depth}" "USAGE: sudo_session [duration]"
       print_info "${log_depth}" "\t -h, --help                - this message"
       print_info "${log_depth}" ""
       print_info "${log_depth}" "The default duration is 15 minutes"
