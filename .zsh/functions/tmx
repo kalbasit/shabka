@@ -80,7 +80,7 @@ tmx() {
             tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${sess}:0" "clear; ${special_sess[$sess]}" Enter
           else
             # start vim
-            if isTrue "${confirm_vim_startup}"; then
+            if is_true "${confirm_vim_startup}"; then
               tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${sess}:0" 'clear; echo "Press Enter to start Vim "; read; vim' Enter
             else
               tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${sess}:0" 'clear; vim' Enter
@@ -96,7 +96,7 @@ tmx() {
         # switch to the selected session
         tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" switch-client -t "${sess}"
         # kill the current pane if requested
-        if isTrue "${kill_pane}"; then
+        if is_true "${kill_pane}"; then
           tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" kill-pane
         fi
       else
@@ -223,7 +223,7 @@ tmx() {
     done
 
     # should we ask vim to save all files and close them?
-    if isTrue "${vim_save_close_all_files}"; then
+    if is_true "${vim_save_close_all_files}"; then
       debug "going to ask Vim to save all files and close them"
       local session=
       for session in $(tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" list-sessions -F '#{session_name}'); do
@@ -241,7 +241,7 @@ tmx() {
     fi
 
     # should we ask vim to exit?
-    if isTrue "${vim_exit}"; then
+    if is_true "${vim_exit}"; then
       debug "going to ask Vim to exit"
       local session=
       for session in $(tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" list-sessions -F '#{session_name}'); do
@@ -256,7 +256,7 @@ tmx() {
         tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${session}:0" : x a C-m
       done
       # should we ask tmux to exit?
-      if isTrue "${tmux_exit}"; then
+      if is_true "${tmux_exit}"; then
         debug "going to ask Tmux to exit"
         tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" kill-server
         return $?
@@ -266,7 +266,7 @@ tmx() {
 
 
     # are selecting the session?
-    if isTrue "${select_session}"; then
+    if is_true "${select_session}"; then
       # declare the projects which is an associated array. We then use build_projects
       # to build the array
       typeset -a projects

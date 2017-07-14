@@ -26,7 +26,7 @@ function print_info() {
   # IF 3 OR MORE ARGS, CHECK IF WE WANT A NEWLINE AFTER PRINT
   if [ "${#}" -gt '2' ]
   then
-    if isTrue "${3}"
+    if is_true "${3}"
     then
       NEWLINE='1';
     else
@@ -37,7 +37,7 @@ function print_info() {
   # IF 4 OR MORE ARGS, CHECK IF WE WANT TO PREFIX WITH A *
   if [ "${#}" -gt '3' ]
   then
-    if isTrue "${4}"
+    if is_true "${4}"
     then
       PREFIXLINE='1'
     else

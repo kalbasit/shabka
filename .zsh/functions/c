@@ -11,7 +11,7 @@ function c() {
     if [ -f "${archive}" ]; then
       print_info 1 "The destination file '${archive}' already exists, overwride [y/n] " false
       read answer; echo
-      if isTrue "${answer}"; then
+      if is_true "${answer}"; then
         rm -f -- "${archive}"
       else
         print_warning 0 "Aborting..."

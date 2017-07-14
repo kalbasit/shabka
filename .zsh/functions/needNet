@@ -27,7 +27,7 @@ function needNet()
   while true; do
     if ping -c 1 google.com &> /dev/null; then
       "${COMMAND}" ${ARGS}
-      if isTrue ${KEEP}; then
+      if is_true ${KEEP}; then
         continue
       else
         break

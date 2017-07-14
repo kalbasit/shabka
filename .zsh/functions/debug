@@ -3,7 +3,7 @@
 #
 
 function debug() {
-  if isTrue "${DEBUG}"; then
+  if is_true "${DEBUG}"; then
     echo -e "[DEBUG][${funcstack[2]}()] ${@}"
   fi
 }

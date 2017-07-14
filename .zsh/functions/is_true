@@ -2,7 +2,7 @@
 # vim:ft=zsh:
 #
 
-function isTrue() {
+function is_true() {
   case "${1}" in
     [Tt][Rr][Uu][Ee])
       return 0

@@ -12,7 +12,7 @@ function mkmine() {
   # should we recursively chown?
   for i in {0..${#}}; do
     if [[ "${1}" =~ ^- ]]; then
-      if isTrue "{flagsdone}"; then
+      if is_true "{flagsdone}"; then
         # the user entered FLAG* FILE FLAG*
         print_error 0 "USAGE: mkmine [FLAG,...] <FILE,...>"
         return 1
