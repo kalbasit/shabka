@@ -2,8 +2,7 @@
 # vim:ft=zsh:
 #
 
-function inArray()
-{
+function in_array() {
   [[ "${#}" -lt "2" ]] && return 1
   local needle="${1}"
   shift
