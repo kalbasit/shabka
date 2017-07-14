@@ -10,7 +10,7 @@ source "${HOME}/.zsh/functions/pathappend"
 source "${HOME}/.zsh/functions/pathprepend"
 source "${HOME}/.zsh/functions/pathunmunge"
 source "${HOME}/.zsh/functions/sp"
-source "${HOME}/.zsh/functions/ssh-agents"
+source "${HOME}/.zsh/functions/ssh_agents"
 
 # autoload all of the functions
 for func in ${HOME}/.zsh/functions/*; do
@@ -22,7 +22,7 @@ for func in ${HOME}/.zsh/functions/*; do
     pathprepend) ;;
     pathunmunge) ;;
     sp)          ;;
-    ssh-agents)  ;;
+    ssh_agents)  ;;
     *)
       autoload -U "$(basename ${func})"
       ;;

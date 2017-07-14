@@ -2,7 +2,7 @@
 # vim:ft=zsh:
 #
 
-function ssh-agents() {
+function ssh_agents() {
   { # Begin "always" block so we can unfunction the internal functions at the end
     # setup the initial pssh to use current SSH_AGENT_NAME or ACTIVE_PROFILE
     function pssh() {
