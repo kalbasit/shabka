@@ -102,6 +102,9 @@ endif
 " load editorconfig if available
 Plug 'editorconfig/editorconfig-vim'
 
+" A plugin to improve motion
+Plug 'easymotion/vim-easymotion'
+
 " this script will explode arrays, functions arguments into a multi-line
 Plug 'FooSoft/vim-argwrap'
 
@@ -469,6 +472,13 @@ augroup END
 ""
 
 let g:polyglot_disabled = ['go', 'terraform', 'csv', 'ruby']
+
+" }}}
+"" EasyMotion{{{
+""
+
+" change the default prefix to \\
+map \\ <Plug>(easymotion-prefix)
 
 " }}}
 "" EasyAlign{{{
