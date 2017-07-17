@@ -1,14 +1,18 @@
 " vim:foldmethod=marker:foldlevel=0:
 
-"" Plug{{{
+"" Core{{{
 ""
 
- " Note: Skip initialization for vim-tiny or vim-small.
+" Note: Skip initialization for vim-tiny or vim-small.
 if !1 | finish | endif
 
 if has('vim_starting') && !has('nvim') && &compatible
   set nocompatible               " Be iMproved
 endif
+
+" }}}
+"" Plug{{{
+""
 
 " Required:
 call plug#begin(expand('~/.vim/bundle/'))
@@ -290,6 +294,11 @@ if has("gui_running")
   set mouse=""          " I hate using the mouse for other than copying/pasting.
   set guioptions=cei    " Set the guioptions I like
   set guifont=Monospace,Fixed\ 11
+
+  if has("autocmd")
+    " Automatically resize splits when resizing MacVim window
+    autocmd VimResized * wincmd =
+  endif
 endif
 
 " }}}
@@ -407,18 +416,6 @@ if has("autocmd")
 
   " Delete certain buffers in order to not cluttering up the buffer list
   au BufReadPost fugitive://* set bufhidden=delete
-
-  if has("gui_running")
-    " Automatically resize splits when resizing MacVim window
-    autocmd VimResized * wincmd =
-  endif
-
-  " Go
-  au FileType go nmap <Leader>gc <Plug>(go-doc)
-  au FileType go nmap <Leader>gd <Plug>(go-def)
-  au FileType go nmap <Leader>sgd <Plug>(go-def-split)
-  au FileType go nmap <Leader>vgd <Plug>(go-def-vertical)
-  au FileType go nmap <Leader>gi <Plug>(go-info)
 endif
 
 " }}}
@@ -510,6 +507,15 @@ let g:go_doc_keywordprg_enabled = 0
 
 " disable go def mappings
 let g:go_def_mapping_enabled = 0
+
+if has("autocmd")
+  " Go
+  au FileType go nmap <Leader>gc <Plug>(go-doc)
+  au FileType go nmap <Leader>gd <Plug>(go-def)
+  au FileType go nmap <Leader>sgd <Plug>(go-def-split)
+  au FileType go nmap <Leader>vgd <Plug>(go-def-vertical)
+  au FileType go nmap <Leader>gi <Plug>(go-info)
+endif
 
 " }}}
 "" Gundo{{{
@@ -930,3 +936,5 @@ function! AlternateRubyFile(current_file)
 endfunction
 
 " }}}
+"" Plug{{{
+""
