@@ -179,7 +179,7 @@ bindsym $mod+$alt+a mode "$mode_apps"
 # System commands
 set $mode_system System: (b) Backup to Madea, (c) Connect to B&W P7
 mode "$mode_system" {
-  bindsym b exec gksu systemctl start snap-sync@e6437994-dced-4441-a3af-344694bb7f37.service, mode "default"
+  bindsym b exec gksu /home/kalbasit/.bin/backup_to_madea, mode "default"
   bindsym c exec $nosid bluetoothctl <<< $'connect EC:66:D1:93:2C:C2', mode "default"
 
   # back to normal: Enter or Escape
