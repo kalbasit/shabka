@@ -342,6 +342,31 @@ set listchars+=precedes:<         " The character to show in the last column whe
                                   " off and the line continues beyond the left of the screen
 
 " }}}
+"" Ack{{{
+
+let g:ackprg = 'ag --vimgrep --smart-case'
+cnoreabbrev ag Ack
+cnoreabbrev aG Ack
+cnoreabbrev Ag Ack
+cnoreabbrev AG Ack
+
+map <Leader>/ :Ack<space>
+
+
+"" }}}
+"" Airline{{{
+
+let g:airline#extensions#tabline#enabled = 1
+
+" use seoul256 theme
+let g:airline_theme='seoul256'
+
+"" }}}
+"" ArgWrap{{{
+
+nnoremap <silent> <leader>a :ArgWrap<CR>
+
+"" }}}
 "" Auto Commands{{{
 ""
 
@@ -397,12 +422,72 @@ if has("autocmd")
 endif
 
 " }}}
-"" Terraform{{{
+"" AutoPairs{{{
+
+" do not jump to the next line if there's only whitespace after the closing
+" pair
+let g:AutoPairsMultilineClose = 0
+
+" disable shortcuts, <A-n> conflicts with Colemak movement
+let g:AutoPairsShortcutJump = ''
+
+"}}}
+"" BetterWhitespace{{{
+
+autocmd BufEnter * EnableStripWhitespaceOnSave
+
+"}}}
+"" Deoplete{{{
+
+if has('nvim')
+  " Run deoplete.nvim automatically
+  let g:deoplete#enable_at_startup = 1
+
+  " deoplete-go settings
+  let g:deoplete#sources#go#gocode_binary = '~/code/bin/gocode'
+  let g:deoplete#sources#go#json_directory = '~/.cache/deoplete/go/$GOOS_$GOARCH'
+  let g:deoplete#sources#go#pointer = 1
+  let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
+  let g:deoplete#sources#go#use_cache = 1
+endif
+
+"" }}}
+"" EasyAlign{{{
+vmap ga <Plug>(EasyAlign)
+"" }}}
+"" EasyMotion{{{
 ""
 
-let g:terraform_fmt_on_save = 1
+" change the default prefix to \\
+map \\ <Plug>(easymotion-prefix)
 
-""}}}
+" }}}
+"" EditorConfig {{{
+let g:EditorConfig_exclude_patterns = ['fugitive://.*']
+"" }}}
+"" FZF {{{
+
+" [Buffers] Jump to the existing window if possible
+let g:fzf_buffers_jump = 1
+
+let g:fzf_action = {
+  \ 'ctrl-t': 'tab split',
+  \ 'ctrl-s': 'split',
+  \ 'ctrl-v': 'vsplit' }
+
+if has('nvim')
+  function! s:fzf_statusline()
+    " Override statusline as you like
+    highlight fzf1 ctermfg=161 ctermbg=251
+    highlight fzf2 ctermfg=23 ctermbg=251
+    highlight fzf3 ctermfg=237 ctermbg=251
+    setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
+  endfunction
+
+  autocmd! User FzfStatusLine call <SID>fzf_statusline()
+endif
+
+"" }}}
 "" Golang{{{
 ""
 
@@ -427,6 +512,60 @@ let g:go_doc_keywordprg_enabled = 0
 let g:go_def_mapping_enabled = 0
 
 " }}}
+"" Gundo{{{
+nmap <Leader>go :GundoToggle<CR>
+"" }}}
+"" Polyglot{{{
+""
+
+let g:polyglot_disabled = ['go', 'terraform', 'csv', 'ruby']
+
+" }}}
+"" Ruby{{{
+""
+
+" disable the default mapping {if} and {af}, conflicts with Colemak
+" See mappings.vim for remapping
+let g:no_ruby_maps = 1
+
+" }}}
+"" Surround{{{
+let g:surround_no_mappings = 1
+"}}}
+"" Syntastic{{{
+let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
+let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
+let g:syntastic_sh_shellcheck_args = "-e SC1090"
+""}}}
+"" TagBar{{{
+let g:tagbar_type_go = {
+    \ 'ctagstype' : 'go',
+    \ 'kinds'     : [
+        \ 'p:package',
+        \ 'i:imports:1',
+        \ 'c:constants',
+        \ 'v:variables',
+        \ 't:types',
+        \ 'n:interfaces',
+        \ 'w:fields',
+        \ 'e:embedded',
+        \ 'm:methods',
+        \ 'r:constructor',
+        \ 'f:functions'
+    \ ],
+    \ 'sro' : '.',
+    \ 'kind2scope' : {
+        \ 't' : 'ctype',
+        \ 'n' : 'ntype'
+    \ },
+    \ 'scope2kind' : {
+        \ 'ctype' : 't',
+        \ 'ntype' : 'n'
+    \ },
+    \ 'ctagsbin'  : 'gotags',
+    \ 'ctagsargs' : '-sort -silent'
+\ }
+""}}}
 "" TaskWarrior{{{
 ""
 
@@ -468,153 +607,14 @@ augroup TaskwarriorMapping
 augroup END
 
 " }}}
-"" Polyglot{{{
+"" Terraform{{{
 ""
 
-let g:polyglot_disabled = ['go', 'terraform', 'csv', 'ruby']
+let g:terraform_fmt_on_save = 1
 
-" }}}
-"" EasyMotion{{{
-""
-
-" change the default prefix to \\
-map \\ <Plug>(easymotion-prefix)
-
-" }}}
-"" EasyAlign{{{
-vmap ga <Plug>(EasyAlign)
-"" }}}
-"" Gundo{{{
-nmap <Leader>go :GundoToggle<CR>
-"" }}}
+""}}}
 "" ZoomWinTab{{{
 nmap <Leader>zo :ZoomWinTabToggle<CR>
-"" }}}
-"" Airline{{{
-
-let g:airline#extensions#tabline#enabled = 1
-
-" use seoul256 theme
-let g:airline_theme='seoul256'
-
-"" }}}
-"" Deoplete{{{
-
-if has('nvim')
-  " Run deoplete.nvim automatically
-  let g:deoplete#enable_at_startup = 1
-
-  " deoplete-go settings
-  let g:deoplete#sources#go#gocode_binary = '~/code/bin/gocode'
-  let g:deoplete#sources#go#json_directory = '~/.cache/deoplete/go/$GOOS_$GOARCH'
-  let g:deoplete#sources#go#pointer = 1
-  let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
-  let g:deoplete#sources#go#use_cache = 1
-endif
-
-"" }}}
-"" Ruby{{{
-""
-
-" disable the default mapping {if} and {af}, conflicts with Colemak
-" See mappings.vim for remapping
-let g:no_ruby_maps = 1
-
-" }}}
-"" Ack{{{
-
-let g:ackprg = 'ag --vimgrep --smart-case'
-cnoreabbrev ag Ack
-cnoreabbrev aG Ack
-cnoreabbrev Ag Ack
-cnoreabbrev AG Ack
-
-map <Leader>/ :Ack<space>
-
-
-"" }}}
-"" ArgWrap{{{
-
-nnoremap <silent> <leader>a :ArgWrap<CR>
-
-"" }}}
-"" Syntastic{{{
-let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
-let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
-let g:syntastic_sh_shellcheck_args = "-e SC1090"
-""}}}
-"" TagBar{{{
-let g:tagbar_type_go = {
-    \ 'ctagstype' : 'go',
-    \ 'kinds'     : [
-        \ 'p:package',
-        \ 'i:imports:1',
-        \ 'c:constants',
-        \ 'v:variables',
-        \ 't:types',
-        \ 'n:interfaces',
-        \ 'w:fields',
-        \ 'e:embedded',
-        \ 'm:methods',
-        \ 'r:constructor',
-        \ 'f:functions'
-    \ ],
-    \ 'sro' : '.',
-    \ 'kind2scope' : {
-        \ 't' : 'ctype',
-        \ 'n' : 'ntype'
-    \ },
-    \ 'scope2kind' : {
-        \ 'ctype' : 't',
-        \ 'ntype' : 'n'
-    \ },
-    \ 'ctagsbin'  : 'gotags',
-    \ 'ctagsargs' : '-sort -silent'
-\ }
-""}}}
-"" AutoPairs{{{
-
-" do not jump to the next line if there's only whitespace after the closing
-" pair
-let g:AutoPairsMultilineClose = 0
-
-" disable shortcuts, <A-n> conflicts with Colemak movement
-let g:AutoPairsShortcutJump = ''
-
-"}}}
-"" BetterWhitespace{{{
-
-autocmd BufEnter * EnableStripWhitespaceOnSave
-
-"}}}
-"" Surround{{{
-let g:surround_no_mappings = 1
-"}}}
-"" FZF {{{
-
-" [Buffers] Jump to the existing window if possible
-let g:fzf_buffers_jump = 1
-
-let g:fzf_action = {
-  \ 'ctrl-t': 'tab split',
-  \ 'ctrl-s': 'split',
-  \ 'ctrl-v': 'vsplit' }
-
-if has('nvim')
-  function! s:fzf_statusline()
-    " Override statusline as you like
-    highlight fzf1 ctermfg=161 ctermbg=251
-    highlight fzf2 ctermfg=23 ctermbg=251
-    highlight fzf3 ctermfg=237 ctermbg=251
-    setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
-  endfunction
-
-  autocmd! User FzfStatusLine call <SID>fzf_statusline()
-endif
-
-"" }}}
-"" EditorConfig {{{
-let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 "" }}}
 "" Command-Line Mappings {{{
 ""
