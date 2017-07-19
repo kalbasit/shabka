@@ -2,7 +2,7 @@
 Description=Gone time tracker
 
 [Service]
-ExecStart=/home/kalbasit/code/bin/gone
+ExecStart=/home/kalbasit/code/bin/gone --expire 19h
 Restart=always
 
 [Install]
