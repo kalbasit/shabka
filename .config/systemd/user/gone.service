@@ -1,0 +1,9 @@
+[Unit]
+Description=Gone time tracker
+
+[Service]
+ExecStart=/home/kalbasit/code/bin/gone
+Restart=always
+
+[Install]
+WantedBy=default.target

@@ -31,6 +31,9 @@ systemctl --user restart xss-lock.service
 # start the wallpaper changer
 systemctl --user restart gwall.service
 
+# start time tracker
+systemctl --user restart gone.service
+
 # start pulse audio
 start-pulseaudio-x11
 
