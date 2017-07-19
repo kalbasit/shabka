@@ -55,6 +55,8 @@ LOCAL_BINARIES = [
   # Awesome script by Paul Giden Dann, that let's me undo a Pacman action. Just
   # run `pacman-undo`, delete what you don't want to change and save/exit.
   "https://github.com/giddie/bits-n-pieces/raw/master/pacman-undo/pacman-undo",
+  # script for accessing lastpass from rofi
+  "https://github.com/Mange/rofi-lpass/raw/master/rofi-lpass",
 ]
 
 ### Initialize
