@@ -1,4 +1,6 @@
-#compdef sp
+#
+# vim:ft=zsh:
+#
 
 local profiles=()
 local i=
