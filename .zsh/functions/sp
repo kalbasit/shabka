@@ -9,7 +9,7 @@ function sp() {
     function $0_help() {
       print_info "${log_depth}" "USAGE: sp [options] profile"
       print_info "${log_depth}" "\t -h, --help        - this message"
-      print_info "${log_depth}" "\t     --log-depth   - change the depth of the log Default: ${log_depth}"
+      print_info "${log_depth}" "\t -L, --log-depth   - change the depth of the log Default: ${log_depth}"
       print_info "${log_depth}" "\t -l, --list        - list the profiles"
       print_info "${log_depth}" "\t -k, --kill        - kill the profile"
     }

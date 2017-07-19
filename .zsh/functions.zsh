@@ -24,7 +24,8 @@ for func in ${HOME}/.zsh/functions/*; do
     sp)          ;;
     ssh_agents)  ;;
     *)
-      autoload -U "$(basename ${func})"
+      local func_name="$(basename ${func})"
+      autoload -U "${func_name}"
       ;;
   esac
 done

@@ -1,17 +1,16 @@
-#
-# vim:ft=zsh:
-#
+#compdef sp
 
-# _sp is for ZSH completion
-function _sp() {
-  local profiles=("kill")
-  local i=
-  local p=
+local profiles=()
+local i=
+local p=
 
-  for i in ${HOME}/.zsh/profiles/*.zsh; do
-    p="$( basename "${i}" )"
-    profiles=(${profiles[@]} ${p%%.zsh})
-  done
+for i in ${HOME}/.zsh/profiles/*.zsh; do
+  p="$( basename "${i}" )"
+  profiles=(${profiles[@]} ${p%%.zsh})
+done
 
-  _arguments "1: :(${profiles[*]})"
-}
+_arguments -C \
+  '(-L --log-depth)'{-L,--log-depth}'[change the depth of the log Default: 0]' \
+  '(-l --list)'{-l,--list}'[list the profiles]' \
+  '(-k --kill)'{-k,--kill}'[kill the profile]' \
+  "1: :(${profiles[*]})"
