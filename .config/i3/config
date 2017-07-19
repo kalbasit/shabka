@@ -86,7 +86,7 @@ bindsym $mod+Shift+q kill
 bindsym $mod+r exec rofi -show run
 
 # rofi lastpass
-bindsym $mod+p exec rofi -show lpass
+bindsym $mod+p exec rofi -modi lpass:rofi-lpass -show lpass
 
 # list open windows to switch to
 bindsym $alt+Tab exec rofi -show window
