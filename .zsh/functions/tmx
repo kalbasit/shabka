@@ -20,22 +20,33 @@ function tmx() {
     }
 
     function $0_build_projects() {
-      local p=
       local dir=
+      local i=
+      local profile=
+      local rc="${HOME}/.tmxrc"
+      local rc_length=
 
-      # iterate over all the profiles
-      for p in ${HOME}/code/profiles/*; do
-        # iterate over all the .git folders under this profile
-        for dir in $(find "${p}" -name .git -type d); do
-          # add $profile@$dir where dir is the $GOPATH/src/$dir
-          dir="$(basename ${p})@\$GOPATH/${dir##$p/}"
-          # remove the /.git from the directories
-          dir="${dir%%/.git}"
-          # add it to the projects
-          projects+=( "${dir}" )
-        done
+      # compute the length of the rc file
+      rc_length="$( jq length "${rc}" )"
+      debug "rc_length=${rc_length}"
+      for (( i = 0; i < rc_length; i++)); do
+        # extract the profile for this project
+        profile="$( jq -r ".[${i}] .profile" "${rc}" )"
+        if [[ -z "${profile}" ]]; then
+          print_error 0 "profile cannot be empty, this project will be ignored"
+          print_error 1 "$(jq -r .[${i}] "${rc}" )"
+          continue
+        fi
+        # extract the folder for this project
+        dir="$( jq -r ".[${i}] .dir" "${rc}" )"
+        if [[ -z "${dir}" ]]; then
+          print_error 0 "dir cannot be empty, this project will be ignored"
+          print_error 1 "$(jq -r .[${i}] "${rc}" )"
+          continue
+        fi
+        # add this project to the hash
+        projects+=( "${profile}@${dir}" )
       done
-
       # append running sessions, and for each session change '_DOT_' to '.' and
       # the '_COLUMN_' to ':'
       projects+=( $( tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" ls -F '#S' | sed -e 's:_DOT_:\.:g' -e 's#_COLUMN_#:#g' ) )
