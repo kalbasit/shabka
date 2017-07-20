@@ -1,0 +1,47 @@
+#
+# vim:ft=zsh:
+#
+
+function tmxrc() {
+  local p=
+  local dir=
+  local i=
+  local sep=
+  local json="["
+  local seen_folders=()
+  local skip=false
+
+  # iterate over all the profiles
+  for p in ${HOME}/code/profiles/*; do
+    # iterate over all the .git folders under this profile
+    # TODO: this makes it take way too long, fix this
+    for dir in $(find "${p}" -name .git -type d); do
+      for i in "${seen_folders[@]}"; do
+        debug "checking if ${dir%%/.git} is a subfolder of ${i}"
+        if echo "${dir%%/.git}" | grep -q "${i}"; then
+          # this folder is a subfolder of another one, skip it
+          skip=true
+          break
+        fi
+      done
+      if is_true "${skip}"; then
+        skip=false
+        continue
+      fi
+      # add the folder to the seen folders
+      seen_folders+=( "${dir%%/.git}" )
+      # initialize the entry
+      local entry="{\"profile\": \"$(basename ${p})\",\"dir\": \""
+      # add the directory to it
+      entry+="\$GOPATH/${${dir##$p/}%%/.git}\"}"
+      debug "adding entry ${entry}"
+
+      # add the entry to the json
+      json+="${sep}${entry}"
+      sep=","
+    done
+  done
+
+  # finally write the tmxrc
+  echo "${json}]" > "${HOME}/.tmxrc"
+}
