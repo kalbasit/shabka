@@ -6,10 +6,12 @@ function gcim() {
   { # begin the always block
     function $0_help()
     {
-      print_info "${log_depth}" "USAGE: tmx [options] <session_name|folder>"
+      print_info "${log_depth}" "USAGE: gcim [options] <message>"
       print_info "${log_depth}" "\t -h, --help        - this message"
       print_info "${log_depth}" "\t     --log-depth   - change the depth of the log Default: ${log_depth}"
     }
+
+    local log_depth=0
 
     while [[ $# -ge 1 ]]; do
       case "${1}" in
@@ -33,8 +35,14 @@ function gcim() {
       esac
     done
 
+    if [[ -z "${message}" ]]; then
+      print_error "${log_depth}" "message is required"
+      $0_help
+      return 1
+    fi
+
     if [[ "x$(git rev-parse --git-dir 2> /dev/null)" = "x" ]]; then
-      print_error 0 "not inside a git repository"
+      print_error "${log_depth}" "not inside a git repository"
       return 1
     fi
 
