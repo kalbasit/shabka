@@ -2,11 +2,11 @@
 # vim:ft=zsh:
 #
 
-function newPR() {
+function new_pr() {
   { # begin the always block
     function $0_help()
     {
-      print_info "${log_depth}" "USAGE: newPR [options] <message>"
+      print_info "${log_depth}" "USAGE: new_pr [options] <message>"
       print_info "${log_depth}" "\t -h, --help        - this message"
       print_info "${log_depth}" "\t     --log-depth   - change the depth of the log Default: ${log_depth}"
     }
