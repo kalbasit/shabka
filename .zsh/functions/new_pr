@@ -70,6 +70,7 @@ function new_pr() {
     debug "story => ${story}"
 
     echo -en "I will create a new PR for the branch '${FG_WHITE_B}${branch}${FG_CLEAR}' titled '${FG_WHITE_B}${title}${FG_CLEAR}'. Continue [Y/n] "
+    local q=
     read -r q
     if [[ "${q}" = "n" ]]; then
       return 0
