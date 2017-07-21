@@ -1,19 +1,22 @@
+# compute the current location
+cur_dir="$(cd "$(dirname "${0}")" && pwd)"
+
 # add the zsh functions to the fpath
-fpath+="${HOME}/.zsh/functions"
-fpath+="${HOME}/.zsh/completions"
+fpath+="${cur_dir}/functions"
+fpath+="${cur_dir}/completions"
 
 # load the important functions
-source "${HOME}/.zsh/functions/debug"
-source "${HOME}/.zsh/functions/have"
-source "${HOME}/.zsh/functions/is_func"
-source "${HOME}/.zsh/functions/pathappend"
-source "${HOME}/.zsh/functions/pathprepend"
-source "${HOME}/.zsh/functions/pathunmunge"
-source "${HOME}/.zsh/functions/sp"
-source "${HOME}/.zsh/functions/ssh_agents"
+source "${cur_dir}/functions/debug"
+source "${cur_dir}/functions/have"
+source "${cur_dir}/functions/is_func"
+source "${cur_dir}/functions/pathappend"
+source "${cur_dir}/functions/pathprepend"
+source "${cur_dir}/functions/pathunmunge"
+source "${cur_dir}/functions/sp"
+source "${cur_dir}/functions/ssh_agents"
 
 # autoload all of the functions
-for func in ${HOME}/.zsh/functions/*; do
+for func in ${cur_dir}/functions/*; do
   case "$(basename ${func})" in
     debug)       ;;
     have)        ;;
@@ -29,4 +32,4 @@ for func in ${HOME}/.zsh/functions/*; do
       ;;
   esac
 done
-unset func
+unset func cur_dir
