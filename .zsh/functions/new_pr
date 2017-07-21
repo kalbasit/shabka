@@ -82,7 +82,13 @@ function new_pr() {
       return 1
     fi
 
-    echo "${url}" | xsel --clipboard -i
+      if [[ "$OSTYPE" = darwin* ]]; then
+        echo "${url}" | pbcopy
+      elif [[ "$OSTYPE" = linux* ]]; then
+        echo "${url}" | xsel --clipboard -i
+      else
+        print_error "${log_depth}" "OS ${OSTYPE} is not supported, nothing copied"
+      fi
     print_info "${log_depth}" "${url} copied to the clipboard"
   } always {
     unfunction -m "$0_*"
