@@ -60,7 +60,14 @@ function get_pr() {
       -H "Accept: application/vnd.github.v3+json" \
       -H "Authorization: token $(cat ${HOME}/.github_token)" )"
 
+    debug "body => '${body}'"
+
     local urls=( $(echo "${body}" | jq -r '.[] | .html_url') )
+
+    if [[ "$#urls" = "0" ]]; then
+      print_error "${log_depth}" "No PRs were found"
+      return 1
+    fi
 
     for url in ${urls[@]}; do
       if ! [[ "${url}" =~ "^https://github.com/${repo}/pull/" ]]; then
@@ -69,7 +76,7 @@ function get_pr() {
         return 1
       fi
       echo "${url}" | xsel --clipboard -i
-      echo "${url} copied to the clipboard"
+      print_info "${log_depth}" "${url} copied to the clipboard"
     done
 
   } always {
