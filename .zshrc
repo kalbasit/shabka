@@ -6,6 +6,8 @@
 [[ "$OSTYPE" = darwin* ]] && SHORT_HOST="$( scutil --get ComputerName 2>/dev/null )"
 [[ -z "${SHORT_HOST}" ]] && SHORT_HOST="${HOST/.*/}"
 
+export DOTZSH="${HOME}/.zsh"
+
 #####################################################################
 # zplug
 #####################################################################
@@ -490,7 +492,7 @@ alias d='dirs -v | head -10'
 
 ## Command history configuration
 
-[[ -z $HISTFILE ]] && export HISTFILE=${ZDOTDIR:-$HOME}/.zsh_history
+[[ -z $HISTFILE ]] && export HISTFILE="${HOME}/.zsh_history"
 export HISTSIZE=100000
 export SAVEHIST=100000
 
