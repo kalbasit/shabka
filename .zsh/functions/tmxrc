@@ -3,45 +3,55 @@
 #
 
 function tmxrc() {
-  local p=
-  local dir=
-  local i=
-  local sep=
-  local json="["
-  local seen_folders=()
-  local skip=false
+  { # Begin "always" block so we can unfunction the internal functions at the end
+    local p=
+    local d=
+    local i=
+    local sep=
+    local json="["
+    local skip=false
 
-  # iterate over all the profiles
-  for p in ${HOME}/code/profiles/*; do
-    # iterate over all the .git folders under this profile
-    # TODO: this makes it take way too long, fix this
-    for dir in $(find "${p}" -name .git -type d); do
-      for i in "${seen_folders[@]}"; do
-        debug "checking if ${dir%%/.git} is a subfolder of ${i}"
-        if echo "${dir%%/.git}" | grep -q "${i}"; then
-          # this folder is a subfolder of another one, skip it
-          skip=true
-          break
+    function $0_parent_under_git() {
+      debug "\$1 = '${1}'"
+      if [[ "x${1}x" = "x/x" ]]; then
+        test -d "${1}/.git"
+      else
+        if [[ -d "${1}/.git" ]]; then
+          return 0
+        else
+          $0 "$(dirname "${1}")"
         fi
-      done
-      if is_true "${skip}"; then
-        skip=false
-        continue
       fi
-      # add the folder to the seen folders
-      seen_folders+=( "${dir%%/.git}" )
-      # initialize the entry
-      local entry="{\"profile\": \"$(basename ${p})\",\"dir\": \""
-      # add the directory to it
-      entry+="\$GOPATH/${${dir##$p/}%%/.git}\"}"
-      debug "adding entry ${entry}"
+    }
 
-      # add the entry to the json
-      json+="${sep}${entry}"
-      sep=","
+    # iterate over all the profiles
+    for p in ${HOME}/code/profiles/*; do
+      # iterate over all the .git folders under this profile
+      for d in $(find "${p}" -name .git -type d); do
+        # remove .git from the dir
+        d="${d%%/.git}"
+        debug "d = '${d}'"
+        # don't include repository that is a sub-folder of another repository
+        if $0_parent_under_git "$(dirname "${d}")"; then
+          debug "'$d' under another git"
+          continue
+        fi
+        # initialize the entry
+        local entry="{\"profile\": \"$(basename ${p})\",\"dir\": \""
+        # add the directory to it
+        entry+="\$GOPATH/${d##$p/}\"}"
+        debug "adding entry ${entry}"
+
+        # add the entry to the json
+        json+="${sep}${entry}"
+        sep=","
+      done
     done
-  done
 
-  # finally write the tmxrc
-  echo "${json}]" > "${HOME}/.tmxrc"
+    # finally write the tmxrc
+    echo "${json}]" > "${HOME}/.tmxrc"
+  } always {
+    unfunction -m "$0_*"
+    export GOPATH="${orig_gopath}"
+  }
 }
