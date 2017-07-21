@@ -34,6 +34,7 @@ IGNORED_FILES = [
 GO_BINARIES = [
   "github.com/3rf/codecoroner",
   "github.com/codegangsta/gin",
+  "github.com/derekparker/delve/cmd/dlv",
   "github.com/dim13/gone",
   "github.com/golang/lint/golint",
   "github.com/golang/protobuf/protoc-gen-go",
