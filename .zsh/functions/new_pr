@@ -69,7 +69,7 @@ function new_pr() {
     debug "repo => ${repo}"
     debug "story => ${story}"
 
-    echo -en "I will create a new PR for the branch '${branch}' titled '${title}'. Continue [Y/n] "
+    echo -en "I will create a new PR for the branch '${FG_WHITE_B}${branch}${FG_CLEAR}' titled '${FG_WHITE_B}${title}${FG_CLEAR}'. Continue [Y/n] "
     read -r q
     if [[ "${q}" = "n" ]]; then
       return 0
