@@ -35,6 +35,8 @@ function new_pr() {
       esac
     done
 
+    debug "message => '${message}'"
+
     if [[ -z "${message}" ]]; then
       print_error "${log_depth}" "message is required"
       $0_help
@@ -81,7 +83,7 @@ function new_pr() {
     fi
 
     echo "${url}" | xsel --clipboard -i
-    echo "${url} copied to the clipboard"
+    print_info "${log_depth}" "${url} copied to the clipboard"
   } always {
     unfunction -m "$0_*"
   }
