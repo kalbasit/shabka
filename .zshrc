@@ -340,14 +340,11 @@ alias grep='grep --color=auto'
 # General aliases
 alias -g rocker_auth="--auth kalbasit:\$(lpass show --password 4984935876)"
 
-# Mac only
-if [[ "$OSTYPE" = darwin* ]]; then
+
+if [[ "$OSTYPE" = darwin* ]]; then  # Mac only
   alias mac_install_cert='sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain'
   alias upup='brew upgrade'
-fi
-
-# Linux only
-if [[ "$OSTYPE" = linux* ]]; then
+elif [[ "$OSTYPE" = linux* ]]; then  # Linux only
   alias upup='yaourt -Syu --aur'
 fi
 
