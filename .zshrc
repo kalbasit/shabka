@@ -326,7 +326,6 @@ alias rserve_this="ruby -rrack -e \"Rack::Handler::WEBrick.run Rack::Directory.n
 alias s='tmx -s'
 alias serve_this="python2 -m SimpleHTTPServer"
 alias t='task'
-alias ta='task add'
 alias utf8test='curl -L https://github.com/tmux/tmux/raw/master/tools/UTF-8-demo.txt'
 alias vi=e
 alias vim=e
