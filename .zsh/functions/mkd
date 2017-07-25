@@ -4,5 +4,5 @@
 
 # Taken from https://github.com/mathiasbynens/dotfiles/blob/master/.functions
 function mkd() {
-  mkdir -p "$@" && cd "$_";
+	mkdir -p "$@" && cd "$_";
 }

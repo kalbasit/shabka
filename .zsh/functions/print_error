@@ -3,5 +3,5 @@
 #
 
 function print_error() {
-  GOOD="${ERROR}" print_info "${@}" >&2
+	GOOD="${ERROR}" print_info "${@}" >&2
 }
