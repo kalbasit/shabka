@@ -235,7 +235,7 @@ if v:version >= 703
 endif
 
 " Whitespace
-set expandtab    " use spaces, not tabs
+set noexpandtab  " use tabs
 set list         " Show invisible characters
 set nowrap       " don't wrap lines
 set shiftwidth=2 " an autoindent (with <<) is two spaces
@@ -382,9 +382,6 @@ nnoremap <silent> <leader>a :ArgWrap<CR>
 if has("autocmd")
   " See http://stackoverflow.com/a/3787326/301730
   au BufEnter ?* call PreviewHeightWorkAround()
-
-  " In Makefiles, use real tabs, not tabs expanded to spaces
-  au FileType make setlocal noexpandtab
 
   " In emails allow footnotes
   au FileType mail ab ~0 [0]<esc>m`:/^--\s*/-2/<CR>o<CR>Footnotes:<CR>----------<CR>[0]
