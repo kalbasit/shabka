@@ -14,8 +14,8 @@
 # }}}
 # core# {{{
 [core]
-	whitespace = trailing-space,space-before-tab,-indent-with-non-tab,cr-at-eol
-	excludesfile    = ~/.gitignore_global
+	whitespace   = trailing-space,space-before-tab,-indent-with-non-tab,cr-at-eol
+	excludesfile = ~/.gitignore_global
 # }}}
 # color# {{{
 [color]
@@ -28,6 +28,7 @@
 # }}}
 # alias# {{{
 [alias]
+	addnw           = !sh -c 'git diff -U0 -w --no-color "$@" | git apply --cached --ignore-whitespace --unidiff-zero -'
 	aa              = add --all .
 	aap             = !git aa -p
 	amend           = commit --amend
