@@ -3,9 +3,9 @@
 #
 
 function check_root() {
-  if [[ "$(id -u)" != "0" ]]; then
-    return 1
-  else
-    return 0
-  fi
+	if [[ "$(id -u)" != "0" ]]; then
+		return 1
+	else
+		return 0
+	fi
 }

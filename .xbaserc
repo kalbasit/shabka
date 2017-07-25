@@ -3,66 +3,66 @@ set -e
 
 # simplified pathprepend used for early X
 function _pathprepend() {
-  if [[ -d "${1}" ]] && ! [[ $PATH =~ (^|:)$1($|:) ]]; then
-    PATH="$1:$PATH"
-  fi
+	if [[ -d "${1}" ]] && ! [[ $PATH =~ (^|:)$1($|:) ]]; then
+		PATH="$1:$PATH"
+	fi
 }
 
 # simplified pathappend used for early X
 function _pathappend() {
-  if [[ -d "${1}" ]] && ! [[ $PATH =~ (^|:)$1($|:) ]]; then
-    PATH="$PATH:$1"
-  fi
+	if [[ -d "${1}" ]] && ! [[ $PATH =~ (^|:)$1($|:) ]]; then
+		PATH="$PATH:$1"
+	fi
 }
 
 # prevent this from running twice
 if [[ -z "${XBASERC}" ]]; then
-  export XBASERC="true"
+	export XBASERC="true"
 
-  # Important variable
-  export BROWSER="${HOME}/.bin/relay-browser"
-  export EDITOR="nvim"
-  export LANG=en_US.UTF-8
-  export LC_ALL="${LANG}"
-  export MYFS="${HOME}/.local"
-  export NOTMUCH_CONFIG="${HOME}/.mail/.notmuch/config"
-  export SUDO_EDITOR="nvim"
-  export TERMINAL=termite
+	# Important variable
+	export BROWSER="${HOME}/.bin/relay-browser"
+	export EDITOR="nvim"
+	export LANG=en_US.UTF-8
+	export LC_ALL="${LANG}"
+	export MYFS="${HOME}/.local"
+	export NOTMUCH_CONFIG="${HOME}/.mail/.notmuch/config"
+	export SUDO_EDITOR="nvim"
+	export TERMINAL=termite
 
-  # add my bin folders to the PATH
-  _pathprepend "${HOME}/.bin"
-  _pathprepend "${HOME}/code/bin"
-  _pathprepend "${MYFS}/bin"
-  if [[ -d "${MYFS}/opt" ]]; then
-    for dir in ${MYFS}/opt/*/bin; do
-      _pathappend "${dir}"
-    done
-  fi
-  if [[ -d "${HOME}/.libexec" ]]; then
-    for dir in ${HOME}/.libexec/*; do
-      _pathappend "${dir}"
-    done
-  fi
+	# add my bin folders to the PATH
+	_pathprepend "${HOME}/.bin"
+	_pathprepend "${HOME}/code/bin"
+	_pathprepend "${MYFS}/bin"
+	if [[ -d "${MYFS}/opt" ]]; then
+		for dir in ${MYFS}/opt/*/bin; do
+			_pathappend "${dir}"
+		done
+	fi
+	if [[ -d "${HOME}/.libexec" ]]; then
+		for dir in ${HOME}/.libexec/*; do
+			_pathappend "${dir}"
+		done
+	fi
 
-  # merge in defaults and keymaps
-  userresources="$HOME/.Xresources"
-  usermodmap="$HOME/.Xmodmap"
-  sysresources="/etc/X11/xinit/.Xresources"
-  sysmodmap="/etc/X11/xinit/.Xmodmap"
-  [[ -r "${sysresources}" ]] && xrdb -merge "${sysresources}"
-  [[ -r "${sysmodmap}" ]] && xmodmap "${sysmodmap}"
-  [[ -r "${userresources}" ]] && xrdb -merge "${userresources}"
-  [[ -r "${usermodmap}" ]] && xmodmap "${usermodmap}"
+	# merge in defaults and keymaps
+	userresources="$HOME/.Xresources"
+	usermodmap="$HOME/.Xmodmap"
+	sysresources="/etc/X11/xinit/.Xresources"
+	sysmodmap="/etc/X11/xinit/.Xmodmap"
+	[[ -r "${sysresources}" ]] && xrdb -merge "${sysresources}"
+	[[ -r "${sysmodmap}" ]] && xmodmap "${sysmodmap}"
+	[[ -r "${userresources}" ]] && xrdb -merge "${userresources}"
+	[[ -r "${usermodmap}" ]] && xmodmap "${usermodmap}"
 
-  # map Ctrl_L to Escape when pressed
-  xcape -e 'Control_L=Escape'
+	# map Ctrl_L to Escape when pressed
+	xcape -e 'Control_L=Escape'
 
-  # change the resolution
-  if xrandr | grep -q '^DP1 connected'; then
-    xrandr --output eDP1 --mode 1920x1080 --output DP1 --auto --right-of eDP1
-  else
-    xrandr --output eDP1 --mode 1920x1080
-  fi
+	# change the resolution
+	if xrandr | grep -q '^DP1 connected'; then
+		xrandr --output eDP1 --mode 1920x1080 --output DP1 --auto --right-of eDP1
+	else
+		xrandr --output eDP1 --mode 1920x1080
+	fi
 fi
 
 unset -f _pathprepend

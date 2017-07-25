@@ -21,8 +21,8 @@
 #
 
 if ! systemctl is-active --quiet teamviewerd.service; then
-  gksudo systemctl start teamviewerd.service
-  sleep 3
+	gksudo systemctl start teamviewerd.service
+	sleep 3
 fi
 
 exec teamviewer

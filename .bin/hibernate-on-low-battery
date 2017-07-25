@@ -21,10 +21,10 @@
 #
 
 acpi -b | awk -F'[,:%]' '{print $2, $3}' | {
-	read -r status capacity
+read -r status capacity
 
-  if [[ "$status" = Discharging ]] && [[ "$capacity" -lt 10 ]]; then
-    logger "Critical battery threshold"
-    systemctl hibernate
-  fi
+if [[ "$status" = Discharging ]] && [[ "$capacity" -lt 10 ]]; then
+	logger "Critical battery threshold"
+	systemctl hibernate
+fi
 }

@@ -51,8 +51,8 @@ zplug check || zplug install
 zplug load
 
 if zplug check b4b4r07/enhancd; then
-  # setting if enhancd is available
-  export ENHANCD_FILTER=fzf-tmux
+	# setting if enhancd is available
+	export ENHANCD_FILTER=fzf-tmux
 fi
 
 #####################################################################
@@ -222,21 +222,21 @@ source "${HOME}/.zsh/functions.zsh"
 #####################################################################
 
 if [[ "$OSTYPE" = linux* ]]; then
-  # GPG_TTY is needed for gpg with pinentry-curses
-  export GPG_TTY="$(tty)"
-  # disable pinentry in lastpass
-  export LPASS_DISABLE_PINENTRY=1
-  # fix the look of Java applications
-  export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel'
+	# GPG_TTY is needed for gpg with pinentry-curses
+	export GPG_TTY="$(tty)"
+	# disable pinentry in lastpass
+	export LPASS_DISABLE_PINENTRY=1
+	# fix the look of Java applications
+	export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel'
 fi
 
 if [[ "$OSTYPE" = darwin* ]]; then
-  # export system-wide defined PATH
-  eval "$(/usr/libexec/path_helper -s)"
+	# export system-wide defined PATH
+	eval "$(/usr/libexec/path_helper -s)"
 
-  # Export Github's token if it's readable.
-  [[ -r "${HOME}/.github_token" ]] && \
-    export HOMEBREW_GITHUB_API_TOKEN="$(head -1 "${HOME}/.github_token")"
+	# Export Github's token if it's readable.
+	[[ -r "${HOME}/.github_token" ]] && \
+		export HOMEBREW_GITHUB_API_TOKEN="$(head -1 "${HOME}/.github_token")"
 fi
 
 # Set the browser to my relay browser
@@ -275,28 +275,28 @@ pathprepend PATH "/usr/lib/emsdk"
 pathprepend PATH "${MYFS}/bin"
 pathappend PATH "${MYFS}/opt/go_appengine"
 if [[ -d "${MYFS}" ]]; then
-  if [[ -d "${MYFS}/opt" ]]; then
-    for dir in ${MYFS}/opt/*/bin; do
-      pathappend PATH "${dir}"
-    done
-  fi
+	if [[ -d "${MYFS}/opt" ]]; then
+		for dir in ${MYFS}/opt/*/bin; do
+			pathappend PATH "${dir}"
+		done
+	fi
 
-  # Make LD can find our files.
-  pathappend LD_LIBRARY_PATH "${MYFS}/lib"
+	# Make LD can find our files.
+	pathappend LD_LIBRARY_PATH "${MYFS}/lib"
 fi
 
 # add any libexec directory
 if [[ -d "${HOME}/.libexec" ]]; then
-  for dir in ${HOME}/.libexec/*; do
-    pathappend PATH "${dir}"
-  done
+	for dir in ${HOME}/.libexec/*; do
+		pathappend PATH "${dir}"
+	done
 fi
 
 # Add all rubygems bin dir
 if [[ -d "${HOME}/.gem/ruby" ]]; then
-  for dir in $HOME/.gem/ruby/*/bin; do
-    pathappend PATH "${dir}"
-  done
+	for dir in $HOME/.gem/ruby/*/bin; do
+		pathappend PATH "${dir}"
+	done
 fi
 
 # add rbenv
@@ -341,14 +341,14 @@ alias -g rocker_auth="--auth kalbasit:\$(lpass show --password 4984935876)"
 
 # OS-Specific aliases
 if [[ "$OSTYPE" = darwin* ]]; then  # Mac only
-  alias mac_install_cert='sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain'
-  alias upup='brew upgrade'
-  alias ii='brew install'
-  alias ss='brew search'
+	alias mac_install_cert='sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain'
+	alias upup='brew upgrade'
+	alias ii='brew install'
+	alias ss='brew search'
 elif [[ "$OSTYPE" = linux* ]]; then  # Linux only
-  alias upup='yaourt -Syu --aur'
-  alias ii='yaourt -Sy'
-  alias ss='yaourt -Ss'
+	alias upup='yaourt -Syu --aur'
+	alias ii='yaourt -Sy'
+	alias ss='yaourt -Ss'
 fi
 
 #####################################################################
@@ -395,33 +395,33 @@ export ERROR="${FG_RED_B}"
 
 # Find the option for using colors in ls, depending on the version
 if [[ "$OSTYPE" == netbsd* ]]; then
-  # On NetBSD, test if "gls" (GNU ls) is installed (this one supports colors);
-  # otherwise, leave ls as is, because NetBSD's ls doesn't support -G
-  gls --color -d . &>/dev/null && alias ls='gls --color=tty'
+	# On NetBSD, test if "gls" (GNU ls) is installed (this one supports colors);
+	# otherwise, leave ls as is, because NetBSD's ls doesn't support -G
+	gls --color -d . &>/dev/null && alias ls='gls --color=tty'
 elif [[ "$OSTYPE" == openbsd* ]]; then
-  # On OpenBSD, "gls" (ls from GNU coreutils) and "colorls" (ls from base,
-  # with color and multibyte support) are available from ports.  "colorls"
-  # will be installed on purpose and can't be pulled in by installing
-  # coreutils, so prefer it to "gls".
-  gls --color -d . &>/dev/null && alias ls='gls --color=tty'
-  colorls -G -d . &>/dev/null && alias ls='colorls -G'
+	# On OpenBSD, "gls" (ls from GNU coreutils) and "colorls" (ls from base,
+	# with color and multibyte support) are available from ports.  "colorls"
+	# will be installed on purpose and can't be pulled in by installing
+	# coreutils, so prefer it to "gls".
+	gls --color -d . &>/dev/null && alias ls='gls --color=tty'
+	colorls -G -d . &>/dev/null && alias ls='colorls -G'
 elif [[ "$OSTYPE" == darwin* ]]; then
-  # this is a good alias, it works by default just using $LSCOLORS
-  ls -G . &>/dev/null && alias ls='ls -G'
+	# this is a good alias, it works by default just using $LSCOLORS
+	ls -G . &>/dev/null && alias ls='ls -G'
 
-  # only use coreutils ls if there is a dircolors customization present ($LS_COLORS or .dircolors file)
-  # otherwise, gls will use the default color scheme which is ugly af
-  [[ -n "$LS_COLORS" || -f "$HOME/.dircolors" ]] && gls --color -d . &>/dev/null && alias ls='gls --color=tty'
+	# only use coreutils ls if there is a dircolors customization present ($LS_COLORS or .dircolors file)
+	# otherwise, gls will use the default color scheme which is ugly af
+	[[ -n "$LS_COLORS" || -f "$HOME/.dircolors" ]] && gls --color -d . &>/dev/null && alias ls='gls --color=tty'
 else
-  # For GNU ls, we use the default ls color theme. They can later be overwritten by themes.
-  if [[ -z "$LS_COLORS" ]]; then
-    (( $+commands[dircolors] )) && eval "$(dircolors -b)"
-  fi
+	# For GNU ls, we use the default ls color theme. They can later be overwritten by themes.
+	if [[ -z "$LS_COLORS" ]]; then
+		(( $+commands[dircolors] )) && eval "$(dircolors -b)"
+	fi
 
-  ls --color -d . &>/dev/null && alias ls='ls --color=tty' || { ls -G . &>/dev/null && alias ls='ls -G' }
+	ls --color -d . &>/dev/null && alias ls='ls --color=tty' || { ls -G . &>/dev/null && alias ls='ls -G' }
 
-  # Take advantage of $LS_COLORS for completion as well.
-  zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+	# Take advantage of $LS_COLORS for completion as well.
+	zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 fi
 
 #####################################################################
@@ -444,27 +444,27 @@ zstyle ':completion:*:cd:*' tag-order local-directories directory-stack path-dir
 
 # Don't complete uninteresting users
 zstyle ':completion:*:*:*:users' ignored-patterns \
-        adm amanda apache at avahi avahi-autoipd beaglidx bin cacti canna \
-        clamav daemon dbus distcache dnsmasq dovecot fax ftp games gdm \
-        gkrellmd gopher hacluster haldaemon halt hsqldb ident junkbust kdm \
-        ldap lp mail mailman mailnull man messagebus  mldonkey mysql nagios \
-        named netdump news nfsnobody nobody nscd ntp nut nx obsrun openvpn \
-        operator pcap polkitd postfix postgres privoxy pulse pvm quagga radvd \
-        rpc rpcuser rpm rtkit scard shutdown squid sshd statd svn sync tftp \
-        usbmux uucp vcsa wwwrun xfs '_*'
+	adm amanda apache at avahi avahi-autoipd beaglidx bin cacti canna \
+	clamav daemon dbus distcache dnsmasq dovecot fax ftp games gdm \
+	gkrellmd gopher hacluster haldaemon halt hsqldb ident junkbust kdm \
+	ldap lp mail mailman mailnull man messagebus  mldonkey mysql nagios \
+	named netdump news nfsnobody nobody nscd ntp nut nx obsrun openvpn \
+	operator pcap polkitd postfix postgres privoxy pulse pvm quagga radvd \
+	rpc rpcuser rpm rtkit scard shutdown squid sshd statd svn sync tftp \
+	usbmux uucp vcsa wwwrun xfs '_*'
 
 # ... unless we really want to.
 zstyle '*' single-ignored show
 
 # Show dots while doing completion
 expand-or-complete-with-dots() {
-  # toggle line-wrapping off and back on again
-  [[ -n "$terminfo[rmam]" && -n "$terminfo[smam]" ]] && echoti rmam
-  print -Pn "%{%F{red}......%f%}"
-  [[ -n "$terminfo[rmam]" && -n "$terminfo[smam]" ]] && echoti smam
+# toggle line-wrapping off and back on again
+[[ -n "$terminfo[rmam]" && -n "$terminfo[smam]" ]] && echoti rmam
+print -Pn "%{%F{red}......%f%}"
+[[ -n "$terminfo[rmam]" && -n "$terminfo[smam]" ]] && echoti smam
 
-  zle expand-or-complete
-  zle redisplay
+zle expand-or-complete
+zle redisplay
 }
 zle -N expand-or-complete-with-dots
 bindkey "^I" expand-or-complete-with-dots
@@ -510,14 +510,14 @@ alias history='fc -fl 1'
 # Make sure that the terminal is in application mode when zle is active, since
 # only then values from $terminfo are valid
 if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
-  function zle-line-init() {
-    echoti smkx
-  }
-  function zle-line-finish() {
-    echoti rmkx
-  }
-  zle -N zle-line-init
-  zle -N zle-line-finish
+	function zle-line-init() {
+		echoti smkx
+	}
+	function zle-line-finish() {
+		echoti rmkx
+	}
+	zle -N zle-line-init
+	zle -N zle-line-finish
 fi
 
 bindkey -v                                            # Use vim key bindings
@@ -525,10 +525,10 @@ export KEYTIMEOUT=1                                   # kill ZSH's lag when ESC 
 
 bindkey '^r' history-incremental-search-backward      # [Ctrl-r] - Search backward incrementally for a specified string. The string may begin with ^ to anchor the search to the beginning of the line.
 if [[ "${terminfo[kpp]}" != "" ]]; then
-  bindkey "${terminfo[kpp]}" up-line-or-history       # [PageUp] - Up a line of history
+	bindkey "${terminfo[kpp]}" up-line-or-history       # [PageUp] - Up a line of history
 fi
 if [[ "${terminfo[knp]}" != "" ]]; then
-  bindkey "${terminfo[knp]}" down-line-or-history     # [PageDown] - Down a line of history
+	bindkey "${terminfo[knp]}" down-line-or-history     # [PageDown] - Down a line of history
 fi
 
 # start typing + [Up-Arrow] - fuzzy find history forward
@@ -538,10 +538,10 @@ fi
 [[ "${terminfo[kcud1]}" != "" ]] && bindkey "${terminfo[kcud1]}" history-substring-search-down
 
 if [[ "${terminfo[khome]}" != "" ]]; then
-  bindkey "${terminfo[khome]}" beginning-of-line      # [Home] - Go to beginning of line
+	bindkey "${terminfo[khome]}" beginning-of-line      # [Home] - Go to beginning of line
 fi
 if [[ "${terminfo[kend]}" != "" ]]; then
-  bindkey "${terminfo[kend]}"  end-of-line            # [End] - Go to end of line
+	bindkey "${terminfo[kend]}"  end-of-line            # [End] - Go to end of line
 fi
 
 bindkey ' ' magic-space                               # [Space] - do history expansion
@@ -550,16 +550,16 @@ bindkey '^[[1;5C' forward-word                        # [Ctrl-RightArrow] - move
 bindkey '^[[1;5D' backward-word                       # [Ctrl-LeftArrow] - move backward one word
 
 if [[ "${terminfo[kcbt]}" != "" ]]; then
-  bindkey "${terminfo[kcbt]}" reverse-menu-complete   # [Shift-Tab] - move through the completion menu backwards
+	bindkey "${terminfo[kcbt]}" reverse-menu-complete   # [Shift-Tab] - move through the completion menu backwards
 fi
 
 bindkey '^?' backward-delete-char                     # [Backspace] - delete backward
 if [[ "${terminfo[kdch1]}" != "" ]]; then
-  bindkey "${terminfo[kdch1]}" delete-char            # [Delete] - delete forward
+	bindkey "${terminfo[kdch1]}" delete-char            # [Delete] - delete forward
 else
-  bindkey "^[[3~" delete-char
-  bindkey "^[3;5~" delete-char
-  bindkey "\e[3~" delete-char
+	bindkey "^[[3~" delete-char
+	bindkey "^[3;5~" delete-char
+	bindkey "\e[3~" delete-char
 fi
 
 # Edit the current command line in $EDITOR
@@ -776,37 +776,37 @@ export TERM=xterm-256color
 
 # Mac only externals
 if [[ "$OSTYPE" = darwin* ]]; then
-  if have brew; then
-    # Load autojump
-    autojump_path="$(brew --prefix)/etc/profile.d/autojump.sh"
-    [[ -r "${autojump_path}" ]] && source "${autojump_path}"
-    unset autojump_path
+	if have brew; then
+		# Load autojump
+		autojump_path="$(brew --prefix)/etc/profile.d/autojump.sh"
+		[[ -r "${autojump_path}" ]] && source "${autojump_path}"
+		unset autojump_path
 
-    # Export CFLAGS and LDFLAGS
-    export CGO_CFLAGS="-I/usr/local/include"
-    export CGO_CPPFLAGS="${CGO_CFLAGS}"
-    export CGO_CXXFLAGS="${CGO_CFLAGS}"
-    export CGO_LDFLAGS="-L/usr/local/lib"
-  fi
+		# Export CFLAGS and LDFLAGS
+		export CGO_CFLAGS="-I/usr/local/include"
+		export CGO_CPPFLAGS="${CGO_CFLAGS}"
+		export CGO_CXXFLAGS="${CGO_CFLAGS}"
+		export CGO_LDFLAGS="-L/usr/local/lib"
+	fi
 
-  # Load iterm2 shell integration
-  [[ -r "${HOME}/.iterm2_shell_integration.zsh" ]] && source "${HOME}/.iterm2_shell_integration.zsh"
+	# Load iterm2 shell integration
+	[[ -r "${HOME}/.iterm2_shell_integration.zsh" ]] && source "${HOME}/.iterm2_shell_integration.zsh"
 
-  # Load the docker machine environmen
-  if have docker-machine; then
-    eval $(docker-machine env)
-  fi
+	# Load the docker machine environmen
+	if have docker-machine; then
+		eval $(docker-machine env)
+	fi
 fi
 
 # Load TheFuck
 if have thefuck; then
-  # Lazy load TheFuck
-  lazyLoadFuck () {
-    unalias fuck
-    unfunction lazyLoadFuck
-    eval "$(thefuck --alias)"
-  }
-  alias fuck=lazyLoadFuck
+	# Lazy load TheFuck
+	lazyLoadFuck () {
+		unalias fuck
+		unfunction lazyLoadFuck
+		eval "$(thefuck --alias)"
+	}
+	alias fuck=lazyLoadFuck
 fi
 
 # Load travis
@@ -815,69 +815,69 @@ fi
 # Load FZF
 [[ -r "${HOME}/.fzf.zsh" ]] && source "${HOME}/.fzf.zsh"
 if have ag; then
-  export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
+	export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
 else
-  # use git ls-tree to speed up FZF. Fall back to find if no current folder is
-  # not under Git.
-  export FZF_DEFAULT_COMMAND='(git ls-tree -r --name-only HEAD || find . -path "*/\.*" -prune -o -type f -print -o -type l -print | sed s/^..//) 2> /dev/null'
+	# use git ls-tree to speed up FZF. Fall back to find if no current folder is
+	# not under Git.
+	export FZF_DEFAULT_COMMAND='(git ls-tree -r --name-only HEAD || find . -path "*/\.*" -prune -o -type f -print -o -type l -print | sed s/^..//) 2> /dev/null'
 fi
 
 # Load rbenv
 if [[ -d "${HOME}/.rbenv" ]]; then
-  lazyLoadRbenv() {
-    unalias rbenv
-    unfunction lazyLoadRbenv
-    eval "$(rbenv init --no-rehash -)"
-  }
-  alias rbenv=lazyLoadRbenv
+	lazyLoadRbenv() {
+		unalias rbenv
+		unfunction lazyLoadRbenv
+		eval "$(rbenv init --no-rehash -)"
+	}
+	alias rbenv=lazyLoadRbenv
 fi
 
 # Load pyenv
 if [[ -d "${HOME}/.pyenv" ]]; then
-  lazyLoadPyenv() {
-    unalias pyenv
-    unfunction lazyLoadPyenv
-    eval "$(pyenv init --no-rehash -)"
-  }
-  alias pyenv=lazyLoadPyenv
+	lazyLoadPyenv() {
+		unalias pyenv
+		unfunction lazyLoadPyenv
+		eval "$(pyenv init --no-rehash -)"
+	}
+	alias pyenv=lazyLoadPyenv
 fi
 
 # Load nvm
 [[ -f "/usr/share/nvm/init-nvm.sh" ]] && export NVM_INIT="/usr/share/nvm/init-nvm.sh"
 [[ -f "${HOME}/.nvm/nvm.sh" ]] && export NVM_INIT="${HOME}/.nvm/nvm.sh"
 if [[ -n "${NVM_INIT}" ]]; then
-  # define the lazy loading
-  lazyLoadNvm() {
-    unalias nvm
-    unfunction lazyLoadNvm
-    unalias npm
-    unfunction lazyLoadNpm
+	# define the lazy loading
+	lazyLoadNvm() {
+		unalias nvm
+		unfunction lazyLoadNvm
+		unalias npm
+		unfunction lazyLoadNpm
 
-    # source the init
-    source "${NVM_INIT}"
+		# source the init
+		source "${NVM_INIT}"
 
-    # we do not need the NVM_INIT anymore
-    unset NVM_INIT
+		# we do not need the NVM_INIT anymore
+		unset NVM_INIT
 
-    # if a folder contains an .nvmrc, respect it
-    autoload -U add-zsh-hook
-    add-zsh-hook chpwd load_nvmrc
-  }
-  alias nvm=lazyLoadNvm
+		# if a folder contains an .nvmrc, respect it
+		autoload -U add-zsh-hook
+		add-zsh-hook chpwd load_nvmrc
+	}
+	alias nvm=lazyLoadNvm
 
-  # lazyLoadNpm is a function to load nvm. It will only be called if
-  # lazyLoadNvm was never called before.
-  lazyLoadNpm() {
-    # call lazyLoadNvm so it loads the actual npm, it will also remove this
-    # function and the alias set to it.
-    lazyLoadNvm
+	# lazyLoadNpm is a function to load nvm. It will only be called if
+	# lazyLoadNvm was never called before.
+	lazyLoadNpm() {
+		# call lazyLoadNvm so it loads the actual npm, it will also remove this
+		# function and the alias set to it.
+		lazyLoadNvm
 
-    # call the actual npm which is loaded by now
-    npm $@
-  }
-  alias npm=lazyLoadNpm
+		# call the actual npm which is loaded by now
+		npm $@
+	}
+	alias npm=lazyLoadNpm
 else
-  unset NVM_INIT
+	unset NVM_INIT
 fi
 
 #####################################################################
@@ -900,6 +900,6 @@ sp "${ACTIVE_PROFILE:-personal}"
 #####################################################################
 
 if [[ -o interactive ]]; then
-  have pom && pom
-  have fortune && fortune -c
+	have pom && pom
+	have fortune && fortune -c
 fi
