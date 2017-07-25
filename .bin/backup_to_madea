@@ -21,24 +21,24 @@
 #
 
 function die() {
-  echo -e $@
-  exit 1
+	echo -e $@
+	exit 1
 }
 
 # check we have permissions
 if [[ "$(id -u)" != 0 ]]; then
-  die "must be root to run this script"
+	die "must be root to run this script"
 fi
 
 # open the drive
 if [[ ! -b /dev/mapper/cryptMadea ]]; then
-  cryptsetup luksOpen --key-file /madea_keyfile.bin /dev/disk/by-uuid/eb6f0476-578d-4ad2-b879-bf130db5319a cryptMadea || \
-    die "unable to luksOpen the device"
+	cryptsetup luksOpen --key-file /madea_keyfile.bin /dev/disk/by-uuid/eb6f0476-578d-4ad2-b879-bf130db5319a cryptMadea || \
+		die "unable to luksOpen the device"
 fi
 
 # mount the drive
 if ! findmnt -S UUID=e6437994-dced-4441-a3af-344694bb7f37 >/dev/null 2>&1; then
-  mount /mnt/Madea || die "unable to mount the device"
+	mount /mnt/Madea || die "unable to mount the device"
 fi
 
 # start the snap-sync
