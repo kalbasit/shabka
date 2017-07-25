@@ -312,15 +312,21 @@ bar {
 	}
 }
 
-########################
-# Workspace assignment #
-########################
+##########################
+# Application assignment #
+##########################
 
-# application assignment
 assign [class="^Slack$"] → slack
 assign [class="^com-xk72-charles-gui-.*$"] → charles
 assign [class="^VirtualBox"] → virtualbox
 assign [class="^Termite" title="irc"] → irc
+assign [class="^Tor Browser"] → tor
+
+for_window [class="^Tor Browser"] floating enable
+
+########################
+# Workspace assignment #
+########################
 
 # assign important spaces to my external monitor
 workspace main output $extmonitor
