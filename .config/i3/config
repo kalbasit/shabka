@@ -101,6 +101,7 @@ bindsym $mod+Shift+Tab move container to workspace back_and_forth
 # dynamic workspaces
 bindsym $mod+space exec rofi -show Workspaces
 bindsym $mod+Shift+space exec rofi -show MoveContainer
+bindsym $mod+$alt+space exec rofi -show RenameWorkspace
 
 # change container layout (stacked, tabbed, toggle split)
 bindsym $mod+l layout stacking
