@@ -771,5 +771,17 @@ mapkey('su', '#4Edit current URL with vim editor', function() {
 	}, 'url');
 });
 
+// paste and go
+mapkey('v', '#3Paste and go', function() {
+	Front.getContentFromClipboard(function(response) {
+		window.location.href = response.data;
+	});
+});
+mapkey('V', '#1Paste and go in a new tab', function() {
+	Front.getContentFromClipboard(function(response) {
+		window.open(response.data);
+	});
+});
+
 // END Custom bindings }}}
 //////////////////////////////////////
