@@ -1,3 +1,8 @@
+# make sure DOTZSH is defined
+if [[ -z "${DOTZSH}" ]]; then
+	export DOTZSH="${0:a:h}"
+fi
+
 # add the zsh functions to the fpath
 fpath+="${DOTZSH}/functions"
 fpath+="${DOTZSH}/completions"
