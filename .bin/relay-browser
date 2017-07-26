@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/zsh
 #
 #  vim:ft=sh:
 #
@@ -20,11 +20,48 @@
 #  USA.
 #
 
+source "${HOME}/.zsh/functions.zsh"
 
-if [[ "${1}" = "--profile" ]]; then
-	profile="${2}"
-	shift 2
-fi
+function help()
+{
+	print_info "${log_depth}" "USAGE: relay-browser [options] <url>"
+	print_info "${log_depth}" "\t -h, --help                - this message"
+	print_info "${log_depth}" "\t -L, --log-depth           - change the depth of the log Default: ${log_depth}"
+	print_info "${log_depth}" "\t -p, --profile             - the profile to use. This is only relevant if a new session is going to be started"
+}
+
+log_depth="0"
+
+while [[ $# -ge 1 ]]; do
+	case "${1}" in
+		-h|--help)
+			help
+			exit 0
+			;;
+		--log-depth)
+			log_depth="${2}"
+			if [[ -z "${log_depth}" ]]; then
+				print_error "${log_depth}" "--log-depth requires an argument"
+				help
+				exit 1
+			fi
+			shift 2
+			;;
+		-p|--profile)
+			profile="${2}"
+			if [[ -z "${profile}" ]]; then
+				print_error "${log_depth}" "--profile requires an argument"
+				help
+				exit 1
+			fi
+			shift 2
+			;;
+		*)
+			argument=( ${@} )
+			break
+			;;
+	esac
+done
 
 if [[ -z "${profile}" ]]; then
 	items="personal\npublica\ntalentoday"
@@ -33,13 +70,13 @@ fi
 
 case "${profile}" in
 	personal)
-		(exec chromium --user-data-dir="${HOME}/.config/chromium-personal" "${@}" &>/dev/null)&
+		(exec chromium --user-data-dir="${HOME}/.config/chromium-personal" "${argument[@]}" &>/dev/null)&
 		;;
 	publica)
-		(exec chromium --user-data-dir="${HOME}/.config/chromium-publica" "${@}" &>/dev/null)&
+		(exec chromium --user-data-dir="${HOME}/.config/chromium-publica" "${argument[@]}" &>/dev/null)&
 		;;
 	talentoday)
-		(exec chromium --user-data-dir="${HOME}/.config/chromium-talentoday" "${@}" &>/dev/null)&
+		(exec chromium --user-data-dir="${HOME}/.config/chromium-talentoday" "${argument[@]}" &>/dev/null)&
 		;;
 	*)
 		echo -e "${profile} is not recognized"
