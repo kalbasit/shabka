@@ -4,6 +4,6 @@ rofi.modi: window,run,ssh,Workspaces:i3-switch-workspaces,RenameWorkspace:i3-ren
 
 ! Font to use
 ! Default:  mono 12
-rofi.font: EmojiOne Color 9
+rofi.font: Cousine 9
 
 #include "/usr/share/rofi/themes/Adapta-Nokto.theme"
