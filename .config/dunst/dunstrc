@@ -1,5 +1,5 @@
 [global]
-  font = EmojiOne Color 8
+  font = Cousine 8
 
   # Allow a small subset of html markup:
   #   <b>bold</b>
