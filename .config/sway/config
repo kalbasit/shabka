@@ -33,16 +33,6 @@ floating_modifier $mod
 # focus should not follow the mouse pointer
 focus_follows_mouse no
 
-# keep the urgency border of a window for 500ms
-force_display_urgency_hint 500 ms
-
-# on window activation, just set the urgency hint. The default behavior is to
-# set the urgency hint if the window is not on the active workspace, and to
-# focus the window on an active workspace. It does surprise me sometimes and I
-# would like to keep it simple by having to manually switch to the urgent
-# window.
-focus_on_window_activation urgent
-
 ############
 # Bindings #
 ############
@@ -173,7 +163,6 @@ mode "$mode_apps" {
   bindsym s exec slack, mode "default"
   bindsym i exec termite --title=irc --exec=weechat, mode "default"
   bindsym w exec whatsapp-web-desktop, mode "default"
-  bindsym a exec termite --title=TaskWarrior --exec="tmx -L task task", mode "default"
   bindsym t exec myteamviewer, mode "default"
 
   # back to normal: Enter or Escape
@@ -300,8 +289,6 @@ bar {
   position top
   # use i3status for the bar
   status_command i3status
-  # disable clicking on workspace buttons
-  bindsym button1 nop
 
   # setup colors
   colors {
@@ -362,7 +349,6 @@ bindsym $alt+p [class="Chromium" instance="crx_jjbjdleccaiklfpcblgekgmjadjdclkp"
 ##############
 
 exec $nosid termite --title=irc --exec="weechat"
-exec $nosid termite --title=TaskWarrior --exec="tmx -L task task"
 exec $nosid whatsapp-web-desktop
 exec $nosid mclip.py daemon
 
