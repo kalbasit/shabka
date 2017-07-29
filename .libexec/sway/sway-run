@@ -49,10 +49,11 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 export GDK_BACKEND=wayland
 
 # sway-specific setting
+export XKB_DEFAULT_LAYOUT=us
+export XKB_DEFAULT_VARIANT=colemak
 export XKB_DEFAULT_OPTIONS=ctrl:nocaps
 export WLC_REPEAT_DELAY=200
 export WLC_REPEAT_RATE=30
-export XKB_DEFAULT_VARIANT=colemak
 # export GTK_IM_MOUDLE=ibus
 # export XMODIFIERS=@im=ibus
 # export QT_IM_MODULE=ibus
