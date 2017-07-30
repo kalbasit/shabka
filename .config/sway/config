@@ -2,8 +2,8 @@
 # Output settings #
 ###################
 
-output eDP1 res 3200x1800 pos 0,0 scale 2
-output DP1 res 3440x1440 pos 3200,0
+output eDP-1 res 3200x1800 pos 0,0 scale 2
+output DP-1 res 3440x1440 pos 3200,0
 
 #################
 # Core settings #
