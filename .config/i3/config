@@ -163,7 +163,7 @@ mode "$mode_wm" {
 bindsym $mod+$alt+w mode "$mode_wm"
 
 # Application launcher
-set $mode_apps Launch: (p) Chromium personal, (u) Chromium publica, (c) Charles, (s) Slack, (i) Irc, (w) Whatsapp, (a) TaskWarrior, (t) Teamviewer
+set $mode_apps Launch: (p) Chromium personal, (u) Chromium publica, (c) Charles, (s) Slack, (i) Irc, (w) Whatsapp, (t) Teamviewer
 mode "$mode_apps" {
 	bindsym p exec relay-browser --profile personal, mode "default"
 	bindsym u exec relay-browser --profile publica, mode "default"
@@ -171,7 +171,6 @@ mode "$mode_apps" {
 	bindsym s exec slack, mode "default"
 	bindsym i exec termite --title=irc --exec=weechat, mode "default"
 	bindsym w exec whatsapp-web-desktop, mode "default"
-	bindsym a exec termite --title=TaskWarrior --exec="tmx -L task task", mode "default"
 	bindsym t exec myteamviewer, mode "default"
 
 	# back to normal: Enter or Escape
@@ -349,10 +348,6 @@ bindsym $mod+Shift+minus move scratchpad
 # Make the currently focused window a scratchpad
 bindsym $mod+$alt+minus scratchpad show
 
-# TaskWarrior
-for_window [class="^Termite" title="^TaskWarrior"] sticky enable, floating enable, move scratchpad
-bindsym $alt+a [class="^Termite" title="^TaskWarrior"] scratchpad show
-
 # Whatsapp
 for_window [class="^whats-app-nativefier*"] sticky enable, floating enable, move scratchpad
 bindsym $alt+w [class="^whats-app-nativefier*"] scratchpad show
@@ -366,7 +361,6 @@ bindsym $alt+p [class="Chromium" instance="crx_jjbjdleccaiklfpcblgekgmjadjdclkp"
 ##############
 
 exec $nosid termite --title=irc --exec="weechat"
-exec $nosid termite --title=TaskWarrior --exec="tmx -L task task"
 exec $nosid whatsapp-web-desktop
 exec $nosid mclip.py daemon
 
