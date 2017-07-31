@@ -34,6 +34,9 @@ systemctl --user restart gwall.service
 # start time tracker
 systemctl --user restart gone.service
 
+# start xcape
+systemctl --user restart xcape.service
+
 # start pulse audio
 start-pulseaudio-x11
 
