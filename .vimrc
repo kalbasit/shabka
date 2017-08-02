@@ -744,14 +744,6 @@ nmap <silent> \fc <ESC>/\v^[<=>]{7}( .*\|$)<CR>
 " Toggle hlsearch with <leader>hs
 nmap <leader>hs :set hlsearch! hlsearch?<CR>
 
-" Bubble single lines
-nmap <C-i> [e
-nmap <C-e> ]e
-
-" Bubble multiple lines
-vmap <C-i> [egv
-vmap <C-e> ]egv
-
 " save all buffers
 nmap <silent> <leader>ww :wall<cr>
 
@@ -766,13 +758,6 @@ endif
 
 " clear the search buffer when hitting return
 nnoremap <CR> :nohlsearch<cr>
-
-" Don't use Ex mode, use Q for formatting
-map Q gq
-
-" make horizontal scrolling easier
-nmap <silent> <C-o> 10jl
-nmap <silent> <C-i> 10jh
 
 " Add/Remove lineend from listchars
 nmap <leader>sle :set listchars+=eol:$<CR>
