@@ -133,7 +133,7 @@ Plug 'navicore/vissort.vim', { 'on': 'Vissort' }
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 
 " check file for errors
-Plug 'scrooloose/syntastic'
+Plug 'w0rp/ale'
 
 " multiple cursors
 Plug 'terryma/vim-multiple-cursors'
@@ -365,12 +365,28 @@ map <Leader>/ :Ack<space>
 "" }}}
 "" Airline{{{
 
+" show tabline
 let g:airline#extensions#tabline#enabled = 1
+
+" show ALE
+let g:airline#extensions#ale#enabled = 1
 
 " use seoul256 theme
 let g:airline_theme='seoul256'
 
 "" }}}
+"" Ale{{{
+
+nmap <silent> <C-i> <Plug>(ale_previous_wrap)
+nmap <silent> <C-e> <Plug>(ale_next_wrap)
+
+" change the linters
+let g:ale_linters = {'go': ['gometalinter', 'gofmt']}
+
+" run only fast linters
+let g:ale_go_gometalinter_options = "--fast"
+
+""}}}
 "" ArgWrap{{{
 
 nnoremap <silent> <leader>a :ArgWrap<CR>
@@ -535,11 +551,6 @@ let g:no_ruby_maps = 1
 "" Surround{{{
 let g:surround_no_mappings = 1
 "}}}
-"" Syntastic{{{
-let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
-let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
-let g:syntastic_sh_shellcheck_args = "-e SC1090"
-""}}}
 "" TagBar{{{
 let g:tagbar_type_go = {
 			\ 'ctagstype' : 'go',
