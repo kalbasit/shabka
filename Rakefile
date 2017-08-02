@@ -31,28 +31,24 @@ IGNORED_FILES = [
 	".osx",
 ]
 
-GO_BINARIES = [
-	"github.com/3rf/codecoroner",
-	"github.com/codegangsta/gin",
-	"github.com/d4l3k/go-pry",
-	"github.com/derekparker/delve/cmd/dlv",
-	"github.com/dim13/gone",
-	"github.com/golang/lint/golint",
-	"github.com/golang/protobuf/protoc-gen-go",
-	"github.com/golang/tools/cmd/gomvpkg",
-	"github.com/jteeuwen/go-bindata/go-bindata",
-	"github.com/kardianos/govendor",
-	"github.com/monochromegane/the_platinum_searcher/cmd/pt",
-	"github.com/ngdinhtoan/glide-cleanup",
-	"github.com/peco/peco/cmd/peco",
-	"github.com/pocke/lemonade",
-	"github.com/smartystreets/goconvey",
-	"github.com/spf13/cobra/cobra",
-	"github.com/tools/godep",
-	"golang.org/x/tools/cmd/cover",
-	"golang.org/x/tools/cmd/stringer",
-	"honnef.co/go/tools/cmd/unused",
-]
+GO_BINARIES = {
+	# Editing helpers (linters and error checkers)
+	"gopkg.in/alecthomas/gometalinter.v1": "gometalinter --install",
+
+	"github.com/3rf/codecoroner": "",
+	"github.com/d4l3k/go-pry": "",
+	"github.com/derekparker/delve/cmd/dlv": "",
+	"github.com/dim13/gone": "",
+	"github.com/golang/protobuf/protoc-gen-go": "",
+	"github.com/golang/tools/cmd/gomvpkg": "",
+	"github.com/jteeuwen/go-bindata/go-bindata": "",
+	"github.com/monochromegane/the_platinum_searcher/cmd/pt": "",
+	"github.com/ngdinhtoan/glide-cleanup": "",
+	"github.com/peco/peco/cmd/peco": "",
+	"github.com/pocke/lemonade": "",
+	"golang.org/x/tools/cmd/cover": "",
+	"golang.org/x/tools/cmd/stringer": "",
+}
 
 LOCAL_BINARIES = [
 	"https://github.com/junegunn/dotfiles/raw/master/bin/tmuxwords.rb",
@@ -97,8 +93,11 @@ task :install_go_binaries do
 	end
 	# Install the binaries and restore the GOPATH
 	begin
-		GO_BINARIES.each do |binary|
+		GO_BINARIES.each do |binary, postinstall|
 			sh %Q{go get -u #{binary}}
+			if postinstall != ""
+				sh postinstall
+			end
 		end
 	ensure
 		ENV["GOPATH"] = oldGoPath
