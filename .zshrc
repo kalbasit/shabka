@@ -305,6 +305,9 @@ pathprepend PATH "${HOME}/.rbenv/bin"
 # add pyenv
 pathprepend PATH "${HOME}/.pyenv/bin"
 
+# add cargo
+pathprepend PATH "${HOME}/.cargo/bin"
+
 #####################################################################
 # aliases
 #####################################################################
@@ -394,7 +397,9 @@ export WARN="${FG_YELLOW_B}"
 export ERROR="${FG_RED_B}"
 
 # Find the option for using colors in ls, depending on the version
-if [[ "$OSTYPE" == netbsd* ]]; then
+if [[ -x "${HOME}/.cargo/bin/exa" ]]; then
+	alias ls='exa'
+elif [[ "$OSTYPE" == netbsd* ]]; then
 	# On NetBSD, test if "gls" (GNU ls) is installed (this one supports colors);
 	# otherwise, leave ls as is, because NetBSD's ls doesn't support -G
 	gls --color -d . &>/dev/null && alias ls='gls --color=tty'
