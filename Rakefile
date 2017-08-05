@@ -39,6 +39,7 @@ GO_BINARIES = {
 	"github.com/d4l3k/go-pry": "",
 	"github.com/derekparker/delve/cmd/dlv": "",
 	"github.com/dim13/gone": "",
+	"github.com/erroneousboat/slack-term": "",
 	"github.com/golang/protobuf/protoc-gen-go": "",
 	"github.com/golang/tools/cmd/gomvpkg": "",
 	"github.com/jteeuwen/go-bindata/go-bindata": "",
