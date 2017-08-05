@@ -27,6 +27,9 @@ Plug 'sheerun/vim-polyglot'
 Plug 'hashivim/vim-terraform'
 " Go
 Plug 'fatih/vim-go', { 'for': 'go' } | Plug 'majutsushi/tagbar'
+if has('nvim')
+	Plug 'sebdah/vim-delve'
+endif
 " CSV
 Plug 'chrisbra/csv.vim', { 'for': 'csv' }
 " Ruby/Rails
