@@ -10,6 +10,7 @@ function tmxrc() {
 		local sep=
 		local json="["
 		local skip=false
+		local orig_gopath="${GOPATH}" # this is used to restore the GOPATH
 
 		function $0_parent_under_git() {
 		debug "\$1 = '${1}'"
