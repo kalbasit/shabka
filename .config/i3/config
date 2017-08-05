@@ -323,6 +323,7 @@ assign [class="^Termite" title="irc"] → irc
 assign [class="^Tor Browser"] → tor
 
 for_window [class="^Tor Browser"] floating enable
+for_window [class="^net-filebot-Main$"] floating enable
 
 ########################
 # Workspace assignment #
