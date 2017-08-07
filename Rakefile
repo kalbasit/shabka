@@ -33,22 +33,23 @@ IGNORED_FILES = [
 
 GO_BINARIES = {
 	# Editing helpers (linters and error checkers)
-	"gopkg.in/alecthomas/gometalinter.v1": "gometalinter --install",
+	"github.com/alecthomas/gometalinter" => "gometalinter --install",
 
-	"github.com/3rf/codecoroner": "",
-	"github.com/d4l3k/go-pry": "",
-	"github.com/derekparker/delve/cmd/dlv": "",
-	"github.com/dim13/gone": "",
-	"github.com/erroneousboat/slack-term": "",
-	"github.com/golang/protobuf/protoc-gen-go": "",
-	"github.com/golang/tools/cmd/gomvpkg": "",
-	"github.com/jteeuwen/go-bindata/go-bindata": "",
-	"github.com/monochromegane/the_platinum_searcher/cmd/pt": "",
-	"github.com/ngdinhtoan/glide-cleanup": "",
-	"github.com/peco/peco/cmd/peco": "",
-	"github.com/pocke/lemonade": "",
-	"golang.org/x/tools/cmd/cover": "",
-	"golang.org/x/tools/cmd/stringer": "",
+	"github.com/3rf/codecoroner"                             => "",
+	"github.com/d4l3k/go-pry"                                => "",
+	"github.com/derekparker/delve/cmd/dlv"                   => "",
+	"github.com/dim13/gone"                                  => "",
+	"github.com/erroneousboat/slack-term"                    => "",
+	"github.com/golang/protobuf/protoc-gen-go"               => "",
+	"github.com/golang/tools/cmd/gomvpkg"                    => "",
+	"github.com/jteeuwen/go-bindata/go-bindata"              => "",
+	"github.com/kalbasit/tmx/cmd/tmxrc"                      => "",
+	"github.com/monochromegane/the_platinum_searcher/cmd/pt" => "",
+	"github.com/ngdinhtoan/glide-cleanup"                    => "",
+	"github.com/peco/peco/cmd/peco"                          => "",
+	"github.com/pocke/lemonade"                              => "",
+	"golang.org/x/tools/cmd/cover"                           => "",
+	"golang.org/x/tools/cmd/stringer"                        => "",
 }
 
 LOCAL_BINARIES = [
@@ -88,14 +89,22 @@ task :install_go_binaries do
 	# record the current GOPATH and switch to the global one
 	oldGoPath = ENV["GOPATH"]
 	if ENV["GLOBAL_GOPATH"].nil?
-		ENV["GOPATH"] = File.join(ENV["HOME"], "code")
+		ENV["GOPATH"] = File.join(ENV["HOME"], ".filesystem")
 	else
 		ENV["GOPATH"] = ENV["GLOBAL_GOPATH"]
 	end
 	# Install the binaries and restore the GOPATH
 	begin
-		GO_BINARIES.each do |binary, postinstall|
-			sh %Q{go get -u #{binary}}
+		GO_BINARIES.each do |bin, postinstall|
+			sh <<-EOF
+				go get -u -d #{bin}
+				cd #{File.join(ENV["GOPATH"], "src", bin)}
+				if [[ -f glide.lock ]]; then
+					glide install
+				fi
+				go install
+			EOF
+
 			if postinstall != ""
 				sh postinstall
 			end

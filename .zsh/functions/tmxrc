@@ -26,9 +26,12 @@ function tmxrc() {
 	}
 
 	# iterate over all the profiles
-	for p in ${HOME}/code/profiles/*; do
+	for p in ${HOME}/code/*; do
+		if [[ "$(basename "${p}")" = "archive" || "$(basename "${p}")" = "old" ]]; then
+			continue
+		fi
 		# iterate over all the .git folders under this profile
-		for d in $(find "${p}" -name .git -type d); do
+		for d in $(find "${p}/base" -name .git -type d); do
 			# remove .git from the dir
 			d="${d%%/.git}"
 			debug "d = '${d}'"
@@ -40,7 +43,7 @@ function tmxrc() {
 			# initialize the entry
 			local entry="{\"profile\": \"$(basename ${p})\",\"dir\": \""
 			# add the directory to it
-			entry+="\$GOPATH/${d##$p/}\"}"
+			entry+="\$GOPATH/${d##$p/base/}\"}"
 			debug "adding entry ${entry}"
 
 			# add the entry to the json

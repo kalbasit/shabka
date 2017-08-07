@@ -457,7 +457,7 @@ if has('nvim')
 	let g:deoplete#enable_at_startup = 1
 
 	" deoplete-go settings
-	let g:deoplete#sources#go#gocode_binary = '~/code/bin/gocode'
+	let g:deoplete#sources#go#gocode_binary = '~/.filesystem/bin/gocode'
 	let g:deoplete#sources#go#json_directory = '~/.cache/deoplete/go/$GOOS_$GOARCH'
 	let g:deoplete#sources#go#pointer = 1
 	let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
