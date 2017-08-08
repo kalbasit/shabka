@@ -91,9 +91,6 @@ bindsym $mod+p exec rofi -modi lpass:rofi-lpass -show lpass
 # list open windows to switch to
 bindsym $alt+Tab exec rofi -show window
 
-# rename workspace
-bindsym $mod+Shift+w exec i3-input -F 'rename workspace to %s' -P 'New name: '
-
 # switch between the current and the previously focused one
 bindsym $mod+Tab workspace back_and_forth
 bindsym $mod+Shift+Tab move container to workspace back_and_forth
