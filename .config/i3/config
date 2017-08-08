@@ -314,11 +314,12 @@ bar {
 ##########################
 
 assign [class="^Slack$"] → slack
-assign [class="^com-xk72-charles-gui-.*$"] → charles
-assign [class="^VirtualBox"] → virtualbox
 assign [class="^Termite" title="irc"] → irc
 assign [class="^Tor Browser"] → tor
+assign [class="^VirtualBox"] → virtualbox
+assign [class="^com-xk72-charles-gui-.*$"] → charles
 
+for_window [class="^Pavucontrol"] floating enable
 for_window [class="^Tor Browser"] floating enable
 for_window [class="^net-filebot-Main$"] floating enable
 
