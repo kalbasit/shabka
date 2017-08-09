@@ -17,7 +17,7 @@
 
 # Kalbasit's dotfiles with Colemak bindings
 
-![Screenshot of my shell](http://i.imgur.com/8TnOljy.png)
+![Screenshot of my shell](https://i.imgur.com/gNF5iHs.png)
 
 # Installation
 
@@ -72,7 +72,7 @@ The dotfiles are not really the place for your private things. But it
 does fully support a `.private` sub-folder which you can track in any
 way you want. This is folder to keep your `~/.ssh` and your `~/.gnupg`.
 
-![Screenshot of .private](http://i.imgur.com/UvWQmze.png)
+![Screenshot of .private](https://i.imgur.com/UvWQmze.png)
 
 # ZSH personal/work profiles
 
@@ -141,7 +141,7 @@ The keys for a particular profile should live under
 `~/.ssh/<profile-name>`, so your personal keys (for the default profile)
 should live under `~/.ssh/personal` and not `~/.ssh`.
 
-![My ~/.ssh folder](http://i.imgur.com/tNsMlks.png)
+![My ~/.ssh folder](https://i.imgur.com/tNsMlks.png)
 
 # Author
 
