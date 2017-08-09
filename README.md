@@ -20,7 +20,7 @@
 
 - [Croscore fonts][8].
 - Colemak keyboard layout. My Kinesis Advantage 2 layout and settings.
-	are available [here][9]
+	are available [here][9].
 - i3 window manger (see [i3
 	README][10] for more information):
 	- Cousine font from the [Croscore fonts][8].
@@ -35,9 +35,9 @@
 	projects down to the filesystem and allows one git repo (the base) to
 	be checked out multiple times with different branches [git help
 	worktree][14]. For more information, please checkout [my workflow][15]
-	and my TMUX session manager [TMX][16]
+	and my TMUX session manager [TMX][16].
 - Vim optimised for working in Go, Python, Ruby, Typescript and many
-	more, please see my [Vim README](#TODO) for more information
+	more, please see my [Vim README][19] for more information.
 - Chromium augmented with Surfingkeys to bring my full Vim experience to
 	the browser. With Colemak layout and Github/Travis navigation helper,
 	see the [config file][17] for details.
@@ -52,7 +52,7 @@ to call binaries and .desktop files.
 
 # Installation
 
-You should clone this repository at `~/.dotfiles`
+You should clone this repository at `~/.dotfiles`.
 
 ```
 $ git clone https://github.com/kalbasit/dotfiles.git ~/.dotfiles
@@ -68,7 +68,7 @@ On the first installation, you should run `rake init` which will:
 - Link everything from `~/.dotfiles/.private` **if it exists**, this is
   the perfect place for you to keep private things. See [Keeping things
   private private][3] for more information.
-- initialize Vim
+- initialize Vim.
 - Install rbenv, install the latest Ruby and set it as the default.
 	Additionally it will install the `bundler` and `git-smart` gems.
 - Install some Go binaries defined in the [Rakefile][18] look for
@@ -80,7 +80,7 @@ It will also run the default tasks (that run with simple `rake`):
 
 For OSX, run [`.osx`][1] binary. Make sure to read it over and modify it
 to your liking, you might want to change the computer host name for
-example `sed -e 's:cratos:mycomputer:g' -i .osx`
+example `sed -e 's:cratos:mycomputer:g' -i .osx`.
 
 The OSX script will:
 - Install XCode CLI.
@@ -196,3 +196,4 @@ should live under `~/.ssh/personal` and not `~/.ssh`.
 [16]: https://github.com/kalbasit/tmx
 [17]: https://github.com/kalbasit/dotfiles/blob/master/.surfingkeys.js.erb
 [18]: https://github.com/kalbasit/dotfiles/blob/master/Rakefile
+[19]: https://github.com/kalbasit/dotfiles/tree/master/.config/nvim
