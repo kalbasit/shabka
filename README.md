@@ -18,14 +18,14 @@
 
 # Features
 
-- [Croscore fonts](8).
+- [Croscore fonts][8].
 - Colemak keyboard layout. My Kinesis Advantage 2 layout and settings.
-	are available [here](9)
+	are available [here][9]
 - i3 window manger (see [i3
-	README](10) for more information):
-	- Cousine font from the [Croscore fonts](8).
-	- [seoul256](11) color scheme.
-	- uses rofi backed by [i3 dynamic workspaces](12) for workspace
+	README][10] for more information):
+	- Cousine font from the [Croscore fonts][8].
+	- [seoul256][11] color scheme.
+	- uses rofi backed by [i3 dynamic workspaces][12] for workspace
 		management. Allows an infinite number of workspaces with Alfred-like
 		interface for jumging from one to another. See this demo video
 		TODO:[here](#TODO).
@@ -34,13 +34,13 @@
 	with one tmux socket and a dedicated GOPATH. This helps separate
 	projects down to the filesystem and allows one git repo (the base) to
 	be checked out multiple times with different branches [git help
-	worktree](14). For more information, please checkout [my workflow](15)
-	and my TMUX session manager [TMX](16)
+	worktree][14]. For more information, please checkout [my workflow][15]
+	and my TMUX session manager [TMX][16]
 - Vim optimised for working in Go, Python, Ruby, Typescript and many
 	more, please see my [Vim README](#TODO) for more information
 - Chromium augmented with Surfingkeys to bring my full Vim experience to
 	the browser. With Colemak layout and Github/Travis navigation helper,
-	see the [config file](17) for details.
+	see the [config file][17] for details.
 
 # Screenshot
 
@@ -71,7 +71,7 @@ On the first installation, you should run `rake init` which will:
 - initialize Vim
 - Install rbenv, install the latest Ruby and set it as the default.
 	Additionally it will install the `bundler` and `git-smart` gems.
-- Install some Go binaries defined in the [Rakefile](18) look for
+- Install some Go binaries defined in the [Rakefile][18] look for
 	`GO_BINARIES`.
 
 It will also run the default tasks (that run with simple `rake`):
