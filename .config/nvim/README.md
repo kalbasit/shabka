@@ -1,3 +1,16 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**
+
+- [NeoVim and Vim config files](#neovim-and-vim-config-files)
+- [Keyboard layout and movement](#keyboard-layout-and-movement)
+- [Developement](#developement)
+  - [Auto completion](#auto-completion)
+  - [Languages](#languages)
+    - [Golang](#golang)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # NeoVim and Vim config files
 
 This (Neo)Vim config works for both without limitations with just a few

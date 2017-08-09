@@ -138,6 +138,7 @@ end
 desc "update README's TOC"
 task :update_readme_toc do
 	sh %Q{doctoc --title "**Table of Contents**" README.md}
+	sh %Q{doctoc --title "**Table of Contents**" .config/nvim/README.md}
 end
 
 desc "link files from dotfiles"
