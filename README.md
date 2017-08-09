@@ -18,13 +18,20 @@
 
 # Features
 
-- [Croscore fonts](https://en.wikipedia.org/wiki/Croscore_fonts)
-- Colemak keyboard layout. My Kinesis Advantage 2 layout and settings
+- [Croscore fonts](https://en.wikipedia.org/wiki/Croscore_fonts).
+- Colemak keyboard layout. My Kinesis Advantage 2 layout and settings.
 	are available [here](https://github.com/kalbasit/advantage2)
-- i3 with Cousine font from the Croscore fonts and colored with the
-	[seoul256](https://github.com/junegunn/seoul256.vim) color scheme. For
-	more details, please read the [i3
-	README](https://github.com/kalbasit/dotfiles/tree/master/.config/i3).
+- i3 window manger (see [i3
+	README](https://github.com/kalbasit/dotfiles/tree/master/.config/i3)
+	for more information):
+	- Cousine font from the [Croscore fonts](https://en.wikipedia.org/wiki/Croscore_fonts).
+	- [seoul256](https://github.com/junegunn/seoul256.vim) color scheme.
+	- uses rofi backed by [i3 dynamic
+		workspaces](https://github.com/kalbasit/i3-dynamic-workspaces) for
+		workspace management. Allows an infinite number of workspaces with
+		Alfred-like interface for jumging from one to another. See this demo
+		video [here](#TODO).
+	- much more, see the README linked above.
 - Workflow optimised for a project-based namespacing. One i3 workspace,
 	with one tmux socket and a dedicated GOPATH. This helps separate
 	projects down to the filesystem and allows one git repo (the base) to
