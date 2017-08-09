@@ -2,7 +2,8 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
-- [Kalbasit's dotfiles with Colemak bindings](#kalbasits-dotfiles-with-colemak-bindings)
+- [Features](#features)
+- [Screenshot](#screenshot)
 - [Installation](#installation)
   - [First installation](#first-installation)
     - [OSX](#osx)
