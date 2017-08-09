@@ -55,8 +55,8 @@ if [[ -z "${XBASERC}" ]]; then
 	[[ -r "${usermodmap}" ]] && xmodmap "${usermodmap}"
 
 	# change the resolution
-	if xrandr | grep -q '^DP1 connected'; then
-		xrandr --output eDP1 --mode 1920x1080 --output DP1 --auto --right-of eDP1
+	if xrandr | grep -q '^DP1-2 connected'; then
+		xrandr --output eDP1 --mode 1920x1080 --output DP1-2 --primary --mode 3440x1440 --right-of eDP1
 	else
 		xrandr --output eDP1 --mode 1920x1080
 	fi
