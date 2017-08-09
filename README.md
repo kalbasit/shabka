@@ -15,41 +15,68 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Kalbasit's dotfiles with Colemak bindings
+# Features
+
+- [Croscore fonts](https://en.wikipedia.org/wiki/Croscore_fonts)
+- Colemak keyboard layout. My Kinesis Advantage 2 layout and settings
+	are available [here](https://github.com/kalbasit/advantage2)
+	- i3 with Cousine font from the Croscore fonts and colored with
+	the [seoul256](https://github.com/junegunn/seoul256.vim) color scheme. For more details, please read the [i3 README](https://github.com/kalbasit/dotfiles/tree/master/.config/i3).
+- Workflow optimised for a project-based namespacing. One i3 workspace,
+	with one tmux socket and a dedicated GOPATH. This helps separate
+	projects down to the filesystem and allows one git repo (the base) to
+	be checked out multiple times with different branches [git help
+	worktree](https://git-scm.com/docs/git-worktree). For more
+	information, please checkout [my
+	workflow](https://github.com/kalbasit/workflow) and my TMUX session
+	manager [TMX](https://github.com/kalbasit/tmx)
+- Vim optimised for working in Go, Python, Ruby, Typescript and many
+	more, please see my [Vim README](#TODO) for more information
+- Chromium augmented with Surfingkeys to bring my full Vim experience to
+	the browser. With Colemak layout and Github/Travis navigation helper,
+	see the [config
+	file](https://github.com/kalbasit/dotfiles/blob/master/.surfingkeys.js.erb)
+	for details.
+
+# Screenshot
+
+This is Arch linux, running i3 window manager, chromium for browser and
+Termite for the terminal. I use `rofi` for i3 workspace management, and
+to call binaries and .desktop files.
 
 ![Screenshot of my shell](https://i.imgur.com/gNF5iHs.png)
 
 # Installation
 
-**Warning:** If you want to give these dotfiles a try, you should first
-fork this repository, review the code, and remove things you don’t want
-or need. Don’t blindly use my settings unless you know what that
-entails. Use at your own risk!
+You should clone this repository at `~/.dotfiles`
 
-You can clone the repository wherever you want, however the path should
-not include any spaces. I like to keep it in `~/.dotfiles`. For the rest
-of the tutorial, we are going to refer to the clone dotfiles under the
-path `~/.dotfiles`.
+```
+$ git clone https://github.com/kalbasit/dotfiles.git ~/.dotfiles
+
+```
 
 ## First installation
 
 On the first installation, you should run `rake init` which will:
 
-- initialize Vim
-- Install rbenv, the latest Ruby and bundler/git-smart
-- Install Go binaries
-
-It will also run the default tasks (that run with simple `rake`):
 - Update submodules.
 - Link everything from `~/.dotfiles` to the home directory.
 - Link everything from `~/.dotfiles/.private` **if it exists**, this is
   the perfect place for you to keep private things. See [Keeping things
   private private][3] for more information.
+- initialize Vim
+- Install rbenv, install the latest Ruby and set it as the default.
+	Additionally it will install the `bundler` and `git-smart` gems.
+- Install some Go binaries defined in the
+	[Rakefile](https://github.com/kalbasit/dotfiles/blob/master/Rakefile)
+	look for `GO_BINARIES`.
+
+It will also run the default tasks (that run with simple `rake`):
 
 ### OSX
 
 For OSX, run [`.osx`][1] binary. Make sure to read it over and modify it
-to your liking, you might want to change the computer hostname for
+to your liking, you might want to change the computer host name for
 example `sed -e 's:cratos:mycomputer:g' -i .osx`
 
 The OSX script will:
