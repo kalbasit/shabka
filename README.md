@@ -18,8 +18,6 @@
 
 # Features
 
-> TODO: move links to the bottom and use numbered links
-
 - [Croscore fonts](8).
 - Colemak keyboard layout. My Kinesis Advantage 2 layout and settings.
 	are available [here](9)
