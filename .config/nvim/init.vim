@@ -137,7 +137,7 @@ Plug 'navicore/vissort.vim', { 'on': 'Vissort' }
 " file browser
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 
-" check file for errors
+" check file for errors, linting and vetting
 Plug 'w0rp/ale'
 
 " multiple cursors
