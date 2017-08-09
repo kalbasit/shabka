@@ -29,6 +29,8 @@ Plug 'hashivim/vim-terraform'
 Plug 'fatih/vim-go', { 'for': 'go' } | Plug 'majutsushi/tagbar'
 if has('nvim')
 	Plug 'sebdah/vim-delve'
+else
+	Plug 'Shougo/vimshell.vim' | Plug 'Shougo/vimproc.vim' | Plug 'sebdah/vim-delve'
 endif
 " CSV
 Plug 'chrisbra/csv.vim', { 'for': 'csv' }
