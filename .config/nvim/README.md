@@ -18,10 +18,8 @@ exceptions.
 
 # Keyboard layout and movement
 
-Vim is configured around the Colemak keyboard layout, it's also provided
-as a separate [plugin](https://github.com/kalbasit/vim-colemak/).
-
-From the [Colemak README](https://github.com/kalbasit/vim-colemak):
+Vim is configured around the Colemak keyboard layout. From the [Colemak
+README][6]:
 
 ```
 Colemak layout:                  |                 QWERTY layout:
@@ -115,3 +113,4 @@ as explained above, syntax check, linting and vetting is provided by
 [3]: https://github.com/Valloric/YouCompleteMe
 [4]: https://github.com/w0rp/ale
 [5]: https://github.com/
+[6]: https://github.com/kalbasit/vim-colemak
