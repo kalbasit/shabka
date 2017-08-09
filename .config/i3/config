@@ -246,7 +246,7 @@ bindsym $mod+$alt+m mode "$move_mode"
 set $mode_display (l) Laptop screen, (m) Multiple screen, (w) Wide screen
 mode "$mode_display" {
 	bindsym l exec $nosid xrandr --output eDP1 --mode 1920x1080 --output $extmonitor --off, mode "default"
-	bindsym m exec $nosid xrandr --output eDP1 --mode 1920x1080 --output $extmonitor --mode 3440x1440 --right-of eDP1, mode "default"
+	bindsym m exec $nosid xrandr --output eDP1 --mode 1920x1080 --output $extmonitor --primary --mode 3440x1440 --right-of eDP1, mode "default"
 	bindsym w exec $nosid xrandr --output eDP1 --off --output $extmonitor --mode 3440x1440, mode "default"
 
 	# back to normal: Enter or Escape
