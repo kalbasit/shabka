@@ -30,7 +30,7 @@
 		workspaces](https://github.com/kalbasit/i3-dynamic-workspaces) for
 		workspace management. Allows an infinite number of workspaces with
 		Alfred-like interface for jumging from one to another. See this demo
-		video [here](#TODO).
+		video TODO:[here](#TODO).
 	- much more, see the README linked above.
 - Workflow optimised for a project-based namespacing. One i3 workspace,
 	with one tmux socket and a dedicated GOPATH. This helps separate
