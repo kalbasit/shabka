@@ -18,35 +18,31 @@
 
 # Features
 
-- [Croscore fonts](https://en.wikipedia.org/wiki/Croscore_fonts).
+> TODO: move links to the bottom and use numbered links
+
+- [Croscore fonts](8).
 - Colemak keyboard layout. My Kinesis Advantage 2 layout and settings.
-	are available [here](https://github.com/kalbasit/advantage2)
+	are available [here](9)
 - i3 window manger (see [i3
-	README](https://github.com/kalbasit/dotfiles/tree/master/.config/i3)
-	for more information):
-	- Cousine font from the [Croscore fonts](https://en.wikipedia.org/wiki/Croscore_fonts).
-	- [seoul256](https://github.com/junegunn/seoul256.vim) color scheme.
-	- uses rofi backed by [i3 dynamic
-		workspaces](https://github.com/kalbasit/i3-dynamic-workspaces) for
-		workspace management. Allows an infinite number of workspaces with
-		Alfred-like interface for jumging from one to another. See this demo
-		video TODO:[here](#TODO).
+	README](10) for more information):
+	- Cousine font from the [Croscore fonts](8).
+	- [seoul256](11) color scheme.
+	- uses rofi backed by [i3 dynamic workspaces](12) for workspace
+		management. Allows an infinite number of workspaces with Alfred-like
+		interface for jumging from one to another. See this demo video
+		TODO:[here](#TODO).
 	- much more, see the README linked above.
 - Workflow optimised for a project-based namespacing. One i3 workspace,
 	with one tmux socket and a dedicated GOPATH. This helps separate
 	projects down to the filesystem and allows one git repo (the base) to
 	be checked out multiple times with different branches [git help
-	worktree](https://git-scm.com/docs/git-worktree). For more
-	information, please checkout [my
-	workflow](https://github.com/kalbasit/workflow) and my TMUX session
-	manager [TMX](https://github.com/kalbasit/tmx)
+	worktree](14). For more information, please checkout [my workflow](15)
+	and my TMUX session manager [TMX](16)
 - Vim optimised for working in Go, Python, Ruby, Typescript and many
 	more, please see my [Vim README](#TODO) for more information
 - Chromium augmented with Surfingkeys to bring my full Vim experience to
 	the browser. With Colemak layout and Github/Travis navigation helper,
-	see the [config
-	file](https://github.com/kalbasit/dotfiles/blob/master/.surfingkeys.js.erb)
-	for details.
+	see the [config file](17) for details.
 
 # Screenshot
 
@@ -77,9 +73,8 @@ On the first installation, you should run `rake init` which will:
 - initialize Vim
 - Install rbenv, install the latest Ruby and set it as the default.
 	Additionally it will install the `bundler` and `git-smart` gems.
-- Install some Go binaries defined in the
-	[Rakefile](https://github.com/kalbasit/dotfiles/blob/master/Rakefile)
-	look for `GO_BINARIES`.
+- Install some Go binaries defined in the [Rakefile](18) look for
+	`GO_BINARIES`.
 
 It will also run the default tasks (that run with simple `rake`):
 
@@ -193,3 +188,13 @@ should live under `~/.ssh/personal` and not `~/.ssh`.
 [5]: https://github.com/kalbasit/dotfiles/blob/master/Rakefile#L21
 [6]: https://github.com/mathiasbynens/dotfiles/blob/master/.osx
 [7]: https://github.com/kalbasit/dotfiles/blob/master/.zsh/functions/ssh_agents
+[8]: https://en.wikipedia.org/wiki/Croscore_fonts
+[9]: https://github.com/kalbasit/advantage2
+[10]: https://github.com/kalbasit/dotfiles/tree/master/.config/i3
+[11]: https://github.com/junegunn/seoul256.vim
+[12]: https://github.com/kalbasit/i3-dynamic-workspaces
+[14]: https://git-scm.com/docs/git-worktree
+[15]: https://github.com/kalbasit/workflow
+[16]: https://github.com/kalbasit/tmx
+[17]: https://github.com/kalbasit/dotfiles/blob/master/.surfingkeys.js.erb
+[18]: https://github.com/kalbasit/dotfiles/blob/master/Rakefile
