@@ -103,6 +103,8 @@ task :install_go_binaries do
 				cd #{File.join(ENV["GOPATH"], "src", bin)}
 				if [[ -f glide.lock ]]; then
 					glide install
+				elif [[ -f Gopkg.lock ]]; then
+					dep ensure
 				fi
 				go install
 			EOF
