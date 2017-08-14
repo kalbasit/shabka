@@ -54,6 +54,10 @@ function tmx() {
 		projects=( $(echo "${projects[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' ') )
 	}
 
+	function $0_export_gopath() {
+	export GOPATH="${HOME}/code/${profile}/base"
+}
+
 	function $0_attach() {
 	# make sure a server is running
 	tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" start-server
@@ -202,12 +206,8 @@ fi
 					# assign the first argument to sess
 					sess="$( cd "${1}" && pwd )"
 					debug "sess=${sess}"
-					# source the profile so we get the correct GOPATH
-					if [[ -n "${profile}" ]] && [[ -r "${HOME}/.zsh/profiles/${profile}.zsh" ]]; then
-						# shellcheck disable=SC1090
-						source "${HOME}/.zsh/profiles/${profile}.zsh"
-						pcode
-					fi
+					# export the right GOPATH
+					$0_export_gopath
 					# replace $GOPATH with \$GOPATH and $HOME with \$HOME
 					sess="$( echo "${sess}" | sed -e "s:$GOPATH:\$GOPATH:g" -e "s:$HOME:\$HOME:g" )"
 					debug "sess=${sess}"
@@ -285,11 +285,8 @@ fi
 			debug "profile=${profile}"
 		fi
 
-		# source the profile so we get the correct GOPATH
-		if [[ -n "${profile}" ]] && [[ -r "${HOME}/.zsh/profiles/${profile}.zsh" ]]; then
-			source "${HOME}/.zsh/profiles/${profile}.zsh"
-			pcode
-		fi
+		# export the right GOPATH
+		$0_export_gopath
 
 		# if the sess is empty, set it to the dotfiles
 		if [[ -z "${sess}" ]]; then
