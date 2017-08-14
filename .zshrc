@@ -242,9 +242,9 @@ fi
 # Set the browser to my relay browser
 export BROWSER="${HOME}/.bin/relay-browser"
 
-# Set the GOPATH
-export GLOBAL_GOPATH="${HOME}/.filesystem"
-pathprepend PATH "${GLOBAL_GOPATH}/bin"
+# Set the GLOBAL_GOPATH
+export SYSTEM_GOPATH="${HOME}/.filesystem"
+pathprepend PATH "${SYSTEM_GOPATH}/bin"
 
 # Set MYFS to my filesysemt
 export MYFS="${HOME}/.local"

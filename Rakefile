@@ -90,10 +90,10 @@ desc "Install Go Binaries"
 task :install_go_binaries do
 	# record the current GOPATH and switch to the global one
 	oldGoPath = ENV["GOPATH"]
-	if ENV["GLOBAL_GOPATH"].nil?
+	if ENV["SYSTEM_GOPATH"].nil?
 		ENV["GOPATH"] = File.join(ENV["HOME"], ".filesystem")
 	else
-		ENV["GOPATH"] = ENV["GLOBAL_GOPATH"]
+		ENV["GOPATH"] = ENV["SYSTEM_GOPATH"]
 	end
 	# Install the binaries and restore the GOPATH
 	begin
