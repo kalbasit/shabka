@@ -53,9 +53,9 @@ function new_pr() {
 		local story="$(echo "${branch}" | grep '^[[:alpha:]][[:alpha:]]*-[[:digit:]][[:digit:]]*$')"
 
 		if [[ "${git_dir}" = ".git" ]]; then
-			local repo="${PWD##${GOPATH}/src/}"
+			local repo="${PWD##${GOPATH}/src/github.com/}"
 		else
-			local repo="$(echo "${git_dir}" | sed -e 's:/\.git.*$::g' -e 's:^.*/[^/]*/src/::g')"
+			local repo="$(echo "${git_dir}" | sed -e 's:/\.git.*$::g' -e 's:^.*/[^/]*/src/github.com/::g')"
 		fi
 
 		if [[ "x${story}" != "x" ]]; then
