@@ -95,18 +95,22 @@ task :install_go_binaries do
 	else
 		ENV["GOPATH"] = ENV["SYSTEM_GOPATH"]
 	end
-	# Install the binaries and restore the GOPATH
 	begin
+		# Install the binaries
 		GO_BINARIES.each do |bin, postinstall|
-			sh <<-EOF
+			sh <<~EOF
 				go get -u -d #{bin}
 				cd #{File.join(ENV["GOPATH"], "src", bin)}
 				if [[ -f glide.lock ]]; then
 					glide install
 				elif [[ -f Gopkg.lock ]]; then
-					dep ensure
+					dep ensure -v
 				fi
-				go install
+				if [[ -f Makefile ]]; then
+					make install || go install -v
+				else
+					go install -v
+				fi
 			EOF
 
 			if postinstall != ""
