@@ -902,8 +902,10 @@ fi
 # Profile support
 #####################################################################
 
-# load the active profile or personal if no active profile
-sp "${ACTIVE_PROFILE:-personal}"
+# load the active profile only if one is available
+if [[ -n "${ACTIVE_PROFILE}" ]]; then
+	sp "${ACTIVE_PROFILE}"
+fi
 
 #####################################################################
 # Welcome notes
