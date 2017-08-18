@@ -56,6 +56,8 @@ function tmx() {
 
 	function $0_export_gopath() {
 	export GOPATH="${HOME}/code/${profile}/base"
+	debug "profile=${profile}"
+	debug "GOPATH=${GOPATH}"
 }
 
 	function $0_attach() {
@@ -71,6 +73,9 @@ function tmx() {
 
 			# add the ACTIVE_PROFILE to the environment of the session
 			tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" set-environment -t "${sess}" ACTIVE_PROFILE "${profile}"
+
+			# add the GOPATH to the environment of the session
+			tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" set-environment -t "${sess}" GOPATH "${HOME}/code/${profile}/base"
 
 			# start a new shell on window 1
 			tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" new-window -t "${sess}:1"
@@ -285,15 +290,15 @@ fi
 			debug "profile=${profile}"
 		fi
 
-		# export the right GOPATH
-		$0_export_gopath
-
 		# if the sess is empty, set it to the dotfiles
 		if [[ -z "${sess}" ]]; then
 			sess="personal@\$HOME/.dotfiles"
 			sess_dir="${HOME}/.dotfiles"
 			profile="personal"
 		fi
+
+		# export the right GOPATH
+		$0_export_gopath
 
 		# expand any variable stored in the sess name
 		sess_dir="$( eval "echo ${sess_dir}" )"
