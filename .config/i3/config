@@ -340,9 +340,8 @@ for_window [class="^net-filebot-Main$"] floating enable
 ########################
 
 # assign important spaces to my external monitor
-workspace main output $extmonitor
-workspace personal output $extmonitor
-workspace publica output $extmonitor
+workspace personal@base output $extmonitor
+workspace publica@base output $extmonitor
 workspace irc output $extmonitor
 workspace mail output $extmonitor
 
@@ -376,4 +375,4 @@ exec $nosid whatsapp-web-desktop
 exec $nosid mclip.py daemon
 
 # Start the personal terminal on the personal workspace
-exec i3-msg "workspace personal; exec $nosid /usr/bin/termite"
+exec i3-msg "workspace personal@base; exec $nosid /usr/bin/termite"
