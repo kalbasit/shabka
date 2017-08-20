@@ -11,7 +11,7 @@ function tmx() {
 			print_info "${log_depth}" "\t     --log-depth           - change the depth of the log Default: ${log_depth}"
 			print_info "${log_depth}" "\t -s, --select-session      - fuzzy-select a session"
 			print_info "${log_depth}" "\t -k, --kill-pane           - kill the pane after the session has been switched; only relevant with --select-session and within TMUX"
-			print_info "${log_depth}" "\t -L, --socket-name         - use a different socket than the default"
+			print_info "${log_depth}" "\t -L, --socket-name         - use a different socket than ${tmux_socket_name}"
 			print_info "${log_depth}" "\t -c, --confirm-vim-start   - confirm before starting Vim, this is essentially a performance improvement"
 			print_info "${log_depth}" "\t -p, --profile             - the profile to use. This is only relevant if a new session is going to be started"
 			print_info "${log_depth}" "\t -vs, --vim-save-close-all - Vim: save and close all files"
@@ -123,7 +123,7 @@ fi
 		local kill_pane=false
 		local log_depth=0
 		local select_session=false
-		local tmux_socket_name=default
+		local tmux_socket_name="$(basename ${TMUX:-default} | cut -d, -f1)"
 		local profile=personal
 		local sess=
 		local sess_dir=
