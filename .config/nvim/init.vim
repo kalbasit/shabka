@@ -100,6 +100,10 @@ if executable('ag')
 	Plug 'mileszs/ack.vim'
 endif
 
+if executable('xdotool') && (executable('grip') || executable('markdown'))
+	Plug 'JamshedVesuna/vim-markdown-preview'
+endif
+
 """""""""""
 " Editing "
 """""""""""
@@ -541,6 +545,15 @@ endif
 " }}}
 "" Gundo{{{
 nmap <Leader>go :GundoToggle<CR>
+"" }}}
+"" Markdown preview{{{
+
+if executable('grip')
+	let g:vim_markdown_preview_github=1
+endif
+
+let g:vim_markdown_preview_use_xdg_open=1
+
 "" }}}
 "" Polyglot{{{
 ""
