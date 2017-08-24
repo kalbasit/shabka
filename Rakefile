@@ -33,25 +33,25 @@ IGNORED_FILES = [
 
 GO_BINARIES = {
 	# Editing helpers (linters and error checkers)
-	"github.com/alecthomas/gometalinter" => "gometalinter --install",
+	"github.com/alecthomas/gometalinter" => {postinstall: "gometalinter --install"},
 
-	"github.com/3rf/codecoroner"                              => "",
-	"github.com/axw/gocov/gocov"                              => "",
-	"github.com/d4l3k/go-pry"                                 => "",
-	"github.com/derekparker/delve/cmd/dlv"                    => "",
-	"github.com/dim13/gone"                                   => "",
-	"github.com/erroneousboat/slack-term"                     => "",
-	"github.com/golang/dep/cmd/dep"                           => "",
-	"github.com/golang/protobuf/protoc-gen-go"                => "",
-	"github.com/golang/tools/cmd/gomvpkg"                     => "",
-	"github.com/jteeuwen/go-bindata/go-bindata"               => "",
-	"github.com/kalbasit/swm/cmd/swm"                         => "",
-	"github.com/monochromegane/the_platinum_searcher/cmd/pt"  => "",
-	"github.com/ngdinhtoan/glide-cleanup"                     => "",
-	"github.com/peco/peco/cmd/peco"                           => "",
-	"github.com/pocke/lemonade"                               => "",
-	"golang.org/x/tools/cmd/cover"                            => "",
-	"golang.org/x/tools/cmd/stringer"                         => "",
+	"github.com/3rf/codecoroner"                              => {},
+	"github.com/axw/gocov/gocov"                              => {},
+	"github.com/d4l3k/go-pry"                                 => {},
+	"github.com/derekparker/delve/cmd/dlv"                    => {},
+	"github.com/dim13/gone"                                   => {},
+	"github.com/erroneousboat/slack-term"                     => {},
+	"github.com/golang/dep/cmd/dep"                           => {},
+	"github.com/golang/protobuf/protoc-gen-go"                => {},
+	"github.com/golang/tools/cmd/gomvpkg"                     => {},
+	"github.com/jteeuwen/go-bindata/go-bindata"               => {},
+	"github.com/kalbasit/swm/cmd/swm"                         => {},
+	"github.com/monochromegane/the_platinum_searcher/cmd/pt"  => {},
+	"github.com/ngdinhtoan/glide-cleanup"                     => {},
+	"github.com/peco/peco/cmd/peco"                           => {},
+	"github.com/pocke/lemonade"                               => {},
+	"golang.org/x/tools/cmd/cover"                            => {},
+	"golang.org/x/tools/cmd/stringer"                         => {},
 }
 
 LOCAL_BINARIES = [
@@ -97,7 +97,7 @@ task :install_go_binaries do
 	end
 	begin
 		# Install the binaries
-		GO_BINARIES.each do |bin, postinstall|
+		GO_BINARIES.each do |bin, options|
 			sh <<~EOF
 				go get -u -d #{bin}
 				cd #{File.join(ENV["GOPATH"], "src", bin)}
@@ -113,8 +113,8 @@ task :install_go_binaries do
 				fi
 			EOF
 
-			if postinstall != ""
-				sh postinstall
+			if options[:postinstall] != ""
+				sh options[:postinstall]
 			end
 		end
 	ensure
