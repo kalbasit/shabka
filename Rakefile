@@ -48,6 +48,7 @@ GO_BINARIES = {
 	"github.com/kalbasit/swm/cmd/swm"                         => {},
 	"github.com/monochromegane/the_platinum_searcher/cmd/pt"  => {},
 	"github.com/ngdinhtoan/glide-cleanup"                     => {},
+	"github.com/opsgenie/opsgenie-lamp"                       => {},
 	"github.com/peco/peco/cmd/peco"                           => {},
 	"github.com/pocke/lemonade"                               => {},
 	"golang.org/x/tools/cmd/cover"                            => {},
