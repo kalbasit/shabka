@@ -28,23 +28,24 @@
 # }}}
 # alias# {{{
 [alias]
-	addnw           = !sh -c 'git diff -U0 -w --no-color "$@" | git apply --cached --ignore-whitespace --unidiff-zero -'
 	aa              = add --all .
 	aap             = !git aa -p
+	addnw           = !sh -c 'git diff -U0 -w --no-color "$@" | git apply --cached --ignore-whitespace --unidiff-zero -'
 	amend           = commit --amend
 	cat             = -p cat-file -p
 	cb              = checkout -b
 	ci              = commit
 	co              = checkout
 	co-branch       = "!f() { git checkout-index -a -f --prefix=${1}/; }; f"
-	cow             = !git checkout $(i3-msg -t get_workspaces | jq -r '.[] | if .focused == true then .name else empty end') 2>/dev/null || git checkout -b $(i3-msg -t get_workspaces | jq -r '.[] | if .focused == true then .name else empty end')
 	com             = checkout master
+	cow             = !git checkout $(i3-msg -t get_workspaces | jq -r '.[] | if .focused == true then .name else empty end') 2>/dev/null || git checkout -b $(i3-msg -t get_workspaces | jq -r '.[] | if .focused == true then .name else empty end')
 	credit          = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
 	current-branch  = !git symbolic-ref -q HEAD | sed -e 's|^refs/heads/||'
 	dc              = diff --cached
 	di              = diff
 	ds              = diff --stat=160,120
 	fa              = fetch --all
+	faro            = !git fetch --all && git rebase origin/master
 	ff              = merge --ff-only
 	generate-patch  = !git-format-patch --patch-with-stat --raw --signoff
 	l               = log --graph --pretty=format':%C(yellow)%h %Cgreen%G?%Cblue%d%Creset %s %C(white) %an, %ar%Creset' # Log display from screencast, with train tracks.
