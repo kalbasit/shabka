@@ -99,6 +99,7 @@ task :install_go_binaries do
 	begin
 		# Install the binaries
 		GO_BINARIES.each do |bin, options|
+			puts "installing #{bin}"
 			sh <<~EOF
 				go get -u -d #{bin}
 				cd #{File.join(ENV["GOPATH"], "src", bin)}
@@ -114,9 +115,7 @@ task :install_go_binaries do
 				fi
 			EOF
 
-			if options[:postinstall] != ""
-				sh options[:postinstall]
-			end
+			sh options[:postinstall] unless options[:postinstall].nil?
 		end
 	ensure
 		ENV["GOPATH"] = oldGoPath
