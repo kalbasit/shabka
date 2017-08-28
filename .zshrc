@@ -308,6 +308,12 @@ pathprepend PATH "${HOME}/.pyenv/bin"
 # add cargo
 pathprepend PATH "${HOME}/.cargo/bin"
 
+# add depot tools
+pathappend PATH /opt/depot_tools
+
+# opsgenie
+export LAMP_CONF_PATH="${HOME}/.config/lamp/opsgenie-integration.conf"
+
 #####################################################################
 # aliases
 #####################################################################
