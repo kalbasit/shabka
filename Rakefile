@@ -114,8 +114,10 @@ task :install_go_binaries do
 					go install -v
 				fi
 			EOF
-
-			sh options[:postinstall] unless options[:postinstall].nil?
+			unless options[:postinstall].nil?
+				puts "running post install for #{bin}"
+				sh options[:postinstall]
+			end
 		end
 	ensure
 		ENV["GOPATH"] = oldGoPath
