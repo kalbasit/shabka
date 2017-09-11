@@ -333,6 +333,7 @@ alias remove_dead_containers="docker rm -v \$(docker ps -a -q -f status=exited)"
 alias rot13="tr '[A-Za-z]' '[N-ZA-Mn-za-m]'"
 alias rserve_this="ruby -rrack -e \"Rack::Handler::WEBrick.run Rack::Directory.new('.')\""
 alias s="swm tmux switch-client"
+alias sb="swm --story base tmux switch-client"
 alias serve_this="python2 -m SimpleHTTPServer"
 alias t='task'
 alias utf8test='curl -L https://github.com/tmux/tmux/raw/master/tools/UTF-8-demo.txt'
