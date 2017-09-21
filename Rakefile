@@ -51,6 +51,7 @@ GO_BINARIES = {
 	"github.com/opsgenie/opsgenie-lamp"                       => {},
 	"github.com/peco/peco/cmd/peco"                           => {},
 	"github.com/pocke/lemonade"                               => {},
+	"github.com/smartystreets/goconvey"                       => {},
 	"golang.org/x/tools/cmd/cover"                            => {},
 	"golang.org/x/tools/cmd/stringer"                         => {},
 }
