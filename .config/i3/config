@@ -373,8 +373,6 @@ bindsym $alt+p [class="Chromium" instance="crx_jjbjdleccaiklfpcblgekgmjadjdclkp"
 exec $nosid termite --title=irc --exec="weechat"
 exec $nosid whatsapp-web-desktop
 exec $nosid mclip.py daemon
-exec $nosid setxkbmap us -variant colemak
-exec $nosid xmodmap ~/.Xmodmap
 
 # Start the personal terminal on the personal workspace
 exec i3-msg "workspace personal@base; exec $nosid /usr/bin/termite"
