@@ -37,10 +37,14 @@ GO_BINARIES = {
 
 	"github.com/3rf/codecoroner"                              => {},
 	"github.com/axw/gocov/gocov"                              => {},
+	"github.com/ckaznocha/protoc-gen-lint"                    => {},
 	"github.com/d4l3k/go-pry"                                 => {},
 	"github.com/derekparker/delve/cmd/dlv"                    => {},
 	"github.com/dim13/gone"                                   => {},
 	"github.com/erroneousboat/slack-term"                     => {},
+	"github.com/gogo/protobuf/gogoproto"                      => {},
+	"github.com/gogo/protobuf/protoc-gen-gofast"              => {},
+	"github.com/gogo/protobuf/protoc-gen-gogo"                => {},
 	"github.com/golang/dep/cmd/dep"                           => {},
 	"github.com/golang/protobuf/protoc-gen-go"                => {},
 	"github.com/golang/tools/cmd/gomvpkg"                     => {},
@@ -52,6 +56,7 @@ GO_BINARIES = {
 	"github.com/peco/peco/cmd/peco"                           => {},
 	"github.com/pocke/lemonade"                               => {},
 	"github.com/smartystreets/goconvey"                       => {},
+	"github.com/square/certstrap"                             => {},
 	"golang.org/x/tools/cmd/cover"                            => {},
 	"golang.org/x/tools/cmd/stringer"                         => {},
 }
