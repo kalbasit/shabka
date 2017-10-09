@@ -112,6 +112,11 @@ if has("python")
 	Plug 'sjl/gundo.vim', { 'on': 'GundoToggle' }
 endif
 
+" base64 encode/decode the visual block
+if executable('base64')
+	Plug 'christianrondeau/vim-base64'
+endif
+
 " load editorconfig if available
 Plug 'editorconfig/editorconfig-vim'
 
