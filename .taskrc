@@ -77,4 +77,5 @@ report._reviewed.filter=( reviewed.none: or reviewed.before:now-1week ) and ( +P
 # Context definition
 context.opensource=+opensource
 context.personal=+personal
+context.chores=+chores
 context.publica=+publica
