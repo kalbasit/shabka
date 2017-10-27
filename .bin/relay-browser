@@ -64,11 +64,17 @@ while [[ $# -ge 1 ]]; do
 done
 
 if [[ -z "${profile}" ]]; then
-	items="personal\npublica\ntalentoday"
+	items="personal\npublica\ntalentoday\nihab\nanya"
 	profile=$(rofi -dmenu < <(echo -e "${items}"))
 fi
 
 case "${profile}" in
+	ihab)
+		(exec chromium --user-data-dir="${HOME}/.config/chromium-ihab" "${argument[@]}" &>/dev/null)&
+		;;
+	anya)
+		(exec chromium --user-data-dir="${HOME}/.config/chromium-anya" "${argument[@]}" &>/dev/null)&
+		;;
 	personal)
 		(exec chromium --user-data-dir="${HOME}/.config/chromium-personal" "${argument[@]}" &>/dev/null)&
 		;;
