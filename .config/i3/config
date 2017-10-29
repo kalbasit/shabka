@@ -124,9 +124,9 @@ bindsym $mod+m exec i3-input -F 'mark %s' -l 1 -P 'Mark: '
 bindsym $mod+apostrophe exec i3-input -F '[con_mark="%s"] focus' -l 1 -P 'Go to: '
 
 # volume support
-bindsym XF86AudioRaiseVolume exec $nosid pactl set-sink-mute 0 false, exec $nosid pactl set-sink-volume 0 +5%
-bindsym XF86AudioLowerVolume exec $nosid pactl set-sink-mute 0 false, exec $nosid pactl set-sink-volume 0 -5%
-bindsym XF86AudioMute exec $nosid pactl set-sink-mute 0 toggle
+bindsym XF86AudioRaiseVolume exec $nosid pactl set-sink-mute @DEFAULT_SINK@ false, exec $nosid pactl set-sink-volume @DEFAULT_SINK@ +5%
+bindsym XF86AudioLowerVolume exec $nosid pactl set-sink-mute @DEFAULT_SINK@ false, exec $nosid pactl set-sink-volume @DEFAULT_SINK@ -5%
+bindsym XF86AudioMute exec $nosid pactl set-sink-mute @DEFAULT_SINK@ toggle
 
 # brightness support
 bindsym XF86MonBrightnessUp exec $nosid xbacklight -inc 5
