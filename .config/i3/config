@@ -37,6 +37,10 @@ force_display_urgency_hint 500 ms
 # window.
 focus_on_window_activation urgent
 
+# This option determines in which mode new containers on workspace level will
+# start.
+workspace_layout tabbed
+
 ############
 # Bindings #
 ############
