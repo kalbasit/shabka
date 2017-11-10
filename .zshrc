@@ -239,6 +239,9 @@ if [[ "$OSTYPE" = darwin* ]]; then
 		export HOMEBREW_GITHUB_API_TOKEN="$(head -1 "${HOME}/.github_token")"
 fi
 
+# use nvim as VMAIL editor
+export VMAIL_VIM=nvim
+
 # Set the browser to my relay browser
 export BROWSER="${HOME}/.bin/relay-browser"
 
