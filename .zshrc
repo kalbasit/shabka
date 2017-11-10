@@ -924,4 +924,8 @@ fi
 if [[ -o interactive ]]; then
 	have pom && pom
 	have fortune && fortune -c
+
+	if have i3-msg && have jq && [[ -n "${DISPLAY}" ]]; then
+		sp "$(i3-msg -t get_workspaces | jq -r '.[] | if .focused == true then .name else empty end' | cut -d@ -f1)"
+	fi
 fi
