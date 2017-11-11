@@ -94,39 +94,14 @@ task :install_rbenv do
 end
 
 desc "Install Go Binaries"
-task :install_go_binaries do
-	# record the current GOPATH and switch to the global one
-	oldGoPath = ENV["GOPATH"]
-	if ENV["SYSTEM_GOPATH"].nil?
-		ENV["GOPATH"] = File.join(ENV["HOME"], ".filesystem")
+task :install_go_binaries, [:binary] do |t, args|
+	if args[:binary]
+		install_go_binary(args[:binary], GO_BINARIES[args[:binary]])
 	else
-		ENV["GOPATH"] = ENV["SYSTEM_GOPATH"]
-	end
-	begin
 		# Install the binaries
 		GO_BINARIES.each do |bin, options|
-			puts "installing #{bin}"
-			sh <<~EOF
-				go get -u -d #{bin}
-				cd #{File.join(ENV["GOPATH"], "src", bin)}
-				if [[ -f glide.lock ]]; then
-					glide install
-				elif [[ -f Gopkg.lock ]]; then
-					dep ensure -v
-				fi
-				if [[ -f Makefile ]]; then
-					make install || go install -v
-				else
-					go install -v
-				fi
-			EOF
-			unless options[:postinstall].nil?
-				puts "running post install for #{bin}"
-				sh options[:postinstall]
-			end
+			install_go_binary(bin, options)
 		end
-	ensure
-		ENV["GOPATH"] = oldGoPath
 	end
 end
 
@@ -365,5 +340,42 @@ def open_and_save_file(path, value = nil, &block)
 		else
 			f.write(value)
 		end
+	end
+end
+
+# Install a go binary
+#
+# @param {String} import_path - The Go project import path (must be a main package)
+# @param {Hash}   options     - The options for install the Go binary
+def install_go_binary(import_path, options)
+	# record the current GOPATH and switch to the global one
+	oldGoPath = ENV["GOPATH"]
+	if ENV["SYSTEM_GOPATH"].nil?
+		ENV["GOPATH"] = File.join(ENV["HOME"], ".filesystem")
+	else
+		ENV["GOPATH"] = ENV["SYSTEM_GOPATH"]
+	end
+	begin
+		puts "installing #{import_path}"
+		sh <<~EOF
+			go get -u -d #{import_path}
+			cd #{File.join(ENV["GOPATH"], "src", import_path)}
+			if [[ -f glide.lock ]]; then
+				glide install
+			elif [[ -f Gopkg.lock ]]; then
+				dep ensure -v
+			fi
+			if [[ -f Makefile ]]; then
+				make install || go install -v
+			else
+				go install -v
+			fi
+		EOF
+		unless options[:postinstall].nil?
+			puts "running post install for #{import_path}"
+			sh options[:postinstall]
+		end
+	ensure
+		ENV["GOPATH"] = oldGoPath
 	end
 end
