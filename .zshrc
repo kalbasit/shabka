@@ -926,6 +926,9 @@ if [[ -o interactive ]]; then
 	have fortune && fortune -c
 
 	if have i3-msg && have jq && [[ -n "${DISPLAY}" ]]; then
-		sp "$(i3-msg -t get_workspaces | jq -r '.[] | if .focused == true then .name else empty end' | cut -d@ -f1)"
+		active_i3_workspace="$(i3-msg -t get_workspaces | jq -r '.[] | if .focused == true then .name else empty end')"
+		[[ -z "${ACTIVE_PROFILE}" ]] && export ACTIVE_PROFILE="$(echo "${active_i3_workspace}" | cut -d@ -f1)"
+		[[ -z "${ACTIVE_STORY}" ]] && export ACTIVE_STORY="$(echo "${active_i3_workspace}" | cut -d@ -f2)"
+		unset active_i3_workspace
 	fi
 fi
