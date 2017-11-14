@@ -39,24 +39,18 @@ function get_pr() {
 			return 1
 		fi
 
-		local git_dir="$(git rev-parse --git-dir 2> /dev/null)"
-		local branch="$(current_branch)"
-		local story="$(echo "${branch}" | grep '^[[:alpha:]][[:alpha:]]*-[[:digit:]][[:digit:]]*$')"
+		local remote_url="$(git remote get-url origin 2> /dev/null)"; debug "remote_url=${remote_url}"
+		local branch="$(current_branch)"; debug "branch=${branch}"
+		local story="$(echo "${branch}" | grep '^[[:alpha:]][[:alpha:]]*-[[:digit:]][[:digit:]]*$')"; debug "story=${story}"
 
-		if [[ "${git_dir}" = ".git" ]]; then
-			local repo="${PWD##${GOPATH}/src/github.com/}"
-		else
-			local repo="${git_dir##${GOPATH}/src/github.com/}"
-			repo="${repo%%.git}"
-		fi
+		local owner="$(git_gopath_formatted_repo_path ${remote_url} | cut -d/ -f2)"
+		local repo="$(git_gopath_formatted_repo_path ${remote_url} | cut -d/ -f3)"
 
-		local owner="$(dirname "${repo}")"
-
-		debug "repo => ${repo}"
 		debug "owner => ${owner}"
+		debug "repo => ${repo}"
 		debug "story => ${story}"
 
-		local body="$( curl -s -X GET "https://api.github.com/repos/${repo}/pulls?state=open&head=${owner}:${branch}" \
+		local body="$( curl -s -X GET "https://api.github.com/repos/${owner}/${repo}/pulls?state=open&head=${owner}:${branch}" \
 			-H "Accept: application/vnd.github.v3+json" \
 			-H "Authorization: token $(cat ${HOME}/.github_token)" )"
 
@@ -70,7 +64,7 @@ function get_pr() {
 		fi
 
 		for url in ${urls[@]}; do
-			if ! [[ "${url}" =~ "^https://github.com/${repo}/pull/" ]]; then
+			if ! [[ "${url}" =~ "^https://github.com/${owner}/${repo}/pull/" ]]; then
 				print_error "${log_depth}" "URL '${url}' is not valid, something went wrong. Body following"
 				echo "${body}"
 				return 1
