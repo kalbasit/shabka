@@ -11,7 +11,7 @@ function vim_clean_swap() {
 		local RECTXT="$TMPDIR/vim.recovery.$USER.txt"
 		local RECFN="$TMPDIR/vim.recovery.$USER.fn"
 		local q=
-		for q in ~/.vim/_swap/*; do
+		for q in ~/.local/share/nvim/swap/*; do
 			[[ -f $q ]] || continue
 			if [[ `du $q | awk '{print $1}'` -eq 0 ]]; then
 				rm -f $q
