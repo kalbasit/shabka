@@ -912,6 +912,14 @@ fi
 # Profile support
 #####################################################################
 
+# compute the profile and story from the current i3 workspace
+if [[ -z "${ACTIVE_PROFILE}" || -z "${ACTIVE_STORY}" ]] && have i3-msg && have jq && [[ -n "${DISPLAY}" ]]; then
+	active_i3_workspace="$(i3-msg -t get_workspaces 2>/dev/null | jq -r '.[] | if .focused == true then .name else empty end')"
+	[[ -z "${ACTIVE_PROFILE}" ]] && export ACTIVE_PROFILE="$(echo "${active_i3_workspace}" | cut -d@ -f1)"
+	[[ -z "${ACTIVE_STORY}" ]] && export ACTIVE_STORY="$(echo "${active_i3_workspace}" | cut -d@ -f2)"
+	unset active_i3_workspace
+fi
+
 # load the active profile only if one is available
 if [[ -n "${ACTIVE_PROFILE}" ]]; then
 	sp "${ACTIVE_PROFILE}"
@@ -924,11 +932,4 @@ fi
 if [[ -o interactive ]]; then
 	have pom && pom
 	have fortune && fortune -c
-
-	if have i3-msg && have jq && [[ -n "${DISPLAY}" ]]; then
-		active_i3_workspace="$(i3-msg -t get_workspaces | jq -r '.[] | if .focused == true then .name else empty end')"
-		[[ -z "${ACTIVE_PROFILE}" ]] && export ACTIVE_PROFILE="$(echo "${active_i3_workspace}" | cut -d@ -f1)"
-		[[ -z "${ACTIVE_STORY}" ]] && export ACTIVE_STORY="$(echo "${active_i3_workspace}" | cut -d@ -f2)"
-		unset active_i3_workspace
-	fi
 fi
