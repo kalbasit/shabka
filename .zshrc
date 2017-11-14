@@ -930,6 +930,6 @@ fi
 #####################################################################
 
 if [[ -o interactive ]]; then
-	have pom && pom
-	have fortune && fortune -c
+	have pom && pom || true
+	have fortune && fortune -c || true
 fi
