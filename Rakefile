@@ -52,6 +52,7 @@ GO_BINARIES = {
 	"github.com/kalbasit/swm"                                 => {},
 	"github.com/monochromegane/the_platinum_searcher/cmd/pt"  => {},
 	"github.com/ngdinhtoan/glide-cleanup"                     => {},
+	"github.com/nsf/gocode"                                   => {},
 	"github.com/opsgenie/opsgenie-lamp"                       => {},
 	"github.com/peco/peco/cmd/peco"                           => {},
 	"github.com/pocke/lemonade"                               => {},
