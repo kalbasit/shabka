@@ -64,7 +64,7 @@ while [[ $# -ge 1 ]]; do
 done
 
 if [[ -z "${profile}" ]]; then
-	items="personal\npublica\ntalentoday\nihab\nanya"
+	items="personal\npublica\ntalentoday\nihab\nanya\nnosecurity"
 	profile=$(rofi -dmenu < <(echo -e "${items}"))
 fi
 
@@ -83,6 +83,9 @@ case "${profile}" in
 		;;
 	talentoday)
 		(exec chromium --user-data-dir="${HOME}/.config/chromium-talentoday" "${argument[@]}" &>/dev/null)&
+		;;
+	nosecurity)
+		(exec chromium --user-data-dir="${HOME}/.config/chromium-nosecurity" --disable-web-security "${argument[@]}" &>/dev/null)&
 		;;
 	*)
 		echo -e "${profile} is not recognized"
