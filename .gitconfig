@@ -46,6 +46,7 @@
 	ds              = diff --stat=160,120
 	fa              = fetch --all
 	faro            = !git fetch --all && git rebase origin/master
+	famm            = !git fetch --all && git merge origin/master
 	ff              = merge --ff-only
 	generate-patch  = !git-format-patch --patch-with-stat --raw --signoff
 	l               = log --graph --pretty=format':%C(yellow)%h %Cgreen%G?%Cblue%d%Creset %s %C(white) %an, %ar%Creset' # Log display from screencast, with train tracks.
