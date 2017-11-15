@@ -1,0 +1,10 @@
+[Unit]
+Description=Virtual framebuffer X server on display %I
+
+[Service]
+ExecStart=/usr/bin/Xvfb :%i
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=default.target
