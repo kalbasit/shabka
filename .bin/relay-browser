@@ -31,6 +31,7 @@ function help()
 }
 
 log_depth="0"
+args=""
 
 while [[ $# -ge 1 ]]; do
 	case "${1}" in
@@ -57,37 +58,29 @@ while [[ $# -ge 1 ]]; do
 			shift 2
 			;;
 		*)
-			argument=( ${@} )
+			args=( ${@} )
 			break
 			;;
 	esac
 done
 
+PROFILES_PATH="${HOME}/.config/chromium/profiles"
+
 if [[ -z "${profile}" ]]; then
-	items="personal\npublica\ntalentoday\nihab\nanya\nnosecurity"
+	items=""
+	sep=""
+	for i in $PROFILES_PATH/*; do;
+		if [[ -d "${i}" ]]; then
+			items="${items}${sep}$(basename "${i}")"
+			sep="\n"
+		fi
+	done
 	profile=$(rofi -dmenu < <(echo -e "${items}"))
 fi
 
-case "${profile}" in
-	ihab)
-		(exec chromium --user-data-dir="${HOME}/.config/chromium-ihab" "${argument[@]}" &>/dev/null)&
-		;;
-	anya)
-		(exec chromium --user-data-dir="${HOME}/.config/chromium-anya" "${argument[@]}" &>/dev/null)&
-		;;
-	personal)
-		(exec chromium --user-data-dir="${HOME}/.config/chromium-personal" "${argument[@]}" &>/dev/null)&
-		;;
-	publica)
-		(exec chromium --user-data-dir="${HOME}/.config/chromium-publica" "${argument[@]}" &>/dev/null)&
-		;;
-	talentoday)
-		(exec chromium --user-data-dir="${HOME}/.config/chromium-talentoday" "${argument[@]}" &>/dev/null)&
-		;;
-	nosecurity)
-		(exec chromium --user-data-dir="${HOME}/.config/chromium-nosecurity" --disable-web-security "${argument[@]}" &>/dev/null)&
-		;;
-	*)
-		echo -e "${profile} is not recognized"
-		;;
-esac
+if [[ ! -d "${PROFILES_PATH}/${profile}" ]]; then
+	print_warning 0 "the selected profile does not exists, creating one"
+	mkdir -p "${PROFILES_PATH}/${profile}"
+fi
+
+(exec chromium --user-data-dir="${PROFILES_PATH}/${profile}" "${args[@]}" &>/dev/null)&
