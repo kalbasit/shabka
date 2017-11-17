@@ -225,7 +225,7 @@ set spell                              " Turn on spellcheck.
 set splitbelow                         " Always split under
 set splitright                         " Always split on the right
 set startofline                        " Move the cursor to the first non-blank of the line
-set backupdir-=.                       " Do not backup to the current directory
+set nobackup                           " Turn off backup
 
 if v:version >= 703
 	set cursorline     " cursor line highlighting
