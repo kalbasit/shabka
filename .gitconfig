@@ -47,6 +47,7 @@
 	fa              = fetch --all
 	faro            = !git fetch --all && git rebase origin/master
 	famm            = !git fetch --all && git merge origin/master
+	famff           = !git fetch --all && git merge --ff-only origin/master
 	ff              = merge --ff-only
 	generate-patch  = !git-format-patch --patch-with-stat --raw --signoff
 	l               = log --graph --pretty=format':%C(yellow)%h %Cgreen%G?%Cblue%d%Creset %s %C(white) %an, %ar%Creset' # Log display from screencast, with train tracks.
