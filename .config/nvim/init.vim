@@ -6,16 +6,12 @@
 " Note: Skip initialization for vim-tiny or vim-small.
 if !1 | finish | endif
 
-if has('vim_starting') && !has('nvim') && &compatible
-	set nocompatible               " Be iMproved
-endif
-
 " }}}
 "" Plug{{{
 ""
 
 " Required:
-call plug#begin(expand('~/.vim/bundle/'))
+call plug#begin(expand('~/.config/nvim/bundle/'))
 
 """"""""""""""
 " Languages  "
@@ -27,11 +23,7 @@ Plug 'sheerun/vim-polyglot'
 Plug 'hashivim/vim-terraform'
 " Go
 Plug 'fatih/vim-go', { 'for': 'go' } | Plug 'majutsushi/tagbar'
-if has('nvim')
-	Plug 'sebdah/vim-delve'
-else
-	Plug 'Shougo/vimshell.vim' | Plug 'Shougo/vimproc.vim' | Plug 'sebdah/vim-delve'
-endif
+Plug 'sebdah/vim-delve'
 " CSV
 Plug 'chrisbra/csv.vim', { 'for': 'csv' }
 " Ruby/Rails
@@ -51,22 +43,17 @@ Plug 'junegunn/seoul256.vim'
 " AutoComplete & Snippet "
 """"""""""""""""""""""""""
 
-" deoplete for nvim, YouCompleteMe for vim
-if has('nvim')
-	" the main plugin
-	Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-	" Golang support
-	Plug 'zchee/deoplete-go', { 'do': 'make && mkdir -p ~/.cache/deoplete/go'}
-	" Typescript support
-	Plug 'mhartington/nvim-typescript'
-	" Ruby support
-	Plug 'fishbullet/deoplete-ruby'
-	" ZSH support
-	Plug 'zchee/deoplete-zsh'
-else
-	Plug 'Valloric/YouCompleteMe', { 'dir': '~/.vim/bundle/vim-YouCompleteMe', 'do': 'python2 install.py --clang-completer --system-libclang --gocode-completer --racer-completer' }
-	autocmd! User YouCompleteMe if !has('vim_starting') | call youcompleteme#Enable() | endif
-endif
+" deoplete for nvim.
+" the main plugin
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" Golang support
+Plug 'zchee/deoplete-go', { 'do': 'make && mkdir -p ~/.cache/deoplete/go'}
+" Typescript support
+Plug 'mhartington/nvim-typescript'
+" Ruby support
+Plug 'fishbullet/deoplete-ruby'
+" ZSH support
+Plug 'zchee/deoplete-zsh'
 
 """""""""""""""
 " Look & Feel "
@@ -196,9 +183,6 @@ call plug#end()
 
 " Required:
 filetype plugin on
-if !has('nvim')
-	filetype plugin indent on
-endif
 
 " }}}
 "" Settings{{{
@@ -207,16 +191,16 @@ endif
 " set background=dark
 colorscheme seoul256
 
-let mapleader = ","                    " set the mapleader
-set backup                             " enable backup, written to backupdir set below
-set backupdir^=~/.vim/_backup//        " where to put backup files.
-set cmdheight=2                        " the height of the command line, giving it a high
+let mapleader = ","                     " set the mapleader
+set backup                              " enable backup, written to backupdir set below
+set backupdir^=~/.config/nvim/_backup// " where to put backup files.
+set cmdheight=2                         " the height of the command line, giving it a high
 " number can prevent the "Hit ENTER to continue" but
 " will shorten the editor.
 set colorcolumn=80                     " Display a color column
 set complete=.,w,b,t,i                 " Same as default except that I remove the 'u' option
 set completeopt=menu,noinsert,noselect " Enable completion menu and disable insert/select
-set directory^=~/.vim/_swap//          " where to put swap files.
+set directory^=~/.config/nvim/_swap//  " where to put swap files.
 set hidden                             " you can change buffer without saving
 set ignorecase                         " searches are case insensitive...
 set lz                                 " do not redraw while running macros (much faster) (LazyRedraw)
@@ -230,7 +214,7 @@ set shortmess=atTIc                    " shortens messages to avoid 'press a key
 set showmatch                          " show matching brackets
 set smartcase                          " ... unless they contain at least one capital letter
 set scrolloff=5                        " Keep 10 lines (top/bottom) for scope
-set undodir^=~/.vim/_undo//            " where to put undo files.
+set undodir^=~/.config/nvim/_undo//            " where to put undo files.
 set whichwrap+=<,>,h,l                 " backspace and cursor keys wrap to
 set wildchar=<TAB>                     " Which character activates the wildmenu
 set winwidth=79                        " Set the minimum window width
@@ -272,37 +256,11 @@ set winheight=999
 " :20  - remember 20 items in command-line history
 " %    - remember the buffer list (if vim started without a file arg)
 " n    - set name of viminfo file
-if has('nvim')
-	set shada='20,<50,:20,%,n~/.nvim/_nviminfo
-else
-	set viminfo='20,\"50,:20,%,n~/.vim/_viminfo
-endif
+set shada='20,<50,:20,%,n~/.config/nvim/_nviminfo
 
-" }}}
-"" ViM only settings, these are default in nvim. See nvim-defaults{{{
-if !has('nvim')
-	set esckeys                     " allow cursor keys in insert mode
-	set autoread                   " Automatically read a file that has changed on disk
-	set backspace=indent,eol,start " backspace through everything in insert mode
-	set hlsearch                   " highlight matches
-	set incsearch                  " incremental searching
-	set wildmenu                   " turn on wild menu
-
-	if has('vim_starting')
-		" The default encoding for nvim is utf-8. It's not possible to change it
-		" either. See http://neovim.io/doc/user/options.html#%27encoding%27
-		set encoding=utf-8      " Set default encoding to UTF-8
-	endif
-
-	if has("statusline")
-		set laststatus=2  " always show the status bar
-	endif
-endif
 " }}}
 "" NeoVim Settings{{{
-if has('nvim')
-	set mouse=  " I hate using the mouse for other than copying/pasting.
-endif
+set mouse=  " I hate using the mouse for other than copying/pasting.
 " }}}
 "" Gui Settings{{{
 ""
@@ -466,17 +424,15 @@ autocmd BufEnter * EnableStripWhitespaceOnSave
 "}}}
 "" Deoplete{{{
 
-if has('nvim')
-	" Run deoplete.nvim automatically
-	let g:deoplete#enable_at_startup = 1
+" Run deoplete.nvim automatically
+let g:deoplete#enable_at_startup = 1
 
-	" deoplete-go settings
-	let g:deoplete#sources#go#gocode_binary = '~/.filesystem/bin/gocode'
-	let g:deoplete#sources#go#json_directory = '~/.cache/deoplete/go/$GOOS_$GOARCH'
-	let g:deoplete#sources#go#pointer = 1
-	let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
-	let g:deoplete#sources#go#use_cache = 1
-endif
+" deoplete-go settings
+let g:deoplete#sources#go#gocode_binary = '~/.filesystem/bin/gocode'
+let g:deoplete#sources#go#json_directory = '~/.cache/deoplete/go/$GOOS_$GOARCH'
+let g:deoplete#sources#go#pointer = 1
+let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
+let g:deoplete#sources#go#use_cache = 1
 
 "" }}}
 "" EasyAlign{{{
@@ -502,17 +458,15 @@ let g:fzf_action = {
 			\ 'ctrl-s': 'split',
 			\ 'ctrl-v': 'vsplit' }
 
-if has('nvim')
-	function! s:fzf_statusline()
-		" Override statusline as you like
-		highlight fzf1 ctermfg=161 ctermbg=251
-		highlight fzf2 ctermfg=23 ctermbg=251
-		highlight fzf3 ctermfg=237 ctermbg=251
-		setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
-	endfunction
+function! s:fzf_statusline()
+	" Override statusline as you like
+	highlight fzf1 ctermfg=161 ctermbg=251
+	highlight fzf2 ctermfg=23 ctermbg=251
+	highlight fzf3 ctermfg=237 ctermbg=251
+	setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
+endfunction
 
-	autocmd! User FzfStatusLine call <SID>fzf_statusline()
-endif
+autocmd! User FzfStatusLine call <SID>fzf_statusline()
 
 "" }}}
 "" Golang{{{
@@ -785,13 +739,7 @@ nmap <leader>hs :set hlsearch! hlsearch?<CR>
 nmap <silent> <leader>ww :wall<cr>
 
 " Wipe out all buffers
-if has('nvim')
-	nmap <silent> <leader>wa :execute 'bdelete' join(filter(range(1, bufnr('$')), 'bufexists(v:val) && getbufvar(v:val, "&buftype") isnot# "terminal"'))<cr>
-elseif has("patch-7.4.585")
-	nmap <silent> <leader>wa :enew \| 1,$bd<cr>
-else
-	nmap <silent> <leader>wa :1,9000bd<cr>
-endif
+nmap <silent> <leader>wa :execute 'bdelete' join(filter(range(1, bufnr('$')), 'bufexists(v:val) && getbufvar(v:val, "&buftype") isnot# "terminal"'))<cr>
 
 " clear the search buffer when hitting return
 nnoremap <CR> :nohlsearch<cr>
