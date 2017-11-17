@@ -100,6 +100,11 @@ if [[ -z "${profile}" ]]; then
 	profile=$(rofi -dmenu < <(echo -e "${items}"))
 fi
 
+if [[ -z "${profile}" ]]; then
+	print_error 0 "no profile was selected, aborting..."
+	exit 1
+fi
+
 if [[ ! -d "${PROFILES_PATH}/${profile}" ]]; then
 	print_warning 0 "the selected profile does not exists, creating one"
 	mkdir -p "${PROFILES_PATH}/${profile}"
