@@ -1,0 +1,142 @@
+"""""""""""""""""""
+" Firefox
+
+" do not open tabs in the background. When I hit F to open a hint in a new tab,
+" I usually like go to it right away. The new tab will be loaded in background
+" according to the browser.tabs.loadInBackground Firefox preference.
+set! browser.tabs.loadInBackground=false
+
+" set the default search provider to DuckDuckGo
+set! browser.startup.homepage=https://duckduckgo.com/
+
+" disable the warning when opening about:config
+set! general.warnOnAboutConfig=false
+
+" disable internal password manager, I prefer Lastpass.
+set! signon.rememberSignons=false
+
+" to prevent d on the last tab from closing the window:
+set! browser.tabs.closeWindowWithLastTab=false
+
+" show javascript warnings and errors on the console
+set! javascript.options.strict=true
+set! javascript.options.showInConsole=true
+
+"""""""""""""""""""
+" Settings
+
+" set the colorscheme
+colorscheme "indigo"
+
+" change the <Leader> to a comma
+let mapleader = ","
+
+" Change the hintchars to the home row in the Colemak keyboard
+set hintchars="arstneio"
+
+" set the correct status elements to show
+set status="input,location,bookmark,history,tabcount,position,zoomlevel"
+
+" Always show tab numbers I hate counting
+set tabnumbers
+
+" Having to press Shift to go back is irretating, use gb instead of gT
+noremap gb gT
+
+" Open all commands in a newtab
+set newtab=all
+
+" open gVim when <c-i> is hit while editing a text area or an input.
+set editor="/usr/local/bin/gvim -f"
+
+" follow hints only after hitting <Enter>
+set followhints=1
+
+"""""""""""""""""""
+" Status bar
+
+" Change the color of the status bar when it's focused.
+" From: http://www.reddit.com/r/linux/comments/99d55/i_could_use_a_little_vimperator_help_also/
+javascript <<EOF
+  (function() {
+    var inputElement = document.getElementById('liberator-commandline-command');
+    function swapBGColor(event) {
+      inputElement.style.backgroundColor = event.type == "focus" ? "#413d42" : "";
+    }
+    inputElement.addEventListener('focus', swapBGColor, false);
+    inputElement.addEventListener('blur', swapBGColor, false);
+  })();
+EOF
+
+"""""""""""""""""""
+" Commands
+
+" reloadPlugins reloads the plugins. This does not remove any previously
+" assigned mappings.
+command! reloadPlugins :js liberator.pluginFiles = {}; liberator.loadPlugins();
+
+" add a command for loading the config file
+command! sourcerc :source ~/.vimperatorrc
+
+"""""""""""""""""""
+" Mappings (Colemak keyboard layout). See https://github.com/kalbasit/advantage2
+
+" n/o: left/right
+" i/e: up/down
+nnoremap n 3h
+nnoremap e 3j
+nnoremap i 3k
+nnoremap o 3l
+
+" k/K: search forward, backward
+nnoremap k n
+nnoremap K N
+
+" E/I: previous/next tab
+" NOTE: These are reversed from Chrome, I use the "Tree Style Tab" extension
+" which displays the tabs in a vertical way so it makes more sense to go up and
+" down.
+nnoremap I gT
+nnoremap E gt
+
+" N/O: go back/forward
+nnoremap N :back<CR>
+nnoremap O :forward<CR>
+
+" Yank the frame URL
+" nnoremap cC
+" Yank the current URL
+nnoremap cc yy
+" Yank highlight
+" nnoremap ch
+" Yank URL with a hint
+nnoremap cg ;y
+
+" remap i to s
+nnoremap s i
+
+" v/V: open the URL in the clipboard in the current tab / new tab.
+nnoremap v p
+nnoremap V P
+" y opens a new URL in the current tab
+" w opens a new URL in a new tab
+" Y opens a new URL (current page URL pre-filled) in the current tab
+" W opens a new URL (current page URL pre-filled) in the current tab
+nnoremap y o
+nnoremap w t
+nnoremap Y O
+nnoremap W T
+" reload the page skipping the cache
+nnoremap <Leader>r R
+" bind <Leader>b to switch buffer. Note that the <Space> forces the :buffer
+" command to enter in autocomplete mode.
+nnoremap <Leader>b :buffer<Space>
+
+"""""""""""""""""""
+" Plugin mappins
+
+" getIP
+nmap ci :getIP<CR>
+
+
+" vim:sw=2 ts=2 et si fdm=marker ft=vimperator:
