@@ -193,14 +193,12 @@ colorscheme seoul256
 
 let mapleader = ","                     " set the mapleader
 set backup                              " enable backup, written to backupdir set below
-set backupdir^=~/.config/nvim/_backup// " where to put backup files.
 set cmdheight=2                         " the height of the command line, giving it a high
 " number can prevent the "Hit ENTER to continue" but
 " will shorten the editor.
 set colorcolumn=80                     " Display a color column
 set complete=.,w,b,t,i                 " Same as default except that I remove the 'u' option
 set completeopt=menu,noinsert,noselect " Enable completion menu and disable insert/select
-set directory^=~/.config/nvim/_swap//  " where to put swap files.
 set hidden                             " you can change buffer without saving
 set ignorecase                         " searches are case insensitive...
 set lz                                 " do not redraw while running macros (much faster) (LazyRedraw)
@@ -214,7 +212,6 @@ set shortmess=atTIc                    " shortens messages to avoid 'press a key
 set showmatch                          " show matching brackets
 set smartcase                          " ... unless they contain at least one capital letter
 set scrolloff=5                        " Keep 10 lines (top/bottom) for scope
-set undodir^=~/.config/nvim/_undo//            " where to put undo files.
 set whichwrap+=<,>,h,l                 " backspace and cursor keys wrap to
 set wildchar=<TAB>                     " Which character activates the wildmenu
 set winwidth=79                        " Set the minimum window width
@@ -228,6 +225,7 @@ set spell                              " Turn on spellcheck.
 set splitbelow                         " Always split under
 set splitright                         " Always split on the right
 set startofline                        " Move the cursor to the first non-blank of the line
+set backupdir-=.                       " Do not backup to the current directory
 
 if v:version >= 703
 	set cursorline     " cursor line highlighting
