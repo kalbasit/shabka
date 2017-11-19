@@ -36,7 +36,10 @@ zplug "peterhurford/git-it-on.zsh"
 zplug "plugins/command-not-found",           from:oh-my-zsh
 zplug "plugins/extract",                     from:oh-my-zsh
 zplug "plugins/git",                         from:oh-my-zsh
-zplug "plugins/github",                      from:oh-my-zsh
+# TODO: Getting the following error after install hub with this plugin enabled:
+#   (eval):11: defining function based on alias `git'
+#   (eval):12: parse error near `()'
+#zplug "plugins/github",                      from:oh-my-zsh
 zplug "plugins/history",                     from:oh-my-zsh
 zplug "supercrabtree/k"
 zplug "zlsun/solarized-man"
