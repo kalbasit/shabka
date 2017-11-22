@@ -422,7 +422,7 @@ autocmd BufEnter * EnableStripWhitespaceOnSave
 "}}}
 "" Deoplete{{{
 
-" Run deoplete.nvim automatically
+" Run deoplete automatically
 let g:deoplete#enable_at_startup = 1
 
 " deoplete-go settings
