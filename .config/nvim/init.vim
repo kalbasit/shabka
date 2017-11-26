@@ -32,6 +32,8 @@ Plug 'tpope/vim-rails', { 'for': 'ruby' }
 Plug 'motus/pig.vim', { 'for': 'pig' }
 " HTML
 Plug 'mattn/emmet-vim', { 'for': ['html', 'css'] }
+" Typescript
+Plug 'HerringtonDarkholme/yats.vim', { 'for': 'typescript' }
 
 """"""""""""""""
 " Colorschemes "
@@ -515,7 +517,7 @@ let g:vim_markdown_preview_use_xdg_open=1
 "" Polyglot{{{
 ""
 
-let g:polyglot_disabled = ['go', 'terraform', 'csv', 'ruby']
+let g:polyglot_disabled = ['go', 'terraform', 'csv', 'ruby', 'typescript']
 
 " }}}
 "" Ruby{{{
