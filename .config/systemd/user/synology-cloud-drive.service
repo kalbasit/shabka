@@ -1,11 +1,8 @@
 [Unit]
 Description=Synology Cloud Drive
-Requires=xvfb@99.service
-After=xvfb@99.service
 
 [Service]
 Type=forking
-Environment=DISPLAY=:99
 Environment=LD_LIBRARY_PATH=/opt/Synology/CloudStation/lib
 ExecStart=/opt/Synology/CloudStation/bin/launcher
 ExecStartPost=/bin/sh -c "sleep 5; grep pid $HOME/.CloudStation/ui.pid | sed -e 's/pid=//g' -e 's/\"//g' > /run/user/1026/cloud-station-drive.pid"
