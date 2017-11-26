@@ -20,6 +20,9 @@
 #  USA.
 #
 
+source "${HOME}/.zsh/functions/is_true"
+source "${HOME}/.zsh/functions/is_number"
+
 # Source/Create the configurations file.
 if [[ -f "${HOME}/.gwallrc" ]]; then
 	# shellcheck disable=SC1090
@@ -82,7 +85,7 @@ else
 
 	# Folders array
 	FOLDERS=( ${HOME}/Pictures/Wallpapers )
-	EOF
+EOF
 	print_error 0 "Please edit ~/.gwallrc and try again."
 	exit 1
 fi
