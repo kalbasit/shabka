@@ -345,6 +345,7 @@ alias t='task'
 alias utf8test='curl -L https://github.com/tmux/tmux/raw/master/tools/UTF-8-demo.txt'
 alias vi=e
 alias vim=e
+alias vim_ready='rbenv; pyenv; nvm; npm'
 
 # Always enable colored `grep` output
 # Note: `GREP_OPTIONS="--color=auto"` is deprecated, hence the alias usage.
