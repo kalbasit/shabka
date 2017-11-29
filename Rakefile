@@ -50,6 +50,7 @@ GO_BINARIES = {
 	"github.com/golang/tools/cmd/gomvpkg"                     => {},
 	"github.com/jteeuwen/go-bindata/go-bindata"               => {},
 	"github.com/kalbasit/swm"                                 => {},
+	"github.com/knqyf263/pet"                                 => {},
 	"github.com/monochromegane/the_platinum_searcher/cmd/pt"  => {},
 	"github.com/ngdinhtoan/glide-cleanup"                     => {},
 	"github.com/nsf/gocode"                                   => {},
