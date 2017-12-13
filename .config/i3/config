@@ -374,7 +374,8 @@ bindsym $alt+p [class="Chromium" instance="crx_jjbjdleccaiklfpcblgekgmjadjdclkp"
 # Auto Start #
 ##############
 
-exec $nosid termite --title=irc --exec="weechat"
+# TODO: should I move back to wee-slack?
+# exec $nosid termite --title=irc --exec="weechat"
 exec $nosid whatsapp-web-desktop
 exec $nosid mclip.py daemon
 
