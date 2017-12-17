@@ -175,6 +175,9 @@ end
 
 desc "Genereate the local binaries"
 task :gen_local_bin do
+	if ENV["MYFS"].nil? || ENV["MYFS"].empty?
+		ENV["MYFS"] = File.join(ENV["HOME"], ".filesystem")
+	end
 	LOCAL_BINARIES.each do |u|
 		p = File.expand_path(File.join(ENV["MYFS"], "bin", File.basename(u)))
 		download_and_save_file(u, p)
