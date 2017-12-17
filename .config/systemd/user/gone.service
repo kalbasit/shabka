@@ -3,7 +3,7 @@ Description=Gone time tracker
 
 [Service]
 ExecStartPre=/usr/bin/mkdir -p /home/kalbasit/.cache/gone
-ExecStart=/home/kalbasit/code/bin/gone --expire 19h
+ExecStart=/home/kalbasit/.filesystem/bin/gone --expire 19h
 Restart=always
 
 [Install]
