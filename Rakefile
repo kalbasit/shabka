@@ -85,7 +85,7 @@ end
 desc "install rbenv"
 task :install_rbenv do
 	sh <<-EOF
-		curl https://raw.githubusercontent.com/fesplugas/rbenv-installer/master/bin/rbenv-installer | bash
+		curl -fsSL https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-installer | bash
 		export PATH="${HOME}/.rbenv/bin:$PATH"
 		eval "$(rbenv init --no-rehash -)"
 		ruby_version="`curl -s https://raw.githubusercontent.com/postmodern/ruby-versions/master/ruby/versions.txt | tail -1`"
