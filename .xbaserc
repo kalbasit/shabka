@@ -55,7 +55,9 @@ if [[ -z "${XBASERC}" ]]; then
 	[[ -r "${usermodmap}" ]] && xmodmap "${usermodmap}"
 
 	# change the resolution
-	autorandr --change --default default
+	if [[ "${HOST}" = "cratos" ]]; then
+		autorandr --change --default default
+	fi
 fi
 
 unset -f _pathprepend
