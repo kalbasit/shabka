@@ -20,6 +20,11 @@
 #  USA.
 #
 
+if acpi -b 2>&1 | grep -q 'No support for device type: power_supply'; then
+	echo "No battery found"
+	exit 0
+fi
+
 acpi -b | awk -F'[,:%]' '{print $2, $3}' | {
 read -r status capacity
 
