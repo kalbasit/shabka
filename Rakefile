@@ -75,7 +75,7 @@ LOCAL_BINARIES = [
 ### Initialize
 
 desc "initialize the home directory"
-task :init => [:default, :vim_plug, :install_rbenv, :install_go_binaries]
+task :init => [:default, :vim_plug, :install_rbenv, :init_go, :install_go_binaries]
 
 desc "Install all vim plugins"
 task :vim_plug do
@@ -93,6 +93,27 @@ task :install_rbenv do
 		rbenv global "${ruby_version}"
 		gem install bundler git-smart
 	EOF
+end
+
+desc "initialize Go"
+task :init_go do
+	# record the current GOPATH and switch to the global one
+	oldGoPath = ENV["GOPATH"]
+	if ENV["SYSTEM_GOPATH"].nil?
+		ENV["GOPATH"] = File.join(ENV["HOME"], ".filesystem")
+	else
+		ENV["GOPATH"] = ENV["SYSTEM_GOPATH"]
+	end
+	begin
+		puts "initializing go"
+		sh <<~EOF
+			go get -u github.com/Masterminds/glide
+			go get -u github.com/golang/dep/cmd/dep
+
+		EOF
+	ensure
+		ENV["GOPATH"] = oldGoPath
+	end
 end
 
 desc "Install Go Binaries"
