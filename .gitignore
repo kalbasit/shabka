@@ -6,11 +6,14 @@
 .bin/jira
 .bin/launch_dm_iterm
 .byobu/.ssh-agent
+.config/QtProject.conf
 .config/Slack/
 .config/Transmission\ Remote\ GUI
+.config/VirtualBox/
 .config/acd-token.json
 .config/acd.json
 .config/autostart/
+.config/bugwarrior
 .config/chromium/
 .config/configstore/
 .config/git/
@@ -29,7 +32,9 @@
 .config/nvim/yankring_history_v2.txt
 .config/nviminfo*
 .config/nviminfo,!
+.config/pet
 .config/pianobar
+.config/pulse/
 .config/robomongo/
 .deis/client.json
 .deis/units/
@@ -49,6 +54,7 @@
 .irssi/config.autosave
 .irssi/scripts/old/
 .irssi/seen.dat
+.local/
 .local/bin/tmuxwords.rb
 .local/share/gvfs-metadata
 .notmuch/compose/
