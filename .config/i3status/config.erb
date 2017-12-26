@@ -1,0 +1,84 @@
+general {
+        colors = true
+        interval = 5
+}
+
+<% if hostname == "zeus" %>
+ethernet enp0s31f6 {
+        format_up = "E1: %ip (%speed)"
+        format_down = "E1: down"
+}
+
+ethernet enp2s0f0 {
+        format_up = "E2: %ip (%speed)"
+        format_down = "E2: down"
+}
+
+ethernet enp2s0f1 {
+        format_up = "E3: %ip (%speed)"
+        format_down = "E3: down"
+}
+
+ethernet enp4s0f0 {
+        format_up = "E4: %ip (%speed)"
+        format_down = "E4: down"
+}
+
+ethernet enp4s0f1 {
+        format_up = "E5: %ip (%speed)"
+        format_down = "E5: down"
+}
+<% else %>
+ethernet enp57s0u1u2 {
+        format_up = "E: %ip (%speed)"
+        format_down = "E: down"
+}
+
+wireless _first_ {
+        format_up = "W: (%quality at %essid) %ip"
+        format_down = "W: down"
+}
+
+battery all {
+        format = "%status %percentage %remaining"
+}
+<% end %>
+
+tztime local {
+        format = "%Y-%m-%d %H:%M:%S"
+}
+
+load {
+        format = "%1min"
+}
+
+disk "/" {
+        format = "%avail"
+}
+
+volume master {
+        format = "♪: %volume"
+        format_muted = "♪: muted (%volume)"
+        device = "default"
+}
+
+cpu_temperature 0 {
+        format = "%degrees °C"
+}
+
+order += "load"
+order += "cpu_temperature 0"
+order += "disk /"
+<% if hostname == "zeus" %>
+order += "ethernet enp0s31f6"
+order += "ethernet enp2s0f0"
+order += "ethernet enp2s0f1"
+order += "ethernet enp4s0f0"
+order += "ethernet enp4s0f1"
+<% else %>
+order += "ethernet enp57s0u1u2"
+order += "wireless _first_"
+order += "battery all"
+<% end %>
+order += "volume master"
+order += "tztime local"
