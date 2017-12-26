@@ -1,6 +1,16 @@
-require 'rake'
 require 'erb'
 require 'open-uri'
+require 'ostruct'
+require 'rake'
+require 'socket'
+
+
+# ERBRenderer renders the template with the binding created by class instance
+class ERBRenderer < OpenStruct
+  def render(template)
+    ERB.new(template).result(binding)
+  end
+end
 
 # Cross-platform way of finding an executable in the $PATH.
 #
@@ -304,8 +314,11 @@ def link_file(file, dest)
 
 	if file =~ /.erb$/
 		puts "generating #{target_file}"
+		context = {
+			hostname: Socket.gethostname,
+		}
 		File.open(target_file, 'w') do |new_file|
-			new_file.write ERB.new(File.read(file)).result(binding)
+			new_file.write(ERBRenderer.new(context).render(File.read(file)))
 		end
 		if is_encrypted?(file)
 			File.chmod(0400, target_file)
