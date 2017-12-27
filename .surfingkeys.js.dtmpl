@@ -501,7 +501,7 @@ vunmap("_l");
 function copyLastElementInPath() {
 	var locationParts = window.location.href.split("/");
 	var lastElement = locationParts[locationParts.length-1].split("#")[0].split("?")[0];
-	Front.writeClipboard(lastElement);
+	Clipboard.write(lastElement);
 	Front.showBanner("Copied " + lastElement + " to the clipboard.");
 }
 
@@ -775,12 +775,12 @@ mapkey('su', '#4Edit current URL with vim editor', function() {
 
 // paste and go
 mapkey('v', '#3Paste and go', function() {
-	Front.getContentFromClipboard(function(response) {
+	Clipboard.read(function(response) {
 		window.location.href = response.data;
 	});
 });
 mapkey('V', '#1Paste and go in a new tab', function() {
-	Front.getContentFromClipboard(function(response) {
+	Clipboard.read(function(response) {
 		window.open(response.data);
 	});
 });
