@@ -499,10 +499,10 @@ vunmap("_l");
 // Custom functions {{{
 
 function copyLastElementInPath() {
-	var locationParts = window.location.href.split("/");
-	var lastElement = locationParts[locationParts.length-1].split("#")[0].split("?")[0];
+	const locationParts = window.location.href.split("/");
+	const lastElement = locationParts[locationParts.length-1].split("#")[0].split("?")[0];
 	Clipboard.write(lastElement);
-	Front.showBanner("Copied " + lastElement + " to the clipboard.");
+	Front.showBanner(`Copied ${lastElement} to the clipboard.`);
 }
 
 // openAlternate opens the alternate page:
@@ -521,23 +521,23 @@ function copyLastElementInPath() {
 //   chrome.storage.sync.set({"github_api_username": "..."});
 //   chrome.storage.sync.set({"github_api_token": "..."});
 function openAlternate(newTab) {
-	return function() {
+	return () => {
 		// start by splitting the path by slashes, ignoring the first slash to
 		// prevent having the first element an empty string
-		var pp = window.location.pathname.substring(1).split("/");
+		const pp = window.location.pathname.substring(1).split("/");
 
 		// extract the anchor from the last element
-		if (pp[pp.length - 1].indexOf("#") !== -1) {
+		if (pp[pp.length - 1].includes("#")) {
 			var tmp = pp[pp.length - 1].split("#");
 			pp[pp.length - 1] = tmp[0];
-			var anchor = tmp[1];
+			const anchor = tmp[1];
 		}
 
 		// extract any query params from the last element
-		if (pp[pp.length - 1].indexOf("?") !== -1) {
+		if (pp[pp.length - 1].includes("?")) {
 			var tmp = pp[pp.length - 1].split("?");
 			pp[pp.length - 1] = tmp[0];
-			var query = tmp[1];
+			const query = tmp[1];
 		}
 
 		function openURL(url) {
@@ -561,38 +561,39 @@ function openAlternate(newTab) {
 		// getGithubPullRequestURL() returns a promise that returns the URL of the PR (if
 		// successful) or rejects it with a string error.
 		function getGithubPullRequestURL(username, password) {
-			return new Promise(function(resolve, reject) {
+			return new Promise((resolve, reject) => {
 				// compute the XHR URL
-				var api_pulls_url = "https://api.github.com/repos" + repoPath() + "/pulls";
+				const api_pulls_url = `https://api.github.com/repos${repoPath()}/pulls`;
 				// find the branch name
-				var commitBranches = window.document.getElementsByClassName("commit-branch");
+				const commitBranches = window.document.getElementsByClassName("commit-branch");
 				if (commitBranches.length === 1) {
-					var commitBranch = commitBranches[0].title;
+					const commitBranch = commitBranches[0].title;
 					// make an XHR Request to Github to find the URL
-					var xhr = new XMLHttpRequest();
+					const xhr = new XMLHttpRequest();
 					xhr.open("GET", api_pulls_url, true);
-					xhr.setRequestHeader("Authorization", "Basic " + btoa(username + ":" + password));
-					xhr.onreadystatechange = function() {
+					xhr.setRequestHeader("Authorization", `Basic ${btoa(username + ":" + password)}`);
+					xhr.onreadystatechange = () => {
 						if (xhr.readyState === 4) {
 							if (xhr.status >= 200 && xhr.status < 299) {
-								var pulls = JSON.parse(xhr.responseText);
-								for (var i = 0; i < pulls.length; i++) {
-									var pull = pulls[i];
+								const pulls = JSON.parse(xhr.responseText);
+
+								for (const pull of pulls) {
 									if (pull.head.ref === commitBranch) {
 										resolve(pull.html_url);
 										return;
 									}
 								}
-								reject("did not find a pull request for branch " + commitBranch);
+
+								reject(`did not find a pull request for branch ${commitBranch}`);
 							} else {
-								reject("got " + xhr.statusText + " in the HTTP request to " + api_pulls_url);
+								reject(`got ${xhr.statusText} in the HTTP request to ${api_pulls_url}`);
 								return;
 							}
 						}
 					}
 					xhr.send();
 				} else {
-					console.log("found " + commitBranches.length + " elements with class commit-branch, was expecting only one");
+					console.log(`found ${commitBranches.length} elements with class commit-branch, was expecting only one`);
 					reject("");
 				}
 			});
@@ -601,45 +602,46 @@ function openAlternate(newTab) {
 		// getTravisURL returns a promise that returns the URL of the Travis
 		// push build (if successful) or rejects it with a string error.
 		function getTravisURL(username, password) {
-			return new Promise(function(resolve, reject) {
-				var api_pull_url = "https://api.github.com/repos" + repoPath() + "/pulls/" + pp[3];
+			return new Promise((resolve, reject) => {
+				const api_pull_url = `https://api.github.com/repos${repoPath()}/pulls/${pp[3]}`;
 				// make an XHR Request to Github to find the URL
-				var xhr = new XMLHttpRequest();
+				const xhr = new XMLHttpRequest();
 				xhr.open("GET", api_pull_url);
-				xhr.setRequestHeader("Authorization", "Basic " + btoa(username + ":" + password));
-				xhr.onreadystatechange = function() {
+				xhr.setRequestHeader("Authorization", `Basic ${btoa(`${username}:${password}`)}`);
+				xhr.onreadystatechange = () => {
 					if (xhr.readyState === 4) {
 						if (xhr.status >= 200 && xhr.status < 299) {
-							var pr = JSON.parse(xhr.responseText);
+							const pr = JSON.parse(xhr.responseText);
 							if (!pr || !pr._links || !pr._links.statuses || !pr._links.statuses.href) {
-								reject("statuses href not found in " + xhr.responseText);
+								reject(`statuses href not found in ${xhr.responseText}`);
 								return;
 							}
 							// make a new request to fetch the Travis link from the status
-							var innerXhr = new XMLHttpRequest();
+							const innerXhr = new XMLHttpRequest();
 							innerXhr.open("GET", pr._links.statuses.href);
-							innerXhr.setRequestHeader("Authorization", "Basic " + btoa(username + ":" + password));
-							innerXhr.onreadystatechange = function() {
+							innerXhr.setRequestHeader("Authorization", `Basic ${btoa(`${username}:${password}`)}`);
+							innerXhr.onreadystatechange = () => {
 								if (innerXhr.readyState === 4) {
 									if (innerXhr.status >= 200 && innerXhr.status < 299) {
-										var statuses = JSON.parse(innerXhr.responseText);
-										for (var i = 0; i < statuses.length; i++) {
-											var status = statuses[i];
+										const statuses = JSON.parse(innerXhr.responseText);
+
+										for (const status of statuses) {
 											if (status.context === "continuous-integration/travis-ci/push") {
 												resolve(status.target_url);
 												return;
 											}
 										}
-										reject("did not find the status continuous-integration/travis-ci/push in " + JSON.stringify(statuses));
+
+										reject(`did not find the status continuous-integration/travis-ci/push in ${JSON.stringify(statuses)}`);
 									} else {
-										reject("got " + innerXhr.statusText + " in the HTTP request to " + pr._links.statuses.href);
+										reject(`got ${innerXhr.statusText} in the HTTP request to ${pr._links.statuses.href}`);
 										return;
 									}
 								}
 							}
 							innerXhr.send();
 						} else {
-							reject("got " + xhr.statusText + " in the HTTP request to " + api_pull_url);
+							reject(`got ${xhr.statusText} in the HTTP request to ${api_pull_url}`);
 							return;
 						}
 					}
@@ -654,21 +656,21 @@ function openAlternate(newTab) {
 			if (pp.length < 2) {
 				return "";
 			}
-			return "/" + pp[0] + "/" + pp[1];
+			return `/${pp[0]}/${pp[1]}`;
 		}
 
 		function openTravis() {
-			var targetURL = "https://travis-ci." + (isGithubPrivateRepo() ? "com" : "org" ) + rp;
-			chrome.storage.sync.get(["github_api_username", "github_api_token"], function(data) {
+			const targetURL = `https://travis-ci.${isGithubPrivateRepo() ? "com" : "org"}${rp}`;
+			chrome.storage.sync.get(["github_api_username", "github_api_token"], data => {
 				if (typeof data.github_api_username === "string" && data.github_api_username !== "" && typeof data.github_api_token === "string" && data.github_api_token !== "") {
 					if (isGithubPR() === true) {
 						getTravisURL(data.github_api_username, data.github_api_token)
-							.then(function(url) {
+							.then(url => {
 								openURL(url);
 							})
-							.catch(function(error) {
-								Front.showBanner("error fetching the Travis URL: " + JSON.stringify(error));
-								setTimeout(function() {
+							.catch(error => {
+								Front.showBanner(`error fetching the Travis URL: ${JSON.stringify(error)}`);
+								setTimeout(() => {
 									openURL(targetURL);
 								}, 1000);
 							});
@@ -677,7 +679,7 @@ function openAlternate(newTab) {
 					}
 				} else {
 					Front.showBanner("API username and password were not found, follow the documentation in the config");
-					setTimeout(function() {
+					setTimeout(() => {
 						openURL(targetURL);
 					}, 1000);
 				}
@@ -685,22 +687,22 @@ function openAlternate(newTab) {
 		}
 
 		function openGithub() {
-			chrome.storage.sync.get(["github_api_username", "github_api_token"], function(data) {
+			chrome.storage.sync.get(["github_api_username", "github_api_token"], data => {
 				if (typeof data.github_api_username === "string" && data.github_api_username !== "" && typeof data.github_api_token === "string" && data.github_api_token !== "") {
 					getGithubPullRequestURL(data.github_api_username, data.github_api_token)
-						.then(function(url) {
+						.then(url => {
 							openURL(url);
 						})
-						.catch(function(error) {
-							Front.showBanner("error fetching the Github URL: " + JSON.stringify(error));
-							setTimeout(function() {
-								openURL("https://github.com" + rp);
+						.catch(error => {
+							Front.showBanner(`error fetching the Github URL: ${JSON.stringify(error)}`);
+							setTimeout(() => {
+								openURL(`https://github.com${rp}`);
 							}, 1000);
 						});
 				} else {
 					Front.showBanner("API username and password were not found, follow the documentation in the config");
-					setTimeout(function() {
-						openURL("https://github.com" + rp);
+					setTimeout(() => {
+						openURL(`https://github.com${rp}`);
 					}, 1000);
 				}
 			});
@@ -714,7 +716,7 @@ function openAlternate(newTab) {
 		}
 
 		function openAlternateFile() {
-			var file = pp[pp.length - 1];
+			const file = pp[pp.length - 1];
 			if (file.match(/_test\.go$/) !== null) {
 				openURL(window.location.href.replace("_test.go", ".go"));
 			} else if (file.match(/\.go$/) !== null) {
@@ -748,18 +750,18 @@ function openAlternate(newTab) {
 mapkey("cb", "#7Copy the last element of the path in the URL", copyLastElementInPath);
 mapkey(",.", "#8Open alternate", openAlternate(false));
 mapkey("g,.", "#8Open alternate in a new tab", openAlternate(true));
-mapkey(",r", "#4Reload the page skipping the cache", function() {
+mapkey(",r", "#4Reload the page skipping the cache", () => {
 	RUNTIME("reloadTab", {
 		nocache: true
 	});
 });
-mapkey("sr", "#11Reload settings", function() {
+mapkey("sr", "#11Reload settings", () => {
 	RUNTIME("loadSettingsFromUrl", {
 		url: "file://<%= ENV["HOME"] %>/.surfingkeys.js"
 	});
 	Front.showBanner('settings were reloaded');
 });
-mapkey("spl", "#13Set Proxy to Charles", function() {
+mapkey("spl", "#13Set Proxy to Charles", () => {
 	// setProxy 127.0.0.1:8888;
 	// setProxyMode always;
 	RUNTIME("updateProxy", {
@@ -767,20 +769,20 @@ mapkey("spl", "#13Set Proxy to Charles", function() {
 		proxy: "127.0.0.1:8888"
 	});
 });
-mapkey('su', '#4Edit current URL with vim editor', function() {
-	Front.showEditor(window.location.href, function(data) {
+mapkey('su', '#4Edit current URL with vim editor', () => {
+	Front.showEditor(window.location.href, data => {
 		window.location.href = data;
 	}, 'url');
 });
 
 // paste and go
-mapkey('v', '#3Paste and go', function() {
-	Clipboard.read(function(response) {
+mapkey('v', '#3Paste and go', () => {
+	Clipboard.read(response => {
 		window.location.href = response.data;
 	});
 });
-mapkey('V', '#1Paste and go in a new tab', function() {
-	Clipboard.read(function(response) {
+mapkey('V', '#1Paste and go in a new tab', () => {
+	Clipboard.read(response => {
 		window.open(response.data);
 	});
 });
