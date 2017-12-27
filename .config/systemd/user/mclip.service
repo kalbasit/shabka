@@ -1,0 +1,9 @@
+[Unit]
+Description=Clipboard manager
+
+[Service]
+ExecStart=/home/kalbasit/.local/opt/rofi-clipboard-manager/bin/mclip.py daemon
+Restart=always
+
+[Install]
+WantedBy=default.target

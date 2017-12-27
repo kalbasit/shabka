@@ -37,6 +37,9 @@ systemctl --user restart gone.service
 # start xcape
 systemctl --user restart xcape.service
 
+# start the Clipboard manager
+systemctl --user restart mclip.service
+
 # start pulse audio
 start-pulseaudio-x11
 

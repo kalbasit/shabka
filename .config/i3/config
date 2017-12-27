@@ -377,7 +377,6 @@ bindsym $alt+p [class="Chromium" instance="crx_jjbjdleccaiklfpcblgekgmjadjdclkp"
 # TODO: should I move back to wee-slack?
 # exec $nosid termite --title=irc --exec="weechat"
 exec $nosid whatsapp-web-desktop
-exec $nosid mclip.py daemon
 
 # Start the personal terminal on the personal workspace
 exec i3-msg "workspace personal@base; exec $nosid /usr/bin/termite"
