@@ -138,7 +138,7 @@ bindsym Shift+XF86MonBrightnessDown exec $nosid xbacklight -dec 1
 bindsym XF86PowerOff exec $nosid $locker && systemctl suspend
 
 # clipboard history
-bindsym $mod+$alt+c exec rofi -modi "clipboard:mclip.py menu" -show clipboard && mclip.py paste
+bindsym $mod+$alt+c exec rofi -modi "clipboard:greenclip print" -show clipboard
 
 ################
 # Applications #

@@ -2,7 +2,7 @@
 Description=Clipboard manager
 
 [Service]
-ExecStart=%h/.local/opt/rofi-clipboard-manager/bin/mclip.py daemon
+ExecStart=/usr/bin/greenclip daemon
 Restart=always
 
 [Install]

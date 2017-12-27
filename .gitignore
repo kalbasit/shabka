@@ -18,6 +18,7 @@
 .config/configstore/
 .config/git/
 .config/google-chrome/
+.config/greenclip.cfg
 .config/i3status/config
 .config/keybase
 .config/liteide/
