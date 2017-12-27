@@ -501,6 +501,10 @@ vunmap("_l");
 function copyLastElementInPath() {
 	const locationParts = window.location.href.split("/");
 	const lastElement = locationParts[locationParts.length-1].split("#")[0].split("?")[0];
+	if (!lastElement) {
+		Front.showBanner(`No last element was found.`);
+		return;
+	}
 	Clipboard.write(lastElement);
 	Front.showBanner(`Copied ${lastElement} to the clipboard.`);
 }
