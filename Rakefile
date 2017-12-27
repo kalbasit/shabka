@@ -166,12 +166,12 @@ task :update_readme_toc do
 end
 
 desc "link files from dotfiles"
-task :link_dotfiles do
+task :link_dotfiles => [:process_templates] do
 	link_folder(DOTFILES_PATH, ENV["HOME"])
 end
 
 desc "link files from the private repository"
-task :link_private do
+task :link_private => [:process_private_templates] do
 	link_folder(PRIVATE_PATH, ENV["HOME"]) if File.exists?(PRIVATE_PATH)
 end
 
@@ -179,6 +179,14 @@ desc "Initialize and update submodules to the latest version"
 task :update_submodules do
 	puts "Updating the submodules"
 	sh %Q{git submodule update --init > /dev/null}
+end
+
+task :process_templates do
+	process_templates(DOTFILES_PATH)
+end
+
+task :process_private_templates do
+	process_templates(PRIVATE_PATH) if File.exists?(PRIVATE_PATH)
 end
 
 ### Generate
@@ -227,12 +235,6 @@ def relative_path(file)
 	return file.gsub("#{PRIVATE_PATH}/", "").gsub("#{DOTFILES_PATH}/", "")
 end
 
-def replace_file(file, dest)
-	target_file = File.join(dest, dest_filename(relative_path(file)))
-	sh %Q{rm -rf '#{target_file}'}
-	link_file(file, dest)
-end
-
 def files(folder)
 	files = Dir["#{folder}/.??*"] + Dir["#{folder}/*"]
 	files.reject! do |file|
@@ -256,6 +258,26 @@ def find_encryption_status
 	end
 
 	return @encrypted
+end
+
+def process_templates(folder)
+	files(folder).each do |file|
+		if File.directory?(file)
+			process_templates(file)
+		else
+			if file =~ /.dtmpl$/
+				context = {
+					hostname: Socket.gethostname,
+				}
+				File.open(file.gsub(/.dtmpl$/, ''), 'w') do |new_file|
+					new_file.write(ERBRenderer.new(context).render(File.read(file)))
+				end
+				if is_encrypted?(file)
+					File.chmod(0400, file)
+				end
+			end
+		end
+	end
 end
 
 def link_folder(folder, dest)
@@ -309,24 +331,18 @@ def dest_filename(path)
 	return path.sub(/\.erb$/, '').sub(/\.unsecure$/, '')
 end
 
-def link_file(file, dest)
+def replace_file(file, dest)
 	target_file = File.join(dest, dest_filename(relative_path(file)))
+	sh %Q{rm -rf '#{target_file}'}
+	link_file(file, dest)
+end
 
-	if file =~ /.erb$/
-		puts "generating #{target_file}"
-		context = {
-			hostname: Socket.gethostname,
-		}
-		File.open(target_file, 'w') do |new_file|
-			new_file.write(ERBRenderer.new(context).render(File.read(file)))
-		end
-		if is_encrypted?(file)
-			File.chmod(0400, target_file)
-		end
-	else
-		puts "linking #{file}"
-		sh %Q{ln -s "#{file}" "#{target_file}"}
-	end
+def link_file(file, dest)
+	return if file =~ /.dtmpl$/
+
+	puts "linking #{file}"
+	target_file = File.join(dest, dest_filename(relative_path(file)))
+	sh %Q{ln -s "#{file}" "#{target_file}"}
 end
 
 def is_encrypted?(file)
