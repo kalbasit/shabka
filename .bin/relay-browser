@@ -75,30 +75,51 @@ while [[ $# -ge 1 ]]; do
 	esac
 done
 
+# the profile paths per browser
+CHROMIUM_PROFILES_PATH="${HOME}/.config/chromium/profiles"
+FIREFOX_PROFILES_PATH="${HOME}/.mozilla/firefox/profiles"
+
+# make sure we have both profile and a browser.
+if [[ -n "${profile}" ]] && [[ -z "${browser}" ]]; then
+	print_error 0 "the profile was set to ${profile}, but the browser is empty. The browser is required with --profile, aborting..."
+	exit 1
+fi
+
+if [[ -z "${profile}" ]]; then
+	items=""
+	sep=""
+	for i in $CHROMIUM_PROFILES_PATH/*; do;
+		if [[ -d "${i}" ]]; then
+			items="${items}${sep}chromium@$(basename "${i}")"
+			sep="\n"
+		fi
+	done
+	for i in $FIREFOX_PROFILES_PATH/*; do;
+		if [[ -d "${i}" ]]; then
+			items="${items}${sep}firefox@$(basename "${i}")"
+			sep="\n"
+		fi
+	done
+	entry="$(rofi -dmenu < <(echo -e "${items}"))"
+	debug "entry=${entry}"
+	browser="$(echo "${entry}" | cut -d@ -f1)"
+	debug "browser=${browser}"
+	profile="$(echo "${entry}" | cut -d@ -f2)"
+	debug "profile=${profile}"
+fi
+
 case "${browser}" in
 	"chromium")
-		PROFILES_PATH="${HOME}/.config/chromium/profiles"
+		PROFILES_PATH="${CHROMIUM_PROFILES_PATH}"
 		;;
 	"firefox")
-		PROFILES_PATH="${HOME}/.mozilla/firefox/profiles"
+		PROFILES_PATH="${FIREFOX_PROFILES_PATH}"
 		;;
 	*)
 		print_error 0 "the browser ${browser} is not supported"
 		exit 1
 		;;
 esac
-
-if [[ -z "${profile}" ]]; then
-	items=""
-	sep=""
-	for i in $PROFILES_PATH/*; do;
-		if [[ -d "${i}" ]]; then
-			items="${items}${sep}$(basename "${i}")"
-			sep="\n"
-		fi
-	done
-	profile=$(rofi -dmenu < <(echo -e "${items}"))
-fi
 
 if [[ -z "${profile}" ]]; then
 	print_error 0 "no profile was selected, aborting..."
@@ -116,10 +137,12 @@ fi
 
 case "${browser}" in
 	"chromium")
+		debug "running \`chromium --user-data-dir=${PROFILES_PATH}/${profile} ${args[@]}\`"
 		(exec chromium --user-data-dir="${PROFILES_PATH}/${profile}" "${args[@]}" &>/dev/null)&
 		;;
 	"firefox")
-		(exec firefox --profile "${PROFILES_PATH}/${profile}" "${argument[@]}" &>/dev/null)&
+		debug "running \`firefox --profile ${PROFILES_PATH}/${profile} --new-tab ${args[@]}\`"
+		(exec firefox --profile "${PROFILES_PATH}/${profile}" --new-tab "${args[@]}" &>/dev/null)&
 		;;
 	*)
 		print_error 0 "the browser ${browser} is not supported"
