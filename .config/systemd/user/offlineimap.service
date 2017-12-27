@@ -3,7 +3,7 @@ Description=Offlineimap
 
 [Service]
 ExecStartPre=/bin/sh -c "docker inspect offlineimap >/dev/null 2>&1 && docker rm -f offlineimap || true"
-ExecStartPre=/usr/bin/docker create --name offlineimap -m 1g -v /home/kalbasit/.offlineimaprc:/etc/offlineimap/offlineimaprc:ro -v /etc/ca-certificates/extracted/ca-bundle.trust.crt:/etc/offlineimap/ca-bundle.crt:ro -v /home/kalbasit/.offlineimap:/var/lib/offlineimap/offlineimap -v /home/kalbasit/.mail:/var/lib/offlineimap/mail quay.io/kalbasit/offlineimap
+ExecStartPre=/usr/bin/docker create --name offlineimap -m 1g -v %h/.offlineimaprc:/etc/offlineimap/offlineimaprc:ro -v /etc/ca-certificates/extracted/ca-bundle.trust.crt:/etc/offlineimap/ca-bundle.crt:ro -v %h/.offlineimap:/var/lib/offlineimap/offlineimap -v %h/.mail:/var/lib/offlineimap/mail quay.io/kalbasit/offlineimap
 ExecStart=/usr/bin/docker start -a offlineimap
 ExecStop=-/usr/bin/docker stop offlineimap
 ExecStopPost=/usr/bin/docker rm -f offlineimap

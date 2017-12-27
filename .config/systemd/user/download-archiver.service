@@ -2,7 +2,7 @@
 Description=Download Archiver
 
 [Service]
-ExecStart=/home/kalbasit/.bin/download-archiver
+ExecStart=%h/.bin/download-archiver
 Type=oneshot
 
 [Install]

@@ -2,11 +2,11 @@
 Description=XCape
 
 [Service]
-ExecStart=/usr/bin/start-stop-daemon --start --name xcape --make-pidfile --pidfile /home/kalbasit/.local/run/xcape.pid --exec /usr/bin/xcape -- -e 'Control_L=Escape'
-ExecStopPost=/usr/bin/rm /home/kalbasit/.local/run/xcape.pid
+ExecStart=/usr/bin/start-stop-daemon --start --name xcape --make-pidfile --pidfile %h/.local/run/xcape.pid --exec /usr/bin/xcape -- -e 'Control_L=Escape'
+ExecStopPost=/usr/bin/rm %h/.local/run/xcape.pid
 Restart=always
 Type=forking
-PIDfile=/home/kalbasit/.local/run/xcape.pid
+PIDfile=%h/.local/run/xcape.pid
 
 [Install]
 WantedBy=default.target
