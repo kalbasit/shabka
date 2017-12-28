@@ -271,11 +271,12 @@ def process_templates(folder)
 				context = {
 					hostname: Socket.gethostname,
 				}
-				File.open(file.gsub(/.dtmpl$/, ''), 'w') do |new_file|
+				target_file = file.gsub(/.dtmpl$/, '')
+				File.open(target_file, 'w') do |new_file|
 					new_file.write(ERBRenderer.new(context).render(File.read(file)))
 				end
 				if is_encrypted?(file)
-					File.chmod(0400, file)
+					File.chmod(0400, target_file)
 				end
 			end
 		end
