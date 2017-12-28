@@ -265,7 +265,7 @@ end
 def process_templates(folder)
 	files(folder).each do |file|
 		if File.directory?(file)
-			process_templates(file)
+			process_templates(file) unless file == File.join(DOTFILES_PATH, '.local/share/nvim/undo')
 		else
 			if file =~ /.dtmpl$/
 				context = {
