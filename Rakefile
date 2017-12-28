@@ -181,10 +181,12 @@ task :update_submodules do
 	sh %Q{git submodule update --init > /dev/null}
 end
 
+desc "Process dotfiles templates"
 task :process_templates do
 	process_templates(DOTFILES_PATH)
 end
 
+desc "Process private templates"
 task :process_private_templates do
 	process_templates(PRIVATE_PATH) if File.exists?(PRIVATE_PATH)
 end
