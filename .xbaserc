@@ -28,6 +28,7 @@ if [[ -z "${XBASERC}" ]]; then
 	export NOTMUCH_CONFIG="${HOME}/.mail/.notmuch/config"
 	export SUDO_EDITOR="nvim"
 	export TERMINAL=termite
+	export MOZ_USE_XINPUT2=1
 
 	# add my bin folders to the PATH
 	_pathprepend "${HOME}/.bin"

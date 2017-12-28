@@ -248,6 +248,9 @@ export VMAIL_VIM=nvim
 # Set the browser to my relay browser
 export BROWSER="${HOME}/.bin/relay-browser"
 
+# Tell firefox to use xinput, this is for touch-screen scrolling
+export MOZ_USE_XINPUT2=1
+
 # Set the GLOBAL_GOPATH
 export SYSTEM_GOPATH="${HOME}/.filesystem"
 pathprepend PATH "${SYSTEM_GOPATH}/bin"
