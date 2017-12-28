@@ -22,9 +22,6 @@ fi
 # composition manager
 systemctl --user restart compton.service
 
-# notification daemon
-systemctl --user restart dunst.service
-
 # start the xss-lock that takes care of locking the screen when necessary.
 systemctl --user restart xss-lock.service
 

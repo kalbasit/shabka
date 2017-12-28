@@ -134,7 +134,7 @@
   dmenu = /usr/bin/rofi -dmenu -p dunst:
 
   # Browser for opening urls in context menu.
-  browser = /home/kalbasit/.bin/relay-browser
+  browser = <%= ENV['HOME'] %>/.bin/relay-browser
 
   # Align icons left/right/off
   icon_position = off
