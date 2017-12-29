@@ -903,8 +903,6 @@ if [[ -n "${NVM_INIT}" ]]; then
 		npm $@
 	}
 	alias npm=lazyLoadNpm
-else
-	unset NVM_INIT
 fi
 
 #####################################################################
