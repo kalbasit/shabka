@@ -181,10 +181,12 @@ task :update_submodules do
 	sh %Q{git submodule update --init > /dev/null}
 end
 
+desc "Process dotfiles templates"
 task :process_templates do
 	process_templates(DOTFILES_PATH)
 end
 
+desc "Process private templates"
 task :process_private_templates do
 	process_templates(PRIVATE_PATH) if File.exists?(PRIVATE_PATH)
 end
@@ -263,17 +265,18 @@ end
 def process_templates(folder)
 	files(folder).each do |file|
 		if File.directory?(file)
-			process_templates(file)
+			process_templates(file) unless file == File.join(DOTFILES_PATH, '.local/share/nvim/undo')
 		else
 			if file =~ /.dtmpl$/
 				context = {
 					hostname: Socket.gethostname,
 				}
-				File.open(file.gsub(/.dtmpl$/, ''), 'w') do |new_file|
+				target_file = file.gsub(/.dtmpl$/, '')
+				File.open(target_file, 'w') do |new_file|
 					new_file.write(ERBRenderer.new(context).render(File.read(file)))
 				end
 				if is_encrypted?(file)
-					File.chmod(0400, file)
+					File.chmod(0400, target_file)
 				end
 			end
 		end

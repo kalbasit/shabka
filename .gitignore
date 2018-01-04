@@ -16,6 +16,7 @@
 .config/bugwarrior
 .config/chromium/
 .config/configstore/
+.config/dunst/dunstrc
 .config/git/
 .config/google-chrome/
 .config/greenclip.cfg

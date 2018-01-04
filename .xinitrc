@@ -22,9 +22,6 @@ fi
 # composition manager
 systemctl --user restart compton.service
 
-# notification daemon
-systemctl --user restart dunst.service
-
 # start the xss-lock that takes care of locking the screen when necessary.
 systemctl --user restart xss-lock.service
 
@@ -38,7 +35,7 @@ systemctl --user restart gone.service
 systemctl --user restart xcape.service
 
 # start the Clipboard manager
-systemctl --user restart mclip.service
+systemctl --user restart clipboard_manager.service
 
 # start pulse audio
 start-pulseaudio-x11
