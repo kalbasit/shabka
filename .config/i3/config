@@ -338,6 +338,7 @@ assign [class="^com-xk72-charles-gui-.*$"] → charles
 for_window [class="^Pavucontrol"] floating enable
 for_window [class="^Tor Browser"] floating enable
 for_window [class="^net-filebot-Main$"] floating enable
+for_window [class="^ROX-Filer$"] floating enable
 
 ########################
 # Workspace assignment #
