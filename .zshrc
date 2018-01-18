@@ -231,6 +231,8 @@ if [[ "$OSTYPE" = linux* ]]; then
 	export LPASS_DISABLE_PINENTRY=1
 	# fix the look of Java applications
 	export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel'
+	# use chromium as the karma's driver
+	export CHROME_BIN="$(which chromium)"
 fi
 
 if [[ "$OSTYPE" = darwin* ]]; then
