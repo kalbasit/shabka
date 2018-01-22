@@ -276,6 +276,11 @@ def process_templates(folder)
 					hostname: Socket.gethostname,
 				}
 				target_file = file.gsub(/.dtmpl$/, '')
+				# if the target file is not writable, chmod it to allow writing before
+				# we process the template.
+				if File.exists?(target_file) && !File.writable?(target_file)
+					File.chmod(0644, target_file)
+				end
 				File.open(target_file, 'w') do |new_file|
 					new_file.write(ERBRenderer.new(context).render(File.read(file)))
 				end
