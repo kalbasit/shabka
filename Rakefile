@@ -221,7 +221,11 @@ task :gen_local_bin do
 	end
 	LOCAL_BINARIES.each do |u|
 		p = File.expand_path(File.join(ENV["MYFS"], "bin", File.basename(u)))
-		download_and_save_file(u, p)
+		if File.exists?(u)
+			FileUtils.cp(u, p)
+		else
+			download_and_save_file(u, p)
+		end
 		File.chmod(0755, p)
 	end
 end
