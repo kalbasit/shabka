@@ -39,6 +39,7 @@
 .config/pianobar
 .config/pulse/
 .config/robomongo/
+.config/systemd/user/xss-lock.service
 .deis/client.json
 .deis/units/
 .deis/vagrant.json
