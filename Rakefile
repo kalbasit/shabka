@@ -80,6 +80,7 @@ LOCAL_BINARIES = [
 	"https://github.com/giddie/bits-n-pieces/raw/master/pacman-undo/pacman-undo",
 	# script for accessing lastpass from rofi
 	"https://github.com/Mange/rofi-lpass/raw/master/rofi-lpass",
+	"/usr/share/doc/xss-lock/transfer-sleep-lock-i3lock.sh",
 ]
 
 ### Initialize
