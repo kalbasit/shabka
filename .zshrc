@@ -594,7 +594,7 @@ fi
 # Edit the current command line in $EDITOR
 autoload -U edit-command-line
 zle -N edit-command-line
-bindkey -M vicmd v edit-command-line
+bindkey -M vicmd 'j' edit-command-line
 
 #####################################################################
 # Colemak key bindings
