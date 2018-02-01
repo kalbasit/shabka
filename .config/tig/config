@@ -1,0 +1,5 @@
+# colemak
+bind generic i move-up
+bind generic e move-down
+bind generic k find-next
+bind generic K find-prev
