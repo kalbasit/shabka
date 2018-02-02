@@ -2,6 +2,7 @@
 # vim:ft=zsh:
 #
 
+# TODO: use open_tunnel to make the tunnel
 function tmycli() {
 	{ # begin an always block
 		function D0_help()
