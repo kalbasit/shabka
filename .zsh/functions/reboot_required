@@ -1,0 +1,17 @@
+#
+# vim:ft=zsh:
+#
+
+function reboot_required() {
+	current_kernel_version="$(uname -r)"
+	debug "current_kernel_version=${current_kernel_version}"
+	for version in $(file /boot/vmlinuz* | sed -e 's:^.*version \([^ ]*\) .*$:\1:g'); do
+		debug "checking kernel version ${version}"
+		if [[ "${current_kernel}" = "${version}" ]]; then
+			debug "found the current version in /boot, reboot is not required"
+			return 1
+		fi
+	done
+	debug "the current kernel was not found in /boot, reboot is required"
+	return 0
+}
