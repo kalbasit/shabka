@@ -46,6 +46,7 @@ GO_BINARIES = {
 	"github.com/alecthomas/gometalinter" => {postinstall: "gometalinter --install"},
 
 	"github.com/3rf/codecoroner"                              => {},
+	"github.com/grammarly/rocker"                             => {},
 	"github.com/axw/gocov/gocov"                              => {},
 	"github.com/ckaznocha/protoc-gen-lint"                    => {},
 	"github.com/d4l3k/go-pry"                                 => {},
