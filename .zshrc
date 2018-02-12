@@ -224,6 +224,9 @@ source "${HOME}/.zsh/functions.zsh"
 # exports
 #####################################################################
 
+# export the code path
+export CODE_PATH="${HOME}/code"
+
 if [[ "$OSTYPE" = linux* ]]; then
 	# GPG_TTY is needed for gpg with pinentry-curses
 	export GPG_TTY="$(tty)"
