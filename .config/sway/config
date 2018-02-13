@@ -355,8 +355,8 @@ for_window [class="^whats-app-nativefier*"] sticky enable, floating enable, move
 bindsym $alt+w [class="^whats-app-nativefier*"] scratchpad show
 
 # Pulse
-for_window [class="Chromium" instance="crx_jjbjdleccaiklfpcblgekgmjadjdclkp"] sticky enable, floating enable, move scratchpad
-bindsym $alt+p [class="Chromium" instance="crx_jjbjdleccaiklfpcblgekgmjadjdclkp"] scratchpad show
+for_window [class="pulse-sms"] sticky enable, floating enable, move scratchpad
+bindsym $alt+p [class="pulse-sms"] scratchpad show
 
 ##############
 # Auto Start #
@@ -365,7 +365,7 @@ bindsym $alt+p [class="Chromium" instance="crx_jjbjdleccaiklfpcblgekgmjadjdclkp"
 # TODO: should I move back to wee-slack?
 # exec $nosid termite --title=irc --exec="weechat"
 exec $nosid whatsapp-web-desktop
-exec $nosid mclip.py daemon
+exec $nosid "/opt/Pulse SMS/pulse-sms"
 
 # Start the personal terminal on the personal workspace
 exec i3-msg "workspace personal@base; exec $nosid /usr/bin/termite"
