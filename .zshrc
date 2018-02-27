@@ -884,6 +884,8 @@ if [[ -n "${NVM_INIT}" ]]; then
 		unfunction lazyLoadNvm
 		unalias npm
 		unfunction lazyLoadNpm
+		unalias yarn
+		unfunction lazyLoadYarn
 
 		# source the init
 		source "${NVM_INIT}"
@@ -908,6 +910,18 @@ if [[ -n "${NVM_INIT}" ]]; then
 		npm $@
 	}
 	alias npm=lazyLoadNpm
+
+	# lazyLoadYarn is a function to load nvm. It will only be called if
+	# lazyLoadNvm was never called before.
+	lazyLoadYarn() {
+		# call lazyLoadNvm so it loads the actual yarn, it will also remove this
+		# function and the alias set to it.
+		lazyLoadNvm
+
+		# call the actual yarn which is loaded by now
+		yarn $@
+	}
+	alias yarn=lazyLoadYarn
 fi
 
 #####################################################################
