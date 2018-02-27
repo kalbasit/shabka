@@ -91,6 +91,10 @@ function sp() {
 	# use
 	export ACTIVE_PROFILE="${requested_profile}"
 	eval "$(ssh_agents)"
+	# set the GOPATH
+	if [[ -n "${ACTIVE_STORY}" ]]; then
+		export GOPATH="${CODE_PATH}/${ACTIVE_PROFILE}/${ACTIVE_STORY}"
+	fi
 } always {
 unfunction -m "$0_*"
 unfunction pload pactivate pdeactivate
