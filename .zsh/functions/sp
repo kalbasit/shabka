@@ -86,7 +86,7 @@ function sp() {
 	fi
 
 	# unload the current profile
-	if [[ -n "${ACTIVE_PROFILE}" ]] && [[ "${ACTIVE_PROFILE}" != "${requested_profile }" ]]; then
+	if [[ -n "${ACTIVE_PROFILE}" ]] && [[ "${ACTIVE_PROFILE}" != "${requested_profile}" ]]; then
 		sp --kill
 	fi
 	# source the profile
