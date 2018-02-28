@@ -86,14 +86,16 @@ function sp() {
 	fi
 
 	# unload the current profile
-	sp --kill
+	if [[ -n "${ACTIVE_PROFILE}" ]] && [[ "${ACTIVE_PROFILE}" != "${requested_profile }" ]]; then
+		sp --kill
+	fi
 	# source the profile
 	# shellcheck disable=SC1090
 	source "${HOME}/.zsh/profiles/${requested_profile}.zsh"
 	# let the terminal know which profile is loaded and which ssh-agent to use
 	export ACTIVE_PROFILE="${requested_profile}"
 	# set the GOPATH
-	if [[ -n "${ACTIVE_STORY}" ]] && [[ -d "${CODE_PATH}/${ACTIVE_PROFILE}/${ACTIVE_STORY}" ]]; then
+	if [[ -z "${GOPATH}" ]] && [[ -n "${ACTIVE_STORY}" ]] && [[ -d "${CODE_PATH}/${ACTIVE_PROFILE}/${ACTIVE_STORY}" ]]; then
 		export GOPATH="${CODE_PATH}/${ACTIVE_PROFILE}/${ACTIVE_STORY}"
 		pathappend PATH "${GOPATH}/bin"
 	fi
