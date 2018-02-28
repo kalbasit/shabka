@@ -56,6 +56,10 @@ function sp() {
 				if [[ -n "${ACTIVE_PROFILE}" ]]; then
 					# shellcheck disable=SC1090
 					source "${HOME}/.zsh/profiles/${ACTIVE_PROFILE}.zsh"
+					if [[ -n "${GOPATH}" ]]; then
+						pathunmunge PATH "${GOPATH}/bin"
+						unset GOPATH
+					fi
 					pdeactivate
 					unset ACTIVE_PROFILE SSH_AGENT_PID SSH_AUTH_SOCK SSH_AGENT_NAME
 					eval "$(ssh_agents)"
@@ -83,18 +87,20 @@ function sp() {
 
 	# unload the current profile
 	sp --kill
-	# activate the profile
+	# source the profile
 	# shellcheck disable=SC1090
 	source "${HOME}/.zsh/profiles/${requested_profile}.zsh"
-	pactivate
-	# let the terminal know which profile is loaded and which ssh-agent to
-	# use
+	# let the terminal know which profile is loaded and which ssh-agent to use
 	export ACTIVE_PROFILE="${requested_profile}"
-	eval "$(ssh_agents)"
 	# set the GOPATH
-	if [[ -n "${ACTIVE_STORY}" ]]; then
+	if [[ -n "${ACTIVE_STORY}" ]] && [[ -d "${CODE_PATH}/${ACTIVE_PROFILE}/${ACTIVE_STORY}" ]]; then
 		export GOPATH="${CODE_PATH}/${ACTIVE_PROFILE}/${ACTIVE_STORY}"
+		pathappend PATH "${GOPATH}/bin"
 	fi
+	# activate the profile
+	pactivate
+	# switch the user agent
+	eval "$(ssh_agents)"
 } always {
 unfunction -m "$0_*"
 unfunction pload pactivate pdeactivate
