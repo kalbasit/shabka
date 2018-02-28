@@ -419,7 +419,7 @@ export WARN="${FG_YELLOW_B}"
 export ERROR="${FG_RED_B}"
 
 # Find the option for using colors in ls, depending on the version
-if [[ -x "${HOME}/.cargo/bin/exa" ]]; then
+if type exa &>/dev/null; then
 	alias ls='exa'
 elif [[ "$OSTYPE" == netbsd* ]]; then
 	# On NetBSD, test if "gls" (GNU ls) is installed (this one supports colors);
