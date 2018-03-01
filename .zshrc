@@ -755,7 +755,6 @@ bindkey -M vicmd 'C' vi-yank-whole-line
 bindkey -M vicmd '^[C' vi-yank-whole-line
 bindkey -M visual 'C' vi-yank-whole-line
 
-
 # vi-put-before (unbound) (P) (unbound)
 #   Insert the contents of the kill buffer before the cursor. If the kill
 #   buffer contains a sequence of lines (as opposed to characters), paste
