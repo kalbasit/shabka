@@ -371,9 +371,9 @@ if [[ "$OSTYPE" = darwin* ]]; then  # Mac only
 	alias ii='brew install'
 	alias ss='brew search'
 elif [[ "$OSTYPE" = linux* ]]; then  # Linux only
-	alias upup='yaourt -Syu --aur'
-	alias ii='yaourt -Sy'
-	alias ss='yaourt -Ss'
+	alias upup='yay -Syu'
+	alias ii='yay -Sy'
+	alias ss='yay'
 fi
 
 #####################################################################
