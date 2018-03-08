@@ -95,9 +95,13 @@ function sp() {
 	# let the terminal know which profile is loaded and which ssh-agent to use
 	export ACTIVE_PROFILE="${requested_profile}"
 	# set the GOPATH
-	if [[ -z "${GOPATH}" ]] && [[ -n "${ACTIVE_STORY}" ]] && [[ -d "${CODE_PATH}/${ACTIVE_PROFILE}/${ACTIVE_STORY}" ]]; then
-		export GOPATH="${CODE_PATH}/${ACTIVE_PROFILE}/${ACTIVE_STORY}"
-		pathappend PATH "${GOPATH}/bin"
+	if [[ -z "${GOPATH}" ]] && [[ -n "${ACTIVE_STORY}" ]]; then
+		local go_path="${CODE_PATH}/${ACTIVE_PROFILE%%.*}/${ACTIVE_STORY}"
+		debug "go_path=${go_path}"
+		if [[ -d "${go_path}" ]]; then
+			export GOPATH="${go_path}"
+			pathappend PATH "${GOPATH}/bin"
+		fi
 	fi
 	# activate the profile
 	pactivate
