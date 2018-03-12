@@ -1,0 +1,14 @@
+{
+	"buildDir": "/home/kalbasit/.cache/yay/",
+	"editor": "nvim",
+	"makepkgbin": "/usr/bin/makepkg",
+	"pacmanbin": "/usr/bin/pacman",
+	"pacmanconf": "/etc/pacman.conf",
+	"tarbin": "/usr/bin/bsdtar",
+	"requestsplitn": 150,
+	"sortmode": 0,
+	"sudoloop": false,
+	"timeupdate": false,
+	"devel": false,
+	"cleanAfter": true
+}
