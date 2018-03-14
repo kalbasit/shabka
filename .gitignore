@@ -40,6 +40,7 @@
 .config/pulse/
 .config/robomongo/
 .config/systemd/user/xss-lock.service
+.config/yay/config.json
 .deis/client.json
 .deis/units/
 .deis/vagrant.json

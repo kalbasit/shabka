@@ -1,6 +1,6 @@
 {
-	"buildDir": "/home/kalbasit/.cache/yay/",
-	"editor": "nvim",
+	"buildDir": "<%= ENV['HOME'] %>/.cache/yay/",
+	"editor": "<%= ENV['EDITOR'] %>",
 	"makepkgbin": "/usr/bin/makepkg",
 	"pacmanbin": "/usr/bin/pacman",
 	"pacmanconf": "/etc/pacman.conf",
