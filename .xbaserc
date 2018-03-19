@@ -29,6 +29,7 @@ if [[ -z "${XBASERC}" ]]; then
 	export SUDO_EDITOR="nvim"
 	export TERMINAL=termite
 	export MOZ_USE_XINPUT2=1
+	export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel'
 
 	# add my bin folders to the PATH
 	_pathprepend "${HOME}/.bin"
