@@ -46,7 +46,6 @@ GO_BINARIES = {
 	"github.com/alecthomas/gometalinter" => {postinstall: "gometalinter --install"},
 
 	"github.com/3rf/codecoroner"                              => {},
-	"github.com/grammarly/rocker"                             => {},
 	"github.com/axw/gocov/gocov"                              => {},
 	"github.com/ckaznocha/protoc-gen-lint"                    => {},
 	"github.com/d4l3k/go-pry"                                 => {},
@@ -57,8 +56,10 @@ GO_BINARIES = {
 	"github.com/gogo/protobuf/protoc-gen-gofast"              => {},
 	"github.com/gogo/protobuf/protoc-gen-gogo"                => {},
 	"github.com/golang/dep/cmd/dep"                           => {},
+	"github.com/golang/mock/gomock"                           => {},
 	"github.com/golang/protobuf/protoc-gen-go"                => {},
 	"github.com/golang/tools/cmd/gomvpkg"                     => {},
+	"github.com/grammarly/rocker"                             => {},
 	"github.com/jteeuwen/go-bindata/go-bindata"               => {},
 	"github.com/kalbasit/swm"                                 => {},
 	"github.com/knqyf263/pet"                                 => {},
@@ -72,6 +73,7 @@ GO_BINARIES = {
 	"github.com/square/certstrap"                             => {},
 	"golang.org/x/tools/cmd/cover"                            => {},
 	"golang.org/x/tools/cmd/stringer"                         => {},
+	"github.com/golang/mock/mockgen"                          => {},
 }
 
 LOCAL_BINARIES = [
