@@ -98,10 +98,12 @@ function sp() {
 	if [[ -z "${GOPATH}" ]] && [[ -n "${ACTIVE_STORY}" ]]; then
 		local go_path="${CODE_PATH}/${ACTIVE_PROFILE%%.*}/${ACTIVE_STORY}"
 		debug "go_path=${go_path}"
-		if [[ -d "${go_path}" ]]; then
-			export GOPATH="${go_path}"
-			pathappend PATH "${GOPATH}/bin"
+		if [[ ! -d "${go_path}" ]]; then
+			mkdir -p "${go_path}/src"
+			mkdir -p "${go_path}/bin"
 		fi
+		export GOPATH="${go_path}"
+		pathappend PATH "${GOPATH}/bin"
 	fi
 	# activate the profile
 	pactivate
