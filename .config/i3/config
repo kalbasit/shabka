@@ -115,6 +115,9 @@ bindsym $mod+a focus parent
 # focus the child container
 bindsym $mod+d focus child
 
+# start a region screenshot
+bindsym $mod+Shift+4 exec deepin-screenshot
+
 # focus the urgent window
 bindsym $mod+x [urgent=latest] focus
 
