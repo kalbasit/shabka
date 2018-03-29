@@ -9,6 +9,6 @@
 	"sortmode": 0,
 	"sudoloop": false,
 	"timeupdate": false,
-	"devel": false,
+	"devel": true,
 	"cleanAfter": true
 }
