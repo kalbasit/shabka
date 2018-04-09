@@ -475,6 +475,14 @@ endfunction
 autocmd! User FzfStatusLine call <SID>fzf_statusline()
 
 "" }}}
+"" Gist{{{
+""
+
+let g:gist_clip_command = 'xsel -bi'
+let g:gist_show_privates = 1
+let g:gist_post_private = 1
+
+" }}}
 "" Golang{{{
 ""
 
