@@ -1,5 +1,5 @@
 {
-	"buildDir": "<%= ENV['HOME'] %>/.cache/yay/",
+	"buildDir": "/tmp/yay/",
 	"editor": "<%= ENV['EDITOR'] %>",
 	"makepkgbin": "/usr/bin/makepkg",
 	"pacmanbin": "/usr/bin/pacman",
