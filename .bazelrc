@@ -1,0 +1,3 @@
+build --show_timestamps
+build --color=yes
+test --test_output=errors
