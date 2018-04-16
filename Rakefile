@@ -47,6 +47,8 @@ GO_BINARIES = {
 
 	"github.com/3rf/codecoroner"                              => {},
 	"github.com/axw/gocov/gocov"                              => {},
+	"github.com/bazelbuild/bazel-gazelle/cmd/gazelle"         => {},
+	"github.com/bazelbuild/buildtools/buildifier"             => {},
 	"github.com/ckaznocha/protoc-gen-lint"                    => {},
 	"github.com/d4l3k/go-pry"                                 => {},
 	"github.com/derekparker/delve/cmd/dlv"                    => {},
@@ -55,8 +57,10 @@ GO_BINARIES = {
 	"github.com/gogo/protobuf/gogoproto"                      => {},
 	"github.com/gogo/protobuf/protoc-gen-gofast"              => {},
 	"github.com/gogo/protobuf/protoc-gen-gogo"                => {},
+	"github.com/gogo/protobuf/protoc-gen-gogofast"            => {},
 	"github.com/golang/dep/cmd/dep"                           => {},
 	"github.com/golang/mock/gomock"                           => {},
+	"github.com/golang/mock/mockgen"                          => {},
 	"github.com/golang/protobuf/protoc-gen-go"                => {},
 	"github.com/golang/tools/cmd/gomvpkg"                     => {},
 	"github.com/grammarly/rocker"                             => {},
@@ -73,7 +77,6 @@ GO_BINARIES = {
 	"github.com/square/certstrap"                             => {},
 	"golang.org/x/tools/cmd/cover"                            => {},
 	"golang.org/x/tools/cmd/stringer"                         => {},
-	"github.com/golang/mock/mockgen"                          => {},
 }
 
 LOCAL_BINARIES = [
