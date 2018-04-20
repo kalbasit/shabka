@@ -74,6 +74,16 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all --no-update-rc' }
 " Externals "
 """""""""""""
 
+if executable('bazel')
+	" Add maktaba and bazel to the runtimepath.
+	" (The latter must be installed before it can be used.)
+	Plug 'google/vim-maktaba'
+	Plug 'bazelbuild/vim-bazel'
+
+	" TODO: why is this not neovim?
+	Plug 'bazelbuild/vim-ft-bzl'
+endif
+
 if executable('task')
 	" revert to the original fork when
 	" https://github.com/blindFS/vim-taskwarrior/pull/137 is merged
