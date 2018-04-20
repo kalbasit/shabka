@@ -1,3 +1,5 @@
 build --show_timestamps
 build --color=yes
 test --test_output=errors
+
+common --action_env=BAZEL_PYTHON=/usr/bin/python2
