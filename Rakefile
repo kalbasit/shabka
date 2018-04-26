@@ -64,6 +64,7 @@ GO_BINARIES = {
 	"github.com/golang/protobuf/protoc-gen-go"                => {},
 	"github.com/golang/tools/cmd/gomvpkg"                     => {},
 	"github.com/grammarly/rocker"                             => {},
+	"github.com/jenkins-x/jx/cmd/jx"                          => {},
 	"github.com/jteeuwen/go-bindata/go-bindata"               => {},
 	"github.com/kalbasit/swm"                                 => {},
 	"github.com/knqyf263/pet"                                 => {},
