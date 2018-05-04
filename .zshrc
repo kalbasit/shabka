@@ -843,6 +843,10 @@ fi
 # Load travis
 [[ -r "${HOME}/.travis/travis.sh" ]] && source "${HOME}/.travis/travis.sh"
 
+# Load ASDF
+[[ -r "${HOME}/.asdf/asdf.sh" ]] && source "${HOME}/.asdf/asdf.sh"
+[[ -r "${HOME}/.asdf/completions/asdf.bash" ]] && source "${HOME}/.asdf/completions/asdf.bash"
+
 # Load FZF
 [[ -r "${HOME}/.fzf.zsh" ]] && source "${HOME}/.fzf.zsh"
 if have ag; then
