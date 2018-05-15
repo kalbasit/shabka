@@ -47,7 +47,6 @@ GO_BINARIES = {
 
 	"github.com/3rf/codecoroner"                              => {},
 	"github.com/axw/gocov/gocov"                              => {},
-	"github.com/bazelbuild/bazel-gazelle/cmd/gazelle"         => {},
 	"github.com/bazelbuild/buildtools/buildifier"             => {},
 	"github.com/ckaznocha/protoc-gen-lint"                    => {},
 	"github.com/d4l3k/go-pry"                                 => {},
@@ -88,6 +87,7 @@ LOCAL_BINARIES = [
 	# script for accessing lastpass from rofi
 	"https://github.com/Mange/rofi-lpass/raw/master/rofi-lpass",
 	"/usr/share/doc/xss-lock/transfer-sleep-lock-i3lock.sh",
+	"https://raw.githubusercontent.com/ekalinin/github-markdown-toc/master/gh-md-toc",
 ]
 
 ### Initialize
