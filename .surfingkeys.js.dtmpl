@@ -748,7 +748,7 @@ function openAlternate(newTab) {
 // NOTE: the help section are defined at
 // https://github.com/brookhong/Surfingkeys/blob/aa4aae5af30979e43fb7408a392359bfadc3f991/pages/front.js#L226
 
-mapkey("cb", "#7Copy the last element of the path in the URL", copyLastElementInPath);
+mapkey("ce", "#7Copy the last element of the path in the URL", copyLastElementInPath);
 mapkey(",.", "#8Open alternate", openAlternate(false));
 mapkey("g,.", "#8Open alternate in a new tab", openAlternate(true));
 mapkey(",r", "#4Reload the page skipping the cache", () => {
