@@ -88,6 +88,10 @@
 	log             = true
 	tool            = vimdiff
 #}}}
+# protocol# {{{
+[protocol "keybase"]
+	allow = always
+#}}}
 # push# {{{
 [push]
 	default = current
