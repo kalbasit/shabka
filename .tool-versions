@@ -5,3 +5,4 @@ kubectl 1.9.4
 minikube 0.25.2
 nodejs 8.11.1
 python 2.7.15
+ruby 2.5.1
