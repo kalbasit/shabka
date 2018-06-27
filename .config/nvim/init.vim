@@ -270,7 +270,6 @@ set shada='20,<50,:20,%,n~/.config/nvim/_nviminfo
 " }}}
 "" NeoVim Settings{{{
 set mouse=  " I hate using the mouse for other than copying/pasting.
-let g:node_host_prog = '/usr/bin/neovim-node-host'
 " }}}
 "" Gui Settings{{{
 ""
