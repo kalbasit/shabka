@@ -44,13 +44,13 @@ Plug 'junegunn/seoul256.vim'
 " AutoComplete & Snippet "
 """"""""""""""""""""""""""
 
+" Typescript support
+Plug 'mhartington/nvim-typescript', { 'do': './install.sh' }
 " deoplete for nvim.
 " the main plugin
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 " Golang support
-Plug 'zchee/deoplete-go', { 'do': 'make && mkdir -p ~/.cache/deoplete/go'}
-" Typescript support
-Plug 'mhartington/nvim-typescript'
+Plug 'zchee/deoplete-go', { 'do': 'make'}
 " Ruby support
 Plug 'fishbullet/deoplete-ruby'
 " ZSH support
