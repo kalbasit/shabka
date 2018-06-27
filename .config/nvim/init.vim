@@ -22,8 +22,7 @@ Plug 'sheerun/vim-polyglot'
 " Terraform
 Plug 'hashivim/vim-terraform'
 " Go
-Plug 'fatih/vim-go', { 'for': 'go' } | Plug 'majutsushi/tagbar' | Plug 'sebdah/vim-delve'
-Plug 'sebdah/vim-delve'
+Plug 'fatih/vim-go', { 'tag': 'v1.17', 'for': 'go', 'do': ':GoUpdateBinaries' } | Plug 'majutsushi/tagbar'
 " CSV
 Plug 'chrisbra/csv.vim', { 'for': 'csv' }
 " Ruby/Rails
@@ -432,12 +431,6 @@ let g:AutoPairsShortcutJump = ''
 autocmd BufEnter * EnableStripWhitespaceOnSave
 
 "}}}
-"" Delve {{{
-""
-
-let g:delve_new_command = "new"
-
-" }}}
 "" Deoplete{{{
 
 " Run deoplete automatically
