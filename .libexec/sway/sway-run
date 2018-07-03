@@ -47,7 +47,10 @@ fi
 export _JAVA_AWT_WM_NONREPARENTING=1
 
 # ask GTK applications to use the Wayland backend
-export GDK_BACKEND=wayland
+# TODO: Chromium does not work with this set, there's an AUR package
+# https://aur.archlinux.org/packages/chromium-wayland/ that add support for
+# Wayland to Chromium.
+# export GDK_BACKEND=wayland
 
 # sway-specific setting
 export XKB_DEFAULT_LAYOUT=us
