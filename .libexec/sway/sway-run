@@ -25,6 +25,7 @@ export LANG=en_US.UTF-8
 export LC_ALL="${LANG}"
 export MYFS="${HOME}/.local"
 export SUDO_EDITOR="nvim"
+export NOTMUCH_CONFIG="${HOME}/.mail/.notmuch/config"
 export TERM=termite
 
 # add my bin folders to the PATH
@@ -61,4 +62,10 @@ export WLC_REPEAT_RATE=30
 unset -f _pathprepend
 unset -f _pathappend
 
-sway 2> ~/.sway.log
+# move the old sway log file out of the way
+if [[ -f "${HOME}/.sway.log" ]]; then
+	rm -f "${HOME}/.sway.log.old"
+	mv "${HOME}/.sway.log" "${HOME}/.sway.log.old"
+fi
+
+sway 2> "${HOME}/.sway.log"
