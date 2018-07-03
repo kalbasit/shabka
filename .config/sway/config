@@ -133,10 +133,10 @@ bindsym XF86AudioLowerVolume exec $nosid pactl set-sink-mute @DEFAULT_SINK@ fals
 bindsym XF86AudioMute exec $nosid pactl set-sink-mute @DEFAULT_SINK@ toggle
 
 # brightness support
-bindsym XF86MonBrightnessUp exec $nosid xbacklight -inc 5
-bindsym XF86MonBrightnessDown exec $nosid xbacklight -dec 5
-bindsym Shift+XF86MonBrightnessUp exec $nosid xbacklight -inc 1
-bindsym Shift+XF86MonBrightnessDown exec $nosid xbacklight -dec 1
+bindsym XF86MonBrightnessUp exec $nosid brightnessctl s +5%
+bindsym XF86MonBrightnessDown exec $nosid brightnessctl s 5%-
+bindsym Shift+XF86MonBrightnessUp exec $nosid brightnessctl s +1%
+bindsym Shift+XF86MonBrightnessDown exec $nosid brightnessctl s 1%-
 
 # sleep support
 bindsym XF86PowerOff exec $nosid $locker && systemctl suspend
