@@ -98,7 +98,7 @@ task :init => [:default, :vim_plug, :install_rbenv, :init_go, :install_go_binari
 
 desc "Install all vim plugins"
 task :vim_plug do
-	sh %Q{vim +PlugUpgrade +PlugInstall +PlugUpdate +qall}
+	sh %Q{nvim +PlugUpgrade +PlugInstall +PlugUpdate +qall}
 end
 
 desc "install rbenv"
