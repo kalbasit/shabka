@@ -1,0 +1,8 @@
+# vim:ft=i3:
+
+###########
+# Display #
+###########
+
+# TODO: scale 1.75x works better, maybe calculate the resolution instead?
+output eDP-1 scale 2
