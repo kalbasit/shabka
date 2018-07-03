@@ -1,4 +1,4 @@
-#!/usr/bin/zsh
+#!/usr/bin/env zsh
 #
 #  vim:ft=sh:
 #
@@ -19,6 +19,8 @@
 #  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
 #  USA.
 #
+
+set -eo pipefail
 
 source "${HOME}/.zsh/functions.zsh"
 
