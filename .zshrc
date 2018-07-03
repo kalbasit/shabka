@@ -869,16 +869,23 @@ fi
 # Profile support
 #####################################################################
 
-# compute the profile and story from the current i3 workspace
-if [[ -z "${ACTIVE_PROFILE}" || -z "${ACTIVE_STORY}" ]] && have i3-msg && have jq && [[ -n "${DISPLAY}" ]]; then
-	active_i3_workspace="$(i3-msg -t get_workspaces 2>/dev/null | jq -r '.[] | if .focused == true then .name else empty end')"
-	[[ -z "${ACTIVE_PROFILE}" ]] && export ACTIVE_PROFILE="$(echo "${active_i3_workspace}" | cut -d@ -f1)"
-	[[ -z "${ACTIVE_STORY}" ]] && export ACTIVE_STORY="$(echo "${active_i3_workspace}" | cut -d@ -f2)"
-	unset active_i3_workspace
+if [[ -z "${ACTIVE_PROFILE}" || -z "${ACTIVE_STORY}" ]]; then
+	if [[ -n "${SWAYSOCK}" ]] && have swaymsg && have jq; then
+		active_workspace="$(swaymsg -rt get_workspaces 2>/dev/null | jq -r '.[] | if .focused == true then .name else empty end')"
+	elif [[ -n "${DISPLAY}" ]] && have i3-msg && have jq; then
+		active_workspace="$(i3-msg -t get_workspaces 2>/dev/null | jq -r '.[] | if .focused == true then .name else empty end')"
+	fi
+
+	if [[ "${active_workspace}" =~ '.*@.*' ]]; then
+		[[ -z "${ACTIVE_PROFILE}" ]] && export ACTIVE_PROFILE="$(echo "${active_workspace}" | cut -d@ -f1)"
+		[[ -z "${ACTIVE_STORY}" ]] && export ACTIVE_STORY="$(echo "${active_workspace}" | cut -d@ -f2)"
+	fi
+
+	[[ -n "${active_workspace}" ]] && unset active_workspace
 fi
 
 # load the active profile only if one is available
-if [[ -n "${ACTIVE_PROFILE}" ]]; then
+if [[ -n "${ACTIVE_PROFILE}" ]] && [[ -f "${DOTZSH}/profiles/${ACTIVE_PROFILE}" ]]; then
 	sp "${ACTIVE_PROFILE}"
 fi
 
