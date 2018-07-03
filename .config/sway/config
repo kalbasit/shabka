@@ -27,14 +27,16 @@ floating_modifier $mod
 focus_follows_mouse no
 
 # keep the urgency border of a window for 500ms
-force_display_urgency_hint 500 ms
+# TODO: not supported on Sway
+# force_display_urgency_hint 500 ms
 
 # on window activation, just set the urgency hint. The default behavior is to
 # set the urgency hint if the window is not on the active workspace, and to
 # focus the window on an active workspace. It does surprise me sometimes and I
 # would like to keep it simple by having to manually switch to the urgent
 # window.
-focus_on_window_activation urgent
+# TODO: not supported on Sway
+# focus_on_window_activation urgent
 
 # This option determines in which mode new containers on workspace level will
 # start.
@@ -302,7 +304,8 @@ bar {
 	# use i3status for the bar
 	status_command i3status
 	# disable clicking on workspace buttons
-	bindsym button1 nop
+	# TODO: not supported on Sway
+	# bindsym button1 nop
 
 	# setup colors
 	colors {
