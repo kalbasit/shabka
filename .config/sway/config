@@ -114,6 +114,9 @@ bindsym $mod+a focus parent
 # focus the child container
 bindsym $mod+d focus child
 
+# start a region screenshot
+bindsym $mod+Shift+4 exec deepin-screenshot
+
 # focus the urgent window
 bindsym $mod+x [urgent=latest] focus
 
@@ -163,7 +166,7 @@ mode "$mode_wm" {
 bindsym $mod+$alt+w mode "$mode_wm"
 
 # Application launcher
-set $mode_apps Launch: (p) Chromium personal, (u) Chromium publica, (c) Charles, (s) Slack, (i) Irc, (w) Whatsapp, (t) Teamviewer
+set $mode_apps Launch: (p) Chromium personal, (u) Chromium publica, (c) Charles, (s) Slack, (i) Irc, (w) Whatsapp, (t) Teamviewer, (m) Pulse SMS
 mode "$mode_apps" {
 	bindsym p exec relay-browser --profile personal, mode "default"
 	bindsym u exec relay-browser --profile publica, mode "default"
@@ -172,6 +175,7 @@ mode "$mode_apps" {
 	bindsym i exec termite --title=irc --exec=weechat, mode "default"
 	bindsym w exec whatsapp-web-desktop, mode "default"
 	bindsym t exec myteamviewer, mode "default"
+	bindsym m exec $nosid /opt/Pulse\ SMS/pulse-sms, mode "default"
 
 	# back to normal: Enter or Escape
 	bindsym Return mode "default"
@@ -365,7 +369,7 @@ bindsym $alt+p [class="pulse-sms"] scratchpad show
 # TODO: should I move back to wee-slack?
 # exec $nosid termite --title=irc --exec="weechat"
 exec $nosid whatsapp-web-desktop
-exec $nosid "/opt/Pulse SMS/pulse-sms"
+exec $nosid /opt/Pulse\ SMS/pulse-sms
 
 # Start the personal terminal on the personal workspace
 exec i3-msg "workspace personal@base; exec $nosid /usr/bin/termite"
