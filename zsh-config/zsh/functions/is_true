@@ -1,0 +1,26 @@
+#
+# vim:ft=zsh:
+#
+
+function is_true() {
+	case "${1}" in
+		[Tt][Rr][Uu][Ee])
+			return 0
+			;;
+		[Tt])
+			return 0
+			;;
+		[Yy][Ee][Ss])
+			return 0
+			;;
+		[Yy])
+			return 0
+			;;
+		1)
+			return 0
+			;;
+		*)
+			return 1
+			;;
+	esac
+}

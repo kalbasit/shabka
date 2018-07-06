@@ -1,0 +1,18 @@
+#compdef sp
+
+local profiles=()
+local i=
+local p=
+
+for i in ${HOME}/.zsh/profiles/*.zsh; do
+  p="$( basename "${i}" )"
+  profiles=(${profiles[@]} ${p%%.zsh})
+done
+
+_arguments -C \
+  '(-L --log-depth)'{-L,--log-depth}'[change the depth of the log Default: 0]' \
+  '(-l --list)'{-l,--list}'[list the profiles]' \
+  '(-k --kill)'{-k,--kill}'[kill the profile]' \
+  "1: :(${profiles[*]})"
+
+# vim:ft=zsh:

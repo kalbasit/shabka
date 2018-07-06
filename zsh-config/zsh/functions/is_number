@@ -1,0 +1,16 @@
+#
+# vim:ft=zsh:
+#
+
+function is_number() {
+	[[ "${#}" -lt "1" ]] && return 1
+
+	case "${1}" in
+		[0-9]*)
+			return 0
+			;;
+		*)
+			return 1
+			;;
+	esac
+}

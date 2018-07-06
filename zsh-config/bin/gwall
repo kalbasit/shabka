@@ -1,0 +1,159 @@
+#!/usr/bin/env bash
+#
+#  vim:ft=sh:
+#
+#  Copyright (c) 2010-2017 Wael Nasreddine <wael.nasreddine@gmail.com>
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software
+#  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
+#  USA.
+#
+
+source "${HOME}/.zsh/functions/is_true"
+source "${HOME}/.zsh/functions/is_number"
+
+# Source/Create the configurations file.
+if [[ -f "${HOME}/.gwallrc" ]]; then
+	# shellcheck disable=SC1090
+	source "${HOME}/.gwallrc"
+else
+	cat <<EOF > "${HOME}/.gwallrc"
+	#
+	# Configurations for Gwall.
+	#
+	# First you have to set which program you want to use, I've
+	# tested this script with feh and gconftool-2, to set the
+	# background with feh use the following combination:
+	#   PROG="feh"
+	#   ARGS="--bg-fill"
+	# If you would like to use gconftool-2 which is used by
+	# Gnome desktop, use the following combination:
+	#   PROG="gconftool-2"
+	#   ARGS="-s /desktop/gnome/background/picture_filename -t string --"
+	#
+	# Next you should set the time to wait before actually rotating
+	# the background(ROTATE_SLEEP), this time is defined in seconds
+	# and will be passed to sleep(1), you can disable the rotating
+	# feature by setting ROTATE to 'false'...
+	#
+	# Last but not least you should add wallpaper folders to the
+	# FOLDERS array which we will take the wallpapers from, remember
+	# that it is an array so it should look like this example:
+	#
+	#   FOLDERS=(
+	#      \${HOME}/Pictures/Wallpapers/1024x768
+	#      \${HOME}/Pictures/Wallpapers/1280x1024
+	#      \${HOME}/Pictures/Wallpapers/1280x800
+	#      \${HOME}/Pictures/Wallpapers/1600x1200
+	#      \${HOME}/Pictures/Wallpapers/800x600
+	#      \${HOME}/Pictures/Wallpapers/Other
+	#       )
+	#
+	# You can disable the image randomizer by setting DISABLE
+	# to true, this will disable looking for any wallpaper, and
+	# actually will use the image you have used before (or
+	# define by yourself). NOTE: this currently works with feh
+	# and gconftool-2 only, so don't bother setting it to false
+	# if you use another program.
+	#
+
+	# Disable Gwall and use whatever is pre-defined?
+	DISABLE="false"
+
+	# Program to use to set the background
+	PROG="feh"
+
+	# Program parameters
+	ARGS="--bg-scale"
+
+	# Rotate ??
+	ROTATE="true"
+
+	# Sleep for how long while rotating?? (in seconds)
+	ROTATE_SLEEP="900"
+
+	# Folders array
+	FOLDERS=( ${HOME}/Pictures/Wallpapers )
+EOF
+	print_error 0 "Please edit ~/.gwallrc and try again."
+	exit 1
+fi
+# If the program is disabled just set the pre-defined wallpaper.
+if [[ ! -z "${DISABLE}" ]] && [[ "${DISABLE}" = "true" ]] && [[ "${PROG}" = "feh" ]]; then
+	# Setting wallpaper
+	"${PROG}" "${ARGS}" "$(cat ~/.fehbg)"
+	exit $?
+elif [[ ! -z "${DISABLE}" ]] && [[ "${DISABLE}" = "true" ]] && [[ "${PROG}" = "gconftool-2" ]]; then
+	# There's no need to set anything up, this is handled by Gnome.
+	exit 0
+fi
+# Sanity checks
+if [[ -f "${HOME}/.gwall.pid" ]]; then
+	pkill --pidfile "${HOME}/.gwall.pid" 2>/dev/null || true
+	rm -f "${HOME}/.gwall.pid"
+fi
+if [[ ${#FOLDERS[@]} -lt 1 ]]; then
+	print_error 0 "Please add folders to FOLDERS array in ~/.gwallrc"
+	exit 1
+fi
+for folder in "${FOLDERS[@]}"; do
+	[[ ! -d "${folder}" ]] && \
+		print_warning 0 "The folder '${folder}' does not exist, please review the FOLDERS array in ~/.gwallrc"
+done
+if ! type "${PROG}" &>/dev/null ; then
+	print_error 0 "${PROG} is not a valid program"
+	exit 1
+fi
+# Build the images array
+images=()
+for folder in "${FOLDERS[@]}"; do
+	# make sure folder does exist
+	[ ! -d "${folder}" ] && \
+		continue
+
+	# make sure path is absolute
+	folder="$(cd "${folder}" && pwd)"
+
+	# Build images array
+	images=(${images[*]} $(find "${folder}" -mindepth 1 -maxdepth 1 -name '*.jpg' -o -name '*.png' -o -name '*.gif' 2>/dev/null))
+done
+
+if [ ${#images[@]} -lt 1 ]; then
+	print_error 0 "Folders does not contain any image."
+	exit 1
+fi
+#}}
+# Record the PID
+# but only if we are rotating..
+if is_true "${ROTATE}" && is_number "${ROTATE_SLEEP}"; then
+	echo "$!" > "${HOME}/.gwall.pid"
+fi
+# Set the wallpaper.
+# If ROTATE is true then rotate the wallpaper while sleeping for ROTATE_SLEEP
+# NOTE: Sleeping to allow xrandr to set the resolution on all screens
+# correctly
+sleep 5
+while true; do
+	# Generating a random number between 0 and ${#images[@]}
+	rand="$(( RANDOM % ${#images[@]} ))"
+
+	# Setting wallpaper
+	"${PROG}" "${ARGS}" "${images[$rand]}"
+	if is_true "${ROTATE}" && is_number "${ROTATE_SLEEP}"; then
+		sleep "${ROTATE_SLEEP}"
+		continue
+	else
+		break
+	fi
+done

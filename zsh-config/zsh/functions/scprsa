@@ -1,0 +1,17 @@
+#
+# vim:ft=zsh:
+#
+
+function scprsa() {
+	local server="$1"
+	local ssh_key="${2:-${HOME}/.ssh/id_rsa.pub}"
+
+	if [[ -z "${server}" ]]; then
+		print_error 0 "!! You need to enter a hostname in order to send your public key !!"
+		return 1
+	fi
+
+	print_info 0 "Copying SSH public key to server..."
+	TERM=linux ssh "${server}" "mkdir -p ~/.ssh && touch ~/.ssh/authorized_keys && cat - >> ~/.ssh/authorized_keys" < "${ssh_key}"
+	print_info 0 "All done!"
+}

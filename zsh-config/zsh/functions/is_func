@@ -1,0 +1,8 @@
+#
+# vim:ft=zsh:
+#
+
+# is_func returns 0 if $1 is a function
+function is_func() {
+	typeset -f "$1" &>/dev/null
+}

@@ -70,7 +70,9 @@
 # }}}
 # commit# {{{
 [commit]
-	gpgsign = true
+	# TODO: this should be true only my gpg config is setup correctly, how to do
+	# that?
+	gpgsign = false
 # }}}
 # core# {{{
 [core]

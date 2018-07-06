@@ -1,0 +1,11 @@
+#
+# vim:ft=zsh:
+#
+
+function strip_ansi() {
+	if [[ "${#}" -eq 0 ]]; then
+		sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"
+	else
+		sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g" ${@}
+	fi
+}

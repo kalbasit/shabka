@@ -1,0 +1,24 @@
+#
+# vim:ft=zsh:
+#
+
+function pathunmunge() {
+	local var="${1}"
+	local value="${(P)var}"
+	shift
+	while [[ $# -ge 1 ]]; do
+		local newpath=""
+		local sep=""
+		local p=
+		for p in ${(s,:,)value}; do
+			debug "p=${p}"
+			if [[ "x${p}" != "x${1}" ]]; then
+				newpath="${newpath}${sep}${p}"
+				sep=":"
+			fi
+		done
+		value="${newpath}"
+		shift
+	done
+	eval "$var=${value}; export $var;"
+}

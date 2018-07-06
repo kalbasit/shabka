@@ -1,0 +1,45 @@
+#
+# vim:ft=zsh:
+#
+
+function osx_dns_info() {
+	if [[ "$OSTYPE" != darwin* ]]; then
+		print_error 0 "can only run on Mac"
+		return 1
+	fi
+
+	local PSID=$( (scutil | grep PrimaryService | sed -e 's/.*PrimaryService : //')<< EOF
+	open
+	get State:/Network/Global/IPv4
+	d.show
+	quit
+	EOF
+	)
+
+	local DOMAIN=$( (scutil | grep "DomainName : " | sed -e 's/.*DomainName : //')<< EOF
+	open
+	get State:/Network/Service/${PSID}/DNS
+	d.show
+	quit
+	EOF
+	)
+
+	local DNS1=$( (scutil | grep '0 : ' | sed -e 's/\ *0 : //')<< EOF
+	open
+	get State:/Network/Service/${PSID}/DNS
+	d.show
+	quit
+	EOF
+	)
+
+	local DNS2=$( (scutil | grep '1 : ' | sed -e 's/\ *1 : //')<< EOF
+	open
+	get State:/Network/Service/${PSID}/DNS
+	d.show
+	quit
+	EOF
+	)
+
+	echo "domain = ${DOMAIN}"
+	echo "DNS = ${DNS1}, ${DNS2}"
+}

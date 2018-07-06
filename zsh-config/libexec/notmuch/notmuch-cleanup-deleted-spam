@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+#
+#  vim:ft=sh:
+#
+#  Copyright (c) 2010-2017 Wael Nasreddine <wael.nasreddine@gmail.com>
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software
+#  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
+#  USA.
+#
+
+# How many days should we keep the messages?
+EXPIRATION=30
+
+# remove the expiring flag from messages that has been redeemed
+notmuch tag -expiring -- tag:expiring and not tag:deleted and not tag:spam
+
+for day in $(seq 0 $((EXPIRATION - 1))); do
+  nextday="$((day + 1))"
+  # remove the expire flag for those redeemed
+  notmuch tag "-expire-${day}" "-expire-${nextday}" -- '(' "tag:expire-${day}" or "tag:expire-${nextday}" ')' and not tag:expiring
+  # move the expire flag by -1 for those that are still flagged
+  notmuch tag "+expire-${day}" "-expire-${nextday}" -- "tag:expire-${nextday}" and tag:expiring
+done
+
+notmuch tag +expire-$EXPIRATION +expiring -- '(' tag:deleted or tag:spam ')' and not tag:expiring
+
+# Delete all the expiring messages that has been deleted for 30 days if any
+if [[ "$( notmuch count --exclude=false tag:expire-0 and tag:expiring )" -gt 0 ]]; then
+  notmuch search --format=text0 --exclude=false --output=files tag:expire-0 and tag:expiring | xargs -0 rm
+  notmuch new --no-hooks
+fi

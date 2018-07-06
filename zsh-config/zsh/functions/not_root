@@ -1,0 +1,10 @@
+#
+# vim:ft=zsh:
+#
+
+function not_root() {
+	if check_root; then
+		print_error 0 "For security reasons, you should not run this script as root!"
+		return 1
+	fi
+}

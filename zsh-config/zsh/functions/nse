@@ -1,0 +1,7 @@
+#
+# vim:ft=zsh:
+#
+
+function nse() {
+	docker exec -it "${1}" "${2:-bash}"
+}
