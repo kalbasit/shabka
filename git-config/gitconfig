@@ -1,0 +1,151 @@
+#
+# Git config
+#
+
+# alias# {{{
+[alias]
+	aa             = add --all .
+	aap            = !git aa -p
+	addnw          = !sh -c 'git diff -U0 -w --no-color "$@" | git apply --cached --ignore-whitespace --unidiff-zero -'
+	amend          = commit --amend
+	cat            = -p cat-file -p
+	cb             = checkout -b
+	ci             = commit
+	co             = checkout
+	co-branch      = "!f() { git checkout-index -a -f --prefix=${1}/; }; f"
+	com            = checkout master
+	cow            = !git checkout $(i3-msg -t get_workspaces | jq -r '.[] | if .focused == true then .name else empty end') 2>/dev/null || git checkout -b $(i3-msg -t get_workspaces | jq -r '.[] | if .focused == true then .name else empty end')
+	credit         = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
+	current-branch = !git symbolic-ref -q HEAD | sed -e 's|^refs/heads/||'
+	dc             = diff --cached
+	di             = diff
+	ds             = diff --stat=160,120
+	fa             = fetch --all
+	famff          = !git fetch --all && git merge --ff-only origin/master
+	famm           = !git fetch --all && git merge origin/master
+	faro           = !git fetch --all && git rebase origin/master
+	ff             = merge --ff-only
+	generate-patch = !git-format-patch --patch-with-stat --raw --signoff
+	l              = log --graph --pretty=format':%C(yellow)%h %Cgreen%G?%Cblue%d%Creset %s %C(white) %an, %ar%Creset' # Log display from screencast, with train tracks.
+	la             = !git l --all
+	last           = cat-file commit HEAD
+	lol            = log --pretty=oneline --abbrev-commit --graph --decorate # Alternate log display from Scott Chacon
+	ls-ignored     = ls-files --others -i --exclude-standard
+	noff           = merge --no-ff
+	nvgc           = !ionice -n7 nice -n20 git vgc
+	pob            = "!f() { git push -u ${1:-origin} `git symbolic-ref HEAD`; }; f"
+	pobf           = "!f() { git push -fu ${1:-origin} `git symbolic-ref HEAD`; }; f"
+	pullff         = pull --ff-only
+	r              = !git l -20
+	ra             = !git r --all
+	sp             = smart-pull # gem install git-smart
+	st             = status
+	sta            = ls-files --exclude-per-directory=.gitignore --exclude-from=.git/info/exclude -t -o -u -s -m -d
+	stc            = diff --stat --name-status --cached
+	stu            = status -uno
+	top            = !eval cd "$(pwd)/$(git rev-parse --show-cdup)" && pwd
+	track          = checkout -t # Usage: git track origin/feature-123-login-form
+	unstage        = reset HEAD --
+	up             = remote update
+	vgc            = repack -f -a -d --depth=250 --window=250
+	who            = shortlog -s -s
+
+	# Go's codereview
+	change = codereview change
+	gofmt = codereview gofmt
+	mail = codereview mail
+	pending = codereview pending
+	submit = codereview submit
+	sync = codereview sync
+
+# }}}
+# apply# {{{
+[apply]
+	whitespace = strip
+# }}}
+# color# {{{
+[color]
+	pager = true
+	ui    = auto
+# }}}
+# commit# {{{
+[commit]
+	gpgsign = true
+# }}}
+# core# {{{
+[core]
+	excludesfile = ~/.gitignore_global
+	whitespace   = trailing-space,space-before-tab,-indent-with-non-tab,cr-at-eol
+# }}}
+# diff# {{{
+[diff]
+	tool = vimdiff
+# }}}
+# difftool# {{{
+[difftool]
+	prompt = false
+# }}}
+# filter lfs# {{{
+[filter "lfs"]
+	clean    = git-lfs clean -- %f
+	required = true
+	smudge   = git-lfs smudge -- %f
+# }}}
+# help# {{{
+[help]
+	autocorrect = 30
+# }}}
+# http# {{{
+[http]
+	cookiefile = ~/.gitcookies
+[http "https://gopkg.in"]
+	followRedirects = true
+# }}}
+# include# {{{
+[include]
+	path = ~/.gitconfig.secrets
+# }}}
+# merge# {{{
+[merge]
+	log  = true
+	tool = vimdiff
+#}}}
+# mergetool# {{{
+[mergetool]
+	prompt = true
+#}}}
+# mergetool "vimdiff"# {{{
+[mergetool "vimdiff"]
+	cmd = @nvim_bin@ -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+#}}}
+# protocol# {{{
+[protocol "keybase"]
+	allow = always
+#}}}
+# push# {{{
+[push]
+	default = current
+#}}}
+# sendemail# {{{
+[sendemail]
+	smtpserver       = /usr/bin/msmtp
+	smtpserveroption = --account=personal
+# }}}
+# status# {{{
+[status]
+	submodule = 1
+# }}}
+# user# {{{
+[user]
+	email      = wael.nasreddine@gmail.com
+	name       = Wael M. Nasreddine
+	signingkey = 0x2D1A12A5FF7D3A91
+# }}}
+# url "https://github"# {{{
+[url "https://github"]
+	insteadOf = git://github
+# }}}
+
+#
+# vim:ft=gitconfig:foldmethod=marker:foldlevel=0:
+#

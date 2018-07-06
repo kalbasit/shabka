@@ -4,19 +4,28 @@
   packageOverrides = pkgs_: with pkgs_; {
     my_nvim = import ./nvim-config { inherit pkgs ; };
 
+    git-config = import ./git-config {
+      # TODO: how to send nvim instead of my_nvim so the packages are not
+      # tightly coupled.
+      inherit (pkgs) stdenv my_nvim;
+    };
+
     all = with pkgs; buildEnv {
       name = "all";
 
       paths = [
         fzf
 
-        python27
-        python36
-
-        nodejs-8_x
+        git
+        git-crypt
+        git-config
 
         my_nvim
 
+        nodejs-8_x
+
+        python27
+        python36
       ];
     };
   };
@@ -81,8 +90,6 @@
 
 
 # development tools
-# git
-# git-crypt
 # gnumake
 # go dep
 # jdk
