@@ -8,8 +8,10 @@ if [[ -d "${HOME}/.nix-profile/userHome" ]]; then
 	pushd "${HOME}" > /dev/null
 
 	echo "Creating dotfiles links in user home"
-	find .nix-profile/userHome/ -maxdepth 1 | sed 's#.nix-profile/userHome/##g' | \
-			grep -v "^$" | xargs -I {} ln -sf .nix-profile/userHome/{} {}
+	for f in $( find -L .nix-profile/userHome -type f | sed 's#.nix-profile/userHome/##g' ); do
+		mkdir -p "${HOME}/$( dirname "${f}" )"
+		ln -sf "${HOME}/.nix-profile/userHome/${f}" "${HOME}/${f}"
+	done
 
 	popd > /dev/null
 fi
