@@ -1,0 +1,15 @@
+#command
+
+# Colemak vim-keybindings
+n left-scroll
+e forw-line
+i back-line
+o right-scroll
+k repeat-search
+K reverse-search
+
+#env
+
+# NOTE: use --quit-if-one-screen only if --no-init is set. Otherwise less will
+# print nothing and exits which looks like it's crashing.
+LESS= --RAW-CONTROL-CHARS --no-init --quit-if-one-screen --ignore-case
