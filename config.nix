@@ -10,6 +10,10 @@
       inherit (pkgs) stdenv my_nvim;
     };
 
+    tmux-config = import ./tmux-config {
+      inherit (pkgs) stdenv tmux xsel gist libnotify;
+    };
+
     all = with pkgs; buildEnv {
       name = "all";
 
@@ -26,6 +30,9 @@
 
         python27
         python36
+
+        tmux
+        tmux-config
       ];
     };
   };
