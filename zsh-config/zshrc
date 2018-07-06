@@ -15,6 +15,9 @@
 [[ "$OSTYPE" = darwin* ]] && SHORT_HOST="$( scutil --get ComputerName 2>/dev/null )"
 [[ -z "${SHORT_HOST}" ]] && SHORT_HOST="${HOST/.*/}"
 
+# load the host profile
+[[ -f /etc/profile ]] && source /etc/profile
+
 #####################################################################
 # zplug
 #####################################################################
