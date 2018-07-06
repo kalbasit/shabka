@@ -14,6 +14,10 @@
       inherit (pkgs) stdenv less;
     };
 
+    most-config = import ./most-config {
+      inherit (pkgs) stdenv;
+    };
+
     tmux-config = import ./tmux-config {
       inherit (pkgs) stdenv tmux xsel gist libnotify;
     };
@@ -33,6 +37,9 @@
         git-config
 
         less-config
+
+        most
+        most-config
 
         my_nvim
 
