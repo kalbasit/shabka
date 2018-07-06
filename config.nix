@@ -42,6 +42,8 @@
         most-config
 
         my_nvim
+                
+        nix-index
 
         nodejs-8_x
 
@@ -92,7 +94,6 @@
 # file
 
 # nix helpers
-# nix-index
 # nix-prefetch-scripts
 # nix-repl
 # nixops
