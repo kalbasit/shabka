@@ -10,6 +10,10 @@
       inherit (pkgs) stdenv my_nvim;
     };
 
+    less-config = import ./less-config {
+      inherit (pkgs) stdenv less;
+    };
+
     tmux-config = import ./tmux-config {
       inherit (pkgs) stdenv tmux xsel gist libnotify;
     };
@@ -27,6 +31,8 @@
         git
         git-crypt
         git-config
+
+        less-config
 
         my_nvim
 
