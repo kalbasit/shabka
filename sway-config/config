@@ -1,0 +1,331 @@
+#################
+# Core settings #
+#################
+
+# variables
+
+set $mod Mod4
+set $alt Mod1
+set $nosid --no-startup-id
+set $locker @i3lock_bin@ && sleep 1
+
+# Font for window titles. Will also be used by the bar unless a different font
+# is used in the bar {} block below.
+font pango:Cousine 8
+
+# Colors
+# class                   border  backgr. text    indicator
+client.focused            #5f865f #5f865f #e4e4e4 #ffafaf
+client.focused_inactive   #4e4e4e #4e4e4e #d0d0d0 #ffafaf
+client.unfocused          #4e4e4e #4e4e4e #87d7d7 #87af87
+client.urgent             #ff0000 #ff0000 #e4e4e4 #d68787
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# focus should not follow the mouse pointer
+focus_follows_mouse no
+
+# keep the urgency border of a window for 500ms
+# TODO: not supported on Sway
+# force_display_urgency_hint 500 ms
+
+# on window activation, just set the urgency hint. The default behavior is to
+# set the urgency hint if the window is not on the active workspace, and to
+# focus the window on an active workspace. It does surprise me sometimes and I
+# would like to keep it simple by having to manually switch to the urgent
+# window.
+# TODO: not supported on Sway
+# focus_on_window_activation urgent
+
+# This option determines in which mode new containers on workspace level will
+# start.
+workspace_layout tabbed
+
+############
+# Bindings #
+############
+
+# change focus
+bindsym $mod+n focus left
+bindsym $mod+e focus down
+bindsym $mod+i focus up
+bindsym $mod+o focus right
+
+# move focused window
+bindsym $mod+Shift+n move left
+bindsym $mod+Shift+e move down
+bindsym $mod+Shift+i move up
+bindsym $mod+Shift+o move right
+
+# split in horizontal orientation
+bindsym $mod+h split h
+
+# split in vertical orientation
+bindsym $mod+v split v
+
+# change focus between output
+bindsym $mod+$alt+o focus output right
+bindsym $mod+$alt+n focus output left
+
+# move workspaces between monitors
+bindsym $mod+Shift+$alt+o move workspace to output right
+bindsym $mod+Shift+$alt+n move workspace to output left
+
+# toggle sticky
+bindsym $mod+s sticky toggle
+
+# toggle tiling / floating
+bindsym $alt+Shift+space floating toggle
+
+# change focus between tiling / floating windows
+bindsym $alt+space focus mode_toggle
+
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen toggle
+
+# kill focused window
+bindsym $mod+Shift+q kill
+
+# rofi run
+bindsym $mod+r exec @rofi_bin@ -show run
+
+# rofi lastpass
+bindsym $mod+p exec @rofi_bin@ -modi lpass:rofi-lpass -show lpass
+
+# list open windows to switch to
+bindsym $alt+Tab exec @rofi_bin@ -show window
+
+# switch between the current and the previously focused one
+bindsym $mod+Tab workspace back_and_forth
+bindsym $mod+Shift+Tab move container to workspace back_and_forth
+
+# dynamic workspaces
+bindsym $mod+space exec @rofi_bin@ -show Workspaces
+bindsym $mod+Shift+space exec @rofi_bin@ -show MoveContainer
+bindsym $mod+$alt+space exec @rofi_bin@ -show RenameWorkspace
+
+# change container layout (stacked, tabbed, toggle split)
+bindsym $mod+l layout stacking
+bindsym $mod+u layout tabbed
+bindsym $mod+y layout toggle split
+
+# focus the parent container
+bindsym $mod+a focus parent
+
+# focus the child container
+bindsym $mod+d focus child
+
+# start a region screenshot
+# TODO: re-do deepin-screenshot
+bindsym $mod+Shift+4 exec deepin-screenshot
+
+# focus the urgent window
+bindsym $mod+x [urgent=latest] focus
+
+# mark current window / goto mark
+# https://github.com/tybitsfox/i3msg/blob/master/.i3/config
+bindsym $mod+m exec i3-input -F 'mark %s' -l 1 -P 'Mark: '
+bindsym $mod+apostrophe exec i3-input -F '[con_mark="%s"] focus' -l 1 -P 'Go to: '
+
+# volume support
+bindsym XF86AudioRaiseVolume exec $nosid @pactl_bin@ set-sink-mute @DEFAULT_SINK@ false, exec $nosid @pactl_bin@ set-sink-volume @DEFAULT_SINK@ +5%
+bindsym XF86AudioLowerVolume exec $nosid @pactl_bin@ set-sink-mute @DEFAULT_SINK@ false, exec $nosid @pactl_bin@ set-sink-volume @DEFAULT_SINK@ -5%
+bindsym XF86AudioMute exec $nosid @pactl_bin@ set-sink-mute @DEFAULT_SINK@ toggle
+
+# brightness support
+bindsym XF86MonBrightnessUp exec $nosid @brightnessctl_bin@ s +5%
+bindsym XF86MonBrightnessDown exec $nosid @brightnessctl_bin@ s 5%-
+bindsym Shift+XF86MonBrightnessUp exec $nosid @brightnessctl_bin@ s +1%
+bindsym Shift+XF86MonBrightnessDown exec $nosid @brightnessctl_bin@ s 1%-
+
+# sleep support
+bindsym XF86PowerOff exec $nosid $locker && systemctl suspend
+
+# clipboard history
+# TODO: install greenclip and use the binary directly
+bindsym $mod+$alt+c exec @rofi_bin@ -modi "clipboard:greenclip print" -show clipboard
+
+################
+# Applications #
+################
+
+# start a terminal
+bindsym $mod+Return exec @termite_bin@
+
+#########
+# Modes #
+#########
+
+# Window Manager mode, this mode allows me to control i3
+set $mode_wm WM: (r) Reload i3, (e) Restart i3
+mode "$mode_wm" {
+	bindsym r reload; exec $nosid @notify-send_bin@ 'i3 configuration reloaded', mode "default"
+	bindsym e restart; exec $nosid @notify-send_bin@ 'i3 restarted', mode "default"
+
+	# back to normal: Enter or Escape
+	bindsym Return mode "default"
+	bindsym Escape mode "default"
+}
+bindsym $mod+$alt+w mode "$mode_wm"
+
+# Application launcher
+set $mode_apps Launch: (p) Chromium personal, (u) Chromium publica, (c) Charles, (s) Slack, (i) Irc, (w) Whatsapp, (t) Teamviewer, (m) Pulse SMS
+mode "$mode_apps" {
+	bindsym p exec @out_dir@/bin/relay-browser --profile personal, mode "default"
+	bindsym u exec @out_dir@/bin/relay-browser --profile publica, mode "default"
+	bindsym c exec charles, mode "default"
+	bindsym s exec @slack_bin@, mode "default"
+	bindsym i exec @termite_bin@ --title=irc --exec=weechat, mode "default"
+	bindsym w exec whatsapp-web-desktop, mode "default"
+	# TODO: is this still necessary?
+	#bindsym t exec myteamviewer, mode "default"
+	# TODO: install Pulse and use the binary here
+	#bindsym m exec $nosid /opt/Pulse\ SMS/pulse-sms, mode "default"
+
+	# back to normal: Enter or Escape
+	bindsym Return mode "default"
+	bindsym Escape mode "default"
+}
+bindsym $mod+$alt+a mode "$mode_apps"
+
+# resize window (you can also use the mouse for that)
+set $resize_mode resize
+mode "$resize_mode" {
+	# Micro resizement
+	bindsym Control+n resize shrink width 10 px or 1 ppt
+	bindsym Control+e resize grow height 10 px or 1 ppt
+	bindsym Control+i resize shrink height 10 px or 1 ppt
+	bindsym Control+o resize grow width 10 px or 1 ppt
+
+	# Normal resizing
+	bindsym n resize shrink width 50 px or 5 ppt
+	bindsym e resize grow height 50 px or 5 ppt
+	bindsym i resize shrink height 50 px or 5 ppt
+	bindsym o resize grow width 50 px or 5 ppt
+
+	# Macro resizing
+	bindsym Shift+n resize shrink width 100 px or 10 ppt
+	bindsym Shift+e resize grow height 100 px or 10 ppt
+	bindsym Shift+i resize shrink height 100 px or 10 ppt
+	bindsym Shift+o resize grow width 100 px or 10 ppt
+
+	# back to normal: Enter or Escape
+	bindsym Return mode "default"
+	bindsym Escape mode "default"
+}
+bindsym $mod+$alt+r mode "$resize_mode"
+
+# move window (you can also use the mouse for that)
+set $move_mode move
+mode "$move_mode" {
+	# Micro movement
+	bindsym Control+n move left 10 px
+	bindsym Control+e move down 10 px
+	bindsym Control+i move up 10 px
+	bindsym Control+o move right 10 px
+
+	# Normal resizing
+	bindsym n move left 50 px
+	bindsym e move down 50 px
+	bindsym i move up 50 px
+	bindsym o move right 50 px
+
+	# Macro resizing
+	bindsym Shift+n move left 100 px
+	bindsym Shift+e move down 100 px
+	bindsym Shift+i move up 100 px
+	bindsym Shift+o move right 100 px
+
+	# back to normal: Enter or Escape
+	bindsym Return mode "default"
+	bindsym Escape mode "default"
+}
+bindsym $mod+$alt+m mode "$move_mode"
+
+## Management of power
+set $mode_power System: (l) lock, (o) logout, (s) suspend, (h) hibernate, (r) reboot, (Shift+s) shutdown
+mode "$mode_power" {
+	bindsym l exec $nosid $locker, mode "default"
+	bindsym o exit
+	bindsym s exec $nosid $locker && systemctl suspend, mode "default"
+	bindsym h exec $nosid $locker && systemctl hibernate, mode "default"
+	bindsym r exec $nosid systemctl reboot
+	bindsym Shift+s exec $nosid systemctl poweroff -i
+
+	# back to normal: Enter or Escape
+	bindsym Return mode "default"
+	bindsym Escape mode "default"
+}
+bindsym $mod+$alt+p mode "$mode_power"
+
+#######
+# Bar #
+#######
+
+# Start i3bar to display a workspace bar (plus the system information i3status
+# finds out, if available)
+bar {
+	# put the bar on the top
+	position top
+	# use i3status for the bar
+	status_command i3status
+	# disable clicking on workspace buttons
+	# TODO: not supported on Sway
+	# bindsym button1 nop
+
+	# setup colors
+	colors {
+		separator #d68787
+		background #626262
+		statusline #00ff00
+		focused_workspace #e4e4e4 #5f865f #e4e4e4
+		active_workspace #e4e4e4 #ffafaf #e4e4e4
+		inactive_workspace #87af87 #87d7d7 #626262
+		urgent_workspace #ff0000 #ff0000 #e4e4e4
+	}
+}
+
+##########################
+# Application assignment #
+##########################
+
+assign [class="^Slack$"] → slack
+assign [class="^Termite" title="irc"] → irc
+assign [class="^Tor Browser"] → tor
+assign [class="^VirtualBox"] → virtualbox
+assign [class="^com-xk72-charles-gui-.*$"] → charles
+
+for_window [class="^Pavucontrol"] floating enable
+for_window [class="^Tor Browser"] floating enable
+for_window [class="^net-filebot-Main$"] floating enable
+for_window [class="^ROX-Filer$"] floating enable
+
+######################
+# Scratchpad support #
+######################
+
+# Make the currently focused window a scratchpad
+bindsym $mod+Shift+minus move scratchpad
+
+# Make the currently focused window a scratchpad
+bindsym $mod+$alt+minus scratchpad show
+
+# Whatsapp
+for_window [class="^whats-app-nativefier*"] sticky enable, floating enable, move scratchpad
+bindsym $alt+w [class="^whats-app-nativefier*"] scratchpad show
+
+# Pulse
+for_window [class="pulse-sms"] sticky enable, floating enable, move scratchpad
+bindsym $alt+p [class="pulse-sms"] scratchpad show
+
+##############
+# Auto Start #
+##############
+
+# Start the personal terminal on the personal workspace
+exec swaymsg "workspace personal@base; exec $nosid @termite_bin@"
+
+include /etc/sway/config.d/*
+include ~/.config/sway/config.d/`hostname`/*
+include ~/.config/sway/config.d/*

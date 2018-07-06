@@ -9,6 +9,6 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -dm 755 $out/userHome
-    cp -dr --no-preserve='ownership' $src/mostrc $out/userHome/.mostrc
+    cp $src/mostrc $out/userHome/.mostrc
   '';
 }

@@ -15,12 +15,8 @@ function _pathappend() {
   fi
 }
 
-# initialize the PATH
-export PATH="/usr/local/sbin:/usr/local/bin:/usr/bin"
-
 # Important variable
-export BROWSER="${HOME}/.bin/relay-browser"
-export EDITOR="nvim"
+export EDITOR="@nvim_dir@/bin/nvim"
 export LANG=en_US.UTF-8
 export LC_ALL="${LANG}"
 export MYFS="${HOME}/.local"
@@ -29,16 +25,10 @@ export NOTMUCH_CONFIG="${HOME}/.mail/.notmuch/config"
 export TERM=termite
 
 # add my bin folders to the PATH
-_pathprepend "${HOME}/.bin"
 _pathprepend "${HOME}/code/bin"
 _pathprepend "${MYFS}/bin"
 if [[ -d "${MYFS}/opt" ]]; then
   for dir in ${MYFS}/opt/*/bin; do
-    _pathappend "${dir}"
-  done
-fi
-if [[ -d "${HOME}/.libexec" ]]; then
-  for dir in ${HOME}/.libexec/*; do
     _pathappend "${dir}"
   done
 fi

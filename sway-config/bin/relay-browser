@@ -22,7 +22,7 @@
 
 set -eo pipefail
 
-source "${HOME}/.zsh/functions.zsh"
+source "@zsh_dir@/zsh/functions.zsh"
 
 function help()
 {
