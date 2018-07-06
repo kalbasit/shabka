@@ -775,6 +775,7 @@ in with pkgs; neovim.override {
         "editorconfig-vim"
         "fugitive"
         "fzf-vim"
+        "fzfWrapper"
         "multiple-cursors"
         "nvim-completion-manager"
         "polyglot"
