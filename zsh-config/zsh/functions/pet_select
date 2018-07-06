@@ -1,0 +1,9 @@
+#
+# vim:ft=zsh:
+#
+
+function pet_select() {
+  BUFFER=$(pet search --query "$LBUFFER")
+  CURSOR=$#BUFFER
+  zle redisplay
+}

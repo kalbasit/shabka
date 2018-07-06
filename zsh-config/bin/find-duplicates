@@ -1,0 +1,60 @@
+#!/usr/bin/env ruby
+
+require 'fileutils'
+require 'digest/md5'
+
+class DuplicateFiles
+
+	attr_reader :files
+	attr_reader :md5_to_files
+
+	def initialize(dir)
+		@base_dir = dir
+		_scan_for_files @base_dir
+		_hash_files
+	end
+
+	def scan_for_duplicates
+		@duplicate_files ||= Hash.new
+		@md5_to_files.each do |v|
+			if v[1].size > 1
+				@duplicate_files[v[0]] = v[1]
+			end
+		end
+		@duplicate_files
+	end
+
+	private
+
+	def _scan_for_files(dir)
+		@files ||= Array.new
+		@md5_to_files ||= Hash.new
+		Dir.glob(dir + File::Separator +  '*').each do |f|
+			if !File.directory? f
+				@files << f
+			else
+				_scan_for_files f
+			end
+		end
+	end
+
+	def _hash_files
+		@files.each do |f|
+			digest = Digest::MD5.file(f)
+			@md5_to_files[digest.to_s] ||= Array.new
+			@md5_to_files[digest.to_s] << f
+		end
+	end
+
+end
+
+df = DuplicateFiles.new(FileUtils.getwd)
+duplicates = df.scan_for_duplicates
+if duplicates
+	duplicates.each do |v|
+		puts "#{v[0]} #{v[1][0]}"
+		for f in 1...v[1].size
+			puts "\t#{v[1][f]}"
+		end
+	end
+end

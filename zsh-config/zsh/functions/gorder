@@ -1,0 +1,15 @@
+#
+# vim:ft=zsh:
+#
+
+function gorder() {
+	if [[ "x$(git rev-parse --git-dir 2> /dev/null)" = "x" ]]; then
+		echo "You must be under a git repository to use gcim"
+		return 1
+	fi
+
+	local branch
+	for branch in $(git branch | sed s/^..//); do
+		echo -e "$(git log -1 --pretty=format:"%Cgreen%ci %Cblue%cr%Creset" "${branch}")\t${branch}"
+	done | sort -r
+}

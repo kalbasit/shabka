@@ -1,0 +1,14 @@
+#
+# vim:ft=zsh:
+#
+
+function pathappend() {
+	local var="${1}"
+	shift
+	while [[ $# -ge 1 ]]; do
+		if [[ -d "${1}" ]] && ! [[ "${(P)var}" =~ (^|:)$1($|:) ]]; then
+			eval "$var=${(P)var}:$1; export $var;"
+		fi
+		shift
+	done
+}

@@ -1,0 +1,95 @@
+#
+# vim:ft=zsh:
+#
+
+function ssh_agents() {
+	{ # Begin "always" block so we can unfunction the internal functions at the end
+		# setup the initial pssh to use current SSH_AGENT_NAME or ACTIVE_PROFILE
+		function pssh() {
+			export SSH_AGENT_NAME="${SSH_AGENT_NAME:-${ACTIVE_PROFILE}}"
+		}
+
+		# start the SSH agent
+		function $0_start_ssh_agent() {
+		# No. Try to get the environment variables from the file.
+		if [[ -f "${SSH_AGENT_FILE}" ]] ; then
+			debug "${SSH_AGENT_FILE} does exist, trying to load the agent from it"
+			eval "$( grep -v echo "${SSH_AGENT_FILE}" )"
+		fi
+
+		# Exit status of ssh-add
+		#   0 means the agent exists and has keys,
+		#   1 means the agent exists but has no keys, and
+		#   2 means agent does not exist.
+		ssh-add -l > /dev/null 2>&1
+		agent_status=$?
+		debug "agent_status=${agent_status}"
+
+		# Does our environment point to an agent now?
+		if [[ "${agent_status}" -eq 2 ]]; then
+			# No.  Start an ssh-agent, saving the environment variables.
+			if ! ssh-agent -s > "${SSH_AGENT_FILE}"; then
+				echo "Failed to start the ssh-agent." >&2
+				return
+			fi
+			eval "$( grep -v echo "${SSH_AGENT_FILE}" )"
+		fi
+
+		# Add all of the keys
+		local key=
+		for key in $(find "${HOME}/.ssh/${SSH_AGENT_NAME}/" -not -name '*.pub' -not -name agent -type f | sed -e 's://:/:g'); do
+			debug "adding the key ${key}"
+			ssh-add "${key}" < /dev/null > /dev/null 2>&1
+		done
+	}
+
+	# export the variables to the environment
+	function $0_export_env() {
+	# Print commands to setup environment.  This handles tcsh and
+	# assumes everyone else can understand sh syntax (bash, ksh, zsh
+	# and maybe others).  Other folks can add detection for more
+	# esoteric shells as needed.
+
+	local var=
+	for var in "${@}" ; do
+		debug "exporting the variable ${var}=${(P)var}"
+		if [[ -n "${(P)var}" ]] ; then
+			echo "$var=${(P)var}; export $var;"
+		fi
+	done
+}
+
+# Forget any currently running agent
+unset SSH_AUTH_SOCK SSH_AGENT_PID
+
+# Source the active profile so it overloads the pssh
+if [[ -n "${ACTIVE_PROFILE}" ]] && [[ -r "${HOME}/.zsh/profiles/${ACTIVE_PROFILE}.zsh" ]]; then
+	source "${HOME}/.zsh/profiles/${ACTIVE_PROFILE}.zsh"
+fi
+
+# call pssh to setup SSH_AGENT_NAME. This is defined above but can be
+# overloaded in the profile sourced above.
+pssh
+
+# no SSH_AGENT_NAME? exit
+if [[ -z "${SSH_AGENT_NAME}" ]]; then
+	return # do not spawn an agent if we do not know the agent's name
+fi
+
+# Path where we store the ssh-agent environment variables, so that
+# multiple sessions may look for an existing agent.
+SSH_AGENT_FILE="${HOME}/.ssh/${SSH_AGENT_NAME}/agent"
+if [[ ! -w "$( dirname "${SSH_AGENT_FILE}" )" ]]; then
+	return # do not spawn an agent if we cannot write to $HOME.
+fi
+
+# start the SSH agent (noop if it's already started)
+$0_start_ssh_agent
+
+# export the variables required to access the SSH agent
+$0_export_env SSH_AUTH_SOCK SSH_AGENT_PID
+	} always {
+	unfunction pssh
+	unfunction -m "$0_*"
+}
+}

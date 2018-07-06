@@ -1,0 +1,16 @@
+#
+# vim:ft=zsh:
+#
+
+function ne() {
+	# get the name from the arguments
+	local name="${1}"
+	if [[ "x${name}" = "x" ]]; then
+		print_error 0 "you must provide a name"
+		return 1
+	fi
+	# create the directory
+	mkdir -p "${GOPATH}/src/experimental/${name}"
+	tmx --profile "${ACTIVE_PROFILE:-personal}" "${GOPATH}/src/experimental/${name}"
+	return 0
+}

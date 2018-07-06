@@ -1,0 +1,70 @@
+#
+# vim:ft=zsh:
+#
+
+function kernel() {
+	local ks="http://www.kernel.org";
+	local kver="$2"
+	local kmaj=$(echo "$kver" | awk -F"." '{print $1"."$2}')
+
+	case "$1" in
+		"help" | "-h" | "--help")
+			echo "kernel help | -h | --help   - show this help"
+			echo "kernel [info]               - show latestet kernel versions"
+			echo "kernel get <ver>            - download kernel version x.x.x.x bz2 and sign file"
+			echo "kernel changelog | cl <ver> - show changelog form kernel version x.x.x.x"
+			echo
+			;;
+		"info" | "")
+			echo "latest kernel versions:"
+			wget -qO - "$ks/kdist/finger_banner"
+			echo
+			;;
+		"get")
+			case "${2}" in
+				"latest" | "lat" | "l")
+					local l=$(wget -qO - "${ks}/kdist/finger_banner" | grep "latest stable" | \
+						awk -F":" '{sub(/^ *| *$/, "", $2); print $2}')
+					test -n "${l}" && echo "found latest kernel: ${l}" && kernel get "${l}"
+					;;
+				*)
+					test -z "${kver}" && \
+						kver=$(wget -qO - "${ks}/kdist/finger_banner" | head -n 1 | awk -F':' '{gsub(/^ */, "", $2); print $2}')
+					echo "get kernel: ${kver}"
+					# get kernel sign key
+					gpg --keyserver wwwkeys.pgp.net --recv-keys 0x517D0F0E
+					if [[ -z $(echo "${kver}" | grep -i "rc") ]]; then
+						local file="${ks}/pub/linux/kernel/v$kmaj/linux-$kver.tar.bz2"
+					else
+						local file="${ks}/pub/linux/kernel/v$kmaj/testing/linux-$kver.tar.bz2"
+					fi
+					wget -c "${file}"
+					wget -c "${file}"".sign"
+					echo "check signature ..."
+					test -f "linux-${kver}.tar.bz2" -a -f "linux-${kver}.tar.bz2.sign"  && \
+						gpg --verify linux-${kver}.tar.bz2.sign linux-${kver}.tar.bz2 2>&1
+					#| \
+						#    egrep -i "Unterschrift|good signature"
+					;;
+			esac
+			;;
+		"changelog" | "cl")
+			case "${2}" in
+				"latest" | "lat" | "l")
+					local l=$(wget -qO - "${ks}/kdist/finger_banner" | grep "latest stable" | \
+						awk -F":" '{sub(/^ *| *$/, "", $2); print $2}')
+					test -n "${l}" && echo "found latest kernel: ${l}" && kernel changelog "${l}"
+					;;
+				*)
+					if [[ -z $(echo "${kver}" | grep -i "rc") ]]; then
+						local file="${ks}/pub/linux/kernel/v${kmaj}/ChangeLog-${kver}"
+					else
+						local file="${ks}/pub/linux/kernel/v${kmaj}/testing/ChangeLog-${kver}"
+					fi
+					echo "changelog topics for ${kver}:"
+					wget -qO - "${file}" | grep ".*\[.*\].*" | sed 's/^[ \t]*/  /'
+					;;
+			esac
+			;;
+	esac
+}

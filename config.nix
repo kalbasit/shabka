@@ -14,6 +14,10 @@
       inherit (pkgs) stdenv tmux xsel gist libnotify;
     };
 
+    zsh-config = import ./zsh-config {
+      inherit (pkgs) stdenv;
+    };
+
     all = with pkgs; buildEnv {
       name = "all";
 
@@ -33,6 +37,10 @@
 
         tmux
         tmux-config
+
+        zsh
+        zsh-config
+        nix-zsh-completions
       ];
     };
   };

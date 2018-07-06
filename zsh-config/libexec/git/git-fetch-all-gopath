@@ -1,0 +1,5 @@
+#!/usr/bin/bash
+set -e
+
+export GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
+find "${GOPATH}/src" -name .git -exec git --git-dir={} fetch --all ';'

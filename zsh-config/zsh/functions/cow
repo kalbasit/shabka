@@ -1,0 +1,7 @@
+#
+# vim:ft=zsh:
+#
+
+function cow() {
+	i3-msg -t get_workspaces | jq -r '.[] | if .focused == true then .name else empty end'
+}

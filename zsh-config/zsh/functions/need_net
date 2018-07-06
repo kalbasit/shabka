@@ -1,0 +1,44 @@
+#
+# vim:ft=zsh:
+#
+
+function need_net() {
+	# is it a sticky application?
+	if [[ "${1}" = "-k" ]]; then
+		KEEP=true
+		shift
+	else
+		KEEP=false
+	fi
+	# Sanity checks
+	if [ "${#}" -lt 1 ]; then
+		print_error 0 "Usage: need_net <command> [args...]"
+		return 1
+	fi
+	# Global Variables
+	COMMAND="${1}"
+	shift
+	ARGS=${@}
+	# Launch the application.
+	# This loop will wait untill a connection is available
+	# and then launch the program.
+	(
+	while true; do
+		if ping -c 1 google.com &> /dev/null; then
+			"${COMMAND}" ${ARGS}
+			if is_true ${KEEP}; then
+				continue
+			else
+				break
+			fi
+		else # We couldn't connect, print a warning and sleep for 5 mins... *#
+			print_warning 0 "I couldn't ping google.com, retrying to launch ${COMMAND} in 30 seconds..."
+			sleep 30
+		fi
+	done
+	) &
+
+	unset COMMAND
+	unset ARGS
+	unset KEEP
+}

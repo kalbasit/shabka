@@ -1,0 +1,61 @@
+#
+# vim:ft=zsh:
+#
+
+function tmxrc() {
+	{ # Begin "always" block so we can unfunction the internal functions at the end
+		local p=
+		local d=
+		local i=
+		local sep=
+		local json="["
+		local skip=false
+		local orig_gopath="${GOPATH}" # this is used to restore the GOPATH
+
+		function $0_parent_under_git() {
+		debug "\$1 = '${1}'"
+		if [[ "x${1}x" = "x/x" ]]; then
+			test -d "${1}/.git"
+		else
+			if [[ -d "${1}/.git" ]]; then
+				return 0
+			else
+				$0 "$(dirname "${1}")"
+			fi
+		fi
+	}
+
+	# iterate over all the profiles
+	for p in ${HOME}/code/*; do
+		if [[ "$(basename "${p}")" = "archive" || "$(basename "${p}")" = "old" ]]; then
+			continue
+		fi
+		# iterate over all the .git folders under this profile
+		for d in $(find "${p}/base" -name .git -type d); do
+			# remove .git from the dir
+			d="${d%%/.git}"
+			debug "d = '${d}'"
+			# don't include repository that is a sub-folder of another repository
+			if $0_parent_under_git "$(dirname "${d}")"; then
+				debug "'$d' under another git"
+				continue
+			fi
+			# initialize the entry
+			local entry="{\"profile\": \"$(basename ${p})\",\"dir\": \""
+			# add the directory to it
+			entry+="\$GOPATH/${d##$p/base/}\"}"
+			debug "adding entry ${entry}"
+
+			# add the entry to the json
+			json+="${sep}${entry}"
+			sep=","
+		done
+	done
+
+	# finally write the tmxrc
+	echo "${json}]" > "${HOME}/.tmxrc"
+} always {
+unfunction -m "$0_*"
+export GOPATH="${orig_gopath}"
+	}
+}

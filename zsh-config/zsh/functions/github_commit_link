@@ -1,0 +1,22 @@
+#
+# vim:ft=zsh:
+#
+
+# github_commit_link [REF]
+#
+# Print the Github commit link for REF (default HEAD)
+function github_commit_link() {
+	# get the reference we need
+	local ref="${1:-HEAD}"
+	# compute the GOPATH format of the URL of origin
+	local gfrp="$( git_gopath_formatted_repo_path )"
+	# validate we are under a Github repo
+	if ! echo "${gfrp}" | grep -q -i 'github\.com/[^/]*/[^/]*'; then
+		print_error 0 "this only works for Github.com"
+		return 1
+	fi
+	# get the commit from the ref
+	local commit="$(git show --no-patch --format="%H" "${ref}")"
+	# finally echo it
+	echo "https://${gfrp}/commit/${commit}"
+}

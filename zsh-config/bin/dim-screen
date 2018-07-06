@@ -1,0 +1,92 @@
+#!/usr/bin/env bash
+#
+#  vim:ft=sh:
+#
+#  Copyright (c) 2010-2017 Wael Nasreddine <wael.nasreddine@gmail.com>
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software
+#  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
+#  USA.
+#
+set -e
+
+# modified version of /usr/share/doc/xss-lock/dim-screen.sh
+
+## CONFIGURATION ##############################################################
+
+# Brightness will be lowered to this value.
+min_brightness=0
+
+# If your video driver works with xbacklight, set -time and -steps for fading
+# to $min_brightness here. Setting steps to 1 disables fading.
+fade_time=1000
+fade_steps=20
+
+# If you have a driver without RandR backlight property (e.g. radeon), set this
+# to use the sysfs interface and create a .conf file in /etc/tmpfiles.d/
+# containing the following line to make the sysfs file writable for group
+# "users":
+#
+#     m /sys/class/backlight/acpi_video0/brightness 0664 root users - -
+#
+#sysfs_path=/sys/class/backlight/acpi_video0/brightness
+
+# Time to sleep (in seconds) between increments when using sysfs. If unset or
+# empty, fading is disabled.
+fade_step_time=0.05
+
+###############################################################################
+
+get_brightness() {
+	# shellcheck disable=SC2154
+	if [[ -z $sysfs_path ]]; then
+		xbacklight -get
+	else
+		cat "${sysfs_path}"
+	fi
+}
+
+set_brightness() {
+	# shellcheck disable=SC2154
+	if [[ -z $sysfs_path ]]; then
+		xbacklight -steps 1 -set "${1}"
+	else
+		echo "${1}" > "${sysfs_path}"
+	fi
+}
+
+fade_brightness() {
+	# shellcheck disable=SC2154
+	if [[ -z $sysfs_path ]]; then
+		xbacklight -time "${fade_time}" -steps "${fade_steps}" -set "${1}"
+	elif [[ -z $fade_step_time ]]; then
+		set_brightness "${1}"
+	else
+		local level
+		for level in $(eval echo {$(get_brightness)..$1}); do
+			set_brightness "${level}"
+			sleep $fade_step_time
+		done
+	fi
+}
+
+trap 'exit 0' TERM INT
+# the trap command takes the current get_brightness (that's why it's in double
+# quotes) so it can be restored to it
+# shellcheck disable=SC2064
+trap "set_brightness $(get_brightness); kill %%" EXIT
+
+fade_brightness $min_brightness
+sleep 2147483647 &
+wait
