@@ -16,6 +16,10 @@
       inherit (pkgs) stdenv;
     };
 
+    termite-config = import ./termite-config {
+      inherit (pkgs) stdenv;
+    };
+
     sway-config = import ./sway-config {
       inherit (pkgs) stdenv brightnessctl pulseaudio i3lock rofi termite libnotify slack zsh-config nvim-config;
     };
@@ -49,10 +53,15 @@
 
         nodejs-8_x
 
+        powerline-fonts
+
         python27
         python36
 
         sway-config
+
+        termite
+        termite-config
 
         tmux
         tmux-config
