@@ -56,6 +56,8 @@
 
         less-config
 
+        mosh
+
         most
         most-config
 
