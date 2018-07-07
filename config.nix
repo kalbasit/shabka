@@ -16,6 +16,10 @@
       inherit (pkgs) stdenv;
     };
 
+    surfingkeys-config = import ./surfingkeys-config {
+      inherit (pkgs) stdenv;
+    };
+
     termite-config = import ./termite-config {
       inherit (pkgs) stdenv;
     };
@@ -57,6 +61,8 @@
 
         python27
         python36
+
+        surfingkeys-config
 
         sway-config
 
