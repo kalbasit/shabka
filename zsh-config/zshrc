@@ -292,9 +292,6 @@ export LANG=en_US.UTF-8
 export LC_ALL="${LANG}"
 [[ -n "${LC_CTYPE}" ]] && unset LC_CTYPE
 
-# We need our bin folder
-pathprepend PATH "@out_dir@/bin"
-
 # load the Emscripten environment
 pathprepend PATH "/usr/lib/emsdk"
 
