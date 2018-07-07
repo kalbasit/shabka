@@ -17,6 +17,7 @@ function _pathappend() {
 
 # Important variable
 export EDITOR="@nvim_dir@/bin/nvim"
+export BROWSER="@out_dir@/bin/relay-browser"
 export LANG=en_US.UTF-8
 export LC_ALL="${LANG}"
 export MYFS="${HOME}/.local"
