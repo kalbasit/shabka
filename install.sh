@@ -13,6 +13,10 @@ if [[ -d "${HOME}/.nix-profile/userHome" ]]; then
 		ln -sf "${HOME}/.nix-profile/userHome/${f}" "${HOME}/${f}"
 	done
 
+	# NOTE: This is needed because Termite could not find the xterm-termite terminfo
+	echo "Linking terminfo to allow terminals to find installed terminfo"
+	ln -sf .nix-profile/share/terminfo .terminfo
+
 	popd > /dev/null
 fi
 
