@@ -21,7 +21,7 @@
     };
 
     sway-config = import ./sway-config {
-      inherit (pkgs) stdenv brightnessctl pulseaudio i3lock rofi termite libnotify slack zsh-config nvim-config;
+      inherit (pkgs) stdenv brightnessctl pulseaudio i3lock rofi termite libnotify slack zsh-config nvim-config i3status;
     };
 
     tmux-config = import ./tmux-config {

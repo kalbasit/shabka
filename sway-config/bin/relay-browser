@@ -101,7 +101,7 @@ if [[ -z "${profile}" ]]; then
 			items="${items}${sep}firefox@$(basename "${i}")"
 		fi
 	done
-	entry="$(rofi -dmenu < <(echo -e "${items}"))"
+	entry="$(@rofi_bin@ -dmenu < <(echo -e "${items}"))"
 	debug "entry=${entry}"
 	browser="$(echo "${entry}" | cut -d@ -f1)"
 	debug "browser=${browser}"

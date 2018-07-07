@@ -1,0 +1,8 @@
+# vim:ft=i3:
+
+
+input 1739:30383:DLL075B:01_06CB:76AF_To {
+    tap enabled
+    natural_scroll enabled
+    dwt enabled
+}
