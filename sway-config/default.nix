@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
       --subst-var-by rofi_bin ${rofi}/bin/rofi \
       --subst-var-by zsh_dir ${zsh-config}
     substituteInPlace $out/bin/sway-run \
-      --subst-var-by nvim_dir ${nvim-config}
+      --subst-var-by nvim_dir ${nvim-config} \
+      --subst-var-by out_dir $out
 
     cp -dr $src/config.d $out/userHome/.config/sway/config.d
 
