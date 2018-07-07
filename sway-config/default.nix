@@ -1,4 +1,4 @@
-{stdenv, brightnessctl, pulseaudio, i3lock, rofi, termite, libnotify, slack, zsh-config, nvim-config}:
+{stdenv, brightnessctl, pulseaudio, i3lock, rofi, termite, libnotify, slack, zsh-config, nvim-config, i3status}:
 
 stdenv.mkDerivation rec {
   name = "sway-config";
@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
 
     cp -dr $src/bin $out/bin
     substituteInPlace $out/bin/relay-browser \
+      --subst-var-by rofi_bin ${rofi}/bin/rofi \
       --subst-var-by zsh_dir ${zsh-config}
     substituteInPlace $out/bin/sway-run \
       --subst-var-by nvim_dir ${nvim-config}
@@ -22,6 +23,7 @@ stdenv.mkDerivation rec {
       --subst-var-by out_dir $out \
       --subst-var-by brightnessctl_bin ${brightnessctl}/bin/brightnessctl \
       --subst-var-by i3lock_bin ${i3lock}/bin/i3lock \
+      --subst-var-by i3status_bin ${i3status}/bin/i3status \
       --subst-var-by notify-send_bin ${libnotify}/bin/notify-send \
       --subst-var-by pactl_bin ${pulseaudio}/bin/pactl \
       --subst-var-by rofi_bin ${rofi}/bin/rofi \

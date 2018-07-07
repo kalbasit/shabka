@@ -269,7 +269,7 @@ bar {
 	# put the bar on the top
 	position top
 	# use i3status for the bar
-	status_command i3status
+	status_command @i3status_bin@
 	# disable clicking on workspace buttons
 	# TODO: not supported on Sway
 	# bindsym button1 nop
