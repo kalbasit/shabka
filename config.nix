@@ -58,6 +58,8 @@
         dep
         swm
 
+        jq
+
         less-config
 
         mosh
