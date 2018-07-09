@@ -41,13 +41,15 @@
     };
 
     zsh-config = import ./zsh-config {
-      inherit (pkgs) stdenv;
+      inherit (pkgs) stdenv direnv;
     };
 
     all = with pkgs; buildEnv {
       name = "all";
 
       paths = [
+        direnv
+
         fzf
 
         git
