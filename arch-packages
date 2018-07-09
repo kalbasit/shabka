@@ -3,6 +3,10 @@ nix
 # install SWAY because nix-installed sway does not start. I believe it's missing a permission.
 sway
 
+# keybase to support the secrets of my dotfiles (private)
+keybase
+kbfs
+
 # install fonts required by Sway and the terminal
 # TODO: move these to Nix
 ttf-croscore
