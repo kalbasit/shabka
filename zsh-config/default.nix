@@ -1,4 +1,4 @@
-{stdenv}:
+{stdenv, direnv}:
 
 stdenv.mkDerivation rec {
   name = "zsh-config";
@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
       --subst-var-by out_dir $out
 
     substitute $src/zshrc $out/userHome/.zshrc \
-      --subst-var-by out_dir $out
+      --subst-var-by out_dir $out \
+      --subst-var-by direnv_dir ${direnv}
   '';
 }
