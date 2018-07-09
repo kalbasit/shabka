@@ -16,12 +16,12 @@
       inherit (pkgs) stdenv;
     };
 
-    surfingkeys-config = import ./surfingkeys-config {
-      inherit (pkgs) stdenv;
-    };
-
     rofi-config = import ./rofi-config {
       inherit (pkgs) stdenv rofi;
+    };
+
+    surfingkeys-config = import ./surfingkeys-config {
+      inherit (pkgs) stdenv;
     };
 
     sway-config = import ./sway-config {
@@ -77,6 +77,8 @@
 
         python27
         python36
+
+        rake
 
         rofi-config
 
