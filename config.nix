@@ -73,6 +73,8 @@
         dep
         swm
 
+        kubernetes-helm
+
         jq
 
         less-config
