@@ -90,17 +90,25 @@ fi
 if [[ -z "${profile}" ]]; then
 	items=""
 	sep=""
-	for i in $CHROMIUM_PROFILES_PATH/*; do;
-		if [[ -d "${i}" ]]; then
-			items="${items}${sep}chromium@$(basename "${i}")"
-			sep="\n"
-		fi
-	done
-	for i in $FIREFOX_PROFILES_PATH/*; do;
-		if [[ -d "${i}" ]]; then
-			items="${items}${sep}firefox@$(basename "${i}")"
-		fi
-	done
+	if [[ -d "$CHROMIUM_PROFILES_PATH" ]]; then
+		for i in $CHROMIUM_PROFILES_PATH/*; do;
+			if [[ -d "${i}" ]]; then
+				items="${items}${sep}chromium@$(basename "${i}")"
+				sep="\n"
+			fi
+		done
+	fi
+	if [[ -d "$FIREFOX_PROFILES_PATH" ]]; then
+		for i in $FIREFOX_PROFILES_PATH/*; do;
+			if [[ -d "${i}" ]]; then
+				items="${items}${sep}firefox@$(basename "${i}")"
+			fi
+		done
+	fi
+	if [[ -z "${items}" ]]; then
+		echo -e "No profiles found, please run it with the <-b> and <-p> options to create the first profiles"
+		exit 1
+	fi
 	entry="$(@rofi_bin@ -dmenu < <(echo -e "${items}"))"
 	debug "entry=${entry}"
 	browser="$(echo "${entry}" | cut -d@ -f1)"
