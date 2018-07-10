@@ -8,6 +8,7 @@
   # Include the results of the hardware scan.
   imports = [
     ./hardware-configuration.nix
+    ./multi-glibc-locale-paths.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
