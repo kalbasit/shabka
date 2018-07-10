@@ -121,6 +121,7 @@
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
+  networking.firewall.allowedUDPPortRanges = [ { from = 60000; to = 61000; } ];
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
