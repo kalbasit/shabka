@@ -76,6 +76,7 @@
       "networkmanager"
       "sway"
       "vboxusers"
+      "video"
       "wheel"
     ];
 
@@ -102,6 +103,12 @@
     # Helm's tiller.
     addons.dns.enable = false;
   };
+
+  # Give people part of the video group access to adjust the backlight
+  services.udev.extraRules = ''
+    ACTION=="add", SUBSYSTEM=="backlight", KERNEL=="intel_backlight", RUN+="${pkgs.coreutils}/bin/chgrp video /sys/class/backlight/%k/brightness"
+    ACTION=="add", SUBSYSTEM=="backlight", KERNEL=="intel_backlight", RUN+="${pkgs.coreutils}/bin/chmod g+w /sys/class/backlight/%k/brightness"
+  '';
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
