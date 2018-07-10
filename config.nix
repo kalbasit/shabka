@@ -1,6 +1,15 @@
 {
   allowUnfree = true;
 
+  firefox = {
+    enableGoogleTalkPlugin = true;
+    enableAdobeFlash = true;
+  };
+
+  chromium = {
+    enablePepperFlash = true;
+  };
+
   packageOverrides = pkgs_: with pkgs_; {
     nvim-config = import ./nvim-config { inherit pkgs ; };
 
@@ -48,7 +57,11 @@
       name = "all";
 
       paths = [
+        chromium
+
         direnv
+
+        firefox
 
         fzf
 
