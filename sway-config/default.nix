@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   name = "sway-config";
 
-  phases = [ "installPhase" ];
+  phases = [ "installPhase" "fixupPhase" ];
 
   src = ./.;
 

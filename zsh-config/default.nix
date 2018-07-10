@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   name = "zsh-config";
 
-  phases = [ "installPhase" ];
+  phases = [ "installPhase" "fixupPhase" ];
 
   src = ./.;
 
