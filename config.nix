@@ -79,6 +79,8 @@
 
         less-config
 
+        mercurial
+
         mosh
 
         most

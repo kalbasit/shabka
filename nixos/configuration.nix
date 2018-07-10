@@ -8,15 +8,6 @@
   # Include the results of the hardware scan.
   imports = [
     ./hardware-configuration.nix
-
-    # Provide version-specific LOCALE_ARCHIVE environment variables to mitigate
-    # the effects of https://github.com/NixOS/nixpkgs/issues/38991.
-    ./multi-glibc-locale-paths.nix
-
-    # Kubernetes does not work on 18.03 due to
-    # https://github.com/kubernetes/kubernetes/issues/58956 so apply the patch
-    # that fixed that issue.
-    ./kubernetes-fix-iptables-nixos-18.03.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -140,5 +131,5 @@
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "18.03"; # Did you read the comment?
+  system.nixos.stateVersion = "18.03"; # Did you read the comment?
 }
