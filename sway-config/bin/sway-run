@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -euo pipefail
 
 # simplified pathprepend used for early X
 function _pathprepend() {
@@ -18,12 +18,9 @@ function _pathappend() {
 # Important variable
 export EDITOR="@nvim_dir@/bin/nvim"
 export BROWSER="@out_dir@/bin/relay-browser"
-export LANG=en_US.UTF-8
-export LC_ALL="${LANG}"
 export MYFS="${HOME}/.local"
 export SUDO_EDITOR="nvim"
 export NOTMUCH_CONFIG="${HOME}/.mail/.notmuch/config"
-export TERM=termite
 
 # add my bin folders to the PATH
 _pathprepend "${HOME}/code/bin"
@@ -62,4 +59,4 @@ if [[ -f "${HOME}/.sway.log" ]]; then
 	mv "${HOME}/.sway.log" "${HOME}/.sway.log.old"
 fi
 
-sway 2> "${HOME}/.sway.log"
+sway 2> "${HOME}/.sway.log" || cat "${HOME}/.sway.log"
