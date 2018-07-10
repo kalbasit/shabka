@@ -116,6 +116,10 @@
   # Enable fwupd
   services.fwupd.enable = true;
 
+  # Install and enable Keybase
+  services.keybase.enable = true;
+  services.kbfs.enable = true;
+
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
