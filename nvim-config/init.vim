@@ -32,7 +32,6 @@ set diffopt+=iwhite                    " Add ignorance of whitespace to diff
 set makeef=error.err                   " When using make, where should it dump the file
 set noautowrite                        " safe automacially content
 set pastetoggle=<F12>                  " Paste toggle on key F12!
-set shell=/bin/bash                    " Use bash no matter what shell are we running
 set showfulltag                        " When completing by tag, show the whole tag, not just the function name
 set spell                              " Turn on spellcheck.
 set splitbelow                         " Always split under
