@@ -3,11 +3,11 @@
 
   firefox = {
     enableGoogleTalkPlugin = true;
-    enableAdobeFlash = true;
+    #enableAdobeFlash = true;
   };
 
   chromium = {
-    enablePepperFlash = true;
+    #enablePepperFlash = true;
   };
 
   packageOverrides = pkgs_: with pkgs_; {
