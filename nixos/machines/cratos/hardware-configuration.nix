@@ -45,12 +45,6 @@
       options = [ "subvol=@nixos/@home" ];
     };
 
-  fileSystems."/var" =
-    { device = "/dev/disk/by-uuid/de2f32b1-85d0-49ab-8684-019175e09544";
-      fsType = "btrfs";
-      options = [ "subvol=@nixos/@var" ];
-    };
-
   fileSystems."/nix-store" =
     { device = "/dev/disk/by-uuid/de2f32b1-85d0-49ab-8684-019175e09544";
       fsType = "btrfs";
