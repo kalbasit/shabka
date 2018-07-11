@@ -90,14 +90,7 @@
 
         nix-index
 
-        nodejs-8_x
-
         powerline-fonts
-
-        python27
-        python36
-
-        rake
 
         rofi-config
 
