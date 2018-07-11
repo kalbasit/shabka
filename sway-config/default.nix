@@ -30,5 +30,8 @@ stdenv.mkDerivation rec {
       --subst-var-by rofi_bin ${rofi}/bin/rofi \
       --subst-var-by slack_bin ${slack}/bin/slack \
       --subst-var-by termite_bin ${termite}/bin/termite
+
+    substitute $src/zshenv $out/userHome/.zshenv \
+      --subst-var-by out_dir $out
   '';
 }
