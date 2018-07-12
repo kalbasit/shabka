@@ -63,6 +63,10 @@ in with pkgs; neovim.override {
         "vim-yats"
         "vim-zoomwintab"
 
+        # required by Gist
+        # TODO: https://github.com/NixOS/nixpkgs/pull/43399
+        "webapi-vim"
+
         # "vim-maktaba"
         # "vim-bazel"
       ]; }
