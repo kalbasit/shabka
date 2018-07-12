@@ -22,6 +22,9 @@
   sound.enable = true;
   hardware.pulseaudio.enable = true;
 
+  # enable build on Sandbox
+  nix.useSandbox = true;
+
   # Define your hostname.
   networking.hostName = "cratos";
 
