@@ -97,16 +97,6 @@
 
   # List services that you want to enable:
 
-  # Enable kubernetes
-  services.kubernetes = {
-    kubelet.extraOpts = "--fail-swap-on=false";
-    roles = [ "master" "node" ];
-
-    # when DNS is enabled, it will end up in a crashloop which in turn crashes
-    # Helm's tiller.
-    addons.dns.enable = false;
-  };
-
   # Give people part of the video group access to adjust the backlight
   services.udev.extraRules = ''
     ACTION=="add", SUBSYSTEM=="backlight", KERNEL=="intel_backlight", RUN+="${pkgs.coreutils}/bin/chgrp video /sys/class/backlight/%k/brightness"
