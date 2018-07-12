@@ -106,6 +106,13 @@
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
+  # Support for my workflow. This can be removed once SWM v2 lands.
+  services.openssh.extraConfig = ''
+    Match User kalbasit
+      AcceptEnv ACTIVE_PROFILE
+      AcceptEnv ACTIVE_STORY
+  '';
+
   # Enable fwupd
   services.fwupd.enable = true;
 
