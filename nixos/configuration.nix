@@ -40,7 +40,7 @@
   i18n = {
     consoleFont = "latarcyrheb-sun32";
     defaultLocale = "en_US.UTF-8";
-    consoleKeyMap = "us";
+    consoleUseXkbConfig = true;
   };
 
   # Set your time zone.
@@ -96,6 +96,18 @@
   };
 
   # List services that you want to enable:
+
+  services.xserver = {
+    autorun = false;
+    enable = false;
+
+    autoRepeatDelay = 200;
+    autoRepeatInterval = 30;
+
+    layout = "us";
+
+    xkbVariant = "colemak";
+  };
 
   # Give people part of the video group access to adjust the backlight
   services.udev.extraRules = ''
