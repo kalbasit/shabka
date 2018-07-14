@@ -8,6 +8,7 @@ set $mod Mod4
 set $alt Mod1
 set $nosid --no-startup-id
 set $locker @i3lock_bin@ && sleep 1
+set $extmonitor DP1-2
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
@@ -249,8 +250,8 @@ bindsym $mod+$alt+m mode "$move_mode"
 # Display mode allows output/resolution selection
 set $mode_display (l) Laptop screen, (m) Multiple screen, (w) Wide screen
 mode "$mode_display" {
-	bindsym l exec $nosid xrandr --output eDP1 --mode 1920x1080 --output $extmonitor --off, mode "default"
-	bindsym m exec $nosid xrandr --output eDP1 --mode 1920x1080 --output $extmonitor --primary --mode 3440x1440 --right-of eDP1, mode "default"
+	bindsym l exec $nosid xrandr --output eDP1 --mode 3200x1800 --scale 0.6x0.6 --output $extmonitor --off, mode "default"
+	bindsym m exec $nosid xrandr --output eDP1 --mode 3200x1800 --scale 1x1 --output $extmonitor --primary --mode 3440x1440 --scale 1x1 --right-of eDP1, mode "default"
 	bindsym w exec $nosid xrandr --output eDP1 --off --output $extmonitor --mode 3440x1440, mode "default"
 
 	# back to normal: Enter or Escape
