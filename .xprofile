@@ -1,6 +1,0 @@
-#!/bin/bash
-set -e
-
-# source the base
-# shellcheck disable=SC1090
-source "${HOME}/.xbaserc"

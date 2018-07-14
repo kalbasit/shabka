@@ -1,1 +1,0 @@
-Config {maxHistoryLength = 250, historyPath = "<%= ENV['HOME'] %>/.cache/greenclip.history", staticHistoryPath = "<%= ENV['HOME'] %>/.cache/greenclip.staticHistory", usePrimarySelectionAsInput = False}

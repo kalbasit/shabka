@@ -1,9 +1,0 @@
-[Unit]
-Description=Check for low battery and hibernate if it's below 5%
-
-[Service]
-ExecStart=%h/.bin/hibernate-on-low-battery
-Type=oneshot
-
-[Install]
-WantedBy=default.target
