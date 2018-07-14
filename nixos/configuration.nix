@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   # Include the results of the hardware scan.
@@ -98,13 +98,30 @@
   # List services that you want to enable:
 
   services.xserver = {
-    autorun = false;
-    enable = false;
+    autorun = true;
+    enable = true;
 
     autoRepeatDelay = 200;
     autoRepeatInterval = 30;
 
+    libinput = {
+      enable = true;
+      naturalScrolling = true;
+    };
+
     layout = "us";
+
+    windowManager.i3 = {
+      enable = true;
+      extraSessionCommands = ''
+        # scale by 40%
+        xrandr --output eDP1 --mode 3200x1800 --scale 0.6x0.6
+      '';
+    };
+
+    xkbOptions = lib.concatStringsSep "," [
+      "ctrl:nocaps"
+    ];
 
     xkbVariant = "colemak";
   };
