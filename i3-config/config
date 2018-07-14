@@ -85,6 +85,9 @@ bindsym $mod+f fullscreen toggle
 # kill focused window
 bindsym $mod+Shift+q kill
 
+# rbrowser
+bindsym $mod+b exec @rbrowser_bin@
+
 # rofi run
 bindsym $mod+r exec @rofi_bin@ -show run
 
