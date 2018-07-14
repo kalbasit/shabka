@@ -102,9 +102,9 @@ bindsym $mod+Tab workspace back_and_forth
 bindsym $mod+Shift+Tab move container to workspace back_and_forth
 
 # dynamic workspaces
-bindsym $mod+space exec @rofi_bin@ -show Workspaces
-bindsym $mod+Shift+space exec @rofi_bin@ -show MoveContainer
-bindsym $mod+$alt+space exec @rofi_bin@ -show RenameWorkspace
+bindsym $mod+space exec @rofi_bin@ -show i3Workspaces
+bindsym $mod+Shift+space exec @rofi_bin@ -show i3MoveContainer
+bindsym $mod+$alt+space exec @rofi_bin@ -show i3RenameWorkspace
 
 # change container layout (stacked, tabbed, toggle split)
 bindsym $mod+l layout stacking
