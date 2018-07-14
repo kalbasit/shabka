@@ -1,6 +1,6 @@
 ! Enabled modi
 ! Default: window,run,ssh
-rofi.modi: window,run,ssh,drun,Workspaces:sway-switch-workspaces,RenameWorkspace:sway-rename-workspace,MoveContainer:sway-move-container
+rofi.modi: window,run,ssh,drun,i3Workspaces:i3-switch-workspaces,i3RenameWorkspace:i3-rename-workspace,i3MoveContainer:i3-move-container,SwayWorkspaces:sway-switch-workspaces,SwayRenameWorkspace:sway-rename-workspace,SwayMoveContainer:sway-move-container
 
 ! Font to use
 ! Default:  mono 12
