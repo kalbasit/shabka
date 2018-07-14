@@ -57,6 +57,8 @@
       name = "all";
 
       paths = [
+        bat
+
         chromium
 
         direnv
