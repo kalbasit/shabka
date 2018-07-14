@@ -1,9 +1,0 @@
-[Unit]
-Description=bugwarrior-pull
-
-[Service]
-ExecStart=/usr/bin/bugwarrior-pull
-Type=oneshot
-
-[Install]
-WantedBy=default.target

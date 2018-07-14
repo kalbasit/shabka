@@ -1,9 +1,0 @@
-! Enabled modi
-! Default: window,run,ssh
-rofi.modi: window,run,ssh,drun,Workspaces:sway-switch-workspaces,RenameWorkspace:sway-rename-workspace,MoveContainer:sway-move-container
-
-! Font to use
-! Default:  mono 12
-rofi.font: Cousine 9
-
-rofi.theme: /usr/share/rofi/themes/Adapta-Nokto.rasi

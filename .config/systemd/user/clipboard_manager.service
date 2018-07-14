@@ -1,9 +1,0 @@
-[Unit]
-Description=Clipboard manager
-
-[Service]
-ExecStart=/usr/bin/greenclip daemon
-Restart=always
-
-[Install]
-WantedBy=default.target

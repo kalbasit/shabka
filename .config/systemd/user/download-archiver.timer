@@ -1,8 +1,0 @@
-[Unit]
-Description=Archive Downloads monthly
-
-[Timer]
-OnCalendar=monthly
-
-[Install]
-WantedBy=timers.target

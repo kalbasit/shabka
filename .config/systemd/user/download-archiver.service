@@ -1,9 +1,0 @@
-[Unit]
-Description=Download Archiver
-
-[Service]
-ExecStart=%h/.bin/download-archiver
-Type=oneshot
-
-[Install]
-WantedBy=default.target

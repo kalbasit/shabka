@@ -1,8 +1,0 @@
-[Unit]
-Description=Gwall
-
-[Service]
-ExecStart=%h/.bin/gwall
-
-[Install]
-WantedBy=default.target

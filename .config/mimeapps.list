@@ -1,9 +1,0 @@
-[Default Applications]
-text/html=relay-browser.desktop
-x-scheme-handler/http=relay-browser.desktop
-x-scheme-handler/https=relay-browser.desktop
-x-scheme-handler/about=relay-browser.desktop
-x-scheme-handler/unknown=relay-browser.desktop
-
-[Added Associations]
-application/pdf=masterpdfeditor4.desktop;

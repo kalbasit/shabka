@@ -1,7 +1,0 @@
-language: c
-services:
-  - docker
-before_script:
-  - yes 'y' | rake
-script:
-  - for i in $(find .bin -type f); do docker run --rm -v "${PWD}":/app:ro koalaman/shellcheck -e SC1071,SC1090 /app/$i; done

@@ -1,9 +1,0 @@
-[Unit]
-Description=Remove the harmful blue light in the night
-
-[Service]
-ExecStart=/usr/bin/redshift -l 34.42:-122.11 -m randr -t 5500:4500 -g 0.75:0.75:0.75
-Restart=always
-
-[Install]
-WantedBy=default.target
