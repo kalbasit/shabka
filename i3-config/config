@@ -27,16 +27,14 @@ floating_modifier $mod
 focus_follows_mouse no
 
 # keep the urgency border of a window for 500ms
-# TODO: not supported on Sway
-# force_display_urgency_hint 500 ms
+force_display_urgency_hint 500 ms
 
 # on window activation, just set the urgency hint. The default behavior is to
 # set the urgency hint if the window is not on the active workspace, and to
 # focus the window on an active workspace. It does surprise me sometimes and I
 # would like to keep it simple by having to manually switch to the urgent
 # window.
-# TODO: not supported on Sway
-# focus_on_window_activation urgent
+focus_on_window_activation urgent
 
 # This option determines in which mode new containers on workspace level will
 # start.
@@ -245,6 +243,31 @@ mode "$move_mode" {
 }
 bindsym $mod+$alt+m mode "$move_mode"
 
+# Display mode allows output/resolution selection
+set $mode_display (l) Laptop screen, (m) Multiple screen, (w) Wide screen
+mode "$mode_display" {
+	bindsym l exec $nosid xrandr --output eDP1 --mode 1920x1080 --output $extmonitor --off, mode "default"
+	bindsym m exec $nosid xrandr --output eDP1 --mode 1920x1080 --output $extmonitor --primary --mode 3440x1440 --right-of eDP1, mode "default"
+	bindsym w exec $nosid xrandr --output eDP1 --off --output $extmonitor --mode 3440x1440, mode "default"
+
+	# back to normal: Enter or Escape
+	bindsym Return mode "default"
+	bindsym Escape mode "default"
+}
+bindsym $mod+$alt+d mode "$mode_display"
+
+# Keyboard layout selection
+set $mode_keyboard (q) Qwerty, (c) Colemak
+mode "$mode_keyboard" {
+	bindsym q exec $nosid setxkbmap us && xmodmap ~/.Xmodmap && notify-send 'keyboard switch to Qwerty', mode "default"
+	bindsym c exec $nosid setxkbmap us -variant colemak && xmodmap ~/.Xmodmap && notify-send 'keyboard switch to Colemak', mode "default"
+
+	# back to normal: Enter or Escape
+	bindsym Return mode "default"
+	bindsym Escape mode "default"
+}
+bindsym $mod+$alt+k mode "$mode_keyboard"
+
 ## Management of power
 set $mode_power System: (l) lock, (o) logout, (s) suspend, (h) hibernate, (r) reboot, (Shift+s) shutdown
 mode "$mode_power" {
@@ -261,6 +284,18 @@ mode "$mode_power" {
 }
 bindsym $mod+$alt+p mode "$mode_power"
 
+# CPU governor selection
+set $mode_cpugovernor CPU Scaling governor: (p) Performance, (o) Powersave
+mode "$mode_cpugovernor" {
+	bindsym p exec $nosid gksudo -- cpupower frequency-set --governor performance, mode "default"
+	bindsym o exec $nosid gksudo -- cpupower frequency-set --governor powersave, mode "default"
+
+	# back to normal: Enter or Escape
+	bindsym Return mode "default"
+	bindsym Escape mode "default"
+}
+bindsym $mod+$alt+g mode "$mode_cpugovernor"
+
 #######
 # Bar #
 #######
@@ -273,8 +308,7 @@ bar {
 	# use i3status for the bar
 	status_command @i3status_bin@
 	# disable clicking on workspace buttons
-	# TODO: not supported on Sway
-	# bindsym button1 nop
+	bindsym button1 nop
 
 	# setup colors
 	colors {
@@ -303,6 +337,19 @@ for_window [class="^Tor Browser"] floating enable
 for_window [class="^net-filebot-Main$"] floating enable
 for_window [class="^ROX-Filer$"] floating enable
 
+########################
+# Workspace assignment #
+########################
+
+# assign important spaces to my external monitor
+workspace personal@base output $extmonitor
+workspace publica@base output $extmonitor
+workspace irc output $extmonitor
+workspace mail output $extmonitor
+
+# assign side apps to the laptop
+workspace media output eDP1
+
 ######################
 # Scratchpad support #
 ######################
@@ -325,9 +372,10 @@ bindsym $alt+p [class="pulse-sms"] scratchpad show
 # Auto Start #
 ##############
 
-# Start the personal terminal on the personal workspace
-exec swaymsg "workspace personal@base; exec $nosid @termite_bin@"
+# TODO: should I move back to wee-slack?
+# exec $nosid termite --title=irc --exec="weechat"
+exec $nosid whatsapp-web-desktop
+exec $nosid /opt/Pulse\ SMS/pulse-sms
 
-include /etc/sway/config.d/*
-include ~/.config/sway/config.d/`hostname`/*
-include ~/.config/sway/config.d/*
+# Start the personal terminal on the personal workspace
+exec i3-msg "workspace personal@base; exec $nosid /usr/bin/termite"

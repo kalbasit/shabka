@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#! @zsh_bin@
 #
 #  vim:ft=sh:
 #
@@ -22,16 +22,19 @@
 
 set -eo pipefail
 
-source "@zsh_dir@/zsh/functions.zsh"
+source "@zsh_config_dir@/zsh/functions.zsh"
 
 function help()
 {
-	print_info "${log_depth}" "USAGE: relay-browser [options] <url>"
+	print_info "${log_depth}" "USAGE: rbrowser [options] <url>"
 	print_info "${log_depth}" "\t -h, --help                - this message"
 	print_info "${log_depth}" "\t -L, --log-depth           - change the depth of the log Default: ${log_depth}"
-	print_info "${log_depth}" "\t -p, --profile             - the profile to use. This is only relevant if a new session is going to be started"
+	print_info "${log_depth}" "\t -p, --profile             - the profile to use"
 	print_info "${log_depth}" "\t -b, --browser             - the browser to use. Default: chromium"
 }
+
+chromium="@chromium_bin@"
+firefox="@firefox_bin@"
 
 log_depth="0"
 args=""
@@ -147,11 +150,11 @@ fi
 case "${browser}" in
 	"chromium")
 		debug "running \`chromium --user-data-dir=${PROFILES_PATH}/${profile} ${args[@]}\`"
-		(exec chromium --user-data-dir="${PROFILES_PATH}/${profile}" "${args[@]}" &>/dev/null)&
+		(exec "${chromium}" --user-data-dir="${PROFILES_PATH}/${profile}" "${args[@]}" &>/dev/null)&
 		;;
 	"firefox")
 		debug "running \`firefox --profile ${PROFILES_PATH}/${profile} --new-tab ${args[@]}\`"
-		(exec firefox --profile "${PROFILES_PATH}/${profile}" --new-tab "${args[@]}" &>/dev/null)&
+		(exec "${firefox}" --profile "${PROFILES_PATH}/${profile}" --new-tab "${args[@]}" &>/dev/null)&
 		;;
 	*)
 		print_error 0 "the browser ${browser} is not supported"

@@ -11,7 +11,13 @@
   };
 
   packageOverrides = pkgs_: with pkgs_; {
-    nvim-config = import ./nvim-config { inherit pkgs ; };
+    i3-config = import ./i3-config {
+      inherit pkgs stdenv;
+    };
+
+    i3status-config = import ./i3status-config {
+      inherit pkgs stdenv;
+    };
 
     git-config = import ./git-config {
       inherit (pkgs) stdenv nvim-config;
@@ -25,6 +31,14 @@
       inherit (pkgs) stdenv;
     };
 
+    nvim-config = import ./nvim-config {
+      inherit pkgs;
+    };
+
+    rbrowser = import ./rbrowser {
+      inherit pkgs stdenv;
+    };
+
     rofi-config = import ./rofi-config {
       inherit (pkgs) stdenv rofi;
     };
@@ -34,7 +48,7 @@
     };
 
     sway-config = import ./sway-config {
-      inherit (pkgs) stdenv brightnessctl pulseaudio i3lock rofi termite libnotify slack zsh-config nvim-config i3status;
+      inherit pkgs stdenv;
     };
 
     swm = import ./swm {
@@ -75,6 +89,9 @@
         dep
         swm
 
+        i3-config
+        i3status-config
+
         jq
 
         less-config
@@ -91,6 +108,8 @@
         nix-index
 
         powerline-fonts
+
+        rbrowser
 
         rofi-config
 
