@@ -37,9 +37,15 @@ function ssh_agents() {
 
 		# Add all of the keys
 		local key=
-		for key in $(find "${HOME}/.ssh/${SSH_AGENT_NAME}/" -not -name '*.pub' -not -name agent -type f | sed -e 's://:/:g'); do
-			debug "adding the key ${key}"
-			ssh-add "${key}" < /dev/null > /dev/null 2>&1
+		for key in $(find "${HOME}/.ssh/${SSH_AGENT_NAME}" -type l); do
+			if [[ -d "$(readlink -f "$key")" ]]; then
+				continue
+			fi
+			debug "found a file located at ${key}"
+			if grep -q 'PRIVATE KEY' "${key}"; then
+				debug "adding the key ${key}"
+				ssh-add "${key}" < /dev/null > /dev/null 2>&1
+			fi
 		done
 	}
 
