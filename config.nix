@@ -59,10 +59,6 @@
       inherit (pkgs) stdenv buildGoPackage fetchgit;
     };
 
-    termite-config = import ./termite-config {
-      inherit (pkgs) stdenv;
-    };
-
     tmux-config = import ./tmux-config {
       inherit (pkgs) stdenv tmux xsel gist libnotify;
     };
@@ -123,9 +119,6 @@
         surfingkeys-config
 
         sway-config
-
-        termite
-        termite-config
 
         tmux
         tmux-config
