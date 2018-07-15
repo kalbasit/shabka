@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       --subst-var-by rbrowser_bin ${pkgs.rbrowser}/bin/rbrowser \
       --subst-var-by rofi_bin ${pkgs.rofi}/bin/rofi \
       --subst-var-by slack_bin ${pkgs.slack}/bin/slack \
-      --subst-var-by termite_bin ${pkgs.termite}/bin/termite
+      --subst-var-by alacritty_bin ${pkgs.alacritty}/bin/alacritty
 
     substitute $src/zshenv $out/userHome/.zshenv \
       --subst-var-by out_dir $out
