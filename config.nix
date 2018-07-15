@@ -11,6 +11,10 @@
   };
 
   packageOverrides = pkgs_: with pkgs_; {
+    alacritty-config = import ./alacritty-config {
+      inherit (pkgs) stdenv;
+    };
+
     i3-config = import ./i3-config {
       inherit pkgs stdenv;
     };
@@ -71,6 +75,9 @@
       name = "all";
 
       paths = [
+        alacritty
+        alacritty-config
+
         bat
 
         chromium
