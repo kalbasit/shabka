@@ -153,7 +153,7 @@ bindsym $mod+$alt+c exec @rofi_bin@ -modi "clipboard:greenclip print" -show clip
 ################
 
 # start a terminal
-bindsym $mod+Return exec @termite_bin@
+bindsym $mod+Return exec @alacritty_bin@
 
 #########
 # Modes #
@@ -179,7 +179,7 @@ mode "$mode_apps" {
 	# TODO: https://github.com/NixOS/nixpkgs/pull/43502
 	#bindsym c exec charles, mode "default"
 	bindsym s exec @slack_bin@, mode "default"
-	bindsym i exec @termite_bin@ --title=irc --exec=weechat, mode "default"
+	bindsym i exec @alacritty_bin@ --title=irc --exec=weechat, mode "default"
 	# TODO: install this
 	# bindsym w exec whatsapp-web-desktop, mode "default"
 	# TODO: is this still necessary?
@@ -331,7 +331,6 @@ bar {
 ##########################
 
 assign [class="^Slack$"] → slack
-assign [class="^Termite" title="irc"] → irc
 assign [class="^Tor Browser"] → tor
 assign [class="^VirtualBox"] → virtualbox
 assign [class="^com-xk72-charles-gui-.*$"] → charles
@@ -376,10 +375,5 @@ bindsym $alt+p [class="pulse-sms"] scratchpad show
 # Auto Start #
 ##############
 
-# TODO: should I move back to wee-slack?
-# exec $nosid termite --title=irc --exec="weechat"
-exec $nosid whatsapp-web-desktop
-exec $nosid /opt/Pulse\ SMS/pulse-sms
-
 # Start the personal terminal on the personal workspace
-exec i3-msg "workspace personal@base; exec $nosid /usr/bin/termite"
+exec i3-msg "workspace personal@base; exec $nosid @alacritty_bin@"
