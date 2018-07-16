@@ -27,8 +27,6 @@ in with pkgs; neovim.override {
         "ale"
         "auto-pairs"
         "caw"
-        "deoplete-go"
-        "deoplete-nvim"
         "easy-align"
         "easymotion"
         "editorconfig-vim"
@@ -58,10 +56,18 @@ in with pkgs; neovim.override {
         "vim-signify"
         "vim-speeddating"
         "vim-terraform"
-        "vim-typescript"
         "vim-vissort"
-        "vim-yats"
         "vim-zoomwintab"
+
+        ## DeoPlete completion support
+        "deoplete-nvim"
+
+        # Golang support
+        "deoplete-go"
+
+        # Typescript support
+        "vim-typescript"
+        "vim-yats"
 
         # required by Gist
         # TODO: https://github.com/NixOS/nixpkgs/pull/43399
