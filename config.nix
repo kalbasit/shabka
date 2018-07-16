@@ -107,6 +107,8 @@
         most-config
 
         nvim-config
+        gocode
+        nodejs
 
         nix-index
 
