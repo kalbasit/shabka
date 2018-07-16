@@ -71,22 +71,6 @@ set shada='20,<50,:20,%,n~/.config/nvim/_nviminfo
 " }}}
 "" NeoVim Settings{{{
 set mouse=  " I hate using the mouse for other than copying/pasting.
-" }}}
-"" Gui Settings{{{
-""
-
-if has("gui_running")
-	set mouse=""          " I hate using the mouse for other than copying/pasting.
-	set guioptions=cei    " Set the guioptions I like
-	set guifont=Monospace,Fixed\ 11
-
-	if has("autocmd")
-		" Automatically resize splits when resizing MacVim window
-		autocmd VimResized * wincmd =
-	endif
-endif
-
-" }}}
 "" Wild settings{{{
 ""
 
