@@ -1,6 +1,10 @@
 { config, pkgs, lib, ... }:
 
 {
+  imports = [
+    ./xorg.nix
+  ];
+
   services.xserver.autorun = true;
   services.xserver.enable = true;
 

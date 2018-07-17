@@ -9,6 +9,9 @@
   imports = [
     ./hardware-configuration.nix
     ../imports/default.nix
+
+    ../imports/i3.nix
+    ../imports/sway.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
