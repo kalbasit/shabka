@@ -16,7 +16,7 @@ in
     nixPath = [
       "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
       # "nixos-config=${dotfiles-path}/machines/${config.networking.hostName}/configuration.nix"
-      "nixos-config=/home/kalbasit/.nixpkgs/machines/${config.networking.hostName}/configuration.nix"
+      "nixos-config=/home/kalbasit/.config/nixpkgs/machines/${config.networking.hostName}/configuration.nix"
       "/nix/var/nix/profiles/per-user/root/channels"
     ];
   };
