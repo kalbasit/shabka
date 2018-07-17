@@ -1,31 +1,19 @@
 self: super:
 
 {
-  alacritty-config = self.callPackage ./alacritty-config {};
-
-  i3-config = self.callPackage ./i3-config {};
-
-  i3status-config = self.callPackage ./i3status-config {};
-
-  git-config = self.callPackage ./git-config {};
-
-  less-config = self.callPackage ./less-config {};
-
-  most-config = self.callPackage ./most-config {};
-
-  rbrowser = self.callPackage ./rbrowser {};
-
-  rofi-config = self.callPackage ./rofi-config {};
-
+  alacritty-config   = self.callPackage ./alacritty-config {};
+  git-config         = self.callPackage ./git-config {};
+  i3-config          = self.callPackage ./i3-config {};
+  i3status-config    = self.callPackage ./i3status-config {};
+  less-config        = self.callPackage ./less-config {};
+  most-config        = self.callPackage ./most-config {};
+  rbrowser           = self.callPackage ./rbrowser {};
+  rofi-config        = self.callPackage ./rofi-config {};
   surfingkeys-config = self.callPackage ./surfingkeys-config {};
-
-  sway-config = self.callPackage ./sway-config {};
-
-  swm = self.callPackage ./swm {};
-
-  tmux-config = self.callPackage ./tmux-config {};
-
-  zsh-config = self.callPackage ./zsh-config {};
+  sway-config        = self.callPackage ./sway-config {};
+  swm                = self.callPackage ./swm {};
+  tmux-config        = self.callPackage ./tmux-config {};
+  zsh-config         = self.callPackage ./zsh-config {};
 
   all = with self; buildEnv {
     name = "all";
@@ -37,6 +25,7 @@ self: super:
       bat
 
       chromium
+      chromium-config
 
       direnv
 
