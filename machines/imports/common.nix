@@ -10,6 +10,11 @@
     ./yubikey.nix
   ];
 
+  nixpkgs.overlays = [
+    (import ../../overlays/neovim)
+    (import ../../overlays/all)
+  ];
+
   # allow unfree software on all machines
   nixpkgs.config.allowUnfree = true;
 
@@ -29,7 +34,7 @@
   environment.systemPackages = with pkgs; [
     git
     curl
-    neovim # TODO: use the Neovim package I create in my .nixpkgs
+    neovim
   ];
 
   # Enable the OpenSSH daemon.
