@@ -5,6 +5,7 @@ self: super:
   git-config         = self.callPackage ./git-config {};
   i3-config          = self.callPackage ./i3-config {};
   i3status-config    = self.callPackage ./i3status-config {};
+  chromium-config    = self.callPackage ./chromium-config {};
   less-config        = self.callPackage ./less-config {};
   most-config        = self.callPackage ./most-config {};
   rbrowser           = self.callPackage ./rbrowser {};
