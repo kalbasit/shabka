@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
     cp -dr $src/bin $out/bin
     substituteInPlace $out/bin/sway-run \
-      --subst-var-by nvim_dir ${pkgs.nvim-config} \
+      --subst-var-by nvim_dir ${pkgs.neovim} \
       --subst-var-by out_dir $out
 
     cp -dr $src/config.d $out/userHome/.config/sway/config.d

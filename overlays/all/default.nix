@@ -13,8 +13,6 @@ self: super:
 
   most-config = self.callPackage ./most-config {};
 
-  nvim-config = self.callPackage ./nvim-config {};
-
   rbrowser = self.callPackage ./rbrowser {};
 
   rofi-config = self.callPackage ./rofi-config {};
@@ -68,7 +66,7 @@ self: super:
       most
       most-config
 
-      nvim-config
+      neovim
       gocode
       nodejs
 
