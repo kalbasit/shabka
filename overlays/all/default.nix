@@ -6,6 +6,7 @@ self: super:
   i3-config          = self.callPackage ./i3-config {};
   i3status-config    = self.callPackage ./i3status-config {};
   chromium-config    = self.callPackage ./chromium-config {};
+  dunst-config       = self.callPackage ./dunst-config {};
   less-config        = self.callPackage ./less-config {};
   most-config        = self.callPackage ./most-config {};
   rbrowser           = self.callPackage ./rbrowser {};
@@ -44,6 +45,7 @@ self: super:
 
       i3-config
       i3status-config
+      dunst dunst-config
 
       jq
 
