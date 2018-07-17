@@ -6,6 +6,7 @@
     ./i3.nix
     ./nix.nix
     ./publica.nix
+    ./redshift.nix
     ./users.nix
     ./xorg.nix
     ./yubikey.nix
