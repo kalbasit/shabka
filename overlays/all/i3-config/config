@@ -144,8 +144,7 @@ bindsym Shift+XF86MonBrightnessDown exec $nosid @brightnessctl_bin@ s 1%-
 bindsym XF86PowerOff exec $nosid $locker && systemctl suspend
 
 # clipboard history
-# TODO: install greenclip and use the binary directly
-bindsym $mod+$alt+c exec @rofi_bin@ -modi "clipboard:greenclip print" -show clipboard
+bindsym $mod+$alt+c exec @rofi_bin@ -modi "clipboard:@greenclip_bin@ print" -show clipboard
 
 ################
 # Applications #
