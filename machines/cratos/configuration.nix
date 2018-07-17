@@ -31,6 +31,9 @@
 
   # List services that you want to enable:
 
+  # set the video drivers to modesetting so no other drivers are loaded
+  services.xserver.videoDrivers = ["modesetting"];
+
   # scale the screen by 40%
   services.xserver.windowManager.i3.extraSessionCommands = ''
     # scale by 40%
