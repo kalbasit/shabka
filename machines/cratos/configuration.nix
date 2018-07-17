@@ -25,8 +25,9 @@
   # Define your hostname.
   networking.hostName = "cratos";
 
-  # Select internationalisation properties.
+  # select a console font that's helpful in HiDPi in the console
   i18n.consoleFont = "latarcyrheb-sun32";
+  boot.earlyVconsoleSetup = true;
 
   # List services that you want to enable:
 
