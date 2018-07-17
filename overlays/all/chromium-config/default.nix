@@ -12,5 +12,7 @@ stdenv.mkDerivation rec {
       install -dm755 $out/userHome/.config/chromium/profiles/$profile
       touch $out/userHome/.config/chromium/profiles/$profile/.keep
     done
+
+    install -Dm644 $src/cmdline_args $out/userHome/.config/chromium/profiles/nosecurity/.cmdline_args
   '';
 }
