@@ -2,12 +2,13 @@
 
 {
   imports = [
-    ./nix.nix
-    ./users.nix
     ./colemak.nix
-    ./xorg.nix
     ./i3.nix
+    ./nix.nix
     ./publica.nix
+    ./users.nix
+    ./xorg.nix
+    ./yubikey.nix
   ];
 
   # set the default locale to en_US.UTF-8
