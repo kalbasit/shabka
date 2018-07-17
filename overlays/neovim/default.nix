@@ -42,7 +42,6 @@ in
             "sleuth"
             "surround"
             "vim-PreserveNoEOL"
-            "vim-addon-nix"
             "vim-airline"
             "vim-airline-themes"
             "vim-better-whitespace"
