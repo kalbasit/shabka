@@ -25,3 +25,30 @@ if [[ ! -f /etc/ca-certificates/trust-source/anchors/nasreddine.crt ]]; then
 	sudo mv ca.crt /etc/ca-certificates/trust-source/anchors/nasreddine.crt
 	sudo trust extract-compat
 fi
+
+# make sure the keyboard is set to Colemak
+if ! localectl status | grep -q 'VC Keymap: colemak'; then
+	sudo localectl set-keymap --no-convert colemak
+fi
+if ! localectl status | grep -q 'X11 Variant: colemak'; then
+	sudo localectl set-x11-keymap --no-convert us pc104 colemak 'ctrl:nocaps'
+fi
+
+if [[ ! -f /etc/systemd/system/kbdrate.service ]]; then
+	cat <<-EOF | sudo tee /etc/systemd/system/kbdrate.service
+	[Unit]
+	Description=Keyboard repeat rate in tty.
+
+	[Service]
+	Type=oneshot
+	RemainAfterExit=yes
+	StandardInput=tty
+	StandardOutput=tty
+	ExecStart=/usr/bin/kbdrate -s -d 300 -r 30
+
+	[Install]
+	WantedBy=multi-user.target
+	EOF
+
+	sudo systemctl enable --now kbdrate.service
+fi
