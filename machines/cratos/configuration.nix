@@ -34,7 +34,7 @@
   # scale the screen by 40%
   services.xserver.windowManager.i3.extraSessionCommands = ''
     # scale by 40%
-    xrandr --output eDP1 --mode 3200x1800 --scale 0.6x0.6
+    xrandr --output eDP-1 --mode 3200x1800 --scale 0.6x0.6
   '';
 
   # Give people part of the video group access to adjust the backlight
