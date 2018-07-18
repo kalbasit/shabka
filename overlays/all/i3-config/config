@@ -153,6 +153,7 @@ bindsym $mod+$alt+c exec @rofi_bin@ -modi "clipboard:greenclip print" -show clip
 
 # start a terminal
 bindsym $mod+Return exec @alacritty_bin@
+bindsym $mod+Shift+Return exec @termite_bin@
 
 #########
 # Modes #

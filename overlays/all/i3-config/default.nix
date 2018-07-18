@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
     cp -dr $src/bin $out/bin
 
     substitute $src/config $out/userHome/.config/i3/config \
+      --subst-var-by alacritty_bin ${pkgs.alacritty}/bin/alacritty \
       --subst-var-by brightnessctl_bin ${pkgs.brightnessctl}/bin/brightnessctl \
       --subst-var-by charles_bin ${pkgs.charles}/bin/charles \
       --subst-var-by i3lock_bin ${pkgs.i3lock}/bin/i3lock \
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
       --subst-var-by rbrowser_bin ${pkgs.rbrowser}/bin/rbrowser \
       --subst-var-by rofi_bin ${pkgs.rofi}/bin/rofi \
       --subst-var-by slack_bin ${pkgs.slack}/bin/slack \
-      --subst-var-by alacritty_bin ${pkgs.alacritty}/bin/alacritty
+      --subst-var-by termite_bin ${pkgs.termite}/bin/termite
   ''
   + (if myHostname == "hades" then ''
     substituteInPlace $out/userHome/.config/i3/config \
