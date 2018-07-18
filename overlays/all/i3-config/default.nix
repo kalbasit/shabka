@@ -1,9 +1,12 @@
-{ pkgs, stdenv }:
+{ stdenv, pkgs, myHostname ? "hades" }:
 
 stdenv.mkDerivation rec {
   name = "i3-config";
 
-  phases = [ "installPhase" "fixupPhase" ];
+  phases = [
+    "installPhase"
+    "fixupPhase"
+  ];
 
   src = ./.;
 
@@ -23,5 +26,19 @@ stdenv.mkDerivation rec {
       --subst-var-by rofi_bin ${pkgs.rofi}/bin/rofi \
       --subst-var-by slack_bin ${pkgs.slack}/bin/slack \
       --subst-var-by alacritty_bin ${pkgs.alacritty}/bin/alacritty
-  '';
+  ''
+  + (if myHostname == "hades" then ''
+    substituteInPlace $out/userHome/.config/i3/config \
+      --subst-var-by int_monitor eDP1 \
+      --subst-var-by int_mode 1920x1080 \
+      --subst-var-by int_scale 1x1 \
+      --subst-var-by ext_monitor DP-1-2
+  '' else "")
+  + (if myHostname == "cratos" then ''
+    substituteInPlace $out/userHome/.config/i3/config \
+      --subst-var-by int_monitor eDP1 \
+      --subst-var-by int_mode 3200x1800 \
+      --subst-var-by int_scale 0.6x0.6 \
+      --subst-var-by ext_monitor DP1-2
+  '' else "");
 }

@@ -14,6 +14,7 @@
   nixpkgs.overlays = [
     (import ../../overlays/neovim)
     (import ../../overlays/all)
+    (self: super: { i3-config = super.i3-config.override { hostname = config.networking.hostname; }; })
   ];
 
   # allow unfree software on all machines
