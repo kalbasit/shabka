@@ -18,7 +18,7 @@ if [[ ! -e "${HOME}/.config/nixpkgs" ]]; then
 fi
 
 echo "Installing nix profile"
-nix-env -i all
+nix-env -f '<nixpkgs>' -iA all
 
 if [[ -d "${HOME}/.nix-profile/userHome" ]]; then
 	echo "Creating dotfiles links in user home"

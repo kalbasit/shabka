@@ -177,8 +177,7 @@ set $mode_apps Launch: (p) Chromium personal, (u) Chromium publica, (c) Charles,
 mode "$mode_apps" {
 	bindsym p exec @rbrowser_bin@ --profile personal, mode "default"
 	bindsym u exec @rbrowser_bin@ --profile publica, mode "default"
-	# TODO: https://github.com/NixOS/nixpkgs/pull/43502
-	#bindsym c exec charles, mode "default"
+	bindsym c exec @charles_bin@, mode "default"
 	bindsym s exec @slack_bin@, mode "default"
 	bindsym i exec @alacritty_bin@ --title=irc --exec=weechat, mode "default"
 	# TODO: install this
