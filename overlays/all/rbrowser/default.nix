@@ -1,6 +1,17 @@
-{pkgs, stdenv}:
+{ pkgs, stdenv, makeDesktopItem }:
 
-stdenv.mkDerivation rec {
+let
+  desktopItem = makeDesktopItem {
+    categories = "GTK;Network;WebBrowser;";
+    desktopName = "Relay Browser";
+    exec = "rbrowser %U";
+    genericName  = "Web Browser";
+    icon = "chromium";
+    mimeType = "x-scheme-handler/unknown;x-scheme-handler/about;text/html;text/xml;application/xhtml+xml;text/mml;x-scheme-handler/http;x-scheme-handler/https;";
+    name = "rbrowser";
+  };
+
+in stdenv.mkDerivation rec {
   name = "rbrowser";
 
   phases = [ "installPhase" "fixupPhase" ];
@@ -15,5 +26,8 @@ stdenv.mkDerivation rec {
       --subst-var-by rofi_bin ${pkgs.rofi}/bin/rofi \
       --subst-var-by zsh_bin ${pkgs.zsh}/bin/zsh \
       --subst-var-by zsh_config_dir ${pkgs.zsh-config}
+
+    install -dm755 $out/userHome/.local/share/applications
+    ln -s ${desktopItem}/share/applications/* $out/userHome/.local/share/applications/
   '';
 }
