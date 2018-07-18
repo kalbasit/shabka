@@ -10,6 +10,7 @@
     ./yubikey.nix
   ];
 
+  # load the overlays that we need at the very top-level
   nixpkgs.overlays = [
     (import ../../overlays/neovim)
     (import ../../overlays/all)
@@ -17,6 +18,9 @@
 
   # allow unfree software on all machines
   nixpkgs.config.allowUnfree = true;
+
+  # set the BROWSER to my rbrowser
+  environment.variables.BROWSER = "${pkgs.rbrowser}/bin/rbrowser";
 
   # set the default locale to en_US.UTF-8
   i18n.defaultLocale = "en_US.UTF-8";
