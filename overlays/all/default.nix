@@ -14,6 +14,7 @@ self: super:
   surfingkeys-config = self.callPackage ./surfingkeys-config {};
   sway-config        = self.callPackage ./sway-config {};
   swm                = self.callPackage ./swm {};
+  termite-config     = self.callPackage ./termite-config {};
   tmux-config        = self.callPackage ./tmux-config {};
   zsh-config         = self.callPackage ./zsh-config {};
 
@@ -73,6 +74,8 @@ self: super:
       surfingkeys-config
 
       sway-config
+
+      termite-config
 
       tmux
       tmux-config
