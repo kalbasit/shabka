@@ -78,11 +78,6 @@ if [[ ! -f /etc/X11/xorg.conf.d/30-touchpad.conf ]]; then
 	EOF
 fi
 
-if [[ ! -d "${HOME}/.asdf" ]]; then
-	echo ">> installing ASDF"
-	git clone --branch v0.5.0 https://github.com/asdf-vm/asdf.git "${HOME}/.asdf"
-fi
-
 if [[ ! -f /etc/udev/rules.d/70-backlight.rules ]]; then
 	echo ">> installing the udev rules for the backlight"
 	cat <<-EOF | sudo tee /etc/udev/rules.d/70-backlight.rules
