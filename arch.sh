@@ -77,3 +77,8 @@ if [[ ! -f /etc/X11/xorg.conf.d/30-touchpad.conf ]]; then
 	EndSection
 	EOF
 fi
+
+if [[ ! -d "${HOME}/.asdf" ]]; then
+	echo ">> installing ASDF"
+	git clone --branch v0.5.0 https://github.com/asdf-vm/asdf.git "${HOME}/.asdf"
+fi
