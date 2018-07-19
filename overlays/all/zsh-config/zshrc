@@ -822,6 +822,10 @@ fi
 # load direnv
 eval "$(@direnv_dir@/bin/direnv hook zsh)"
 
+# Load ASDF
+[[ -r "${HOME}/.asdf/asdf.sh" ]] && source "${HOME}/.asdf/asdf.sh"
+[[ -r "${HOME}/.asdf/completions/asdf.bash" ]] && source "${HOME}/.asdf/completions/asdf.bash"
+
 #####################################################################
 # host overrides
 #####################################################################
