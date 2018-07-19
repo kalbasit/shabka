@@ -81,6 +81,8 @@ self: super:
       tmux
       tmux-config
 
+      unzip
+
       zsh
       zsh-config
       nix-zsh-completions
