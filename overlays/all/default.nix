@@ -39,8 +39,6 @@ self: super:
       git-config
 
       go
-      dep
-      swm
 
       i3-config
       i3status-config
@@ -76,6 +74,8 @@ self: super:
       surfingkeys-config
 
       sway-config
+
+      swm
 
       termite        # Arch-only: this is required to make the ~/.terminfo link happy
       termite-config
