@@ -1,43 +1,51 @@
+"" Provides{{{
+let g:node_host_prog = '@neovim_node_host_bin@'
+let g:nvim_typescript#server_path = '@typescript_server_bin@'
+let g:deoplete#sources#go#gocode_binary = '@gocode_bin@'
+" }}}
 "" Settings{{{
 ""
 
 " set background=dark
 colorscheme seoul256
 
-let mapleader = ","                     " set the mapleader
-set backup                              " enable backup, written to backupdir set below
-set cmdheight=2                         " the height of the command line, giving it a high
-" number can prevent the "Hit ENTER to continue" but
-" will shorten the editor.
+" set the mapleader
+let mapleader = ","
+
+set backup                             " enable backup, written to backupdir set below
+set cmdheight=2                        " the height of the command line, giving it a high
+                                       " number can prevent the "Hit ENTER to continue" but
+                                       " will shorten the editor.
 set colorcolumn=80                     " Display a color column
 set complete=.,w,b,t,i                 " Same as default except that I remove the 'u' option
 set completeopt=menu,noinsert,noselect " Enable completion menu and disable insert/select
+set diffopt+=iwhite                    " Add ignorance of whitespace to diff
 set hidden                             " you can change buffer without saving
 set ignorecase                         " searches are case insensitive...
 set lz                                 " do not redraw while running macros (much faster) (LazyRedraw)
+set makeef=error.err                   " When using make, where should it dump the file
 set matchtime=2                        " how many tenths of a second to blink matching brackets for
+set mouse=                             " I hate using the mouse for other than copying/pasting.
+set noautowrite                        " safe automacially content
+set nobackup                           " Turn off backup
 set noerrorbells                       " don't make noise
 set novisualbell                       " don't blink
 set number                             " turn on line numbers but display them as relative to the current line
+set pastetoggle=<F12>                  " Paste toggle on key F12!
 set report=1                           " tell us when anything is changed via :...
 set ruler                              " Always show current positions along the bottom
+set scrolloff=5                        " Keep 10 lines (top/bottom) for scope
 set shortmess=atTIc                    " shortens messages to avoid 'press a key' prompt
+set showfulltag                        " When completing by tag, show the whole tag, not just the function name
 set showmatch                          " show matching brackets
 set smartcase                          " ... unless they contain at least one capital letter
-set scrolloff=5                        " Keep 10 lines (top/bottom) for scope
-set whichwrap+=<,>,h,l                 " backspace and cursor keys wrap to
-set wildchar=<TAB>                     " Which character activates the wildmenu
-set winwidth=79                        " Set the minimum window width
-set diffopt+=iwhite                    " Add ignorance of whitespace to diff
-set makeef=error.err                   " When using make, where should it dump the file
-set noautowrite                        " safe automacially content
-set pastetoggle=<F12>                  " Paste toggle on key F12!
-set showfulltag                        " When completing by tag, show the whole tag, not just the function name
 set spell                              " Turn on spellcheck.
 set splitbelow                         " Always split under
 set splitright                         " Always split on the right
 set startofline                        " Move the cursor to the first non-blank of the line
-set nobackup                           " Turn off backup
+set whichwrap+=<,>,h,l                 " backspace and cursor keys wrap to
+set wildchar=<TAB>                     " Which character activates the wildmenu
+set winwidth=79                        " Set the minimum window width
 
 if v:version >= 703
 	set cursorline     " cursor line highlighting
@@ -69,8 +77,6 @@ set winheight=999
 set shada='20,<50,:20,%,n~/.config/nvim/_nviminfo
 
 " }}}
-"" NeoVim Settings{{{
-set mouse=  " I hate using the mouse for other than copying/pasting.
 "" Wild settings{{{
 ""
 
@@ -218,7 +224,6 @@ autocmd BufEnter * EnableStripWhitespaceOnSave
 let g:deoplete#enable_at_startup = 1
 
 " deoplete-go settings
-let g:deoplete#sources#go#gocode_binary = '~/.filesystem/bin/gocode'
 let g:deoplete#sources#go#json_directory = '~/.cache/deoplete/go/$GOOS_$GOARCH'
 let g:deoplete#sources#go#pointer = 1
 let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
@@ -262,7 +267,7 @@ autocmd! User FzfStatusLine call <SID>fzf_statusline()
 "" Gist{{{
 ""
 
-let g:gist_clip_command = 'xsel -bi'
+let g:gist_clip_command = '@xsel_bin@ -bi'
 let g:gist_show_privates = 1
 let g:gist_post_private = 1
 

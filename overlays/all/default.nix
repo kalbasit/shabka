@@ -56,10 +56,6 @@ self: super:
       most-config
 
       neovim
-      gocode
-      nodePackages.neovim
-      nodePackages.typescript
-      nodejs
 
       nix-index
 

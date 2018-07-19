@@ -15,7 +15,14 @@ in
     extraPython3Packages = [self.python36Packages.neovim];
 
     configure = {
-      customRC = builtins.readFile ./init.vim;
+      customRC = builtins.readFile (super.substituteAll {
+        src = ./init.vim;
+
+        gocode_bin = "${self.gocode}/bin/gocode";
+        neovim_node_host_bin = "${self.nodePackages.neovim}/bin/neovim-node-host";
+        typescript_server_bin = "${self.nodePackages.typescript}/bin/tsserver";
+        xsel_bin = "${self.xsel}/bin/xsel";
+      });
 
       vam.knownPlugins = super.vimPlugins // my_plugins;
       vam.pluginDictionaries = [
