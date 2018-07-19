@@ -23,8 +23,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/google/go-github";
-      rev = "60f2773bd99aa86164bc80bf370be6ba63b47dea";
-      sha256 = "00mqlcfpjbaqj9if7d43wr4kx0gkk6wn9rg1vnsm6wig93sz9xgx";
+      rev = "c0b63e2f9bb198baf328c8abf1ddcbe05ff9427e";
+      sha256 = "1a4skdbzxnyj3irqrmhhj4c9cimga0k5sd0vykjfqj7c8c5bwbd5";
     };
   }
   {
@@ -95,8 +95,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/net";
-      rev = "32a936f46389aa10549d60bd7833e54b01685d09";
-      sha256 = "0f24khgx6s7idpnmwgkml4qyrqwkvdjd18aapn5rmybyhmrb57j7";
+      rev = "a680a1efc54dd51c040b3b5ce4939ea3cf2ea0d1";
+      sha256 = "018zmn4kmg2mbngcciqal54slc3pl4ry5vlv0bw36fcxvnazxnbp";
     };
   }
   {
@@ -113,8 +113,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/text";
-      rev = "c0fe8dde8a10c9b32154bd9bdf080b8b3d635127";
-      sha256 = "0zi15k236nmqrlpfy3hgnxnh3f0n1aag0h6gs41xlxdkr9lpmnsz";
+      rev = "0605a8320aceb4207a5fb3521281e17ec2075476";
+      sha256 = "1pak7q9ivwxh5bnjk00pkrs9ri9vmbyccvza56fl6138w397h49j";
     };
   }
   {
