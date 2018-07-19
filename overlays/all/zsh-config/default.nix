@@ -1,4 +1,4 @@
-{stdenv, direnv}:
+{ stdenv, pkgs }:
 
 stdenv.mkDerivation rec {
   name = "zsh-config";
@@ -18,6 +18,11 @@ stdenv.mkDerivation rec {
 
     substitute $src/zshrc $out/userHome/.zshrc \
       --subst-var-by out_dir $out \
-      --subst-var-by direnv_dir ${direnv}
+      --subst-var-by direnv_dir ${pkgs.direnv}
+
+    substituteInPlace $out/zsh/functions/tmycli \
+      --subst-var-by mycli_bin ${pkgs.mycli}/bin/mycli \
+      --subst-var-by netstat_bin ${pkgs.nettools}/bin/netstat \
+      --subst-var-by ssh_bin ${pkgs.openssh}/bin/ssh
   '';
 }
