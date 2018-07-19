@@ -82,3 +82,11 @@ if [[ ! -d "${HOME}/.asdf" ]]; then
 	echo ">> installing ASDF"
 	git clone --branch v0.5.0 https://github.com/asdf-vm/asdf.git "${HOME}/.asdf"
 fi
+
+if [[ ! -f /etc/udev/rules.d/70-backlight.rules ]]; then
+	echo ">> installing the udev rules for the backlight"
+	cat <<-EOF | sudo tee /etc/udev/rules.d/70-backlight.rules
+	ACTION=="add", SUBSYSTEM=="backlight", KERNEL=="intel_backlight", RUN+="/bin/chgrp video /sys/class/backlight/%k/brightness"
+	ACTION=="add", SUBSYSTEM=="backlight", KERNEL=="intel_backlight", RUN+="/bin/chmod g+w /sys/class/backlight/%k/brightness"
+	EOF
+fi
