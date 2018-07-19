@@ -37,7 +37,6 @@ self: super:
       fzf
 
       git
-      git-crypt
       git-config
 
       go
