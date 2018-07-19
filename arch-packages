@@ -17,8 +17,3 @@ networkmanager
 
 # Sound support
 pulseaudio
-
-# install chromium because it does not start when installed with Nix due to
-# missing setuid on the binary.
-# TODO: maybe add a postHook that uses sudo to setuid the binary?
-chromium
