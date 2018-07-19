@@ -833,6 +833,16 @@ eval "$(@direnv_dir@/bin/direnv hook zsh)"
 [[ -r "@out_dir@/zsh/hosts/${SHORT_HOST}.zsh" ]] && source "@out_dir@/zsh/hosts/${SHORT_HOST}.zsh"
 
 #####################################################################
+# externally managed support
+#####################################################################
+
+if [[ -d "${HOME}/.zsh/rc.d" ]]; then
+	for rc in ${HOME}/.zsh/rc.d/*.zsh; do
+		test -r "${rc}" && source "${rc}"
+	done
+fi
+
+#####################################################################
 # Profile support
 #####################################################################
 
