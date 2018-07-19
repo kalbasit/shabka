@@ -60,6 +60,8 @@ self: super:
 
       neovim
       gocode
+      nodePackages.neovim
+      nodePackages.typescript
       nodejs
 
       nix-index
