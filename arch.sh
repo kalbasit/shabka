@@ -64,3 +64,16 @@ for derivation in $(nix-store -q --tree /nix/var/nix/profiles/per-user/kalbasit/
 		sudo chmod 4755 "${derivation}/bin/__chromium-suid-sandbox"
 	fi
 done
+
+if [[ ! -f /etc/X11/xorg.conf.d/30-touchpad.conf ]]; then
+	echo ">> installing the touchpad libinput config file"
+	cat <<-EOF | sudo tee /etc/X11/xorg.conf.d/30-touchpad.conf
+	Section "InputClass"
+	  Identifier "MyTouchPad"
+	  MatchIsTouchpad "on"
+	  Driver "libinput"
+	  Option "Tapping" "on"
+	  Option "Natural Scrolling" "on"
+	EndSection
+	EOF
+fi
