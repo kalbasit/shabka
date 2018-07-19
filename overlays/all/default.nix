@@ -66,6 +66,8 @@ self: super:
 
       nix-index
 
+      pet
+
       powerline-fonts
 
       rbrowser
