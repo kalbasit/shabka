@@ -15,5 +15,5 @@ let
 in
 
 {
-  haskell.packages.greenclip = pinnedPkgs.haskell.packages.greenclip;
+  self.haskell.packages.greenclip = pinnedPkgs.haskell.packages.greenclip;
 }
