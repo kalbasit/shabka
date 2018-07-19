@@ -65,6 +65,7 @@ for derivation in $(nix-store -q --tree /nix/var/nix/profiles/per-user/kalbasit/
 	fi
 done
 
+# enable natural Scrolling and tap-to-click on the touchpad
 if [[ ! -f /etc/X11/xorg.conf.d/30-touchpad.conf ]]; then
 	echo ">> installing the touchpad libinput config file"
 	cat <<-EOF | sudo tee /etc/X11/xorg.conf.d/30-touchpad.conf
@@ -78,10 +79,17 @@ if [[ ! -f /etc/X11/xorg.conf.d/30-touchpad.conf ]]; then
 	EOF
 fi
 
+# give anyone in the video group access to alter the brightness of the screen
 if [[ ! -f /etc/udev/rules.d/70-backlight.rules ]]; then
 	echo ">> installing the udev rules for the backlight"
 	cat <<-EOF | sudo tee /etc/udev/rules.d/70-backlight.rules
 	ACTION=="add", SUBSYSTEM=="backlight", KERNEL=="intel_backlight", RUN+="/bin/chgrp video /sys/class/backlight/%k/brightness"
 	ACTION=="add", SUBSYSTEM=="backlight", KERNEL=="intel_backlight", RUN+="/bin/chmod g+w /sys/class/backlight/%k/brightness"
 	EOF
+fi
+
+# tell keybase not to use a pinentry
+if [[ ! -f "${HOME}/.zsh/rc.d/keybase-no-pinentry.zsh" ]]; then
+	mkdir -p "${HOME}/.zsh/rc.d"
+	echo "alias keybase='keybase --pinentry=none'" >> "${HOME}/.zsh/rc.d/keybase-no-pinentry.zsh"
 fi
