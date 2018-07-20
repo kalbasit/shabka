@@ -38,6 +38,8 @@ self: super:
 
       direnv
 
+      docker-credential-gcr
+
       firefox
 
       fzf
