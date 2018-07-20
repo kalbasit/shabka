@@ -20,11 +20,20 @@ while read line; do
 	fi
 done < <(grep -v '^#\|^$' arch-packages)
 
+# install the nasreddine certificate
 if [[ ! -f /etc/ca-certificates/trust-source/anchors/nasreddine.crt ]]; then
 	echo ">> installing the Nasreddine cert"
 	curl -LO http://nasreddine.com/ca.crt
 	sudo mv ca.crt /etc/ca-certificates/trust-source/anchors/nasreddine.crt
 	sudo trust extract-compat
+fi
+
+if [[ -f ~/.charles/ca/charles-proxy-ssl-proxying-certificate.pem ]]; then
+	if [[ ! -f /etc/ca-certificates/trust-source/anchors/charles.crt ]] || [[ "$(md5sum ~/.charles/ca/charles-proxy-ssl-proxying-certificate.pem | awk '{print $1}')" != "$(md5sum /etc/ca-certificates/trust-source/anchors/charles.crt | awk '{print $1}')" ]]; then
+		echo ">> installing the Charles cert"
+		sudo cp ~/.charles/ca/charles-proxy-ssl-proxying-certificate.pem /etc/ca-certificates/trust-source/anchors/nasreddine.crt
+		sudo trust extract-compat
+	fi
 fi
 
 # make sure the keyboard is set to Colemak
