@@ -147,6 +147,9 @@ bindsym XF86PowerOff exec $nosid $locker && systemctl suspend
 # TODO: install greenclip and use the binary directly
 bindsym $mod+$alt+c exec @rofi_bin@ -modi "clipboard:greenclip print" -show clipboard
 
+# xcape
+bindsym $mod+$alt+x exec $nosid @xcape_bin@ -e 'Control_L=Escape'
+
 ################
 # Applications #
 ################
@@ -366,7 +369,7 @@ bindsym $alt+p [class="pulse-sms"] scratchpad show
 exec $nosid @xset_bin@ r rate 300 30
 
 # start xcape, I love xcape!
-exec $nosid @xcape_bin@
+exec $nosid @xcape_bin@ -e 'Control_L=Escape'
 
 # Start the personal terminal on the personal workspace
 exec i3-msg "workspace personal@base; exec $nosid @alacritty_bin@"
