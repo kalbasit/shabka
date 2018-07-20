@@ -25,6 +25,13 @@ self: super:
       alacritty-config
 
       bat
+      (self.writeTextFile {
+        name = "alias-bat-cat";
+        destination = "/userHome/.zsh/rc.d/alias-bat-cat.zsh";
+        text = ''
+          alias cat=bat
+        '';
+      })
 
       chromium
       chromium-config
