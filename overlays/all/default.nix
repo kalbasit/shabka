@@ -35,6 +35,8 @@ self: super:
 
       fzf
 
+      gist
+
       git
       git-config
 
