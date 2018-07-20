@@ -73,7 +73,7 @@ in
             "deoplete-go"
 
             # Typescript support
-            "vim-typescript"
+            # "vim-typescript"    # TODO: https://github.com/kalbasit/dotfiles/issues/15
             "vim-yats"
 
             # required by Gist
