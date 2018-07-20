@@ -12,6 +12,7 @@
 
   # load the overlays that we need at the very top-level
   nixpkgs.overlays = [
+    (import ../../overlays/nodePackages)
     (import ../../overlays/neovim)
     (import ../../overlays/all)
     (self: super: { i3-config = super.i3-config.override { hostname = config.networking.hostname; }; })
