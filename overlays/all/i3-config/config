@@ -118,7 +118,7 @@ bindsym $mod+a focus parent
 bindsym $mod+d focus child
 
 # start a region screenshot
-# TODO: re-do deepin-screenshot
+# TODO: Replace deepin-screenshot, not available through Nix!
 bindsym $mod+Shift+4 exec deepin-screenshot
 
 # focus the urgent window
@@ -258,18 +258,6 @@ mode "$mode_display" {
 	bindsym Escape mode "default"
 }
 bindsym $mod+$alt+d mode "$mode_display"
-
-# Keyboard layout selection
-set $mode_keyboard (q) Qwerty, (c) Colemak
-mode "$mode_keyboard" {
-	bindsym q exec $nosid setxkbmap us && xmodmap ~/.Xmodmap && notify-send 'keyboard switch to Qwerty', mode "default"
-	bindsym c exec $nosid setxkbmap us -variant colemak && xmodmap ~/.Xmodmap && notify-send 'keyboard switch to Colemak', mode "default"
-
-	# back to normal: Enter or Escape
-	bindsym Return mode "default"
-	bindsym Escape mode "default"
-}
-bindsym $mod+$alt+k mode "$mode_keyboard"
 
 ## Management of power
 set $mode_power System: (l) lock, (o) logout, (s) suspend, (h) hibernate, (r) reboot, (Shift+s) shutdown
