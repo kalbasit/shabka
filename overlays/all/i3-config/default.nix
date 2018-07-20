@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
       --subst-var-by rbrowser_bin ${pkgs.rbrowser}/bin/rbrowser \
       --subst-var-by rofi_bin ${pkgs.rofi}/bin/rofi \
       --subst-var-by slack_bin ${pkgs.slack}/bin/slack \
+      --subst-var-by termite_bin ${pkgs.termite}/bin/termite \
       --subst-var-by xset_bin ${pkgs.xlibs.xset}/bin/xset \
       --subst-var-by xcape_bin ${pkgs.xcape}/bin/xcape
   ''
