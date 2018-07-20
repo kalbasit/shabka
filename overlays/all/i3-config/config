@@ -344,13 +344,13 @@ for_window [class="^ROX-Filer$"] floating enable
 ########################
 
 # assign important spaces to my external monitor
-workspace personal@base output $extmonitor
-workspace publica@base output $extmonitor
-workspace irc output $extmonitor
-workspace mail output $extmonitor
+workspace personal@base output @ext_monitor@
+workspace publica@base output @ext_monitor@
+workspace irc output @ext_monitor@
+workspace mail output @ext_monitor@
 
 # assign side apps to the laptop
-workspace media output eDP1
+workspace media output @int_monitor@
 
 ######################
 # Scratchpad support #
