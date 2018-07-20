@@ -375,7 +375,10 @@ bindsym $alt+p [class="pulse-sms"] scratchpad show
 ##############
 
 # set the correct delay and repeat
-exec $nosid xset r rate 300 30
+exec $nosid @xset_bin@ r rate 300 30
+
+# start xcape, I love xcape!
+exec $nosid @xcape_bin@
 
 # Start the personal terminal on the personal workspace
 exec i3-msg "workspace personal@base; exec $nosid @alacritty_bin@"
