@@ -31,7 +31,7 @@ fi
 if [[ -f ~/.charles/ca/charles-proxy-ssl-proxying-certificate.pem ]]; then
 	if [[ ! -f /etc/ca-certificates/trust-source/anchors/charles.crt ]] || [[ "$(md5sum ~/.charles/ca/charles-proxy-ssl-proxying-certificate.pem | awk '{print $1}')" != "$(md5sum /etc/ca-certificates/trust-source/anchors/charles.crt | awk '{print $1}')" ]]; then
 		echo ">> installing the Charles cert"
-		sudo cp ~/.charles/ca/charles-proxy-ssl-proxying-certificate.pem /etc/ca-certificates/trust-source/anchors/nasreddine.crt
+		sudo cp ~/.charles/ca/charles-proxy-ssl-proxying-certificate.pem /etc/ca-certificates/trust-source/anchors/charles.crt
 		sudo trust extract-compat
 	fi
 fi
