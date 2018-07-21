@@ -27,6 +27,10 @@ stdenv.mkDerivation rec {
       --subst-var-by out_dir $out \
       --subst-var-by thefuck_out ${pkgs.thefuck}
 
+    substituteInPlace $out/zsh/functions/jsonpp \
+      --subst-var-by python_bin ${pkgs.python37Full}/bin/python \
+      --subst-var-by pygmentize_bin ${pkgs.python36Packages.pygments}/bin/pygmentize
+
     substituteInPlace $out/zsh/functions/tmycli \
       --subst-var-by mycli_bin ${pkgs.mycli}/bin/mycli \
       --subst-var-by netstat_bin ${pkgs.nettools}/bin/netstat \
@@ -37,5 +41,6 @@ stdenv.mkDerivation rec {
 
     substituteInPlace $out/zsh/functions/pet_prev \
       --subst-var-by pet_bin ${pkgs.pet}/bin/pet
+
   '';
 }

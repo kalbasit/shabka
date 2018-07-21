@@ -3,17 +3,8 @@
 #
 
 function jsonpp() {
-	if ! have python; then
-		print_error 0 "You must have python installed for this work"
-		return 1
-	fi
-	if ! have pygmentize; then
-		print_error 0 "You must have pygmentize installed for this work"
-		return 1
-	fi
-
 	if [[ "${#}" -eq 0 ]]; then
-		python -m json.tool | pygmentize -l javascript
+		@python_bin@ -m json.tool | @pygmentize_bin@ -l javascript
 	else
 		local input_file="${1}"
 		local output_file="${2}"
@@ -21,7 +12,7 @@ function jsonpp() {
 			output_file="`mktemp /tmp/jsonpp.XXXXXXXX`"
 		fi
 
-		python -m json.tool < "${input_file}" > "${output_file}" || return
+		@python_bin@ -m json.tool < "${input_file}" > "${output_file}" || return
 		mv "${output_file}" "${input_file}"
 	fi
 }
