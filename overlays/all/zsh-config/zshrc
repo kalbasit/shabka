@@ -511,10 +511,10 @@ alias d='dirs -v | head -10'
 export HISTSIZE=100000
 export SAVEHIST=100000
 
-# show dates as "mm/dd/yyyy"
 # use 'fc -El 1' for "dd.mm.yyyy"
 # use 'fc -il 1' for "yyyy-mm-dd"
-alias history='fc -fl 1'
+# use 'fc -fl 1' for mm/dd/yyyy
+alias history='fc -il 1'
 
 #####################################################################
 # Key bindings
