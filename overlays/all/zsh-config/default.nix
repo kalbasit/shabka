@@ -42,5 +42,7 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/zsh/functions/pet_prev \
       --subst-var-by pet_bin ${pkgs.pet}/bin/pet
 
+    substituteInPlace $out/zsh/functions/xmlpp \
+      --subst-var-by xmllint_bin ${pkgs.libxml2Python}/bin/xmllint
   '';
 }
