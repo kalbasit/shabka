@@ -1,4 +1,4 @@
-{ pkgs, stdenv, makeDesktopItem }:
+{ stdenv, pkgs, makeDesktopItem }:
 
 let
   desktopItem = makeDesktopItem {
@@ -24,8 +24,7 @@ in stdenv.mkDerivation rec {
       --subst-var-by chromium_bin ${pkgs.chromium}/bin/chromium \
       --subst-var-by firefox_bin ${pkgs.firefox}/bin/firefox \
       --subst-var-by rofi_bin ${pkgs.rofi}/bin/rofi \
-      --subst-var-by zsh_bin ${pkgs.zsh}/bin/zsh \
-      --subst-var-by zsh_config_dir ${pkgs.zsh-config}
+      --subst-var-by zsh_bin ${pkgs.zsh}/bin/zsh
 
     install -dm755 $out/userHome/.local/share/applications
     ln -s ${desktopItem}/share/applications/* $out/userHome/.local/share/applications/

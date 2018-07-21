@@ -22,15 +22,12 @@
 
 set -eo pipefail
 
-source "@zsh_config_dir@/zsh/functions.zsh"
-
 function help()
 {
-	print_info "${log_depth}" "USAGE: rbrowser [options] <url>"
-	print_info "${log_depth}" "\t -h, --help                - this message"
-	print_info "${log_depth}" "\t -L, --log-depth           - change the depth of the log Default: ${log_depth}"
-	print_info "${log_depth}" "\t -p, --profile             - the profile to use"
-	print_info "${log_depth}" "\t -b, --browser             - the browser to use. Default: chromium"
+	echo -e "USAGE: rbrowser [options] <url>"
+	echo -e "\t -h, --help                - this message"
+	echo -e "\t -p, --profile             - the profile to use"
+	echo -e "\t -b, --browser             - the browser to use. Default: chromium"
 }
 
 chromium="@chromium_bin@"
@@ -46,19 +43,10 @@ while [[ $# -ge 1 ]]; do
 			help
 			exit 0
 			;;
-		--log-depth)
-			log_depth="${2}"
-			if [[ -z "${log_depth}" ]]; then
-				print_error "${log_depth}" "--log-depth requires an argument"
-				help
-				exit 1
-			fi
-			shift 2
-			;;
 		-p|--profile)
 			profile="${2}"
 			if [[ -z "${profile}" ]]; then
-				print_error "${log_depth}" "--profile requires an argument"
+				echo -e "ERR: --profile requires an argument"
 				help
 				exit 1
 			fi
@@ -67,7 +55,7 @@ while [[ $# -ge 1 ]]; do
 		-b|--browser)
 			browser="${2}"
 			if [[ -z "${browser}" ]]; then
-				print_error "${log_depth}" "--browser requires an argument"
+				echo -e "ERR: --browser requires an argument"
 				help
 				exit 1
 			fi
@@ -86,7 +74,7 @@ FIREFOX_PROFILES_PATH="${HOME}/.mozilla/firefox/profiles"
 
 # make sure we have both profile and a browser.
 if [[ -n "${profile}" ]] && [[ -z "${browser}" ]]; then
-	print_error 0 "the profile was set to ${profile}, but the browser is empty. The browser is required with --profile, aborting..."
+	echo -e "ERR: the profile was set to ${profile}, but the browser is empty. The browser is required with --profile, aborting..."
 	exit 1
 fi
 
@@ -113,11 +101,8 @@ if [[ -z "${profile}" ]]; then
 		exit 1
 	fi
 	entry="$(@rofi_bin@ -dmenu < <(echo -e "${items}"))"
-	debug "entry=${entry}"
 	browser="$(echo "${entry}" | cut -d@ -f1)"
-	debug "browser=${browser}"
 	profile="$(echo "${entry}" | cut -d@ -f2)"
-	debug "profile=${profile}"
 fi
 
 case "${browser}" in
@@ -128,18 +113,18 @@ case "${browser}" in
 		PROFILES_PATH="${FIREFOX_PROFILES_PATH}"
 		;;
 	*)
-		print_error 0 "the browser ${browser} is not supported"
+		echo -e "ERR: the browser ${browser} is not supported"
 		exit 1
 		;;
 esac
 
 if [[ -z "${profile}" ]]; then
-	print_error 0 "no profile was selected, aborting..."
+	echo -e "ERR: no profile was selected, aborting..."
 	exit 1
 fi
 
 if [[ ! -d "${PROFILES_PATH}/${profile}" ]]; then
-	print_warning 0 "the selected profile does not exists, creating one"
+	echo -e "WARN: the selected profile does not exists, creating one"
 	mkdir -p "${PROFILES_PATH}/${profile}"
 fi
 
@@ -149,15 +134,13 @@ fi
 
 case "${browser}" in
 	"chromium")
-		debug "running \`chromium --user-data-dir=${PROFILES_PATH}/${profile} ${args[@]}\`"
 		(exec "${chromium}" --user-data-dir="${PROFILES_PATH}/${profile}" "${args[@]}" &>/dev/null)&
 		;;
 	"firefox")
-		debug "running \`firefox --profile ${PROFILES_PATH}/${profile} --new-tab ${args[@]}\`"
 		(exec "${firefox}" --profile "${PROFILES_PATH}/${profile}" --new-tab "${args[@]}" &>/dev/null)&
 		;;
 	*)
-		print_error 0 "the browser ${browser} is not supported"
+		echo -e "ERR: the browser ${browser} is not supported"
 		exit 1
 		;;
 esac
