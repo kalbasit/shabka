@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
     substitute $src/zshrc $out/userHome/.zshrc \
       --subst-var-by ag_bin ${pkgs.silver-searcher}/bin/ag \
       --subst-var-by direnv_dir ${pkgs.direnv} \
+      --subst-var-by exa_bin ${pkgs.exa}/bin/exa \
       --subst-var-by fzf_out ${pkgs.fzf} \
       --subst-var-by git_bin ${pkgs.git}/bin/git \
       --subst-var-by out_dir $out \
