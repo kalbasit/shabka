@@ -29,5 +29,11 @@ stdenv.mkDerivation rec {
       --subst-var-by mycli_bin ${pkgs.mycli}/bin/mycli \
       --subst-var-by netstat_bin ${pkgs.nettools}/bin/netstat \
       --subst-var-by ssh_bin ${pkgs.openssh}/bin/ssh
+
+    substituteInPlace $out/zsh/functions/pet_select \
+      --subst-var-by pet_bin ${pkgs.pet}/bin/pet
+
+    substituteInPlace $out/zsh/functions/pet_prev \
+      --subst-var-by pet_bin ${pkgs.pet}/bin/pet
   '';
 }

@@ -3,7 +3,7 @@
 #
 
 function pet_select() {
-  BUFFER=$(pet search --query "$LBUFFER")
+  BUFFER=$(@pet_bin@ search --query "$LBUFFER")
   CURSOR=$#BUFFER
   zle redisplay
 }
