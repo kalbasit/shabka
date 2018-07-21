@@ -264,7 +264,7 @@ export LAMP_CONF_PATH="${HOME}/.config/lamp/opsgenie-integration.conf"
 export VMAIL_VIM=nvim
 
 # Set the browser to my relay browser
-export BROWSER="${HOME}/.bin/relay-browser"
+export BROWSER="@rbrowser_bin@"
 
 # Set the GLOBAL_GOPATH
 export SYSTEM_GOPATH="${HOME}/.filesystem"

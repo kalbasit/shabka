@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
       --subst-var-by exa_bin ${pkgs.exa}/bin/exa \
       --subst-var-by fzf_out ${pkgs.fzf} \
       --subst-var-by git_bin ${pkgs.git}/bin/git \
+      --subst-var-by rbrowser_bin ${pkgs.rbrowser}/bin/rbrowser \
       --subst-var-by out_dir $out \
       --subst-var-by thefuck_out ${pkgs.thefuck}
 
