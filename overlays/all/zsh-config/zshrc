@@ -351,6 +351,11 @@ alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias grep='grep --color=auto'
 
+# send_code sends the code to apollo
+alias send_code='rsync -avuz --rsync-path=/usr/bin/rsync --delete --exclude=.snapshots/ --exclude=pkg/ --exclude=bin/ ~/code/ apollo:/volume1/Code/active/'
+# get_code gets code from apollo
+alias get_code='rsync -avuz --rsync-path=/usr/bin/rsync --delete --exclude=.snapshots/ --exclude=pkg/ --exclude=bin/ apollo:/volume1/Code/active/ ~/code/'
+
 # OS-Specific aliases
 if [[ "$OSTYPE" = darwin* ]]; then  # Mac only
 	alias mac_install_cert='sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain'
@@ -821,16 +826,6 @@ fi
 
 # load direnv
 eval "$(@direnv_dir@/bin/direnv hook zsh)"
-
-#####################################################################
-# host overrides
-#####################################################################
-
-# TODO: how to have nix manage this by host?
-
-# Source host-specific settings if the exists. Keep this last so it can
-# overwrite any of the other settings.
-[[ -r "@out_dir@/zsh/hosts/${SHORT_HOST}.zsh" ]] && source "@out_dir@/zsh/hosts/${SHORT_HOST}.zsh"
 
 #####################################################################
 # externally managed support
