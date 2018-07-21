@@ -15,6 +15,11 @@ stdenv.mkDerivation rec {
 
     cp -dr $src/bin $out/bin
 
+    install -Dm644 $src/zsh/functions/cow $out/zsh/functions/cow
+    install -d -m755 $out/userHome/.zsh/rc.d
+    substitute $src/zsh/i3-fpath.zsh $out/userHome/.zsh/rc.d/i3-fpath.zsh \
+      --subst-var-by out_dir $out
+
     substitute $src/config $out/userHome/.config/i3/config \
       --subst-var-by alacritty_bin ${pkgs.alacritty}/bin/alacritty \
       --subst-var-by brightnessctl_bin ${pkgs.brightnessctl}/bin/brightnessctl \
