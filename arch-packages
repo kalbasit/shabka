@@ -20,7 +20,6 @@ pulseaudio
 
 # X support for i3
 xorg-server
-xorg-xrandr
 i3-gaps
 i3blocks
 i3status

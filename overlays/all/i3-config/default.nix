@@ -29,7 +29,8 @@ stdenv.mkDerivation rec {
       --subst-var-by slack_bin ${pkgs.slack}/bin/slack \
       --subst-var-by termite_bin ${pkgs.termite}/bin/termite \
       --subst-var-by xset_bin ${pkgs.xlibs.xset}/bin/xset \
-      --subst-var-by xcape_bin ${pkgs.xcape}/bin/xcape
+      --subst-var-by xcape_bin ${pkgs.xcape}/bin/xcape \
+      --subst-var-by xrandr_bin ${pkgs.xlibs.xrandr}/bin/xrandr
   ''
   + (if myHostname == "hades" then ''
     substituteInPlace $out/userHome/.config/i3/config \
