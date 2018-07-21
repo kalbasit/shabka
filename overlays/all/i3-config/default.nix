@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
       --subst-var-by brightnessctl_bin ${pkgs.brightnessctl}/bin/brightnessctl \
       --subst-var-by charles_bin ${pkgs.charles}/bin/charles \
       --subst-var-by cpupower_bin ${pkgs.linuxPackages.cpupower}/bin/cpupower \
+      --subst-var-by gksudo_bin ${pkgs.gksu}/bin/gksudo \
       --subst-var-by i3lock_bin ${pkgs.i3lock}/bin/i3lock \
       --subst-var-by i3status_bin ${pkgs.i3status}/bin/i3status \
       --subst-var-by notify-send_bin ${pkgs.libnotify}/bin/notify-send \
@@ -33,9 +34,9 @@ stdenv.mkDerivation rec {
       --subst-var-by rofi_bin ${pkgs.rofi}/bin/rofi \
       --subst-var-by slack_bin ${pkgs.slack}/bin/slack \
       --subst-var-by termite_bin ${pkgs.termite}/bin/termite \
-      --subst-var-by xset_bin ${pkgs.xlibs.xset}/bin/xset \
       --subst-var-by xcape_bin ${pkgs.xcape}/bin/xcape \
-      --subst-var-by xrandr_bin ${pkgs.xlibs.xrandr}/bin/xrandr
+      --subst-var-by xrandr_bin ${pkgs.xlibs.xrandr}/bin/xrandr \
+      --subst-var-by xset_bin ${pkgs.xlibs.xset}/bin/xset
   ''
   + (if myHostname == "hades" then ''
     substituteInPlace $out/userHome/.config/i3/config \

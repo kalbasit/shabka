@@ -281,8 +281,8 @@ bindsym $mod+$alt+p mode "$mode_power"
 # CPU governor selection
 set $mode_cpugovernor CPU Scaling governor: (p) Performance, (o) Powersave
 mode "$mode_cpugovernor" {
-	bindsym p exec $nosid gksudo -- @cpupower_bin@ frequency-set --governor performance, mode "default"
-	bindsym o exec $nosid gksudo -- @cpupower_bin@ frequency-set --governor powersave, mode "default"
+	bindsym p exec $nosid @gksudo_bin@ -- @cpupower_bin@ frequency-set --governor performance, mode "default"
+	bindsym o exec $nosid @gksudo_bin@ -- @cpupower_bin@ frequency-set --governor powersave, mode "default"
 
 	# back to normal: Enter or Escape
 	bindsym Return mode "default"
