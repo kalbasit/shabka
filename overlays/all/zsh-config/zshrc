@@ -16,7 +16,7 @@
 [[ -z "${SHORT_HOST}" ]] && SHORT_HOST="${HOST/.*/}"
 
 # load the host profile
-[[ -f /etc/profile ]] && source /etc/profile
+[[ -r /etc/profile ]] && source /etc/profile
 
 #####################################################################
 # zplug
@@ -801,28 +801,18 @@ if [[ "$OSTYPE" = darwin* ]]; then
 fi
 
 # Load TheFuck
-if have thefuck; then
-	# Lazy load TheFuck
-	lazyLoadFuck () {
-		unalias fuck
-		unfunction lazyLoadFuck
-		eval "$(thefuck --alias)"
-	}
-	alias fuck=lazyLoadFuck
-fi
+pathappend PATH @thefuck_out@/bin
+lazyLoadFuck () {
+	unalias fuck
+	unfunction lazyLoadFuck
+	eval "$(thefuck --alias)"
+}
+alias fuck=lazyLoadFuck
 
-# Load travis
-[[ -r "${HOME}/.travis/travis.sh" ]] && source "${HOME}/.travis/travis.sh"
-
-# configure fzf
-# TODO: move this to the fzf package
-if have ag; then
-	export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
-else
-	# use git ls-tree to speed up FZF. Fall back to find if no current folder is
-	# not under Git.
-	export FZF_DEFAULT_COMMAND='(git ls-tree -r --name-only HEAD || find . -path "*/\.*" -prune -o -type f -print -o -type l -print | sed s/^..//) 2> /dev/null'
-fi
+# Load fzf
+export FZF_DEFAULT_COMMAND='(@git_bin@ ls-tree -r --name-only HEAD || @ag_bin@ --hidden --ignore .git -g "")'
+pathappend PATH @fzf_out@/bin
+source @fzf_out@/share/fzf/key-bindings.zsh
 
 # load direnv
 eval "$(@direnv_dir@/bin/direnv hook zsh)"
