@@ -69,8 +69,6 @@ self: super:
 
       nix-index
 
-      powerline-fonts
-
       rbrowser
 
       rofi-config

@@ -37,6 +37,11 @@
   sound.enable = true;
   hardware.pulseaudio.enable = true;
 
+  # setup the fonts
+  fonts.fonts = with pkgs; [
+    powerline-fonts
+  ];
+
   environment.systemPackages = with pkgs; [
     git
     curl
