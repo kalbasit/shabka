@@ -42,11 +42,16 @@
     powerline-fonts
   ];
 
+  # install some basic package system-wide, The day-to-day binaries are located
+  # under the overlays/all overlay.
   environment.systemPackages = with pkgs; [
     git
     curl
     neovim
   ];
+
+  # Enable docker support
+  virtualisation.docker.enable = true;
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
