@@ -23,6 +23,9 @@ self: super:
       alacritty
       alacritty-config
 
+      amazon-ecr-credential-helper
+      docker-credential-gcr
+
       bat
       (self.writeTextFile {
         name = "alias-bat-cat";
@@ -36,8 +39,6 @@ self: super:
       chromium-config
 
       direnv
-
-      docker-credential-gcr
 
       firefox
 
