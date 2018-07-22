@@ -30,10 +30,8 @@ configurations and by [NixOS][2] for the system.
   - [seoul256][11] color scheme.
   - uses rofi backed by [i3 dynamic workspaces][12] for workspace
       management. Allows an infinite number of workspaces with Alfred-like
-      interface for jumging from one to another. See this demo video
-      TODO:[here](#TODO).
-  - much more, see the README linked above.
-- Workflow optimised for a project-based namespacing. One i3 workspace,
+      interface for jumging from one to another.
+- Workflow optimised for a storgy-based name-spacing. One i3 workspace,
     with one tmux socket and a dedicated GOPATH. This helps separate
     projects down to the filesystem and allows one git repo (the base) to
     be checked out multiple times with different branches [git help
