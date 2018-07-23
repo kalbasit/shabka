@@ -16,6 +16,7 @@ in
     nixPath = [
       "nixpkgs=${system-path}/external/nixpkgs"
       "nixos-config=${system-path}/machines/${config.networking.hostName}/configuration.nix"
+      "nixpkgs-overlays=${system-path}/modules/overlays-compat"
     ];
   };
 }
