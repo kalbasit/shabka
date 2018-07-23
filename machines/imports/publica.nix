@@ -21,6 +21,17 @@ let
     else "";
 
   setupNginx = builtins.stringLength publica_dev_ssl_cert > 0 && builtins.stringLength publica_dev_ssl_key > 0 && builtins.stringLength publica_dev_ssl_ca > 0;
+
+  commonLocation = ''
+    proxy_set_header      X-Real-IP $remote_addr;
+    proxy_set_header      X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header      X-Forwarded-Proto $scheme;
+    proxy_set_header      Host $http_host;
+    proxy_set_header      X-NginX-Proxy true;
+    proxy_read_timeout    10m;
+    proxy_connect_timeout 10m;
+    proxy_redirect        off;
+  '';
 in
 
 {
@@ -45,15 +56,8 @@ in
     services.nginx.virtualHosts."api.publica.dev".sslCertificate = pkgs.writeText "api.publica.dev.cert" publica_dev_ssl_cert;
     services.nginx.virtualHosts."api.publica.dev".sslCertificateKey = pkgs.writeText "api.publica.dev.cert" publica_dev_ssl_key;
     services.nginx.virtualHosts."api.publica.dev".locations."/".extraConfig = ''
-        proxy_set_header      X-Real-IP $remote_addr;
-        proxy_set_header      X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header      X-Forwarded-Proto $scheme;
-        proxy_set_header      Host $http_host;
-        proxy_set_header      X-NginX-Proxy true;
-        proxy_read_timeout    10m;
-        proxy_connect_timeout 10m;
-        proxy_pass            http://127.0.0.1:8080;
-        proxy_redirect        off;
+      ${commonLocation}
+      proxy_pass            http://127.0.0.1:8080;
     '';
 
     # //console/ui
@@ -62,15 +66,8 @@ in
     services.nginx.virtualHosts."console.publica.dev".sslCertificate = pkgs.writeText "console.publica.dev.cert" publica_dev_ssl_cert;
     services.nginx.virtualHosts."console.publica.dev".sslCertificateKey = pkgs.writeText "console.publica.dev.cert" publica_dev_ssl_key;
     services.nginx.virtualHosts."console.publica.dev".locations."/".extraConfig = ''
-        proxy_set_header      X-Real-IP $remote_addr;
-        proxy_set_header      X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header      X-Forwarded-Proto $scheme;
-        proxy_set_header      Host $http_host;
-        proxy_set_header      X-NginX-Proxy true;
-        proxy_read_timeout    10m;
-        proxy_connect_timeout 10m;
-        proxy_pass            http://127.0.0.1:7000;
-        proxy_redirect        off;
+      ${commonLocation}
+      proxy_pass            http://127.0.0.1:7000;
     '';
 
     # //ads/controller
@@ -79,15 +76,8 @@ in
     services.nginx.virtualHosts."ctrl.publica.dev".sslCertificate = pkgs.writeText "ctrl.publica.dev.cert" publica_dev_ssl_cert;
     services.nginx.virtualHosts."ctrl.publica.dev".sslCertificateKey = pkgs.writeText "ctrl.publica.dev.cert" publica_dev_ssl_key;
     services.nginx.virtualHosts."ctrl.publica.dev".locations."/".extraConfig = ''
-        proxy_set_header      X-Real-IP $remote_addr;
-        proxy_set_header      X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header      X-Forwarded-Proto $scheme;
-        proxy_set_header      Host $http_host;
-        proxy_set_header      X-NginX-Proxy true;
-        proxy_read_timeout    10m;
-        proxy_connect_timeout 10m;
-        proxy_pass            http://127.0.0.1:8060;
-        proxy_redirect        off;
+      ${commonLocation}
+      proxy_pass            http://127.0.0.1:8060;
     '';
 
     # //homepage
@@ -96,15 +86,8 @@ in
     services.nginx.virtualHosts."home.publica.dev".sslCertificate = pkgs.writeText "home.publica.dev.cert" publica_dev_ssl_cert;
     services.nginx.virtualHosts."home.publica.dev".sslCertificateKey = pkgs.writeText "home.publica.dev.cert" publica_dev_ssl_key;
     services.nginx.virtualHosts."home.publica.dev".locations."/".extraConfig = ''
-        proxy_set_header      X-Real-IP $remote_addr;
-        proxy_set_header      X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header      X-Forwarded-Proto $scheme;
-        proxy_set_header      Host $http_host;
-        proxy_set_header      X-NginX-Proxy true;
-        proxy_read_timeout    10m;
-        proxy_connect_timeout 10m;
-        proxy_pass            http://127.0.0.1:7010;
-        proxy_redirect        off;
+      ${commonLocation}
+      proxy_pass            http://127.0.0.1:7010;
     '';
 
     # //ads/app/src/demo
@@ -114,15 +97,8 @@ in
     services.nginx.virtualHosts."js.publica.dev".sslCertificate = pkgs.writeText "js.publica.dev.cert" publica_dev_ssl_cert;
     services.nginx.virtualHosts."js.publica.dev".sslCertificateKey = pkgs.writeText "js.publica.dev.cert" publica_dev_ssl_key;
     services.nginx.virtualHosts."js.publica.dev".locations."/".extraConfig = ''
-        proxy_set_header      X-Real-IP $remote_addr;
-        proxy_set_header      X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header      X-Forwarded-Proto $scheme;
-        proxy_set_header      Host $http_host;
-        proxy_set_header      X-NginX-Proxy true;
-        proxy_read_timeout    10m;
-        proxy_connect_timeout 10m;
-        proxy_pass            http://127.0.0.1:3002;
-        proxy_redirect        off;
+      ${commonLocation}
+      proxy_pass            http://127.0.0.1:3002;
     '';
 
     # //ads/rewriter
@@ -131,15 +107,8 @@ in
     services.nginx.virtualHosts."rewriter.publica.dev".sslCertificate = pkgs.writeText "rewriter.publica.dev.cert" publica_dev_ssl_cert;
     services.nginx.virtualHosts."rewriter.publica.dev".sslCertificateKey = pkgs.writeText "rewriter.publica.dev.cert" publica_dev_ssl_key;
     services.nginx.virtualHosts."rewriter.publica.dev".locations."/".extraConfig = ''
-        proxy_set_header      X-Real-IP $remote_addr;
-        proxy_set_header      X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header      X-Forwarded-Proto $scheme;
-        proxy_set_header      Host $http_host;
-        proxy_set_header      X-NginX-Proxy true;
-        proxy_read_timeout    10m;
-        proxy_connect_timeout 10m;
-        proxy_pass            http://127.0.0.1:8061;
-        proxy_redirect        off;
+      ${commonLocation}
+      proxy_pass            http://127.0.0.1:8061;
     '';
 
     # //demo
@@ -148,15 +117,8 @@ in
     services.nginx.virtualHosts."demo.publica.dev".sslCertificate = pkgs.writeText "demo.publica.dev.cert" publica_dev_ssl_cert;
     services.nginx.virtualHosts."demo.publica.dev".sslCertificateKey = pkgs.writeText "demo.publica.dev.cert" publica_dev_ssl_key;
     services.nginx.virtualHosts."demo.publica.dev".locations."/".extraConfig = ''
-        proxy_set_header      X-Real-IP $remote_addr;
-        proxy_set_header      X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header      X-Forwarded-Proto $scheme;
-        proxy_set_header      Host $http_host;
-        proxy_set_header      X-NginX-Proxy true;
-        proxy_read_timeout    10m;
-        proxy_connect_timeout 10m;
-        proxy_pass            http://127.0.0.1:8124;
-        proxy_redirect        off;
+      ${commonLocation}
+      proxy_pass            http://127.0.0.1:8124;
     '';
   };
 }
