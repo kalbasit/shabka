@@ -56,6 +56,11 @@
   # Enable Virtualbox support
   virtualisation.virtualbox.host.enable = true;
 
+  # The power button should trigger suspend
+  services.logind.extraConfig = ''
+    HandlePowerKey=suspend
+  '';
+
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
