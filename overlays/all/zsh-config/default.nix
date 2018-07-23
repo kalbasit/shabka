@@ -27,9 +27,25 @@ stdenv.mkDerivation rec {
       --subst-var-by out_dir $out \
       --subst-var-by thefuck_out ${pkgs.thefuck}
 
+    substituteInPlace $out/zsh/functions/get_pr \
+      --subst-var-by curl_bin ${pkgs.curl}/bin/curl \
+      --subst-var-by git_bin ${pkgs.git}/bin/git \
+      --subst-var-by jq_bin ${pkgs.jq}/bin/jq \
+      --subst-var-by xsel_bin ${pkgs.xsel}/bin/xsel
+
+    substituteInPlace $out/zsh/functions/git_gopath_formatted_repo_path \
+      --subst-var-by git_bin ${pkgs.git}/bin/git \
+      --subst-var-by perl_bin ${pkgs.perl}/bin/perl
+
     substituteInPlace $out/zsh/functions/jsonpp \
       --subst-var-by python_bin ${pkgs.python37Full}/bin/python \
       --subst-var-by pygmentize_bin ${pkgs.python36Packages.pygments}/bin/pygmentize
+
+    substituteInPlace $out/zsh/functions/new_pr \
+      --subst-var-by curl_bin ${pkgs.curl}/bin/curl \
+      --subst-var-by git_bin ${pkgs.git}/bin/git \
+      --subst-var-by jq_bin ${pkgs.jq}/bin/jq \
+      --subst-var-by xsel_bin ${pkgs.xsel}/bin/xsel
 
     substituteInPlace $out/zsh/functions/tmycli \
       --subst-var-by mycli_bin ${pkgs.mycli}/bin/mycli \
@@ -41,6 +57,9 @@ stdenv.mkDerivation rec {
 
     substituteInPlace $out/zsh/functions/pet_prev \
       --subst-var-by pet_bin ${pkgs.pet}/bin/pet
+
+    substituteInPlace $out/zsh/functions/pr \
+      --subst-var-by git_bin ${pkgs.git}/bin/git
 
     substituteInPlace $out/zsh/functions/xmlpp \
       --subst-var-by xmllint_bin ${pkgs.libxml2Python}/bin/xmllint
