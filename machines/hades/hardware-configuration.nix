@@ -69,12 +69,6 @@
       fsType = "vfat";
     };
 
-    "/nix-store" = {
-      device = "/dev/disk/by-uuid/e2b2367b-f458-4c55-a3f0-87cef3366d62";
-      fsType = "btrfs";
-      options = [ "subvol=@nixos/@nix-store" ];
-    };
-
     # Root
 
     "/mnt/volumes/root" = {
