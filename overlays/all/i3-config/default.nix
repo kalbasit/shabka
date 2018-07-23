@@ -40,10 +40,10 @@ stdenv.mkDerivation rec {
   ''
   + (if myHostname == "hades" then ''
     substituteInPlace $out/userHome/.config/i3/config \
-      --subst-var-by int_monitor eDP1 \
+      --subst-var-by int_monitor eDP-1 \
       --subst-var-by int_mode 1920x1080 \
       --subst-var-by int_scale 1x1 \
-      --subst-var-by ext_monitor DP-1-2
+      --subst-var-by ext_monitor DP-2
   '' else "")
   + (if myHostname == "cratos" then ''
     substituteInPlace $out/userHome/.config/i3/config \
