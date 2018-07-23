@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  dotfiles-path = builtins.path { path = ../..; name = "dotfiles"; };
+  system-path = builtins.toPath ../..;
 in
 
 {
@@ -14,10 +14,8 @@ in
       auto-optimise-store = true
     '';
     nixPath = [
-      "nixpkgs=/home/kalbasit/code/personal/base/src/github.com/kalbasit/system/external/nixpkgs"
-      # "nixos-config=${dotfiles-path}/machines/${config.networking.hostName}/configuration.nix"
-      "nixos-config=/home/kalbasit/code/personal/base/src/github.com/kalbasit/system/machines/${config.networking.hostName}/configuration.nix"
-      "/nix/var/nix/profiles/per-user/root/channels"
+      "nixpkgs=${system-path}/external/nixpkgs"
+      "nixos-config=${system-path}/machines/${config.networking.hostName}/configuration.nix"
     ];
   };
 }
