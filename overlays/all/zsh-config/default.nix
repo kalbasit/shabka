@@ -41,6 +41,9 @@ stdenv.mkDerivation rec {
       --subst-var-by python_bin ${pkgs.python37Full}/bin/python \
       --subst-var-by pygmentize_bin ${pkgs.python36Packages.pygments}/bin/pygmentize
 
+    substituteInPlace $out/zsh/functions/jspp \
+      --subst-var-by js-beautify_bin ${pkgs.python36Packages.jsbeautifier}/bin/js-beautify
+
     substituteInPlace $out/zsh/functions/new_pr \
       --subst-var-by curl_bin ${pkgs.curl}/bin/curl \
       --subst-var-by git_bin ${pkgs.git}/bin/git \
