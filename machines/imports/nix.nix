@@ -9,7 +9,6 @@ in
     buildCores = 0;
     daemonIONiceLevel = 7;
     daemonNiceLevel = 10;
-    useSandbox = true;
     extraOptions = ''
       auto-optimise-store = true
     '';
@@ -17,5 +16,6 @@ in
       "nixpkgs=${system-path}/external/nixpkgs"
       "nixos-config=${system-path}/machines/${config.networking.hostName}/configuration.nix"
     ];
+    useSandbox = true;
   };
 }
