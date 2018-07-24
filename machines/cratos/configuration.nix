@@ -3,6 +3,8 @@
 {
   # Include the results of the hardware scan.
   imports = [
+    <nixos-hardware/dell/xps/13-9360>
+
     ./hardware-configuration.nix
 
     ../../modules/common.nix
