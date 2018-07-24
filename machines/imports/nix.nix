@@ -6,6 +6,7 @@ in
 
 {
   nix = {
+    autoOptimiseStore = true;
     buildCores = 0;
     daemonIONiceLevel = 7;
     daemonNiceLevel = 10;
