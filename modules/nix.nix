@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  system-path = builtins.toPath ../..;
+  system-path = builtins.toPath ./..;
 in
 
 {

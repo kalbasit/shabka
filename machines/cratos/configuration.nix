@@ -5,10 +5,10 @@
   imports = [
     ./hardware-configuration.nix
 
-    ../imports/common.nix
+    ../../modules/common.nix
 
-    ../imports/i3.nix
-    ../imports/sway.nix
+    ../../modules/i3.nix
+    ../../modules/sway.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
