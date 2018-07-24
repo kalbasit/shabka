@@ -5,6 +5,8 @@
   imports = [
     ./hardware-configuration.nix
 
+    ../imports/intel.nix
+
     ../imports/common.nix
 
     ../imports/i3.nix
