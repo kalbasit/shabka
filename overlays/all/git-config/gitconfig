@@ -38,7 +38,7 @@
 	pullff         = pull --ff-only
 	r              = !git l -20
 	ra             = !git r --all
-	sp             = smart-pull # gem install git-smart
+	sp             = pull --rebase --autostash
 	st             = status
 	sta            = ls-files --exclude-per-directory=.gitignore --exclude-from=.git/info/exclude -t -o -u -s -m -d
 	stc            = diff --stat --name-status --cached
