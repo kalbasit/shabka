@@ -63,6 +63,9 @@
   # Enable Virtualbox support
   virtualisation.virtualbox.host.enable = true;
 
+  # Synchronise the clock with NTP
+  services.ntp.enable = true;
+
   # The power button should trigger suspend
   services.logind.extraConfig = ''
     HandlePowerKey=suspend
