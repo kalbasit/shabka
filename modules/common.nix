@@ -53,6 +53,10 @@
     neovim
   ];
 
+  # Enable GnuPG support
+  programs.gnupg.agent.enable = true;
+  programs.gnupg.agent.enableBrowserSocket = true;
+
   # Enable docker support
   virtualisation.docker.enable = true;
 
