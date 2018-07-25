@@ -80,8 +80,8 @@ in
             # TODO: https://github.com/NixOS/nixpkgs/pull/43399
             "webapi-vim"
 
-            # "vim-maktaba"
-            # "vim-bazel"
+            "vim-maktaba"
+            "vim-bazel"
           ];
         }
       ];
