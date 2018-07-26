@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
       --subst-var-by charles_bin ${pkgs.charles}/bin/charles \
       --subst-var-by cpupower_bin ${pkgs.linuxPackages.cpupower}/bin/cpupower \
       --subst-var-by gksudo_bin ${pkgs.gksu}/bin/gksudo \
-      --subst-var-by i3lock_bin ${pkgs.i3lock}/bin/i3lock \
       --subst-var-by i3status_bin ${pkgs.i3status}/bin/i3status \
       --subst-var-by notify-send_bin ${pkgs.libnotify}/bin/notify-send \
       --subst-var-by pactl_bin ${pkgs.pulseaudio}/bin/pactl \
@@ -36,6 +35,7 @@ stdenv.mkDerivation rec {
       --subst-var-by termite_bin ${pkgs.termite}/bin/termite \
       --subst-var-by xcape_bin ${pkgs.xcape}/bin/xcape \
       --subst-var-by xrandr_bin ${pkgs.xlibs.xrandr}/bin/xrandr \
+      --subst-var-by xautolock_bin ${pkgs.xautolock}/bin/xautolock \
       --subst-var-by xset_bin ${pkgs.xlibs.xset}/bin/xset
   ''
   + (if myHostname == "hades" then ''
