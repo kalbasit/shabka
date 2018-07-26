@@ -2,8 +2,8 @@
 
 let
   image = pkgs.fetchurl {
-    url = "https://i.imgur.com/7kb9cEF.png"; # hosted on my imgur
-    sha256 = "01k36djnp58cv1ik1afz8l2rmfwmmyizgjsysi84hf1rcjrqqqsq";
+    url = "https://i.imgur.com/VwqWOwM.png"; # hosted on my imgur
+    sha256 = "0mw3nk4aqjdikm4q9f0f65kj99w4sv93r0naf8s8366h5sdvw5g3";
   };
 in
 
