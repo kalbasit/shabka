@@ -239,7 +239,7 @@ source "@out_dir@/zsh/functions.zsh"
 #####################################################################
 
 # export the code path
-export CODE_PATH="${HOME}/code"
+export CODE_PATH="/code"
 
 if [[ "$OSTYPE" = linux* ]]; then
 	# GPG_TTY is needed for gpg with pinentry-curses
@@ -359,9 +359,9 @@ if [[ -o interactive ]]; then
 	alias grep='grep --color=auto'
 
 	# send_code sends the code to apollo
-	alias send_code='rsync -avuz --rsync-path=/usr/bin/rsync --delete --exclude=.snapshots/ --exclude=pkg/ --exclude=bin/ ~/code/ apollo:/volume1/Code/active/'
+	alias send_code='rsync -avuz --rsync-path=/usr/bin/rsync --delete --exclude=.snapshots/ --exclude=pkg/ --exclude=bin/ "${CODE_PATH}/" apollo:/volume1/Code/active/'
 	# get_code gets code from apollo
-	alias get_code='rsync -avuz --rsync-path=/usr/bin/rsync --delete --exclude=.snapshots/ --exclude=pkg/ --exclude=bin/ apollo:/volume1/Code/active/ ~/code/'
+	alias get_code='rsync -avuz --rsync-path=/usr/bin/rsync --delete --exclude=.snapshots/ --exclude=pkg/ --exclude=bin/ apollo:/volume1/Code/active/ "${CODE_PATH}/"'
 
 	# OS-Specific aliases
 	if [[ "$OSTYPE" = darwin* ]]; then  # Mac only
