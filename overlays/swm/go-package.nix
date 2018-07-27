@@ -3,15 +3,15 @@
 
 buildGoPackage rec {
   name = "swm-unstable-${version}";
-  version = "2018-04-19";
-  rev = "de4a7564d2e002f5773fe4b3fcbe2c22e9abe6b6";
+  version = "2018-07-27";
+  rev = "b0ba0d9bf880f1c2e6bb4503b9a14062d499ecbf";
 
   goPackagePath = "github.com/kalbasit/swm";
 
   src = fetchgit {
     inherit rev;
     url = "https://github.com/kalbasit/swm";
-    sha256 = "0d62rnci528ckfgh1jb7k16m9haa6infl7mrmiwlinynm8idca49";
+    sha256 = "1dxxq6a2hf67gq578kzd9795vaslpddym00lia3vp1rf0z8kvb99";
   };
 
   goDeps = ./deps.nix;
