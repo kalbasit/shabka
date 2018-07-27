@@ -3,10 +3,10 @@
 
   firefox = {
     enableGoogleTalkPlugin = true;
-    #enableAdobeFlash = true;
+    enableAdobeFlash = true;
   };
 
   chromium = {
-    #enablePepperFlash = true;
+    enablePepperFlash = true;
   };
 }
