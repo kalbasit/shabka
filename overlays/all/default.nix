@@ -57,6 +57,8 @@ self: super:
 
       jq
 
+      lastpass-cli
+
       less-config
 
       mercurial
