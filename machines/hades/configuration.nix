@@ -9,8 +9,6 @@
 
     ./hardware-configuration.nix
 
-    ../../modules/intel.nix
-
     ../../modules/common.nix
 
     ../../modules/i3.nix
