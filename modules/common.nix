@@ -91,9 +91,6 @@
   # allow Mosh server in
   networking.firewall.allowedUDPPortRanges = [ { from = 60000; to = 61000; } ];
 
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
-
   # hide process information of other users when running non-root
   security.hideProcessInformation = true;
 

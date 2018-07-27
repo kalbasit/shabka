@@ -15,6 +15,8 @@
 
     ../../modules/i3.nix
     ../../modules/sway.nix
+
+    ../../modules/printers.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
