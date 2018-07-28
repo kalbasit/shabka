@@ -1,0 +1,7 @@
+#
+# vim:ft=zsh:
+#
+
+function nixos-start-vm() {
+  QEMU_NET_OPTS="hostfwd=tcp::2222-:22" ./result/bin/run-*-vm
+}
