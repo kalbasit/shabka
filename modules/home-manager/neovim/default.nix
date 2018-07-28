@@ -1,9 +1,10 @@
 { pkgs, ... }:
 
-{
-  programs.neovim = {
-    vimAlias = true;
+let
+  my_plugins = import ./plugins.nix { inherit (pkgs) vimUtils fetchFromGitHub;  };
 
+in {
+  programs.neovim = {
     withPython = true;
     extraPythonPackages = [pkgs.python27Packages.neovim];
 
