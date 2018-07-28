@@ -3,6 +3,10 @@
 let
   system-path = builtins.toPath /code/personal/base/src/github.com/kalbasit/system;
 in {
+  imports = [
+    ./modules/home-manager/neovim
+  ];
+
   programs.home-manager = {
     enable = true;
     # path = "https://github.com/rycee/home-manager/archive/master.tar.gz";
