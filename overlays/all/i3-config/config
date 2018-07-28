@@ -118,8 +118,7 @@ bindsym $mod+a focus parent
 bindsym $mod+d focus child
 
 # start a region screenshot
-# TODO: Replace deepin-screenshot, not available through Nix!
-bindsym $mod+Shift+4 exec deepin-screenshot
+bindsym $mod+Shift+4 exec @maim_bin@ -s ~/Desktop/screenshot-`date +%Y-%m-%d_%H:%M:%S`.png
 
 # focus the urgent window
 bindsym $mod+x [urgent=latest] focus

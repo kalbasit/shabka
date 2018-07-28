@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
       --subst-var-by cpupower_bin ${pkgs.linuxPackages.cpupower}/bin/cpupower \
       --subst-var-by gksudo_bin ${pkgs.gksu}/bin/gksudo \
       --subst-var-by i3status_bin ${pkgs.i3status}/bin/i3status \
+      --subst-var-by maim_bin ${pkgs.maim}/bin/maim \
       --subst-var-by notify-send_bin ${pkgs.libnotify}/bin/notify-send \
       --subst-var-by pactl_bin ${pkgs.pulseaudio}/bin/pactl \
       --subst-var-by rbrowser_bin ${pkgs.rbrowser}/bin/rbrowser \
