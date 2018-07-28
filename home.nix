@@ -62,8 +62,6 @@ in {
       most
       most-config
 
-      neovim
-
       nix-index
 
       # curses-based file manager
