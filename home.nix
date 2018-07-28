@@ -62,6 +62,9 @@ in {
 
       nix-index
 
+      # curses-based file manager
+      ranger
+
       rbrowser
 
       rofi-config
