@@ -26,7 +26,7 @@ in {
       vam.knownPlugins = pkgs.vimPlugins // my_plugins;
       vam.pluginDictionaries = [
         {
-          names = [
+          names = [ # vimPlugins
             "Gist"
             "Gundo"
             "LanguageClient-neovim"
@@ -47,23 +47,13 @@ in {
             "rhubarb"
             "sleuth"
             "surround"
-            "vim-PreserveNoEOL"
             "vim-airline"
             "vim-airline-themes"
-            "vim-better-whitespace"
-            "vim-colemak"
-            "vim-color-seoul256"
-            "vim-csv"
-            "vim-emmet"
             "vim-eunuch"
             "vim-go"
             "vim-markdown"
-            "vim-pig"
             "vim-signify"
             "vim-speeddating"
-            "vim-terraform"
-            "vim-vissort"
-            "vim-zoomwintab"
 
             ## DeoPlete completion support
             "deoplete-nvim"
@@ -71,16 +61,27 @@ in {
             # Golang support
             "deoplete-go"
 
-            # Typescript support
-            # "vim-typescript"    # TODO: https://github.com/kalbasit/dotfiles/issues/15
-            "vim-yats"
-
             # required by Gist
             # TODO: https://github.com/NixOS/nixpkgs/pull/43399
             "webapi-vim"
 
             "vim-maktaba"
             "vim-bazel"
+          ] ++ [ # my_plugins
+            "vim-PreserveNoEOL"
+            "vim-better-whitespace"
+            "vim-colemak"
+            "vim-color-seoul256"
+            "vim-csv"
+            "vim-emmet"
+            "vim-pig"
+            "vim-terraform"
+            "vim-vissort"
+            "vim-zoomwintab"
+
+            # Typescript support
+            # "vim-typescript"    # TODO: https://github.com/kalbasit/dotfiles/issues/15
+            "vim-yats"
           ];
         }
       ];
