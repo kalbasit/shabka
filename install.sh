@@ -18,8 +18,9 @@ if [[ ! -e "${HOME}/.config/nixpkgs" ]]; then
 fi
 
 echo "Installing nix profile"
-nix-env -f '<nixpkgs>' -iA all
+nix-shell -p home-manager --run 'home-manager switch'
 
+# TODO: migrate all these packages to the home-manager
 if [[ -d "${HOME}/.nix-profile/userHome" ]]; then
 	echo "Creating dotfiles links in user home"
 	pushd "${HOME}" > /dev/null
