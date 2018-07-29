@@ -4,6 +4,7 @@ let
   system-path = builtins.toPath /code/personal/base/src/github.com/kalbasit/system;
 in {
   imports = [
+    ./modules/home-manager/git
     ./modules/home-manager/neovim
   ];
 
@@ -40,8 +41,7 @@ in {
 
       gist
 
-      git
-      git-config
+      gnupg
 
       go
 

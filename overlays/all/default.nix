@@ -2,7 +2,6 @@ self: super:
 
 {
   alacritty-config   = self.callPackage ./alacritty-config {};
-  git-config         = self.callPackage ./git-config {};
   i3-config          = self.callPackage ./i3-config {};
   i3status-config    = self.callPackage ./i3status-config {};
   chromium-config    = self.callPackage ./chromium-config {};
