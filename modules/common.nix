@@ -27,6 +27,9 @@
   # set the EDITOR to neovim
   environment.variables.EDITOR = "nvim";
 
+  # install all completions libraries for system packages
+  environment.pathsToLink = [ "/share/zsh" ];
+
   # set the default locale to en_US.UTF-8
   i18n.defaultLocale = "en_US.UTF-8";
 
