@@ -12,55 +12,27 @@
       aa             = "add --all .";
       aap            = "!git aa -p";
       amend          = "commit --amend";
-      cat            = "-p cat-file -p";
       cb             = "checkout -b";
       ci             = "commit";
       co             = "checkout";
-      co-branch      = "!f() { git checkout-index -a -f --prefix=$1/; }; f";
       com            = "checkout master";
-      cow            = "!git checkout $(i3-msg -t get_workspaces | jq -r '.[] | if .focused == true then .name else empty end') 2>/dev/null || git checkout -b $(i3-msg -t get_workspaces | jq -r '.[] | if .focused == true then .name else empty end')";
       credit         = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f";
-      current-branch = "!git symbolic-ref -q HEAD | sed -e 's|^refs/heads/||'";
       dc             = "diff --cached";
       di             = "diff";
-      ds             = "diff --stat=160,120";
       fa             = "fetch --all";
       famff          = "!git fetch --all && git merge --ff-only origin/master";
       famm           = "!git fetch --all && git merge origin/master";
       faro           = "!git fetch --all && git rebase origin/master";
-      ff             = "merge --ff-only";
       generate-patch = "!git-format-patch --patch-with-stat --raw --signoff";
       l              = "log --graph --pretty=format':%C(yellow)%h %Cgreen%G?%Cblue%d%Creset %s %C(white) %an, %ar%Creset'";
-      la             = "!git l --all";
-      last           = "cat-file commit HEAD";
       lol            = "log --pretty=oneline --abbrev-commit --graph --decorate";
       ls-ignored     = "ls-files --others -i --exclude-standard";
-      noff           = "merge --no-ff";
-      nvgc           = "!ionice -n7 nice -n20 git vgc";
       pob            = "!f() { git push -u \${1:-origin} `git symbolic-ref HEAD`; }; f";
       pobf           = "!f() { git push -fu \${1:-origin} `git symbolic-ref HEAD`; }; f";
-      pullff         = "pull --ff-only";
-      r              = "!git l -20";
-      ra             = "!git r --all";
       sp             = "pull --rebase --autostash";
       st             = "status";
-      sta            = "ls-files --exclude-per-directory=.gitignore --exclude-from=.git/info/exclude -t -o -u -s -m -d";
-      stc            = "diff --stat --name-status --cached";
-      stu            = "status -uno";
-      top            = "!eval cd \"$(pwd)/$(git rev-parse --show-cdup)\" && pwd";
-      track          = "checkout -t";
       unstage        = "reset HEAD --";
-      up             = "remote update";
-      vgc            = "repack -f -a -d --depth=250 --window=250";
       who            = "shortlog -s -s";
-
-      # Go's codereview
-      change = "codereview change";
-      gofmt = "codereview gofmt";
-      mail = "codereview mail";
-      pending = "codereview pending";
-      submit = "codereview submit";
-      sync = "codereview sync";
     };
 
     extraConfig = {
@@ -74,7 +46,7 @@
       };
 
       core = {
-        whitespace   = "trailing-space,space-before-tab,-indent-with-non-tab,cr-at-eol";
+        whitespace = "trailing-space,space-before-tab,-indent-with-non-tab,cr-at-eol";
       };
 
       diff = {
