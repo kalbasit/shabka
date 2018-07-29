@@ -8,7 +8,6 @@ self: super:
   dunst-config       = self.callPackage ./dunst-config {};
   less-config        = self.callPackage ./less-config {};
   most-config        = self.callPackage ./most-config {};
-  rofi-config        = self.callPackage ./rofi-config {};
   surfingkeys-config = self.callPackage ./surfingkeys-config {};
   sway-config        = self.callPackage ./sway-config {};
   termite-config     = self.callPackage ./termite-config {};

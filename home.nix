@@ -15,6 +15,18 @@ in {
     maxCacheTtl = 68400;
   };
 
+  programs.rofi = {
+    enable = true;
+
+    extraConfig = ''
+      rofi.modi: window,run,ssh,drun,i3Workspaces:i3-switch-workspaces,i3RenameWorkspace:i3-rename-workspace,i3MoveContainer:i3-move-container,SwayWorkspaces:sway-switch-workspaces,SwayRenameWorkspace:sway-rename-workspace,SwayMoveContainer:sway-move-container
+    '';
+
+    font = "Cousine 9";
+
+    theme = "Adapta-Nokto";
+  };
+
   programs.home-manager = {
     enable = true;
     # path = "https://github.com/rycee/home-manager/archive/master.tar.gz";
@@ -75,8 +87,6 @@ in {
       ranger
 
       rbrowser
-
-      rofi-config
 
       surfingkeys-config
 
