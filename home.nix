@@ -8,6 +8,13 @@ in {
     ./modules/home-manager/neovim
   ];
 
+  services.gpg-agent = {
+    enable = true;
+
+    defaultCacheTtl = 68400;
+    maxCacheTtl = 68400;
+  };
+
   programs.home-manager = {
     enable = true;
     # path = "https://github.com/rycee/home-manager/archive/master.tar.gz";
