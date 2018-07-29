@@ -18,7 +18,7 @@ if [[ ! -e "${HOME}/.config/nixpkgs" ]]; then
 fi
 
 echo "Installing nix profile"
-nix-shell -p home-manager --run 'home-manager switch'
+home-manager switch
 
 # TODO: migrate all these packages to the home-manager
 if [[ -d "${HOME}/.nix-profile/userHome" ]]; then
