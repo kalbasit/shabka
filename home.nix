@@ -6,6 +6,7 @@ in {
   imports = [
     ./modules/home-manager/git
     ./modules/home-manager/neovim
+    ./modules/home-manager/zsh
   ];
 
   services.gpg-agent = {
