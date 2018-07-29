@@ -1,9 +1,9 @@
 { config, pkgs, lib, ... }:
 
 let
-  publica_dev_ssl_cert_path = /home/kalbasit/code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/publica.dev.crt;
-  publica_dev_ssl_key_path = /home/kalbasit/code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/publica.dev.key;
-  publica_dev_ssl_ca_path = /home/kalbasit/code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/ca.crt;
+  publica_dev_ssl_cert_path = /code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/publica.dev.crt;
+  publica_dev_ssl_key_path = /code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/publica.dev.key;
+  publica_dev_ssl_ca_path = /code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/ca.crt;
 
   publica_dev_ssl_cert =
     if builtins.pathExists (builtins.toPath publica_dev_ssl_cert_path)
