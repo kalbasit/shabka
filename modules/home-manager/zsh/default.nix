@@ -73,7 +73,13 @@
 
     plugins = [
       {
-
+        name = "zsh-kubernetes";
+        src = pkgs.fetchFromGitHub {
+          owner = "Dbz";
+          repo = "zsh-kubernetes";
+          rev = "8d7045d553244f84e1c65434057cc7c2602390cd";
+          sha256 = "0z6i9wjjklb4lvr7zjhbphibsyx51psv50gm07mbb0kj9058j6kc";
+        };
       }
     ];
   };
