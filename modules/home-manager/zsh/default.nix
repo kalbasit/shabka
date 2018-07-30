@@ -5,9 +5,9 @@
     enable = true;
 
     shellAliases = {
-      e = "\${EDITOR:-vim}";
-      hm = "home-manager";
+      e = "\${EDITOR:-nvim}";
       gl = "github_commit_link";
+      hm = "home-manager";
       http = "http --print=HhBb";
       ll = "ls -la";
       pw = "ps aux | grep -v grep | grep -e";
@@ -16,6 +16,8 @@
       serve_this = "python2 -m SimpleHTTPServer";
       t = "task";
       utf8test = "curl -L https://github.com/tmux/tmux/raw/master/tools/UTF-8-demo.txt";
+      vim = "nvim";
+      vi = "nvim";
 
       # TODO: move this to the swm package
       s = "swm tmux switch-client";
