@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   programs.zsh = {
@@ -45,15 +45,30 @@
       #if [[ "$OSTYPE" = darwin* ]]; then  # Mac only
       #	alias mac_install_cert='sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain'
       #fi
+
+      # use 'fc -El 1' for "dd.mm.yyyy"
+      # use 'fc -il 1' for "yyyy-mm-dd"
+      # use 'fc -fl 1' for mm/dd/yyyy
+      history = "fc -il 1";
+    };
+
+    history = {
+      expireDuplicatesFirst = true;
+      save = 100000;
+      size = 100000;
     };
 
     initExtra = builtins.readFile (pkgs.substituteAll {
       src = ./init-extra.zsh;
 
-      gocode_bin = "${pkgs.gocode}/bin/gocode";
-      neovim_node_host_bin = "${pkgs.nodePackages.neovim}/bin/neovim-node-host";
-      typescript_server_bin = "${pkgs.nodePackages.typescript}/bin/tsserver";
-      xsel_bin = "${pkgs.xsel}/bin/xsel";
+      ag_bin       = "${pkgs.silver-searcher}/bin/ag";
+      bat_bin      = "${pkgs.bat}/bin/bat";
+      direnv_dir   = "${pkgs.direnv}";
+      exa_bin      = "${pkgs.exa}/bin/exa";
+      fzf_out      = "${pkgs.fzf}";
+      git_bin      = "${pkgs.git}/bin/git";
+      rbrowser_bin = "${pkgs.rbrowser}/bin/rbrowser";
+      thefuck_out  = "${pkgs.thefuck}";
     });
 
     plugins = [
