@@ -154,6 +154,11 @@
           sha256 = "0d9nf3aljqmpz2kjarsrb5nv4rjy8jnrkqdlalwm2299jklbsnmw";
         };
       }
+
+      {
+        name = "functions";
+        src = ./plugins/functions;
+      }
     ];
   };
 }
