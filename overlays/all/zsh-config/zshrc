@@ -332,8 +332,8 @@ pathprepend PATH "${HOME}/.cargo/bin"
 
 if [[ -o interactive ]]; then
 	alias e="${EDITOR:-vim}"
-	alias hm="home-manager"
 	alias gl='github_commit_link'
+	alias hm="home-manager"
 	alias http='http --print=HhBb'
 	alias ll="ls -la"
 	alias pw="ps aux | grep -v grep | grep -e"
