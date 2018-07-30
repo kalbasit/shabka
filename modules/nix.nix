@@ -16,6 +16,7 @@ in
     '';
 
     nixPath = [
+      "system-path=${system-path}"
       "nixpkgs=${system-path}/external/nixpkgs"
       "nixos-config=${system-path}/machines/${config.networking.hostName}/configuration.nix"
       "nixos-hardware=${system-path}/external/nixos-hardware"
