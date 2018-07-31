@@ -56,8 +56,7 @@ management, and to call binaries and .desktop files.
 ## NixOS
 
 ```
-$ git clone https://github.com/kalbasit/system.git
-$ git submodule update --init
+$ git clone --recurse-submodules https://github.com/kalbasit/system.git
 $ cd system
 $ ./install.sh
 ```
@@ -68,8 +67,7 @@ nixpkgs and nixos-config without having to export the NIX_PATH.
 ## Arch Linux
 
 ```
-$ git clone https://github.com/kalbasit/system.git
-$ git submodule update --init
+$ git clone --recurse-submodules https://github.com/kalbasit/system.git
 $ cd system
 $ ./install.sh
 ```
