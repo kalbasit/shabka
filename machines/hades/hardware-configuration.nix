@@ -58,12 +58,6 @@
       options = [ "subvol=@home-kalbasit-storage" ];
     };
 
-    "/home/kalbasit/VirtualBox/VMs" = {
-      device = "/dev/disk/by-uuid/d8a3aad7-3fe8-4986-acc5-c6f7525c9af4";
-      fsType = "btrfs";
-      options = [ "subvol=@home-kalbasit-virtualbox-vms" ];
-    };
-
     "/boot" = {
       device = "/dev/disk/by-uuid/F4E5-ABC1";
       fsType = "vfat";
