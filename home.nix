@@ -64,6 +64,8 @@ in {
 
       go
 
+      htop
+
       i3-config
       i3status-config
       dunst dunst-config
