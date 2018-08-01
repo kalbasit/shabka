@@ -49,6 +49,8 @@ in {
         '';
       })
 
+      browsh
+
       chromium
       chromium-config
 
