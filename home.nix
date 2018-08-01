@@ -22,7 +22,7 @@ in {
       rofi.modi: window,run,ssh,drun,i3Workspaces:i3-switch-workspaces,i3RenameWorkspace:i3-rename-workspace,i3MoveContainer:i3-move-container,SwayWorkspaces:sway-switch-workspaces,SwayRenameWorkspace:sway-rename-workspace,SwayMoveContainer:sway-move-container
     '';
 
-    font = "Hack 9";
+    font = "SourceCodePro 9";
 
     theme = "Adapta-Nokto";
   };

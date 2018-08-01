@@ -11,7 +11,7 @@ set $locker @xautolock_bin@ -locknow && sleep 1
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango:Hack 8
+font pango:SourceCodePro Regular 8
 
 # Colors
 # class                   border  backgr. text    indicator
