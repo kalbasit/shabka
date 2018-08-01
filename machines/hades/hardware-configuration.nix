@@ -33,40 +33,81 @@
     };
   };
 
-  fileSystems."/" =
-    { device = "/dev/disk/by-uuid/e2b2367b-f458-4c55-a3f0-87cef3366d62";
+  fileSystems = {
+    "/" = {
+      device = "/dev/disk/by-uuid/e2b2367b-f458-4c55-a3f0-87cef3366d62";
       fsType = "btrfs";
       options = [ "subvol=@nixos/@root" ];
     };
 
-  fileSystems."/home" =
-    { device = "/dev/disk/by-uuid/e2b2367b-f458-4c55-a3f0-87cef3366d62";
+    "/home" = {
+      device = "/dev/disk/by-uuid/e2b2367b-f458-4c55-a3f0-87cef3366d62";
       fsType = "btrfs";
       options = [ "subvol=@nixos/@home" ];
     };
 
-  fileSystems."/home/kalbasit/code" =
-    { device = "/dev/disk/by-uuid/e2b2367b-f458-4c55-a3f0-87cef3366d62";
+    "/code" = {
+      device = "/dev/disk/by-uuid/e2b2367b-f458-4c55-a3f0-87cef3366d62";
       fsType = "btrfs";
-      options = [ "subvol=@code" ];
+      options = [ "subvol=@code" "X-mount.mkdir=0700" ];
     };
 
-  fileSystems."/home/kalbasit/storage" =
-    { device = "/dev/disk/by-uuid/d8a3aad7-3fe8-4986-acc5-c6f7525c9af4";
+    "/home/kalbasit/storage" = {
+      device = "/dev/disk/by-uuid/d8a3aad7-3fe8-4986-acc5-c6f7525c9af4";
       fsType = "btrfs";
       options = [ "subvol=@home-kalbasit-storage" ];
     };
 
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/F4E5-ABC1";
+    "/boot" = {
+      device = "/dev/disk/by-uuid/F4E5-ABC1";
       fsType = "vfat";
     };
 
-  fileSystems."/nix-store" =
-    { device = "/dev/disk/by-uuid/e2b2367b-f458-4c55-a3f0-87cef3366d62";
+    # Root
+
+    "/mnt/volumes/root" = {
+      device = "/dev/disk/by-uuid/e2b2367b-f458-4c55-a3f0-87cef3366d62";
       fsType = "btrfs";
-      options = [ "subvol=@nixos/@nix-store" ];
     };
+
+    # Storage
+
+    "/mnt/volumes/storage" = {
+      device = "/dev/disk/by-uuid/d8a3aad7-3fe8-4986-acc5-c6f7525c9af4";
+      fsType = "btrfs";
+    };
+
+    # ArchOS
+
+    "/mnt/arch" = {
+      device = "/dev/disk/by-uuid/e2b2367b-f458-4c55-a3f0-87cef3366d62";
+      fsType = "btrfs";
+      options = [ "subvol=@arch/@root" ];
+    };
+
+    "/mnt/arch/home" = {
+      device = "/dev/disk/by-uuid/e2b2367b-f458-4c55-a3f0-87cef3366d62";
+      fsType = "btrfs";
+      options = [ "subvol=@arch/@home" ];
+    };
+
+    "/mnt/arch/code" = {
+      device = "/dev/disk/by-uuid/e2b2367b-f458-4c55-a3f0-87cef3366d62";
+      fsType = "btrfs";
+      options = [ "subvol=@code" ];
+    };
+
+    "/mnt/arch/home/kalbasit/storage" = {
+      device = "/dev/disk/by-uuid/d8a3aad7-3fe8-4986-acc5-c6f7525c9af4";
+      fsType = "btrfs";
+      options = [ "subvol=@home-kalbasit-storage" ];
+    };
+
+    "/mnt/arch/boot" = {
+      device = "/dev/disk/by-uuid/F4E5-ABC1";
+      fsType = "vfat";
+    };
+  };
 
   swapDevices =
     [ { device = "/dev/disk/by-uuid/a3e2591f-a1d4-4d75-b09c-094416b485c4"; }

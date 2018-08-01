@@ -1,17 +1,18 @@
-My dotfiles, which describes not only my home dir, but also my entire
-machine, is now managed by [Nix](https://nixos.org/nix) for the home
-configurations and by [NixOS](https://nixos.org) for the system.
+# kalbasit's System
+
+My system, which describes not only my home dir, but also my entire
+machine, is now managed by [Nix][1] for the home
+configurations and by [NixOS][2] for the system.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Features](#features)
 - [Screenshot](#screenshot)
 - [Installation](#installation)
-  - [First installation](#first-installation)
-  - [Subsequent linking](#subsequent-linking)
-- [Keeping private things private](#keeping-private-things-private)
+  - [NixOS](#nixos)
+  - [Arch Linux](#arch-linux)
 - [ZSH personal/work profiles](#zsh-personalwork-profiles)
   - [Profile](#profile)
   - [SSH Agents](#ssh-agents)
@@ -19,64 +20,57 @@ configurations and by [NixOS](https://nixos.org) for the system.
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+
 # Features
 
 - [Croscore fonts][8].
-- Colemak keyboard layout. My Kinesis Advantage 2 layout and settings.
-	are available [here][9].
-- i3 window manger (see [i3
-	README][10] for more information):
-	- Cousine font from the [Croscore fonts][8].
-	- [seoul256][11] color scheme.
-	- uses rofi backed by [i3 dynamic workspaces][12] for workspace
-		management. Allows an infinite number of workspaces with Alfred-like
-		interface for jumging from one to another. See this demo video
-		TODO:[here](#TODO).
-	- much more, see the README linked above.
-- Workflow optimised for a project-based namespacing. One i3 workspace,
-	with one tmux socket and a dedicated GOPATH. This helps separate
-	projects down to the filesystem and allows one git repo (the base) to
-	be checked out multiple times with different branches [git help
-	worktree][14]. For more information, please checkout [my workflow][15]
-	and my TMUX session manager [TMX][16].
+- Colemak keyboard layout. My Kinesis Advantage 2 layout and settings are available [here][9].
+- i3 window manger (see [i3 README][10] for more information):
+  - SourceCodePro font from the [Adobe][8].
+  - [seoul256][11] color scheme.
+  - uses rofi backed by [i3 dynamic workspaces][12] for workspace
+      management. Allows an infinite number of workspaces with Alfred-like
+      interface for jumging from one to another.
+- Workflow optimised for a storgy-based name-spacing. One i3 workspace,
+    with one tmux socket and a dedicated GOPATH. This helps separate
+    projects down to the filesystem and allows one git repo (the base) to
+    be checked out multiple times with different branches [git help
+    worktree][14]. For more information, please checkout my [story based
+    workflow manager](https://github.com/kalbasit/swm).
 - Vim optimised for working in Go, Python, Ruby, Typescript and many
-	more, please see my [Vim README][19] for more information.
+    more, please see my [Vim README][19] for more information.
 - Chromium augmented with Surfingkeys to bring my full Vim experience to
-	the browser. With Colemak layout and Github/Travis navigation helper,
-	see the [config file][17] for details.
+    the browser. With Colemak layout and Github/Travis navigation helper,
+    see the [config file][17] for details.
 
 # Screenshot
 
-This is Arch linux, running i3 window manager, chromium for browser and
-Termite for the terminal. I use `rofi` for i3 workspace management, and
-to call binaries and .desktop files.
+This is [NixOS][2], running i3 window manager, chromium for browser and
+[Alacritty][3] for the terminal. I use `rofi` for i3 workspace
+management, and to call binaries and .desktop files.
 
 ![Screenshot of my shell](https://i.imgur.com/gNF5iHs.png)
 
 # Installation
 
-You should clone this repository at `~/.dotfiles`.
+## NixOS
 
 ```
-$ git clone https://github.com/kalbasit/dotfiles.git ~/.dotfiles
-
+$ git clone --recurse-submodules https://github.com/kalbasit/system.git
+$ cd system
+$ ./install.sh
 ```
 
-## First installation
+TODO: instructions on how to run `nixos-rebuild` given the changed
+nixpkgs and nixos-config without having to export the NIX_PATH.
 
-TODO
+## Arch Linux
 
-## Subsequent linking
-
-TODO
-
-# Keeping private things private
-
-The dotfiles are not really the place for your private things. But it
-does fully support a `.private` sub-folder which you can track in any
-way you want. This is folder to keep your `~/.ssh` and your `~/.gnupg`.
-
-![Screenshot of .private](https://i.imgur.com/UvWQmze.png)
+```
+$ git clone --recurse-submodules https://github.com/kalbasit/system.git
+$ cd system
+$ ./install.sh
+```
 
 # ZSH personal/work profiles
 
@@ -137,9 +131,11 @@ function have() {
 
 ## SSH Agents
 
-The ssh agents is managed by [`~/.zsh/functions/ssh_agents`][7] which is loaded on
-startup of ZSH. It assigns an agent for each profile, so when you switch
-profiles, you will also switch the ssh agent and the keys it manages.
+The ssh agents is managed by
+[`overlays/all/zsh-config/zsh/functions/ssh_agents`][7] which is loaded
+on startup of ZSH. It assigns an agent for each profile, so when you
+switch profiles, you will also switch the ssh agent and the keys it
+manages.
 
 The keys for a particular profile should live under
 `~/.ssh/<profile-name>`, so your personal keys (for the default profile)
@@ -153,14 +149,16 @@ should live under `~/.ssh/personal` and not `~/.ssh`.
 |---|
 | [Wael Nasreddine](https://github.com/kalbasit) |
 
-[7]: https://github.com/kalbasit/dotfiles/blob/master/overlays/all/zsh-config/zsh/functions/ssh_agents
-[8]: https://en.wikipedia.org/wiki/Croscore_fonts
+[1]: https://nixos.org/nix
+[2]: https://nixos.org
+[3]: https://github.com/jwilm/alacritty
+[7]: https://github.com/kalbasit/system/blob/master/overlays/all/zsh-config/zsh/functions/ssh_agents
+[8]: https://adobe-fonts.github.io/source-code-pro/
 [9]: https://github.com/kalbasit/advantage2
-[10]: https://github.com/kalbasit/dotfiles/tree/master/.config/i3
+[10]: https://github.com/kalbasit/system/tree/master/.config/i3
 [11]: https://github.com/junegunn/seoul256.vim
-[12]: https://github.com/kalbasit/i3-dynamic-workspaces
+[12]: https://github.com/kalbasit/system/tree/master/overlays/all/i3-config/bin
 [14]: https://git-scm.com/docs/git-worktree
-[15]: https://github.com/kalbasit/workflow
 [16]: https://github.com/kalbasit/tmx
-[17]: https://github.com/kalbasit/dotfiles/blob/master/overlays/all/surfingkeys-config/surfingkeys.js
-[19]: https://github.com/kalbasit/dotfiles/tree/master/overlays/neovim
+[17]: https://github.com/kalbasit/system/blob/master/overlays/all/surfingkeys-config/surfingkeys.js
+[19]: https://github.com/kalbasit/system/tree/master/overlays/neovim

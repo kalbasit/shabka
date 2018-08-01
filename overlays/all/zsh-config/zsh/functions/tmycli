@@ -20,11 +20,11 @@ function tmycli() {
 
 		function D0_find_open_port() {
 			if [[ "$( uname )" = "Darwin" ]]; then
-				while [[ "$( netstat -anp tcp | awk "\$6 == \"LISTEN\" && \$4 ~ \".${tunnel_port}\"" | wc -l)" -gt 0 ]]; do
+				while [[ "$( @netstat_bin@ -anp tcp | awk "\$6 == \"LISTEN\" && \$4 ~ \".${tunnel_port}\"" | wc -l)" -gt 0 ]]; do
 					tunnel_port=$(( tunnel_port + 1 ))
 				done
 			elif [[ "$( uname )" = "Linux" ]]; then
-				while [[ "$( netstat -lnt | awk "\$6 == \"LISTEN\" && \$4 ~ \".${tunnel_port}\"" | wc -l)" -gt 0 ]]; do
+				while [[ "$( @netstat_bin@ -lnt | awk "\$6 == \"LISTEN\" && \$4 ~ \".${tunnel_port}\"" | wc -l)" -gt 0 ]]; do
 					tunnel_port=$(( tunnel_port + 1 ))
 				done
 			else
@@ -35,11 +35,11 @@ function tmycli() {
 
 		function D0_wait_for_tunnel_port() {
 			if [[ "$( uname )" = "Darwin" ]]; then
-				while [[ "$( netstat -anp tcp | awk "\$6 == \"LISTEN\" && \$4 ~ \".${tunnel_port}\"" | wc -l)" -eq 0 ]]; do
+				while [[ "$( @netstat_bin@ -anp tcp | awk "\$6 == \"LISTEN\" && \$4 ~ \".${tunnel_port}\"" | wc -l)" -eq 0 ]]; do
 					sleep 0.3
 				done
 			elif [[ "$( uname )" = "Linux" ]]; then
-				while [[ "$( netstat -lnt | awk "\$6 == \"LISTEN\" && \$4 ~ \".${tunnel_port}\"" | wc -l)" -eq 0 ]]; do
+				while [[ "$( @netstat_bin@ -lnt | awk "\$6 == \"LISTEN\" && \$4 ~ \".${tunnel_port}\"" | wc -l)" -eq 0 ]]; do
 					sleep 0.3
 				done
 			else
@@ -50,7 +50,7 @@ function tmycli() {
 
 		function D0_open_tunnel() {
 			# open the tunnel
-			ssh -f -N -L "${tunnel_port}:${mysql_host}:${mysql_port}" "${bastion_username}"@"${bastion_host}"
+			@ssh_bin@ -f -N -L "${tunnel_port}:${mysql_host}:${mysql_port}" "${bastion_username}"@"${bastion_host}"
 			# shellcheck disable=SC2009
 			ssh_pid="$( ps aux | grep "[s]sh -f -N -L ${tunnel_port}:${mysql_host}:${mysql_port} ${bastion_username}@${bastion_host}" | awk '{print $2}' )"
 		}
@@ -153,7 +153,7 @@ function tmycli() {
 		D0_find_open_port
 		D0_open_tunnel
 		D0_wait_for_tunnel_port
-		mycli --host "localhost" --port "${tunnel_port}" --user "${mysql_username}" --password "${mysql_password}" --database "${mysql_database}"
+		@mycli_bin@ --host "localhost" --port "${tunnel_port}" --user "${mysql_username}" --password "${mysql_password}" --database "${mysql_database}"
 	} always {
 	if [[ -n "${ssh_pid}" ]]; then
 		kill "${ssh_pid}"

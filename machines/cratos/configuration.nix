@@ -3,12 +3,16 @@
 {
   # Include the results of the hardware scan.
   imports = [
+    <nixos-hardware/dell/xps/13-9360>
+
     ./hardware-configuration.nix
 
-    ../imports/common.nix
+    ../../modules/common.nix
 
-    ../imports/i3.nix
-    ../imports/sway.nix
+    ../../modules/i3.nix
+    ../../modules/sway.nix
+
+    ../../modules/printers.nix
   ];
 
   # Use the systemd-boot EFI boot loader.

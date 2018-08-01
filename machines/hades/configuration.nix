@@ -3,12 +3,18 @@
 {
   # Include the results of the hardware scan.
   imports = [
+    <nixos-hardware/common/cpu/intel>
+    <nixos-hardware/common/pc/laptop>
+    <nixos-hardware/common/pc/laptop/ssd>
+
     ./hardware-configuration.nix
 
-    ../imports/common.nix
+    ../../modules/common.nix
 
-    ../imports/i3.nix
-    ../imports/sway.nix
+    ../../modules/i3.nix
+    ../../modules/sway.nix
+
+    ../../modules/printers.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -29,7 +35,7 @@
   # List services that you want to enable:
 
   # set the video drivers to modesetting so no other drivers are loaded
-  services.xserver.videoDrivers = ["modesetting"];
+  services.xserver.videoDrivers = lib.mkForce ["modesetting"];
 
   # Give people part of the video group access to adjust the backlight
   services.udev.extraRules = ''

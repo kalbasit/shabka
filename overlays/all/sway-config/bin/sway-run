@@ -1,35 +1,7 @@
-#!/bin/bash
-set -euo pipefail
+#! /usr/bin/env nix-shell
+#! nix-shell -i zsh
 
-# simplified pathprepend used for early X
-function _pathprepend() {
-  if [[ -d "${1}" ]] && ! [[ $PATH =~ (^|:)$1($|:) ]]; then
-    PATH="$1:$PATH"
-  fi
-}
-
-# simplified pathappend used for early X
-function _pathappend() {
-  if [[ -d "${1}" ]] && ! [[ $PATH =~ (^|:)$1($|:) ]]; then
-    PATH="$PATH:$1"
-  fi
-}
-
-# Important variable
-export EDITOR="@nvim_dir@/bin/nvim"
-export BROWSER="@out_dir@/bin/relay-browser"
-export MYFS="${HOME}/.local"
-export SUDO_EDITOR="nvim"
-export NOTMUCH_CONFIG="${HOME}/.mail/.notmuch/config"
-
-# add my bin folders to the PATH
-_pathprepend "${HOME}/code/bin"
-_pathprepend "${MYFS}/bin"
-if [[ -d "${MYFS}/opt" ]]; then
-  for dir in ${MYFS}/opt/*/bin; do
-    _pathappend "${dir}"
-  done
-fi
+source "${HOME}/.zshrc"
 
 # make java applications look decent
 export _JAVA_AWT_WM_NONREPARENTING=1
@@ -49,9 +21,6 @@ export WLC_REPEAT_RATE=30
 # export GTK_IM_MOUDLE=ibus
 # export XMODIFIERS=@im=ibus
 # export QT_IM_MODULE=ibus
-
-unset -f _pathprepend
-unset -f _pathappend
 
 # move the old sway log file out of the way
 if [[ -f "${HOME}/.sway.log" ]]; then

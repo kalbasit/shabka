@@ -7,11 +7,11 @@
 set $mod Mod4
 set $alt Mod1
 set $nosid --no-startup-id
-set $locker @i3lock_bin@ && sleep 1
+set $locker @xautolock_bin@ -locknow && sleep 1
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango:Cousine 8
+font pango:SourceCodePro Regular 8
 
 # Colors
 # class                   border  backgr. text    indicator
@@ -118,8 +118,7 @@ bindsym $mod+a focus parent
 bindsym $mod+d focus child
 
 # start a region screenshot
-# TODO: re-do deepin-screenshot
-bindsym $mod+Shift+4 exec deepin-screenshot
+bindsym $mod+Shift+4 exec @maim_bin@ -s ~/Desktop/screenshot-`date +%Y-%m-%d_%H:%M:%S`.png
 
 # focus the urgent window
 bindsym $mod+x [urgent=latest] focus
@@ -145,6 +144,9 @@ bindsym XF86PowerOff exec $nosid $locker && systemctl suspend
 
 # clipboard history
 bindsym $mod+$alt+c exec @rofi_bin@ -modi "clipboard:@greenclip_bin@ print" -show clipboard
+
+# xcape
+bindsym $mod+$alt+x exec $nosid @xcape_bin@ -e 'Control_L=Escape'
 
 ################
 # Applications #
@@ -248,27 +250,15 @@ bindsym $mod+$alt+m mode "$move_mode"
 # Display mode allows output/resolution selection
 set $mode_display (l) Laptop screen, (m) Multiple screen, (w) Wide screen
 mode "$mode_display" {
-	bindsym l exec $nosid xrandr --output @int_monitor@ --mode @int_mode@ --scale @int_scale@ --output @ext_monitor@ --off, mode "default"
-	bindsym m exec $nosid xrandr --output @int_monitor@ --mode @int_mode@ --scale @int_scale@ --output @ext_monitor@ --primary --mode 3440x1440 --right-of @int_monitor@, mode "default"
-	bindsym w exec $nosid xrandr --output @int_monitor@ --off --output @ext_monitor@ --mode 3440x1440, mode "default"
+	bindsym l exec $nosid @xrandr_bin@ --output @int_monitor@ --mode @int_mode@ --scale @int_scale@ --output @ext_monitor@ --off, mode "default"
+	bindsym m exec $nosid @xrandr_bin@ --output @int_monitor@ --mode @int_mode@ --scale @int_scale@ --output @ext_monitor@ --primary --mode 3440x1440 --right-of @int_monitor@, mode "default"
+	bindsym w exec $nosid @xrandr_bin@ --output @int_monitor@ --off --output @ext_monitor@ --mode 3440x1440, mode "default"
 
 	# back to normal: Enter or Escape
 	bindsym Return mode "default"
 	bindsym Escape mode "default"
 }
 bindsym $mod+$alt+d mode "$mode_display"
-
-# Keyboard layout selection
-set $mode_keyboard (q) Qwerty, (c) Colemak
-mode "$mode_keyboard" {
-	bindsym q exec $nosid setxkbmap us && xmodmap ~/.Xmodmap && notify-send 'keyboard switch to Qwerty', mode "default"
-	bindsym c exec $nosid setxkbmap us -variant colemak && xmodmap ~/.Xmodmap && notify-send 'keyboard switch to Colemak', mode "default"
-
-	# back to normal: Enter or Escape
-	bindsym Return mode "default"
-	bindsym Escape mode "default"
-}
-bindsym $mod+$alt+k mode "$mode_keyboard"
 
 ## Management of power
 set $mode_power System: (l) lock, (o) logout, (s) suspend, (h) hibernate, (r) reboot, (Shift+s) shutdown
@@ -289,8 +279,8 @@ bindsym $mod+$alt+p mode "$mode_power"
 # CPU governor selection
 set $mode_cpugovernor CPU Scaling governor: (p) Performance, (o) Powersave
 mode "$mode_cpugovernor" {
-	bindsym p exec $nosid gksudo -- cpupower frequency-set --governor performance, mode "default"
-	bindsym o exec $nosid gksudo -- cpupower frequency-set --governor powersave, mode "default"
+	bindsym p exec $nosid @gksudo_bin@ -- @cpupower_bin@ frequency-set --governor performance, mode "default"
+	bindsym o exec $nosid @gksudo_bin@ -- @cpupower_bin@ frequency-set --governor powersave, mode "default"
 
 	# back to normal: Enter or Escape
 	bindsym Return mode "default"
@@ -343,13 +333,13 @@ for_window [class="^ROX-Filer$"] floating enable
 ########################
 
 # assign important spaces to my external monitor
-workspace personal@base output $extmonitor
-workspace publica@base output $extmonitor
-workspace irc output $extmonitor
-workspace mail output $extmonitor
+workspace personal@base output @ext_monitor@
+workspace publica@base output @ext_monitor@
+workspace irc output @ext_monitor@
+workspace mail output @ext_monitor@
 
 # assign side apps to the laptop
-workspace media output eDP1
+workspace media output @int_monitor@
 
 ######################
 # Scratchpad support #
@@ -374,7 +364,10 @@ bindsym $alt+p [class="pulse-sms"] scratchpad show
 ##############
 
 # set the correct delay and repeat
-exec $nosid xset r rate 300 30
+exec $nosid @xset_bin@ r rate 300 30
+
+# start xcape, I love xcape!
+exec $nosid @xcape_bin@ -e 'Control_L=Escape'
 
 # Start the personal terminal on the personal workspace
 exec i3-msg "workspace personal@base; exec $nosid @alacritty_bin@"

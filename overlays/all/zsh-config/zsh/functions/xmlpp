@@ -4,7 +4,7 @@
 
 function xmlpp() {
 	if [[ "${#}" -eq 0 ]]; then
-		xmllint --format -
+		@xmllint_bin@ --format -
 	else
 		local input_file="${1}"
 		local output_file="${2}"
@@ -12,7 +12,7 @@ function xmlpp() {
 			output_file="`mktemp /tmp/xmlpp.XXXXXXXX`"
 		fi
 
-		xmllint --format --output "${output_file}" "${input_file}" || return
+		@xmllint_bin@ --format --output "${output_file}" "${input_file}" || return
 		mv "${output_file}" "${input_file}"
 	fi
 }

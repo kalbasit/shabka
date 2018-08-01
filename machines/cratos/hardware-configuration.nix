@@ -45,12 +45,6 @@
       options = [ "subvol=@nixos/@home" ];
     };
 
-  fileSystems."/nix-store" =
-    { device = "/dev/disk/by-uuid/de2f32b1-85d0-49ab-8684-019175e09544";
-      fsType = "btrfs";
-      options = [ "subvol=@nixos/@nix-store" ];
-    };
-
   swapDevices =
     [ { device = "/dev/disk/by-uuid/be829e9b-e163-45fb-beea-aa4cf1aa6012"; }
     ];
