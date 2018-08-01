@@ -2,7 +2,6 @@
 
 {
   imports = [
-    ./slim.nix
     ./xorg.nix
   ];
 
