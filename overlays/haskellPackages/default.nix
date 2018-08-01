@@ -2,6 +2,7 @@ self: super:
 
 {
   # TODO: fix the compilation of haskellPackages.greenclip
+  #       https://github.com/erebe/greenclip/issues/35
   haskellPackages = super.haskellPackages.override {
     overrides = hsSelf: hsSuper: {
       wordexp  = self.haskell.lib.overrideCabal hsSuper.wordexp  (oa: {
