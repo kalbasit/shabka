@@ -3,7 +3,6 @@ self: super:
 {
   alacritty-config   = self.callPackage ./alacritty-config {};
   chromium-config    = self.callPackage ./chromium-config {};
-  dunst-config       = self.callPackage ./dunst-config {};
   i3-config          = self.callPackage ./i3-config {};
   i3status-config    = self.callPackage ./i3status-config {};
   less-config        = self.callPackage ./less-config {};

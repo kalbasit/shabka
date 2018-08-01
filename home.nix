@@ -4,6 +4,7 @@ let
   system-path = builtins.toPath /code/personal/base/src/github.com/kalbasit/system;
 in {
   imports = [
+    ./modules/home-manager/dunst
     ./modules/home-manager/git
     ./modules/home-manager/neovim
   ];
@@ -70,7 +71,6 @@ in {
 
       i3-config
       i3status-config
-      dunst dunst-config
 
       jq
 
