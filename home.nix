@@ -98,6 +98,8 @@ in {
 
       swm
 
+      task-config
+
       termite        # Arch-only: this is required to make the ~/.terminfo link happy
       termite-config
 
