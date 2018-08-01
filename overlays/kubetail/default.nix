@@ -1,6 +1,6 @@
 self: super:
 
 {
-  # TODO: remove this once https://github.com/NixOS/nixpkgs/pull/44062 is merged
+  # TODO: remove this overlay once https://github.com/NixOS/nixpkgs/pull/44062 lands in my external
   kubetail = super.callPackage ./pkg.nix {};
 }
