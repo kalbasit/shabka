@@ -143,11 +143,7 @@ bindsym Shift+XF86MonBrightnessDown exec $nosid @brightnessctl_bin@ s 1%-
 bindsym XF86PowerOff exec $nosid $locker && systemctl suspend
 
 # clipboard history
-# TODO: install greenclip and use the binary directly
-bindsym $mod+$alt+c exec @rofi_bin@ -modi "clipboard:greenclip print" -show clipboard
-
-# xcape
-bindsym $mod+$alt+x exec $nosid @xcape_bin@ -e 'Control_L=Escape'
+bindsym $mod+$alt+c exec @rofi_bin@ -modi "clipboard:@greenclip_bin@ print" -show clipboard
 
 ################
 # Applications #
@@ -160,6 +156,18 @@ bindsym $mod+Shift+Return exec @termite_bin@
 #########
 # Modes #
 #########
+
+# Daemon launcher
+set $mode_daemon Launch: (x) Xcape, (g) Greenclip
+mode "$mode_daemon" {
+	bindsym x exec $nosid @xcape_bin@ -e 'Control_L=Escape', mode "default"
+	bindsym g exec $nosid @greenclip_bin@ daemon, mode "default"
+
+	# back to normal: Enter or Escape
+	bindsym Return mode "default"
+	bindsym Escape mode "default"
+}
+bindsym $mod+$alt+l mode "$mode_daemon"
 
 # Window Manager mode, this mode allows me to control i3
 set $mode_wm WM: (r) Reload i3, (e) Restart i3
@@ -369,6 +377,9 @@ exec $nosid @xset_bin@ r rate 300 30
 
 # start xcape, I love xcape!
 exec $nosid @xcape_bin@ -e 'Control_L=Escape'
+
+# start the greenclip daemon
+exec $nosid @greenclip_bin@ daemon
 
 # Start the personal terminal on the personal workspace
 exec i3-msg "workspace personal@base; exec $nosid @alacritty_bin@"

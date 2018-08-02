@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
       --subst-var-by alacritty_bin ${pkgs.alacritty}/bin/alacritty \
       --subst-var-by brightnessctl_bin ${pkgs.brightnessctl}/bin/brightnessctl \
       --subst-var-by charles_bin ${pkgs.charles}/bin/charles \
+      --subst-var-by greenclip_bin ${pkgs.haskellPackages.greenclip}/bin/greenclip \
       --subst-var-by i3lock_bin ${pkgs.i3lock}/bin/i3lock \
       --subst-var-by i3status_bin ${pkgs.i3status}/bin/i3status \
       --subst-var-by notify-send_bin ${pkgs.libnotify}/bin/notify-send \
