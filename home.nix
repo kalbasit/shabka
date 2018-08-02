@@ -88,6 +88,8 @@ in {
 
     nix-index
 
+    nixops
+
     # curses-based file manager
     ranger
 
