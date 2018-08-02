@@ -18,4 +18,7 @@
   services.logind.extraConfig = ''
     HandlePowerKey=suspend
   '';
+
+  # enable TeamViewer
+  services.teamviewer.enable = true;
 }
