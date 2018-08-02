@@ -35,81 +35,82 @@ in {
   };
 
   home.packages = with pkgs; [
-      alacritty
-      alacritty-config
+    # Applications
+    alacritty
+    alacritty-config
 
-      amazon-ecr-credential-helper
-      docker-credential-gcr
+    amazon-ecr-credential-helper
+    docker-credential-gcr
 
-      bat
-      (pkgs.writeTextFile {
-        name = "alias-bat-cat";
-        destination = "/userHome/.zsh/rc.d/alias-bat-cat.zsh";
-        text = ''
+    bat
+    (pkgs.writeTextFile {
+      name = "alias-bat-cat";
+      destination = "/userHome/.zsh/rc.d/alias-bat-cat.zsh";
+      text = ''
           alias cat=bat
-        '';
-      })
+      '';
+    })
 
-      browsh
+    browsh
 
-      chromium
-      chromium-config
+    chromium
+    chromium-config
 
-      direnv
+    direnv
 
-      firefox
+    firefox
 
-      fzf
+    fzf
 
-      gist
+    gist
 
-      gnupg
+    gnupg
 
-      go
+    go
 
-      htop
+    htop
 
-      i3-config
-      i3status-config
+    i3-config
+    i3status-config
 
-      jq
+    jq
 
-      lastpass-cli
+    lastpass-cli
 
-      less-config
+    less-config
 
-      mercurial
+    mercurial
 
-      mosh
+    mosh
 
-      most
-      most-config
+    most
+    most-config
 
-      nix-index
+    nix-index
 
-      # curses-based file manager
-      ranger
+    # curses-based file manager
+    ranger
 
-      rbrowser
+    rbrowser
 
-      surfingkeys-config
+    surfingkeys-config
 
-      sway-config
+    sway-config
 
-      swm
+    swm
 
-      task-config
+    task-config
 
-      termite        # Arch-only: this is required to make the ~/.terminfo link happy
-      termite-config
+    termite        # Arch-only: this is required to make the ~/.terminfo link happy
+    termite-config
 
-      tmux
-      tmux-config
+    tmux
+    tmux-config
 
-      unzip
+    unzip
 
-      zsh
-      zsh-config
-      nix-zsh-completions
+    zsh
+    zsh-config
+    nix-zsh-completions
   ];
 }
