@@ -18,6 +18,9 @@
     (self: super: { i3-config = super.i3-config.override { hostname = config.networking.hostname; }; })
   ];
 
+  # put /tmp on tmpfs
+  boot.tmpOnTmpfs = true;
+
   # allow unfree software on all machines
   nixpkgs.config.allowUnfree = true;
 
