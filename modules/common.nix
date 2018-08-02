@@ -4,10 +4,7 @@
   imports = [
     ./colemak.nix
     ./nix.nix
-    ./publica.nix
-    ./redshift.nix
     ./users.nix
-    ./yubikey.nix
   ];
 
   # load the overlays that we need at the very top-level
@@ -24,9 +21,6 @@
   # allow unfree software on all machines
   nixpkgs.config.allowUnfree = true;
 
-  # set the BROWSER to my rbrowser
-  environment.variables.BROWSER = "${pkgs.rbrowser}/bin/rbrowser";
-
   # set the EDITOR to neovim
   environment.variables.EDITOR = "nvim";
 
@@ -42,18 +36,14 @@
   # Enable the network manager, it makes life easier
   networking.networkmanager.enable = true;
 
-  # Enable sound.
-  sound.enable = true;
-  hardware.pulseaudio.enable = true;
+  # disable IPv6, it's not working within my network. I have to add support for
+  # IPv6 inside my network before being able to enable it.
+  networking.enableIPv6 = false;
 
   # setup the fonts
   fonts.fonts = with pkgs; [
     powerline-fonts
   ];
-
-  # disable IPv6, it's not working within my network. I have to add support for
-  # IPv6 inside my network before being able to enable it.
-  networking.enableIPv6 = false;
 
   # install some basic package system-wide, The day-to-day binaries are located
   # under the overlays/all overlay.
@@ -75,11 +65,6 @@
 
   # Synchronise the clock with NTP
   services.ntp.enable = true;
-
-  # The power button should trigger suspend
-  services.logind.extraConfig = ''
-    HandlePowerKey=suspend
-  '';
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
