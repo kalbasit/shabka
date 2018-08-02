@@ -48,6 +48,10 @@
     powerline-fonts
   ];
 
+  # disable IPv6, it's not working within my network. I have to add support for
+  # IPv6 inside my network before being able to enable it.
+  networking.enableIPv6 = false;
+
   # install some basic package system-wide, The day-to-day binaries are located
   # under the overlays/all overlay.
   environment.systemPackages = with pkgs; [
