@@ -20,4 +20,11 @@ in
   # enable xautolock
   services.xserver.xautolock.enable = true;
   services.xserver.xautolock.locker = "${pkgs.i3lock}/bin/i3lock -ti ${image}";
+
+  # enable the display manager
+  services.xserver.displayManager.gdm.enable = true;
+  services.xserver.displayManager.gdm.autoLogin = {
+    enable = true;
+    user = "kalbasit";
+  };
 }
