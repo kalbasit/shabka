@@ -112,5 +112,8 @@ in {
     zsh
     zsh-config
     nix-zsh-completions
+
+    # Games
+    _2048-in-terminal
   ];
 }
