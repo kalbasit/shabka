@@ -8,6 +8,7 @@ in {
     ./modules/home-manager/chromium
     ./modules/home-manager/dunst
     ./modules/home-manager/git
+    ./modules/home-manager/i3
     ./modules/home-manager/neovim
   ];
 
