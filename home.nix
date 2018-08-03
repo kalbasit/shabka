@@ -9,6 +9,7 @@ in {
     ./modules/home-manager/dunst
     ./modules/home-manager/git
     ./modules/home-manager/neovim
+    ./modules/home-manager/greenclip
   ];
 
   services.gpg-agent = {
