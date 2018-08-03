@@ -18,6 +18,8 @@
     ../../modules/printers.nix
 
     ../../modules/snapper.nix
+
+    ../../modules/openvpn/client/nasreddine/hades.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
