@@ -321,85 +321,85 @@ in {
       # Daemon launcher
       set ${defaultModifier}e_daemon Launch: (x) Xcape, (g) Greenclip
       mode "${defaultModifier}e_daemon" {
-        bindsym x exec ${nosid} ${pkgs.xcape}/bin/xcape -e 'Control_L=Escape', mode "default"
-        bindsym g exec ${nosid} ${pkgs.haskellPackages.greenclip}/bin/greenclip daemon, mode "default"
+        bindsym x exec ${nosid} ${pkgs.xcape}/bin/xcape -e 'Control_L=Escape', mode default
+        bindsym g exec ${nosid} ${pkgs.haskellPackages.greenclip}/bin/greenclip daemon, mode default
 
         # back to normal: Enter or Escape
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
+        bindsym Return mode default
+        bindsym Escape mode default
       }
       bindsym ${defaultModifier}+${thirdModifier}+l mode "${defaultModifier}e_daemon"
 
       # Window Manager mode, this mode allows me to control i3
       set ${defaultModifier}e_wm WM: (r) Reload i3, (e) Restart i3
       mode "${defaultModifier}e_wm" {
-        bindsym r reload; exec ${nosid} ${pkgs.libnotify}/bin/notify-send 'i3 configuration reloaded', mode "default"
-        bindsym e restart; exec ${nosid} ${pkgs.libnotify}/bin/notify-send 'i3 restarted', mode "default"
+        bindsym r reload; exec ${nosid} ${pkgs.libnotify}/bin/notify-send 'i3 configuration reloaded', mode default
+        bindsym e restart; exec ${nosid} ${pkgs.libnotify}/bin/notify-send 'i3 restarted', mode default
 
         # back to normal: Enter or Escape
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
+        bindsym Return mode default
+        bindsym Escape mode default
       }
       bindsym ${defaultModifier}+${thirdModifier}+w mode "${defaultModifier}e_wm"
 
       # Application launcher
       set ${defaultModifier}e_apps Launch: (p) Chromium personal, (u) Chromium publica, (c) Charles, (s) Slack, (i) Irc, (w) Whatsapp, (t) Teamviewer, (m) Pulse SMS
       mode "${defaultModifier}e_apps" {
-        bindsym p exec ${pkgs.rbrowser}/bin/rbrowser --profile personal, mode "default"
-        bindsym u exec ${pkgs.rbrowser}/bin/rbrowser --profile publica, mode "default"
-        bindsym c exec ${pkgs.charles}/bin/charles, mode "default"
-        bindsym s exec ${pkgs.slack}/bin/slack, mode "default"
-        bindsym i exec ${pkgs.alacritty}/bin/alacritty --title=irc --exec=weechat, mode "default"
-        bindsym t exec ${pkgs.teamviewer}/bin/teamviewer, mode "default"
+        bindsym p exec ${pkgs.rbrowser}/bin/rbrowser --profile personal, mode default
+        bindsym u exec ${pkgs.rbrowser}/bin/rbrowser --profile publica, mode default
+        bindsym c exec ${pkgs.charles}/bin/charles, mode default
+        bindsym s exec ${pkgs.slack}/bin/slack, mode default
+        bindsym i exec ${pkgs.alacritty}/bin/alacritty --title=irc --exec=weechat, mode default
+        bindsym t exec ${pkgs.teamviewer}/bin/teamviewer, mode default
         # TODO: install this
-        # bindsym w exec whatsapp-web-desktop, mode "default"
+        # bindsym w exec whatsapp-web-desktop, mode default
         # TODO: install Pulse and use the binary here
-        #bindsym m exec ${nosid} /opt/Pulse\ SMS/pulse-sms, mode "default"
+        #bindsym m exec ${nosid} /opt/Pulse\ SMS/pulse-sms, mode default
 
         # back to normal: Enter or Escape
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
+        bindsym Return mode default
+        bindsym Escape mode default
       }
       bindsym ${defaultModifier}+${thirdModifier}+a mode "${defaultModifier}e_apps"
 
       # Display mode allows output/resolution selection
       set ${defaultModifier}e_display (l) Laptop screen, (m) Multiple screen, (w) Wide screen
       mode "${defaultModifier}e_display" {
-        bindsym l exec ${nosid} ${pkgs.xlibs.xrandr}/bin/xrandr --output ${intMonitor} --mode ${intMode} --scale ${intScale} --output ${extMonitor} --off, mode "default"
-        bindsym m exec ${nosid} ${pkgs.xlibs.xrandr}/bin/xrandr --output ${intMonitor} --mode ${intMode} --scale ${intScale} --output ${extMonitor} --primary --mode 3440x1440 --right-of ${intMonitor}, mode "default"
-        bindsym w exec ${nosid} ${pkgs.xlibs.xrandr}/bin/xrandr --output ${intMonitor} --off --output ${extMonitor} --mode ${extMode}, mode "default"
+        bindsym l exec ${nosid} ${pkgs.xlibs.xrandr}/bin/xrandr --output ${intMonitor} --mode ${intMode} --scale ${intScale} --output ${extMonitor} --off, mode default
+        bindsym m exec ${nosid} ${pkgs.xlibs.xrandr}/bin/xrandr --output ${intMonitor} --mode ${intMode} --scale ${intScale} --output ${extMonitor} --primary --mode 3440x1440 --right-of ${intMonitor}, mode default
+        bindsym w exec ${nosid} ${pkgs.xlibs.xrandr}/bin/xrandr --output ${intMonitor} --off --output ${extMonitor} --mode ${extMode}, mode default
 
         # back to normal: Enter or Escape
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
+        bindsym Return mode default
+        bindsym Escape mode default
       }
       bindsym ${defaultModifier}+${thirdModifier}+d mode "${defaultModifier}e_display"
 
       ## Management of power
       set ${defaultModifier}e_power System: (l) lock, (o) logout, (s) suspend, (h) hibernate, (r) reboot, (${secondModifier}+s) shutdown
       mode "${defaultModifier}e_power" {
-        bindsym l exec ${nosid} ${locker}, mode "default"
+        bindsym l exec ${nosid} ${locker}, mode default
         bindsym o exit
-        bindsym s exec ${nosid} ${locker} && systemctl suspend, mode "default"
-        bindsym h exec ${nosid} ${locker} && systemctl hibernate, mode "default"
+        bindsym s exec ${nosid} ${locker} && systemctl suspend, mode default
+        bindsym h exec ${nosid} ${locker} && systemctl hibernate, mode default
         bindsym r exec ${nosid} systemctl reboot
         bindsym ${secondModifier}+s exec ${nosid} systemctl poweroff -i
 
         # back to normal: Enter or Escape
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
+        bindsym Return mode default
+        bindsym Escape mode default
       }
       bindsym ${defaultModifier}+${thirdModifier}+p mode "${defaultModifier}e_power"
 
       # CPU governor selection
       set ${defaultModifier}e_cpugovernor CPU Scaling governor: (p) Performance, (o) Powersave
       mode "${defaultModifier}e_cpugovernor" {
-        bindsym p exec ${nosid} ${pkgs.gksu}/bin/gksudo -- ${pkgs.linuxPackages.cpupower}/bin/cpupower frequency-set --governor performance, mode "default"
-        bindsym o exec ${nosid} ${pkgs.gksu}/bin/gksudo -- ${pkgs.linuxPackages.cpupower}/bin/cpupower frequency-set --governor powersave, mode "default"
+        bindsym p exec ${nosid} ${pkgs.gksu}/bin/gksudo -- ${pkgs.linuxPackages.cpupower}/bin/cpupower frequency-set --governor performance, mode default
+        bindsym o exec ${nosid} ${pkgs.gksu}/bin/gksudo -- ${pkgs.linuxPackages.cpupower}/bin/cpupower frequency-set --governor powersave, mode default
 
         # back to normal: Enter or Escape
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
+        bindsym Return mode default
+        bindsym Escape mode default
       }
       bindsym ${defaultModifier}+${thirdModifier}+g mode "${defaultModifier}e_cpugovernor"
 
