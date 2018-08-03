@@ -19,4 +19,5 @@ stdenv.mkDerivation rec {
     install -d -m755 $out/userHome/.zsh/rc.d
     substitute $src/zsh/i3-fpath.zsh $out/userHome/.zsh/rc.d/i3-fpath.zsh \
       --subst-var-by out_dir $out
+  '';
 }

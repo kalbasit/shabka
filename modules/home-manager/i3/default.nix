@@ -193,13 +193,13 @@ in {
         "${defaultModifier}+Shift+minus" = "move scratchpad";
 
         # Make the currently focused window a scratchpad
-        "${defaultModifier}+${secondModifier}+minus" = "scratchpad show";
+        "${defaultModifier}+${thirdModifier}+minus" = "scratchpad show";
 
         # Whatsapp
-        "${secondModifier}+w" = "[class=\"^whats-app-nativefier*\"] scratchpad show";
+        "${thirdModifier}+w" = "[class=\"^whats-app-nativefier*\"] scratchpad show";
 
         # Pulse
-        "${secondModifier}+p" = "[class=\"pulse-sms\"] scratchpad show";
+        "${thirdModifier}+p" = "[class=\"pulse-sms\"] scratchpad show";
       };
 
       colors = {
