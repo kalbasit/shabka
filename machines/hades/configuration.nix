@@ -16,6 +16,8 @@
     ../../modules/sway.nix
 
     ../../modules/printers.nix
+
+    ../../modules/snapper.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
