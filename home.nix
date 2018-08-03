@@ -5,6 +5,7 @@ let
 in {
   imports = [
     ./modules/home-manager/alacritty
+    ./modules/home-manager/chromium
     ./modules/home-manager/dunst
     ./modules/home-manager/git
     ./modules/home-manager/neovim
@@ -54,9 +55,6 @@ in {
     })
 
     browsh
-
-    chromium
-    chromium-config
 
     direnv
 
