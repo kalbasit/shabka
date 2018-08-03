@@ -4,6 +4,7 @@ let
   system-path = builtins.toPath /code/personal/base/src/github.com/kalbasit/system;
 in {
   imports = [
+    ./modules/home-manager/alacritty
     ./modules/home-manager/dunst
     ./modules/home-manager/git
     ./modules/home-manager/neovim
@@ -40,9 +41,6 @@ in {
 
   home.packages = with pkgs; [
     # Applications
-    alacritty
-    alacritty-config
-
     amazon-ecr-credential-helper
     docker-credential-gcr
 

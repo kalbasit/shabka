@@ -1,7 +1,6 @@
 self: super:
 
 {
-  alacritty-config   = self.callPackage ./alacritty-config {};
   chromium-config    = self.callPackage ./chromium-config {};
   greenclip-config   = self.callPackage ./greenclip-config {};
   i3-config          = self.callPackage ./i3-config {};
