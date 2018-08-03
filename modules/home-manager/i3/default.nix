@@ -38,7 +38,6 @@ let
   extMode = "3440x1440";
 in {
   xsession.enable = true;
-
   xsession.windowManager.i3 = {
     enable = true;
 
