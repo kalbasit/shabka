@@ -8,7 +8,18 @@ let
     phases = [ "installPhase" "fixupPhase" ];
     installPhase = ''
       install -d -m755 $out/bin
-      cp -dr $src/* $out/bin
+
+      substitute $src/i3-move-container $out/bin/i3-move-container \
+        --subst-var-by i3-msg_bin ${pkgs.i3}/bin/i3-msg \
+        --subst-var-by jq_bin ${pkgs.jq}/bin/jq
+
+      substitute $src/i3-rename-workspace $out/bin/i3-rename-workspace \
+        --subst-var-by i3-msg_bin ${pkgs.i3}/bin/i3-msg \
+        --subst-var-by jq_bin ${pkgs.jq}/bin/jq
+
+      substitute $src/i3-switch-workspaces $out/bin/i3-switch-workspaces \
+        --subst-var-by i3-msg_bin ${pkgs.i3}/bin/i3-msg \
+        --subst-var-by jq_bin ${pkgs.jq}/bin/jq
     '';
   };
 
@@ -19,7 +30,18 @@ let
     phases = [ "installPhase" "fixupPhase" ];
     installPhase = ''
       install -d -m755 $out/bin
-      cp -dr $src/* $out/bin
+
+      substitute $src/sway-move-container $out/bin/sway-move-container \
+        --subst-var-by swaymsg_bin ${pkgs.sway}/bin/swaymsg \
+        --subst-var-by jq_bin ${pkgs.jq}/bin/jq
+
+      substitute $src/sway-rename-workspace $out/bin/sway-rename-workspace \
+        --subst-var-by swaymsg_bin ${pkgs.sway}/bin/swaymsg \
+        --subst-var-by jq_bin ${pkgs.jq}/bin/jq
+
+      substitute $src/sway-switch-workspaces $out/bin/sway-switch-workspaces \
+        --subst-var-by swaymsg_bin ${pkgs.sway}/bin/swaymsg \
+        --subst-var-by jq_bin ${pkgs.jq}/bin/jq
     '';
   };
 in {

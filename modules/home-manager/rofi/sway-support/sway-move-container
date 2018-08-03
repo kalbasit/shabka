@@ -24,8 +24,8 @@ if [[ -z "${*}" ]]; then
   # we need the back and forth first
   echo back_and_forth
   # get the list of workspaces that are not empty
-  swaymsg -rt get_workspaces | jq -r '.[] | if .focused == false then .name else empty end'
+  @swaymsg_bin@ -rt get_workspaces | @jq_bin@ -r '.[] | if .focused == false then .name else empty end'
 else
   # switch to the given workspace
-  swaymsg move container to workspace "${@}" >/dev/null
+  @swaymsg_bin@ move container to workspace "${@}" >/dev/null
 fi

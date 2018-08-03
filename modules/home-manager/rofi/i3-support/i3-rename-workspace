@@ -22,8 +22,8 @@
 
 if [[ -z "${*}" ]]; then
   # print the name of the current workspace
-  i3-msg -t get_workspaces | jq -r '.[] | if .focused == true then .name else empty end'
+  @i3-msg_bin@ -t get_workspaces | @jq_bin@ -r '.[] | if .focused == true then .name else empty end'
 else
   # switch to the given workspace
-  i3-msg rename workspace to "${@}" >/dev/null
+  @i3-msg_bin@ rename workspace to "${@}" >/dev/null
 fi

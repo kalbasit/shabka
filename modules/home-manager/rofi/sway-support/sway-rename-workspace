@@ -22,8 +22,8 @@
 
 if [[ -z "${*}" ]]; then
   # print the name of the current workspace
-  swaymsg -rt get_workspaces | jq -r '.[] | if .focused == true then .name else empty end'
+  @swaymsg_bin@ -rt get_workspaces | @jq_bin@ -r '.[] | if .focused == true then .name else empty end'
 else
   # switch to the given workspace
-  swaymsg rename workspace to "${@}" >/dev/null
+  @swaymsg_bin@ rename workspace to "${@}" >/dev/null
 fi
