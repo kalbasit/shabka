@@ -14,6 +14,8 @@
     ../../modules/sway.nix
 
     ../../modules/printers.nix
+
+    ../../modules/openvpn/client/nasreddine/cratos.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
