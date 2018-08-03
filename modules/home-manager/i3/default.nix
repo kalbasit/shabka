@@ -15,36 +15,14 @@ in {
 
       window = {
         commands = [
-          {
-            command = "floating enable";
-            criteria = {
-              class = "^Pavucontrol";
-            };
-          }
-          {
-            command = "floating enable";
-            criteria = {
-              class = "^Tor Browser";
-            };
-          }
-          {
-            command = "floating enable";
-            criteria = {
-              class = "^net-filebot-Main$";
-            };
-          }
-          {
-            command = "floating enable";
-            criteria = {
-              class = "^ROX-Filer$";
-            };
-          }
+          { command = "floating enable"; criteria = { class = "^Pavucontrol"; }; }
+          { command = "floating enable"; criteria = { class = "^Tor Browser"; }; }
+          { command = "floating enable"; criteria = { class = "^net-filebot-Main$"; }; }
+          { command = "floating enable"; criteria = { class = "^ROX-Filer$"; }; }
         ];
       };
 
-      floating = {
-        modifier = "${defaultModifier}";
-      };
+      floating = { modifier = "${defaultModifier}"; };
 
       focus = {
         # focus should not follow the mouse pointer
