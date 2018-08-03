@@ -203,6 +203,8 @@ in {
       };
 
       colors = {
+        background = "#4e4e4e";
+
         focused = {
           border = "#5f865f"; background = "#5f865f"; text = "#e4e4e4";
           indicator = "#ffafaf"; childBorder = "#285577";
