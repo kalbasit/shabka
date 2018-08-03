@@ -20,6 +20,8 @@ let
       substitute $src/i3-switch-workspaces $out/bin/i3-switch-workspaces \
         --subst-var-by i3-msg_bin ${pkgs.i3}/bin/i3-msg \
         --subst-var-by jq_bin ${pkgs.jq}/bin/jq
+
+      chmod 755 $out/bin/*
     '';
   };
 
@@ -42,6 +44,8 @@ let
       substitute $src/sway-switch-workspaces $out/bin/sway-switch-workspaces \
         --subst-var-by swaymsg_bin ${pkgs.sway}/bin/swaymsg \
         --subst-var-by jq_bin ${pkgs.jq}/bin/jq
+
+      chmod 755 $out/bin/*
     '';
   };
 in {
