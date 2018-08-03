@@ -79,10 +79,6 @@
   # Enable fwupd
   services.fwupd.enable = true;
 
-  # Install and enable Keybase
-  services.keybase.enable = true;
-  services.kbfs.enable = true;
-
   # allow Mosh server in
   networking.firewall.allowedUDPPortRanges = [ { from = 60000; to = 61000; } ];
 

@@ -28,6 +28,10 @@ in {
     theme = "Adapta-Nokto";
   };
 
+  # Install and enable Keybase
+  services.keybase.enable = true;
+  services.kbfs.enable = true;
+
   programs.home-manager = {
     enable = true;
     # path = "https://github.com/rycee/home-manager/archive/master.tar.gz";
@@ -74,6 +78,8 @@ in {
     i3status-config
 
     jq
+
+    keybase-gui
 
     lastpass-cli
 
