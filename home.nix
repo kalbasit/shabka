@@ -60,8 +60,6 @@ in {
 
     htop
 
-    i3status-config
-
     jq
 
     keybase

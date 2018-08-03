@@ -37,6 +37,8 @@ let
 
   extMode = "3440x1440";
 in {
+  home.file.".config/i3status/config".text = builtins.readFile ./i3status-config;
+
   xsession.enable = true;
   xsession.windowManager.i3 = {
     enable = true;
