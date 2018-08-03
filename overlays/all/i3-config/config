@@ -32,10 +32,6 @@ workspace_layout tabbed
 # Applications #
 ################
 
-# start a terminal
-bindsym $mod+Return exec @alacritty_bin@
-bindsym $mod+Shift+Return exec @termite_bin@
-
 #########
 # Modes #
 #########

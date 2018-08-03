@@ -2,6 +2,8 @@
 
 let
   defaultModifier = "Mod4";
+  secondModifier = "Shift";
+  thirdModifier = "Mod1";
 in {
   xsession.enable = true;
 
@@ -73,10 +75,10 @@ in {
         "${defaultModifier}+o" = "focus right";
 
         # move focused window
-        "${defaultModifier}+Shift+n" = "move left";
-        "${defaultModifier}+Shift+e" = "move down";
-        "${defaultModifier}+Shift+i" = "move up";
-        "${defaultModifier}+Shift+o" = "move right";
+        "${defaultModifier}+${secondModifier}+n" = "move left";
+        "${defaultModifier}+${secondModifier}+e" = "move down";
+        "${defaultModifier}+${secondModifier}+i" = "move up";
+        "${defaultModifier}+${secondModifier}+o" = "move right";
 
         # split in horizontal orientation
         "${defaultModifier}+h" = "split h";
@@ -85,27 +87,27 @@ in {
         "${defaultModifier}+v" = "split v";
 
         # change focus between output
-        "${defaultModifier}+$alt+o" = "focus output right";
-        "${defaultModifier}+$alt+n" = "focus output left";
+        "${defaultModifier}+${thirdModifier}+o" = "focus output right";
+        "${defaultModifier}+${thirdModifier}+n" = "focus output left";
 
         # move workspaces between monitors
-        "${defaultModifier}+Shift+$alt+o" = "move workspace to output right";
-        "${defaultModifier}+Shift+$alt+n" = "move workspace to output left";
+        "${defaultModifier}+${secondModifier}+${thirdModifier}+o" = "move workspace to output right";
+        "${defaultModifier}+${secondModifier}+${thirdModifier}+n" = "move workspace to output left";
 
         # toggle sticky
         "${defaultModifier}+s" = "sticky toggle";
 
         # toggle tiling / floating
-        "$alt+Shift+space" = "floating toggle";
+        "${thirdModifier}+${secondModifier}+space" = "floating toggle";
 
         # change focus between tiling / floating windows
-        "$alt+space" = "focus mode_toggle";
+        "${thirdModifier}+space" = "focus mode_toggle";
 
         # enter fullscreen mode for the focused container
         "${defaultModifier}+f" = "fullscreen toggle";
 
         # kill focused window
-        "${defaultModifier}+Shift+q" = "kill";
+        "${defaultModifier}+${secondModifier}+q" = "kill";
 
         # rbrowser
         "${defaultModifier}+b" = "exec ${pkgs.rbrowser}/bin/rbrowser";
@@ -117,16 +119,16 @@ in {
         "${defaultModifier}+p" = "exec ${pkgs.rofi}/bin/rofi -modi lpass:rofi-lpass -show lpass";
 
         # list open windows to switch to
-        "$alt+Tab" = "exec ${pkgs.rofi}/bin/rofi -show window";
+        "${thirdModifier}+Tab" = "exec ${pkgs.rofi}/bin/rofi -show window";
 
         # switch between the current and the previously focused one
         "${defaultModifier}+Tab" = "workspace back_and_forth";
-        "${defaultModifier}+Shift+Tab" = "move container to workspace back_and_forth";
+        "${defaultModifier}+${secondModifier}+Tab" = "move container to workspace back_and_forth";
 
         # dynamic workspaces
         "${defaultModifier}+space" = "exec ${pkgs.rofi}/bin/rofi -show i3Workspaces";
-        "${defaultModifier}+Shift+space" = "exec ${pkgs.rofi}/bin/rofi -show i3MoveContainer";
-        "${defaultModifier}+$alt+space" = "exec ${pkgs.rofi}/bin/rofi -show i3RenameWorkspace";
+        "${defaultModifier}+${secondModifier}+space" = "exec ${pkgs.rofi}/bin/rofi -show i3MoveContainer";
+        "${defaultModifier}+${thirdModifier}+space" = "exec ${pkgs.rofi}/bin/rofi -show i3RenameWorkspace";
 
         # change container layout (stacked, tabbed, toggle split)
         "${defaultModifier}+l" = "layout stacking";
@@ -140,7 +142,7 @@ in {
         "${defaultModifier}+d" = "focus child";
 
         # start a region screenshot
-        "${defaultModifier}+Shift+4" = "exec ${pkgs.maim}/bin/maim -s ~/Desktop/screenshot-`date +%Y-%m-%d_%H:%M:%S`.png";
+        "${defaultModifier}+${secondModifier}+4" = "exec ${pkgs.maim}/bin/maim -s ~/Desktop/screenshot-`date +%Y-%m-%d_%H:%M:%S`.png";
 
         # focus the urgent window
         "${defaultModifier}+x" = "[urgent=latest] focus";
@@ -158,14 +160,18 @@ in {
         # brightness support
         "XF86MonBrightnessUp" = "exec $nosid ${pkgs.brightnessctl}/bin/brightnessctl s +5%";
         "XF86MonBrightnessDown" = "exec $nosid ${pkgs.brightnessctl}/bin/brightnessctl s 5%-";
-        "Shift+XF86MonBrightnessUp" = "exec $nosid ${pkgs.brightnessctl}/bin/brightnessctl s +1%";
-        "Shift+XF86MonBrightnessDown" = "exec $nosid ${pkgs.brightnessctl}/bin/brightnessctl s 1%-";
+        "${secondModifier}+XF86MonBrightnessUp" = "exec $nosid ${pkgs.brightnessctl}/bin/brightnessctl s +1%";
+        "${secondModifier}+XF86MonBrightnessDown" = "exec $nosid ${pkgs.brightnessctl}/bin/brightnessctl s 1%-";
 
         # sleep support
         "XF86PowerOff" = "exec $nosid $locker && systemctl suspend";
 
         # clipboard history
-        "${defaultModifier}+$alt+c" = "exec ${pkgs.rofi}/bin/rofi -modi \"clipboard:${pkgs.haskellPackages.greenclip}/bin/greenclip print\" -show clipboard";
+        "${defaultModifier}+${thirdModifier}+c" = "exec ${pkgs.rofi}/bin/rofi -modi \"clipboard:${pkgs.haskellPackages.greenclip}/bin/greenclip print\" -show clipboard";
+
+        # Terminals
+        "$mod+Return" = "exec ${pkgs.alacritty}/bin/alacritty";
+        "$mod+${secondModifier}+Return" = "exec ${pkgs.termite}/bin/termite";
       };
     };
   };
