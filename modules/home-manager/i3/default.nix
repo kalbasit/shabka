@@ -51,6 +51,8 @@ in {
           { command = "floating enable"; criteria = { class = "^Tor Browser"; }; }
           { command = "floating enable"; criteria = { class = "^net-filebot-Main$"; }; }
           { command = "floating enable"; criteria = { class = "^ROX-Filer$"; }; }
+          { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "^whats-app-nativefier*"; }; }
+          { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "pulse-sms"; }; }
         ];
       };
 
@@ -186,6 +188,18 @@ in {
         # Modes
         "${defaultModifier}+${thirdModifier}+r" = "mode resize";
         "${defaultModifier}+${thirdModifier}+m" = "mode move";
+
+        # Make the currently focused window a scratchpad
+        "${defaultModifier}+Shift+minus" = "move scratchpad";
+
+        # Make the currently focused window a scratchpad
+        "${defaultModifier}+${secondModifier}+minus" = "scratchpad show";
+
+        # Whatsapp
+        "${secondModifier}+w" = "[class=\"^whats-app-nativefier*\"] scratchpad show";
+
+        # Pulse
+        "${secondModifier}+p" = "[class=\"pulse-sms\"] scratchpad show";
       };
 
       colors = {
@@ -279,6 +293,13 @@ in {
           };
         }
       ];
+
+      startup = [
+        { command = "${pkgs.xlibs.xset}/bin/xset r rate 300 30"; always = false; notification = false; }
+        { command = "${pkgs.xcape}/bin/xcape -e 'Control_L=Escape'"; always = false; notification = false; }
+        { command = "${pkgs.haskellPackages.greenclip}/bin/greenclip daemon"; always = false; notification = false; }
+        { command = "i3-msg \"workspace personal@base; exec ${nosid} ${pkgs.alacritty}/bin/alacritty\""; always = false; notification = true; }
+      ];
     };
 
     extraConfig = ''
@@ -291,6 +312,9 @@ in {
       # TODO: move this to the i3 module via PR
       workspace_layout tabbed
 
+      #########
+      # Modes #
+      #########
 
       # Daemon launcher
       set ${defaultModifier}e_daemon Launch: (x) Xcape, (g) Greenclip
@@ -376,6 +400,16 @@ in {
         bindsym Escape mode "default"
       }
       bindsym ${defaultModifier}+${thirdModifier}+g mode "${defaultModifier}e_cpugovernor"
+
+      ########################
+      # Workspace assignment #
+      ########################
+
+      # assign important spaces to my external monitor
+      workspace personal@base output ${extMonitor}
+      workspace publica@base output ${extMonitor}
+      workspace irc output ${extMonitor}
+      workspace mail output ${extMonitor}
     '';
   };
 }
