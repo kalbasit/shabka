@@ -60,7 +60,6 @@ in {
 
     htop
 
-    i3-config
     i3status-config
 
     jq
