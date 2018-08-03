@@ -79,6 +79,7 @@ in {
 
     jq
 
+    keybase
     keybase-gui
 
     lastpass-cli
