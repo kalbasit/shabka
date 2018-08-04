@@ -696,9 +696,6 @@ if [[ -o interactive ]]; then
 	pathappend PATH @fzf_out@/bin
 	source @fzf_out@/share/fzf/key-bindings.zsh
 	export ENHANCD_FILTER=@fzf_out@/bin/fzf-tmux
-
-	# load direnv
-	eval "$(@direnv_dir@/bin/direnv hook zsh)"
 fi
 
 #####################################################################

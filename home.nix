@@ -41,6 +41,9 @@ in {
     path = "${system-path}/external/home-manager";
   };
 
+  # Enable direnv
+  programs.direnv.enable = true;
+
   home.packages = with pkgs; [
     # Applications
     amazon-ecr-credential-helper
@@ -49,8 +52,6 @@ in {
     bat
 
     browsh
-
-    direnv
 
     firefox
 

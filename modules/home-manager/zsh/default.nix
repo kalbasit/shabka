@@ -65,7 +65,6 @@
 
       ag_bin       = "${pkgs.silver-searcher}/bin/ag";
       bat_bin      = "${pkgs.bat}/bin/bat";
-      direnv_dir   = "${pkgs.direnv}";
       exa_bin      = "${pkgs.exa}/bin/exa";
       fzf_out      = "${pkgs.fzf}";
       git_bin      = "${pkgs.git}/bin/git";
