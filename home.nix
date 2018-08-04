@@ -75,9 +75,6 @@ in {
 
     mosh
 
-    most
-    most-config
-
     nix-index
 
     nixops
