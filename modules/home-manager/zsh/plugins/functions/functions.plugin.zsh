@@ -1,16 +1,19 @@
+functions_root="${${(%):-%x}:A:h}"
+
 # load the important functions
-source ./debug
-source ./have
-source ./is_func
-source ./pathappend
-source ./pathprepend
-source ./pathunmunge
-source ./sp
-source ./ssh_agents
+source "${functions_root}/debug"
+source "${functions_root}/have"
+source "${functions_root}/is_func"
+source "${functions_root}/pathappend"
+source "${functions_root}/pathprepend"
+source "${functions_root}/pathunmunge"
+source "${functions_root}/sp"
+source "${functions_root}/ssh_agents"
 
 # autoload all of the functions
-for func in *; do
-  case "$(basename ${func})" in
+for func in $functions_root/*; do
+	local func_name="$(basename ${func})"
+  case "${func_name}" in
     debug)       ;;
     have)        ;;
     is_func)     ;;
@@ -20,7 +23,6 @@ for func in *; do
     sp)          ;;
     ssh_agents)  ;;
     *)
-      local func_name="$(basename ${func})"
       autoload -U "${func_name}"
       ;;
   esac
