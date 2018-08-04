@@ -860,9 +860,7 @@ fi
 # ZSH work with or without it.
 
 if [[ -z "${ACTIVE_PROFILE}" || -z "${ACTIVE_STORY}" ]]; then
-	if [[ -n "${SWAYSOCK}" ]] && have swaymsg && have jq; then
-		active_workspace="$(swaymsg -rt get_workspaces 2>/dev/null | jq -r '.[] | if .focused == true then .name else empty end')"
-	elif [[ -n "${DISPLAY}" ]] && have i3-msg && have jq; then
+	if [[ -n "${DISPLAY}" ]] && have i3-msg && have jq; then
 		active_workspace="$(i3-msg -t get_workspaces 2>/dev/null | jq -r '.[] | if .focused == true then .name else empty end')"
 	fi
 

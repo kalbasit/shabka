@@ -11,7 +11,6 @@
     ../../modules/desktop.nix
 
     ../../modules/i3.nix
-    ../../modules/sway.nix
 
     ../../modules/printers.nix
   ] ++ (if builtins.pathExists /private then [

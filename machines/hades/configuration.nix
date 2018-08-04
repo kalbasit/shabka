@@ -12,8 +12,6 @@
     ../../modules/common.nix
     ../../modules/desktop.nix
 
-    ../../modules/sway.nix
-
     ../../modules/printers.nix
 
     ../../modules/snapper.nix
