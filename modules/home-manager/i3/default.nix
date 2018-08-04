@@ -136,6 +136,7 @@ in {
           "${defaultModifier}+r" = "exec ${pkgs.rofi}/bin/rofi -show run";
 
           # rofi lastpass
+          # TODO: setup this
           "${defaultModifier}+p" = "exec ${pkgs.rofi}/bin/rofi -modi lpass:rofi-lpass -show lpass";
 
           # list open windows to switch to
@@ -327,8 +328,8 @@ in {
         #########
 
         # Daemon launcher
-        set ${defaultModifier}e_daemon Launch: (x) Xcape, (g) Greenclip
-        mode "${defaultModifier}e_daemon" {
+        set $mode_daemon Launch: (x) Xcape, (g) Greenclip
+        mode "$mode_daemon" {
           bindsym x exec ${nosid} ${pkgs.xcape}/bin/xcape -e 'Control_L=Escape', mode default
           bindsym g exec ${nosid} ${pkgs.haskellPackages.greenclip}/bin/greenclip daemon, mode default
 
@@ -336,11 +337,11 @@ in {
           bindsym Return mode default
           bindsym Escape mode default
         }
-        bindsym ${defaultModifier}+${thirdModifier}+l mode "${defaultModifier}e_daemon"
+        bindsym ${defaultModifier}+${thirdModifier}+l mode "$mode_daemon"
 
         # Window Manager mode, this mode allows me to control i3
-        set ${defaultModifier}e_wm WM: (r) Reload i3, (e) Restart i3
-        mode "${defaultModifier}e_wm" {
+        set $mode_wm WM: (r) Reload i3, (e) Restart i3
+        mode "$mode_wm" {
           bindsym r reload; exec ${nosid} ${pkgs.libnotify}/bin/notify-send 'i3 configuration reloaded', mode default
           bindsym e restart; exec ${nosid} ${pkgs.libnotify}/bin/notify-send 'i3 restarted', mode default
 
@@ -348,11 +349,11 @@ in {
           bindsym Return mode default
           bindsym Escape mode default
         }
-        bindsym ${defaultModifier}+${thirdModifier}+w mode "${defaultModifier}e_wm"
+        bindsym ${defaultModifier}+${thirdModifier}+w mode "$mode_wm"
 
         # Application launcher
-        set ${defaultModifier}e_apps Launch: (p) Chromium personal, (u) Chromium publica, (c) Charles, (s) Slack, (i) Irc, (w) Whatsapp, (t) Teamviewer, (m) Pulse SMS
-        mode "${defaultModifier}e_apps" {
+        set $mode_apps Launch: (p) Chromium personal, (u) Chromium publica, (c) Charles, (s) Slack, (i) Irc, (w) Whatsapp, (t) Teamviewer, (m) Pulse SMS
+        mode "$mode_apps" {
           bindsym p exec ${pkgs.rbrowser}/bin/rbrowser --profile personal, mode default
           bindsym u exec ${pkgs.rbrowser}/bin/rbrowser --profile publica, mode default
           bindsym c exec ${pkgs.charles}/bin/charles, mode default
@@ -368,11 +369,11 @@ in {
           bindsym Return mode default
           bindsym Escape mode default
         }
-        bindsym ${defaultModifier}+${thirdModifier}+a mode "${defaultModifier}e_apps"
+        bindsym ${defaultModifier}+${thirdModifier}+a mode "$mode_apps"
 
         # Display mode allows output/resolution selection
-        set ${defaultModifier}e_display (l) Laptop screen, (m) Multiple screen, (w) Wide screen
-        mode "${defaultModifier}e_display" {
+        set $mode_display (l) Laptop screen, (m) Multiple screen, (w) Wide screen
+        mode "$mode_display" {
           bindsym l exec ${nosid} ${pkgs.xlibs.xrandr}/bin/xrandr --output ${intMonitor} --mode ${intMode} --scale ${intScale} --output ${extMonitor} --off, mode default
           bindsym m exec ${nosid} ${pkgs.xlibs.xrandr}/bin/xrandr --output ${intMonitor} --mode ${intMode} --scale ${intScale} --output ${extMonitor} --primary --mode 3440x1440 --right-of ${intMonitor}, mode default
           bindsym w exec ${nosid} ${pkgs.xlibs.xrandr}/bin/xrandr --output ${intMonitor} --off --output ${extMonitor} --mode ${extMode}, mode default
@@ -381,11 +382,11 @@ in {
           bindsym Return mode default
           bindsym Escape mode default
         }
-        bindsym ${defaultModifier}+${thirdModifier}+d mode "${defaultModifier}e_display"
+        bindsym ${defaultModifier}+${thirdModifier}+d mode "$mode_display"
 
         ## Management of power
-        set ${defaultModifier}e_power System: (l) lock, (o) logout, (s) suspend, (h) hibernate, (r) reboot, (${secondModifier}+s) shutdown
-        mode "${defaultModifier}e_power" {
+        set $mode_power System: (l) lock, (o) logout, (s) suspend, (h) hibernate, (r) reboot, (${secondModifier}+s) shutdown
+        mode "$mode_power" {
           bindsym l exec ${nosid} ${locker}, mode default
           bindsym o exit
           bindsym s exec ${nosid} ${locker} && systemctl suspend, mode default
@@ -397,11 +398,11 @@ in {
           bindsym Return mode default
           bindsym Escape mode default
         }
-        bindsym ${defaultModifier}+${thirdModifier}+p mode "${defaultModifier}e_power"
+        bindsym ${defaultModifier}+${thirdModifier}+p mode "$mode_power"
 
         # CPU governor selection
-        set ${defaultModifier}e_cpugovernor CPU Scaling governor: (p) Performance, (o) Powersave
-        mode "${defaultModifier}e_cpugovernor" {
+        set $mode_cpugovernor CPU Scaling governor: (p) Performance, (o) Powersave
+        mode "$mode_cpugovernor" {
           bindsym p exec ${nosid} ${pkgs.gksu}/bin/gksudo -- ${pkgs.linuxPackages.cpupower}/bin/cpupower frequency-set --governor performance, mode default
           bindsym o exec ${nosid} ${pkgs.gksu}/bin/gksudo -- ${pkgs.linuxPackages.cpupower}/bin/cpupower frequency-set --governor powersave, mode default
 
@@ -409,7 +410,7 @@ in {
           bindsym Return mode default
           bindsym Escape mode default
         }
-        bindsym ${defaultModifier}+${thirdModifier}+g mode "${defaultModifier}e_cpugovernor"
+        bindsym ${defaultModifier}+${thirdModifier}+g mode "$mode_cpugovernor"
 
         ########################
         # Workspace assignment #
