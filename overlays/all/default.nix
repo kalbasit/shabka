@@ -2,8 +2,6 @@ self: super:
 
 {
   greenclip-config   = self.callPackage ./greenclip-config {};
-  i3-config          = self.callPackage ./i3-config {};
-  i3status-config    = self.callPackage ./i3status-config {};
   less-config        = self.callPackage ./less-config {};
   most-config        = self.callPackage ./most-config {};
   surfingkeys-config = self.callPackage ./surfingkeys-config {};
