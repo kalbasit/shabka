@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, myHostname ? "hades", ... }:
 
 let
   defaultModifier = "Mod4";
