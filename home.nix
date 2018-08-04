@@ -13,6 +13,10 @@ in {
     ./modules/home-manager/rofi
   ];
 
+  # set the keyboard layout and variant
+  home.keyboard.layout = "us";
+  home.keyboard.variant = "colemak";
+
   services.gpg-agent = {
     enable = true;
 
