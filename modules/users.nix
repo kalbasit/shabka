@@ -29,7 +29,6 @@
       "fuse"
       "libvirtd"
       "networkmanager"
-      "sway"
       "vboxusers"
       "video"
       "wheel"

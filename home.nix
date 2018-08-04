@@ -91,8 +91,6 @@ in {
 
     rbrowser
 
-    sway-config
-
     swm
 
     unzip
