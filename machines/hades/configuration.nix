@@ -10,12 +10,16 @@
     ./hardware-configuration.nix
 
     ../../modules/common.nix
+    ../../modules/desktop.nix
 
-    ../../modules/i3.nix
     ../../modules/sway.nix
 
     ../../modules/printers.nix
-  ];
+
+    ../../modules/snapper.nix
+  ] ++ (if builtins.pathExists /private then [
+    ../../modules/openvpn/client/nasreddine/hades.nix
+  ] else []);
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.editor = false;

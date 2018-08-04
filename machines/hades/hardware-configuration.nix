@@ -52,16 +52,16 @@
       options = [ "subvol=@code" "X-mount.mkdir=0700" ];
     };
 
+    "/private" = {
+      device = "/dev/disk/by-uuid/e2b2367b-f458-4c55-a3f0-87cef3366d62";
+      fsType = "btrfs";
+      options = [ "subvol=@private" "X-mount.mkdir=0700" ];
+    };
+
     "/home/kalbasit/storage" = {
       device = "/dev/disk/by-uuid/d8a3aad7-3fe8-4986-acc5-c6f7525c9af4";
       fsType = "btrfs";
       options = [ "subvol=@home-kalbasit-storage" ];
-    };
-
-    "/home/kalbasit/VirtualBox/VMs" = {
-      device = "/dev/disk/by-uuid/d8a3aad7-3fe8-4986-acc5-c6f7525c9af4";
-      fsType = "btrfs";
-      options = [ "subvol=@home-kalbasit-virtualbox-vms" ];
     };
 
     "/boot" = {

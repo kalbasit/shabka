@@ -26,7 +26,7 @@ configurations and by [NixOS][2] for the system.
 - [Croscore fonts][8].
 - Colemak keyboard layout. My Kinesis Advantage 2 layout and settings are available [here][9].
 - i3 window manger (see [i3 README][10] for more information):
-  - Cousine font from the [Croscore fonts][8].
+  - SourceCodePro font from the [Adobe][8].
   - [seoul256][11] color scheme.
   - uses rofi backed by [i3 dynamic workspaces][12] for workspace
       management. Allows an infinite number of workspaces with Alfred-like
@@ -56,8 +56,7 @@ management, and to call binaries and .desktop files.
 ## NixOS
 
 ```
-$ git clone https://github.com/kalbasit/system.git
-$ git submodule update --init
+$ git clone --recurse-submodules https://github.com/kalbasit/system.git
 $ cd system
 $ ./install.sh
 ```
@@ -68,8 +67,7 @@ nixpkgs and nixos-config without having to export the NIX_PATH.
 ## Arch Linux
 
 ```
-$ git clone https://github.com/kalbasit/system.git
-$ git submodule update --init
+$ git clone --recurse-submodules https://github.com/kalbasit/system.git
 $ cd system
 $ ./install.sh
 ```
@@ -155,7 +153,7 @@ should live under `~/.ssh/personal` and not `~/.ssh`.
 [2]: https://nixos.org
 [3]: https://github.com/jwilm/alacritty
 [7]: https://github.com/kalbasit/system/blob/master/overlays/all/zsh-config/zsh/functions/ssh_agents
-[8]: https://en.wikipedia.org/wiki/Croscore_fonts
+[8]: https://adobe-fonts.github.io/source-code-pro/
 [9]: https://github.com/kalbasit/advantage2
 [10]: https://github.com/kalbasit/system/tree/master/.config/i3
 [11]: https://github.com/junegunn/seoul256.vim

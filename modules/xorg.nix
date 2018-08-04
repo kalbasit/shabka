@@ -8,6 +8,8 @@ let
 in
 
 {
+  services.xserver.autorun = true;
+  services.xserver.enable = true;
   services.xserver.autoRepeatDelay = 200;
   services.xserver.autoRepeatInterval = 30;
   services.xserver.xkbOptions = lib.concatStringsSep "," [
@@ -20,4 +22,11 @@ in
   # enable xautolock
   services.xserver.xautolock.enable = true;
   services.xserver.xautolock.locker = "${pkgs.i3lock}/bin/i3lock -ti ${image}";
+
+  # enable the display manager
+  services.xserver.displayManager.gdm.enable = true;
+  services.xserver.displayManager.gdm.autoLogin = {
+    enable = true;
+    user = "kalbasit";
+  };
 }

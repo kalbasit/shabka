@@ -4,25 +4,26 @@
   imports = [
     ./colemak.nix
     ./nix.nix
-    ./publica.nix
-    ./redshift.nix
+    ./tmux.nix
     ./users.nix
-    ./yubikey.nix
   ];
 
   # load the overlays that we need at the very top-level
   nixpkgs.overlays = [
-    (import ../overlays/nodePackages)
-    (import ../overlays/neovim)
-    (import ../overlays/rbrowser)
     (self: super: { i3-config = super.i3-config.override { hostname = config.networking.hostname; }; })
+    (self: super: { home = super.home.override { hostname = config.networking.hostname; }; })
+
+    (import ../overlays/neovim)
+    (import ../overlays/nodePackages)
+    (import ../overlays/rbrowser)
+    (import ../overlays/swm)
   ];
+
+  # put /tmp on tmpfs
+  boot.tmpOnTmpfs = true;
 
   # allow unfree software on all machines
   nixpkgs.config.allowUnfree = true;
-
-  # set the BROWSER to my rbrowser
-  environment.variables.BROWSER = "${pkgs.rbrowser}/bin/rbrowser";
 
   # set the EDITOR to neovim
   environment.variables.EDITOR = "nvim";
@@ -39,9 +40,9 @@
   # Enable the network manager, it makes life easier
   networking.networkmanager.enable = true;
 
-  # Enable sound.
-  sound.enable = true;
-  hardware.pulseaudio.enable = true;
+  # disable IPv6, it's not working within my network. I have to add support for
+  # IPv6 inside my network before being able to enable it.
+  networking.enableIPv6 = false;
 
   # setup the fonts
   fonts.fonts = with pkgs; [
@@ -67,12 +68,8 @@
   virtualisation.virtualbox.host.enable = true;
 
   # Synchronise the clock with NTP
-  services.ntp.enable = true;
-
-  # The power button should trigger suspend
-  services.logind.extraConfig = ''
-    HandlePowerKey=suspend
-  '';
+  # TODO: figure out why NTP is getting stuck on shutdown.
+  # services.ntp.enable = true;
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
@@ -86,10 +83,6 @@
 
   # Enable fwupd
   services.fwupd.enable = true;
-
-  # Install and enable Keybase
-  services.keybase.enable = true;
-  services.kbfs.enable = true;
 
   # allow Mosh server in
   networking.firewall.allowedUDPPortRanges = [ { from = 60000; to = 61000; } ];

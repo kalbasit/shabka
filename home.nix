@@ -4,10 +4,25 @@ let
   system-path = builtins.toPath /code/personal/base/src/github.com/kalbasit/system;
 in {
   imports = [
+    ./modules/home-manager/alacritty
+    ./modules/home-manager/chromium
+    ./modules/home-manager/dunst
     ./modules/home-manager/git
+    ./modules/home-manager/i3
     ./modules/home-manager/neovim
+    ./modules/home-manager/rofi
+    ./modules/home-manager/taskwarrior
+    ./modules/home-manager/termite
     ./modules/home-manager/zsh
+
+    # TODO: enable this once https://github.com/erebe/greenclip/issues/39 has
+    # been resolved, and released to HackagePackages.
+    # ./modules/home-manager/greenclip
   ];
+
+  # set the keyboard layout and variant
+  home.keyboard.layout = "us";
+  home.keyboard.variant = "colemak";
 
   services.gpg-agent = {
     enable = true;
@@ -16,17 +31,9 @@ in {
     maxCacheTtl = 68400;
   };
 
-  programs.rofi = {
-    enable = true;
-
-    extraConfig = ''
-      rofi.modi: window,run,ssh,drun,i3Workspaces:i3-switch-workspaces,i3RenameWorkspace:i3-rename-workspace,i3MoveContainer:i3-move-container,SwayWorkspaces:sway-switch-workspaces,SwayRenameWorkspace:sway-rename-workspace,SwayMoveContainer:sway-move-container
-    '';
-
-    font = "Cousine 9";
-
-    theme = "Adapta-Nokto";
-  };
+  # Install and enable Keybase
+  services.keybase.enable = true;
+  services.kbfs.enable = true;
 
   programs.home-manager = {
     enable = true;
@@ -35,76 +42,66 @@ in {
   };
 
   home.packages = with pkgs; [
-      alacritty
-      alacritty-config
+    # Applications
+    amazon-ecr-credential-helper
+    docker-credential-gcr
 
-      amazon-ecr-credential-helper
-      docker-credential-gcr
-
-      bat
-      (pkgs.writeTextFile {
-        name = "alias-bat-cat";
-        destination = "/userHome/.zsh/rc.d/alias-bat-cat.zsh";
-        text = ''
+    bat
+    (pkgs.writeTextFile {
+      name = "alias-bat-cat";
+      destination = "/userHome/.zsh/rc.d/alias-bat-cat.zsh";
+      text = ''
           alias cat=bat
-        '';
-      })
+      '';
+    })
 
-      chromium
-      chromium-config
+    browsh
 
-      direnv
+    direnv
 
-      firefox
+    firefox
 
-      fzf
+    fzf
 
-      gist
+    gist
 
-      gnupg
+    gnupg
 
-      go
+    go
 
-      i3-config
-      i3status-config
-      dunst dunst-config
+    htop
 
-      jq
+    jq
 
-      lastpass-cli
+    keybase
+    keybase-gui
 
-      less-config
+    lastpass-cli
 
-      mercurial
+    mercurial
 
-      mosh
+    mosh
 
-      most
-      most-config
+    nix-index
 
-      nix-index
+    nixops
 
-      # curses-based file manager
-      ranger
+    # curses-based file manager
+    ranger
 
-      rbrowser
+    rbrowser
 
-      surfingkeys-config
+    sway-config
 
-      sway-config
+    swm
 
-      swm
+    unzip
 
-      termite        # Arch-only: this is required to make the ~/.terminfo link happy
-      termite-config
+    zsh
+    zsh-config
+    nix-zsh-completions
 
-      tmux
-      tmux-config
-
-      unzip
-
-      zsh
-      zsh-config
-      nix-zsh-completions
+    # Games
+    _2048-in-terminal
   ];
 }
