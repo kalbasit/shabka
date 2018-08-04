@@ -74,6 +74,8 @@
     });
 
     oh-my-zsh = {
+      enable = true;
+
       plugins = [
         "command-not-found"
         "extract"
