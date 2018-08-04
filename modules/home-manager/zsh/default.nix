@@ -5,6 +5,7 @@
     enable = true;
 
     shellAliases = {
+      cat = "${pkgs.bat}/bin/bat";
       e = "\${EDITOR:-nvim}";
       gl = "github_commit_link";
       hm = "home-manager";
