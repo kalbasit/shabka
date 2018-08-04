@@ -4,6 +4,7 @@
   imports = [
     ./colemak.nix
     ./nix.nix
+    ./tmux.nix
     ./users.nix
   ];
 
