@@ -423,7 +423,4 @@ in {
       '';
     };
   };
-
-  xsession.enable = true;
-  xsession.;
 }
