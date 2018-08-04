@@ -1,6 +1,8 @@
 { pkgs, ... }:
 
 {
+  imports = [./surfingkeys];
+
   home.file.".config/chromium/profiles/anya/.keep".text = "";
   home.file.".config/chromium/profiles/ihab/.keep".text = "";
   home.file.".config/chromium/profiles/nosecurity/.keep".text = "";

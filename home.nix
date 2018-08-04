@@ -84,8 +84,6 @@ in {
 
     rbrowser
 
-    surfingkeys-config
-
     sway-config
 
     swm
