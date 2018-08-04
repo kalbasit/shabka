@@ -1,75 +1,3 @@
-# TODO: only copy .zshrc to the home directory, this file must source from it's
-# source, how to do that?
-# TODO: pass all external binaries by substitution.
-# - chromium
-# - exa
-# - fortune
-# - fzf
-# - pom
-
-#####################################################################
-# core
-#####################################################################
-
-# macOS's $HOST changes with dhcp, etc. Use ComputerName if possible.
-[[ "$OSTYPE" = darwin* ]] && SHORT_HOST="$( scutil --get ComputerName 2>/dev/null )"
-[[ -z "${SHORT_HOST}" ]] && SHORT_HOST="${HOST/.*/}"
-
-# load the host profile
-[[ -r /etc/profile ]] && source /etc/profile
-
-if [[ -o interactive ]]; then
-	#####################################################################
-	# zplug
-	#####################################################################
-
-	# Load zplug
-	[[ -r "${HOME}/.zplug/init.zsh" ]] || git clone https://github.com/zplug/zplug.git "${HOME}/.zplug"
-	source "${HOME}/.zplug/init.zsh"
-
-	# speed up zplug. See https://github.com/zplug/zplug/issues/368#issuecomment-282566102
-	__zplug::io::file::generate
-
-	# let zplug manage itself
-	zplug 'zplug/zplug', hook-build:'zplug --self-manage'
-
-	# load the shellder theme
-	zplug "kalbasit/shellder", as:theme
-
-	# plugins
-	zplug "Dbz/zsh-kubernetes"
-	zplug "b4b4r07/emoji-cli"
-	zplug "b4b4r07/enhancd",                     use:init.sh
-	zplug "denolfe/zsh-travis"
-	zplug "hcgraf/zsh-sudo"
-	zplug "jreese/zsh-titles"
-	zplug "peterhurford/git-it-on.zsh"
-	zplug "plugins/command-not-found",           from:oh-my-zsh
-	zplug "plugins/extract",                     from:oh-my-zsh
-	zplug "plugins/git",                         from:oh-my-zsh
-	# TODO: Getting the following error after install hub with this plugin enabled:
-	#   (eval):11: defining function based on alias `git'
-	#   (eval):12: parse error near `()'
-	#zplug "plugins/github",                      from:oh-my-zsh
-	zplug "plugins/history",                     from:oh-my-zsh
-	zplug "supercrabtree/k"
-	zplug "zlsun/solarized-man"
-	zplug "zsh-users/zsh-completions"
-	zplug "zsh-users/zsh-history-substring-search"
-	zplug "zsh-users/zsh-syntax-highlighting",   defer:2
-
-	# Install if not installed
-	zplug check || zplug install
-
-	# Then, source plugins and add commands to $PATH
-	zplug load
-
-	if zplug check b4b4r07/enhancd; then
-		# setting if enhancd is available
-		export ENHANCD_FILTER=fzf-tmux
-	fi
-fi
-
 #####################################################################
 # options
 #####################################################################
@@ -229,12 +157,6 @@ if [[ -o interactive ]]; then
 fi
 
 #####################################################################
-# functions
-#####################################################################
-
-source "@out_dir@/zsh/functions.zsh"
-
-#####################################################################
 # exports
 #####################################################################
 
@@ -325,53 +247,6 @@ fi
 
 # add cargo
 pathprepend PATH "${HOME}/.cargo/bin"
-
-#####################################################################
-# aliases
-#####################################################################
-
-if [[ -o interactive ]]; then
-	alias e="${EDITOR:-vim}"
-	alias gl='github_commit_link'
-	alias hm="home-manager"
-	alias http='http --print=HhBb'
-	alias less=@bat_bin@
-	alias ll="ls -la"
-	alias pw="ps aux | grep -v grep | grep -e"
-	alias rot13="tr '[A-Za-z]' '[N-ZA-Mn-za-m]'"
-	alias rserve_this="ruby -rrack -e \"Rack::Handler::WEBrick.run Rack::Directory.new('.')\""
-	alias serve_this="python2 -m SimpleHTTPServer"
-	alias t='@task_bin@'
-	alias utf8test='curl -L https://github.com/tmux/tmux/raw/master/tools/UTF-8-demo.txt'
-	alias vi=nvim
-	alias vim=nvim
-
-	# TODO: move this to the swm package
-	alias s="swm tmux switch-client"
-	alias sb="swm --story base tmux switch-client"
-	alias vim_ready='' # TODO: remove this from swm, no longer needed!
-
-	# TODO: move to docker-config, how to tell ZSH to import them?
-	alias remove_created_containers="docker rm -v \$(docker ps -a -q -f status=created)"
-	alias remove_dangling_images="docker rmi \$(docker images -f dangling=true -q)"
-	alias remove_dead_containers="docker rm -v \$(docker ps -a -q -f status=exited)"
-
-	# Always enable colored `grep` output
-	# Note: `GREP_OPTIONS="--color=auto"` is deprecated, hence the alias usage.
-	alias egrep='egrep --color=auto'
-	alias fgrep='fgrep --color=auto'
-	alias grep='grep --color=auto'
-
-	# send_code sends the code to apollo
-	alias send_code='rsync -avuz --rsync-path=/usr/bin/rsync --delete --exclude=.snapshots/ --exclude=pkg/ --exclude=bin/ "${CODE_PATH}/" apollo:/volume1/Code/active/'
-	# get_code gets code from apollo
-	alias get_code='rsync -avuz --rsync-path=/usr/bin/rsync --delete --exclude=.snapshots/ --exclude=pkg/ --exclude=bin/ apollo:/volume1/Code/active/ "${CODE_PATH}/"'
-
-	# OS-Specific aliases
-	if [[ "$OSTYPE" = darwin* ]]; then  # Mac only
-		alias mac_install_cert='sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain'
-	fi
-fi
 
 #####################################################################
 # colors
@@ -517,23 +392,6 @@ if [[ -o interactive ]]; then
 	alias md='mkdir -p'
 	alias rd=rmdir
 	alias d='dirs -v | head -10'
-fi
-
-#####################################################################
-# history settings
-#####################################################################
-
-## Command history configuration
-
-if [[ -o interactive ]]; then
-	[[ -z $HISTFILE ]] && export HISTFILE="${HOME}/.zsh_history"
-	export HISTSIZE=100000
-	export SAVEHIST=100000
-
-	# use 'fc -El 1' for "dd.mm.yyyy"
-	# use 'fc -il 1' for "yyyy-mm-dd"
-	# use 'fc -fl 1' for mm/dd/yyyy
-	alias history='fc -il 1'
 fi
 
 #####################################################################
@@ -837,9 +695,7 @@ if [[ -o interactive ]]; then
 	export FZF_DEFAULT_COMMAND='(@git_bin@ ls-tree -r --name-only HEAD || @ag_bin@ --hidden --ignore .git -g "")'
 	pathappend PATH @fzf_out@/bin
 	source @fzf_out@/share/fzf/key-bindings.zsh
-
-	# load direnv
-	eval "$(@direnv_dir@/bin/direnv hook zsh)"
+	export ENHANCD_FILTER=@fzf_out@/bin/fzf-tmux
 fi
 
 #####################################################################

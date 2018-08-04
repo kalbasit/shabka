@@ -13,6 +13,7 @@ in {
     ./modules/home-manager/rofi
     ./modules/home-manager/taskwarrior
     ./modules/home-manager/termite
+    ./modules/home-manager/zsh
 
     # TODO: enable this once https://github.com/erebe/greenclip/issues/39 has
     # been resolved, and released to HackagePackages.
@@ -40,23 +41,17 @@ in {
     path = "${system-path}/external/home-manager";
   };
 
+  # Enable direnv
+  programs.direnv.enable = true;
+
   home.packages = with pkgs; [
     # Applications
     amazon-ecr-credential-helper
     docker-credential-gcr
 
     bat
-    (pkgs.writeTextFile {
-      name = "alias-bat-cat";
-      destination = "/userHome/.zsh/rc.d/alias-bat-cat.zsh";
-      text = ''
-          alias cat=bat
-      '';
-    })
 
     browsh
-
-    direnv
 
     firefox
 
@@ -94,8 +89,6 @@ in {
 
     unzip
 
-    zsh
-    zsh-config
     nix-zsh-completions
 
     # Games
