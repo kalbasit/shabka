@@ -335,6 +335,7 @@ if [[ -o interactive ]]; then
 	alias gl='github_commit_link'
 	alias hm="home-manager"
 	alias http='http --print=HhBb'
+	alias less=@bat_bin@
 	alias ll="ls -la"
 	alias pw="ps aux | grep -v grep | grep -e"
 	alias rot13="tr '[A-Za-z]' '[N-ZA-Mn-za-m]'"
@@ -342,8 +343,8 @@ if [[ -o interactive ]]; then
 	alias serve_this="python2 -m SimpleHTTPServer"
 	alias t='@task_bin@'
 	alias utf8test='curl -L https://github.com/tmux/tmux/raw/master/tools/UTF-8-demo.txt'
-	alias vim=nvim
 	alias vi=nvim
+	alias vim=nvim
 
 	# TODO: move this to the swm package
 	alias s="swm tmux switch-client"

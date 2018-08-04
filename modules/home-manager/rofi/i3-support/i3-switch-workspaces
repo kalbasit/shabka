@@ -21,9 +21,11 @@
 #
 
 if [[ -z "${*}" ]]; then
-  # print the name of the current workspace
-  swaymsg -rt get_workspaces | jq -r '.[] | if .focused == true then .name else empty end'
+  # we need the back and forth first
+  echo back_and_forth
+  # get a list of workspaces except for the one focused
+  @i3-msg_bin@ -t get_workspaces | @jq_bin@ -r '.[] | if .focused == false then .name else empty end'
 else
   # switch to the given workspace
-  swaymsg rename workspace to "${@}" >/dev/null
+  @i3-msg_bin@ workspace "${@}" >/dev/null
 fi

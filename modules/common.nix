@@ -13,6 +13,7 @@
     (import ../overlays/neovim)
     (import ../overlays/rbrowser)
     (self: super: { i3-config = super.i3-config.override { hostname = config.networking.hostname; }; })
+    (self: super: { home = super.home.override { hostname = config.networking.hostname; }; })
   ];
 
   # put /tmp on tmpfs
@@ -64,7 +65,8 @@
   virtualisation.virtualbox.host.enable = true;
 
   # Synchronise the clock with NTP
-  services.ntp.enable = true;
+  # TODO: figure out why NTP is getting stuck on shutdown.
+  # services.ntp.enable = true;
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;

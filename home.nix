@@ -8,27 +8,21 @@ in {
     ./modules/home-manager/chromium
     ./modules/home-manager/dunst
     ./modules/home-manager/git
-    ./modules/home-manager/neovim
     ./modules/home-manager/greenclip
+    ./modules/home-manager/i3
+    ./modules/home-manager/neovim
+    ./modules/home-manager/rofi
   ];
+
+  # set the keyboard layout and variant
+  home.keyboard.layout = "us";
+  home.keyboard.variant = "colemak";
 
   services.gpg-agent = {
     enable = true;
 
     defaultCacheTtl = 68400;
     maxCacheTtl = 68400;
-  };
-
-  programs.rofi = {
-    enable = true;
-
-    extraConfig = ''
-      rofi.modi: window,run,ssh,drun,i3Workspaces:i3-switch-workspaces,i3RenameWorkspace:i3-rename-workspace,i3MoveContainer:i3-move-container,SwayWorkspaces:sway-switch-workspaces,SwayRenameWorkspace:sway-rename-workspace,SwayMoveContainer:sway-move-container
-    '';
-
-    font = "SourceCodePro 9";
-
-    theme = "Adapta-Nokto";
   };
 
   # Install and enable Keybase
@@ -71,9 +65,6 @@ in {
 
     htop
 
-    i3-config
-    i3status-config
-
     jq
 
     keybase
@@ -81,14 +72,9 @@ in {
 
     lastpass-cli
 
-    less-config
-
     mercurial
 
     mosh
-
-    most
-    most-config
 
     nix-index
 
@@ -98,8 +84,6 @@ in {
     ranger
 
     rbrowser
-
-    surfingkeys-config
 
     sway-config
 

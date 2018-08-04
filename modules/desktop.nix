@@ -4,6 +4,7 @@
   imports = [
     ./publica.nix
     ./redshift.nix
+    ./xorg.nix
     ./yubikey.nix
   ];
 

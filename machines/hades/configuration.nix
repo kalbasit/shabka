@@ -12,7 +12,6 @@
     ../../modules/common.nix
     ../../modules/desktop.nix
 
-    ../../modules/i3.nix
     ../../modules/sway.nix
 
     ../../modules/printers.nix
