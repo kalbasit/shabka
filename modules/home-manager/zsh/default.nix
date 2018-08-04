@@ -13,7 +13,7 @@
       less = "${pkgs.bat}/bin/bat";
       ll = "ls -la";
       pw = "ps aux | grep -v grep | grep -e";
-      rot13 = "tr '[A-Za-z]' '[N-ZA-Mn-za-m]'";
+      rot13 = "tr \"[A-Za-z]\" \"[N-ZA-Mn-za-m]\"";
       rserve_this = "ruby -rrack -e \"Rack::Handler::WEBrick.run Rack::Directory.new('.')\"";
       serve_this = "python2 -m SimpleHTTPServer";
       t = "${pkgs.taskwarrior}/bin/task";
