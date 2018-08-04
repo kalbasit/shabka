@@ -130,6 +130,17 @@
       #}
 
       {
+        name = "shellder";
+        file = "shellder.zsh-theme";
+        src = pkgs.fetchFromGitHub {
+          owner = "kalbasit";
+          repo = "shellder";
+          rev = "452b69ff48776ea539856dcb33a051763e681e4f";
+          sha256 = "0sjb8zy7wcymd9gjfp2386z2657xh46qlbffkvws0f7scpwv0ahc";
+        };
+      }
+
+      {
         name = "zsh-completions";
         src = pkgs.fetchFromGitHub {
           owner = "zsh-users";
