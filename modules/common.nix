@@ -65,7 +65,8 @@
   virtualisation.virtualbox.host.enable = true;
 
   # Synchronise the clock with NTP
-  services.ntp.enable = true;
+  # TODO: figure out why NTP is getting stuck on shutdown.
+  # services.ntp.enable = true;
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
