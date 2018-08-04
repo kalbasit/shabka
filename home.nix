@@ -71,8 +71,6 @@ in {
 
     lastpass-cli
 
-    less-config
-
     mercurial
 
     mosh
