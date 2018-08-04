@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+readonly here="$(cd $(dirname "${BASH_SOURCE[0]}")/.. && pwd)"
+
 if [[ $(id -u) -gt 0 ]]; then
 	echo -e "must run this as root"
 	exit 1
@@ -12,5 +14,19 @@ nixos-rebuild switch
 su kalbasit -c '
 set -euo pipefail
 
-nix-shell -p home-manager --run 'home-manager build'
+if [[ -e "${HOME}/.config/nixpkgs" ]] && [[ ! -L "${HOME}/.config/nixpkgs" ]]; then
+	echo -e "${HOME}/.config/nixpkgs already exists, cannot continue."
+	exit 1
+fi
+
+if [[ -L "${HOME}/.config/nixpkgs" ]] && [[ "$(readlink -f "${HOME}/.config/nixpkgs")" != "${here}" ]]; then
+	echo -e "${HOME}/.config/nixpkgs already exists as a link, but does not point here, cannot continue."
+	exit 1
+fi
+
+if [[ ! -e "${HOME}/.config/nixpkgs" ]]; then
+	ln -s "${here}" "${HOME}/.config/nixpkgs"
+fi
+
+nix-shell -p home-manager --run 'home-manager switch'
 '
