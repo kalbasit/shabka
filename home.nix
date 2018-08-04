@@ -95,8 +95,6 @@ in {
 
     unzip
 
-    zsh
-    zsh-config
     nix-zsh-completions
 
     # Games
