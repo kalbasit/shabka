@@ -42,6 +42,10 @@ in {
   xsession = {
     enable = true;
 
+    initExtra = ''
+      exec > ~/.xsession-errors 2>&1
+    '';
+
     # TODO: extract this to i3-config.nix
     windowManager.i3 = {
       enable = true;
