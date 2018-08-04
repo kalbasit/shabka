@@ -94,9 +94,6 @@ in {
 
     swm
 
-    tmux
-    tmux-config
-
     unzip
 
     zsh

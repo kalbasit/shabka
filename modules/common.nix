@@ -4,16 +4,19 @@
   imports = [
     ./colemak.nix
     ./nix.nix
+    ./tmux.nix
     ./users.nix
   ];
 
   # load the overlays that we need at the very top-level
   nixpkgs.overlays = [
-    (import ../overlays/nodePackages)
-    (import ../overlays/neovim)
-    (import ../overlays/rbrowser)
     (self: super: { i3-config = super.i3-config.override { hostname = config.networking.hostname; }; })
     (self: super: { home = super.home.override { hostname = config.networking.hostname; }; })
+
+    (import ../overlays/neovim)
+    (import ../overlays/nodePackages)
+    (import ../overlays/rbrowser)
+    (import ../overlays/swm)
   ];
 
   # put /tmp on tmpfs
