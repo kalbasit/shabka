@@ -1,6 +1,13 @@
 { pkgs, lib, ... }:
 
-{
+let
+  plugins = with pkgs; [
+    tmuxPlugins.battery
+    tmuxPlugins.logging
+    tmuxPlugins.prefix-highlight
+    # TODO: install wfxr/tmux-fzf-url
+  ];
+in {
   programs.tmux = {
     # Rather than constraining window size to the maximum size of any client
     # connected to the *session*, constrain window size to the maximum size of any
@@ -140,6 +147,12 @@
 
       # online status settings
       set -g status-interval 5
+
+      # add all the plugins
+      ${lib.concatStrings (map (x: "run-shell ${x.rtp}\n") plugins)}
+
+      # tmux-battery settings
+      set -g @batt_remain_short true
     '' + lib.optionalString pkgs.stdenv.isDarwin ''
       # on OSX, set the default command to reattach-to-user-namespace
       # TODO: must install reattach-to-user-namespace through Nix to enable this!
