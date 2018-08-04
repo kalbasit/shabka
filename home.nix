@@ -12,6 +12,7 @@ in {
     ./modules/home-manager/neovim
     ./modules/home-manager/rofi
     ./modules/home-manager/taskwarrior
+    ./modules/home-manager/termite
 
     # TODO: enable this once https://github.com/erebe/greenclip/issues/39 has
     # been resolved, and released to HackagePackages.
@@ -92,9 +93,6 @@ in {
     sway-config
 
     swm
-
-    termite        # Arch-only: this is required to make the ~/.terminfo link happy
-    termite-config
 
     tmux
     tmux-config
