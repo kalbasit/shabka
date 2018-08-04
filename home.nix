@@ -8,10 +8,13 @@ in {
     ./modules/home-manager/chromium
     ./modules/home-manager/dunst
     ./modules/home-manager/git
-    ./modules/home-manager/greenclip
     ./modules/home-manager/i3
     ./modules/home-manager/neovim
     ./modules/home-manager/rofi
+
+    # TODO: enable this once https://github.com/erebe/greenclip/issues/39 has
+    # been resolved, and released to HackagePackages.
+    # ./modules/home-manager/greenclip
   ];
 
   # set the keyboard layout and variant
