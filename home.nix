@@ -11,6 +11,7 @@ in {
     ./modules/home-manager/i3
     ./modules/home-manager/neovim
     ./modules/home-manager/rofi
+    ./modules/home-manager/taskwarrior
 
     # TODO: enable this once https://github.com/erebe/greenclip/issues/39 has
     # been resolved, and released to HackagePackages.
@@ -91,8 +92,6 @@ in {
     sway-config
 
     swm
-
-    task-config
 
     termite        # Arch-only: this is required to make the ~/.terminfo link happy
     termite-config
