@@ -1,6 +1,8 @@
 { pkgs, ... }:
 
-{
+let
+  myFunctions = pkgs.callPackage ./plugins/functions {};
+in {
   programs.zsh = {
     enable = true;
 
@@ -174,7 +176,7 @@
 
       {
         name = "functions";
-        src = ./plugins/functions;
+        src = myFunctions;
       }
     ];
   };
