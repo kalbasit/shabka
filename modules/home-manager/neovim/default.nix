@@ -1,8 +1,7 @@
 { pkgs, ... }:
 
 let
-  my_plugins = import ./plugins.nix { inherit (pkgs) vimUtils fetchFromGitHub;  };
-
+  my_plugins = import ./plugins.nix { inherit (pkgs) vimUtils fetchFromGitHub stdenv;  };
 in {
   programs.neovim = {
     enable = true;
@@ -68,6 +67,7 @@ in {
             "vim-maktaba"
             "vim-bazel"
           ] ++ [ # my_plugins
+            "airline-seoul256-theme"
             "vim-PreserveNoEOL"
             "vim-better-whitespace"
             "vim-colemak"

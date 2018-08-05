@@ -1,6 +1,23 @@
-{ vimUtils, fetchFromGitHub }:
+{ vimUtils, fetchFromGitHub, stdenv }:
 
-{
+let
+  airlineSeoul256Theme = stdenv.mkDerivation rec {
+    name = "airline-seoul256-theme-${version}";
+    version = "0.0.1";
+    src = ./seoul256.vim;
+    phases = [ "installPhase" ];
+    installPhase = ''
+      install -Dm644 $src $out/autoload/airline/themes/seoul256.vim
+    '';
+  };
+
+in {
+  airline-seoul256-theme = vimUtils.buildVimPluginFrom2Nix {
+    name = "vim-colemak-2016-10-16";
+    src = airlineSeoul256Theme;
+    dependencies = [];
+  };
+
   vim-colemak = vimUtils.buildVimPluginFrom2Nix {
     name = "vim-colemak-2016-10-16";
     src = fetchFromGitHub {
