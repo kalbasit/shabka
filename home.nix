@@ -4,20 +4,20 @@ let
   system-path = builtins.toPath /code/personal/base/src/github.com/kalbasit/system;
 in {
   imports = [
-    ./modules/home-manager/alacritty
-    ./modules/home-manager/chromium
-    ./modules/home-manager/dunst
-    ./modules/home-manager/git
-    ./modules/home-manager/i3
-    ./modules/home-manager/neovim
-    ./modules/home-manager/rofi
-    ./modules/home-manager/taskwarrior
-    ./modules/home-manager/termite
-    ./modules/home-manager/zsh
+    ./cfg/home-manager/alacritty
+    ./cfg/home-manager/chromium
+    ./cfg/home-manager/dunst
+    ./cfg/home-manager/git
+    ./cfg/home-manager/i3
+    ./cfg/home-manager/neovim
+    ./cfg/home-manager/rofi
+    ./cfg/home-manager/taskwarrior
+    ./cfg/home-manager/termite
+    ./cfg/home-manager/zsh
 
     # TODO: enable this once https://github.com/erebe/greenclip/issues/39 has
     # been resolved, and released to HackagePackages.
-    # ./modules/home-manager/greenclip
+    # ./cfg/home-manager/greenclip
   ];
 
   # set the keyboard layout and variant

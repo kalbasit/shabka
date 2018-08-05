@@ -7,14 +7,14 @@
 
     ./hardware-configuration.nix
 
-    ../../modules/common.nix
-    ../../modules/desktop.nix
+    ../../cfg/common.nix
+    ../../cfg/desktop.nix
 
-    ../../modules/i3.nix
+    ../../cfg/i3.nix
 
-    ../../modules/printers.nix
+    ../../cfg/printers.nix
   ] ++ (if builtins.pathExists /private then [
-    ../../modules/openvpn/client/nasreddine/cratos.nix
+    ../../cfg/openvpn/client/nasreddine/cratos.nix
   ] else []);
 
   # Use the systemd-boot EFI boot loader.
