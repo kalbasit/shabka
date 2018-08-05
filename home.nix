@@ -44,6 +44,9 @@ in {
   # Enable direnv
   programs.direnv.enable = true;
 
+  # Enable the network applet
+  services.network-manager-applet.enable = true;
+
   home.packages = with pkgs; [
     # Applications
     amazon-ecr-credential-helper
