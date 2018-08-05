@@ -99,6 +99,12 @@ in {
       bind . command-prompt "swap-window -t '%%'"
       bind > command-prompt "move-window -t '%%'"
 
+      # More straight forward key bindings for splitting
+      unbind %
+      bind h split-window -h
+      unbind '"'
+      bind v split-window -v
+
       #
       # Settings
       #
