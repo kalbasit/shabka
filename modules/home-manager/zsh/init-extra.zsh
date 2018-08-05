@@ -390,11 +390,6 @@ if [[ -o interactive ]]; then
 	}
 	zle -N expand-or-complete-with-dots
 	bindkey "^I" expand-or-complete-with-dots
-
-	# pet_select
-	zle -N pet_select
-	stty -ixon
-	bindkey '^p' pet_select
 fi
 
 #####################################################################

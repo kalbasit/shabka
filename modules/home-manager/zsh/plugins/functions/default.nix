@@ -40,12 +40,6 @@ stdenv.mkDerivation rec {
       --subst-var-by netstat_bin ${pkgs.nettools}/bin/netstat \
       --subst-var-by ssh_bin ${pkgs.openssh}/bin/ssh
 
-    substituteInPlace $out/pet_select \
-      --subst-var-by pet_bin ${pkgs.pet}/bin/pet
-
-    substituteInPlace $out/pet_prev \
-      --subst-var-by pet_bin ${pkgs.pet}/bin/pet
-
     substituteInPlace $out/pr \
       --subst-var-by git_bin ${pkgs.git}/bin/git
 
