@@ -5,7 +5,7 @@ let
     tmuxPlugins.battery
     tmuxPlugins.logging
     tmuxPlugins.prefix-highlight
-    # TODO: install wfxr/tmux-fzf-url
+    myTmuxPlugins.fzf-tmux-url
   ];
 in {
   programs.tmux = {

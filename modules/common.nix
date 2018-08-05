@@ -17,6 +17,7 @@
     (import ../overlays/nodePackages)
     (import ../overlays/rbrowser)
     (import ../overlays/swm)
+    (import ../overlays/tmuxPlugins)
   ];
 
   # put /tmp on tmpfs
