@@ -4,6 +4,9 @@
   programs.zsh = {
     enable = true;
 
+    enableCompletion = true;
+    enableAutosuggestions = true;
+
     shellAliases = {
       cat = "${pkgs.bat}/bin/bat";
       e = "\${EDITOR:-nvim}";
