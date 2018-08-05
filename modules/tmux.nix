@@ -133,7 +133,7 @@ in {
       set-option -g visual-bell off
 
       # reload config
-      bind R source-file ~/.tmux.conf \; display-message "Config reloaded..."
+      bind R source-file /etc/tmux.conf \; display-message "Config reloaded..."
 
       # No Mouse!
       set -g mouse off
