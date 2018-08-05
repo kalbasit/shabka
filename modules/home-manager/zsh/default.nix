@@ -154,8 +154,8 @@
         src = pkgs.fetchFromGitHub {
           owner = "zsh-users";
           repo = "zsh-history-substring-search";
-          rev = "v1.0.1";
-          sha256 = "0lgmq1xcccnz5cf7vl0r0qj351hwclx9p80cl0qczxry4r2g5qaz";
+          rev = "47a7d416c652a109f6e8856081abc042b50125f4";
+          sha256 = "1mvilqivq0qlsvx2rqn6xkxyf9yf4wj8r85qrxizkf0biyzyy4hl";
         };
       }
 
