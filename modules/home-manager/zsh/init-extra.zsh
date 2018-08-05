@@ -157,6 +157,26 @@ if [[ -o interactive ]]; then
 fi
 
 #####################################################################
+# Powerline9k theme settings
+#####################################################################
+
+# define the segments of the left prompt
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir vcs custom_profile_story)
+
+# define the segments of the right prompt
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator background_jobs command_execution_time time vi_mode ssh)
+
+# truncate /usr/share/plasma to /u/s/plasma
+POWERLEVEL9K_SHORTEN_DIR_LENGTH=1
+POWERLEVEL9K_SHORTEN_DELIMITER=""
+POWERLEVEL9K_SHORTEN_STRATEGY="truncate_from_right"
+
+# define custom segments
+POWERLEVEL9K_CUSTOM_PROFILE_STORY="echo $'\u270D' \$ACTIVE_PROFILE@\$ACTIVE_STORY"
+
+# TODO: setup the colors to be better visible
+
+#####################################################################
 # exports
 #####################################################################
 

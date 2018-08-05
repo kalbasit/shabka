@@ -129,13 +129,13 @@
       #}
 
       {
-        name = "shellder";
-        file = "shellder.zsh-theme";
+        name = "powerlevel9k";
+        file = "powerlevel9k.zsh-theme";
         src = pkgs.fetchFromGitHub {
-          owner = "kalbasit";
-          repo = "shellder";
-          rev = "452b69ff48776ea539856dcb33a051763e681e4f";
-          sha256 = "0sjb8zy7wcymd9gjfp2386z2657xh46qlbffkvws0f7scpwv0ahc";
+          owner = "bhilburn";
+          repo = "powerlevel9k";
+          rev = "571a859413866897cf962396f02f65a288f677ac";
+          sha256 = "0xwa1v3c4p3cbr9bm7cnsjqvddvmicy9p16jp0jnjdivr6y9s8ax";
         };
       }
 
