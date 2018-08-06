@@ -3,7 +3,7 @@ self: super:
 let
   rtpPath = "share/tmux-plugins";
 
-  addRtp = path: pluginName: rtpFileName: attrs: derivation:
+  addRtp = path: rtpFileName: attrs: derivation:
     derivation // { rtp = "${derivation}/${path}/${rtpFileName}"; } // {
       overrideAttrs = f: buildTmuxPlugin (attrs // f attrs);
     };
@@ -23,7 +23,7 @@ let
     dependencies ? [],
     ...
   }:
-    addRtp "${rtpPath}/${path}" pluginName rtpFileName a (self.stdenv.mkDerivation (a // {
+    addRtp "${rtpPath}/${path}" rtpFileName a (self.stdenv.mkDerivation (a // {
       name = namePrefix + pluginName;
 
       inherit pluginName unpackPhase configurePhase buildPhase addonInfo preInstall postInstall;
@@ -47,8 +47,8 @@ let
     configurePhase =":";
   } // a);
 in {
-  myTmuxPlugins.fzf-url = buildTmuxPluginFrom2Nix {
-    pluginName = "fzf-url";
+  myTmuxPlugins.fzf-tmux-url = buildTmuxPluginFrom2Nix {
+    pluginName = "fzf-tmux-url";
     rtpFileName = "fzf-url.tmux";
     src = self.fetchgit {
       url = "https://github.com/wfxr/tmux-fzf-url";
