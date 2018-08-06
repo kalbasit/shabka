@@ -4,6 +4,8 @@ let
   system-path = builtins.toPath /code/personal/base/src/github.com/kalbasit/system;
 in {
   imports = [
+    ./modules/home-manager/lowbatt
+
     ./cfg/home-manager/alacritty
     ./cfg/home-manager/chromium
     ./cfg/home-manager/dunst
@@ -30,6 +32,9 @@ in {
     defaultCacheTtl = 68400;
     maxCacheTtl = 68400;
   };
+
+  # enable batteryNotifier
+  services.batteryNotifier.enable = true;
 
   # Install and enable Keybase
   services.keybase.enable = true;
