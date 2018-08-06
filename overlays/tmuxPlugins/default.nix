@@ -4,7 +4,7 @@ let
   rtpPath = "share/tmux-plugins";
 
   addRtp = path: pluginName: attrs: derivation:
-    derivation // { rtp = "${derivation}/${path}/${builtins.replaceStrings ["-"] ["_"] pluginName}.tmux"; } // {
+    derivation // { rtp = "${derivation}/${path}/${pluginName}.tmux"; } // {
       overrideAttrs = f: buildTmuxPlugin (attrs // f attrs);
     };
 
@@ -46,8 +46,8 @@ let
     configurePhase =":";
   } // a);
 in {
-  myTmuxPlugins.fzf-tmux-url = buildTmuxPluginFrom2Nix {
-    pluginName = "fzf-tmux-url";
+  myTmuxPlugins.fzf-url = buildTmuxPluginFrom2Nix {
+    pluginName = "fzf-url";
     src = self.fetchgit {
       url = "https://github.com/wfxr/tmux-fzf-url";
       rev = "ecd518eec1067234598c01e655b048ff9d06ef2f";
