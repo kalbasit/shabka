@@ -85,7 +85,7 @@ in {
         "extract"
         "git"
         "history"
-        "kuberenetes"
+        "kubectl"
         "sudo"
       ];
     };
