@@ -1,5 +1,3 @@
-# TODO: see https://github.com/rycee/home-manager/issues/250 for instructions
-
 { config, lib, pkgs, ...}:
 
 with lib;
