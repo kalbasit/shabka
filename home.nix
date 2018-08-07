@@ -58,6 +58,11 @@ in {
     path = "${system-path}/external/home-manager";
   };
 
+  # enable FZF
+  programs.fzf = {
+    enable = true;
+  };
+
   # Enable direnv
   programs.direnv.enable = true;
 
@@ -72,8 +77,6 @@ in {
     bat
 
     browsh
-
-    fzf
 
     gist
 
