@@ -12,10 +12,6 @@
   services.xserver.libinput.enable = true;
   services.xserver.libinput.naturalScrolling = true;
 
-  # enable xautolock
-  services.xserver.xautolock.enable = true;
-  services.xserver.xautolock.locker = "${pkgs.i3lock-color}/bin/i3lock-color --clock --color=606060";
-
   # enable the display manager
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.displayManager.gdm.autoLogin = {

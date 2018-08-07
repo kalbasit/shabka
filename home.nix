@@ -34,6 +34,13 @@ in {
     maxCacheTtl = 68400;
   };
 
+  # enable the screen locker
+  services.screen-locker = {
+    enable = true;
+    lockCmd = "${pkgs.i3lock-color}/bin/i3lock-color --clock --color=606060";
+    inactiveInterval = 15;
+  };
+
   # enable Dropbox
   services.dropbox.enable = true;
 
