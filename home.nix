@@ -125,6 +125,8 @@ in {
 
     nix-zsh-completions
 
+    weechat
+
     # Games
     _2048-in-terminal
   ];
