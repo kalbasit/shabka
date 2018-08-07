@@ -135,10 +135,6 @@ in {
           # rofi run
           "${defaultModifier}+r" = "exec ${pkgs.rofi}/bin/rofi -show run";
 
-          # rofi lastpass
-          # TODO: setup this
-          "${defaultModifier}+p" = "exec ${pkgs.rofi}/bin/rofi -modi lpass:rofi-lpass -show lpass";
-
           # list open windows to switch to
           "${thirdModifier}+Tab" = "exec ${pkgs.rofi}/bin/rofi -show window";
 
