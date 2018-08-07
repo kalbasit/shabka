@@ -21,7 +21,7 @@ in {
       rot13 = "tr \"[A-Za-z]\" \"[N-ZA-Mn-za-m]\"";
       serve_this = "${pkgs.python3}/bin/python -m http.server";
       t = "${pkgs.taskwarrior}/bin/task";
-      utf8test = "curl -L https://github.com/tmux/tmux/raw/master/tools/UTF-8-demo.txt";
+      utf8test = "${pkgs.curl}/bin/curl -L https://github.com/tmux/tmux/raw/master/tools/UTF-8-demo.txt";
       vi = "nvim";
       vim = "nvim";
 
@@ -42,9 +42,9 @@ in {
       grep = "grep --color=auto";
 
       # send_code sends the code to apollo
-      send_code = "rsync -avuz --rsync-path=/usr/bin/rsync --delete --exclude=.snapshots/ --exclude=pkg/ --exclude=bin/ \"$CODE_PATH/\" apollo:/volume1/Code/active/";
+      send_code = "${pkgs.rsync}/bin/rsync -avuz --rsync-path=/usr/bin/rsync --delete --exclude=.snapshots/ --exclude=pkg/ --exclude=bin/ \"$CODE_PATH/\" apollo:/volume1/Code/active/";
       # get_code gets code from apollo
-      get_code = "rsync -avuz --rsync-path=/usr/bin/rsync --delete --exclude=.snapshots/ --exclude=pkg/ --exclude=bin/ apollo:/volume1/Code/active/ \"$CODE_PATH/\"";
+      get_code = "${pkgs.rsync}/bin/rsync -avuz --rsync-path=/usr/bin/rsync --delete --exclude=.snapshots/ --exclude=pkg/ --exclude=bin/ apollo:/volume1/Code/active/ \"$CODE_PATH/\"";
 
       # OS-Specific aliases
       # TODO: install this only on Mac
