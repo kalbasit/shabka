@@ -63,6 +63,11 @@ in {
     enable = true;
   };
 
+  # enable htop
+  programs.htop = {
+    enable = true;
+  };
+
   # Enable direnv
   programs.direnv.enable = true;
 
@@ -83,8 +88,6 @@ in {
     gnupg
 
     go
-
-    htop
 
     jq
 
