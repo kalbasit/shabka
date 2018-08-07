@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
       --subst-var-by rofi_bin ${pkgs.rofi}/bin/rofi \
       --subst-var-by zsh_bin ${pkgs.zsh}/bin/zsh
 
-    install -dm755 $out/userHome/.local/share/applications
-    ln -s ${desktopItem}/share/applications/* $out/userHome/.local/share/applications/
+    install -dm755 $out/share/applications
+    ln -s ${desktopItem}/share/applications/* $out/share/applications/
   '';
 }

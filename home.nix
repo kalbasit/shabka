@@ -117,6 +117,10 @@ in {
     # curses-based file manager
     ranger
 
+    # NOTE: Slack does not seem to find the rbrowser.desktop in
+    #       ~/.nix-profile/share/applications so you must manually create a
+    #       symlink to ~/.local/share/applications on bootstrap.
+    # ln -s ../../../.nix-profile/share/applications/rbrowser.desktop ~/.local/share/applications/rbrowser.desktop
     rbrowser
 
     swm
