@@ -147,8 +147,7 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#ale#enabled = 1
 
 " use seoul256 theme
-" TODO: https://github.com/kalbasit/dotfiles/blob/master/.config/nvim/autoload/airline/themes/seoul256.vim
-"let g:airline_theme='seoul256'
+let g:airline_theme='seoul256'
 
 "" }}}
 "" Ale{{{
