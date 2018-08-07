@@ -161,10 +161,10 @@ fi
 #####################################################################
 
 # define the segments of the left prompt
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir vcs custom_profile_story)
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(custom_prompt_char)
 
 # define the segments of the right prompt
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator background_jobs command_execution_time time vi_mode ssh)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(dir vcs custom_profile_story status vi_mode command_execution_time background_jobs context root_indicator ssh time)
 
 # truncate /usr/share/plasma to /u/s/plasma
 POWERLEVEL9K_SHORTEN_DIR_LENGTH=1
@@ -172,6 +172,7 @@ POWERLEVEL9K_SHORTEN_DELIMITER=""
 POWERLEVEL9K_SHORTEN_STRATEGY="truncate_from_right"
 
 # define custom segments
+POWERLEVEL9K_CUSTOM_PROMPT_CHAR="echo λ"
 POWERLEVEL9K_CUSTOM_PROFILE_STORY="echo $'\u270D' \$ACTIVE_PROFILE@\$ACTIVE_STORY"
 
 # TODO: setup the colors to be better visible
