@@ -19,8 +19,7 @@ in {
       ll = "ls -la";
       pw = "ps aux | grep -v grep | grep -e";
       rot13 = "tr \"[A-Za-z]\" \"[N-ZA-Mn-za-m]\"";
-      rserve_this = "ruby -rrack -e \"Rack::Handler::WEBrick.run Rack::Directory.new('.')\"";
-      serve_this = "python2 -m SimpleHTTPServer";
+      serve_this = "${pkgs.python3}/bin/python -m http.server";
       t = "${pkgs.taskwarrior}/bin/task";
       utf8test = "curl -L https://github.com/tmux/tmux/raw/master/tools/UTF-8-demo.txt";
       vi = "nvim";
