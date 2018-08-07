@@ -68,6 +68,11 @@ in {
     enable = true;
   };
 
+  # enable compton
+  services.compton = {
+    enable = true;
+  };
+
   # Enable direnv
   programs.direnv.enable = true;
 
