@@ -10,6 +10,7 @@ in {
     ./cfg/home-manager/alacritty
     ./cfg/home-manager/chromium
     ./cfg/home-manager/dunst
+    ./cfg/home-manager/firefox
     ./cfg/home-manager/git
     ./cfg/home-manager/i3
     ./cfg/home-manager/neovim
@@ -71,8 +72,6 @@ in {
     bat
 
     browsh
-
-    firefox
 
     fzf
 
