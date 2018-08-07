@@ -1,6 +1,12 @@
 { pkgs, ... }:
 
 {
+  programs.firefox = {
+    enable = true;
+    enableGoogleTalk = true;
+    enableAdobeFlash = true;
+  };
+
   home.file.".mozilla/firefox/profiles.ini".text = ''
     [General]
     StartWithLastProfile=1
@@ -15,8 +21,4 @@
     IsRelative=1
     Path=profiles/publica
   '';
-
-  home.packages = with pkgs; [
-    firefox
-  ];
 }
