@@ -163,7 +163,7 @@ in {
           "${defaultModifier}+d" = "focus child";
 
           # start a region screenshot
-          "${defaultModifier}+${secondModifier}+4" = "exec ${pkgs.maim}/bin/maim -s ~/Desktop/screenshot-`date +%Y-%m-%d_%H:%M:%S`.png";
+          "${defaultModifier}+${secondModifier}+4" = "exec ${pkgs.flameshot}/bin/flameshot gui --delay 500 --path ~/Desktop";
 
           # focus the urgent window
           "${defaultModifier}+x" = "[urgent=latest] focus";
