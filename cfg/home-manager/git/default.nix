@@ -1,6 +1,10 @@
 { pkgs, ... }:
 
 {
+  home.packages = with pkgs; [
+    gitAndTools.hub
+  ];
+
   programs.git = {
     enable = true;
 
