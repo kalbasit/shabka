@@ -4,6 +4,7 @@ let
   system-path = builtins.toPath /code/personal/base/src/github.com/kalbasit/system;
 in {
   imports = [
+    ./modules/home-manager/dropbox
     ./modules/home-manager/lowbatt
 
     ./cfg/home-manager/alacritty
@@ -32,6 +33,9 @@ in {
     defaultCacheTtl = 68400;
     maxCacheTtl = 68400;
   };
+
+  # enable Dropbox
+  services.dropbox.enable = true;
 
   # enable batteryNotifier
   services.batteryNotifier.enable = true;
