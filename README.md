@@ -149,9 +149,14 @@ should live under `~/.ssh/personal` and not `~/.ssh`.
 |---|
 | [Wael Nasreddine](https://github.com/kalbasit) |
 
+# License
+
+All source code is licensed under the [MIT License][4].
+
 [1]: https://nixos.org/nix
 [2]: https://nixos.org
 [3]: https://github.com/jwilm/alacritty
+[4]: https://raw.github.com/kalbasit/system/master/LICENSE
 [7]: https://github.com/kalbasit/system/blob/master/overlays/all/zsh-config/zsh/functions/ssh_agents
 [8]: https://adobe-fonts.github.io/source-code-pro/
 [9]: https://github.com/kalbasit/advantage2
