@@ -6,6 +6,7 @@
     ./nix.nix
     ./tmux.nix
     ./users.nix
+    ./version.nix
   ];
 
   # load the overlays that we need at the very top-level
