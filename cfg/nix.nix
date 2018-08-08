@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  system-path = builtins.toPath /code/personal/base/src/github.com/kalbasit/system;
+  system-path = builtins.toPath ./..;
 in
 
 {
