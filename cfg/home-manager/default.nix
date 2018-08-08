@@ -30,19 +30,6 @@ in {
   # Getting: Error installing file '.config/nixpkgs/config.nix' outside $HOME
   # xdg.configFile."nixpkgs/config.nix".source = ./nixpkgs-config.nix;
 
-  # setup nixpkgs overlays
-  nixpkgs.overlays = [
-    (import ../../overlays/download-archiver)
-    (import ../../overlays/gpg-clean-up)
-    (import ../../overlays/haskellPackages)
-    (import ../../overlays/neovim)
-    (import ../../overlays/nix-verify)
-    (import ../../overlays/nodePackages)
-    (import ../../overlays/rbrowser)
-    (import ../../overlays/swm)
-    (import ../../overlays/tmuxPlugins)
-  ];
-
   # set the keyboard layout and variant
   home.keyboard.layout = "us";
   home.keyboard.variant = "colemak";
