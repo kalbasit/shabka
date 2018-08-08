@@ -1,6 +1,13 @@
 { config, pkgs, ...}:
 
 {
+  imports = [
+    (import ../external/home-manager {}).nixos
+  ];
+
+  # configure the kalbasit user using home-manager
+  home-manager.users.kalbasit = import ./home-manager;
+
   # enable zsh
   programs.zsh.enable = true;
 
@@ -23,7 +30,7 @@
   };
 
   # define the users
-  users.extraUsers.kalbasit = {
+  users.users.kalbasit = {
     extraGroups = [
       "docker"
       "fuse"

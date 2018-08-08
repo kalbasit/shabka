@@ -15,7 +15,6 @@
     (self: super: { home = super.home.override { hostname = config.networking.hostname; }; })
 
     (import ../overlays/neovim)
-    (import ../overlays/nodePackages)
     (import ../overlays/rbrowser)
     (import ../overlays/swm)
     (import ../overlays/tmuxPlugins)

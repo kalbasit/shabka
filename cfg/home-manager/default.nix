@@ -1,28 +1,34 @@
 { pkgs ? import <nixpkgs> {}, ... }:
 
 let
-  system-path = builtins.toPath /code/personal/base/src/github.com/kalbasit/system;
+
 in {
   imports = [
-    ./modules/home-manager/dropbox
-    ./modules/home-manager/lowbatt
+    ../../modules/home-manager/dropbox
+    ../../modules/home-manager/lowbatt
 
-    ./cfg/home-manager/alacritty
-    ./cfg/home-manager/chromium
-    ./cfg/home-manager/dunst
-    ./cfg/home-manager/firefox
-    ./cfg/home-manager/git
-    ./cfg/home-manager/i3
-    ./cfg/home-manager/neovim
-    ./cfg/home-manager/rofi
-    ./cfg/home-manager/taskwarrior
-    ./cfg/home-manager/termite
-    ./cfg/home-manager/zsh
+    ./alacritty
+    ./chromium
+    ./dunst
+    ./firefox
+    ./git
+    ./i3
+    ./neovim
+    ./rofi
+    ./taskwarrior
+    ./termite
+    ./zsh
 
     # TODO: enable this once https://github.com/erebe/greenclip/issues/39 has
     # been resolved, and released to HackagePackages.
     # ./cfg/home-manager/greenclip
   ];
+
+  # setup nixpkgs config
+  nixpkgs.config = import ./nixpkgs-config.nix;
+  # TODO: why is this failing?
+  # Getting: Error installing file '.config/nixpkgs/config.nix' outside $HOME
+  # xdg.configFile."nixpkgs/config.nix".source = ./nixpkgs-config.nix;
 
   # set the keyboard layout and variant
   home.keyboard.layout = "us";
@@ -52,12 +58,6 @@ in {
   services.keybase.enable = true;
   services.kbfs.enable = true;
 
-  programs.home-manager = {
-    enable = true;
-    # path = "https://github.com/rycee/home-manager/archive/master.tar.gz";
-    path = "${system-path}/external/home-manager";
-  };
-
   # enable FZF
   programs.fzf = {
     enable = true;
@@ -81,6 +81,16 @@ in {
 
   # Enable the network applet
   services.network-manager-applet.enable = true;
+
+  home.file.".config/nixpkgs/config.nix".text = ''
+    {
+      allowUnfree = true;
+
+      chromium = {
+        enablePepperFlash = true;
+      };
+    }
+  '';
 
   home.packages = with pkgs; [
     # Applications
