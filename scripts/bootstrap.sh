@@ -1,32 +1,26 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
+if [[ "${#}" -ne 1 ]]; then
+	echo "USAGE: sudo ./scripts/bootstrap.sh <hostname>"
+	echo "ERR: You must provide a host to bootstrap, host must exist under machines/"
+	exit 1
+fi
+
 readonly here="$(cd $(dirname "${BASH_SOURCE[0]}")/.. && pwd)"
+readonly hostname="${1}"
 
 if [[ $(id -u) -gt 0 ]]; then
 	echo -e "must run this as root"
 	exit 1
 fi
 
-export nixpkgs=/code/personal/base/src/github.com/kalbasit/system/external/nixpkgs:nixos-config=/code/personal/base/src/github.com/kalbasit/system/machines/hades/configuration.nix:nixos-hardware=/code/personal/base/src/github.com/kalbasit/system/external/nixos-hardware
+NIX_PATH="nixos-config=${here}/machines/${hostname}/configuration.nix"
+NIX_PATH="${NIX_PATH}:nixos-hardware=${here}/external/nixos-hardware"
+NIX_PATH="${NIX_PATH}:nixpkgs-overlays=${here}/overlays"
+NIX_PATH="${NIX_PATH}:nixpkgs=${here}/external/nixpkgs"
+NIX_PATH="${NIX_PATH}:system-path=${here}"
+export NIX_PATH
 
 nixos-rebuild switch
-
-su kalbasit -c '
-set -euo pipefail
-
-if [[ -e "${HOME}/.config/nixpkgs" ]] && [[ ! -L "${HOME}/.config/nixpkgs" ]]; then
-	echo -e "${HOME}/.config/nixpkgs already exists, cannot continue."
-	exit 1
-fi
-
-if [[ -L "${HOME}/.config/nixpkgs" ]] && [[ "$(readlink -f "${HOME}/.config/nixpkgs")" != "${here}" ]]; then
-	echo -e "${HOME}/.config/nixpkgs already exists as a link, but does not point here, cannot continue."
-	exit 1
-fi
-
-if [[ ! -e "${HOME}/.config/nixpkgs" ]]; then
-	ln -s "${here}" "${HOME}/.config/nixpkgs"
-fi
-
-nix-shell -p home-manager --run 'home-manager switch'
-'

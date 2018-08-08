@@ -58,18 +58,7 @@ management, and to call binaries and .desktop files.
 ```
 $ git clone --recurse-submodules https://github.com/kalbasit/system.git
 $ cd system
-$ ./install.sh
-```
-
-TODO: instructions on how to run `nixos-rebuild` given the changed
-nixpkgs and nixos-config without having to export the NIX_PATH.
-
-## Arch Linux
-
-```
-$ git clone --recurse-submodules https://github.com/kalbasit/system.git
-$ cd system
-$ ./install.sh
+$ sudo ./scripts/bootstrap.sh
 ```
 
 # ZSH personal/work profiles
