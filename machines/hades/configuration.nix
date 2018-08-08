@@ -11,18 +11,17 @@
 
     ../../cfg/common.nix
     ../../cfg/desktop.nix
+    ../../cfg/virtualisation.nix
+    ../../cfg/redshift.nix
 
     ../../cfg/printers.nix
+
+    ../../cfg/publica.nix
 
     ../../cfg/snapper.nix
   ] ++ (if builtins.pathExists /private then [
     ../../cfg/openvpn/client/nasreddine/hades.nix
   ] else []);
-
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.editor = false;
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
 
   # boot the latest kernel
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -34,7 +33,21 @@
   i18n.consoleFont = "Lat2-Terminus16";
   boot.earlyVconsoleSetup = true;
 
+  # put /tmp on tmpfs
+  boot.tmpOnTmpfs = true;
+
   # List services that you want to enable:
+
+  # The power button should trigger suspend
+  services.logind.extraConfig = ''
+    HandlePowerKey=suspend
+  '';
+
+  # enable TeamViewer
+  services.teamviewer.enable = true;
+
+  # Enable fwupd
+  services.fwupd.enable = true;
 
   # set the video drivers to modesetting so no other drivers are loaded
   services.xserver.videoDrivers = lib.mkForce ["modesetting"];

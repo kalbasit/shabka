@@ -1,9 +1,7 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 {
   imports = [
-    ./publica.nix
-    ./redshift.nix
     ./xorg.nix
     ./yubikey.nix
   ];
@@ -12,14 +10,6 @@
   environment.variables.BROWSER = "${pkgs.rbrowser}/bin/rbrowser";
 
   # Enable sound.
-  sound.enable = true;
+  sound.enable = lib.mkForce true;
   hardware.pulseaudio.enable = true;
-
-  # The power button should trigger suspend
-  services.logind.extraConfig = ''
-    HandlePowerKey=suspend
-  '';
-
-  # enable TeamViewer
-  services.teamviewer.enable = true;
 }

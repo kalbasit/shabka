@@ -19,9 +19,6 @@
     (import ../overlays/swm)
   ];
 
-  # put /tmp on tmpfs
-  boot.tmpOnTmpfs = true;
-
   # allow unfree software on all machines
   nixpkgs.config.allowUnfree = true;
 
@@ -61,12 +58,6 @@
   programs.gnupg.agent.enable = true;
   programs.gnupg.agent.enableBrowserSocket = true;
 
-  # Enable docker support
-  virtualisation.docker.enable = true;
-
-  # Enable Virtualbox support
-  virtualisation.virtualbox.host.enable = true;
-
   # Synchronise the clock with NTP
   # TODO: figure out why NTP is getting stuck on shutdown.
   # services.ntp.enable = true;
@@ -80,9 +71,6 @@
       AcceptEnv ACTIVE_PROFILE
       AcceptEnv ACTIVE_STORY
   '';
-
-  # Enable fwupd
-  services.fwupd.enable = true;
 
   # allow Mosh server in
   networking.firewall.allowedUDPPortRanges = [ { from = 60000; to = 61000; } ];

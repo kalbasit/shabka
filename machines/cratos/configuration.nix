@@ -9,10 +9,14 @@
 
     ../../cfg/common.nix
     ../../cfg/desktop.nix
+    ../../cfg/virtualisation.nix
+    ../../cfg/redshift.nix
 
     ../../cfg/i3.nix
 
     ../../cfg/printers.nix
+
+    ../../cfg/publica.nix
   ] ++ (if builtins.pathExists /private then [
     ../../cfg/openvpn/client/nasreddine/cratos.nix
   ] else []);
@@ -32,7 +36,21 @@
   i18n.consoleFont = "latarcyrheb-sun32";
   boot.earlyVconsoleSetup = true;
 
+  # put /tmp on tmpfs
+  boot.tmpOnTmpfs = true;
+
   # List services that you want to enable:
+
+  # The power button should trigger suspend
+  services.logind.extraConfig = ''
+    HandlePowerKey=suspend
+  '';
+
+  # enable TeamViewer
+  services.teamviewer.enable = true;
+
+  # Enable fwupd
+  services.fwupd.enable = true;
 
   # set the video drivers to modesetting so no other drivers are loaded
   services.xserver.videoDrivers = ["modesetting"];
