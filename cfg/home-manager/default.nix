@@ -1,7 +1,7 @@
 { pkgs ? import <nixpkgs> {}, ... }:
 
 let
-  system-path = builtins.toPath /code/personal/base/src/github.com/kalbasit/system;
+
 in {
   imports = [
     ../../modules/home-manager/dropbox
@@ -69,12 +69,6 @@ in {
   # Install and enable Keybase
   services.keybase.enable = true;
   services.kbfs.enable = true;
-
-  programs.home-manager = {
-    enable = true;
-    # path = "https://github.com/rycee/home-manager/archive/master.tar.gz";
-    path = "${system-path}/external/home-manager";
-  };
 
   # enable FZF
   programs.fzf = {
