@@ -13,7 +13,6 @@ in {
       cat = "${pkgs.bat}/bin/bat";
       e = "\${EDITOR:-nvim}";
       gl = "github_commit_link";
-      hm = "home-manager";
       http = "http --print=HhBb";
       less = "${pkgs.bat}/bin/bat";
       ll = "ls -la";
