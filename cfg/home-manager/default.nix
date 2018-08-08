@@ -26,7 +26,8 @@ in {
 
   # setup nixpkgs config
   nixpkgs.config = import ./nixpkgs-config.nix;
-  # TODO: why is this failing? Error installing file '.config/nixpkgs/config.nix' outside $HOME
+  # TODO: why is this failing?
+  # Getting: Error installing file '.config/nixpkgs/config.nix' outside $HOME
   # xdg.configFile."nixpkgs/config.nix".source = ./nixpkgs-config.nix;
 
   # setup nixpkgs overlays
