@@ -4,24 +4,44 @@ let
   system-path = builtins.toPath /code/personal/base/src/github.com/kalbasit/system;
 in {
   imports = [
-    ./modules/home-manager/dropbox
-    ./modules/home-manager/lowbatt
+    ../../modules/home-manager/dropbox
+    ../../modules/home-manager/lowbatt
 
-    ./cfg/home-manager/alacritty
-    ./cfg/home-manager/chromium
-    ./cfg/home-manager/dunst
-    ./cfg/home-manager/firefox
-    ./cfg/home-manager/git
-    ./cfg/home-manager/i3
-    ./cfg/home-manager/neovim
-    ./cfg/home-manager/rofi
-    ./cfg/home-manager/taskwarrior
-    ./cfg/home-manager/termite
-    ./cfg/home-manager/zsh
+    ./alacritty
+    ./chromium
+    ./dunst
+    ./firefox
+    ./git
+    ./i3
+    ./neovim
+    ./rofi
+    ./taskwarrior
+    ./termite
+    ./zsh
 
     # TODO: enable this once https://github.com/erebe/greenclip/issues/39 has
     # been resolved, and released to HackagePackages.
     # ./cfg/home-manager/greenclip
+  ];
+
+  nixpkgs.config = {
+    allowUnfree = true;
+
+    chromium = {
+      enablePepperFlash = true;
+    };
+  };
+
+  nixpkgs.overlays = [
+    (import ../../overlays/download-archiver)
+    (import ../../overlays/gpg-clean-up)
+    (import ../../overlays/haskellPackages)
+    (import ../../overlays/neovim)
+    (import ../../overlays/nix-verify)
+    (import ../../overlays/nodePackages)
+    (import ../../overlays/rbrowser)
+    (import ../../overlays/swm)
+    (import ../../overlays/tmuxPlugins)
   ];
 
   # set the keyboard layout and variant
@@ -81,6 +101,16 @@ in {
 
   # Enable the network applet
   services.network-manager-applet.enable = true;
+
+  home.file.".config/nixpkgs/config.nix".text = ''
+    {
+      allowUnfree = true;
+
+      chromium = {
+        enablePepperFlash = true;
+      };
+    }
+  '';
 
   home.packages = with pkgs; [
     # Applications
@@ -155,3 +185,4 @@ in {
     fi
   '';
 }
+
