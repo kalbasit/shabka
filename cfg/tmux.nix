@@ -5,7 +5,7 @@ let
     tmuxPlugins.battery
     tmuxPlugins.logging
     tmuxPlugins.prefix-highlight
-    myTmuxPlugins.fzf-tmux-url
+    tmuxPlugins.fzf-tmux-url
   ];
 in {
   programs.tmux = {
