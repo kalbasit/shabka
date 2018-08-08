@@ -58,8 +58,10 @@ management, and to call binaries and .desktop files.
 ```
 $ git clone --recurse-submodules https://github.com/kalbasit/system.git
 $ cd system
-$ sudo ./scripts/bootstrap.sh
+$ sudo ./scripts/bootstrap.sh <machine>
 ```
+
+Where `<machine>` is a folder that must exist under `machines/<machine>`
 
 # ZSH personal/work profiles
 
