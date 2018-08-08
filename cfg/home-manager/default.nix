@@ -24,14 +24,12 @@ in {
     # ./cfg/home-manager/greenclip
   ];
 
-  nixpkgs.config = {
-    allowUnfree = true;
+  # setup nixpkgs config
+  nixpkgs.config = import ./nixpkgs-config.nix;
+  # TODO: why is this failing? Error installing file '.config/nixpkgs/config.nix' outside $HOME
+  # xdg.configFile."nixpkgs/config.nix".source = ./nixpkgs-config.nix;
 
-    chromium = {
-      enablePepperFlash = true;
-    };
-  };
-
+  # setup nixpkgs overlays
   nixpkgs.overlays = [
     (import ../../overlays/download-archiver)
     (import ../../overlays/gpg-clean-up)
