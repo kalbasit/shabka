@@ -12,11 +12,11 @@ configurations and by [NixOS][2] for the system.
 - [Screenshot](#screenshot)
 - [Installation](#installation)
   - [NixOS](#nixos)
-  - [Arch Linux](#arch-linux)
 - [ZSH personal/work profiles](#zsh-personalwork-profiles)
   - [Profile](#profile)
   - [SSH Agents](#ssh-agents)
 - [Author](#author)
+- [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
