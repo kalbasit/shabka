@@ -26,9 +26,7 @@ in {
 
   # setup nixpkgs config
   nixpkgs.config = import ./nixpkgs-config.nix;
-  # TODO: why is this failing?
-  # Getting: Error installing file '.config/nixpkgs/config.nix' outside $HOME
-  # xdg.configFile."nixpkgs/config.nix".source = ./nixpkgs-config.nix;
+  xdg.configFile."nixpkgs/config.nix".source = ./nixpkgs-config.nix;
 
   # set the keyboard layout and variant
   home.keyboard.layout = "us";
@@ -76,16 +74,6 @@ in {
 
   # Enable the network applet
   services.network-manager-applet.enable = true;
-
-  home.file.".config/nixpkgs/config.nix".text = ''
-    {
-      allowUnfree = true;
-
-      chromium = {
-        enablePepperFlash = true;
-      };
-    }
-  '';
 
   home.packages = with pkgs; [
     # Applications
