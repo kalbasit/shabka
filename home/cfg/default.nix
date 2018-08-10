@@ -4,8 +4,8 @@ let
 
 in {
   imports = [
-    ../../modules/home-manager/dropbox
-    ../../modules/home-manager/lowbatt
+    ../modules/home-manager/dropbox
+    ../modules/home-manager/lowbatt
 
     ./alacritty
     ./chromium
