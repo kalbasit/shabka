@@ -1,9 +1,16 @@
 self: super:
 
-{
-  download-archiver = super.callPackage ../pkgs/download-archiver {};
-  gpg-clean-up = super.callPackage ../pkgs/gpg-clean-up {};
-  nix-verify = super.callPackage ../pkgs/nix-verify {};
-  rbrowser = super.callPackage ../pkgs/rbrowser {};
-  swm = super.callPackage ../pkgs/swm {};
+let
+  # pkgs is a function given a path will create a set {name = callPackage name}
+  pkgs = path:
+  let content = builtins.readDir path; in
+    builtins.listToAttrs
+      (map (n: {name = n; value = super.callPackage (path + ("/" + n)) {}; })
+      (builtins.filter (n: builtins.pathExists (path + ("/" + n + "/default.nix")))
+        (builtins.attrNames content)));
+
+  myPkgs = pkgs ../pkgs;
+in
+myPkgs // {
+  # other overlay code goes here
 }
