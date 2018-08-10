@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  system-path = builtins.toPath ./..;
+  system-path = builtins.toPath ./../..;
 in
 
 {
@@ -16,7 +16,7 @@ in
     '';
 
     nixPath = [
-      "nixos-config=${system-path}/machines/${config.networking.hostName}/configuration.nix"
+      "nixos-config=${system-path}/nixos/machines/${config.networking.hostName}/configuration.nix"
       "nixos-hardware=${system-path}/external/nixos-hardware"
       "nixpkgs-overlays=${system-path}/overlays"
       "nixpkgs=${system-path}/external/nixpkgs"

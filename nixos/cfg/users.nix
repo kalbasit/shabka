@@ -2,11 +2,11 @@
 
 {
   imports = [
-    (import ../external/home-manager {}).nixos
+    (import ../../external/home-manager {}).nixos
   ];
 
   # configure the kalbasit user using home-manager
-  home-manager.users.kalbasit = import ./home-manager;
+  home-manager.users.kalbasit = import ../../home/cfg;
 
   # enable zsh
   programs.zsh.enable = true;
