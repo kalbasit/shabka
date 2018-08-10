@@ -68,11 +68,6 @@ in {
     enable = true;
   };
 
-  # enable compton
-  services.compton = {
-    enable = true;
-  };
-
   # enable flameshot screenshot daemon. Use `flameshot gui` to start taking screenshot.
   services.flameshot.enable = true;
 
