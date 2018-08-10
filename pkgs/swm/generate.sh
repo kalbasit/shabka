@@ -8,7 +8,7 @@ go get -u github.com/kalbasit/swm/cmd/swm
 
 cd "${GOPATH}/src/github.com/kalbasit/swm/cmd/swm"
 
-go2nix save -o "${here}/go-package.nix" -d "${here}/deps.nix"
+go2nix save -o "${here}/default.nix" -d "${here}/deps.nix"
 
 # clean up
 cd "${here}"
