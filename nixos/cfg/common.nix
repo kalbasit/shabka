@@ -14,8 +14,8 @@
     (self: super: { i3-config = super.i3-config.override { hostname = config.networking.hostname; }; })
     (self: super: { home = super.home.override { hostname = config.networking.hostname; }; })
 
-    (import ../overlays)
-    (import ../overlays/neovim)
+    (import ../../overlays)
+    (import ../../overlays/neovim)
   ];
 
   # allow unfree software on all machines
