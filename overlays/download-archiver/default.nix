@@ -1,5 +1,5 @@
 self: super:
 
 {
-  download-archiver = super.callPackage ./pkg.nix {};
+  download-archiver = super.callPackage ../../pkgs/download-archiver {};
 }
