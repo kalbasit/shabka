@@ -1,0 +1,24 @@
+#! /usr/bin/env nix-shell
+#! nix-shell -i bash -p nix-prefetch-git
+set -euo pipefail
+
+if [[ "${#}" -le 1 ]]; then
+	echo "USAGE: nixify <path> [rev]"
+	echo "Path must exist and must be a directory"
+	echo "You can optionally provide the rev of nixpkgs-channels, defaults to refs/heads/nixos-unstable"
+	exit 1
+fi
+
+if [[ ! -d "${1}" ]]; then
+	echo "ERR: ${1} is not directory"
+	exit 1
+fi
+
+readonly here="$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)"
+readonly template_dir="$(cd "${here}/../share/nixify/templates" && pwd)"
+readonly location="$(cd "${1}" && pwd)"
+
+cp "${template_dir}/envrc" "${location}/.envrc"
+cp "${template_dir}/shell.nix" "${location}/shell.nix"
+
+nix-prefetch-git https://github.com/nixos/nixpkgs-channels.git "${2:-refs/heads/nixos-unstable}" > "${here}/nixpkgs-version.json"
