@@ -13,7 +13,7 @@ let
 
 in {
   airline-seoul256-theme = vimUtils.buildVimPluginFrom2Nix {
-    name = "vim-colemak-2016-10-16";
+    name = "airline-seoul256-theme-2018-08-12";
     src = airlineSeoul256Theme;
     dependencies = [];
   };
