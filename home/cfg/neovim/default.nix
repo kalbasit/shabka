@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 let
-  my_plugins = import ./plugins.nix { inherit (pkgs) vimUtils fetchFromGitHub stdenv;  };
+  my_plugins = pkgs.callPackage ./plugins.nix {};
 in {
   programs.neovim = {
     enable = true;
