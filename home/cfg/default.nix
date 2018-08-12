@@ -101,6 +101,8 @@ in {
 
     mosh
 
+    nixify
+
     nix-index
 
     nixops
