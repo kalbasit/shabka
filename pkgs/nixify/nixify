@@ -21,4 +21,6 @@ readonly location="$(cd "${1}" && pwd)"
 cp "${template_dir}/envrc" "${location}/.envrc"
 cp "${template_dir}/shell.nix" "${location}/shell.nix"
 
-nix-prefetch-git https://github.com/nixos/nixpkgs-channels.git "${2:-refs/heads/nixos-unstable}" > "${location}/nixpkgs-version.json"
+nix-prefetch-git https://github.com/nixos/nixpkgs-channels.git "${2:-refs/heads/nixos-unstable}" > "${location}/.nixpkgs-version.json"
+
+chmod 644 ${location}/{.envrc,shell.nix,.nixpkgs-version.json}
