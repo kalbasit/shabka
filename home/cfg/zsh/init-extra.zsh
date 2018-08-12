@@ -181,18 +181,18 @@ POWERLEVEL9K_CUSTOM_PROFILE_STORY="echo $'\u270D' \$ACTIVE_PROFILE@\$ACTIVE_STOR
 # exports
 #####################################################################
 
+# setup fzf
+if [[ -o interactive ]]; then
+	export FZF_DEFAULT_COMMAND='(@git_bin@ ls-tree -r --name-only HEAD || @ag_bin@ --hidden --ignore .git -g "")'
+	export ENHANCD_FILTER=@fzf_out@/bin/fzf-tmux
+fi
+
 # export the code path
 export CODE_PATH="/code"
 
 if [[ "$OSTYPE" = linux* ]]; then
 	# GPG_TTY is needed for gpg with pinentry-curses
 	export GPG_TTY="$(tty)"
-	# disable pinentry in lastpass
-	export LPASS_DISABLE_PINENTRY=1
-	# fix the look of Java applications
-	if [[ -o interactive ]]; then
-		export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel'
-	fi
 	# use chromium as the karma's driver
 	export CHROME_BIN="$(which chromium)"
 fi
@@ -697,10 +697,6 @@ if [[ -o interactive ]]; then
 		# Load iterm2 shell integration
 		[[ -r "${HOME}/.iterm2_shell_integration.zsh" ]] && source "${HOME}/.iterm2_shell_integration.zsh"
 	fi
-
-	# Load fzf
-	export FZF_DEFAULT_COMMAND='(@git_bin@ ls-tree -r --name-only HEAD || @ag_bin@ --hidden --ignore .git -g "")'
-	export ENHANCD_FILTER=@fzf_out@/bin/fzf-tmux
 fi
 
 #####################################################################
