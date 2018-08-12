@@ -72,7 +72,6 @@ in {
       fzf_out      = "${pkgs.fzf}";
       git_bin      = "${pkgs.git}/bin/git";
       rbrowser_bin = "${pkgs.rbrowser}/bin/rbrowser";
-      thefuck_out  = "${pkgs.thefuck}";
     });
 
     oh-my-zsh = {

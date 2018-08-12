@@ -698,15 +698,6 @@ if [[ -o interactive ]]; then
 		[[ -r "${HOME}/.iterm2_shell_integration.zsh" ]] && source "${HOME}/.iterm2_shell_integration.zsh"
 	fi
 
-	# Load TheFuck
-	pathappend PATH @thefuck_out@/bin
-	lazyLoadFuck () {
-		unalias fuck
-		unfunction lazyLoadFuck
-		eval "$(thefuck --alias)"
-	}
-	alias fuck=lazyLoadFuck
-
 	# Load fzf
 	export FZF_DEFAULT_COMMAND='(@git_bin@ ls-tree -r --name-only HEAD || @ag_bin@ --hidden --ignore .git -g "")'
 	export ENHANCD_FILTER=@fzf_out@/bin/fzf-tmux
