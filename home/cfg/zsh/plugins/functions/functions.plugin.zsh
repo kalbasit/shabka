@@ -14,6 +14,8 @@ source "${functions_root}/ssh_agents"
 for func in $functions_root/*; do
 	local func_name="$(basename ${func})"
   case "${func_name}" in
+    _*)          ;;
+
     debug)       ;;
     have)        ;;
     is_func)     ;;
@@ -22,6 +24,7 @@ for func in $functions_root/*; do
     pathunmunge) ;;
     sp)          ;;
     ssh_agents)  ;;
+
     *)
       autoload -U "${func_name}"
       ;;
