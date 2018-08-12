@@ -21,6 +21,7 @@ if [[ $(id -u) -gt 0 ]]; then
 fi
 
 NIX_PATH=""
+NIX_PATH="${NIX_PATH}:home-manager=${here}/external/home-manager"
 NIX_PATH="${NIX_PATH}:nixos-config=${here}/nixos/machines/${machine}/configuration.nix"
 NIX_PATH="${NIX_PATH}:nixos-hardware=${here}/external/nixos-hardware"
 NIX_PATH="${NIX_PATH}:nixpkgs-overlays=${here}/overlays"

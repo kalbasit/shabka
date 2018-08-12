@@ -2,7 +2,7 @@
 
 {
   imports = [
-    (import ../../external/home-manager {}).nixos
+    (import <home-manager> {}).nixos
   ];
 
   # configure the kalbasit user using home-manager
