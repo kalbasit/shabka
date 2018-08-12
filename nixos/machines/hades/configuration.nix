@@ -38,6 +38,13 @@
 
   # List services that you want to enable:
 
+  # enable nix-serve
+  services.nix-serve = lib.mkIf (builtins.pathExists /private/network-secrets/nix/caches/hades.nasreddine.com.key) {
+    enable = true;
+    secretKeyFile = "/private/network-secrets/nix/caches/hades.nasreddine.com.key";
+  };
+  networking.firewall.allowedTCPPorts = lib.mkIf (builtins.pathExists /private/network-secrets/nix/caches/hades.nasreddine.com.key) [ 5000 ];
+
   # The power button should trigger suspend
   services.logind.extraConfig = ''
     HandlePowerKey=suspend
