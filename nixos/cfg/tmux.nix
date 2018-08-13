@@ -105,6 +105,9 @@ in {
       unbind '"'
       bind v split-window -v
 
+      # The shortcut is set to <t> which overrides the default mapping for clock mode
+      bind T clock-mode
+
       #
       # Settings
       #
