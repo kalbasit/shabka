@@ -12,11 +12,11 @@
     ../../cfg/virtualisation.nix
     ../../cfg/redshift.nix
 
-    ../../cfg/i3.nix
-
     ../../cfg/printers.nix
 
     ../../cfg/publica.nix
+
+    ../../cfg/snapper.nix
   ] ++ (if builtins.pathExists /private then [
     ../../cfg/openvpn/client/nasreddine/cratos.nix
   ] else []);
