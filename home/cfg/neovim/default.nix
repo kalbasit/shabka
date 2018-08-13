@@ -53,6 +53,7 @@ in {
             "vim-markdown"
             "vim-signify"
             "vim-speeddating"
+            "vimtex"
 
             ## DeoPlete completion support
             "deoplete-nvim"
