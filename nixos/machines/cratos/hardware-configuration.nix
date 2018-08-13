@@ -28,22 +28,41 @@
     };
   };
 
-  fileSystems."/" =
-    { device = "/dev/disk/by-uuid/de2f32b1-85d0-49ab-8684-019175e09544";
+  fileSystems = {
+    "/" = {
+      device = "/dev/disk/by-uuid/de2f32b1-85d0-49ab-8684-019175e09544";
       fsType = "btrfs";
       options = [ "subvol=@nixos/@root" ];
     };
 
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/02EA-F418";
+    "/boot" = {
+      device = "/dev/disk/by-uuid/02EA-F418";
       fsType = "vfat";
     };
 
-  fileSystems."/home" =
-    { device = "/dev/disk/by-uuid/de2f32b1-85d0-49ab-8684-019175e09544";
+    "/home" = {
+      device = "/dev/disk/by-uuid/de2f32b1-85d0-49ab-8684-019175e09544";
       fsType = "btrfs";
       options = [ "subvol=@nixos/@home" ];
     };
+
+    "/code" = {
+      device = "/dev/disk/by-uuid/de2f32b1-85d0-49ab-8684-019175e09544";
+      fsType = "btrfs";
+      options = [ "subvol=@code" "X-mount.mkdir=0700" ];
+    };
+
+    "/private" = {
+      device = "/dev/disk/by-uuid/de2f32b1-85d0-49ab-8684-019175e09544";
+      fsType = "btrfs";
+      options = [ "subvol=@private" "X-mount.mkdir=0700" ];
+    };
+
+    "/mnt/volumes/root" = {
+      device = "/dev/disk/by-uuid/de2f32b1-85d0-49ab-8684-019175e09544";
+      fsType = "btrfs";
+    };
+  };
 
   swapDevices =
     [ { device = "/dev/disk/by-uuid/be829e9b-e163-45fb-beea-aa4cf1aa6012"; }
