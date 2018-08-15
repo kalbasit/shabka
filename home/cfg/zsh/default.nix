@@ -19,7 +19,7 @@ in {
       pw = "ps aux | grep -v grep | grep -e";
       rot13 = "tr \"[A-Za-z]\" \"[N-ZA-Mn-za-m]\"";
       serve_this = "${pkgs.python3}/bin/python -m http.server";
-      t = "${pkgs.taskwarrior}/bin/task";
+      t = "task";
       utf8test = "${pkgs.curl}/bin/curl -L https://github.com/tmux/tmux/raw/master/tools/UTF-8-demo.txt";
       vi = "nvim";
       vim = "nvim";
