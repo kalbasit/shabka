@@ -45,28 +45,6 @@ taskd.credentials=Home\/Wael Nasreddine\/92d86b3f-aa16-412b-bfff-0050e8a5a50c
 uda.reviewed.type=date
 uda.reviewed.label=Reviewed
 
-# Bugwarrior UDAs
-uda.jiraurl.type=string
-uda.jiraurl.label=Jira URL
-uda.jiraestimate.type=numeric
-uda.jiraestimate.label=Estimate
-uda.jirasummary.type=string
-uda.jirasummary.label=Jira Summary
-uda.jirafixversion.type=string
-uda.jirafixversion.label=Fix Version
-uda.jiraid.type=string
-uda.jiraid.label=Jira Issue ID
-uda.jiracreatedts.type=date
-uda.jiracreatedts.label=Created At
-uda.jiradescription.type=string
-uda.jiradescription.label=Jira Description
-
-# TrelloWarrior UDA
-uda.trelloid.type=string
-uda.trelloid.label=Trello ID
-uda.trellolistname.type=string
-uda.trellolistname.label=Trello List Name
-
 # Report settings
 report._reviewed.description=Tasksh review report. Adjust the filter to your needs.
 report._reviewed.columns=uuid
