@@ -50,9 +50,3 @@ report._reviewed.description=Tasksh review report. Adjust the filter to your nee
 report._reviewed.columns=uuid
 report._reviewed.sort=reviewed+,modified+
 report._reviewed.filter=( reviewed.none: or reviewed.before:now-1week ) and ( +PENDING or +WAITING )
-
-# Context definition
-context.opensource=+opensource
-context.personal=+personal
-context.chores=+chores
-context.publica=+publica
