@@ -23,7 +23,7 @@
     };
 
     cryptroot-1 = {
-      device = "/dev/disk/by-uuid/471c4bf2-14c9-4eef-a791-8beebfcfe31a";
+      device = "/dev/disk/by-uuid/0f379615-7381-4f40-8e34-4eb930a85f9d";
       keyFile = "/dev/mapper/cryptkey";
     };
 
