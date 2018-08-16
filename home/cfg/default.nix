@@ -95,6 +95,8 @@ in {
     keybase
     keybase-gui
 
+    killall
+
     lastpass-cli
 
     mercurial
@@ -117,6 +119,8 @@ in {
     #       symlink to ~/.local/share/applications on bootstrap.
     # ln -s ../../../.nix-profile/share/applications/rbrowser.desktop ~/.local/share/applications/rbrowser.desktop
     rbrowser
+
+    remmina
 
     swm
 
