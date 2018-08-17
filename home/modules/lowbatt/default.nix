@@ -9,6 +9,7 @@ let
     executable = true;
     destination = "/bin/lowbatt-start";
     text = ''
+      #! ${pkgs.runtimeShell}
       export battery_capacity=$(${pkgs.coreutils}/bin/cat /sys/class/power_supply/${cfg.device}/capacity)
       export battery_status=$(${pkgs.coreutils}/bin/cat /sys/class/power_supply/${cfg.device}/status)
 
