@@ -11,4 +11,6 @@
 
     taskwarrior_out = "${pkgs.taskwarrior}";
   });
+
+  home.file.".task/hooks/on-modify.timewarrior".source = "${pkgs.timewarrior}/share/doc/timew/ext/on-modify.timewarrior";
 }
