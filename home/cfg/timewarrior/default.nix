@@ -3,7 +3,7 @@
 {
   home.packages = with pkgs; [
     timewarrior
-    python # needed by totals.py extension
+    python # needed by totals.py extension and by on-modify.timewarrior
   ];
 
   home.file.".timewarrior/timewarrior.cfg".text = builtins.readFile (pkgs.substituteAll {
