@@ -21,6 +21,9 @@
   # allow unfree software on all machines
   nixpkgs.config.allowUnfree = true;
 
+  # install virtualbox extensions pack
+  nixpkgs.config.virtualbox.enableExtensionPack = true;
+
   # set the EDITOR to neovim
   environment.variables.EDITOR = "nvim";
 
