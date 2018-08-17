@@ -332,7 +332,7 @@ let g:multi_cursor_quit_key            = '<Esc>'
 "" Polyglot{{{
 ""
 
-let g:polyglot_disabled = ['go', 'terraform', 'csv', 'ruby', 'typescript']
+let g:polyglot_disabled = ['csv', 'go', 'latex', 'ruby', 'terraform', 'typescript']
 
 " }}}
 "" Ruby{{{
