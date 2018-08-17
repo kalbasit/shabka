@@ -17,5 +17,8 @@
     executable = true;
   };
 
-  home.file.".task/hooks/on-modify.timewarrior".source = "${pkgs.timewarrior}/share/doc/timew/ext/on-modify.timewarrior";
+  home.file.".task/hooks/on-modify.timewarrior" = {
+    source = "${pkgs.timewarrior}/share/doc/timew/ext/on-modify.timewarrior";
+    executable = true;
+  };
 }
