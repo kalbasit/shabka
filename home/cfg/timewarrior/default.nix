@@ -3,6 +3,7 @@
 {
   home.packages = with pkgs; [
     timewarrior
+    python # needed by totals.py extension
   ];
 
   # If timewarrior.cfg is not writable, timew errors out with Insufficient permissions for '/home/kalbasit/.timewarrior/timewarrior.cfg'.
@@ -13,4 +14,9 @@
   #
   #   timewarrior_out = "${pkgs.timewarrior}";
   # });
+
+  home.file.".timewarrior/extensions/totals.py" = {
+    source = "${pkgs.timewarrior}/share/doc/timew/ext/totals.py";
+    executable = true;
+  };
 }
