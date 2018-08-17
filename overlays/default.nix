@@ -13,4 +13,7 @@ let
 in
 myPkgs // {
   # other overlay code goes here
+
+  # revert kernel 4.18 update due to https://github.com/NixOS/nixpkgs/issues/45165
+  linuxPackages_latest = super.linuxPackages_4_17;
 }
