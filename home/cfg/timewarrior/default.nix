@@ -16,4 +16,6 @@
     source = "${pkgs.timewarrior}/share/doc/timew/ext/totals.py";
     executable = true;
   };
+
+  home.file.".task/hooks/on-modify.timewarrior".source = "${pkgs.timewarrior}/share/doc/timew/ext/on-modify.timewarrior";
 }
