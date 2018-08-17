@@ -17,6 +17,7 @@ in {
     ./rofi
     ./taskwarrior
     ./termite
+    ./timewarrior
     ./zsh
 
     # TODO: enable this once https://github.com/erebe/greenclip/issues/39 has
