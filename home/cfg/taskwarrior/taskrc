@@ -52,5 +52,5 @@ report._reviewed.sort=reviewed+,modified+
 report._reviewed.filter=( reviewed.none: or reviewed.before:now-1week ) and ( +PENDING or +WAITING )
 
 # Context settings
-context.work=+work or +freelance
-context.home=-work -freelance
+context.publica=+publica
+context.personal=-publica
