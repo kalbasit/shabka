@@ -29,6 +29,7 @@ include @taskwarrior_out@/share/doc/task/rc/solarized-dark-256.theme
 #include @taskwarrior_out@/share/doc/task/rc/no-color.theme
 
 # Urgency settings
+urgency.user.tag.bug.coefficient=5.0
 urgency.user.tag.problem.coefficient=4.5
 urgency.user.tag.later.coefficient=-6.0
 urgency.user.tag.waiting.coefficient=-12.0
