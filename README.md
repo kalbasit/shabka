@@ -56,7 +56,7 @@ management, and to call binaries and .desktop files.
 ## NixOS
 
 ```
-$ git clone --recurse-submodules https://github.com/kalbasit/system.git
+$ git clone https://github.com/kalbasit/system.git
 $ cd system
 $ sudo make HOSTNAME=<hostname> switch
 ```
