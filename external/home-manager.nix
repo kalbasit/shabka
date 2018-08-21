@@ -1,7 +1,7 @@
-{ pkgs, lib, }:
+{ pkgs ? import <nixpkgs> {} }:
 
 let
-  home-manager-version = lib.importJSON ./home-manager-version.json;
+  home-manager-version = pkgs.lib.importJSON ./home-manager-version.json;
   pinned-home-manager = pkgs.fetchFromGitHub {
     owner = "rycee";
     repo = "home-manager";
