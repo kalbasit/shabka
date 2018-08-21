@@ -3,6 +3,5 @@
 nixpkgs.mkShell {
   buildInputs = with nixpkgs; [
     gnumake
-    sudo
   ];
 }
