@@ -2,7 +2,7 @@
 
 HOSTNAME ?= $(shell hostname -s)
 
-NIXOS_REBUILD=./lib/shell/bin/nixos-rebuild
+NIXOS_REBUILD=./lib/shell/bin/nixos-rebuild.sh
 
 all: build
 
