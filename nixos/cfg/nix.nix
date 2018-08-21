@@ -3,31 +3,10 @@
 let
   system-path = builtins.toPath ./../..;
 
-  nixos-hardware-version = lib.importJSON ../../external/nixos-hardware-version.json;
-  pinned-nixos-hardware = pkgs.fetchFromGitHub {
-    owner = "NixOS";
-    repo = "nixos-hardware";
-    inherit (nixos-hardware-version) rev sha256;
-  };
-
-
-  nixpkgs-version = lib.importJSON ../../external/nixpkgs-version.json;
-  pinned-nixpkgs = pkgs.fetchFromGitHub {
-    owner = "NixOS";
-    repo = "nixpkgs";
-    inherit (nixpkgs-version) rev sha256;
-  };
-
-  home-manager-version = lib.importJSON ../../external/home-manager-version.json;
-  pinned-home-manager = pkgs.fetchFromGitHub {
-    owner = "rycee";
-    repo = "home-manager";
-    inherit (home-manager-version) rev sha256;
-  };
-
-in
-
-{
+  pinned-nixos-hardware = pkgs.callPackage ../../external/nixos-hardware.nix {};
+  pinned-nixpkgs        = pkgs.callPackage ../../external/nixpkgs.nix {};
+  pinned-home-manager   = pkgs.callPackage ../../external/home-manager.nix {};
+in {
   nix = {
     autoOptimiseStore = true;
     buildCores = 0;
