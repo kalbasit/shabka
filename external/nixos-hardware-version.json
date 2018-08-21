@@ -1,5 +1,5 @@
 {
-  "url": "https://github.com/nixos/nixos-hardware.git",
+  "url": "https://github.com/NixOS/nixos-hardware.git",
   "rev": "2ec8af381789cee2334c34091c7047a26defcbc5",
   "date": "2018-08-17T14:42:33+01:00",
   "sha256": "1qn8yxgbn91381bq6227vbsr0pw5hlk4qsv00zfgpln6k2bzrdd4",
