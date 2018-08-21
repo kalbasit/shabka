@@ -27,7 +27,7 @@ if [[ "${action}" == "test" ]] || [[ "${action}" == "switch" ]]; then
 	fi
 fi
 
-if [[ "${action}" == "switch" ]] && [[ $(id -u) -gt 0 ]]; then
+if [[ $(id -u) -gt 0 ]] && ([[ "${action}" == "switch" ]] || [[ "${action}" == "test" ]] || [[ "${action}" == "boot" ]]) ; then
 	echo -e "must run this as root"
 	exit 1
 fi
