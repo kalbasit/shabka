@@ -88,6 +88,8 @@ in
     services.nginx.virtualHosts."api.publica.dev".locations."/".extraConfig = ''
       ${commonLocation}
       proxy_pass            http://127.0.0.1:8080;
+      proxy_buffers         4 32k;
+      proxy_buffer_size     32k;
     '';
 
     # //console/ui
@@ -98,6 +100,8 @@ in
     services.nginx.virtualHosts."console.publica.dev".locations."/".extraConfig = ''
       ${commonLocation}
       proxy_pass            http://127.0.0.1:7000;
+      proxy_buffers         4 32k;
+      proxy_buffer_size     32k;
     '';
 
     # //ads/controller
@@ -108,6 +112,8 @@ in
     services.nginx.virtualHosts."ctrl.publica.dev".locations."/".extraConfig = ''
       ${commonLocation}
       proxy_pass            http://127.0.0.1:8060;
+      proxy_buffers         4 32k;
+      proxy_buffer_size     32k;
     '';
 
     # //homepage
@@ -118,6 +124,8 @@ in
     services.nginx.virtualHosts."home.publica.dev".locations."/".extraConfig = ''
       ${commonLocation}
       proxy_pass            http://127.0.0.1:7010;
+      proxy_buffers         4 32k;
+      proxy_buffer_size     32k;
     '';
 
     # //ads/app/src/demo
@@ -129,6 +137,8 @@ in
     services.nginx.virtualHosts."js.publica.dev".locations."/".extraConfig = ''
       ${commonLocation}
       proxy_pass            http://127.0.0.1:3002;
+      proxy_buffers         4 32k;
+      proxy_buffer_size     32k;
     '';
 
     # //ads/rewriter
@@ -139,6 +149,8 @@ in
     services.nginx.virtualHosts."rewriter.publica.dev".locations."/".extraConfig = ''
       ${commonLocation}
       proxy_pass            http://127.0.0.1:8061;
+      proxy_buffers         4 32k;
+      proxy_buffer_size     32k;
     '';
 
     # //demo
@@ -149,6 +161,8 @@ in
     services.nginx.virtualHosts."demo.publica.dev".locations."/".extraConfig = ''
       ${commonLocation}
       proxy_pass            http://127.0.0.1:8124;
+      proxy_buffers         4 32k;
+      proxy_buffer_size     32k;
     '';
   };
 }
