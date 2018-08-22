@@ -81,7 +81,7 @@ use_nix() {
 }
 
 fail() {
-	log_status "${@}"
+	log_error "${@}"
 	exit 1
 }
 
