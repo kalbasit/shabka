@@ -181,6 +181,9 @@ if has("autocmd")
 	au FileType mail ab ~8 [8]<esc>m`:/^Footnotes\:/+9/<CR>o[8]
 	au FileType mail ab ~9 [9]<esc>m`:/^Footnotes\:/+10/<CR>o[9]
 
+	" Set the envrc filetype to shell
+	au BufRead,BufNewFile .envrc set ft=sh
+
 	" Set the Ruby filetype for a number of common Ruby files without .rb
 	au BufRead,BufNewFile {Gemfile,Rakefile,Vagrantfile,Thorfile,Procfile,Guardfile,config.ru,*.rake} set ft=ruby
 
