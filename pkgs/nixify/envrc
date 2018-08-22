@@ -74,6 +74,7 @@ use_nix() {
 	direnv_load cat "${dump}"
 
 	watch_file "${default}"
+	watch_file "${nixpkgs_version}"
 	watch_file shell.nix
 	if [[ ${shell} == "default.nix" ]]; then
 		watch_file default.nix
