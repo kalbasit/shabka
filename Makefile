@@ -1,19 +1,15 @@
-.PHONY: all build test switch update update-nixpkgs
+.PHONY: all update update-nixpkgs
 
 HOSTNAME ?= $(shell hostname -s)
 
 NIXOS_REBUILD=./lib/shell/bin/nixos-rebuild.sh
+NIXOS_REBUILD_OPERATIONS = switch boot test build dry-build dry-activate build-vm build-vm-with-bootloader
+.PHONY: $(NIXOS_REBUILD_OPERATIONS)
 
 all: build
 
-build:
-	@$(NIXOS_REBUILD) $(HOSTNAME) build
-
-test:
-	@$(NIXOS_REBUILD) $(HOSTNAME) test
-
-switch:
-	@$(NIXOS_REBUILD) $(HOSTNAME) switch
+$(NIXOS_REBUILD_OPERATIONS):
+	@$(NIXOS_REBUILD) $(HOSTNAME) $@
 
 update: update-nixpkgs update-nixos-hardware update-home-manager
 
