@@ -14,6 +14,7 @@ in {
       e = "\${EDITOR:-nvim}";
       gl = "github_commit_link";
       http = "http --print=HhBb";
+      kube = "kubectl";
       less = "${pkgs.bat}/bin/bat";
       ll = "ls -la";
       pw = "ps aux | grep -v grep | grep -e";
