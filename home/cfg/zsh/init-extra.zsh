@@ -161,10 +161,10 @@ fi
 #####################################################################
 
 # define the segments of the left prompt
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(custom_prompt_char)
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(custom_in_nix_shell custom_prompt_char)
 
 # define the segments of the right prompt
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(dir vcs custom_profile_story status vi_mode command_execution_time background_jobs context root_indicator ssh time)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(dir vcs custom_profile_story custom_nix_shell_packages status vi_mode command_execution_time background_jobs context root_indicator ssh time)
 
 # truncate /usr/share/plasma to /u/s/plasma
 POWERLEVEL9K_SHORTEN_DIR_LENGTH=1
@@ -172,8 +172,10 @@ POWERLEVEL9K_SHORTEN_DELIMITER=""
 POWERLEVEL9K_SHORTEN_STRATEGY="truncate_from_right"
 
 # define custom segments
+POWERLEVEL9K_CUSTOM_IN_NIX_SHELL="echo \$IN_NIX_SHELL"
 POWERLEVEL9K_CUSTOM_PROMPT_CHAR="echo λ"
 POWERLEVEL9K_CUSTOM_PROFILE_STORY="echo $'\u270D' \$ACTIVE_PROFILE@\$ACTIVE_STORY"
+POWERLEVEL9K_CUSTOM_NIX_SHELL_PACKAGES="if [[ -n \$NIX_SHELL_PACKAGES ]]; then echo \"(\$NIX_SHELL_PACKAGES)\"; fi"
 
 # TODO: setup the colors to be better visible
 
