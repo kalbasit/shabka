@@ -88,11 +88,11 @@ in {
       ];
     };
 
-    plugins = [
+    plugins = with pkgs; [
       {
         name = "enhancd";
         file = "init.sh";
-        src = pkgs.fetchFromGitHub {
+        src = fetchFromGitHub {
           owner = "b4b4r07";
           repo = "enhancd";
           rev = "fd805158ea19d640f8e7713230532bc95d379ddc";
@@ -102,7 +102,7 @@ in {
 
       {
         name = "gitit";
-        src = pkgs.fetchFromGitHub {
+        src = fetchFromGitHub {
           owner = "peterhurford";
           repo = "git-it-on.zsh";
           rev = "4827030e1ead6124e3e7c575c0dd375a9c6081a2";
@@ -112,7 +112,7 @@ in {
 
       {
         name = "solarized-man";
-        src = pkgs.fetchFromGitHub {
+        src = fetchFromGitHub {
           owner = "zlsun";
           repo = "solarized-man";
           rev = "a902b64696271efee95f37d45589078fdfbbddc5";
@@ -123,7 +123,7 @@ in {
       {
         name = "powerlevel9k";
         file = "powerlevel9k.zsh-theme";
-        src = pkgs.fetchFromGitHub {
+        src = fetchFromGitHub {
           owner = "bhilburn";
           repo = "powerlevel9k";
           rev = "571a859413866897cf962396f02f65a288f677ac";
@@ -133,7 +133,7 @@ in {
 
       {
         name = "zsh-completions";
-        src = pkgs.fetchFromGitHub {
+        src = fetchFromGitHub {
           owner = "zsh-users";
           repo = "zsh-completions";
           rev = "0.27.0";
@@ -143,7 +143,7 @@ in {
 
       {
         name = "zsh-history-substring-search";
-        src = pkgs.fetchFromGitHub {
+        src = fetchFromGitHub {
           owner = "zsh-users";
           repo = "zsh-history-substring-search";
           rev = "47a7d416c652a109f6e8856081abc042b50125f4";
@@ -153,7 +153,7 @@ in {
 
       {
         name = "zsh-syntax-highlighting";
-        src = pkgs.fetchFromGitHub {
+        src = fetchFromGitHub {
           owner = "zsh-users";
           repo = "zsh-syntax-highlighting";
           rev = "db6cac391bee957c20ff3175b2f03c4817253e60";
