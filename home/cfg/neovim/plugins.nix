@@ -1,5 +1,7 @@
 { vimUtils, fetchFromGitHub, stdenv }:
 
+with vimUtils;
+
 let
   airlineSeoul256Theme = stdenv.mkDerivation rec {
     name = "airline-seoul256-theme-${version}";
@@ -12,13 +14,13 @@ let
   };
 
 in {
-  airline-seoul256-theme = vimUtils.buildVimPluginFrom2Nix {
+  airline-seoul256-theme = buildVimPluginFrom2Nix {
     name = "airline-seoul256-theme-2018-08-12";
     src = airlineSeoul256Theme;
     dependencies = [];
   };
 
-  vim-colemak = vimUtils.buildVimPluginFrom2Nix {
+  vim-colemak = buildVimPluginFrom2Nix {
     name = "vim-colemak-2016-10-16";
     src = fetchFromGitHub {
       owner = "kalbasit";
@@ -29,7 +31,7 @@ in {
     dependencies = [];
   };
 
-  vim-terraform = vimUtils.buildVimPluginFrom2Nix {
+  vim-terraform = buildVimPluginFrom2Nix {
     name = "vim-terraform-2018-04-16";
     src = fetchFromGitHub {
       owner = "hashivim";
@@ -40,7 +42,7 @@ in {
     dependencies = [];
   };
 
-  vim-csv = vimUtils.buildVimPluginFrom2Nix {
+  vim-csv = buildVimPluginFrom2Nix {
     name = "vim-csv-2018-06-24";
     src = fetchFromGitHub {
       owner = "chrisbra";
@@ -51,7 +53,7 @@ in {
     dependencies = [];
   };
 
-  vim-pig = vimUtils.buildVimPluginFrom2Nix {
+  vim-pig = buildVimPluginFrom2Nix {
     name = "vim-pig-2017-06-08";
     src = fetchFromGitHub {
       owner = "motus";
@@ -62,7 +64,7 @@ in {
     dependencies = [];
   };
 
-  vim-emmet = vimUtils.buildVimPluginFrom2Nix {
+  vim-emmet = buildVimPluginFrom2Nix {
     name = "vim-emmet-2018-05-20";
     src = fetchFromGitHub {
       owner = "mattn";
@@ -73,7 +75,7 @@ in {
     dependencies = [];
   };
 
-  vim-yats = vimUtils.buildVimPluginFrom2Nix {
+  vim-yats = buildVimPluginFrom2Nix {
     name = "vim-yats-2018-06-20";
     src = fetchFromGitHub {
       owner = "HerringtonDarkholme";
@@ -84,7 +86,7 @@ in {
     dependencies = [];
   };
 
-  vim-color-seoul256 = vimUtils.buildVimPluginFrom2Nix {
+  vim-color-seoul256 = buildVimPluginFrom2Nix {
     name = "vim-color-seoul256-2017-09-04";
     src = fetchFromGitHub {
       owner = "junegunn";
@@ -95,7 +97,7 @@ in {
     dependencies = [];
   };
 
-  vim-typescript = vimUtils.buildVimPluginFrom2Nix {
+  vim-typescript = buildVimPluginFrom2Nix {
     name = "vim-typescript-2018-06-05";
     src = fetchFromGitHub {
       owner = "mhartington";
@@ -106,7 +108,7 @@ in {
     dependencies = [];
   };
 
-   vim-go = vimUtils.buildVimPluginFrom2Nix {
+   vim-go = buildVimPluginFrom2Nix {
     name = "vim-go-2018-03-27";
     src = fetchFromGitHub {
       owner = "fatih";
@@ -120,7 +122,7 @@ in {
   # show trailing whitespace in red. It also strips whitespace on save (See
   # settings for it below). To disable it, use :ToggleStripWhitespaceOnSave and
   # to strip manually do :StripWhiteSpace
-  vim-better-whitespace = vimUtils.buildVimPluginFrom2Nix {
+  vim-better-whitespace = buildVimPluginFrom2Nix {
     name = "vim-better-whitespace-2018-06-11";
     src = fetchFromGitHub {
       owner = "ntpeters";
@@ -131,7 +133,7 @@ in {
     dependencies = [];
   };
 
-  vim-vissort = vimUtils.buildVimPluginFrom2Nix {
+  vim-vissort = buildVimPluginFrom2Nix {
     name = "vim-vissort-2014-01-31";
     src = fetchFromGitHub {
       owner = "navicore";
@@ -142,7 +144,7 @@ in {
     dependencies = [];
   };
 
-  vim-zoomwintab = vimUtils.buildVimPluginFrom2Nix {
+  vim-zoomwintab = buildVimPluginFrom2Nix {
     name = "vim-zoomwintab-2018-04-14";
     src = fetchFromGitHub {
       owner = "troydm";
@@ -153,7 +155,7 @@ in {
     dependencies = [];
   };
 
-  vim-PreserveNoEOL = vimUtils.buildVimPluginFrom2Nix {
+  vim-PreserveNoEOL = buildVimPluginFrom2Nix {
     name = "vim-PreserveNoEOL-2013-04-25";
     src = fetchFromGitHub {
       owner = "vim-scripts";
