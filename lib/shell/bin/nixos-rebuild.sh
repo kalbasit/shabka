@@ -34,7 +34,7 @@ NIX_PATH="$(compute_nix_path)"
 export NIX_PATH
 
 if [[ $(id -u) -gt 0 ]] && ([[ "${action}" == "switch" ]] || [[ "${action}" == "test" ]] || [[ "${action}" == "boot" ]]) ; then
-	echo -e "must run this as SYSTEM_PATH"
+	echo -e "ERR: must run this as root"
 	exit 1
 fi
 
