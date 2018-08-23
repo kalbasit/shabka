@@ -36,7 +36,6 @@ in {
             "easy-align"
             "easymotion"
             "editorconfig-vim"
-            "fugitive"
             "fzf-vim"
             "fzfWrapper"
             "multiple-cursors"
@@ -75,6 +74,7 @@ in {
             "vim-color-seoul256"
             "vim-csv"
             "vim-emmet"
+            "vim-fugitive" # update to 2.4
             "vim-pig"
             "vim-terraform"
             "vim-vissort"

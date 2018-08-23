@@ -165,4 +165,17 @@ in {
     };
     dependencies = [];
   };
+
+  # copy from nixpkgs to update
+  vim-fugitive = buildVimPluginFrom2Nix {
+    name = "vim-fugitive-2.4";
+    src = fetchFromGitHub {
+      owner = "tpope";
+      repo = "vim-fugitive";
+      rev = "85c6c7a8376f464feb16c59c007a0c17d61ba3b3"; # v2.4
+      sha256 = "1k0g5qxsgyyzz7wbpj9jzr1isdfyv4mwxhwk6aw5sglk746qjysz";
+    };
+    dependencies = [];
+
+  };
 }
