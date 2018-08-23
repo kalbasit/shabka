@@ -266,6 +266,12 @@ endfunction
 autocmd! User FzfStatusLine call <SID>fzf_statusline()
 
 "" }}}
+"" Fugitive {{{
+
+" ask Fugitive to not set any mappings
+let g:fugitive_no_maps = 1
+
+"" }}}
 "" Gist{{{
 ""
 
