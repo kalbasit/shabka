@@ -18,7 +18,7 @@ function vim_clean_swap() {
 				continue
 			fi
 			rm -f "$RECTXT" "$RECFN"
-			/usr/bin/vim -X -r "$q" \
+			@vim_bin@ -X -r "$q" \
 				-c "w! $RECTXT" \
 				-c "let fn=expand('%')" \
 				-c "new $RECFN" \

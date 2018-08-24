@@ -43,6 +43,9 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/pr \
       --subst-var-by git_bin ${pkgs.git}/bin/git
 
+    substituteInPlace $out/vim_clean_swap \
+      --subst-var-by vim_bin ${pkgs.vim}/bin/vim
+
     substituteInPlace $out/xmlpp \
       --subst-var-by xmllint_bin ${pkgs.libxml2Python}/bin/xmllint
   '';
