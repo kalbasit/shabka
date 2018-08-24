@@ -709,16 +709,16 @@ fi
 # ZSH work with or without it.
 
 if [[ -z "${ACTIVE_PROFILE}" || -z "${ACTIVE_STORY}" ]]; then
-	if [[ -n "${DISPLAY}" ]] && have i3-msg && have jq; then
-		active_workspace="$(i3-msg -t get_workspaces 2>/dev/null | jq -r '.[] | if .focused == true then .name else empty end')"
-	fi
+	if [[ -n "${DISPLAY}" ]] && have i3-msg; then
+		active_workspace="$(i3-msg -t get_workspaces 2>/dev/null | @jq_bin@ -r '.[] | if .focused == true then .name else empty end')"
 
-	if [[ "${active_workspace}" =~ '.*@.*' ]]; then
-		[[ -z "${ACTIVE_PROFILE}" ]] && export ACTIVE_PROFILE="$(echo "${active_workspace}" | cut -d@ -f1)"
-		[[ -z "${ACTIVE_STORY}" ]] && export ACTIVE_STORY="$(echo "${active_workspace}" | cut -d@ -f2)"
-	fi
+		if [[ "${active_workspace}" =~ '.*@.*' ]]; then
+			[[ -z "${ACTIVE_PROFILE}" ]] && export ACTIVE_PROFILE="$(echo "${active_workspace}" | cut -d@ -f1)"
+			[[ -z "${ACTIVE_STORY}" ]] && export ACTIVE_STORY="$(echo "${active_workspace}" | cut -d@ -f2)"
+		fi
 
-	[[ -n "${active_workspace}" ]] && unset active_workspace
+		unset active_workspace
+	fi
 fi
 
 # load the active profile only if one is available

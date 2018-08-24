@@ -72,6 +72,7 @@ in {
       exa_bin      = "${pkgs.exa}/bin/exa";
       fzf_out      = "${pkgs.fzf}";
       git_bin      = "${pkgs.git}/bin/git";
+      jq_bin       = "${pkgs.jq}/bin/jq";
       rbrowser_bin = "${pkgs.rbrowser}/bin/rbrowser";
     });
 
