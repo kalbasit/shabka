@@ -60,13 +60,6 @@ set nowrap       " don't wrap lines
 set shiftwidth=2 " an autoindent (with <<) is two spaces
 set tabstop=2    " a tab is two spaces
 
-" We have to have a winheight bigger than we want to set winminheight. But if
-" we set winheight to be huge before winminheight, the winminheight set will
-" fail.
-set winheight=5
-set winminheight=5   " must come before setting winheight to 999
-set winheight=999
-
 " Remember things between sessions
 "
 " '20  - remember marks for 20 previous files
@@ -166,9 +159,6 @@ let g:ale_go_gometalinter_options = "--fast"
 ""
 
 if has("autocmd")
-	" See http://stackoverflow.com/a/3787326/301730
-	au BufEnter ?* call PreviewHeightWorkAround()
-
 	" In emails allow footnotes
 	au FileType mail ab ~0 [0]<esc>m`:/^--\s*/-2/<CR>o<CR>Footnotes:<CR>----------<CR>[0]
 	au FileType mail ab ~1 [1]<esc>m`:/^Footnotes\:/+2/<CR>o[1]
@@ -575,14 +565,6 @@ nmap <leader>hle :set listchars-=eol:$<CR>
 " }}}
 "" Functions {{{
 ""
-
-function! PreviewHeightWorkAround()
-	if &previewwindow
-		" See http://stackoverflow.com/a/30771487/301730
-		exec 'wincmd K'
-		exec 'setlocal winheight='.&previewheight
-	endif
-endfunction
 
 function! ExtractVariable()
 	let name = input("Variable name: ")
