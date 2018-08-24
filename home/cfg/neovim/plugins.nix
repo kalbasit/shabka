@@ -176,6 +176,16 @@ in {
       sha256 = "1k0g5qxsgyyzz7wbpj9jzr1isdfyv4mwxhwk6aw5sglk746qjysz";
     };
     dependencies = [];
+  };
 
+  traces-vim = buildVimPluginFrom2Nix {
+    name = "traces-vim-2018-08-20";
+    src = fetchFromGitHub {
+      owner = "markonm";
+      repo = "traces.vim";
+      rev = "f3ca6fe2e81aba4d00476349b201605a9d0e86df";
+      sha256 = "0nk7dr38r3aj6z2dl35rvid6m6ji0gq366zcm4vrlgp1rz8kbvp1";
+    };
+    dependencies = [];
   };
 }

@@ -68,6 +68,7 @@ in {
             "vim-bazel"
           ] ++ [ # my_plugins
             "airline-seoul256-theme"
+            "traces-vim"
             "vim-PreserveNoEOL"
             "vim-better-whitespace"
             "vim-colemak"
