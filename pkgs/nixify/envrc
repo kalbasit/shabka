@@ -46,7 +46,7 @@ use_nix() {
 	local dir="${PWD}"/.direnv
 	local default="${dir}/default"
 	if [[ ! -L "${default}" ]] || [[ ! -d $(readlink "${default}") ]]; then
-		local wd="${dir}/env-$(md5sum "${shell}" | cut -c -32)-$(md5sum "${nixpkgs_version}" | cut -c -32)"
+		local wd="${dir}/env-$(hashFile "${shell}")-$(hashFile "${nixpkgs_version}")"
 		mkdir -p "${wd}"
 
 		local drv="${wd}/env.drv"
@@ -60,8 +60,8 @@ use_nix() {
 		ln -s $(basename "${wd}") "${default}"
 	fi
 
-	local drv=$(readlink -f "${default}/env.drv")
-	local dump="${dir}/dump-$(md5sum ".envrc" | cut -c -32)-$(md5sum ${drv} | cut -c -32)"
+	local drv=$(readlink "${default}/env.drv")
+	local dump="${dir}/dump-$(hashFile ".envrc")-$(hashFile ${drv})"
 
 	if [[ ! -f "${dump}" ]] || [[ "${XDG_CONFIG_DIR}/direnv/direnvrc" -nt "${dump}" ]]; then
 		log_status "use nix: updating cache"
@@ -78,6 +78,14 @@ use_nix() {
 	watch_file shell.nix
 	if [[ ${shell} == "default.nix" ]]; then
 		watch_file default.nix
+	fi
+}
+
+hashFile() {
+	if command -v md5sum &>/dev/null; then
+		md5sum "${@}" | cut -c -32
+	elif command -v md5 &>/dev/null; then
+		md5 -q "${@}"
 	fi
 }
 
