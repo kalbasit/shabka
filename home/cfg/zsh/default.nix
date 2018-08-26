@@ -67,11 +67,9 @@ in {
     initExtra = builtins.readFile (pkgs.substituteAll {
       src = ./init-extra.zsh;
 
-      ag_bin       = "${pkgs.silver-searcher}/bin/ag";
       bat_bin      = "${pkgs.bat}/bin/bat";
       exa_bin      = "${pkgs.exa}/bin/exa";
       fzf_out      = "${pkgs.fzf}";
-      git_bin      = "${pkgs.git}/bin/git";
       jq_bin       = "${pkgs.jq}/bin/jq";
       rbrowser_bin = "${pkgs.rbrowser}/bin/rbrowser";
     });

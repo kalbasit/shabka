@@ -185,7 +185,6 @@ POWERLEVEL9K_CUSTOM_NIX_SHELL_PACKAGES="if [[ -n \$NIX_SHELL_PACKAGES ]]; then e
 
 # setup fzf
 if [[ -o interactive ]]; then
-	export FZF_DEFAULT_COMMAND='(@git_bin@ ls-tree -r --name-only HEAD || @ag_bin@ --hidden --ignore .git -g "")'
 	export ENHANCD_FILTER=@fzf_out@/bin/fzf-tmux
 fi
 
