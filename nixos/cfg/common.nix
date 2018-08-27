@@ -42,6 +42,7 @@
   # disable IPv6, it's not working within my network. I have to add support for
   # IPv6 inside my network before being able to enable it.
   networking.enableIPv6 = false;
+  networking.dnsSingleRequest = true;
 
   # setup the fonts
   fonts.fonts = with pkgs; [
