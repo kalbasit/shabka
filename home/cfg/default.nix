@@ -96,6 +96,8 @@ in {
 
     browsh
 
+    corgi
+
     gist
 
     gnupg
