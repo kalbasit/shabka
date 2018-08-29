@@ -3,10 +3,10 @@
 #
 
 function jspp() {
-	if [[ "${#}" -eq 0 ]]; then
-    @js-beautify_bin@ --stdin
-	else
-		local input_file="${1}"
-    @js-beautify_bin@ --replace "${input_file}"
-	fi
+    if [[ "${#}" -eq 0 ]]; then
+	@js-beautify_bin@ --stdin
+    else
+	local input_file="${1}"
+	@js-beautify_bin@ --replace "${input_file}"
+    fi
 }
