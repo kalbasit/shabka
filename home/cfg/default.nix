@@ -25,6 +25,13 @@ in {
     # ./cfg/home-manager/greenclip
   ];
 
+  # configure GTK icon theme to fix missing icons issue
+  # https://github.com/NixOS/nixpkgs/issues/32730#issuecomment-368310621
+  gtk = {
+    enable = true;
+    iconTheme = { package = pkgs.hicolor_icon_theme; name = "hicolor"; };
+  };
+
   # setup nixpkgs config
   nixpkgs.config = import ./nixpkgs-config.nix;
   xdg.configFile."nixpkgs/config.nix".source = ./nixpkgs-config.nix;
