@@ -234,9 +234,6 @@ export SUDO_EDITOR=nvim
 export NOTMUCH_HOME="${HOME}/.mail/.notmuch"
 export NOTMUCH_CONFIG="${NOTMUCH_HOME}/config"
 
-# Set the pager
-export PAGER=@bat_bin@
-
 # Set the language support
 export LANG=en_US.UTF-8
 export LC_ALL="${LANG}"

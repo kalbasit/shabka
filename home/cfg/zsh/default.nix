@@ -67,7 +67,6 @@ in {
     initExtra = builtins.readFile (pkgs.substituteAll {
       src = ./init-extra.zsh;
 
-      bat_bin      = "${pkgs.bat}/bin/bat";
       exa_bin      = "${pkgs.exa}/bin/exa";
       fzf_out      = "${pkgs.fzf}";
       jq_bin       = "${pkgs.jq}/bin/jq";
