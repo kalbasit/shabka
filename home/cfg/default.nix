@@ -13,6 +13,7 @@ in {
     ./firefox
     ./git
     ./i3
+    ./less
     ./neovim
     ./rofi
     ./taskwarrior
