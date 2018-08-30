@@ -68,6 +68,7 @@ in {
       src = ./init-extra.zsh;
 
       exa_bin      = "${pkgs.exa}/bin/exa";
+      fortune_bin  = "${pkgs.fortune}/bin/fortune";
       fzf_out      = "${pkgs.fzf}";
       jq_bin       = "${pkgs.jq}/bin/jq";
       rbrowser_bin = "${pkgs.rbrowser}/bin/rbrowser";

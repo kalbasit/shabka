@@ -727,6 +727,5 @@ fi
 #####################################################################
 
 if [[ -o interactive ]]; then
-	have pom && pom || true
-	have fortune && fortune -c || true
+	@fortune_bin@ -c
 fi
