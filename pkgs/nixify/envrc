@@ -67,7 +67,7 @@ use_nix() {
 		log_status "use nix: updating cache"
 
 		old=$(find ${dir} -name 'dump-*')
-		nix-shell "${drv}" --show-trace "$@" --run 'direnv dump' > "${dump}"
+		nix-shell "${drv}" --show-trace "$@" --run "$(join_args "$direnv" dump)" > "${dump}"
 		rm -f ${old}
 	fi
 
