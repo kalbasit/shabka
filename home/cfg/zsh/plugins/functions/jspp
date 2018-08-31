@@ -4,9 +4,9 @@
 
 function jspp() {
     if [[ "${#}" -eq 0 ]]; then
-	@js-beautify_bin@ --stdin
+	@js-beautify_bin@ --stdin --indent-size=2
     else
 	local input_file="${1}"
-	@js-beautify_bin@ --replace "${input_file}"
+	@js-beautify_bin@ --replace --indent-size=2 "${input_file}"
     fi
 }
