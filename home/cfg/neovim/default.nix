@@ -6,6 +6,9 @@ in {
   programs.neovim = {
     enable = true;
 
+    viAlias = true;
+    vimAlias = true;
+
     withPython = true;
     extraPythonPackages = [pkgs.python27Packages.neovim];
 
