@@ -14,9 +14,6 @@ in
 myPkgs // {
   # other overlay code goes here
 
-  # revert kernel 4.18 update due to https://github.com/NixOS/nixpkgs/issues/45165
-  linuxPackages_latest = super.linuxPackages_4_17;
-
   # timewarrior errors out if it can't write the config file, even though it's tracked by Nix
   # If timewarrior.cfg is not writable, timew errors out with Insufficient permissions for '/home/kalbasit/.timewarrior/timewarrior.cfg'.
   # I believe the root cause is https://github.com/GothenburgBitFactory/timewarrior/blob/004afd64a5556ba3d35fd99c14d82f9b3ca64f1b/src/init.cpp#L183-L186
@@ -24,4 +21,16 @@ myPkgs // {
   timewarrior = super.timewarrior.overrideAttrs (oa: {
     patches = [./timewarrior-no-write-config-file.patch];
   });
+
+  # Patch kernel 4.18 to fix my mouse.
+  # https://github.com/NixOS/nixpkgs/issues/45165
+  linux_4_18 = super.linux_4_18.override {
+    kernelPatches = super.linux_4_18.kernelPatches ++ [{
+      name = "fix-kernel-#200847";
+      patch = super.fetchpatch {
+        url = "https://patchwork.kernel.org/patch/10587369/raw/";
+        sha256 = "07z1cp3mkiwy7r8sqvzjafrk80p8xrza82zfx85whm3vgngi3bwp";
+      };
+    }];
+  };
 }
