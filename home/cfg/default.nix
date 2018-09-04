@@ -12,6 +12,7 @@ in {
     ./dunst
     ./firefox
     ./git
+    ./greenclip
     ./i3
     ./less
     ./neovim
@@ -20,10 +21,6 @@ in {
     ./termite
     ./timewarrior
     ./zsh
-
-    # TODO: enable this once https://github.com/erebe/greenclip/issues/39 has
-    # been resolved, and released to HackagePackages.
-    # ./cfg/home-manager/greenclip
   ];
 
   # configure GTK icon theme to fix missing icons issue

@@ -4,8 +4,8 @@ self: super:
   haskellPackages = super.haskellPackages.override {
     overrides = hsSelf: hsSuper: {
       greenclip  = self.haskell.lib.overrideCabal hsSuper.greenclip  (oa: {
-        version = "3.1.1";
-        sha256 = "1axh1q7kcvcnhn4rl704i4gcix5yn5v0sb3bdgjk4vgkd7fv8chw";
+        version = "3.2.0";
+        sha256 = "09ygvyrczxqsp2plwmwx021wmbq2vln9i4b5iaj0j26j7prykikq";
         executablePkgconfigDepends = oa.executablePkgconfigDepends ++ [super.xorg.libXdmcp];
       });
 
