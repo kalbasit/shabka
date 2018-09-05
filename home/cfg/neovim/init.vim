@@ -1,7 +1,6 @@
 "" Provides{{{
 let g:node_host_prog = '@neovim_node_host_bin@'
 let g:nvim_typescript#server_path = '@typescript_server_bin@'
-let g:deoplete#sources#go#gocode_binary = '@gocode_bin@'
 " }}}
 "" Settings{{{
 ""
@@ -220,6 +219,7 @@ let g:deoplete#sources#go#json_directory = '~/.cache/deoplete/go/$GOOS_$GOARCH'
 let g:deoplete#sources#go#pointer = 1
 let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
 let g:deoplete#sources#go#use_cache = 1
+let g:deoplete#sources#go#gocode_binary = '@gocode_bin@'
 
 "" }}}
 "" EasyAlign{{{
