@@ -99,7 +99,7 @@ in {
 
     gnupg
 
-    go
+    go_1_10
 
     jq
 
