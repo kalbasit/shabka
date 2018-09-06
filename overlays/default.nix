@@ -21,16 +21,4 @@ myPkgs // {
   timewarrior = super.timewarrior.overrideAttrs (oa: {
     patches = [./timewarrior-no-write-config-file.patch];
   });
-
-  # Patch kernel 4.18 to fix my mouse.
-  # https://github.com/NixOS/nixpkgs/issues/45165
-  linux_4_18 = super.linux_4_18.override {
-    kernelPatches = super.linux_4_18.kernelPatches ++ [{
-      name = "fix-kernel-#200847";
-      patch = super.fetchpatch {
-        url = "https://patchwork.kernel.org/patch/10587369/raw/";
-        sha256 = "07z1cp3mkiwy7r8sqvzjafrk80p8xrza82zfx85whm3vgngi3bwp";
-      };
-    }];
-  };
 }
