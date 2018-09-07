@@ -1,5 +1,9 @@
 { config, pkgs, lib, ... }:
 
+assert (builtins.pathExists /code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/publica.dev.crt);
+assert (builtins.pathExists /code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/publica.dev.key);
+assert (builtins.pathExists /code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/ca.crt);
+
 let
   publica_dev_ssl_cert_path = /code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/publica.dev.crt;
   publica_dev_ssl_key_path = /code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/publica.dev.key;

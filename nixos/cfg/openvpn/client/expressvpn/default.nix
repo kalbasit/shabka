@@ -1,5 +1,7 @@
 { pkgs, ... }:
 
+assert (builtins.pathExists /private);
+
 let
   remotes = {
     albania = "albania-ca-version-2.expressnetw.com 1195";

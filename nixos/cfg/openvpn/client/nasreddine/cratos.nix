@@ -1,5 +1,7 @@
 { ... }:
 
+assert (builtins.pathExists /private);
+
 {
   services.openvpn.servers = {
     client-nasreddine = {
