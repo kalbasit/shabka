@@ -3,6 +3,7 @@
 {
   home.packages = with pkgs; [
     gitAndTools.hub
+    gitAndTools.tig
   ];
 
   programs.git = {
