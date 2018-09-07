@@ -159,7 +159,7 @@ let
   generateOpenVPNConfig = remote: {
     autoStart = false;
     config = builtins.readFile (pkgs.substituteAll {
-      src = /private/network-secrets/vpn/client/expressvpn/config.ovpn;
+      src = ./config.ovpn;
 
       remote = "${remote}";
     });
