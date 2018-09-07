@@ -154,16 +154,18 @@ let
     vietnam = "vietnam-ca-version-2.expressnetw.com 1195";
   };
 
-  createConfig = (name: value: pkgs.lib.nameValuePair ("client-expressvpn-" + name) ({
+  remoteConfig = name: remote: pkgs.lib.nameValuePair ("client-expressvpn-" + name) (generateOpenVPNConfig remote);
+
+  generateOpenVPNConfig = remote: {
     autoStart = false;
     config = builtins.readFile (pkgs.substituteAll {
       src = /private/network-secrets/vpn/client/expressvpn/config.ovpn;
 
-      remote = "${value}";
+      remote = "${remote}";
     });
     updateResolvConf = true;
-  }));
+  };
 
 in {
-  services.openvpn.servers = pkgs.lib.mapAttrs' createConfig remotes;
+  services.openvpn.servers = pkgs.lib.mapAttrs' remoteConfig remotes;
 }
