@@ -167,7 +167,7 @@ let
     config = builtins.readFile (pkgs.substituteAll {
       src = ./config.ovpn;
 
-      remote = "${remote}";
+      inherit remote;
 
       # Go to https://www.expressvpn.com/setup#manual
       # 1) copy the username and password given to you in step 1 and write
