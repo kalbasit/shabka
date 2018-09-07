@@ -1,6 +1,10 @@
 { pkgs, ... }:
 
-assert (builtins.pathExists /private);
+assert (builtins.pathExists /private/network-secrets/vpn/client/expressvpn/auth.txt);
+assert (builtins.pathExists /private/network-secrets/vpn/client/expressvpn/ca2.crt);
+assert (builtins.pathExists /private/network-secrets/vpn/client/expressvpn/client.crt);
+assert (builtins.pathExists /private/network-secrets/vpn/client/expressvpn/client.key);
+assert (builtins.pathExists /private/network-secrets/vpn/client/expressvpn/ta.key);
 
 let
   remotes = {
@@ -92,7 +96,7 @@ let
     norway = "norway-ca-version-2.expressnetw.com 1195";
     pakistan = "pakistan-ca-version-2.expressnetw.com 1195";
     peru = "peru-ca-version-2.expressnetw.com 1195";
-    philippines_viasingapore_ = "ph-via-sing-ca-version-2.expressnetw.com 1195";
+    philippines-viasingapore = "ph-via-sing-ca-version-2.expressnetw.com 1195";
     poland = "poland-ca-version-2.expressnetw.com 1195";
     portugal = "portugal-ca-version-2.expressnetw.com 1195";
     romania = "romania-ca-version-2.expressnetw.com 1195";
@@ -157,15 +161,25 @@ let
   remoteConfig = name: remote: pkgs.lib.nameValuePair ("client-expressvpn-" + name) (generateOpenVPNConfig remote);
 
   generateOpenVPNConfig = remote: {
-    autoStart = false;
+    autoStart        = false;
+    updateResolvConf = true;
+
     config = builtins.readFile (pkgs.substituteAll {
       src = ./config.ovpn;
 
       remote = "${remote}";
+
+      # Go to https://www.expressvpn.com/setup#manual
+      # 1) copy the username and password given to you in step 1 and write
+      #    them, each on a new line, in the auth.txt file below.
+      # 2) Download the ZIP file from step 4 and make them available to cert,
+      #    key, tls-auth and ca below.
+      auth_user_pass = /private/network-secrets/vpn/client/expressvpn/auth.txt;
+      ca             = /private/network-secrets/vpn/client/expressvpn/ca2.crt;
+      client_cert    = /private/network-secrets/vpn/client/expressvpn/client.crt;
+      client_key     = /private/network-secrets/vpn/client/expressvpn/client.key;
+      tls_auth       = /private/network-secrets/vpn/client/expressvpn/ta.key;
     });
-    updateResolvConf = true;
   };
 
-in {
-  services.openvpn.servers = pkgs.lib.mapAttrs' remoteConfig remotes;
-}
+in { services.openvpn.servers = pkgs.lib.mapAttrs' remoteConfig remotes; }
