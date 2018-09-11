@@ -24,7 +24,7 @@
     openssh.authorizedKeys.keys = [
       (builtins.readFile (builtins.fetchurl {
         url = "https://github.com/kalbasit.keys";
-        sha256 = "439dea6077640c229dcaa2a2849c57424b8d7731ecc3bd4fc4ca11bb1f98cde2";
+        sha256 = "1jm3haqcv827vr92ynkbf23dgq0anlym10hqk87wbzafb82smy50";
       }))
     ];
   };
@@ -48,7 +48,7 @@
     openssh.authorizedKeys.keys = [
       (builtins.readFile (builtins.fetchurl {
         url = "https://github.com/kalbasit.keys";
-        sha256 = "439dea6077640c229dcaa2a2849c57424b8d7731ecc3bd4fc4ca11bb1f98cde2";
+        sha256 = "1jm3haqcv827vr92ynkbf23dgq0anlym10hqk87wbzafb82smy50";
       }))
     ];
   };
