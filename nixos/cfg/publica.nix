@@ -167,5 +167,17 @@ in
       proxy_buffers         4 32k;
       proxy_buffer_size     32k;
     '';
+
+    # //prebid
+    services.nginx.virtualHosts."prebid.publica.dev".serverName = "prebid.publica.dev";
+    services.nginx.virtualHosts."prebid.publica.dev".addSSL = true;
+    services.nginx.virtualHosts."prebid.publica.dev".sslCertificate = pkgs.writeText "prebid.publica.dev.cert" publica_dev_ssl_cert;
+    services.nginx.virtualHosts."prebid.publica.dev".sslCertificateKey = pkgs.writeText "prebid.publica.dev.cert" publica_dev_ssl_key;
+    services.nginx.virtualHosts."prebid.publica.dev".locations."/".extraConfig = ''
+      ${commonLocation}
+      proxy_pass            http://127.0.0.1:9999;
+      proxy_buffers         4 32k;
+      proxy_buffer_size     32k;
+    '';
   };
 }
