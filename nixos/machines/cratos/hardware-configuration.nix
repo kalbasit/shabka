@@ -8,6 +8,11 @@
     [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
     ];
 
+  # Use the systemd-boot EFI boot loader.
+  boot.loader.systemd-boot.editor = false;
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+
   boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];

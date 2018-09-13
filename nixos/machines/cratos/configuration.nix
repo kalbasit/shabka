@@ -21,11 +21,6 @@
     ../../cfg/openvpn/client/nasreddine/cratos.nix
   ] else []);
 
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.editor = false;
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-
   # boot the latest kernel
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
