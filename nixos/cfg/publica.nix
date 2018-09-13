@@ -64,7 +64,7 @@ assert (builtins.pathExists publica_dev_ssl_key_path);
 {
   # Add the extra hosts
   networking.extraHosts = ''
-    127.0.0.1 ${builtins.concatStringsSep " " (builtins.attrNames hostsPorts)}
+    127.0.0.1 k8s.publica.dev ${builtins.concatStringsSep " " (builtins.attrNames hostsPorts)}
   '';
 
   # NginX configuration for publica
