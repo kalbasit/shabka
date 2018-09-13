@@ -1,9 +1,5 @@
 { config, pkgs, lib, ... }:
 
-assert (builtins.pathExists /code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/publica.dev.crt);
-assert (builtins.pathExists /code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/publica.dev.key);
-assert (builtins.pathExists /code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/ca.crt);
-
 let
   publica_dev_ssl_cert_path = /code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/publica.dev.crt;
   publica_dev_ssl_key_path = /code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/publica.dev.key;
@@ -38,22 +34,7 @@ let
     -----END CERTIFICATE-----
   '';
 
-  publica_dev_ssl_cert =
-    if builtins.pathExists (builtins.toPath publica_dev_ssl_cert_path)
-    then builtins.readFile publica_dev_ssl_cert_path
-    else "";
-
-  publica_dev_ssl_key =
-    if builtins.pathExists (builtins.toPath publica_dev_ssl_key_path)
-    then builtins.readFile publica_dev_ssl_key_path
-    else "";
-
-  publica_dev_ssl_ca =
-    if builtins.pathExists (builtins.toPath publica_dev_ssl_ca_path)
-    then builtins.readFile publica_dev_ssl_ca_path
-    else "";
-
-  setupNginx = builtins.stringLength publica_dev_ssl_cert > 0 && builtins.stringLength publica_dev_ssl_key > 0 && builtins.stringLength publica_dev_ssl_ca > 0;
+  publica_dev_ssl_ca = builtins.readFile publica_dev_ssl_ca_path;
 
   commonLocation = ''
     proxy_set_header      X-Real-IP $remote_addr;
@@ -65,119 +46,61 @@ let
     proxy_connect_timeout 10m;
     proxy_redirect        off;
   '';
+
+  hostsPorts = {
+    "api.publica.dev"      = 8080;
+    "console.publica.dev"  = 7000;
+    "ctrl.publica.dev"     = 8060;
+    "home.publica.dev"     = 7010;
+    "js.publica.dev"       = 3002;
+    "prebid.publica.dev"   = 9999;
+    "publica.dev"          = 3002;
+    "rewriter.publica.dev" = 8061;
+  };
+
+  generateVirtualHostsSet = host: port: {
+    addSSL = true;
+    serverName = host;
+    sslCertificate = builtins.toPath publica_dev_ssl_cert_path;
+    sslCertificateKey = builtins.toPath publica_dev_ssl_key_path;
+
+    locations = {
+      "/" = {
+        extraConfig = ''
+          ${commonLocation}
+          proxy_pass            http://127.0.0.1:${toString port};
+          proxy_buffers         4 32k;
+          proxy_buffer_size     32k;
+        '';
+      };
+    };
+  };
+
+  generateVirtualHosts = host: port: pkgs.lib.nameValuePair
+    (host)
+    (generateVirtualHostsSet host port);
+
 in
 
+assert (builtins.pathExists publica_dev_ssl_cert_path);
+assert (builtins.pathExists publica_dev_ssl_key_path);
+assert (builtins.pathExists publica_dev_ssl_ca_path);
+
 {
-  config = lib.mkIf setupNginx {
-    # Add the extra hosts
-    networking.extraHosts = ''
-      127.0.0.1 k8s.publica.dev api.publica.dev console.publica.dev home.publica.dev ctrl.publica.dev js.publica.dev rewriter.publica.dev publica.dev demo.publica.dev prebid.publica.dev
-    '';
+  # Add the extra hosts
+  networking.extraHosts = ''
+    127.0.0.1 ${builtins.concatStringsSep " " (builtins.attrNames hostsPorts)}
+  '';
 
-    # NginX configuration for publica
-    services.nginx.enable = true;
+  # NginX configuration for publica
+  services.nginx.enable = true;
 
-    # Add Publica CA
-    security.pki.certificates = [
-      publica_dev_ssl_ca
-      charles_ssl_cert
-    ];
+  # Add Publica CA
+  security.pki.certificates = [
+    publica_dev_ssl_ca
+    charles_ssl_cert
+  ];
 
-    # //console/server
-    services.nginx.virtualHosts."api.publica.dev".serverName = "api.publica.dev";
-    services.nginx.virtualHosts."api.publica.dev".addSSL = true;
-    services.nginx.virtualHosts."api.publica.dev".sslCertificate = pkgs.writeText "api.publica.dev.cert" publica_dev_ssl_cert;
-    services.nginx.virtualHosts."api.publica.dev".sslCertificateKey = pkgs.writeText "api.publica.dev.cert" publica_dev_ssl_key;
-    services.nginx.virtualHosts."api.publica.dev".locations."/".extraConfig = ''
-      ${commonLocation}
-      proxy_pass            http://127.0.0.1:8080;
-      proxy_buffers         4 32k;
-      proxy_buffer_size     32k;
-    '';
-
-    # //console/ui
-    services.nginx.virtualHosts."console.publica.dev".serverName = "console.publica.dev";
-    services.nginx.virtualHosts."console.publica.dev".addSSL = true;
-    services.nginx.virtualHosts."console.publica.dev".sslCertificate = pkgs.writeText "console.publica.dev.cert" publica_dev_ssl_cert;
-    services.nginx.virtualHosts."console.publica.dev".sslCertificateKey = pkgs.writeText "console.publica.dev.cert" publica_dev_ssl_key;
-    services.nginx.virtualHosts."console.publica.dev".locations."/".extraConfig = ''
-      ${commonLocation}
-      proxy_pass            http://127.0.0.1:7000;
-      proxy_buffers         4 32k;
-      proxy_buffer_size     32k;
-    '';
-
-    # //ads/controller
-    services.nginx.virtualHosts."ctrl.publica.dev".serverName = "ctrl.publica.dev";
-    services.nginx.virtualHosts."ctrl.publica.dev".addSSL = true;
-    services.nginx.virtualHosts."ctrl.publica.dev".sslCertificate = pkgs.writeText "ctrl.publica.dev.cert" publica_dev_ssl_cert;
-    services.nginx.virtualHosts."ctrl.publica.dev".sslCertificateKey = pkgs.writeText "ctrl.publica.dev.cert" publica_dev_ssl_key;
-    services.nginx.virtualHosts."ctrl.publica.dev".locations."/".extraConfig = ''
-      ${commonLocation}
-      proxy_pass            http://127.0.0.1:8060;
-      proxy_buffers         4 32k;
-      proxy_buffer_size     32k;
-    '';
-
-    # //homepage
-    services.nginx.virtualHosts."home.publica.dev".serverName = "home.publica.dev";
-    services.nginx.virtualHosts."home.publica.dev".addSSL = true;
-    services.nginx.virtualHosts."home.publica.dev".sslCertificate = pkgs.writeText "home.publica.dev.cert" publica_dev_ssl_cert;
-    services.nginx.virtualHosts."home.publica.dev".sslCertificateKey = pkgs.writeText "home.publica.dev.cert" publica_dev_ssl_key;
-    services.nginx.virtualHosts."home.publica.dev".locations."/".extraConfig = ''
-      ${commonLocation}
-      proxy_pass            http://127.0.0.1:7010;
-      proxy_buffers         4 32k;
-      proxy_buffer_size     32k;
-    '';
-
-    # //ads/app/src/demo
-    services.nginx.virtualHosts."js.publica.dev".serverName = "js.publica.dev";
-    services.nginx.virtualHosts."js.publica.dev".serverAliases = ["publica.dev"];
-    services.nginx.virtualHosts."js.publica.dev".addSSL = true;
-    services.nginx.virtualHosts."js.publica.dev".sslCertificate = pkgs.writeText "js.publica.dev.cert" publica_dev_ssl_cert;
-    services.nginx.virtualHosts."js.publica.dev".sslCertificateKey = pkgs.writeText "js.publica.dev.cert" publica_dev_ssl_key;
-    services.nginx.virtualHosts."js.publica.dev".locations."/".extraConfig = ''
-      ${commonLocation}
-      proxy_pass            http://127.0.0.1:3002;
-      proxy_buffers         4 32k;
-      proxy_buffer_size     32k;
-    '';
-
-    # //ads/rewriter
-    services.nginx.virtualHosts."rewriter.publica.dev".serverName = "rewriter.publica.dev";
-    services.nginx.virtualHosts."rewriter.publica.dev".addSSL = true;
-    services.nginx.virtualHosts."rewriter.publica.dev".sslCertificate = pkgs.writeText "rewriter.publica.dev.cert" publica_dev_ssl_cert;
-    services.nginx.virtualHosts."rewriter.publica.dev".sslCertificateKey = pkgs.writeText "rewriter.publica.dev.cert" publica_dev_ssl_key;
-    services.nginx.virtualHosts."rewriter.publica.dev".locations."/".extraConfig = ''
-      ${commonLocation}
-      proxy_pass            http://127.0.0.1:8061;
-      proxy_buffers         4 32k;
-      proxy_buffer_size     32k;
-    '';
-
-    # //demo
-    services.nginx.virtualHosts."demo.publica.dev".serverName = "demo.publica.dev";
-    services.nginx.virtualHosts."demo.publica.dev".addSSL = true;
-    services.nginx.virtualHosts."demo.publica.dev".sslCertificate = pkgs.writeText "demo.publica.dev.cert" publica_dev_ssl_cert;
-    services.nginx.virtualHosts."demo.publica.dev".sslCertificateKey = pkgs.writeText "demo.publica.dev.cert" publica_dev_ssl_key;
-    services.nginx.virtualHosts."demo.publica.dev".locations."/".extraConfig = ''
-      ${commonLocation}
-      proxy_pass            http://127.0.0.1:8124;
-      proxy_buffers         4 32k;
-      proxy_buffer_size     32k;
-    '';
-
-    # //prebid
-    services.nginx.virtualHosts."prebid.publica.dev".serverName = "prebid.publica.dev";
-    services.nginx.virtualHosts."prebid.publica.dev".addSSL = true;
-    services.nginx.virtualHosts."prebid.publica.dev".sslCertificate = pkgs.writeText "prebid.publica.dev.cert" publica_dev_ssl_cert;
-    services.nginx.virtualHosts."prebid.publica.dev".sslCertificateKey = pkgs.writeText "prebid.publica.dev.cert" publica_dev_ssl_key;
-    services.nginx.virtualHosts."prebid.publica.dev".locations."/".extraConfig = ''
-      ${commonLocation}
-      proxy_pass            http://127.0.0.1:9999;
-      proxy_buffers         4 32k;
-      proxy_buffer_size     32k;
-    '';
-  };
+  # //console/server
+  services.nginx.virtualHosts = pkgs.lib.mapAttrs' generateVirtualHosts hostsPorts;
 }
