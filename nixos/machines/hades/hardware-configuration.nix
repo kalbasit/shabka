@@ -114,7 +114,7 @@
       options = [ "subvol=@home-kalbasit-storage" ];
     };
 
-    "/mnt/arch/boot" = {
+    "/mnt/arch/boot/efi" = {
       device = "/dev/disk/by-uuid/F4E5-ABC1";
       fsType = "vfat";
     };
