@@ -28,7 +28,7 @@ function listWorkspaces() {
 	local current_profile="$( echo "${current_workspaces}" | cut -d\@ -f1 )"
 	local current_story="$( echo "${current_workspaces}" | cut -d\@ -f2 )"
 	if [[ "${current_story}" == "base" ]]; then
-		for dir in $(find "/code/${current_profile}/stories" -maxdepth 1); do
+		for dir in $(find "/code/${current_profile}/stories" -mindepth 1 -maxdepth 1); do
 			if [[ -d "${dir}" ]]; then
 				echo "${current_profile}@$(basename "${dir}")"
 			fi
