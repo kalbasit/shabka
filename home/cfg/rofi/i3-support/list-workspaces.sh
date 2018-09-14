@@ -20,26 +20,45 @@
 #  USA.
 #
 
+containsElement () {
+	local e match="$1"
+	shift
+	for e; do [[ "$e" == "$match" ]] && return 0; done
+	return 1
+}
+
 function listWorkspaces() {
+	local result current_workspaces current_profile current_story dir elem
+
 	# print out the list of currently active workspaces
-	@i3-msg_bin@ -t get_workspaces | @jq_bin@ -r '.[] | if .focused == false then .name else empty end'
+	result=( $(@i3-msg_bin@ -t get_workspaces | @jq_bin@ -r '.[] | if .focused == false then .name else empty end') )
 
 	# print out the list of available stories, but only if we are on the base story
-	local current_workspaces="$( @i3-msg_bin@ -t get_workspaces | @jq_bin@ -r '.[] | if .focused == true then .name else empty end' )"
-	local current_profile="$( echo "${current_workspaces}" | cut -d\@ -f1 )"
-	local current_story="$( echo "${current_workspaces}" | cut -d\@ -f2 )"
+	current_workspaces="$( @i3-msg_bin@ -t get_workspaces | @jq_bin@ -r '.[] | if .focused == true then .name else empty end' )"
+	current_profile="$( echo "${current_workspaces}" | cut -d\@ -f1 )"
+	current_story="$( echo "${current_workspaces}" | cut -d\@ -f2 )"
 	if [[ "${current_story}" == "base" ]]; then
 		for dir in $(find "/code/${current_profile}/stories" -mindepth 1 -maxdepth 1); do
 			if [[ -d "${dir}" ]]; then
-				echo "${current_profile}@$(basename "${dir}")"
+				elem="${current_profile}@$(basename "${dir}")"
+				if ! containsElement "${elem}" "${result[@]}"; then
+					result=("${result[@]}" "${elem}")
+				fi
 			fi
 		done
 	fi
 
-    # print out the list of available profiles
-    for dir in $(find "/code/" -mindepth 1 -maxdepth 1); do
-        if [[ -d "${dir}" ]] && [[ -d "${dir}/base" ]]; then
-				echo "$(basename "${dir}")@base"
-        fi
-    done
+	# print out the list of available profiles
+	for dir in $(find "/code/" -mindepth 1 -maxdepth 1); do
+		if [[ -d "${dir}" ]] && [[ -d "${dir}/base" ]]; then
+			elem="$(basename "${dir}")@base"
+			if ! containsElement "${elem}" "${result[@]}"; then
+				result=("${result[@]}" "${elem}")
+			fi
+		fi
+	done
+
+	for elem in "${result[@]}"; do
+		echo "${elem}"
+	done
 }
