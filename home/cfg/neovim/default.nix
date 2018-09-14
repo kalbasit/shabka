@@ -10,10 +10,10 @@ in {
     vimAlias = true;
 
     withPython = true;
-    extraPythonPackages = [pkgs.python27Packages.neovim];
+    extraPythonPackages = ps: with ps; [neovim];
 
     withPython3 = true;
-    extraPython3Packages = [pkgs.python36Packages.neovim];
+    extraPython3Packages = ps: with ps; [neovim];
 
     configure = {
       customRC = builtins.readFile (pkgs.substituteAll {
