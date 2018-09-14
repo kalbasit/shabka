@@ -91,6 +91,8 @@ in {
 
     bat
 
+    bazel-watcher
+
     browsh
 
     corgi
