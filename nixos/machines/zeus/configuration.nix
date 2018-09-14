@@ -10,8 +10,9 @@
     ./hardware-configuration.nix
 
     ../../cfg/common.nix
-    ../../cfg/virtualisation.nix
     ../../cfg/redshift.nix
+    ../../cfg/serial_console.nix
+    ../../cfg/virtualisation.nix
 
     ../../cfg/snapper.nix
   ];

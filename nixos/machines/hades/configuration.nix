@@ -11,8 +11,8 @@
 
     ../../cfg/common.nix
     ../../cfg/desktop.nix
-    ../../cfg/virtualisation.nix
     ../../cfg/redshift.nix
+    ../../cfg/virtualisation.nix
 
     ../../cfg/printers.nix
 
