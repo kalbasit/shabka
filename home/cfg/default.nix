@@ -95,6 +95,8 @@ in {
 
     browsh
 
+    chroot-enter
+
     corgi
 
     gist
