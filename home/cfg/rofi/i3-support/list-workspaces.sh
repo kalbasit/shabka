@@ -23,6 +23,7 @@
 function listWorkspaces() {
 	# print out the list of currently active workspaces
 	@i3-msg_bin@ -t get_workspaces | @jq_bin@ -r '.[] | if .focused == false then .name else empty end'
+
 	# print out the list of available stories, but only if we are on the base story
 	local current_workspaces="$( @i3-msg_bin@ -t get_workspaces | @jq_bin@ -r '.[] | if .focused == true then .name else empty end' )"
 	local current_profile="$( echo "${current_workspaces}" | cut -d\@ -f1 )"
@@ -34,4 +35,11 @@ function listWorkspaces() {
 			fi
 		done
 	fi
+
+    # print out the list of available profiles
+    for dir in $(find "/code/" -mindepth 1 -maxdepth 1); do
+        if [[ -d "${dir}" ]] && [[ -d "${dir}/base" ]]; then
+				echo "$(basename "${dir}")@base"
+        fi
+    done
 }
