@@ -20,10 +20,16 @@
 #  USA.
 #
 
+set -euo pipefail
+
+source @out_dir@/lib/list-workspaces.sh
+
 if [[ -z "${*}" ]]; then
-  # print the name of the current workspace
-  @i3-msg_bin@ -t get_workspaces | @jq_bin@ -r '.[] | if .focused == true then .name else empty end'
+  # we need the back and forth first
+  echo back_and_forth
+  # get the list of workspaces that are not empty
+	listWorkspaces
 else
   # switch to the given workspace
-  @i3-msg_bin@ rename workspace to "${@}" >/dev/null
+  @i3-msg_bin@ move container to workspace "${@}" >/dev/null
 fi

@@ -2,7 +2,7 @@
 #
 #  vim:ft=sh:
 #
-#  Copyright (c) 2010-2017 Wael Nasreddine <wael.nasreddine@gmail.com>
+#  Copyright (c) 2010-2018 Wael Nasreddine <wael.nasreddine@gmail.com>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -20,12 +20,16 @@
 #  USA.
 #
 
+set -euo pipefail
+
+source @out_dir@/lib/list-workspaces.sh
+
 if [[ -z "${*}" ]]; then
-  # we need the back and forth first
-  echo back_and_forth
-  # get the list of workspaces that are not empty
-  @i3-msg_bin@ -t get_workspaces | @jq_bin@ -r '.[] | if .focused == false then .name else empty end'
+	# we need the back and forth first
+	echo back_and_forth
+	# get the list of workspaces that are not empty
+	listWorkspaces
 else
-  # switch to the given workspace
-  @i3-msg_bin@ move container to workspace "${@}" >/dev/null
+	# switch to the given workspace
+	@i3-msg_bin@ workspace "${@}" >/dev/null
 fi

@@ -20,12 +20,14 @@
 #  USA.
 #
 
+set -euo pipefail
+
+source @out_dir@/lib/list-workspaces.sh
+
 if [[ -z "${*}" ]]; then
-  # we need the back and forth first
-  echo back_and_forth
-  # get a list of workspaces except for the one focused
-  @i3-msg_bin@ -t get_workspaces | @jq_bin@ -r '.[] | if .focused == false then .name else empty end'
+  # print the name of the current workspace
+  @i3-msg_bin@ -t get_workspaces | @jq_bin@ -r '.[] | if .focused == true then .name else empty end'
 else
   # switch to the given workspace
-  @i3-msg_bin@ workspace "${@}" >/dev/null
+  @i3-msg_bin@ rename workspace to "${@}" >/dev/null
 fi

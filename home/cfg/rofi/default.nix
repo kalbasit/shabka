@@ -7,19 +7,27 @@ let
     src = ./i3-support;
     phases = [ "installPhase" "fixupPhase" ];
     installPhase = ''
-      install -d -m755 $out/bin
+      install -d -m755 $out/bin $out/lib
 
-      substitute $src/i3-move-container $out/bin/i3-move-container \
+      substitute $src/i3-move-container.sh $out/bin/i3-move-container \
         --subst-var-by i3-msg_bin ${pkgs.i3}/bin/i3-msg \
-        --subst-var-by jq_bin ${pkgs.jq}/bin/jq
+        --subst-var-by jq_bin ${pkgs.jq}/bin/jq \
+        --subst-var-by out_dir $out
 
-      substitute $src/i3-rename-workspace $out/bin/i3-rename-workspace \
+      substitute $src/i3-rename-workspace.sh $out/bin/i3-rename-workspace \
         --subst-var-by i3-msg_bin ${pkgs.i3}/bin/i3-msg \
-        --subst-var-by jq_bin ${pkgs.jq}/bin/jq
+        --subst-var-by jq_bin ${pkgs.jq}/bin/jq \
+        --subst-var-by out_dir $out
 
-      substitute $src/i3-switch-workspaces $out/bin/i3-switch-workspaces \
+      substitute $src/i3-switch-workspaces.sh $out/bin/i3-switch-workspaces \
         --subst-var-by i3-msg_bin ${pkgs.i3}/bin/i3-msg \
-        --subst-var-by jq_bin ${pkgs.jq}/bin/jq
+        --subst-var-by jq_bin ${pkgs.jq}/bin/jq \
+        --subst-var-by out_dir $out
+
+      substitute $src/list-workspaces.sh $out/lib/list-workspaces.sh \
+        --subst-var-by i3-msg_bin ${pkgs.i3}/bin/i3-msg \
+        --subst-var-by jq_bin ${pkgs.jq}/bin/jq \
+        --subst-var-by out_dir $out
 
       chmod 755 $out/bin/*
     '';
