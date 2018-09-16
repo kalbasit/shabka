@@ -157,7 +157,7 @@ if [[ -o interactive ]]; then
 fi
 
 #####################################################################
-# Powerline9k theme settings
+# Powerlevel9k theme settings
 #####################################################################
 
 # define the segments of the left prompt

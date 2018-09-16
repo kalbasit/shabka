@@ -25,6 +25,10 @@ in {
       vi = "nvim";
       vim = "nvim";
 
+      # for enabling and disabling the current theme. This means go back to a very basic theme
+      zsh_theme_enable = "prompt_powerlevel9k_teardown";
+      zsh_theme_disable = "prompt_powerlevel9k_setup";
+
       # TODO: move this to the swm package
       s = "swm tmux switch-client";
       sb = "swm --story base tmux switch-client";
