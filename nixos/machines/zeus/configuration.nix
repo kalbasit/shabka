@@ -55,27 +55,27 @@
   networking.networkmanager.enable = lib.mkForce false;
 
   networking.vlans = {
-    vlan101 = {
+    ifcadmin = {
       id = 101;
       interface = "enp2s0f0";
     };
 
-    vlan102 = {
+    ifcns1 = {
       id = 102;
       interface = "enp2s0f1";
     };
 
-    vlan103 = {
+    ifcns2 = {
       id = 103;
       interface = "enp4s0f0";
     };
 
-    vlan104 = {
+    ifcns3 = {
       id = 104;
       interface = "enp4s0f1";
     };
 
-    vlan250 = {
+    ifcns4 = {
       id = 250;
       interface = "enp0s31f6";
     };
@@ -83,33 +83,33 @@
 
   networking.interfaces = {
     # The ADMIN interface
-    enp0s31f6 = {
+    ifcadmin = {
       useDHCP = true;
     };
 
     # NS1 address
-    enp2s0f0 = {
+    ifcns1 = {
       ipv4 = {
         addresses = [ { address = "172.25.1.3"; prefixLength = 24; } ];
       };
     };
 
     # NS2 address
-    enp2s0f1 = {
+    ifcns2 = {
       ipv4 = {
         addresses = [ { address = "172.25.2.3"; prefixLength = 24; } ];
       };
     };
 
     # NS3 address
-    enp4s0f0 = {
+    ifcns3 = {
       ipv4 = {
         addresses = [ { address = "172.25.3.3"; prefixLength = 24; } ];
       };
     };
 
     # NS4 address
-    enp4s0f1 = {
+    ifcns4 = {
       ipv4 = {
         addresses = [ { address = "172.25.4.3"; prefixLength = 24; } ];
       };
