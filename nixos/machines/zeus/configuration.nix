@@ -100,6 +100,7 @@
     ifcns1 = {
       ipv4 = {
         addresses = [ { address = "172.25.1.3"; prefixLength = 24; } ];
+        routes = [ { address = "0.0.0.0"; prefixLength = 0; via = "172.25.1.1";  }  ];
       };
     };
 
