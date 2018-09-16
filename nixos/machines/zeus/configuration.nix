@@ -82,6 +82,15 @@
   };
 
   networking.interfaces = {
+    # turn off all real interfaces, I only want virtual networks.
+    # TODO: Once I change my switch, flag the port with the VLAN on the switch
+    # and use DHCP here!
+    enp0s31f6 = { useDHCP = false; };
+    enp2s0f0 = { useDHCP = false; };
+    enp2s0f1 = { useDHCP = false; };
+    enp4s0f0 = { useDHCP = false; };
+    enp4s0f1 = { useDHCP = false; };
+
     # The ADMIN interface
     ifcadmin = {
       useDHCP = true;
@@ -113,7 +122,7 @@
       ipv4 = {
         addresses = [ { address = "172.25.4.3"; prefixLength = 24; } ];
       };
-   };
+    };
   };
 }
 
