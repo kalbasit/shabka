@@ -25,6 +25,7 @@ let
     "api.publica.dev"      = 8080;
     "console.publica.dev"  = 7000;
     "ctrl.publica.dev"     = 8060;
+    "demo.publica.dev"     = 8124;
     "home.publica.dev"     = 7010;
     "js.publica.dev"       = 3002;
     "prebid.publica.dev"   = 9999;
