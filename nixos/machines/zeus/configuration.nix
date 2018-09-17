@@ -86,10 +86,10 @@
     # TODO: Once I change my switch, flag the port with the VLAN on the switch
     # and use DHCP here!
     enp0s31f6 = { useDHCP = false; };
-    enp2s0f0 = { useDHCP = false; };
-    enp2s0f1 = { useDHCP = false; };
-    enp4s0f0 = { useDHCP = false; };
-    enp4s0f1 = { useDHCP = false; };
+    enp2s0f0  = { useDHCP = false; };
+    enp2s0f1  = { useDHCP = false; };
+    enp4s0f0  = { useDHCP = false; };
+    enp4s0f1  = { useDHCP = false; };
 
     # The ADMIN interface
     ifcadmin = {
@@ -97,9 +97,10 @@
     };
 
     # NS1 address
-    ifcns1 = {
-      ipv4 = {
+    ifcn1 = {
+      ip04 = {
         addresses = [ { address = "172.25.1.3"; prefixLength = 24; } ];
+        routes = [ { address = "0.0.0.0"; prefixLength = 0; via = "172.25.1.1"; } ];
       };
     };
 
