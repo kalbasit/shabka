@@ -33,7 +33,7 @@ let
   };
 
   generateVirtualHostsSet = host: port: {
-    addSSL = true;
+    forceSSL = true;
     serverName = host;
     sslCertificate = builtins.toPath publica_dev_ssl_cert_path;
     sslCertificateKey = builtins.toPath publica_dev_ssl_key_path;
@@ -104,7 +104,7 @@ assert (builtins.pathExists publica_dev_ssl_key_path);
   # //console/server
   services.nginx.virtualHosts = pkgs.lib.mapAttrs' generateVirtualHosts hostsPorts // {
     "publica.dev" = {
-      addSSL = true;
+      forceSSL = true;
       serverName = "publica.dev";
       sslCertificate = builtins.toPath publica_dev_ssl_cert_path;
       sslCertificateKey = builtins.toPath publica_dev_ssl_key_path;
