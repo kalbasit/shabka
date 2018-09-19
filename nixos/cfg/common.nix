@@ -50,7 +50,9 @@
   # under the overlays/all overlay.
   environment.systemPackages = with pkgs; [
     git
-    curl
+    (curl.override {
+      brotliSupport = true;
+    })
     neovim
   ];
 
