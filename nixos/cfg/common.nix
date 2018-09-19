@@ -75,6 +75,9 @@
   # allow Mosh server in
   networking.firewall.allowedUDPPortRanges = [ { from = 60000; to = 61000; } ];
 
+  # set the initial password of the root user
+  security.initialRootPassword = "$6$0bx5eAEsHJRxkD8.$gJ7sdkOOJRf4QCHWLGDUtAmjHV/gJxPQpyCEtHubWocHh9O7pWy10Frkm1Ch8P0/m8UTUg.Oxp.MB3YSQxFXu1";
+
   # hide process information of other users when running non-root
   security.hideProcessInformation = true;
 
