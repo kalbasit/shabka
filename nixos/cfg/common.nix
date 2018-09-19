@@ -62,9 +62,6 @@
   # TODO: figure out why NTP is getting stuck on shutdown.
   # services.ntp.enable = true;
 
-  # enable the dnsmasq service
-  services.dnsmasq.enable = true;
-
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
