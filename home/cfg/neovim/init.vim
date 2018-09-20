@@ -11,10 +11,11 @@ colorscheme seoul256
 " set the mapleader
 let mapleader = ","
 
+" the height of the command line, giving it a high number can prevent the "Hit
+" ENTER to continue" but will shorten the editor.
+set cmdheight=2
+
 set backup                             " enable backup, written to backupdir set below
-set cmdheight=2                        " the height of the command line, giving it a high
-                                       " number can prevent the "Hit ENTER to continue" but
-                                       " will shorten the editor.
 set colorcolumn=80                     " Display a color column
 set complete=.,w,b,t,i                 " Same as default except that I remove the 'u' option
 set completeopt=menu,noinsert,noselect " Enable completion menu and disable insert/select
@@ -47,17 +48,17 @@ set wildchar=<TAB>                     " Which character activates the wildmenu
 set winwidth=79                        " Set the minimum window width
 
 if v:version >= 703
-	set cursorline     " cursor line highlighting
-	set nocursorcolumn " no cursor column highlighting
-	set undofile       " remember undo chains between sessions
+  set cursorline     " cursor line highlighting
+  set nocursorcolumn " no cursor column highlighting
+  set undofile       " remember undo chains between sessions
 endif
 
 " Whitespace
 set noexpandtab  " use tabs
 set list         " Show invisible characters
 set nowrap       " don't wrap lines
-set shiftwidth=2 " an autoindent (with <<) is two spaces
-set tabstop=2    " a tab is two spaces
+set shiftwidth=2 " Number of spaces to use for each step of (auto)indent.
+set tabstop=2    " Number of spaces that a <Tab> in the file counts for.
 
 " Remember things between sessions
 "
@@ -128,7 +129,6 @@ cnoreabbrev AG Ack
 
 map <Leader>/ :Ack<space>
 
-
 "" }}}
 "" Airline{{{
 
@@ -158,39 +158,39 @@ let g:ale_go_gometalinter_options = "--fast"
 ""
 
 if has("autocmd")
-	" In emails allow footnotes
-	au FileType mail ab ~0 [0]<esc>m`:/^--\s*/-2/<CR>o<CR>Footnotes:<CR>----------<CR>[0]
-	au FileType mail ab ~1 [1]<esc>m`:/^Footnotes\:/+2/<CR>o[1]
-	au FileType mail ab ~2 [2]<esc>m`:/^Footnotes\:/+3/<CR>o[2]
-	au FileType mail ab ~3 [3]<esc>m`:/^Footnotes\:/+4/<CR>o[3]
-	au FileType mail ab ~4 [4]<esc>m`:/^Footnotes\:/+5/<CR>o[4]
-	au FileType mail ab ~5 [5]<esc>m`:/^Footnotes\:/+6/<CR>o[5]
-	au FileType mail ab ~6 [6]<esc>m`:/^Footnotes\:/+7/<CR>o[6]
-	au FileType mail ab ~7 [7]<esc>m`:/^Footnotes\:/+8/<CR>o[7]
-	au FileType mail ab ~8 [8]<esc>m`:/^Footnotes\:/+9/<CR>o[8]
-	au FileType mail ab ~9 [9]<esc>m`:/^Footnotes\:/+10/<CR>o[9]
+  " In emails allow footnotes
+  au FileType mail ab ~0 [0]<esc>m`:/^--\s*/-2/<CR>o<CR>Footnotes:<CR>----------<CR>[0]
+  au FileType mail ab ~1 [1]<esc>m`:/^Footnotes\:/+2/<CR>o[1]
+  au FileType mail ab ~2 [2]<esc>m`:/^Footnotes\:/+3/<CR>o[2]
+  au FileType mail ab ~3 [3]<esc>m`:/^Footnotes\:/+4/<CR>o[3]
+  au FileType mail ab ~4 [4]<esc>m`:/^Footnotes\:/+5/<CR>o[4]
+  au FileType mail ab ~5 [5]<esc>m`:/^Footnotes\:/+6/<CR>o[5]
+  au FileType mail ab ~6 [6]<esc>m`:/^Footnotes\:/+7/<CR>o[6]
+  au FileType mail ab ~7 [7]<esc>m`:/^Footnotes\:/+8/<CR>o[7]
+  au FileType mail ab ~8 [8]<esc>m`:/^Footnotes\:/+9/<CR>o[8]
+  au FileType mail ab ~9 [9]<esc>m`:/^Footnotes\:/+10/<CR>o[9]
 
-	" Set the envrc filetype to shell
-	au BufRead,BufNewFile .envrc set ft=sh
+  " Set the envrc filetype to shell
+  au BufRead,BufNewFile .envrc set ft=sh
 
-	" Set the Ruby filetype for a number of common Ruby files without .rb
-	au BufRead,BufNewFile {Gemfile,Rakefile,Vagrantfile,Thorfile,Procfile,Guardfile,config.ru,*.rake} set ft=ruby
+  " Set the Ruby filetype for a number of common Ruby files without .rb
+  au BufRead,BufNewFile {Gemfile,Rakefile,Vagrantfile,Thorfile,Procfile,Guardfile,config.ru,*.rake} set ft=ruby
 
-	" Make sure all mardown files have the correct filetype set and setup wrapping
-	au BufRead,BufNewFile *.{md,markdown,mdown,mkd,mkdn,txt} set ft=markdown
-	au FileType markdown setlocal wrap linebreak textwidth=72 nolist
+  " Make sure all mardown files have the correct filetype set and setup wrapping
+  au BufRead,BufNewFile *.{md,markdown,mdown,mkd,mkdn,txt} set ft=markdown
+  au FileType markdown setlocal wrap linebreak textwidth=72 nolist
 
-	" make Python follow PEP8 for whitespace.
-	" http://www.python.org/dev/peps/pep-0008/
-	au FileType python setlocal tabstop=4 shiftwidth=4
+  " make Python follow PEP8 for whitespace.
+  " http://www.python.org/dev/peps/pep-0008/
+  au FileType python setlocal tabstop=4 shiftwidth=4 expandtab
 
-	" Remember last location in file, but not for commit messages.
-	" see :help last-position-jump
-	au BufReadPost * if &filetype !~ '^git\c' && line("'\"") > 0 && line("'\"") <= line("$")
-				\| exe "normal! g`\"" | endif
+  " Remember last location in file, but not for commit messages.
+  " see :help last-position-jump
+  au BufReadPost * if &filetype !~ '^git\c' && line("'\"") > 0 && line("'\"") <= line("$")
+	\| exe "normal! g`\"" | endif
 
-	" Delete certain buffers in order to not cluttering up the buffer list
-	au BufReadPost fugitive://* set bufhidden=delete
+  " Delete certain buffers in order to not cluttering up the buffer list
+  au BufReadPost fugitive://* set bufhidden=delete
 endif
 
 " }}}
@@ -242,16 +242,16 @@ let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 let g:fzf_buffers_jump = 1
 
 let g:fzf_action = {
-			\ 'ctrl-t': 'tab split',
-			\ 'ctrl-s': 'split',
-			\ 'ctrl-v': 'vsplit' }
+      \ 'ctrl-t': 'tab split',
+      \ 'ctrl-s': 'split',
+      \ 'ctrl-v': 'vsplit' }
 
 function! s:fzf_statusline()
-	" Override statusline as you like
-	highlight fzf1 ctermfg=161 ctermbg=251
-	highlight fzf2 ctermfg=23 ctermbg=251
-	highlight fzf3 ctermfg=237 ctermbg=251
-	setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
+  " Override statusline as you like
+  highlight fzf1 ctermfg=161 ctermbg=251
+  highlight fzf2 ctermfg=23 ctermbg=251
+  highlight fzf3 ctermfg=237 ctermbg=251
+  setlocal statusline=%#fzf1#\ >\ %#fzf2#fz%#fzf3#f
 endfunction
 
 autocmd! User FzfStatusLine call <SID>fzf_statusline()
@@ -295,12 +295,12 @@ let g:go_doc_keywordprg_enabled = 0
 let g:go_def_mapping_enabled = 0
 
 if has("autocmd")
-	" Go
-	au FileType go nmap <Leader>gc <Plug>(go-doc)
-	au FileType go nmap <Leader>gd <Plug>(go-def)
-	au FileType go nmap <Leader>sgd <Plug>(go-def-split)
-	au FileType go nmap <Leader>vgd <Plug>(go-def-vertical)
-	au FileType go nmap <Leader>gi <Plug>(go-info)
+  " Go
+  au FileType go nmap <Leader>gc <Plug>(go-doc)
+  au FileType go nmap <Leader>gd <Plug>(go-def)
+  au FileType go nmap <Leader>sgd <Plug>(go-def-split)
+  au FileType go nmap <Leader>vgd <Plug>(go-def-vertical)
+  au FileType go nmap <Leader>gi <Plug>(go-info)
 endif
 
 " }}}
@@ -310,7 +310,7 @@ nmap <Leader>go :GundoToggle<CR>
 "" Markdown preview{{{
 
 if executable('grip')
-	let g:vim_markdown_preview_github=1
+  let g:vim_markdown_preview_github=1
 endif
 
 let g:vim_markdown_preview_use_xdg_open=1
@@ -348,32 +348,32 @@ let g:surround_no_mappings = 1
 "}}}
 "" TagBar{{{
 let g:tagbar_type_go = {
-			\ 'ctagstype' : 'go',
-			\ 'kinds'     : [
-			\ 'p:package',
-			\ 'i:imports:1',
-			\ 'c:constants',
-			\ 'v:variables',
-			\ 't:types',
-			\ 'n:interfaces',
-			\ 'w:fields',
-			\ 'e:embedded',
-			\ 'm:methods',
-			\ 'r:constructor',
-			\ 'f:functions'
-			\ ],
-			\ 'sro' : '.',
-			\ 'kind2scope' : {
-			\ 't' : 'ctype',
-			\ 'n' : 'ntype'
-			\ },
-			\ 'scope2kind' : {
-			\ 'ctype' : 't',
-			\ 'ntype' : 'n'
-			\ },
-			\ 'ctagsbin'  : 'gotags',
-			\ 'ctagsargs' : '-sort -silent'
-			\ }
+      \ 'ctagstype' : 'go',
+      \ 'kinds'     : [
+      \ 'p:package',
+      \ 'i:imports:1',
+      \ 'c:constants',
+      \ 'v:variables',
+      \ 't:types',
+      \ 'n:interfaces',
+      \ 'w:fields',
+      \ 'e:embedded',
+      \ 'm:methods',
+      \ 'r:constructor',
+      \ 'f:functions'
+      \ ],
+      \ 'sro' : '.',
+      \ 'kind2scope' : {
+      \ 't' : 'ctype',
+      \ 'n' : 'ntype'
+      \ },
+      \ 'scope2kind' : {
+      \ 'ctype' : 't',
+      \ 'ntype' : 'n'
+      \ },
+      \ 'ctagsbin'  : 'gotags',
+      \ 'ctagsargs' : '-sort -silent'
+      \ }
 ""}}}
 "" TaskWarrior{{{
 ""
@@ -386,33 +386,33 @@ let g:task_disable_mappings = 1
 
 " mappings
 augroup TaskwarriorMapping
-	autocmd!
-	autocmd FileType taskreport nmap <silent> <buffer> A        <Plug>(taskwarrior_annotate)
-	autocmd FileType taskreport nmap <silent> <buffer> x        <Plug>(taskwarrior_denotate)
-	autocmd FileType taskreport nmap <silent> <buffer> p        <Plug>(taskwarrior_open_annotate)
-	autocmd FileType taskreport nmap <silent> <buffer> D        <Plug>(taskwarrior_remove)
-	autocmd FileType taskreport nmap <silent> <buffer> <Del>    <Plug>(taskwarrior_delete)
-	autocmd FileType taskreport nmap <silent> <buffer> a        <Plug>(taskwarrior_new)
-	autocmd FileType taskreport nmap <silent> <buffer> c        <Plug>(taskwarrior_command)
-	autocmd FileType taskreport nmap <silent> <buffer> d        <Plug>(taskwarrior_done)
-	autocmd FileType taskreport nmap <silent> <buffer> r        <Plug>(taskwarrior_report)
-	autocmd FileType taskreport nmap <silent> <buffer> R        <Plug>(taskwarrior_refresh)
-	autocmd FileType taskreport nmap <silent> <buffer> X        <Plug>(taskwarrior_clear_completed)
-	autocmd FileType taskreport nmap <silent> <buffer> u        <Plug>(taskwarrior_undo)
-	autocmd FileType taskreport nmap <silent> <buffer> U        <Plug>(taskwarrior_urgency)
-	autocmd FileType taskreport nmap <silent> <buffer> S        <Plug>(taskwarrior_sync)
-	autocmd FileType taskreport nmap <silent> <buffer> m        <Plug>(taskwarrior_modify_field)
-	autocmd FileType taskreport nmap <silent> <buffer> M        <Plug>(taskwarrior_modify_task)
-	autocmd FileType taskreport nmap <silent> <buffer> v        <Plug>(taskwarrior_paste)
-	autocmd FileType taskreport nmap <silent> <buffer> +        <Plug>(taskwarrior_start_task)
-	autocmd FileType taskreport nmap <silent> <buffer> -        <Plug>(taskwarrior_stop_task)
-	autocmd FileType taskreport nmap <silent> <buffer> <Space>  <Plug>(taskwarrior_select)
-	autocmd FileType taskreport nmap <silent> <buffer> <C-A>    <Plug>(taskwarrior_increase)
-	autocmd FileType taskreport nmap <silent> <buffer> <C-X>    <Plug>(taskwarrior_decrease)
-	autocmd FileType taskreport vmap <silent> <buffer> d        <Plug>(taskwarrior_visual_done)
-	autocmd FileType taskreport vmap <silent> <buffer> D        <Plug>(taskwarrior_visual_delete)
-	autocmd FileType taskreport vmap <silent> <buffer> <Del>    <Plug>(taskwarrior_visual_delete)
-	autocmd FileType taskreport vmap <silent> <buffer> <Space>  <Plug>(taskwarrior_visual_select)
+  autocmd!
+  autocmd FileType taskreport nmap <silent> <buffer> A        <Plug>(taskwarrior_annotate)
+  autocmd FileType taskreport nmap <silent> <buffer> x        <Plug>(taskwarrior_denotate)
+  autocmd FileType taskreport nmap <silent> <buffer> p        <Plug>(taskwarrior_open_annotate)
+  autocmd FileType taskreport nmap <silent> <buffer> D        <Plug>(taskwarrior_remove)
+  autocmd FileType taskreport nmap <silent> <buffer> <Del>    <Plug>(taskwarrior_delete)
+  autocmd FileType taskreport nmap <silent> <buffer> a        <Plug>(taskwarrior_new)
+  autocmd FileType taskreport nmap <silent> <buffer> c        <Plug>(taskwarrior_command)
+  autocmd FileType taskreport nmap <silent> <buffer> d        <Plug>(taskwarrior_done)
+  autocmd FileType taskreport nmap <silent> <buffer> r        <Plug>(taskwarrior_report)
+  autocmd FileType taskreport nmap <silent> <buffer> R        <Plug>(taskwarrior_refresh)
+  autocmd FileType taskreport nmap <silent> <buffer> X        <Plug>(taskwarrior_clear_completed)
+  autocmd FileType taskreport nmap <silent> <buffer> u        <Plug>(taskwarrior_undo)
+  autocmd FileType taskreport nmap <silent> <buffer> U        <Plug>(taskwarrior_urgency)
+  autocmd FileType taskreport nmap <silent> <buffer> S        <Plug>(taskwarrior_sync)
+  autocmd FileType taskreport nmap <silent> <buffer> m        <Plug>(taskwarrior_modify_field)
+  autocmd FileType taskreport nmap <silent> <buffer> M        <Plug>(taskwarrior_modify_task)
+  autocmd FileType taskreport nmap <silent> <buffer> v        <Plug>(taskwarrior_paste)
+  autocmd FileType taskreport nmap <silent> <buffer> +        <Plug>(taskwarrior_start_task)
+  autocmd FileType taskreport nmap <silent> <buffer> -        <Plug>(taskwarrior_stop_task)
+  autocmd FileType taskreport nmap <silent> <buffer> <Space>  <Plug>(taskwarrior_select)
+  autocmd FileType taskreport nmap <silent> <buffer> <C-A>    <Plug>(taskwarrior_increase)
+  autocmd FileType taskreport nmap <silent> <buffer> <C-X>    <Plug>(taskwarrior_decrease)
+  autocmd FileType taskreport vmap <silent> <buffer> d        <Plug>(taskwarrior_visual_done)
+  autocmd FileType taskreport vmap <silent> <buffer> D        <Plug>(taskwarrior_visual_delete)
+  autocmd FileType taskreport vmap <silent> <buffer> <Del>    <Plug>(taskwarrior_visual_delete)
+  autocmd FileType taskreport vmap <silent> <buffer> <Space>  <Plug>(taskwarrior_visual_select)
 augroup END
 
 " }}}
@@ -568,145 +568,145 @@ nmap <leader>hle :set listchars-=eol:$<CR>
 ""
 
 function! ExtractVariable()
-	let name = input("Variable name: ")
-	if name == ""
-		return
-	endif
-	" Enter visual mode (not sure why this is needed since we're already in
-	" visual mode anyway)
-	normal! ga
+  let name = input("Variable name: ")
+  if name == ""
+    return
+  endif
+  " Enter visual mode (not sure why this is needed since we're already in
+  " visual mode anyway)
+  normal! ga
 
-	" Replace selected text with the variable name
-	exec "normal c" . name
-	" Define the variable on the line above
-	if &ft = "go"
-		exec "normal! H" . name . " := "
-	else
-		exec "normal! H" . name . " = "
-	endif
-	" Paste the original selected text to be the variable value
-	normal! $p
+  " Replace selected text with the variable name
+  exec "normal c" . name
+  " Define the variable on the line above
+  if &ft = "go"
+    exec "normal! H" . name . " := "
+  else
+    exec "normal! H" . name . " = "
+  endif
+  " Paste the original selected text to be the variable value
+  normal! $p
 endfunction
 
 " TODO: candidate for removal
 function! ShowRoutes()
-	" Requires 'scratch' plugin
-	:topleft 100 :split __Routes__
-	" Make sure Vim doesn't write __Routes__ as a file
-	:set buftype=nofile
-	" Delete everything
-	:normal 1GdG
-	" Put routes output in buffer
-	:0r! rake -s routes
-	" Size window to number of lines (1 plus rake output length)
-	:exec ":normal " . line("$") . _ "
-	" Move cursor to bottom
-	:normal 1GG
-	" Delete empty trailing line
-	:normal dd
+  " Requires 'scratch' plugin
+  :topleft 100 :split __Routes__
+  " Make sure Vim doesn't write __Routes__ as a file
+  :set buftype=nofile
+  " Delete everything
+  :normal 1GdG
+  " Put routes output in buffer
+  :0r! rake -s routes
+  " Size window to number of lines (1 plus rake output length)
+  :exec ":normal " . line("$") . _ "
+  " Move cursor to bottom
+  :normal 1GG
+  " Delete empty trailing line
+  :normal dd
 endfunction
 
 function! InlineVariable()
-	" Copy the variable under the cursor into the 'a' register
-	:let l:tmp_a = @a
-	:normal "acrw
-	" Delete variable and equals sign
-	:normal 2daW
-	" Delete the expression into the 'b' register
-	:let l:tmp_b = @b
-	:normal "bd$
-	" Delete the remnants of the line
-	:normal dd
-	" Go to the end of the previous line so we can start our search for the
-	" usage of the variable to replace. Doing '0' instead of 'k$' doesn't
-	" work; I'm not sure why.
-	normal i$
-	" Find the next occurence of the variable
-	exec '/\<' . @a . '\>'
-	" Replace that occurence with the text we yanked
-	exec ':.s/\<' . @a . '\>/' . @b
-	:let @a = l:tmp_a
-	:let @b = l:tmp_b
+  " Copy the variable under the cursor into the 'a' register
+  :let l:tmp_a = @a
+  :normal "acrw
+  " Delete variable and equals sign
+  :normal 2daW
+  " Delete the expression into the 'b' register
+  :let l:tmp_b = @b
+  :normal "bd$
+  " Delete the remnants of the line
+  :normal dd
+  " Go to the end of the previous line so we can start our search for the
+  " usage of the variable to replace. Doing '0' instead of 'k$' doesn't
+  " work; I'm not sure why.
+  normal i$
+  " Find the next occurence of the variable
+  exec '/\<' . @a . '\>'
+  " Replace that occurence with the text we yanked
+  exec ':.s/\<' . @a . '\>/' . @b
+  :let @a = l:tmp_a
+  :let @b = l:tmp_b
 endfunction
 
 function! OpenTestAlternate(position)
-	let current_file = expand("%")
-	let new_file = current_file
+  let current_file = expand("%")
+  let new_file = current_file
 
-	if match(current_file, '\.go$') != -1
-		let new_file = AlternateGoFile(current_file)
-	elseif match(current_file, '\.py$') != -1
-		let new_file = AlternatePythonFile(current_file)
-	elseif match(current_file, '\.rb$') != -1 || match(current_file, '\.rake$') != -1
-		let new_file = AlternateRubyFile(current_file)
-	endif
+  if match(current_file, '\.go$') != -1
+    let new_file = AlternateGoFile(current_file)
+  elseif match(current_file, '\.py$') != -1
+    let new_file = AlternatePythonFile(current_file)
+  elseif match(current_file, '\.rb$') != -1 || match(current_file, '\.rake$') != -1
+    let new_file = AlternateRubyFile(current_file)
+  endif
 
-	" Open the alternate file or self if the rules don't match
-	if a:position == "split"
-		exec ':sp ' . new_file
-	elseif a:position == "vsplit"
-		exec ':vsp ' . new_file
-	else
-		exec ':e ' . new_file
-	endif
+  " Open the alternate file or self if the rules don't match
+  if a:position == "split"
+    exec ':sp ' . new_file
+  elseif a:position == "vsplit"
+    exec ':vsp ' . new_file
+  else
+    exec ':e ' . new_file
+  endif
 endfunction
 
 function! AlternateGoFile(current_file)
-	let new_file = a:current_file
-	if match(a:current_file, '_test\.go$') != -1
-		" We are in the test file
-		let new_file = substitute(a:current_file, '_test\.go$', '.go', "")
-	else
-		" We are in the production code file
-		let new_file = substitute(a:current_file, '\.go$', '_test.go', "")
-	endif
+  let new_file = a:current_file
+  if match(a:current_file, '_test\.go$') != -1
+    " We are in the test file
+    let new_file = substitute(a:current_file, '_test\.go$', '.go', "")
+  else
+    " We are in the production code file
+    let new_file = substitute(a:current_file, '\.go$', '_test.go', "")
+  endif
 
-	return new_file
+  return new_file
 endfunction
 
 function! AlternatePythonFile(current_file)
-	let new_file = a:current_file
-	if match(a:current_file, '_test\.py$') != -1
-		" We are in the test file
-		let new_file = substitute(a:current_file, '_test\.py$', '.py', "")
-	else
-		" We are in the production code file
-		let new_file = substitute(a:current_file, '\.py$', '_test.py', "")
-	endif
+  let new_file = a:current_file
+  if match(a:current_file, '_test\.py$') != -1
+    " We are in the test file
+    let new_file = substitute(a:current_file, '_test\.py$', '.py', "")
+  else
+    " We are in the production code file
+    let new_file = substitute(a:current_file, '\.py$', '_test.py', "")
+  endif
 
-	return new_file
+  return new_file
 endfunction
 
 function! AlternateRubyFile(current_file)
-	let new_file = a:current_file
-	let in_spec = match(a:current_file, '^spec/') != -1
-	let going_to_spec = !in_spec
-	let rakefile = match(a:current_file, '\.rake$') != -1
-	let in_app = match(a:current_file, '\<controllers\>') != -1 || match(a:current_file, '\<models\>') != -1 || match(a:current_file, '\<views\>') != -1
-	if going_to_spec
-		if in_app
-			let new_file = substitute(new_file, '^app/', "", "")
-		end
-		if rakefile
-			let new_file = substitute(new_file, '\.rake$', '_spec.rb', "")
-		else
-			let new_file = substitute(new_file, '\.rb$', '_spec.rb', "")
-		end
-		let new_file = 'spec/' . new_file
-	else
-		let new_file = substitute(new_file, '_spec\.rb$', '.rb', "")
-		let new_file = substitute(new_file, '^spec/', "", "")
-		if in_app
-			let new_file = 'app/' . new_file
-		end
+  let new_file = a:current_file
+  let in_spec = match(a:current_file, '^spec/') != -1
+  let going_to_spec = !in_spec
+  let rakefile = match(a:current_file, '\.rake$') != -1
+  let in_app = match(a:current_file, '\<controllers\>') != -1 || match(a:current_file, '\<models\>') != -1 || match(a:current_file, '\<views\>') != -1
+  if going_to_spec
+    if in_app
+      let new_file = substitute(new_file, '^app/', "", "")
+    end
+    if rakefile
+      let new_file = substitute(new_file, '\.rake$', '_spec.rb', "")
+    else
+      let new_file = substitute(new_file, '\.rb$', '_spec.rb', "")
+    end
+    let new_file = 'spec/' . new_file
+  else
+    let new_file = substitute(new_file, '_spec\.rb$', '.rb', "")
+    let new_file = substitute(new_file, '^spec/', "", "")
+    if in_app
+      let new_file = 'app/' . new_file
+    end
 
-		if !filereadable(new_file)
-			let spec_file = substitute(new_file, '\.rb$', '.rake', "")
-			if filereadable(spec_file)
-				let new_file = spec_file
-			endif
-		endif
-	endif
+    if !filereadable(new_file)
+      let spec_file = substitute(new_file, '\.rb$', '.rake', "")
+      if filereadable(spec_file)
+	let new_file = spec_file
+      endif
+    endif
+  endif
 endfunction
 
 " }}}
