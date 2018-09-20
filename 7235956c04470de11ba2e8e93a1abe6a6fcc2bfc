@@ -1,3 +1,5 @@
 {"timestamp":"1537420560","author":"wael.nasreddine@gmail.com","location":{"commit":"7235956c04470de11ba2e8e93a1abe6a6fcc2bfc"},"description":"I should probably install neovim plugin as well"}
 
 {"timestamp":"1537420672","author":"wael.nasreddine@gmail.com","location":{"commit":"7235956c04470de11ba2e8e93a1abe6a6fcc2bfc","path":"home/cfg/git/default.nix","range":{"startLine":7}},"description":"please sort the array"}
+
+{"timestamp":"1537421079","author":"wael.nasreddine@gmail.com","location":{"commit":"7235956c04470de11ba2e8e93a1abe6a6fcc2bfc"},"resolved":true}
