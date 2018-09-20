@@ -45,9 +45,11 @@ in {
     window = {
       commands = [
         { command = "floating enable"; criteria = { class = "^Pavucontrol"; }; }
+        { command = "floating enable"; criteria = { class = "^ROX-Filer$"; }; }
+        { command = "floating enable"; criteria = { class = "^SimpleScreenRecorder$"; }; }
         { command = "floating enable"; criteria = { class = "^Tor Browser"; }; }
         { command = "floating enable"; criteria = { class = "^net-filebot-Main$"; }; }
-        { command = "floating enable"; criteria = { class = "^ROX-Filer$"; }; }
+
         { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "^whats-app-nativefier*"; }; }
         { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "pulse-sms"; }; }
       ];
@@ -149,6 +151,9 @@ in {
 
       # start a region screenshot
       "${defaultModifier}+${secondModifier}+4" = "exec ${pkgs.flameshot}/bin/flameshot gui --delay 500 --path ~/Desktop";
+
+      # start a screen recorder
+      "${defaultModifier}+${secondModifier}+5" = "exec ${pkgs.simplescreenrecorder}/bin/simplescreenrecorder";
 
       # focus the urgent window
       "${defaultModifier}+x" = "[urgent=latest] focus";
