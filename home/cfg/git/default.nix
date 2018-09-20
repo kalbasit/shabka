@@ -4,6 +4,7 @@
   home.packages = with pkgs; [
     gitAndTools.hub
     gitAndTools.tig
+    gitAndTools.git-appraise
   ];
 
   programs.git = {
