@@ -1,3 +1,5 @@
+systemConfig:
+
 { pkgs ? import <nixpkgs> {}, ... }:
 
 let
