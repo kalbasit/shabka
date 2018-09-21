@@ -1,4 +1,4 @@
-{ pkgs, myHostname ? "hades", ... }:
+{ pkgs, systemConfig, ... }:
 
 let
   defaultModifier = "Mod4";
@@ -7,33 +7,33 @@ let
   nosid = "--no-startup-id";
   locker = "${pkgs.xautolock}/bin/xautolock -locknow && sleep 1";
 
-  intMonitor = "eDP-1";
-    # if myHostname == "hades"
-    # then "eDP-1"
-    # else if myHostname == "cratos"
-    # then "eDP1"
-    # else "";
+  intMonitor =
+    if systemConfig.networking.hostname == "hades"
+    then "eDP-1"
+    else if systemConfig.networking.hostname == "cratos"
+    then "eDP1"
+    else "";
 
-  intMode = "1920x1080";
-    # if myHostname == "hades"
-    # then "1920x1080"
-    # else if myHostname == "cratos"
-    # then "3200x1800"
-    # else "";
+  intMode =
+    if systemConfig.networking.hostname == "hades"
+    then "1920x1080"
+    else if systemConfig.networking.hostname == "cratos"
+    then "3200x1800"
+    else "";
 
-  intScale = "1x1";
-    # if myHostname == "hades"
-    # then "1x1"
-    # else if myHostname == "cratos"
-    # then "0.6x0.6"
-    # else "";
+  intScale =
+    if systemConfig.networking.hostname == "hades"
+    then "1x1"
+    else if systemConfig.networking.hostname == "cratos"
+    then "0.6x0.6"
+    else "";
 
-  extMonitor = "DP-2";
-    # if myHostname == "hades"
-    # then "DP-2"
-    # else if myHostname == "cratos"
-    # then "DP1-2"
-    # else "";
+  extMonitor =
+    if systemConfig.networking.hostname == "hades"
+    then "DP-2"
+    else if systemConfig.networking.hostname == "cratos"
+    then "DP1-2"
+    else "";
 
   extMode = "3440x1440";
 in {
