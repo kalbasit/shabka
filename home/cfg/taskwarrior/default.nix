@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   programs.taskwarrior = {
@@ -36,4 +36,8 @@
       context.personal=-publica
     '';
   };
+
+  home.packages = with pkgs; [
+    tasksh
+  ];
 }
