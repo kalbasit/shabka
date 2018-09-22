@@ -1,5 +1,3 @@
-systemConfig:
-
 { pkgs ? import <nixpkgs> {}, ... }:
 
 let
@@ -15,11 +13,7 @@ in {
     ./firefox
     ./git
     ./greenclip
-
-    # i3 is throwing an error:
-    #   attribute 'systemConfig' missing, at /nix/store/x9b0f3rpbp0i37h9brkbd6wi4hf2jsr5-source/lib/modules.nix:163:28
     ./i3
-
     ./less
     ./neovim
     ./rofi
@@ -28,9 +22,6 @@ in {
     ./timewarrior
     ./zsh
   ];
-
-  # this works!
-  home.file."myHostname.txt".text = systemConfig.networking.hostName;
 
   # configure GTK icon theme to fix missing icons issue
   # https://github.com/NixOS/nixpkgs/issues/32730#issuecomment-368310621

@@ -6,7 +6,7 @@
   ];
 
   # configure the kalbasit user using home-manager
-  home-manager.users.kalbasit = (import ../../home/cfg) config;
+  home-manager.users.kalbasit = import ../../home/cfg;
 
   # enable zsh
   programs.zsh.enable = true;
