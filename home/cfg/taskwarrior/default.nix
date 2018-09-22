@@ -37,6 +37,11 @@
     '';
   };
 
+  programs.zsh.shellAliases = {
+    t = "task";
+    weekend = "task \\(due:eod or due:monday\\)";
+  };
+
   home.packages = with pkgs; [
     tasksh
   ];
