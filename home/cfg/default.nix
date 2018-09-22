@@ -20,6 +20,7 @@ in {
     ./taskwarrior
     ./termite
     ./timewarrior
+    ./xsession
     ./zsh
   ];
 
