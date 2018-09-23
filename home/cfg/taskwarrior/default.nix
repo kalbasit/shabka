@@ -41,7 +41,7 @@
     t = "task";
 
     eod = "task due:eod";
-    tomorrow = "task due:tomorrow";
+    tomorrow = "task due:sod";
     weekend = "task \\(due:saturday or due:sunday or due:mondayT00:00\\)";
   };
 
