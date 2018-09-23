@@ -52,7 +52,9 @@
   # disable network manager because network on Zeus is set via Static IP
   # TODO: setup DHCP on pfsense, and setup the ports on  my new switch with the
   # appropriate VLAN, then simply enable the network manager.
-  networking.networkmanager.enable = lib.mkForce false;
+  # networking.networkmanager.enable = lib.mkForce false;
+
+  # security.sudo.wheelNeedsPassword = false;
 
   networking.vlans = {
     ifcadmin = {
@@ -81,15 +83,17 @@
     };
   };
 
+  #networking.defaultGateway = { address = "172.25.1.1"; interface = "ifcns1"; };
+
   networking.interfaces = {
     # turn off all real interfaces, I only want virtual networks.
     # TODO: Once I change my switch, flag the port with the VLAN on the switch
     # and use DHCP here!
-    enp0s31f6 = { useDHCP = false; };
     enp2s0f0 = { useDHCP = false; };
     enp2s0f1 = { useDHCP = false; };
     enp4s0f0 = { useDHCP = false; };
     enp4s0f1 = { useDHCP = false; };
+    # enp0s31f6 = { useDHCP = false; };
 
     # The ADMIN interface
     ifcadmin = {
@@ -98,31 +102,35 @@
 
     # NS1 address
     ifcns1 = {
-      ipv4 = {
-        addresses = [ { address = "172.25.1.3"; prefixLength = 24; } ];
-        routes = [ { address = "0.0.0.0"; prefixLength = 0; via = "172.25.1.1";  }  ];
-      };
+      useDHCP = true;
+      #ipv4 = {
+      #  addresses = [ { address = "172.25.1.3"; prefixLength = 24; } ];
+      #  routes = [ { address = "0.0.0.0"; prefixLength = 0; via = "172.25.1.1";  }  ];
+      #};
     };
 
     # NS2 address
     ifcns2 = {
-      ipv4 = {
-        addresses = [ { address = "172.25.2.3"; prefixLength = 24; } ];
-      };
+      useDHCP = true;
+      #ipv4 = {
+      #  addresses = [ { address = "172.25.2.3"; prefixLength = 24; } ];
+      #};
     };
 
     # NS3 address
     ifcns3 = {
-      ipv4 = {
-        addresses = [ { address = "172.25.3.3"; prefixLength = 24; } ];
-      };
+      useDHCP = true;
+      #ipv4 = {
+      #  addresses = [ { address = "172.25.3.3"; prefixLength = 24; } ];
+      #};
     };
 
     # NS4 address
     ifcns4 = {
-      ipv4 = {
-        addresses = [ { address = "172.25.4.3"; prefixLength = 24; } ];
-      };
+      useDHCP = true;
+      #ipv4 = {
+      #  addresses = [ { address = "172.25.4.3"; prefixLength = 24; } ];
+      #};
     };
   };
 }
