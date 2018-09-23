@@ -39,7 +39,10 @@
 
   programs.zsh.shellAliases = {
     t = "task";
-    weekend = "task \\(due:eod or due:monday\\)";
+
+    eod = "task due:eod";
+    tomorrow = "task due:tomorrow";
+    weekend = "task \\(due:sunday or due:monday\\)";
   };
 
   home.packages = with pkgs; [
