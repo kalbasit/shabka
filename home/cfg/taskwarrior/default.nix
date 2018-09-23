@@ -42,7 +42,7 @@
 
     eod = "task due:eod";
     tomorrow = "task due:tomorrow";
-    weekend = "task \\(due:sunday or due:monday\\)";
+    weekend = "task \\(due:saturday or due:sunday or due:mondayT00:00\\)";
   };
 
   home.packages = with pkgs; [
