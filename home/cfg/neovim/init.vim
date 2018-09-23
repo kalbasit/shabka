@@ -170,6 +170,10 @@ if has("autocmd")
   au FileType mail ab ~8 [8]<esc>m`:/^Footnotes\:/+9/<CR>o[8]
   au FileType mail ab ~9 [9]<esc>m`:/^Footnotes\:/+10/<CR>o[9]
 
+  " dbg
+  au FileType javascript.jsx ab dbg debugger; // eslint-disable-line
+  au FileType typescript ab dbg debugger; // tslint-disable-line
+
   " Set the envrc filetype to shell
   au BufRead,BufNewFile .envrc set ft=sh
 
