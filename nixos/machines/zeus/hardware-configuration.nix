@@ -3,12 +3,6 @@
 # to /etc/nixos/configuration.nix instead.
 { config, lib, pkgs, ... }:
 
-let
-  zeus_initrd_ssh_host_rsa_key_path = /private/network-secrets/nix/hosts/zeus/zeus_initrd_host_rsa_key.dropbear;
-in
-
-assert lib.assertMsg (builtins.pathExists zeus_initrd_ssh_host_rsa_key_path) "Zeus initrd SSH key was not found";
-
 {
   imports =
     [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix>

@@ -1,5 +1,11 @@
 { config, pkgs, lib, ... }:
 
+let
+  zeus_initrd_ssh_host_rsa_key_path = /private/network-secrets/nix/hosts/zeus/zeus_initrd_host_rsa_key.dropbear;
+in
+
+assert lib.assertMsg (builtins.pathExists zeus_initrd_ssh_host_rsa_key_path) "Zeus initrd SSH key was not found";
+
 {
   # Include the results of the hardware scan.
   imports = [
