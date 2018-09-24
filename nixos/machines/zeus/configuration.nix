@@ -19,6 +19,21 @@
   # boot the latest kernel
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
+  # Start an SSH server within initrd
+  boot.initrd.network = {
+    ssh = {
+      authorizedKeys = [
+        (builtins.readFile (builtins.fetchurl {
+          url = "https://github.com/kalbasit.keys";
+          sha256 = "1jm3haqcv827vr92ynkbf23dgq0anlym10hqk87wbzafb82smy50";
+        }))
+      ];
+
+      enable = true;
+      hostRSAKey = builtins.readFile zeus_initrd_ssh_host_rsa_key_path;
+    };
+  };
+
   # Define your hostname.
   networking.hostName = "zeus";
 
@@ -47,6 +62,9 @@
   #
   # Network
   #
+
+  # enable DHCP forcibly as it is required for initrd
+  networking.useDHCP = lib.mkForce true;
 
   # disable the networkmanager on Zeus as it is really not needed since the
   # network does never change.
