@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   programs.taskwarrior = {
@@ -36,4 +36,16 @@
       context.personal=-publica
     '';
   };
+
+  programs.zsh.shellAliases = {
+    t = "task";
+
+    eod = "task due:eod";
+    tomorrow = "task due:sod";
+    weekend = "task \\(due:saturday or due:sunday or due:mondayT00:00\\)";
+  };
+
+  home.packages = with pkgs; [
+    tasksh
+  ];
 }

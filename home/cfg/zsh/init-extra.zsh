@@ -164,7 +164,11 @@ fi
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(custom_in_nix_shell custom_prompt_char)
 
 # define the segments of the right prompt
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(dir vcs custom_profile_story custom_nix_shell_packages status vi_mode command_execution_time background_jobs context root_indicator ssh time)
+if [[ -n "${TMUX}" ]]; then
+	POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(dir vcs custom_profile_story custom_nix_shell_packages status vi_mode command_execution_time background_jobs root_indicator ssh)
+else
+	POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(dir vcs custom_profile_story custom_nix_shell_packages status vi_mode command_execution_time background_jobs context root_indicator ssh time)
+fi
 
 # truncate /usr/share/plasma to /u/s/plasma
 POWERLEVEL9K_SHORTEN_DIR_LENGTH=1

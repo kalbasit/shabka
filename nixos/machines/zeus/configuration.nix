@@ -44,4 +44,73 @@
 
   # set the video drivers to modesetting so no other drivers are loaded
   services.xserver.videoDrivers = lib.mkForce ["modesetting"];
+
+  #
+  # Network
+  #
+
+  # disable the networkmanager on Zeus as it is really not needed since the
+  # network does never change.
+  networking.networkmanager.enable = lib.mkForce false;
+
+  networking.vlans = {
+    ifcns1 = {
+      id = 101;
+      interface = "enp2s0f0";
+    };
+
+    ifcns2 = {
+      id = 102;
+      interface = "enp2s0f1";
+    };
+
+    ifcns3 = {
+      id = 103;
+      interface = "enp4s0f0";
+    };
+
+    ifcns4 = {
+      id = 104;
+      interface = "enp4s0f1";
+    };
+
+    ifcadmin = {
+      id = 250;
+      interface = "enp0s31f6";
+    };
+  };
+
+  networking.interfaces = {
+    # turn off DHCP on all real interfaces, I use virtual networks.
+    enp2s0f0 = { useDHCP = false; };
+    enp2s0f1 = { useDHCP = false; };
+    enp4s0f0 = { useDHCP = false; };
+    enp4s0f1 = { useDHCP = false; };
+    enp0s31f6 = { useDHCP = false; };
+
+    # The ADMIN interface
+    ifcadmin = {
+      useDHCP = true;
+    };
+
+    # NS1 address
+    ifcns1 = {
+      useDHCP = true;
+    };
+
+    # NS2 address
+    ifcns2 = {
+      useDHCP = true;
+    };
+
+    # NS3 address
+    ifcns3 = {
+      useDHCP = true;
+    };
+
+    # NS4 address
+    ifcns4 = {
+      useDHCP = true;
+    };
+  };
 }
