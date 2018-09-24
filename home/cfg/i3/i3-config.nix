@@ -1,4 +1,4 @@
-{ pkgs, myHostname ? "hades", ... }:
+{ pkgs, systemConfig ? (import <nixpkgs/nixos> {}).config, ... }:
 
 let
   defaultModifier = "Mod4";
@@ -7,33 +7,33 @@ let
   nosid = "--no-startup-id";
   locker = "${pkgs.xautolock}/bin/xautolock -locknow && sleep 1";
 
-  intMonitor = "eDP-1";
-    # if myHostname == "hades"
-    # then "eDP-1"
-    # else if myHostname == "cratos"
-    # then "eDP1"
-    # else "";
+  intMonitor =
+    if systemConfig.networking.hostName == "hades"
+    then "eDP-1"
+    else if systemConfig.networking.hostName == "cratos"
+    then "eDP1"
+    else "";
 
-  intMode = "1920x1080";
-    # if myHostname == "hades"
-    # then "1920x1080"
-    # else if myHostname == "cratos"
-    # then "3200x1800"
-    # else "";
+  intMode =
+    if systemConfig.networking.hostName == "hades"
+    then "1920x1080"
+    else if systemConfig.networking.hostName == "cratos"
+    then "3200x1800"
+    else "";
 
-  intScale = "1x1";
-    # if myHostname == "hades"
-    # then "1x1"
-    # else if myHostname == "cratos"
-    # then "0.6x0.6"
-    # else "";
+  intScale =
+    if systemConfig.networking.hostName == "hades"
+    then "1x1"
+    else if systemConfig.networking.hostName == "cratos"
+    then "0.6x0.6"
+    else "";
 
-  extMonitor = "DP-2";
-    # if myHostname == "hades"
-    # then "DP-2"
-    # else if myHostname == "cratos"
-    # then "DP1-2"
-    # else "";
+  extMonitor =
+    if systemConfig.networking.hostName == "hades"
+    then "DP-2"
+    else if systemConfig.networking.hostName == "cratos"
+    then "DP1-2"
+    else "";
 
   extMode = "3440x1440";
 in {
@@ -45,9 +45,11 @@ in {
     window = {
       commands = [
         { command = "floating enable"; criteria = { class = "^Pavucontrol"; }; }
+        { command = "floating enable"; criteria = { class = "^ROX-Filer$"; }; }
+        { command = "floating enable"; criteria = { class = "^SimpleScreenRecorder$"; }; }
         { command = "floating enable"; criteria = { class = "^Tor Browser"; }; }
         { command = "floating enable"; criteria = { class = "^net-filebot-Main$"; }; }
-        { command = "floating enable"; criteria = { class = "^ROX-Filer$"; }; }
+
         { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "^whats-app-nativefier*"; }; }
         { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "pulse-sms"; }; }
       ];
@@ -149,6 +151,9 @@ in {
 
       # start a region screenshot
       "${defaultModifier}+${secondModifier}+4" = "exec ${pkgs.flameshot}/bin/flameshot gui --delay 500 --path ~/Desktop";
+
+      # start a screen recorder
+      "${defaultModifier}+${secondModifier}+5" = "exec ${pkgs.simplescreenrecorder}/bin/simplescreenrecorder";
 
       # focus the urgent window
       "${defaultModifier}+x" = "[urgent=latest] focus";

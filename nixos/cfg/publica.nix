@@ -33,7 +33,7 @@ let
   };
 
   generateVirtualHostsSet = host: port: {
-    addSSL = true;
+    forceSSL = true;
     serverName = host;
     sslCertificate = builtins.toPath publica_dev_ssl_cert_path;
     sslCertificateKey = builtins.toPath publica_dev_ssl_key_path;
@@ -81,10 +81,10 @@ let
 
 in
 
-assert (builtins.pathExists charles_ssl_cert_path);
-assert (builtins.pathExists publica_dev_ssl_ca_path);
-assert (builtins.pathExists publica_dev_ssl_cert_path);
-assert (builtins.pathExists publica_dev_ssl_key_path);
+assert lib.assertMsg (builtins.pathExists charles_ssl_cert_path) "Charles certificate was not found";
+assert lib.assertMsg (builtins.pathExists publica_dev_ssl_ca_path) "Publica CA was not found";
+assert lib.assertMsg (builtins.pathExists publica_dev_ssl_cert_path) "Publica certificate was not found";
+assert lib.assertMsg (builtins.pathExists publica_dev_ssl_key_path) "Publica key was not found";
 
 {
   # Add the extra hosts
@@ -104,7 +104,7 @@ assert (builtins.pathExists publica_dev_ssl_key_path);
   # //console/server
   services.nginx.virtualHosts = pkgs.lib.mapAttrs' generateVirtualHosts hostsPorts // {
     "publica.dev" = {
-      addSSL = true;
+      forceSSL = true;
       serverName = "publica.dev";
       sslCertificate = builtins.toPath publica_dev_ssl_cert_path;
       sslCertificateKey = builtins.toPath publica_dev_ssl_key_path;

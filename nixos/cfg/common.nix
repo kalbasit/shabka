@@ -13,9 +13,6 @@
 
   # load the overlays that we need at the very top-level
   nixpkgs.overlays = [
-    (self: super: { i3-config = super.i3-config.override { hostname = config.networking.hostname; }; })
-    (self: super: { home = super.home.override { hostname = config.networking.hostname; }; })
-
     (import ../../overlays)
     (import ../../overlays/neovim)
   ];
@@ -50,7 +47,9 @@
   # under the overlays/all overlay.
   environment.systemPackages = with pkgs; [
     git
-    curl
+    (curl.override {
+      brotliSupport = true;
+    })
     neovim
   ];
 
@@ -74,6 +73,9 @@
 
   # allow Mosh server in
   networking.firewall.allowedUDPPortRanges = [ { from = 60000; to = 61000; } ];
+
+  # set the initial password of the root user
+  security.initialRootPassword = "$6$0bx5eAEsHJRxkD8.$gJ7sdkOOJRf4QCHWLGDUtAmjHV/gJxPQpyCEtHubWocHh9O7pWy10Frkm1Ch8P0/m8UTUg.Oxp.MB3YSQxFXu1";
 
   # hide process information of other users when running non-root
   security.hideProcessInformation = true;

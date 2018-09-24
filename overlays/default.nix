@@ -21,14 +21,4 @@ myPkgs // {
   timewarrior = super.timewarrior.overrideAttrs (oa: {
     patches = [./timewarrior-no-write-config-file.patch];
   });
-
-  charles = super.charles.overrideAttrs (oa: rec {
-    name = "charles-${version}";
-    version = "4.2.7";
-
-    src = super.fetchurl {
-      url = "https://www.charlesproxy.com/assets/release/${version}/charles-proxy-${version}.tar.gz";
-      sha256 = "1nycw3wpbfwj4ijjaq5k0f4xipj8j605fs0yjzgl66gmv7r583rd";
-    };
-  });
 }

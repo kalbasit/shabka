@@ -2,6 +2,7 @@
 
 {
   home.packages = with pkgs; [
+    gitAndTools.git-appraise
     gitAndTools.hub
     gitAndTools.tig
   ];

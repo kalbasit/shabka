@@ -19,8 +19,6 @@
 
   # define the root user
   users.users.root = {
-    hashedPassword = "$6$0bx5eAEsHJRxkD8.$gJ7sdkOOJRf4QCHWLGDUtAmjHV/gJxPQpyCEtHubWocHh9O7pWy10Frkm1Ch8P0/m8UTUg.Oxp.MB3YSQxFXu1";
-
     openssh.authorizedKeys.keys = [
       (builtins.readFile (builtins.fetchurl {
         url = "https://github.com/kalbasit.keys";

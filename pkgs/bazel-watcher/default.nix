@@ -46,7 +46,7 @@ in buildBazelPackage rec {
       rm -rf $bazelOut/external/{local_*,\@local_*}
     '';
 
-    sha256 = "0m7sjlbhg3p3l3mhs5smd28mj3zyzf6jrk3dgg0mjfb3zwfnfz32";
+    sha256 = "111dalq1v806y0hkhnpzaffiv2w4vcyvnzdfx6p1rd1z1capjxk7";
   };
 
   buildAttrs = {
