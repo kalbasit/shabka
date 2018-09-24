@@ -59,6 +59,9 @@
   # set the video drivers to modesetting so no other drivers are loaded
   services.xserver.videoDrivers = lib.mkForce ["modesetting"];
 
+  # configure OpenSSH server to listen on the ADMIN interface
+  services.openssh.listenAddresses = [ { addr = "172.25.250.3"; port = 22; } ];
+
   #
   # Network
   #
