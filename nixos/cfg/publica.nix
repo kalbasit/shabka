@@ -25,10 +25,10 @@ let
     "api.publica.dev"      = 8080;
     "console.publica.dev"  = 7000;
     "ctrl.publica.dev"     = 8060;
+    "demo.publica.dev"     = 8124;
     "home.publica.dev"     = 7010;
     "js.publica.dev"       = 3002;
     "prebid.publica.dev"   = 9999;
-    "publica.dev"          = 3002;
     "rewriter.publica.dev" = 8061;
   };
 
@@ -54,6 +54,31 @@ let
     (host)
     (generateVirtualHostsSet host port);
 
+  publica_index = pkgs.writeText "index.html" ''
+    <!HTML>
+    <html>
+      <head>
+        <title>Publica - Index</title>
+      </head>
+      <body>
+        <h1>Publica development pages.</h1>
+        <ul>
+          ${lib.concatStringsSep "\n" (map (name: "<li><a href='https://${name}'>${name}</a></li>") (builtins.attrNames hostsPorts))}
+        </ul>
+      </body>
+    </html>
+  '';
+
+  publica_index_drv = pkgs.stdenvNoCC.mkDerivation rec {
+    name = "publica-index-html";
+    src = publica_index;
+    phases = [ "generatePublicaIndex" ];
+
+    generatePublicaIndex = ''
+      install -Dm644 ${publica_index} $out/index.html
+    '';
+  };
+
 in
 
 assert (builtins.pathExists charles_ssl_cert_path);
@@ -64,7 +89,7 @@ assert (builtins.pathExists publica_dev_ssl_key_path);
 {
   # Add the extra hosts
   networking.extraHosts = ''
-    127.0.0.1 k8s.publica.dev ${builtins.concatStringsSep " " (builtins.attrNames hostsPorts)}
+    127.0.0.1 publica.dev k8s.publica.dev ${builtins.concatStringsSep " " (builtins.attrNames hostsPorts)}
   '';
 
   # NginX configuration for publica
@@ -77,5 +102,19 @@ assert (builtins.pathExists publica_dev_ssl_key_path);
   ];
 
   # //console/server
-  services.nginx.virtualHosts = pkgs.lib.mapAttrs' generateVirtualHosts hostsPorts;
+  services.nginx.virtualHosts = pkgs.lib.mapAttrs' generateVirtualHosts hostsPorts // {
+    "publica.dev" = {
+      addSSL = true;
+      serverName = "publica.dev";
+      sslCertificate = builtins.toPath publica_dev_ssl_cert_path;
+      sslCertificateKey = builtins.toPath publica_dev_ssl_key_path;
+
+      locations = {
+        "/" = {
+          index = "index.html";
+          root = publica_index_drv;
+        };
+      };
+    };
+  };
 }
