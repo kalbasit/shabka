@@ -76,9 +76,6 @@ use_nix() {
 	watch_file "${default}"
 	watch_file "${nixpkgs_version}"
 	watch_file "${shell}"
-	if [[ ${shell} == "default.nix" ]]; then
-		watch_file default.nix
-	fi
 }
 
 hashFile() {
