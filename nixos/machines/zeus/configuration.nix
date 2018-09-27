@@ -68,6 +68,8 @@ assert lib.assertMsg (builtins.pathExists zeus_initrd_ssh_host_rsa_key_path) "Ze
   # configure OpenSSH server to listen on the ADMIN interface
   services.openssh.listenAddresses = [ { addr = "172.25.250.3"; port = 22; } ];
 
+  networking.firewall.enable = lib.mkForce false;
+
   #
   # Network
   #
