@@ -3,7 +3,7 @@ index 4011d9b..d085ae8 100644
 --- a/WORKSPACE
 +++ b/WORKSPACE
 @@ -52,11 +52,9 @@ http_archive(
- 
+
  http_archive(
      name = "bazel_gazelle",
 -    sha256 = "c0a5739d12c6d05b6c1ad56f2200cb0b57c5a70e03ebd2f7b87ce88cabf09c7b",
@@ -15,5 +15,5 @@ index 4011d9b..d085ae8 100644
 +    strip_prefix = "bazel-gazelle-b34f46af2f31ee0470e7364352c2376bcc10d079",
 +    url = "https://github.com/bazelbuild/bazel-gazelle/archive/b34f46af2f31ee0470e7364352c2376bcc10d079.tar.gz",
  )
- 
+
  load("@io_bazel_rules_go//go:def.bzl", "go_register_toolchains", "go_rules_dependencies")
