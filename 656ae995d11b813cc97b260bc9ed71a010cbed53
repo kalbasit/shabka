@@ -1,0 +1,1 @@
+{"timestamp":"1538198548","reviewRef":"refs/heads/system_zeus_initrd_ssh","targetRef":"refs/heads/master","requester":"wael.nasreddine@gmail.com","description":"Revert \"nixos/machines: zeus: enable Serial console on TTY and GRUB\"\n\nThis reverts commit 776c2ac306eb8a1e215768ff41ea54095afeabd3.","baseCommit":"2a2fa00c7416f73e543ad9af00f50c8c593fb32c"}
