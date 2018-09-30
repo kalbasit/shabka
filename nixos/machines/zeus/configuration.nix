@@ -58,17 +58,59 @@
     managePlugins = false;
     extraPlugins = [];
 
-    package = pkgs.plex.overrideAttrs (x: let
+    package = pkgs.plex.overrideAttrs (_: let
       # see https://www.plex.tv/media-server-downloads/ for 64bit rpm
-      version = "1.13.8.5339-115f087d6";
-      # TODO: update to version = "1.13.8.5395-10d48da0d";
-      sha1 = "7f425470387b7d6b4f31c799dc37f967cef2aae2";
+      version = "1.13.8.5395";
+      vsnHash = "10d48da0d";
+      sha1 = "pcp4xdkj5ilqwsz4nfdxg2bddradaybp";
     in {
       name = "plex-${version}";
       src = pkgs.fetchurl {
-        url = "https://downloads.plex.tv/plex-media-server/${version}/plexmediaserver-${version}.x86_64.rpm";
+        url = "https://downloads.plex.tv/plex-media-server/${version}-${vsnHash}/plexmediaserver-${version}-${vsnHash}.x86_64.rpm";
         inherit sha1;
       };
+
+      # TODO: remove this once https://github.com/NixOS/nixpkgs/pull/47562 is merged in.
+      installPhase = let
+        dataDir = "/nas/Plex/Library/Application\ Support";
+      in ''
+        install -d $out/usr/lib
+        cp -dr --no-preserve='ownership' usr/lib/plexmediaserver $out/usr/lib/
+
+        # Now we need to patch up the executables and libraries to work on Nix.
+        # Side note: PLEASE don't put spaces in your binary names. This is stupid.
+        for bin in "Plex Media Server"              \
+                   "Plex DLNA Server"               \
+                   "Plex Media Scanner"             \
+                   "Plex Relay"                     \
+                   "Plex Script Host"               \
+                   "Plex Transcoder"                \
+                   "Plex Tuner Service"             ; do
+          patchelf --set-interpreter "${pkgs.glibc.out}/lib/ld-linux-x86-64.so.2" "$out/usr/lib/plexmediaserver/$bin"
+          patchelf --set-rpath "$out/usr/lib/plexmediaserver" "$out/usr/lib/plexmediaserver/$bin"
+        done
+
+        find $out/usr/lib/plexmediaserver/Resources -type f -a -perm -0100 \
+            -print -exec patchelf --set-interpreter "${pkgs.glibc.out}/lib/ld-linux-x86-64.so.2" '{}' \;
+
+        # executables need libstdc++.so.6
+        ln -s "${pkgs.stdenv.lib.makeLibraryPath [ pkgs.stdenv.cc.cc ]}/libstdc++.so.6" "$out/usr/lib/plexmediaserver/libstdc++.so.6"
+
+        # Our next problem is the "Resources" directory in /usr/lib/plexmediaserver.
+        # This is ostensibly a skeleton directory, which contains files that Plex
+        # copies into its folder in /var. Unfortunately, there are some SQLite
+        # databases in the directory that are opened at startup. Since these
+        # database files are read-only, SQLite chokes and Plex fails to start. To
+        # solve this, we keep the resources directory in the Nix store, but we
+        # rename the database files and replace the originals with symlinks to
+        # /var/lib/plex. Then, in the systemd unit, the base database files are
+        # copied to /var/lib/plex before starting Plex.
+        RSC=$out/usr/lib/plexmediaserver/Resources
+        for db in "com.plexapp.plugins.library.db"; do
+            mv $RSC/$db $RSC/base_$db
+            ln -s "${dataDir}/.skeleton/$db" $RSC/$db
+        done
+      '';
     });
   };
 
