@@ -48,6 +48,38 @@
   # configure OpenSSH server to listen on the ADMIN interface
   services.openssh.listenAddresses = [ { addr = "172.25.250.3"; port = 22; } ];
 
+  # Plex service
+  services.plex = {
+    enable = true;
+    openFirewall = true;
+    dataDir = "/nas/Plex/Library/Application\ Support";
+
+    # TODO: setup the plugins after the migration, if any.
+    managePlugins = false;
+    extraPlugins = [];
+
+    package = pkgs.plex.overrideAttrs (x: let
+      # see https://www.plex.tv/media-server-downloads/ for 64bit rpm
+      version = "1.13.8.5339-115f087d6";
+      # TODO: update to version = "1.13.8.5395-10d48da0d";
+      sha1 = "7f425470387b7d6b4f31c799dc37f967cef2aae2";
+    in {
+      name = "plex-${version}";
+      src = pkgs.fetchurl {
+        url = "https://downloads.plex.tv/plex-media-server/${version}/plexmediaserver-${version}.x86_64.rpm";
+        inherit sha1;
+      };
+    });
+  };
+
+  # Currently the Plex systemd service tries to install the skeleton directory
+  # using the install command, however that command does not work when the
+  # directory where the installation is happening is living on an NFS mount.
+  # TODO: This will not allow me to transition the Plex plugins to Nix so I
+  # must solve this and send a patch upstream to get it working nicely. Perhaps
+  # a simple test before the installation should suffice.
+  systemd.services.plex.preStart = lib.mkForce "true";
+
   #
   # Network
   #
