@@ -16,7 +16,11 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  # TODO: add metadata https://nixos.org/nixpkgs/manual/#sec-standard-meta-attributes
-  meta = {
+  meta = with stdenv.lib; {
+    homepage = https://github.com/kalbasit/swm;
+    description = "swm (Story-based Workflow Manager) is a Tmux session manager specifically designed for Story-based development workflow";
+    license = licenses.mit;
+    maintainers = [ maintainers.kalbasit ];
+    platforms = platforms.all;
   };
 }
