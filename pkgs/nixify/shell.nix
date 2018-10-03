@@ -1,19 +1,18 @@
 let
-  hostPkgs = import <nixpkgs> {};
   # Look here for information about how to generate `nixpkgs-version.json`.
   #  → https://nixos.wiki/wiki/FAQ/Pinning_Nixpkgs
-  pinnedVersion = hostPkgs.lib.importJSON ./.nixpkgs-version.json;
-  pinnedPkgs = import (hostPkgs.fetchFromGitHub {
-    owner = "NixOS";
-    repo = "nixpkgs";
-    inherit (pinnedVersion) rev sha256;
+  pinnedVersion = builtins.fromJSON (builtins.readFile ./.nixpkgs-version.json);
+  pinnedPkgs = import (builtins.fetchGit {
+    inherit (pinnedVersion) url rev;
+
+    ref = "{{ref}}";
   }) {};
 in
 
-# This allows overriding nixpkgs by passing `--arg nixpkgs ...`
-{ nixpkgs ? pinnedPkgs }:
+# This allows overriding pkgs by passing `--arg pkgs ...`
+{ pkgs ? pinnedPkgs }:
 
-nixpkgs.mkShell {
+pkgs.mkShell {
   buildInputs = with nixpkgs; [
     # put packages here.
   ];
