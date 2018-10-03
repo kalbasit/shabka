@@ -81,10 +81,10 @@ let
 
 in
 
-assert lib.assertMsg (builtins.pathExists charles_ssl_cert_path) "Charles certificate was not found";
-assert lib.assertMsg (builtins.pathExists publica_dev_ssl_ca_path) "Publica CA was not found";
-assert lib.assertMsg (builtins.pathExists publica_dev_ssl_cert_path) "Publica certificate was not found";
-assert lib.assertMsg (builtins.pathExists publica_dev_ssl_key_path) "Publica key was not found";
+assert builtins.pathExists charles_ssl_cert_path;
+assert builtins.pathExists publica_dev_ssl_ca_path;
+assert builtins.pathExists publica_dev_ssl_cert_path;
+assert builtins.pathExists publica_dev_ssl_key_path;
 
 {
   # Add the extra hosts

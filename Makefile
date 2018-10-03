@@ -8,16 +8,17 @@ NIXOS_REBUILD_OPERATIONS = switch boot test build dry-build dry-activate build-v
 
 all: build
 
-$(NIXOS_REBUILD_OPERATIONS):
+$(NIXOS_REBUILD_OPERATIONS): add-channels update-channels
+	@echo ">>> Running nixos-rebuild $@"
 	@$(NIXOS_REBUILD) $(HOSTNAME) $@
 
-update: update-nixpkgs update-nixos-hardware update-home-manager
+add-channels:
+	@echo ">>> Adding all the relevant channels, this will override any previously added channel if the version is different"
+	@nix-channel --add https://nixos.org/channels/nixos-unstable nixpkgs-unstable
+	@nix-channel --add https://nixos.org/channels/nixos-18.09 nixpkgs
+	@nix-channel --add https://github.com/rycee/home-manager/archive/release-18.09.tar.gz home-manager
+	@nix-channel --add https://github.com/NixOS/nixos-hardware/archive/master.tar.gz nixos-hardware
 
-update-nixpkgs:
-	nix-shell -p nix-prefetch-git --run 'nix-prefetch-git https://github.com/NixOS/nixpkgs-channels.git refs/heads/nixos-unstable' > external/nixpkgs-version.json
-
-update-nixos-hardware:
-	nix-shell -p nix-prefetch-git --run 'nix-prefetch-git https://github.com/NixOS/nixos-hardware.git refs/heads/master' > external/nixos-hardware-version.json
-
-update-home-manager:
-	nix-shell -p nix-prefetch-git --run 'nix-prefetch-git https://github.com/rycee/home-manager.git refs/heads/master' > external/home-manager-version.json
+update-channels:
+	@echo ">>> Updating all channels"
+	@nix-channel --update

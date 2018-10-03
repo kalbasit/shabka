@@ -3,9 +3,9 @@
 let
   system-path = builtins.toPath ./../..;
 
-  pinned-nixos-hardware = pkgs.callPackage ../../external/nixos-hardware.nix {};
-  pinned-nixpkgs        = pkgs.callPackage ../../external/nixpkgs.nix {};
-  pinned-home-manager   = pkgs.callPackage ../../external/home-manager.nix {};
+  # pinned-nixos-hardware = pkgs.callPackage ../../external/nixos-hardware.nix {};
+  # pinned-nixpkgs        = pkgs.callPackage ../../external/nixpkgs.nix {};
+  # pinned-home-manager   = pkgs.callPackage ../../external/home-manager.nix {};
 in {
   nix = {
     autoOptimiseStore = true;
@@ -19,9 +19,9 @@ in {
 
     nixPath = [
       # externals
-      "home-manager=${pinned-home-manager}"
-      "nixos-hardware=${pinned-nixos-hardware}"
-      "nixpkgs=${pinned-nixpkgs}"
+      # "home-manager=${pinned-home-manager}"
+      # "nixos-hardware=${pinned-nixos-hardware}"
+      # "nixpkgs=${pinned-nixpkgs}"
 
       # system
       "system-path=${system-path}"
