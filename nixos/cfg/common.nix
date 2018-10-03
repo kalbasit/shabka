@@ -14,7 +14,6 @@
   # load the overlays that we need at the very top-level
   nixpkgs.overlays = [
     (import ../../overlays)
-    (import ../../overlays/neovim)
   ];
 
   # allow unfree software on all machines
