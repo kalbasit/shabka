@@ -92,8 +92,6 @@ in {
 
     bat
 
-    bazel-watcher
-
     browsh
 
     chroot-enter
