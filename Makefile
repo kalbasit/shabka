@@ -8,7 +8,7 @@ NIXOS_REBUILD_OPERATIONS = switch boot test build dry-build dry-activate build-v
 
 all: build add-channels update-channels
 
-$(NIXOS_REBUILD_OPERATIONS): add-channels
+$(NIXOS_REBUILD_OPERATIONS): add-channels update-channels
 	@echo ">>> Running nixos-rebuild $@"
 	@$(NIXOS_REBUILD) $(HOSTNAME) $@
 
