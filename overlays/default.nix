@@ -20,6 +20,9 @@ myPkgs // {
   gitAndTools = super.gitAndTools // {
     git-appraise = nixpkgs-unstable.gitAndTools.git-appraise;
   };
+  lib = super.lib // {
+    assertMsg = nixpkgs-unstable.lib.assertMsg;
+  };
 
   # timewarrior errors out if it can't write the config file, even though it's tracked by Nix
   # If timewarrior.cfg is not writable, timew errors out with Insufficient permissions for '/home/kalbasit/.timewarrior/timewarrior.cfg'.
