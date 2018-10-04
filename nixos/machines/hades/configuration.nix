@@ -11,8 +11,9 @@
 
     ../../cfg/common.nix
     ../../cfg/desktop.nix
+    ../../cfg/docker.nix
     ../../cfg/redshift.nix
-    ../../cfg/virtualisation.nix
+    ../../cfg/virtualbox.nix
 
     ../../cfg/printers.nix
 
@@ -22,6 +23,10 @@
   ] ++ (if builtins.pathExists /private then [
     ../../cfg/openvpn/client/nasreddine/hades.nix
   ] else []);
+
+  # Enable VirtualBox and Docker virtualisation services.
+  mine.virtualisation.docker.enable = true;
+  mine.virtualisation.virtualbox.enable = true;
 
   # boot the latest kernel
   boot.kernelPackages = pkgs.linuxPackages_latest;
