@@ -7,9 +7,7 @@ set -euo pipefail
 readonly SYSTEM_PATH="$(cd $(dirname "${BASH_SOURCE[0]}")/../../.. && pwd)"
 
 source "${SYSTEM_PATH}/lib/shell/functions/compute_nix_path.sh"
-set +u
-source "$( nix-build '<nixpkgs>' --no-build-output -A git )/libexec/git-core/git-sh-setup"
-set -u
+source "${SYSTEM_PATH}/lib/shell/functions/require_clean_work_tree.sh"
 
 if [[ "${#}" -lt 2 ]]; then
 	echo "USAGE: ${BASH_SOURCE[0]} <machine> <command>"
