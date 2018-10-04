@@ -121,7 +121,7 @@ set listchars+=precedes:<         " The character to show in the last column whe
 " }}}
 "" Ack{{{
 
-let g:ackprg = 'ag --vimgrep --smart-case'
+let g:ackprg = '@ag_bin@ --vimgrep --smart-case'
 cnoreabbrev ag Ack
 cnoreabbrev aG Ack
 cnoreabbrev Ag Ack

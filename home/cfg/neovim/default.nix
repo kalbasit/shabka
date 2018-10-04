@@ -19,6 +19,7 @@ in {
       customRC = builtins.readFile (pkgs.substituteAll {
         src = ./init.vim;
 
+        ag_bin = "${pkgs.ag}/bin/ag";
         gocode_bin = "${pkgs.gocode}/bin/gocode";
         neovim_node_host_bin = "${pkgs.nodePackages.neovim}/bin/neovim-node-host";
         typescript_server_bin = "${pkgs.nodePackages.typescript}/bin/tsserver";
