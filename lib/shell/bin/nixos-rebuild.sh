@@ -7,16 +7,19 @@ set -euo pipefail
 readonly SYSTEM_PATH="$(cd $(dirname "${BASH_SOURCE[0]}")/../../.. && pwd)"
 
 source "${SYSTEM_PATH}/lib/shell/functions/compute_nix_path.sh"
+set +u
+source "$( nix-build '<nixpkgs>' --no-build-output -A git )/libexec/git-core/git-sh-setup"
+set -u
 
 if [[ "${#}" -lt 2 ]]; then
-	echo "USAGE: ${BASH_SOURCE[0]} <machine> <action>"
+	echo "USAGE: ${BASH_SOURCE[0]} <machine> <command>"
 	echo "ERR: You must provide a host to bootstrap, <machine> must exist under nixos/machines/"
 	exit 1
 fi
 
 readonly hostname="$(hostname -s)"
 readonly machine="${1}"
-readonly action="${2}"
+readonly command="${2}"
 
 if [[ ! -r "${SYSTEM_PATH}/nixos/machines/${machine}/configuration.nix" ]]; then
 	echo "ERR: configuration for machine ${machine} does not exist."
@@ -24,8 +27,8 @@ if [[ ! -r "${SYSTEM_PATH}/nixos/machines/${machine}/configuration.nix" ]]; then
 fi
 
 if [[ "${machine}" != "${hostname}" ]]; then
-	if [[ "${action}" == "test" ]] || [[ "${action}" == "switch" ]]; then
-		echo "ERR: cannot run \'nixos-rebuild ${action}\` for ${machine} from ${hostname}."
+	if [[ "${command}" == "test" ]] || [[ "${command}" == "switch" ]]; then
+		echo "ERR: cannot run \'nixos-rebuild ${command}\` for ${machine} from ${hostname}."
 		exit 1
 	fi
 fi
@@ -33,9 +36,13 @@ fi
 NIX_PATH="$(compute_nix_path)"
 export NIX_PATH
 
-if [[ $(id -u) -gt 0 ]] && ([[ "${action}" == "switch" ]] || [[ "${action}" == "test" ]] || [[ "${action}" == "boot" ]]) ; then
+if [[ $(id -u) -gt 0 ]] && ([[ "${command}" == "switch" ]] || [[ "${command}" == "test" ]] || [[ "${command}" == "boot" ]]) ; then
 	echo -e "ERR: must run this as root"
 	exit 1
 fi
 
-nixos-rebuild "${action}"
+if [[ "${command}" == "switch" ]] || [[ "${command}" == "boot" ]]; then
+	require_clean_work_tree ${command} "Please commit or stash all changes and try again."
+fi
+
+nixos-rebuild "${command}"

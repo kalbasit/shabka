@@ -1,6 +1,8 @@
 self: super:
 
 let
+  nixpkgs-unstable = import <nixpkgs-unstable> { overlays = []; };
+
   # pkgs is a function given a path will create a set {name = callPackage name}
   pkgs = path:
   let content = builtins.readDir path; in
@@ -13,6 +15,11 @@ let
 in
 myPkgs // {
   # other overlay code goes here
+
+  # import packages from unstable
+  gitAndTools = super.gitAndTools // {
+    git-appraise = nixpkgs-unstable.gitAndTools.git-appraise;
+  };
 
   # timewarrior errors out if it can't write the config file, even though it's tracked by Nix
   # If timewarrior.cfg is not writable, timew errors out with Insufficient permissions for '/home/kalbasit/.timewarrior/timewarrior.cfg'.

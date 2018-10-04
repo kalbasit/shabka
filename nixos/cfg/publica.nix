@@ -1,6 +1,8 @@
 { config, pkgs, lib, ... }:
 
 let
+  assertMsg = (import <nixpkgs-unstable> { config = {}; overlays = []; }).lib.assertMsg;
+
   charles_ssl_cert_path     = /private/private-home-files/.charles/ca/charles-proxy-ssl-proxying-certificate.pem;
   publica_dev_ssl_ca_path   = /code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/ca.crt;
   publica_dev_ssl_cert_path = /code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/publica.dev.crt;
@@ -81,10 +83,10 @@ let
 
 in
 
-assert lib.assertMsg (builtins.pathExists charles_ssl_cert_path) "Charles certificate was not found";
-assert lib.assertMsg (builtins.pathExists publica_dev_ssl_ca_path) "Publica CA was not found";
-assert lib.assertMsg (builtins.pathExists publica_dev_ssl_cert_path) "Publica certificate was not found";
-assert lib.assertMsg (builtins.pathExists publica_dev_ssl_key_path) "Publica key was not found";
+assert assertMsg (builtins.pathExists charles_ssl_cert_path) "Charles certificate was not found";
+assert assertMsg (builtins.pathExists publica_dev_ssl_ca_path) "Publica CA was not found";
+assert assertMsg (builtins.pathExists publica_dev_ssl_cert_path) "Publica certificate was not found";
+assert assertMsg (builtins.pathExists publica_dev_ssl_key_path) "Publica key was not found";
 
 {
   # Add the extra hosts

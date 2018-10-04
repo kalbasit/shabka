@@ -3,6 +3,17 @@
 let
   myFunctions = pkgs.callPackage ./plugins/functions {};
 in {
+
+  home.packages = with pkgs; [
+    # packages needed by the extract plugin
+    # TODO: move this to the extract plugin instead!
+    bzip2
+    gnutar
+    gzip
+    p7zip
+  ];
+
+
   programs.zsh = {
     enable = true;
 
