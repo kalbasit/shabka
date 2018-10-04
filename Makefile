@@ -1,4 +1,4 @@
-.PHONY: all update update-nixpkgs
+.PHONY: all add-channels update-channels
 
 HOSTNAME ?= $(shell hostname -s)
 
@@ -6,9 +6,9 @@ NIXOS_REBUILD=./lib/shell/bin/nixos-rebuild.sh
 NIXOS_REBUILD_OPERATIONS = switch boot test build dry-build dry-activate build-vm build-vm-with-bootloader
 .PHONY: $(NIXOS_REBUILD_OPERATIONS)
 
-all: build add-channels update-channels
+all: build
 
-$(NIXOS_REBUILD_OPERATIONS): add-channels update-channels
+$(NIXOS_REBUILD_OPERATIONS):
 	@echo ">>> Running nixos-rebuild $@"
 	@$(NIXOS_REBUILD) $(HOSTNAME) $@
 
