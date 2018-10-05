@@ -4,6 +4,8 @@ let
 
 in {
   imports = [
+    ../../overlays
+
     ../modules/dropbox
     ../modules/lowbatt
 

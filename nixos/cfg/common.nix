@@ -2,20 +2,18 @@
 
 {
   imports = [
+    ../../overlays
+
     ./colemak.nix
     ./gnupg.nix
     ./nix.nix
     ./tmux.nix
     ./users.nix
     ./version.nix
+
   ] ++ (if builtins.pathExists /private then [
     ./openvpn/client/expressvpn
   ] else []);
-
-  # load the overlays that we need at the very top-level
-  nixpkgs.overlays = [
-    (import ../../overlays)
-  ];
 
   # allow unfree software on all machines
   nixpkgs.config.allowUnfree = true;

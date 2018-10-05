@@ -1,31 +1,56 @@
-self: super:
+{ ... }:
+
+with import <nixpkgs/lib>;
+with import ../util;
 
 let
-  nixpkgs-unstable = import <nixpkgs-unstable> { overlays = []; };
+  stableFilters = ["default.nix" "unstable.*" "python.*" "nodePackages" "haskellPackages"];
 
-  # pkgs is a function given a path will create a set {name = callPackage name}
-  pkgs = path:
-  let content = builtins.readDir path; in
-    builtins.listToAttrs
-      (map (n: {name = n; value = super.callPackage (path + ("/" + n)) {}; })
-      (builtins.filter (n: builtins.pathExists (path + ("/" + n + "/default.nix")))
-        (builtins.attrNames content)));
+  # TODO: it still goes into the nodePackages folder for some reason
+  # stable = filteredModules stableFilters ./.;
+  stable = [];
 
-  myPkgs = pkgs ../pkgs;
-in
-myPkgs // {
-  # other overlay code goes here
+  unstable = [(self: super:
+    let
+      pinnedVersion = builtins.fromJSON (builtins.readFile ../external/nixpkgs-version.json);
+      pinnedPkgs = builtins.fetchGit {
+        inherit (pinnedVersion) url rev;
 
-  # import packages from unstable
-  gitAndTools = super.gitAndTools // {
-    git-appraise = nixpkgs-unstable.gitAndTools.git-appraise;
-  };
+        ref = "{{ref}}";
+      };
+    in {
+      unstable = import pinnedPkgs {
+        config = {};
+        overlays = python3 ++ (filteredModules [] ./unstable);
+      };
+    })];
 
-  # timewarrior errors out if it can't write the config file, even though it's tracked by Nix
-  # If timewarrior.cfg is not writable, timew errors out with Insufficient permissions for '/home/kalbasit/.timewarrior/timewarrior.cfg'.
-  # I believe the root cause is https://github.com/GothenburgBitFactory/timewarrior/blob/004afd64a5556ba3d35fd99c14d82f9b3ca64f1b/src/init.cpp#L183-L186
-  # TODO: file a ticket upstream, and try to fix it with an overlay
-  timewarrior = super.timewarrior.overrideAttrs (oa: {
-    patches = [./timewarrior-no-write-config-file.patch];
-  });
+  # TODO: this is erroring out because it can't find the python3 folder.
+  python3 = [];
+  # python3 = [(self: super: {
+  #   python3 = super.python3.override (old:
+  #     let
+  #       po = old.packageOverrides or (self: super: {});
+  #       pythonModules = filteredModules [] ./python3;
+  #       pythonPackages = map (m: m self) pythonModules;
+  #     in {
+  #       packageOverrides =
+  #         foldl' composeExtensions (self: super: {}) pythonPackages;
+  #     }
+  #   );
+  # })];
+
+  pkgs = [(self: super: recCallPackage ../pkgs)];
+
+in {
+  nixpkgs.overlays = pkgs ++ stable ++ unstable ++ [
+    # TODO: move these to follow python3 above
+    (import ./nodePackages)
+    (import ./haskellPackages)
+
+    # TODO once stable is fixed, remove these
+    (import ./git-appraise.nix)
+    (import ./timewarrior.nix)
+  ];
 }
+
