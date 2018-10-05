@@ -3,6 +3,7 @@
 {
   imports = [
     ./colemak.nix
+    ./gnupg.nix
     ./nix.nix
     ./tmux.nix
     ./users.nix
@@ -10,6 +11,9 @@
   ] ++ (if builtins.pathExists /private then [
     ./openvpn/client/expressvpn
   ] else []);
+
+  # Enable GnuPG support
+  mine.gnupg.enable = true;
 
   # load the overlays that we need at the very top-level
   nixpkgs.overlays = [
@@ -48,10 +52,6 @@
     })
     neovim
   ];
-
-  # Enable GnuPG support
-  programs.gnupg.agent.enable = true;
-  programs.gnupg.agent.enableBrowserSocket = true;
 
   # Synchronise the clock with NTP
   # TODO: figure out why NTP is getting stuck on shutdown.
