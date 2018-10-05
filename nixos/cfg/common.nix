@@ -12,9 +12,6 @@
     ./openvpn/client/expressvpn
   ] else []);
 
-  # Enable GnuPG support
-  mine.gnupg.enable = true;
-
   # load the overlays that we need at the very top-level
   nixpkgs.overlays = [
     (import ../../overlays)

@@ -24,6 +24,12 @@
     ../../cfg/openvpn/client/nasreddine/hades.nix
   ] else []);
 
+  # Enable Tmux
+  mine.tmux.enable = true;
+
+  # Enable GnuPG support
+  mine.gnupg.enable = true;
+
   # Enable VirtualBox and Docker virtualisation services.
   mine.virtualisation.docker.enable = true;
   mine.virtualisation.virtualbox.enable = true;
