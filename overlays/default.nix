@@ -4,7 +4,7 @@ with import <nixpkgs/lib>;
 with import ../util;
 
 let
-  stableFilters = ["default.nix" "unstable.*" "python.*" "nodePackages" "haskellPackages"];
+  stableFilters = ["default.nix" "unstable.*" "python.*" "nodePackages" "haskellPackages" "pkgs"];
 
   # TODO: it still goes into the nodePackages folder for some reason
   # stable = filteredModules stableFilters ./.;
@@ -15,13 +15,11 @@ let
       pinnedVersion = builtins.fromJSON (builtins.readFile ../external/nixpkgs-version.json);
       pinnedPkgs = builtins.fetchGit {
         inherit (pinnedVersion) url rev;
-
-        ref = "{{ref}}";
       };
     in {
       unstable = import pinnedPkgs {
         config = {};
-        overlays = python3 ++ (filteredModules [] ./unstable);
+        overlays = [];#python3 ++ (filteredModules [] ./unstable);
       };
     })];
 
@@ -40,7 +38,7 @@ let
   #   );
   # })];
 
-  pkgs = [(self: super: recCallPackage ../pkgs)];
+  pkgs = [(self: super: recCallPackage pkgs)];
 
 in {
   nixpkgs.overlays = pkgs ++ stable ++ unstable ++ [

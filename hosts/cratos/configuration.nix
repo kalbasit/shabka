@@ -1,5 +1,3 @@
-{ config, pkgs, lib, ... }:
-
 {
   imports = [
     ../../modules/nixos
@@ -7,6 +5,10 @@
     ./hardware-configuration.nix
     ./home.nix
   ];
+
+  mine.printing.enable = true;
+  mine.workstation.enable = true;
+  mine.workstation.publica.enable = true;
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database

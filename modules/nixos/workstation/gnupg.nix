@@ -2,12 +2,12 @@
 
 with lib;
 
-let
-  cfg = config.mine.gnupg;
-in {
-  options.mine.gnupg.enable = mkEnableOption "Enable GnuPG";
-  config = mkIf cfg.enable {
+{
+  options.mine.workstation.gnupg.enable = mkEnableOption "Enable GnuPG";
+
+  config = mkIf config.mine.workstation.gnupg.enable {
     programs.gnupg.agent.enable = true;
     programs.gnupg.agent.enableBrowserSocket = true;
   };
 }
+
