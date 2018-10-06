@@ -1,19 +1,6 @@
-{ config, pkgs, ...}:
+{ pkgs, ... }:
 
 {
-  imports = [
-    (import <home-manager> {}).nixos
-  ];
-
-  # configure the kalbasit user using home-manager
-  home-manager.users.kalbasit = import ../../home/cfg;
-
-  # enable zsh
-  programs.zsh.enable = true;
-
-  # set the default to zsh for all users
-  users.defaultUserShell = "/run/current-system/sw/bin/zsh";
-
   # do not allow the users to be mutated
   users.mutableUsers = false;
 
@@ -27,6 +14,9 @@
     ];
   };
 
+  # set the initial password of the root user
+  security.initialRootPassword = "$6$0bx5eAEsHJRxkD8.$gJ7sdkOOJRf4QCHWLGDUtAmjHV/gJxPQpyCEtHubWocHh9O7pWy10Frkm1Ch8P0/m8UTUg.Oxp.MB3YSQxFXu1";
+
   # define the users
   users.users.kalbasit = {
     extraGroups = [
@@ -39,6 +29,7 @@
       "wheel"
     ];
 
+    shell = pkgs.zsh;
     hashedPassword = "$6$0bx5eAEsHJRxkD8.$gJ7sdkOOJRf4QCHWLGDUtAmjHV/gJxPQpyCEtHubWocHh9O7pWy10Frkm1Ch8P0/m8UTUg.Oxp.MB3YSQxFXu1";
     isNormalUser = true;
     uid = 1026;
