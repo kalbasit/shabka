@@ -6,6 +6,8 @@
     ./home.nix
   ];
 
+  networking.hostName = "cratos";
+
   mine.printing.enable = true;
   mine.workstation.enable = true;
   mine.workstation.publica.enable = true;
@@ -40,9 +42,6 @@
 #
 #   # boot the latest kernel
 #   boot.kernelPackages = pkgs.linuxPackages_latest;
-#
-#   # Define your hostname.
-#   networking.hostName = "cratos";
 #
 #   # select a console font that's helpful in HiDPi in the console
 #   i18n.consoleFont = "latarcyrheb-sun32";
