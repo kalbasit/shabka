@@ -38,7 +38,7 @@ let
   #   );
   # })];
 
-  pkgs = [(self: super: recCallPackage pkgs)];
+  pkgs = [(self: super: recCallPackage ./pkgs)];
 
 in {
   nixpkgs.overlays = pkgs ++ stable ++ unstable ++ [
