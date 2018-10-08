@@ -9,7 +9,7 @@ function compute_nix_path() {
 
 	# add the nixos-config to the new_nix_path if /etc/NIXOS is found
 	if [[ -f /etc/NIXOS ]]; then
-		new_nix_path="${new_nix_path}:nixos-config=${system_path}/nixos/machines/${machine}/configuration.nix"
+		new_nix_path="${new_nix_path}:nixos-config=${system_path}/hosts/${machine}/configuration.nix"
 	fi
 
 	echo "${new_nix_path}"

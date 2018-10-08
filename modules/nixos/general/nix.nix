@@ -19,4 +19,3 @@
     useSandbox = true;
   };
 }
-
