@@ -98,10 +98,6 @@ in {
 #   # boot the latest kernel
 #   boot.kernelPackages = pkgs.linuxPackages_latest;
 #
-#   # select a console font
-#   i18n.consoleFont = "Lat2-Terminus16";
-#   boot.earlyVconsoleSetup = true;
-#
 #   # put /tmp on tmpfs
 #   boot.tmpOnTmpfs = true;
 #
