@@ -26,30 +26,7 @@ in {
     ./zsh
   ];
 
-  # configure GTK icon theme to fix missing icons issue
-  # https://github.com/NixOS/nixpkgs/issues/32730#issuecomment-368310621
-  gtk = {
-    enable = true;
-    iconTheme = { package = pkgs.hicolor_icon_theme; name = "hicolor"; };
-  };
 
-  # set the keyboard layout and variant
-  home.keyboard.layout = "us";
-  home.keyboard.variant = "colemak";
-
-  services.gpg-agent = {
-    enable = true;
-
-    defaultCacheTtl = 68400;
-    maxCacheTtl = 68400;
-  };
-
-  # enable the screen locker
-  services.screen-locker = {
-    enable = true;
-    lockCmd = "${pkgs.i3lock-color}/bin/i3lock-color --clock --color=606060";
-    inactiveInterval = 15;
-  };
 
   # enable Dropbox
   services.dropbox.enable = true;

@@ -3,5 +3,7 @@
     imports = [
       ../../modules/home
     ];
+
+    mine.workstation.enable = true;
   };
 }
