@@ -32,20 +32,6 @@ in {
     <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
   ];
 
-  boot.loader.efi.canTouchEfiVariables = true;
-
-  boot.loader.grub = {
-    configurationLimit = 30;
-    device = "nodev";
-    efiSupport = true;
-    enable = true;
-    enableCryptodisk = true;
-  };
-
-  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod" ];
-  boot.kernelModules = [ "kvm-intel" ];
-  boot.extraModulePackages = [ ];
-
   boot.initrd.luks.devices = {
     cryptkey = {
       device = "/dev/disk/by-uuid/12ada2e7-bdfe-4bdf-9335-bc26d7404a10";
@@ -103,10 +89,7 @@ in {
     };
   };
 
-  swapDevices =
-    [ { device = "/dev/disk/by-uuid/f58da878-7e18-430e-ad8c-321f63c61a4e"; }
-    ];
-
-  nix.maxJobs = lib.mkDefault 8;
-  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
+  swapDevices = [
+    { device = "/dev/disk/by-uuid/f58da878-7e18-430e-ad8c-321f63c61a4e"; }
+  ];
 }
