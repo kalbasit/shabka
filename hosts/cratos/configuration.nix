@@ -10,7 +10,9 @@ assert (builtins.pathExists /private);
 
   networking.hostName = "cratos";
 
+  mine.openvpn.client.expressvpn.enable = true;
   mine.printing.enable = true;
+  mine.tmux.enable = true;
   mine.workstation.enable = true;
   mine.workstation.publica.enable = true;
 
