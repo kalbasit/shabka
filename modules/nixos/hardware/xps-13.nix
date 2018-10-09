@@ -9,14 +9,13 @@ with lib;
     boot.extraModulePackages = [ ];
 
     boot.loader.systemd-boot.editor = false;
-    boot.loader.systemd-boot.enable = true;
-
-    boot.loader.efi.canTouchEfiVariables = true;
 
     nix.maxJobs = lib.mkDefault 12;
     powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
     services.xserver.videoDrivers = lib.mkForce ["modesetting"];
+
+    boot.kernelPackages = pkgs.linuxPackages_latest;
   };
 }
 

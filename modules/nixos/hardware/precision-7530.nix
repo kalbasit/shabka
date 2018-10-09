@@ -17,5 +17,9 @@ with lib;
     powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
     services.xserver.videoDrivers = lib.mkForce ["modesetting"];
+
+    boot.kernelPackages = pkgs.linuxPackages_latest;
+
+    i18n.consoleFont = "Lat2-Terminus16";
   };
 }
