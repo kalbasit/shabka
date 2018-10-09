@@ -1,7 +1,7 @@
 {
   home-manager.users.kalbasit = { ... }: {
     imports = [
-      ../../modules/home/linux
+      ../../modules/home
     ];
   };
 }
