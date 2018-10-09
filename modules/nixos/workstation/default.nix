@@ -40,6 +40,7 @@ with import ../../../util;
       "redshift"
       "snapper"
       "sound"
+      "teamviewer"
       "virtualbox"
     ];
   };

@@ -88,9 +88,6 @@ assert (builtins.pathExists /private);
 #     HandlePowerKey=suspend
 #   '';
 #
-#   # enable TeamViewer
-#   services.teamviewer.enable = true;
-#
 #   # Enable fwupd
 #   services.fwupd.enable = true;
 #
