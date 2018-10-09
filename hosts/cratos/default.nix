@@ -85,11 +85,6 @@ assert (builtins.pathExists /private);
 #
 #   # List services that you want to enable:
 #
-#   # The power button should trigger suspend
-#   services.logind.extraConfig = ''
-#     HandlePowerKey=suspend
-#   '';
-#
 #   # add my custom certificates
 #   security.pki.certificates = [
 #     # Charles proxy located at /home/kalbasit/.charles/ca/charles-proxy-ssl-proxying-certificate.pem
