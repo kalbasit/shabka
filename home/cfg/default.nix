@@ -146,6 +146,9 @@ in {
 
     xsel
 
+    # zoom for meetings
+    zoom-us
+
     # Games
     _2048-in-terminal
   ];
