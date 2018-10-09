@@ -2,16 +2,18 @@
 
 with lib;
 
-let
+{
+  config = mkIf (config.mine.hardware.machine == "precision-7530") {
+    boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "usbhid" "sd_mod" ];
+    boot.kernelModules = [ "kvm-intel" ];
+    boot.extraModulePackages = [ ];
 
-  pinnedNH = import ../../../external/nixos-hardware.nix;
+    boot.loader.systemd-boot.editor = false;
+    boot.loader.systemd-boot.enable = true;
 
-in {
-  # config = mkIf (config.mine.hardware.machine == "precision-7530") {
-    imports = [
-      "${pinnedNH}/common/cpu/intel"
-      "${pinnedNH}/common/pc/laptop"
-      "${pinnedNH}/common/pc/laptop/ssd"
-    ];
-  # };
+    boot.loader.efi.canTouchEfiVariables = true;
+
+    nix.maxJobs = lib.mkDefault 12;
+    powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
+  };
 }

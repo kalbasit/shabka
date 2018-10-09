@@ -1,10 +1,19 @@
 assert (builtins.pathExists /private);
 
-{
+let
+
+  pinnedNH = import ../../external/nixos-hardware.nix;
+
+in {
   imports = [
+    ./hardware-configuration.nix
+
+    "${pinnedNH}/common/cpu/intel"
+    "${pinnedNH}/common/pc/laptop"
+    "${pinnedNH}/common/pc/laptop/ssd"
+
     ../../modules/nixos
 
-    ./hardware-configuration.nix
     ./home.nix
   ];
 
