@@ -1,12 +1,6 @@
 let
 
-  homeManager = let
-    pinnedVersion = builtins.fromJSON (builtins.readFile ../../../external/home-manager-version.json);
-    pinnedHM = builtins.fetchGit {
-      inherit (pinnedVersion) url rev;
-    };
-  in
-    pinnedHM;
+  homeManager = import ../../../external/home-manager.nix;
 
 in {
   imports = [
