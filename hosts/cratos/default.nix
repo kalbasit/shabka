@@ -18,6 +18,8 @@ assert (builtins.pathExists /private);
   mine.workstation.enable = true;
   mine.workstation.publica.enable = true;
 
+  mine.hardware.machine = "xps-13";
+
   services.openvpn.servers = {
     client-nasreddine = {
       autoStart = false;
@@ -87,9 +89,6 @@ assert (builtins.pathExists /private);
 #   services.logind.extraConfig = ''
 #     HandlePowerKey=suspend
 #   '';
-#
-#   # set the video drivers to modesetting so no other drivers are loaded
-#   services.xserver.videoDrivers = ["modesetting"];
 #
 #   # add my custom certificates
 #   security.pki.certificates = [
