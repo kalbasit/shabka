@@ -146,6 +146,8 @@ in {
 
     weechat
 
+    xsel
+
     # Games
     _2048-in-terminal
   ];
