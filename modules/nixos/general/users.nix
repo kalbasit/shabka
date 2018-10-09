@@ -17,6 +17,11 @@
   # set the initial password of the root user
   security.initialRootPassword = "$6$0bx5eAEsHJRxkD8.$gJ7sdkOOJRf4QCHWLGDUtAmjHV/gJxPQpyCEtHubWocHh9O7pWy10Frkm1Ch8P0/m8UTUg.Oxp.MB3YSQxFXu1";
 
+  programs.zsh = {
+    enable = true;
+    enableCompletion = true;
+  };
+
   # define the users
   users.users.kalbasit = {
     extraGroups = [
