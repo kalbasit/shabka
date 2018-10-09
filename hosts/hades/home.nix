@@ -5,5 +5,6 @@
     ];
 
     mine.workstation.enable = true;
+    mine.batteryNotifier.enable = true;
   };
 }

@@ -1,22 +1,11 @@
-{ config, lib, pkgs, ...}:
+{ config, pkgs, lib, ... }:
 
 with lib;
 
-let
-  cfg = config.services.dropbox;
-in {
-  options = {
-    services.dropbox = {
-      enable = mkOption {
-        default = false;
-        description = ''
-            Whether to enable Dropbox.
-        '';
-      };
-    };
-  };
+{
+  options.mine.workstation.dropbox.enable = mkEnableOption "Enable Dropbox";
 
-  config = mkIf cfg.enable {
+  config = mkIf config.mine.workstation.dropbox.enable {
     systemd.user.services.dropbox = {
       Unit = {
         Description = "Dropbox";

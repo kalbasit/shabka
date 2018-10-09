@@ -3,7 +3,7 @@
 with lib;
 
 {
-  options.mine.workstation.locker.enable = mkEnableOption "Enable GnuPG";
+  options.mine.workstation.locker.enable = mkEnableOption "Enable screen auto-locker";
 
   config = mkIf config.mine.workstation.locker.enable {
     services.screen-locker = {

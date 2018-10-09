@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ...}:
+{ config, pkgs, lib, ...}:
 
 with lib;
 
 let
-  cfg = config.services.batteryNotifier;
+  cfg = config.mine.batteryNotifier;
+
   script = pkgs.writeTextFile {
     name = "unit-script";
     executable = true;
@@ -30,32 +31,30 @@ let
   };
 
 in {
-  options = {
-    services.batteryNotifier = {
-      enable = mkOption {
-        default = false;
-        description = ''
+  options.mine.batteryNotifier = {
+    enable = mkOption {
+      default = false;
+      description = ''
           Whether to enable battery notifier.
-        '';
-      };
-      device = mkOption {
-        default = "BAT0";
-        description = ''
+      '';
+    };
+    device = mkOption {
+      default = "BAT0";
+      description = ''
           Device to monitor.
-        '';
-      };
-      notifyCapacity = mkOption {
-        default = 10;
-        description = ''
+      '';
+    };
+    notifyCapacity = mkOption {
+      default = 10;
+      description = ''
           Battery level at which a notification shall be sent.
-        '';
-      };
-      hibernateCapacity = mkOption {
-        default = 5;
-        description = ''
+      '';
+    };
+    hibernateCapacity = mkOption {
+      default = 5;
+      description = ''
           Battery level at which a hibernate unless connected shall be sent.
-        '';
-      };
+      '';
     };
   };
 

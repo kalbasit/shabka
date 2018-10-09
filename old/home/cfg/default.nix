@@ -27,13 +27,6 @@ in {
   ];
 
 
-
-  # enable Dropbox
-  services.dropbox.enable = true;
-
-  # enable batteryNotifier
-  services.batteryNotifier.enable = true;
-
   # Install and enable Keybase
   services.keybase.enable = true;
   services.kbfs.enable = true;
