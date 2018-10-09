@@ -2,11 +2,10 @@
 
 with lib;
 
-let cfg = config.mine.virtualisation.virtualbox;
-in {
-  options.mine.virtualisation.virtualbox.enable = mkEnableOption "Enable VirtualBox";
+{
+  options.mine.workstation.virtualbox.enable = mkEnableOption "Enable VirtualBox";
 
-  config = mkIf cfg.enable {
+  config = mkIf config.mine.workstation.virtualbox.enable {
     # Enable Virtualbox support
     virtualisation.virtualbox.host.enable = true;
 
@@ -14,3 +13,4 @@ in {
     nixpkgs.config.virtualbox.enableExtensionPack = true;
   };
 }
+
