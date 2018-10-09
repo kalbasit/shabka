@@ -43,4 +43,4 @@ if [[ "${command}" == "switch" ]] || [[ "${command}" == "boot" ]]; then
 	require_clean_work_tree ${command} "Please commit or stash all changes and try again."
 fi
 
-nixos-rebuild "${command}"
+nixos-rebuild "${command}" --show-trace
