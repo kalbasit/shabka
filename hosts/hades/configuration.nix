@@ -9,6 +9,7 @@
   networking.hostName = "hades";
 
   mine.printing.enable = true;
+  mine.tmux.enable = true;
   mine.workstation.enable = true;
   mine.workstation.publica.enable = true;
 
