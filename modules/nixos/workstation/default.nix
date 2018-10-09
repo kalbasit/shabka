@@ -33,7 +33,7 @@ with import ../../../util;
     };
 
     mine.workstation = enableMultiple [
-      "fonts" "networking" "power" "sound" "gnupg"
+      "fonts" "networking" "power" "sound" "gnupg" "redshift"
     ];
   };
 }

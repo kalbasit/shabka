@@ -4,6 +4,7 @@ with lib;
 
 {
   options.mine.workstation.fonts.enable = mkEnableOption "workstation.fonts";
+
   config = mkIf config.mine.workstation.fonts.enable {
     fonts = {
       enableFontDir = true;
