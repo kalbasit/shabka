@@ -1,7 +1,9 @@
-{ pkgs, ... }:
+{ config, pkgs, lib, ... }:
+
+with lib;
 
 let
-  i3Support = pkgs.stdenv.mkDerivation rec {
+  i3Support = pkgs.stdenvNoCC.mkDerivation rec {
     name = "rofi-i3-support-${version}";
     version = "0.0.1";
     src = ./i3-support;
@@ -33,15 +35,19 @@ let
     '';
   };
 in {
-  programs.rofi = {
-    enable = true;
+  options.mine.workstation.rofi.enable = mkEnableOption "workstation.rofi";
 
-    extraConfig = ''
-      rofi.modi: window,run,ssh,drun,i3Workspaces:${i3Support}/bin/i3-switch-workspaces,i3RenameWorkspace:${i3Support}/bin/i3-rename-workspace,i3MoveContainer:${i3Support}/bin/i3-move-container
-    '';
+  config = mkIf config.mine.workstation.rofi.enable {
+    programs.rofi = {
+      enable = true;
 
-    font = "SourceCodePro 9";
+      extraConfig = ''
+        rofi.modi: window,run,ssh,drun,i3Workspaces:${i3Support}/bin/i3-switch-workspaces,i3RenameWorkspace:${i3Support}/bin/i3-rename-workspace,i3MoveContainer:${i3Support}/bin/i3-move-container
+      '';
 
-    theme = "Adapta-Nokto";
+      font = "SourceCodePro 9";
+
+      theme = "Adapta-Nokto";
+    };
   };
 }

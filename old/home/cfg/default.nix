@@ -9,20 +9,10 @@ in {
     ../modules/dropbox
     ../modules/lowbatt
 
-    ./alacritty
-    ./chromium
-    ./dunst
-    ./firefox
     ./git
-    ./greenclip
-    ./i3
     ./less
     ./neovim
-    ./rofi
     ./taskwarrior
-    ./termite
-    ./timewarrior
-    ./xsession
     ./zsh
   ];
 

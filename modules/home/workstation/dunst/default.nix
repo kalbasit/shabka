@@ -1,10 +1,15 @@
-{ pkgs, ... }:
+{ config, pkgs, lib, ... }:
+
+with lib;
 
 {
-  services.dunst = {
-    enable = true;
-    settings = {
-      global = {
+  options.mine.workstation.dunst.enable = mkEnableOption "workstation.dunst";
+
+  config = mkIf config.mine.workstation.dunst.enable {
+    services.dunst = {
+      enable = true;
+      settings = {
+        global = {
         # Allow a small subset of html markup:
         #   <b>bold</b>
         #   <i>italic</i>
@@ -16,7 +21,7 @@
         # If markup is not allowed, those tags will be stripped out of the
         # message.
         allow_markup = true;
-        plain_text = false;
+          plain_text = false;
 
         # The format of the message.  Possible variables are:
         #   %a  appname
@@ -204,4 +209,5 @@
       };
     };
   };
+};
 }

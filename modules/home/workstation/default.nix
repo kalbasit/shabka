@@ -9,9 +9,19 @@ with import ../../../util;
 
   config = mkIf config.mine.workstation.enable {
     mine.workstation = enableMultiple [
+      "alacritty"
+      "chromium"
       "dropbox"
+      "dunst"
+      "firefox"
       "gnupg"
+      "greenclip"
+      "i3"
       "locker"
+      "rofi"
+      "termite"
+      "timewarrior"
+      "xsession"
     ];
   };
 }
