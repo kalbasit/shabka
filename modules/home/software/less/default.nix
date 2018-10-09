@@ -1,8 +1,9 @@
-{ pkgs, ... }:
+{ config, pkgs, lib, ... }:
+
+with lib;
 
 let
-  # TODO: use runCommand here instead of full derivation
-  less-config = pkgs.stdenv.mkDerivation rec {
+  less-config = pkgs.stdenvNoCC.mkDerivation rec {
     name = "less-config";
 
     phases = [ "buildPhase" "installPhase" ];
@@ -21,5 +22,9 @@ let
   };
 
 in {
-  home.file.".less".source = "${less-config}/share/less/less";
+  options.mine.less.enable = mkEnableOption "less";
+
+  config = mkIf config.mine.less.enable {
+    home.file.".less".source = "${less-config}/share/less/less";
+  };
 }
