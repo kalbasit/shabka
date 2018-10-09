@@ -13,6 +13,7 @@ assert (builtins.pathExists /private);
   mine.openvpn.client.expressvpn.enable = true;
   mine.printing.enable = true;
   mine.tmux.enable = true;
+  mine.virtualisation.docker.enable = true;
   mine.workstation.enable = true;
   mine.workstation.publica.enable = true;
 
