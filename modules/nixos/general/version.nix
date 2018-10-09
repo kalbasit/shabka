@@ -23,7 +23,7 @@
 # }
 
 let
-  git_dir = ../../.git;
+  git_dir = ../../../.git;
   label = "nixos_${config.system.nixos.version}" + (if lib.pathIsDirectory git_dir then
     "-system_${builtins.substring 0 7 (lib.commitIdFromGitRepo git_dir)}"
   else "-story");
