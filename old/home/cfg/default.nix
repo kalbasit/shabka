@@ -13,7 +13,6 @@ in {
     ./less
     ./neovim
     ./taskwarrior
-    ./zsh
   ];
 
 
