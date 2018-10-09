@@ -5,6 +5,7 @@
     ];
 
     mine.workstation.enable = true;
+    mine.timewarrior.enable = true;
     mine.batteryNotifier.enable = true;
   };
 }

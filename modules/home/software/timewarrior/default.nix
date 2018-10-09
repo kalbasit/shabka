@@ -3,9 +3,9 @@
 with lib;
 
 {
-  options.mine.workstation.timewarrior.enable = mkEnableOption "workstation.timewarrior";
+  options.mine.timewarrior.enable = mkEnableOption "timewarrior";
 
-  config = mkIf config.mine.workstation.timewarrior.enable {
+  config = mkIf config.mine.timewarrior.enable {
     home.packages = with pkgs; [
       timewarrior
       python # needed by totals.py extension and by on-modify.timewarrior

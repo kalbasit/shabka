@@ -46,7 +46,6 @@ with import ../../../util;
       "locker"
       "rofi"
       "termite"
-      "timewarrior"
       "xsession"
     ];
   };
