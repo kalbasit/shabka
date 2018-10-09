@@ -1,10 +1,13 @@
-{ pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
-assert (builtins.pathExists /private/network-secrets/vpn/client/expressvpn/auth.txt);
-assert (builtins.pathExists /private/network-secrets/vpn/client/expressvpn/ca2.crt);
-assert (builtins.pathExists /private/network-secrets/vpn/client/expressvpn/client.crt);
-assert (builtins.pathExists /private/network-secrets/vpn/client/expressvpn/client.key);
-assert (builtins.pathExists /private/network-secrets/vpn/client/expressvpn/ta.key);
+with lib;
+with import ../../../../../util;
+
+assert assertMsg (builtins.pathExists /private/network-secrets/vpn/client/expressvpn/auth.txt) "/private/network-secrets does not exist.";
+assert assertMsg (builtins.pathExists /private/network-secrets/vpn/client/expressvpn/ca2.crt) "/private/network-secrets does not exist.";
+assert assertMsg (builtins.pathExists /private/network-secrets/vpn/client/expressvpn/client.crt) "/private/network-secrets does not exist.";
+assert assertMsg (builtins.pathExists /private/network-secrets/vpn/client/expressvpn/client.key) "/private/network-secrets does not exist.";
+assert assertMsg (builtins.pathExists /private/network-secrets/vpn/client/expressvpn/ta.key) "/private/network-secrets does not exist.";
 
 let
   remotes = {
@@ -182,4 +185,10 @@ let
     });
   };
 
-in { services.openvpn.servers = pkgs.lib.mapAttrs' remoteConfig remotes; }
+in {
+  options.mine.openvpn.client.expressvpn.enable = mkEnableOption "Enable ExpressionVPN client configuration";
+
+  config = mkIf config.mine.openvpn.client.expressvpn.enable {
+    services.openvpn.servers = pkgs.lib.mapAttrs' remoteConfig remotes;
+  };
+}
