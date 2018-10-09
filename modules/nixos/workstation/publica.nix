@@ -1,6 +1,7 @@
 { config, pkgs, lib, ... }:
 
 with lib;
+with import ../../../util;
 
 let
   charles_ssl_cert_path     = /private/private-home-files/.charles/ca/charles-proxy-ssl-proxying-certificate.pem;
@@ -83,10 +84,10 @@ let
 
 in
 
-assert /* assertMsg */ (builtins.pathExists charles_ssl_cert_path)      /* "Charles certificate was not found" */;
-assert /* assertMsg */ (builtins.pathExists publica_dev_ssl_ca_path)    /* "Publica CA was not found"          */;
-assert /* assertMsg */ (builtins.pathExists publica_dev_ssl_cert_path)  /* "Publica certificate was not found" */;
-assert /* assertMsg */ (builtins.pathExists publica_dev_ssl_key_path)   /* "Publica key was not found"         */;
+assert assertMsg (builtins.pathExists charles_ssl_cert_path) "Charles certificate was not found";
+assert assertMsg (builtins.pathExists publica_dev_ssl_ca_path) "Publica CA was not found";
+assert assertMsg (builtins.pathExists publica_dev_ssl_cert_path) "Publica certificate was not found";
+assert assertMsg (builtins.pathExists publica_dev_ssl_key_path)  "Publica key was not found";
 
 {
   options.mine.workstation.publica.enable = mkEnableOption "Enable Publica";
