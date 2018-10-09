@@ -118,9 +118,6 @@ in {
 #     HandlePowerKey=suspend
 #   '';
 #
-#   # Enable fwupd
-#   services.fwupd.enable = true;
-#
 #   # set the video drivers to modesetting so no other drivers are loaded
 #   services.xserver.videoDrivers = lib.mkForce ["modesetting"];
 # }
