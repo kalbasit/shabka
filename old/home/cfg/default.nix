@@ -33,10 +33,6 @@ in {
     iconTheme = { package = pkgs.hicolor_icon_theme; name = "hicolor"; };
   };
 
-  # setup nixpkgs config
-  nixpkgs.config = import ./nixpkgs-config.nix;
-  xdg.configFile."nixpkgs/config.nix".source = ./nixpkgs-config.nix;
-
   # set the keyboard layout and variant
   home.keyboard.layout = "us";
   home.keyboard.variant = "colemak";
