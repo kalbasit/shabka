@@ -10,6 +10,7 @@ assert (builtins.pathExists /private);
 
   networking.hostName = "hades";
 
+  mine.hardware.intel_backlight.enable = true;
   mine.openvpn.client.expressvpn.enable = true;
   mine.printing.enable = true;
   mine.tmux.enable = true;
@@ -115,10 +116,4 @@ assert (builtins.pathExists /private);
 #
 #   # set the video drivers to modesetting so no other drivers are loaded
 #   services.xserver.videoDrivers = lib.mkForce ["modesetting"];
-#
-#   # Give people part of the video group access to adjust the backlight
-#   services.udev.extraRules = ''
-#     ACTION=="add", SUBSYSTEM=="backlight", KERNEL=="intel_backlight", RUN+="${pkgs.coreutils}/bin/chgrp video /sys/class/backlight/%k/brightness"
-#     ACTION=="add", SUBSYSTEM=="backlight", KERNEL=="intel_backlight", RUN+="${pkgs.coreutils}/bin/chmod g+w /sys/class/backlight/%k/brightness"
-#   '';
 # }

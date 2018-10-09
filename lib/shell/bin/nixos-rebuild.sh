@@ -19,7 +19,7 @@ readonly hostname="$(hostname -s)"
 readonly machine="${1}"
 readonly command="${2}"
 
-if [[ ! -r "${SYSTEM_PATH}/hosts/${machine}/configuration.nix" ]]; then
+if [[ ! -r "${SYSTEM_PATH}/hosts/${machine}/default.nix" ]]; then
 	echo "ERR: configuration for machine ${machine} does not exist."
 	exit 1
 fi
