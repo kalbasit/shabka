@@ -1,52 +1,55 @@
 { pkgs, ... }:
 
 {
-    home.packages = with pkgs; [
-      amazon-ecr-credential-helper
-      docker-credential-gcr
+  home.packages = with pkgs; [
+    amazon-ecr-credential-helper
+    docker-credential-gcr
 
-      bat
+    bat
 
-      browsh
+    browsh
 
-      chroot-enter
+    chroot-enter
 
-      corgi
+    corgi
 
-      gist
+    gist
 
-      gnupg
+    gnupg
 
-      go_1_10
+    go_1_10
 
-      jq
+    jq
 
-      keybase
+    keybase
 
-      killall
+    killall
 
-      lastpass-cli
+    lastpass-cli
 
-      mercurial
+    mercurial
 
-      mosh
+    mosh
 
-      nixify
+    nixify
 
-      nix-index
+    nix-index
 
-      nixops
+    nixops
 
-      # curses-based file manager
-      lf
+    # curses-based file manager
+    lf
 
-      swm
+    swm
 
-      unzip
+    unzip
 
-      nix-zsh-completions
+    nix-zsh-completions
 
-      # Games
-      _2048-in-terminal
-    ];
+    # Games
+    _2048-in-terminal
+  ];
+
+  programs.direnv.enable = true;
+  programs.htop.enable = true;
 }

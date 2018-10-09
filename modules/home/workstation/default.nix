@@ -8,11 +8,9 @@ with import ../../../util;
   options.mine.workstation.enable = mkEnableOption "Workstation Profile";
 
   config = mkIf config.mine.workstation.enable {
-    # Install and enable Keybase
-    services.keybase.enable = true;
+    services.flameshot.enable = true;
     services.kbfs.enable = true;
-
-    # Enable the network applet
+    services.keybase.enable = true;
     services.network-manager-applet.enable = true;
 
     home.packages = with pkgs; [
