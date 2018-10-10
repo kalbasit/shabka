@@ -11,8 +11,6 @@ with lib;
       enableGhostscriptFonts = true;
       fonts = with pkgs; [
         powerline-fonts
-        source-code-pro
-        twemoji-color-font
       ];
     };
   };
