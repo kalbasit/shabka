@@ -25,12 +25,6 @@ in {
 
   mine.hardware.machine = "zeus";
 
-  services.nix-serve = lib.mkIf (builtins.pathExists /private/network-secrets/nix/caches/zeus.nasreddine.com.key) {
-    enable = true;
-    secretKeyFile = "/private/network-secrets/nix/caches/zeus.nasreddine.com.key";
-  };
-  networking.firewall.allowedTCPPorts = lib.mkIf (builtins.pathExists /private/network-secrets/nix/caches/zeus.nasreddine.com.key) [ 5000 ];
-
   # configure OpenSSH server to listen on the ADMIN interface
   services.openssh.listenAddresses = [ { addr = "172.25.250.3"; port = 22; } ];
 

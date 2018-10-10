@@ -10,7 +10,7 @@ with lib;
 
     boot.loader.systemd-boot.editor = false;
 
-    nix.maxJobs = lib.mkDefault 12;
+    nix.maxJobs = lib.mkDefault 4;
     powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
     services.xserver.videoDrivers = lib.mkForce ["modesetting"];
