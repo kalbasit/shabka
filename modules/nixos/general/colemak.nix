@@ -4,8 +4,8 @@ with lib;
 
 {
   config = {
+    boot.earlyVconsoleSetup = true;
     i18n.consoleKeyMap = "colemak/en-latin9";
-  } // mkIf config.mine.workstation.enable {
     services.xserver.layout = "us";
     services.xserver.xkbVariant = "colemak";
   };

@@ -1,3 +1,0 @@
-{
-  boot.earlyVconsoleSetup = true;
-}
