@@ -12,5 +12,6 @@
     mine.taskwarrior.enable = true;
     mine.timewarrior.enable = true;
     mine.workstation.enable = true;
+    mine.workstation.gnupg.enable = true;
   };
 }

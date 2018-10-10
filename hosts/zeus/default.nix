@@ -22,6 +22,7 @@ in {
   mine.openvpn.client.expressvpn.enable = true;
   mine.tmux.enable = true;
   mine.virtualisation.docker.enable = true;
+  mine.workstation.gnupg.enable = true;
 
   mine.hardware.machine = "zeus";
 
@@ -39,7 +40,7 @@ in {
 
   # disable the networkmanager on Zeus as it is really not needed since the
   # network does never change.
-  networking.networkmanager.enable = lib.mkForce false;
+  networking.networkmanager.enable = false;
 
   networking.vlans = {
     ifcns1 = {

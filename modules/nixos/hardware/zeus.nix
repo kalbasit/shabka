@@ -20,9 +20,9 @@ with lib;
 
     nix.maxJobs = lib.mkDefault 12;
 
-    services.xserver.videoDrivers = lib.mkForce ["modesetting"];
-
     boot.kernelPackages = pkgs.linuxPackages_latest;
+
+    mine.serial_console.enable = true;
 
     i18n.consoleFont = "Lat2-Terminus16";
   };
