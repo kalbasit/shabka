@@ -1,5 +1,3 @@
-{ ... }:
-
 with import <nixpkgs/lib>;
 with import ../util;
 
@@ -51,4 +49,3 @@ in {
     (import ./timewarrior.nix)
   ];
 }
-
