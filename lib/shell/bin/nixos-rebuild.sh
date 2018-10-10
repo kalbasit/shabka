@@ -19,7 +19,7 @@ readonly hostname="$(hostname -s)"
 readonly machine="${1}"
 readonly command="${2}"
 
-if [[ ! -r "${SYSTEM_PATH}/nixos/machines/${machine}/configuration.nix" ]]; then
+if [[ ! -r "${SYSTEM_PATH}/hosts/${machine}/default.nix" ]]; then
 	echo "ERR: configuration for machine ${machine} does not exist."
 	exit 1
 fi
@@ -43,4 +43,4 @@ if [[ "${command}" == "switch" ]] || [[ "${command}" == "boot" ]]; then
 	require_clean_work_tree ${command} "Please commit or stash all changes and try again."
 fi
 
-nixos-rebuild "${command}"
+nixos-rebuild "${command}" --show-trace

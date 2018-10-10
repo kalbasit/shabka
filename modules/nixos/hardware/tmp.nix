@@ -1,0 +1,3 @@
+{
+  boot.tmpOnTmpfs = true;
+}
