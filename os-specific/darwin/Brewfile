@@ -2,8 +2,9 @@ tap "homebrew/bundle"
 tap "homebrew/cask"
 tap "homebrew/core"
 
-cask "google-chrome"
-cask "iterm2"
+cask "google-chrome"  # my browser of choice
+cask "iterm2"         # my terminal of choice
+cask 'insomniax'      # keep the laptop awake
 
 # TODO: Whatever does not install via nix, install it via Brew. Below, is the contents of my old Brewfile.
 #
@@ -46,7 +47,6 @@ cask "iterm2"
 # cask 'google-photos-backup'
 # cask 'gopro-studio'
 # cask 'gpgtools'
-# cask 'insomniax'
 # cask 'istat-menus'
 # cask 'iterm2-beta'
 # cask 'java'
