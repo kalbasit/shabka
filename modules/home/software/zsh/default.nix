@@ -128,7 +128,7 @@ in {
       size = 1000000;
     };
 
-    initExtra = builtins.readFile (pkgs.substituteAll {
+    initExtra = (builtins.readFile (pkgs.substituteAll {
       src = ./init-extra.zsh;
 
       exa_bin      = "${pkgs.exa}/bin/exa";
@@ -136,8 +136,12 @@ in {
       fzf_out      = "${pkgs.fzf}";
       home_path    = "${config.home.homeDirectory}";
       jq_bin       = "${pkgs.jq}/bin/jq";
-      rbrowser_bin = "${pkgs.rbrowser}/bin/rbrowser";
-    });
+    })) + (if pkgs.stdenv.isDarwin then ''
+      # source the nix profiles
+      if [[ -r "${config.home.homeDirectory}/.nix-profile/etc/profile.d/nix.sh" ]]; then
+        source "${config.home.homeDirectory}/.nix-profile/etc/profile.d/nix.sh"
+      fi
+    '' else "");
 
     oh-my-zsh = {
       enable = true;

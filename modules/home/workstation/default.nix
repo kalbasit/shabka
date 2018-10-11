@@ -32,13 +32,17 @@ with import ../../../util;
       zoom-us
     ];
 
+    programs.zsh.initExtra = ''
+      # Set the browser to my relay browser
+      export BROWSER="${pkgs.rbrowser}/bin/rbrowser"
+    '';
+
     mine.workstation = enableMultiple [
       "alacritty"
       "chromium"
       "dropbox"
       "dunst"
       "firefox"
-      "gnupg"
       "greenclip"
       "i3"
       "locker"

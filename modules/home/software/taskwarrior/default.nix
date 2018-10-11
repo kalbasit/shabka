@@ -50,8 +50,7 @@ with lib;
       weekend = "task \\(due:saturday or due:sunday or due:mondayT00:00\\)";
     };
 
-    home.packages = with pkgs; [
-      tasksh
-    ];
+    # TODO: get tasksh compatible with Mac
+    home.packages = if pkgs.stdenv.isLinux then [ pkgs.tasksh ] else [];
   };
 }

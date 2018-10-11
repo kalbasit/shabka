@@ -15,6 +15,7 @@ configurations and by [NixOS][2] for the system.
 - [ZSH personal/work profiles](#zsh-personalwork-profiles)
   - [Profile](#profile)
   - [SSH Agents](#ssh-agents)
+- [Supported Operation systems](#supported-operation-systems)
 - [Author](#author)
 - [License](#license)
 
@@ -133,6 +134,12 @@ The keys for a particular profile should live under
 should live under `~/.ssh/personal` and not `~/.ssh`.
 
 ![My ~/.ssh folder](https://i.imgur.com/tNsMlks.png)
+
+# Supported Operation systems
+
+- NixOS is supported via the nixos module under modules/nixos. Use make
+- to build on it.
+- Darwin, see the [README](os-specific/darwin/README.md).
 
 # Author
 

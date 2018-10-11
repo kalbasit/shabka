@@ -220,9 +220,6 @@ fi
 # use nvim as VMAIL editor
 export VMAIL_VIM=nvim
 
-# Set the browser to my relay browser
-export BROWSER="@rbrowser_bin@"
-
 # Set the GLOBAL_GOPATH
 export SYSTEM_GOPATH="@home_path@/.filesystem"
 pathprepend PATH "${SYSTEM_GOPATH}/bin"

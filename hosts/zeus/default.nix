@@ -19,10 +19,10 @@ in {
 
   networking.hostName = "zeus";
 
+  mine.gnupg.enable = true;
   mine.openvpn.client.expressvpn.enable = true;
   mine.tmux.enable = true;
   mine.virtualisation.docker.enable = true;
-  mine.workstation.gnupg.enable = true;
 
   mine.hardware.machine = "zeus";
 

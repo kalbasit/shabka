@@ -6,6 +6,7 @@
 
     mine.batteryNotifier.enable = true;
     mine.git.enable = true;
+    mine.gnupg.enable = true;
     mine.less.enable = true;
     mine.neovim.enable = true;
     mine.pet.enable = true;

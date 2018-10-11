@@ -34,7 +34,6 @@ with import ../../../util;
 
     mine.workstation = enableMultiple [
       "fonts"
-      "gnupg"
       "networking"
       "power"
       "redshift"

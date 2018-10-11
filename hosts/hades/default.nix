@@ -19,6 +19,7 @@ in {
 
   networking.hostName = "hades";
 
+  mine.gnupg.enable = true;
   mine.hardware.intel_backlight.enable = true;
   mine.openvpn.client.expressvpn.enable = true;
   mine.printing.enable = true;
