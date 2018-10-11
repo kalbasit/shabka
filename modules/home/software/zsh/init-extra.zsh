@@ -193,7 +193,7 @@ if [[ -o interactive ]]; then
 fi
 
 # export the code path
-export CODE_PATH="${HOME}/code"
+export CODE_PATH="@home_path@/code"
 
 if [[ "$OSTYPE" = linux* ]]; then
 	# GPG_TTY is needed for gpg with pinentry-curses
@@ -207,14 +207,14 @@ if [[ "$OSTYPE" = darwin* ]]; then
 	eval "$(/usr/libexec/path_helper -s)"
 
 	# Export Github's token if it's readable.
-	if [[ -o interactive ]] && [[ -r "${HOME}/.github_token" ]]; then
-		export HOMEBREW_GITHUB_API_TOKEN="$(head -1 "${HOME}/.github_token")"
+	if [[ -o interactive ]] && [[ -r "@home_path@/.github_token" ]]; then
+		export HOMEBREW_GITHUB_API_TOKEN="$(head -1 "@home_path@/.github_token")"
 	fi
 fi
 
 # opsgenie
 if [[ -o interactive ]]; then
-	export LAMP_CONF_PATH="${HOME}/.config/lamp/opsgenie-integration.conf"
+	export LAMP_CONF_PATH="@home_path@/.config/lamp/opsgenie-integration.conf"
 fi
 
 # use nvim as VMAIL editor
@@ -224,18 +224,18 @@ export VMAIL_VIM=nvim
 export BROWSER="@rbrowser_bin@"
 
 # Set the GLOBAL_GOPATH
-export SYSTEM_GOPATH="${HOME}/.filesystem"
+export SYSTEM_GOPATH="@home_path@/.filesystem"
 pathprepend PATH "${SYSTEM_GOPATH}/bin"
 
 # Set MYFS to my filesystem
-export MYFS="${HOME}/.local"
+export MYFS="@home_path@/.local"
 
 # Set the editor
 export EDITOR=nvim
 export SUDO_EDITOR=nvim
 
 # Set the notmuch config
-export NOTMUCH_HOME="${HOME}/.mail/.notmuch"
+export NOTMUCH_HOME="@home_path@/.mail/.notmuch"
 export NOTMUCH_CONFIG="${NOTMUCH_HOME}/config"
 
 # Set the language support
@@ -269,7 +269,7 @@ if [[ -d @out_dir@/libexec ]]; then
 fi
 
 # add cargo
-pathprepend PATH "${HOME}/.cargo/bin"
+pathprepend PATH "@home_path@/.cargo/bin"
 
 #####################################################################
 # colors
@@ -334,7 +334,7 @@ if [[ -o interactive ]]; then
 
 		# only use coreutils ls if there is a dircolors customization present ($LS_COLORS or .dircolors file)
 		# otherwise, gls will use the default color scheme which is ugly af
-		[[ -n "$LS_COLORS" || -f "$HOME/.dircolors" ]] && gls --color -d . &>/dev/null && alias ls='gls --color=tty'
+		[[ -n "$LS_COLORS" || -f "@home_path@/.dircolors" ]] && gls --color -d . &>/dev/null && alias ls='gls --color=tty'
 	else
 		# For GNU ls, we use the default ls color theme. They can later be overwritten by themes.
 		if [[ -z "$LS_COLORS" ]]; then
@@ -697,7 +697,7 @@ if [[ -o interactive ]]; then
 		fi
 
 		# Load iterm2 shell integration
-		[[ -r "${HOME}/.iterm2_shell_integration.zsh" ]] && source "${HOME}/.iterm2_shell_integration.zsh"
+		[[ -r "@home_path@/.iterm2_shell_integration.zsh" ]] && source "@home_path@/.iterm2_shell_integration.zsh"
 	fi
 fi
 
@@ -722,7 +722,7 @@ if [[ -z "${ACTIVE_PROFILE}" || -z "${ACTIVE_STORY}" ]]; then
 fi
 
 # load the active profile only if one is available
-if [[ -n "${ACTIVE_PROFILE}" ]] && [[ -r "${HOME}/.zsh/profiles/${ACTIVE_PROFILE}.zsh" ]]; then
+if [[ -n "${ACTIVE_PROFILE}" ]] && [[ -r "@home_path@/.zsh/profiles/${ACTIVE_PROFILE}.zsh" ]]; then
 	sp "${ACTIVE_PROFILE}"
 fi
 
