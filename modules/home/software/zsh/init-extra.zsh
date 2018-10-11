@@ -193,7 +193,7 @@ if [[ -o interactive ]]; then
 fi
 
 # export the code path
-export CODE_PATH="/code"
+export CODE_PATH="${HOME}/code"
 
 if [[ "$OSTYPE" = linux* ]]; then
 	# GPG_TTY is needed for gpg with pinentry-curses

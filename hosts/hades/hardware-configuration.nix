@@ -37,13 +37,13 @@
       options = [ "subvol=@nixos/@home" ];
     };
 
-    "/code" = {
+    "/home/kalbasit/code" = {
       device = "/dev/disk/by-uuid/e2b2367b-f458-4c55-a3f0-87cef3366d62";
       fsType = "btrfs";
       options = [ "subvol=@code" "X-mount.mkdir=0700" ];
     };
 
-    "/private" = {
+    "/home/kalbasit/private" = {
       device = "/dev/disk/by-uuid/e2b2367b-f458-4c55-a3f0-87cef3366d62";
       fsType = "btrfs";
       options = [ "subvol=@private" "X-mount.mkdir=0700" ];
@@ -88,7 +88,7 @@
       options = [ "subvol=@arch/@home" ];
     };
 
-    "/mnt/arch/code" = {
+    "/mnt/arch/home/kalbasit/code" = {
       device = "/dev/disk/by-uuid/e2b2367b-f458-4c55-a3f0-87cef3366d62";
       fsType = "btrfs";
       options = [ "subvol=@code" ];

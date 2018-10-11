@@ -1,4 +1,4 @@
-assert (builtins.pathExists /private);
+assert (builtins.pathExists /home/kalbasit/private);
 
 let
 

@@ -38,7 +38,7 @@ function listWorkspaces() {
 	current_profile="$( echo "${current_workspaces}" | cut -d\@ -f1 )"
 	current_story="$( echo "${current_workspaces}" | cut -d\@ -f2 )"
 	if [[ "${current_story}" == "base" ]]; then
-		for dir in $(find "/code/${current_profile}/stories" -mindepth 1 -maxdepth 1); do
+		for dir in $(find "${HOME}/code/${current_profile}/stories" -mindepth 1 -maxdepth 1); do
 			if [[ -d "${dir}" ]]; then
 				elem="${current_profile}@$(basename "${dir}")"
 				if ! containsElement "${elem}" "${result[@]}"; then
@@ -49,7 +49,7 @@ function listWorkspaces() {
 	fi
 
 	# print out the list of available profiles
-	for dir in $(find "/code/" -mindepth 1 -maxdepth 1); do
+	for dir in $(find "${HOME}/code/" -mindepth 1 -maxdepth 1); do
 		if [[ -d "${dir}" ]] && [[ -d "${dir}/base" ]]; then
 			elem="$(basename "${dir}")@base"
 			if ! containsElement "${elem}" "${result[@]}"; then

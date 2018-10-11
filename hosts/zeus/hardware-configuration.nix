@@ -71,13 +71,13 @@ in {
       options = [ "subvol=@nixos/@home" ];
     };
 
-    "/code" = {
+    "/home/kalbasit/code" = {
       device = "/dev/disk/by-uuid/471c4bf2-14c9-4eef-a791-8beebfcfe31a";
       fsType = "btrfs";
       options = [ "subvol=@code" ];
     };
 
-    "/private" = {
+    "/home/kalbasit/private" = {
       device = "/dev/disk/by-uuid/471c4bf2-14c9-4eef-a791-8beebfcfe31a";
       fsType = "btrfs";
       options = [ "subvol=@private" ];

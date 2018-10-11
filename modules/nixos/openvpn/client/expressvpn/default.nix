@@ -3,11 +3,11 @@
 with lib;
 with import ../../../../../util;
 
-assert assertMsg (builtins.pathExists /private/network-secrets/vpn/client/expressvpn/auth.txt) "/private/network-secrets does not exist.";
-assert assertMsg (builtins.pathExists /private/network-secrets/vpn/client/expressvpn/ca2.crt) "/private/network-secrets does not exist.";
-assert assertMsg (builtins.pathExists /private/network-secrets/vpn/client/expressvpn/client.crt) "/private/network-secrets does not exist.";
-assert assertMsg (builtins.pathExists /private/network-secrets/vpn/client/expressvpn/client.key) "/private/network-secrets does not exist.";
-assert assertMsg (builtins.pathExists /private/network-secrets/vpn/client/expressvpn/ta.key) "/private/network-secrets does not exist.";
+assert assertMsg (builtins.pathExists /home/kalbasit/private/network-secrets/vpn/client/expressvpn/auth.txt) "/home/kalbasit/private/network-secrets does not exist.";
+assert assertMsg (builtins.pathExists /home/kalbasit/private/network-secrets/vpn/client/expressvpn/ca2.crt) "/home/kalbasit/private/network-secrets does not exist.";
+assert assertMsg (builtins.pathExists /home/kalbasit/private/network-secrets/vpn/client/expressvpn/client.crt) "/home/kalbasit/private/network-secrets does not exist.";
+assert assertMsg (builtins.pathExists /home/kalbasit/private/network-secrets/vpn/client/expressvpn/client.key) "/home/kalbasit/private/network-secrets does not exist.";
+assert assertMsg (builtins.pathExists /home/kalbasit/private/network-secrets/vpn/client/expressvpn/ta.key) "/home/kalbasit/private/network-secrets does not exist.";
 
 let
   remotes = {
@@ -177,11 +177,11 @@ let
       #    them, each on a new line, in the auth.txt file below.
       # 2) Download the ZIP file from step 4 and make them available to cert,
       #    key, tls-auth and ca below.
-      auth_user_pass = /private/network-secrets/vpn/client/expressvpn/auth.txt;
-      ca             = /private/network-secrets/vpn/client/expressvpn/ca2.crt;
-      client_cert    = /private/network-secrets/vpn/client/expressvpn/client.crt;
-      client_key     = /private/network-secrets/vpn/client/expressvpn/client.key;
-      tls_auth       = /private/network-secrets/vpn/client/expressvpn/ta.key;
+      auth_user_pass = /home/kalbasit/private/network-secrets/vpn/client/expressvpn/auth.txt;
+      ca             = /home/kalbasit/private/network-secrets/vpn/client/expressvpn/ca2.crt;
+      client_cert    = /home/kalbasit/private/network-secrets/vpn/client/expressvpn/client.crt;
+      client_key     = /home/kalbasit/private/network-secrets/vpn/client/expressvpn/client.key;
+      tls_auth       = /home/kalbasit/private/network-secrets/vpn/client/expressvpn/ta.key;
     });
   };
 
