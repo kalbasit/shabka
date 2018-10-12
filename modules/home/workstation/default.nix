@@ -46,6 +46,7 @@ with import ../../../util;
       "greenclip"
       "i3"
       "locker"
+      "mysql-workbench"
       "rofi"
       "termite"
       "xsession"
