@@ -34,6 +34,7 @@ with import ../../../util;
 
     mine.workstation = enableMultiple [
       "fonts"
+      "gnome-keyring"
       "networking"
       "power"
       "redshift"
