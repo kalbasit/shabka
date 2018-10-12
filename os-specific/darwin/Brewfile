@@ -2,9 +2,17 @@ tap "homebrew/bundle"
 tap "homebrew/cask"
 tap "homebrew/core"
 
-cask "google-chrome"  # my browser of choice
-cask "iterm2"         # my terminal of choice
-cask 'insomniax'      # keep the laptop awake
+cask "alfred"                     # spotlight replacement
+cask "charles"                    # Charles Proxy
+cask "google-chrome"              # my browser of choice
+cask "insomniax"                  # keep the laptop awake
+cask "iterm2"                     # my terminal of choice
+cask "sequel-pro"                 # MySQL frontend supporting connections through a tunnel
+cask "slack"                      # Team communication
+cask "teamviewer"                 # TeamViewer for remote login
+cask "virtualbox"                 # VirtualBox for VM
+cask "virtualbox-extension-pack"  # VirtualBox extensions
+cask "whatsapp"                   # WhatsApp application
 
 # TODO: Whatever does not install via nix, install it via Brew. Below, is the contents of my old Brewfile.
 #
@@ -21,7 +29,6 @@ cask 'insomniax'      # keep the laptop awake
 # # Casks
 # cask '1password'
 # cask 'league-of-legends' # GAME: http://na.leagueoflegends.com/en/
-# cask 'alfred'
 # cask 'angry-ip-scanner'
 # cask 'arduino'
 # cask 'arq'
@@ -29,7 +36,6 @@ cask 'insomniax'      # keep the laptop awake
 # cask 'balsamiq-mockups'
 # cask 'bitbar'
 # cask 'boom'
-# cask 'charles'
 # cask 'cleanmymac'
 # cask 'cyberduck'
 # cask 'dash'
@@ -69,28 +75,23 @@ cask 'insomniax'      # keep the laptop awake
 # cask 'real-vnc'
 # cask 'rstudio'
 # cask 'screenflick' # Screen recorder
-# cask 'sequel-pro' # MySQL frontend supporting connections through a tunnel
 # cask 'serial' # Serial Console communication
 # cask 'skype'
-# cask 'slack'
 # cask 'spotify'
 # cask 'sqlitebrowser'
 # cask 'steam'
 # cask 'synergy'
 # cask 'synology-cloud-station-drive'
 # cask 'synology-photo-station-uploader'
-# cask 'teamviewer'
 # cask 'telegram'
 # cask 'torbrowser'
 # cask 'transmission-remote-gui'
 # cask 'tunnelblick'
 # cask 'vagrant'
 # cask 'viber'
-# cask 'virtualbox'
 # cask 'viscosity'
 # cask 'vlc'
 # cask 'vyprvpn'
-# cask 'whatsapp'
 # cask 'wkhtmltopdf' # Required for transmuter
 # cask 'yubico-authenticator'
 # cask 'yubikey-neo-manager'
