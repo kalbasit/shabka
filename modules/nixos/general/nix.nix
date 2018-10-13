@@ -16,11 +16,8 @@ in {
     '';
 
     nixPath = [
-      # system
+      "nixos-config=/etc/nixos/configuration.nix"
       "system-path=${system-path}"
-
-      # machine-specific
-      "nixos-config=${system-path}/hosts/${config.networking.hostName}"
     ];
 
     optimise = {

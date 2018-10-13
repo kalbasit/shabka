@@ -19,6 +19,9 @@ let
         --subst-var-by jq_bin ${lib.getBin pkgs.jq}/bin/jq \
         --subst-var-by xsel_bin ${lib.getBin pkgs.xsel}/bin/xsel
 
+      substituteInPlace $out/git_require_clean_work_tree \
+        --subst-var-by git_bin ${lib.getBin pkgs.git}/bin/git
+
       substituteInPlace $out/git_gopath_formatted_repo_path \
         --subst-var-by git_bin ${lib.getBin pkgs.git}/bin/git \
         --subst-var-by perl_bin ${lib.getBin pkgs.perl}/bin/perl

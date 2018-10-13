@@ -1,11 +1,15 @@
-require_clean_work_tree () {
-    local action err
+#
+# vim:ft=zsh:
+#
 
-	git rev-parse --verify HEAD >/dev/null || exit 1
-	git update-index -q --ignore-submodules --refresh
+require_clean_work_tree () {
+	local action err
+
+	@git_bin@ rev-parse --verify HEAD >/dev/null || exit 1
+	@git_bin@ update-index -q --ignore-submodules --refresh
 	err=0
 
-	if ! git diff-files --quiet --ignore-submodules
+	if ! @git_bin@ diff-files --quiet --ignore-submodules
 	then
 		action=$1
 		case "$action" in
@@ -25,7 +29,7 @@ require_clean_work_tree () {
 		err=1
 	fi
 
-	if ! git diff-index --cached --quiet --ignore-submodules HEAD --
+	if ! @git_bin@ diff-index --cached --quiet --ignore-submodules HEAD --
 	then
 		if test $err = 0
 		then
