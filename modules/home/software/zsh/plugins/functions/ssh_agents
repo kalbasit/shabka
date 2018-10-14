@@ -38,7 +38,7 @@ function ssh_agents() {
 		# Add all of the keys
 		local key=
 		for key in $(find "${HOME}/.ssh/${SSH_AGENT_NAME}" -type l); do
-			if [[ -d "$(readlink -f "$key")" ]]; then
+			if [[ -d "$(@readlink_bin@ -f "$key")" ]]; then
 				continue
 			fi
 			debug "found a file located at ${key}"
