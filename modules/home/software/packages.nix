@@ -39,6 +39,8 @@ in {
 
     nix-index
 
+    nix-verify
+
     nixops
 
     # curses-based file manager
