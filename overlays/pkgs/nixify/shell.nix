@@ -12,8 +12,10 @@ in
 # This allows overriding pkgs by passing `--arg pkgs ...`
 { pkgs ? pinnedPkgs }:
 
-pkgs.mkShell {
-  buildInputs = with nixpkgs; [
+with pkgs;
+
+mkShell {
+  buildInputs = [
     # put packages here.
   ];
 }
