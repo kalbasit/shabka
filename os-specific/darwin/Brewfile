@@ -10,6 +10,7 @@ cask "iterm2"                     # my terminal of choice
 cask "sequel-pro"                 # MySQL frontend supporting connections through a tunnel
 cask "slack"                      # Team communication
 cask "teamviewer"                 # TeamViewer for remote login
+cask "keybase"                    # Keybase for accessing my encrypted repositories
 cask "virtualbox"                 # VirtualBox for VM
 cask "virtualbox-extension-pack"  # VirtualBox extensions
 cask "whatsapp"                   # WhatsApp application

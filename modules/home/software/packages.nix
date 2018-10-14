@@ -27,8 +27,6 @@ in {
 
     jq
 
-    keybase
-
     killall
 
     lastpass-cli
@@ -55,6 +53,8 @@ in {
     #
     # Linux applications
     #
+
+    keybase
 
     # Games
     _2048-in-terminal
