@@ -1,11 +1,16 @@
 { lib }:
 
-with import <home-manager/modules/lib/dag.nix> { inherit lib; };
+let
+
+  homeManager = import ../external/home-manager.nix;
+
+in
+
+with import "${homeManager}/modules/lib/dag.nix" { inherit lib; };
 
 {
   symlink = src: dst: dagEntryAfter ["installPackages"] ''
-    if [ ! -L ${dst} ]; then
-    ln -s ${src} ${dst}
-    fi
+    mkdir -p ${builtins.dirOf dst}
+    ln -Tsf ${src} ${dst}
   '';
 }
