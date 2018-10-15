@@ -38,14 +38,12 @@ let
 
   pkgs = [(self: super: recCallPackage ./pkgs)];
 
-in {
-  nixpkgs.overlays = pkgs ++ stable ++ unstable ++ [
-    # TODO: move these to follow python3 above
-    (import ./nodePackages)
-    (import ./haskellPackages)
+in pkgs ++ stable ++ unstable ++ [
+  # TODO: move these to follow python3 above
+  (import ./nodePackages)
+  (import ./haskellPackages)
 
-    # TODO once stable is fixed, remove these
-    (import ./git-appraise.nix)
-    (import ./timewarrior.nix)
-  ];
-}
+  # TODO once stable is fixed, remove these
+  (import ./git-appraise.nix)
+  (import ./timewarrior.nix)
+]

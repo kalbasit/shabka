@@ -1,5 +1,5 @@
 with import ../../util;
 
 {
-  imports = recImport ./. ++ [../../overlays];
+  imports = recImport ./.;
 }

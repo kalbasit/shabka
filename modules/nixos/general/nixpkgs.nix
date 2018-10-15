@@ -1,5 +1,4 @@
 {
-  nixpkgs.config = {
-    allowUnfree = true;
-  };
+  nixpkgs.config = { allowUnfree = true; };
+  nixpkgs.overlays = import ../../../overlays;
 }
