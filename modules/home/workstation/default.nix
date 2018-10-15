@@ -16,10 +16,6 @@ with import ../../../util;
     home.packages = with pkgs; [
       keybase-gui
 
-      # NOTE: Slack does not seem to find the rbrowser.desktop in
-      #       ~/.nix-profile/share/applications so you must manually create a
-      #       symlink to ~/.local/share/applications on bootstrap.
-      # ln -s ../../../.nix-profile/share/applications/rbrowser.desktop ~/.local/share/applications/rbrowser.desktop
       rbrowser
 
       remmina
@@ -31,6 +27,12 @@ with import ../../../util;
       # zoom for meetings
       zoom-us
     ];
+
+    home.activation = {
+      rbrowser-desktop-link = symlink
+        "${pkgs.rbrowser}/share/applications/rbrowser.desktop"
+        "${config.home.homeDirectory}/.local/share/applications/rbrowser.desktop";
+    };
 
     programs.zsh.initExtra = ''
       # Set the browser to my relay browser
