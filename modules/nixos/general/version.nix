@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 # TODO: make it work with worktree
 # let
@@ -29,5 +29,8 @@ let
   else "-story");
 
 in {
+  # git is required to compute the label within lib.commitIdFromGitRepo.
+  environment.systemPackages = [ pkgs.git ];
+
   system.nixos.label = label;
 }
