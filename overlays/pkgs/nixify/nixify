@@ -1,5 +1,8 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i bash -p nix-prefetch-git
+
+# vim:ft=sh:
+
 set -euo pipefail
 
 if [[ "${#}" -lt 1 ]]; then
