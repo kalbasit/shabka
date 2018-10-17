@@ -25,6 +25,15 @@ in {
       dates = [ "12:00" ];
     };
 
+    binaryCaches = [
+      "https://cache.nixos.org/"
+      "https://kalbasit.cachix.org"
+    ];
+    binaryCachePublicKeys = [
+      "kalbasit.cachix.org-1:cUhsmtACuuKMcExazyXxjhKzXUxf4Suwvt11jsHSfPM="
+    ];
+    trustedUsers = [ "root" "kalbasit" ];
+
     useSandbox = true;
   };
 }
