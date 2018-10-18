@@ -30,6 +30,7 @@ let
     "ctrl.publica.dev"     = 8060;
     "demo.publica.dev"     = 8124;
     "home.publica.dev"     = 7010;
+    "pbs.publica.dev"      = 8000;
     "js.publica.dev"       = 3002;
     "prebid.publica.dev"   = 9999;
     "rewriter.publica.dev" = 8061;
