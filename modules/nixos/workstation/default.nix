@@ -10,7 +10,7 @@ with import ../../../util;
   config = mkIf config.mine.workstation.enable {
     # set the BROWSER to my rbrowser
     # TODO: move this to the home
-    environment.variables.BROWSER = "${pkgs.rbrowser}/bin/rbrowser";
+    environment.variables.BROWSER = "${pkgs.nur.kalbasit.rbrowser}/bin/rbrowser";
 
     services.xserver = {
       autorun = true;

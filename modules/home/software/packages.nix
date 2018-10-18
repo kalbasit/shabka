@@ -15,8 +15,6 @@ in {
 
     browsh
 
-    chroot-enter
-
     corgi
 
     gist
@@ -35,18 +33,16 @@ in {
 
     mosh
 
-    nixify
+    nur.kalbasit.nixify
 
     nix-index
-
-    nix-verify
 
     nixops
 
     # curses-based file manager
     lf
 
-    swm
+    nur.kalbasit.swm
 
     unzip
 

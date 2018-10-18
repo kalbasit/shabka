@@ -36,9 +36,7 @@ let
   #   );
   # })];
 
-  pkgs = [(self: super: recCallPackage ./pkgs)];
-
-in pkgs ++ stable ++ unstable ++ [
+in stable ++ unstable ++ [
   # TODO: move these to follow python3 above
   (import ./nodePackages)
   (import ./haskellPackages)

@@ -153,7 +153,7 @@ with lib;
         dmenu = "${pkgs.rofi}/bin/rofi -dmenu -p dunst:";
 
         # Browser for opening urls in context menu.
-        browser = "${pkgs.rbrowser}/bin/rbrowser";
+        browser = "${pkgs.nur.kalbasit.rbrowser}/bin/rbrowser";
       };
 
       frame = {

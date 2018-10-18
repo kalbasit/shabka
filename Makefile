@@ -1,4 +1,4 @@
-.PHONY: all add-channels update-channels update update-nixpkgs update-nixos-hardware
+.PHONY: all add-channels update-channels update update-nixpkgs update-nixos-hardware update-kalbasit-nur
 
 all: add-channels update-channels
 
@@ -15,10 +15,13 @@ update-channels:
 	nix-channel --update
 	@echo
 
-update: update-nixpkgs update-nixos-hardware
+update: update-nixpkgs update-nixos-hardware update-kalbasit-nur
 
 update-nixpkgs:
 	nix-shell -p nix-prefetch-git --run 'nix-prefetch-git https://github.com/NixOS/nixpkgs-channels.git refs/heads/nixos-unstable' > external/nixpkgs-version.json
 
 update-nixos-hardware:
 	nix-shell -p nix-prefetch-git --run 'nix-prefetch-git https://github.com/NixOS/nixos-hardware.git refs/heads/master' > external/nixos-hardware-version.json
+
+update-kalbasit-nur:
+	nix-shell -p nix-prefetch-git --run 'nix-prefetch-git https://github.com/kalbasit/nur-packages.git refs/heads/master' > external/kalbasit-nur-version.json
