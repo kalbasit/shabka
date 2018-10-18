@@ -1,17 +1,24 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 let
 
-  pinnedKalbasit = import ../../../external/kalbasit-nur.nix;
+  pinnedNUR = import ../../../external/nur.nix;
+  pinnedKalbasitNUR = import ../../../external/kalbasit-nur.nix;
 
   configFile = pkgs.writeText "config.nix" ''
+    { pkgs, ... }:
+
     {
       allowUnfree = true;
 
       packageOverrides = pkgs: {
-        nur = {
-          kalbasit = import ${pinnedKalbasit} { inherit pkgs; };
-        };
+        nur = pkgs.lib.recursiveUpdate
+          (import ${pinnedNUR} { inherit pkgs; })
+          ({
+            repos = {
+              kalbasit = import ${pinnedKalbasitNUR} { inherit pkgs; };
+            };
+          });
       };
 
       chromium = {
@@ -21,19 +28,24 @@ let
   '';
 
 in {
-  nixpkgs.config = {
-    allowUnfree = true;
+  nixpkgs.config = { pkgs, ... }:
+    {
+      allowUnfree = true;
 
-    packageOverrides = pkgs: {
-      nur = {
-        kalbasit = import pinnedKalbasit { inherit pkgs; };
+      packageOverrides = pkgs: {
+        nur = pkgs.lib.recursiveUpdate
+          (import pinnedNUR { inherit pkgs; })
+          ({
+            repos = {
+              kalbasit = import pinnedKalbasitNUR { inherit pkgs; };
+            };
+          });
+      };
+
+      chromium = {
+        enablePepperFlash = true;
       };
     };
-
-    chromium = {
-      enablePepperFlash = true;
-    };
-  };
 
   xdg.configFile."nixpkgs/config.nix".source = configFile;
 

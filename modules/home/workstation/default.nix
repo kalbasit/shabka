@@ -16,7 +16,7 @@ with import ../../../util;
     home.packages = with pkgs; [
       keybase-gui
 
-      nur.kalbasit.rbrowser
+      nur.repos.kalbasit.rbrowser
 
       remmina
 
@@ -30,13 +30,13 @@ with import ../../../util;
 
     home.activation = {
       rbrowser-desktop-link = symlink
-        "${pkgs.nur.kalbasit.rbrowser}/share/applications/rbrowser.desktop"
+        "${pkgs.nur.repos.kalbasit.rbrowser}/share/applications/rbrowser.desktop"
         "${config.home.homeDirectory}/.local/share/applications/rbrowser.desktop";
     };
 
     programs.zsh.initExtra = ''
       # Set the browser to my relay browser
-      export BROWSER="${pkgs.nur.kalbasit.rbrowser}/bin/rbrowser"
+      export BROWSER="${pkgs.nur.repos.kalbasit.rbrowser}/bin/rbrowser"
     '';
 
     mine.workstation = enableMultiple [

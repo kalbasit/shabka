@@ -121,7 +121,7 @@ in {
       "${defaultModifier}+${secondModifier}+q" = "kill";
 
       # rbrowser
-      "${defaultModifier}+b" = "exec ${pkgs.nur.kalbasit.rbrowser}/bin/rbrowser";
+      "${defaultModifier}+b" = "exec ${pkgs.nur.repos.kalbasit.rbrowser}/bin/rbrowser";
 
       # rofi run
       "${defaultModifier}+r" = "exec ${pkgs.rofi}/bin/rofi -show run";
@@ -344,8 +344,8 @@ in {
     # Application launcher
     set $mode_apps Launch: (p) Chromium personal, (u) Chromium publica, (c) Charles, (s) Slack, (i) Irc, (w) Whatsapp, (t) Teamviewer, (m) Pulse SMS
     mode "$mode_apps" {
-      bindsym p exec ${pkgs.nur.kalbasit.rbrowser}/bin/rbrowser --profile personal, mode default
-      bindsym u exec ${pkgs.nur.kalbasit.rbrowser}/bin/rbrowser --profile publica, mode default
+      bindsym p exec ${pkgs.nur.repos.kalbasit.rbrowser}/bin/rbrowser --profile personal, mode default
+      bindsym u exec ${pkgs.nur.repos.kalbasit.rbrowser}/bin/rbrowser --profile publica, mode default
       bindsym c exec ${pkgs.charles}/bin/charles, mode default
       bindsym s exec ${pkgs.slack}/bin/slack, mode default
       bindsym i exec ${pkgs.alacritty}/bin/alacritty --title=irc --exec=weechat, mode default

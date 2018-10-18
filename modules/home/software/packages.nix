@@ -33,7 +33,7 @@ in {
 
     mosh
 
-    nur.kalbasit.nixify
+    nur.repos.kalbasit.nixify
 
     nix-index
 
@@ -42,7 +42,7 @@ in {
     # curses-based file manager
     lf
 
-    nur.kalbasit.swm
+    nur.repos.kalbasit.swm
 
     unzip
 

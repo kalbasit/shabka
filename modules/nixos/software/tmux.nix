@@ -155,7 +155,7 @@ in {
         set -g update-environment ""
 
         # fuzzy client selection
-        bind s split-window -p 20 -v ${pkgs.nur.kalbasit.swm}/bin/swm tmux switch-client --kill-pane
+        bind s split-window -p 20 -v ${pkgs.nur.repos.kalbasit.swm}/bin/swm tmux switch-client --kill-pane
 
         # Last active window
         bind C-t last-window

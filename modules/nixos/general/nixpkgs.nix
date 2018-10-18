@@ -1,14 +1,21 @@
+{ lib, ... }:
+
 let
 
-  pinnedKalbasit = import ../../../external/kalbasit-nur.nix;
+  pinnedNUR = import ../../../external/nur.nix;
+  pinnedKalbasitNUR = import ../../../external/kalbasit-nur.nix;
 
 in {
   nixpkgs.config = {
     allowUnfree = true;
     packageOverrides = pkgs: {
-      nur = {
-        kalbasit = import pinnedKalbasit { inherit pkgs; };
-      };
+      nur = lib.recursiveUpdate
+        (import pinnedNUR { inherit pkgs; })
+        ({
+          repos = {
+            kalbasit = import pinnedKalbasitNUR { inherit pkgs; };
+          };
+        });
     };
   };
 
