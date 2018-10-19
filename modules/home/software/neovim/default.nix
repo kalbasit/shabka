@@ -77,7 +77,6 @@ in {
               "vim-bazel"
             ] ++ [ # my_plugins
               "airline-seoul256-theme"
-              "direnv-vim"
               "traces-vim"
               "vim-PreserveNoEOL"
               "vim-better-whitespace"
