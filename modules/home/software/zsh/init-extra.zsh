@@ -67,6 +67,11 @@ if [[ -o interactive ]]; then
 	# just like HIST_IGNORE_ALL_DUPS once the history fills up with unique events.
 	setopt histexpiredupsfirst
 
+	# If a new command line being added to the history list duplicates an older
+	# one, the older command is removed from the list (even if it is not the
+	# previous event).
+	setopt hist_ignore_all_dups
+
 	# Do not enter command lines into the history list if they are duplicates of
 	# the previous event.
 	setopt histignoredups

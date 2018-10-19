@@ -130,8 +130,8 @@ in {
 
     history = {
       expireDuplicatesFirst = true;
-      save = 1000000;
-      size = 1000000;
+      save = 100000000;
+      size = 1000000000;
     };
 
     initExtra = (builtins.readFile (pkgs.substituteAll {
