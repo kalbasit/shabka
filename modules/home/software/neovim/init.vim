@@ -95,10 +95,7 @@ set wildignore+=*.swp,*~,._*
 set wildignore+=*/Godeps/_workspace/*
 
 " Disable the vendor directory Go 1.5+
-" TODO: This setting makes it impossible for me to go ahead and open files
-" inside the vendor directory. Does removing it affects my workflow? Does fzf
-" still ignores based on .gitignore?
-" set wildignore+=*/vendor/*
+set wildignore+=*/vendor/*
 
 " Disable node/TypeScript
 set wildignore+=*/node_modules/*,*/typings/*,*/dist/*
