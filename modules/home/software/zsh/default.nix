@@ -47,6 +47,14 @@ let
         --subst-var-by netstat_bin ${lib.getBin pkgs.nettools}/bin/netstat \
         --subst-var-by ssh_bin ${lib.getBin pkgs.openssh}/bin/ssh
 
+      substituteInPlace $out/ulimit_usage \
+        --subst-var-by paste_bin ${lib.getBin pkgs.coreutils}/bin/paste \
+        --subst-var-by cut_bin ${lib.getBin pkgs.coreutils}/bin/cut \
+        --subst-var-by awk_bin ${lib.getBin pkgs.gawk}/bin/awk \
+        --subst-var-by lsof_bin ${lib.getBin pkgs.lsof}/bin/lsof \
+        --subst-var-by sed_bin ${lib.getBin pkgs.gnused}/bin/sed \
+        --subst-var-by bc_bin ${lib.getBin pkgs.bc}/bin/bc
+
       substituteInPlace $out/pr \
         --subst-var-by git_bin ${lib.getBin pkgs.git}/bin/git
 
