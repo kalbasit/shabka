@@ -25,8 +25,8 @@ with import ../../../util;
       libinput.naturalScrolling = true;
 
       # enable the display manager
-      displayManager.gdm.enable = true;
-      displayManager.gdm.autoLogin = {
+      displayManager.lightdm.enable = true;
+      displayManager.lightdm.autoLogin = {
         enable = true;
         user = "kalbasit";
       };
