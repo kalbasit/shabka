@@ -34,10 +34,11 @@ let
 
   makeHM = name: attrs: nameValuePair
     (name)
-    (config.mine.home-manager.config { attrs = attrs // {
+    (config.mine.home-manager.config {
+      inherit (attrs) uid isAdmin;
       inherit name;
       nixosConfig = config;
-    }; });
+    });
 
   users = {
     yl            = { uid = 2000; isAdmin = false; };

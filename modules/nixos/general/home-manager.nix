@@ -8,9 +8,9 @@ with lib;
   ];
 
   options.mine.home-manager.config = mkOption {
-    default = { ... }: {};
+    default = { name, uid, isAdmin, nixosConfig }: {...}: {};
     description = ''
-        Per-user Home Manager configuration.
+      Function that returns the Home Manager configuration.
     '';
   };
 }
