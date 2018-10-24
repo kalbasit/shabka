@@ -40,31 +40,43 @@ let
       nixosConfig = config;
     });
 
-  users = {
+  defaultUsers = {
     yl            = { uid = 2000; isAdmin = false; };
-    yl_admin      = { uid = 2001; isAdmin = true;};
-    yl_opensource = { uid = 2002; isAdmin = false;};
-
-    yl_publica    = { uid = 2016; isAdmin = false;}; # work uid should be indexed by start year
+    yl_admin      = { uid = 2001; isAdmin = true; };
+    yl_opensource = { uid = 2002; isAdmin = false; };
+    yl_publica    = { uid = 2016; isAdmin = false; };
   };
 
 in {
-  # set the initial password of the root user
-  security.initialRootPassword = "$6$0bx5eAEsHJRxkD8.$gJ7sdkOOJRf4QCHWLGDUtAmjHV/gJxPQpyCEtHubWocHh9O7pWy10Frkm1Ch8P0/m8UTUg.Oxp.MB3YSQxFXu1";
-
-  users = {
-    mutableUsers = false;
-
-    groups = {
-      mine = {
-        gid = 2000;
-      };
-    };
-
-    users = {
-      root = { openssh.authorizedKeys.keys = sshKeys; };
-    } // (mapAttrs' makeUser users);
+  options.mine.users = mkOption {
+    type = types.attrs;
+    default = defaultUsers;
+    defaultText = ''
+      The default users are ${builtins.concatStringsSep " " (builtins.attrNames defaultUsers)}
+    '';
+    description = ''
+      The list of users to create.
+    '';
   };
 
-  home-manager.users = mapAttrs' makeHM users;
+  config = {
+    # set the initial password of the root user
+    security.initialRootPassword = "$6$0bx5eAEsHJRxkD8.$gJ7sdkOOJRf4QCHWLGDUtAmjHV/gJxPQpyCEtHubWocHh9O7pWy10Frkm1Ch8P0/m8UTUg.Oxp.MB3YSQxFXu1";
+
+    users = {
+      mutableUsers = false;
+
+      groups = {
+        mine = {
+          gid = 2000;
+        };
+      };
+
+      users = {
+        root = { openssh.authorizedKeys.keys = sshKeys; };
+      } // (mapAttrs' makeUser config.mine.users);
+    };
+
+    home-manager.users = mapAttrs' makeHM config.mine.users;
+  };
 }
