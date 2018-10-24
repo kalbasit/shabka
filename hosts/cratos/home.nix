@@ -1,8 +1,10 @@
 {
-  home-manager.users.kalbasit = { ... }: {
+  mine.home-manager.config = { name, uid, isAdmin, nixosConfig }: { ... }: {
     imports = [
       ../../modules/home
     ];
+
+    mine.nixosConfig = nixosConfig;
 
     mine.batteryNotifier.enable = true;
     mine.git.enable = true;
