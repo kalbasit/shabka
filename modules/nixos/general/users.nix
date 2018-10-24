@@ -69,15 +69,11 @@ in {
     users = {
       mutableUsers = false;
 
-      groups = {
-        mine = {
-          gid = 2000;
-        };
-      };
+      groups = { mine = { gid = 2000; }; };
 
-      users = {
-        root = { openssh.authorizedKeys.keys = sshKeys; };
-      } // (mapAttrs' makeUser config.mine.users);
+      users = mergeAttrs
+        { root = { openssh.authorizedKeys.keys = sshKeys; }; }
+        (mapAttrs' makeUser config.mine.users);
     };
 
     home-manager.users = mapAttrs' makeHM config.mine.users;
