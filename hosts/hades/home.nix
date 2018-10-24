@@ -1,5 +1,5 @@
 {
-  mine.home-manager.users.kalbasit = { ... }: {
+  mine.home-manager.config = { attrs }: { ... }: {
     imports = [
       ../../modules/home
     ];

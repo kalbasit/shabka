@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 with lib;
 
@@ -32,9 +32,16 @@ let
       openssh.authorizedKeys.keys = sshKeys;
     });
 
+  makeHM = name: attrs: nameValuePair
+    (name)
+    (config.mine.home-manager.config { attrs = attrs // {
+      inherit name;
+      nixosConfig = config;
+    }; });
+
   users = {
-    yl            = { uid = 2000; isAdmin = true; };
-    yl_admin      = { uid = 2001; isAdmin = false;};
+    yl            = { uid = 2000; isAdmin = false; };
+    yl_admin      = { uid = 2001; isAdmin = true;};
     yl_opensource = { uid = 2003; isAdmin = false;};
     yl_publica    = { uid = 2002; isAdmin = false;};
   };
@@ -56,4 +63,6 @@ in {
       root = { openssh.authorizedKeys.keys = sshKeys; };
     } // (mapAttrs' makeUser users);
   };
+
+  home-manager.users = mapAttrs' makeHM users;
 }

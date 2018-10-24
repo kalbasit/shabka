@@ -7,9 +7,8 @@ with lib;
     (import <home-manager> {}).nixos
   ];
 
-  options.mine.home-manager.users = mkOption mkOption {
-    type = types.attrsOf hmModule;
-    default = {};
+  options.mine.home-manager.config = mkOption {
+    default = { ... }: {};
     description = ''
         Per-user Home Manager configuration.
     '';
