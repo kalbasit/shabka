@@ -1,5 +1,5 @@
 {
-  home-manager.users.kalbasit = { ... }: {
+  mine.home-manager.users.kalbasit = { ... }: {
     imports = [
       ../../modules/home
     ];

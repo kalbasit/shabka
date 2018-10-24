@@ -1,4 +1,6 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
+
+with lib;
 
 let
   sshKeys = [
@@ -8,24 +10,33 @@ let
     }))
   ];
 
-  makeUser = uid: admin: {
-    inherit uid;
+  makeUser = name: attrs: nameValuePair
+    (name)
+    ({
+      inherit (attrs) uid;
 
-    group = "mine";
-    extraGroups = [
-      "docker"
-      "fuse"
-      "libvirtd"
-      "networkmanager"
-      "vboxusers"
-      "video"
-    ] ++ (if admin then ["wheel"] else []);
+      group = "mine";
+      extraGroups = [
+        "docker"
+        "fuse"
+        "libvirtd"
+        "networkmanager"
+        "vboxusers"
+        "video"
+      ] ++ (if attrs.isAdmin then ["wheel"] else []);
 
-    shell = pkgs.zsh;
-    hashedPassword = "$6$0bx5eAEsHJRxkD8.$gJ7sdkOOJRf4QCHWLGDUtAmjHV/gJxPQpyCEtHubWocHh9O7pWy10Frkm1Ch8P0/m8UTUg.Oxp.MB3YSQxFXu1";
-    isNormalUser = true;
+      shell = pkgs.zsh;
+      hashedPassword = "$6$0bx5eAEsHJRxkD8.$gJ7sdkOOJRf4QCHWLGDUtAmjHV/gJxPQpyCEtHubWocHh9O7pWy10Frkm1Ch8P0/m8UTUg.Oxp.MB3YSQxFXu1";
+      isNormalUser = true;
 
-    openssh.authorizedKeys.keys = sshKeys;
+      openssh.authorizedKeys.keys = sshKeys;
+    });
+
+  users = {
+    yl            = { uid = 2000; isAdmin = true; };
+    yl_admin      = { uid = 2001; isAdmin = false;};
+    yl_opensource = { uid = 2003; isAdmin = false;};
+    yl_publica    = { uid = 2002; isAdmin = false;};
   };
 
 in {
@@ -42,12 +53,7 @@ in {
     };
 
     users = {
-      yl = makeUser 2000 true;
-      yl_admin = makeUser 2001 false;
-      yl_opensource = makeUser 2003 false;
-      yl_publica = makeUser 2002 false;
-
       root = { openssh.authorizedKeys.keys = sshKeys; };
-    };
+    } // (mapAttrs' makeUser users);
   };
 }
