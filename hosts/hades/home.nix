@@ -4,6 +4,8 @@
       ../../modules/home
     ];
 
+    mine.nixosConfig = nixosConfig;
+
     mine.batteryNotifier.enable = true;
     mine.git.enable = true;
     mine.gnupg.enable = true;

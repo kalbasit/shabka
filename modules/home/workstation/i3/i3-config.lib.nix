@@ -1,4 +1,4 @@
-{ pkgs, systemConfig ? (import <nixpkgs/nixos> {}).config, ... }:
+{ config, pkgs, ... }:
 
 let
   defaultModifier = "Mod4";
@@ -8,30 +8,30 @@ let
   locker = "${pkgs.xautolock}/bin/xautolock -locknow && sleep 1";
 
   intMonitor =
-    if systemConfig.networking.hostName == "hades"
+    if config.mine.nixosConfig.networking.hostName == "hades"
     then "eDP-1"
-    else if systemConfig.networking.hostName == "cratos"
+    else if config.mine.nixosConfig.networking.hostName == "cratos"
     then "eDP1"
     else "";
 
   intMode =
-    if systemConfig.networking.hostName == "hades"
+    if config.mine.nixosConfig.networking.hostName == "hades"
     then "1920x1080"
-    else if systemConfig.networking.hostName == "cratos"
+    else if config.mine.nixosConfig.networking.hostName == "cratos"
     then "3200x1800"
     else "";
 
   intScale =
-    if systemConfig.networking.hostName == "hades"
+    if config.mine.nixosConfig.networking.hostName == "hades"
     then "1x1"
-    else if systemConfig.networking.hostName == "cratos"
+    else if config.mine.nixosConfig.networking.hostName == "cratos"
     then "0.6x0.6"
     else "";
 
   extMonitor =
-    if systemConfig.networking.hostName == "hades"
+    if config.mine.nixosConfig.networking.hostName == "hades"
     then "DP-2"
-    else if systemConfig.networking.hostName == "cratos"
+    else if config.mine.nixosConfig.networking.hostName == "cratos"
     then "DP1-2"
     else "";
 
