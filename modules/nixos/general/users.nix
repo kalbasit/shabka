@@ -41,13 +41,7 @@ let
     });
 
   defaultUsers = {
-    # TODO: remove this once I move to yl users
     kalbasit      = { uid = 1026; isAdmin = true; };
-
-    yl            = { uid = 2000; isAdmin = false; };
-    yl_admin      = { uid = 2001; isAdmin = true; };
-    yl_opensource = { uid = 2002; isAdmin = false; };
-    yl_publica    = { uid = 2016; isAdmin = false; };
   };
 
 in {
