@@ -21,6 +21,7 @@ let
         "fuse"
         "libvirtd"
         "networkmanager"
+        "users"
         "vboxusers"
         "video"
       ] ++ (if attrs.isAdmin then ["wheel"] else []);
