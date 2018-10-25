@@ -25,6 +25,8 @@ in {
 
     jq
 
+    jrnl
+
     killall
 
     lastpass-cli
