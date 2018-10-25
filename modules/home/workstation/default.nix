@@ -51,7 +51,6 @@ with import ../../../util;
       "mysql-workbench"
       "rofi"
       "termite"
-      "xsession"
     ];
   };
 }
