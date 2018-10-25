@@ -24,6 +24,9 @@ with import ../../../util;
       libinput.enable = true;
       libinput.naturalScrolling = true;
 
+      desktopManager.gnome3.enable = true;
+      desktopManager.plasma5.enable = true;
+
       # enable the display manager
       displayManager.lightdm.enable = true;
       displayManager.lightdm.autoLogin = {
