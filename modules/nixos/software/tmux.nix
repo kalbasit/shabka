@@ -7,7 +7,6 @@ let
   cfg = config.mine.tmux;
 
   plugins = with pkgs; [
-    tmuxPlugins.battery
     tmuxPlugins.logging
     tmuxPlugins.prefix-highlight
     tmuxPlugins.fzf-tmux-url
