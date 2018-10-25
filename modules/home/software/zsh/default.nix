@@ -71,6 +71,7 @@ in {
   home.packages = with pkgs; [
     # packages needed by the extract plugin
     # TODO: move this to the extract plugin instead!
+    binutils
     bzip2
     gnutar
     gzip
