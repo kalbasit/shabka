@@ -8,7 +8,6 @@ with lib;
   config = mkIf config.mine.taskwarrior.enable {
     programs.taskwarrior = {
       enable = true;
-      dataLocation = "~/.task";
       colorTheme = "solarized-dark-256";
 
       extraConfig = ''
