@@ -1,4 +1,9 @@
+{ lib, ... }:
+
+with lib;
+
 assert (builtins.pathExists /yl/private);
+
 
 let
 
@@ -39,6 +44,10 @@ in {
   #
   # Network
   #
+
+  # TODO(high): For some reason, when the firewall is enabled, I can't seem to
+  # connect via SSH.
+  networking.firewall.enable = mkForce false;
 
   # disable the networkmanager on Zeus as it is really not needed since the
   # network does never change.
