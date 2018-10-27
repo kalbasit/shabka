@@ -1,8 +1,17 @@
 { config, pkgs, lib, ... }:
 
+with lib;
+
 let
 
   system-path = builtins.toPath ./../../..;
+
+  myUsers =
+    filter
+      (entry: if entry != "" then true else false)
+      (map
+        (user: if hasPrefix "yl" user then user else "")
+        (builtins.attrNames config.users.users));
 
 in {
   nix = {
@@ -34,7 +43,7 @@ in {
     binaryCachePublicKeys = [
       "kalbasit.cachix.org-1:cUhsmtACuuKMcExazyXxjhKzXUxf4Suwvt11jsHSfPM="
     ];
-    trustedUsers = [ "root" "kalbasit" ];
+    trustedUsers = [ "root" ] ++ myUsers;
 
     useSandbox = true;
   };
