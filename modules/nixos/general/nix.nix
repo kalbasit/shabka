@@ -6,13 +6,6 @@ let
 
   system-path = builtins.toPath ./../../..;
 
-  myUsers =
-    filter
-      (entry: if entry != "" then true else false)
-      (map
-        (user: if hasPrefix "yl" user then user else "")
-        (builtins.attrNames config.users.users));
-
 in {
   nix = {
     autoOptimiseStore = true;
@@ -43,7 +36,7 @@ in {
     binaryCachePublicKeys = [
       "kalbasit.cachix.org-1:cUhsmtACuuKMcExazyXxjhKzXUxf4Suwvt11jsHSfPM="
     ];
-    trustedUsers = [ "root" ] ++ myUsers;
+    trustedUsers = [ "root" "@wheel" ];
 
     useSandbox = true;
   };
