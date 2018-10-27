@@ -19,6 +19,8 @@ in {
 
   networking.hostName = "zeus";
 
+  mine.users = { yl = { uid = 2000; isAdmin = true;  home = "/yl"; }; };
+
   mine.gnupg.enable = true;
   mine.openvpn.client.expressvpn.enable = true;
   mine.tmux.enable = true;
