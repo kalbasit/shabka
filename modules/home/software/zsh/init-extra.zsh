@@ -194,7 +194,7 @@ POWERLEVEL9K_CUSTOM_NIX_SHELL_PACKAGES="if [[ -n \$NIX_SHELL_PACKAGES ]]; then e
 
 # setup fzf
 if [[ -o interactive ]]; then
-	export ENHANCD_FILTER=@fzf_out@/bin/fzf-tmux
+	export ENHANCD_FILTER=@fzf_bin@
 fi
 
 # export the code path

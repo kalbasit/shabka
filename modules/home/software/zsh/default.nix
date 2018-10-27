@@ -1,5 +1,7 @@
 { config, pkgs, lib, ... }:
 
+with lib;
+
 let
   myFunctions = pkgs.stdenvNoCC.mkDerivation rec {
     name = "zsh-functions-${version}";
@@ -14,55 +16,55 @@ let
       rm -f $out/default.nix
 
       substituteInPlace $out/get_pr \
-        --subst-var-by curl_bin ${lib.getBin pkgs.curl}/bin/curl \
-        --subst-var-by git_bin ${lib.getBin pkgs.git}/bin/git \
-        --subst-var-by jq_bin ${lib.getBin pkgs.jq}/bin/jq \
-        --subst-var-by xsel_bin ${lib.getBin pkgs.xsel}/bin/xsel
+        --subst-var-by curl_bin ${getBin pkgs.curl}/bin/curl \
+        --subst-var-by git_bin ${getBin pkgs.git}/bin/git \
+        --subst-var-by jq_bin ${getBin pkgs.jq}/bin/jq \
+        --subst-var-by xsel_bin ${getBin pkgs.xsel}/bin/xsel
 
       substituteInPlace $out/git_require_clean_work_tree \
-        --subst-var-by git_bin ${lib.getBin pkgs.git}/bin/git
+        --subst-var-by git_bin ${getBin pkgs.git}/bin/git
 
       substituteInPlace $out/git_gopath_formatted_repo_path \
-        --subst-var-by git_bin ${lib.getBin pkgs.git}/bin/git \
-        --subst-var-by perl_bin ${lib.getBin pkgs.perl}/bin/perl
+        --subst-var-by git_bin ${getBin pkgs.git}/bin/git \
+        --subst-var-by perl_bin ${getBin pkgs.perl}/bin/perl
 
       substituteInPlace $out/jsonpp \
-        --subst-var-by python_bin ${lib.getBin pkgs.python37Full}/bin/python \
-        --subst-var-by pygmentize_bin ${lib.getBin pkgs.python36Packages.pygments}/bin/pygmentize
+        --subst-var-by python_bin ${getBin pkgs.python37Full}/bin/python \
+        --subst-var-by pygmentize_bin ${getBin pkgs.python36Packages.pygments}/bin/pygmentize
 
       substituteInPlace $out/jspp \
-        --subst-var-by js-beautify_bin ${lib.getBin pkgs.python36Packages.jsbeautifier}/bin/js-beautify
+        --subst-var-by js-beautify_bin ${getBin pkgs.python36Packages.jsbeautifier}/bin/js-beautify
 
       substituteInPlace $out/ssh_agents \
-        --subst-var-by readlink_bin ${lib.getBin pkgs.coreutils}/bin/readlink
+        --subst-var-by readlink_bin ${getBin pkgs.coreutils}/bin/readlink
 
       substituteInPlace $out/new_pr \
-        --subst-var-by curl_bin ${lib.getBin pkgs.curl}/bin/curl \
-        --subst-var-by git_bin ${lib.getBin pkgs.git}/bin/git \
-        --subst-var-by jq_bin ${lib.getBin pkgs.jq}/bin/jq \
-        --subst-var-by xsel_bin ${lib.getBin pkgs.xsel}/bin/xsel
+        --subst-var-by curl_bin ${getBin pkgs.curl}/bin/curl \
+        --subst-var-by git_bin ${getBin pkgs.git}/bin/git \
+        --subst-var-by jq_bin ${getBin pkgs.jq}/bin/jq \
+        --subst-var-by xsel_bin ${getBin pkgs.xsel}/bin/xsel
 
       substituteInPlace $out/tmycli \
-        --subst-var-by mycli_bin ${lib.getBin pkgs.mycli}/bin/mycli \
-        --subst-var-by netstat_bin ${lib.getBin pkgs.nettools}/bin/netstat \
-        --subst-var-by ssh_bin ${lib.getBin pkgs.openssh}/bin/ssh
+        --subst-var-by mycli_bin ${getBin pkgs.mycli}/bin/mycli \
+        --subst-var-by netstat_bin ${getBin pkgs.nettools}/bin/netstat \
+        --subst-var-by ssh_bin ${getBin pkgs.openssh}/bin/ssh
 
       substituteInPlace $out/ulimit_usage \
-        --subst-var-by paste_bin ${lib.getBin pkgs.coreutils}/bin/paste \
-        --subst-var-by cut_bin ${lib.getBin pkgs.coreutils}/bin/cut \
-        --subst-var-by awk_bin ${lib.getBin pkgs.gawk}/bin/awk \
-        --subst-var-by lsof_bin ${lib.getBin pkgs.lsof}/bin/lsof \
-        --subst-var-by sed_bin ${lib.getBin pkgs.gnused}/bin/sed \
-        --subst-var-by bc_bin ${lib.getBin pkgs.bc}/bin/bc
+        --subst-var-by paste_bin ${getBin pkgs.coreutils}/bin/paste \
+        --subst-var-by cut_bin ${getBin pkgs.coreutils}/bin/cut \
+        --subst-var-by awk_bin ${getBin pkgs.gawk}/bin/awk \
+        --subst-var-by lsof_bin ${getBin pkgs.lsof}/bin/lsof \
+        --subst-var-by sed_bin ${getBin pkgs.gnused}/bin/sed \
+        --subst-var-by bc_bin ${getBin pkgs.bc}/bin/bc
 
       substituteInPlace $out/pr \
-        --subst-var-by git_bin ${lib.getBin pkgs.git}/bin/git
+        --subst-var-by git_bin ${getBin pkgs.git}/bin/git
 
       substituteInPlace $out/vim_clean_swap \
-        --subst-var-by vim_bin ${lib.getBin pkgs.vim}/bin/vim
+        --subst-var-by vim_bin ${getBin pkgs.vim}/bin/vim
 
       substituteInPlace $out/xmlpp \
-        --subst-var-by xmllint_bin ${lib.getBin pkgs.libxml2Python}/bin/xmllint
+        --subst-var-by xmllint_bin ${getBin pkgs.libxml2Python}/bin/xmllint
     '';
   };
 
@@ -146,11 +148,11 @@ in {
     initExtra = (builtins.readFile (pkgs.substituteAll {
       src = ./init-extra.zsh;
 
-      exa_bin      = "${pkgs.exa}/bin/exa";
-      fortune_bin  = "${pkgs.fortune}/bin/fortune";
-      fzf_out      = "${pkgs.fzf}";
+      exa_bin      = "${getBin pkgs.exa}/bin/exa";
+      fortune_bin  = "${getBin pkgs.fortune}/bin/fortune";
+      fzf_bin      = "${getBin pkgs.fzf}/bin/fzf-tmux";
       home_path    = "${config.home.homeDirectory}";
-      jq_bin       = "${pkgs.jq}/bin/jq";
+      jq_bin       = "${getBin pkgs.jq}/bin/jq";
     })) + (if pkgs.stdenv.isDarwin then ''
       # source the nix profiles
       if [[ -r "${config.home.homeDirectory}/.nix-profile/etc/profile.d/nix.sh" ]]; then
