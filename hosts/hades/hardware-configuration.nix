@@ -13,8 +13,8 @@ let
       # NixOS
       "/"                      = { device = rootDevice;   subvol = "@nixos/@root"; };
       "/home"                  = { device = rootDevice;   subvol = "@nixos/@home"; };
-      "/home/kalbasit/code"    = { device = rootDevice;   subvol = "@code"; options = [ "X-mount.mkdir=0700" ]; };
-      "/home/kalbasit/private" = { device = rootDevice;   subvol = "@private"; options = [ "X-mount.mkdir=0700" ]; };
+      "/home/kalbasit/code"    = { device = rootDevice;   subvol = "@code"; };
+      "/home/kalbasit/private" = { device = rootDevice;   subvol = "@private"; };
       "/home/kalbasit/storage" = { device = storgeDevice; subvol = "@home-kalbasit-storage"; };
 
       # ArchOS
