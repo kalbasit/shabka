@@ -47,6 +47,7 @@ in {
               "editorconfig-vim"
               "fzf-vim"
               "fzfWrapper"
+              "goyo"
               "multiple-cursors"
               "nvim-completion-manager"
               "polyglot"
