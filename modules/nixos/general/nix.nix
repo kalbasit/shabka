@@ -17,6 +17,8 @@ in {
 
     nixPath = [
       "nixos-config=/etc/nixos/configuration.nix"
+      "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
+      "home-manager=/nix/var/nix/profiles/per-user/root/channels/home-manager"
       "system-path=${system-path}"
     ];
 

@@ -5,14 +5,14 @@ all: add-channels update-channels
 add-channels:
 	@echo ">>> Adding all the relevant channels, this will override any previously added channel if the version is different"
 	@echo
-	nix-channel --add https://nixos.org/channels/nixos-18.09 nixpkgs
-	nix-channel --add https://github.com/rycee/home-manager/archive/release-18.09.tar.gz home-manager
+	sudo -i nix-channel --add https://nixos.org/channels/nixos-18.09 nixos
+	sudo -i nix-channel --add https://github.com/rycee/home-manager/archive/release-18.09.tar.gz home-manager
 	@echo
 
 update-channels:
 	@echo ">>> Updating all channels"
 	@echo
-	nix-channel --update
+	sudo -i nix-channel --update
 	@echo
 
 update: update-nixpkgs update-nixos-hardware update-kalbasit-nur
