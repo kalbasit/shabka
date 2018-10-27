@@ -15,7 +15,5 @@
     mine.taskwarrior.enable = true;
     mine.timewarrior.enable = true;
     mine.workstation.enable = true;
-
-    mine.workstation.i3.enable = if name != "yl_presentation" then true else false;
   };
 }
