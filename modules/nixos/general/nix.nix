@@ -41,5 +41,17 @@ in {
     trustedUsers = [ "root" "@wheel" ];
 
     useSandbox = true;
+
+    distributedBuilds = true;
+    buildMachines = [{
+      hostName = "zeus.home.nasreddine.com";
+      sshUser = "yl";
+      sshKey = "/yl/private/private-home-files/.ssh/personal/id_rsa";
+      system = "x86_64-linux";
+      maxJobs = 8;
+      speedFactor = 2;
+      supportedFeatures = [ ];
+      mandatoryFeatures = [ ];
+    }];
   };
 }
