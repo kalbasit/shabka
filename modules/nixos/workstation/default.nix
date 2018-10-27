@@ -17,9 +17,9 @@ with import ../../../util;
       enable = true;
       autoRepeatDelay = 200;
       autoRepeatInterval = 30;
-      xkbOptions = lib.concatStringsSep "," [
+      xkbOptions = concatStringsSep "," [
         "ctrl:nocaps"
-        ];
+      ];
 
       libinput.enable = true;
       libinput.naturalScrolling = true;
