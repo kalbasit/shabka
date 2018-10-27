@@ -153,6 +153,7 @@ in {
       fzf_bin      = "${getBin pkgs.fzf}/bin/fzf-tmux";
       home_path    = "${config.home.homeDirectory}";
       jq_bin       = "${getBin pkgs.jq}/bin/jq";
+      tput_bin     = "${getBin pkgs.ncurses}/bin/tput";
     })) + (if pkgs.stdenv.isDarwin then ''
       # source the nix profiles
       if [[ -r "${config.home.homeDirectory}/.nix-profile/etc/profile.d/nix.sh" ]]; then

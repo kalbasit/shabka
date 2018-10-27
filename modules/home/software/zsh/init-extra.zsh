@@ -735,3 +735,12 @@ fi
 if [[ -o interactive ]]; then
 	@fortune_bin@ -c
 fi
+
+#####################################################################
+# Unsupported Terminals
+#####################################################################
+
+if (( $(@tput_bin@ colors) < 256 )); then
+	echo "WARN: 256 colors are not supported, Powerlevel9k will be teared down"
+	prompt_powerlevel9k_teardown
+fi
