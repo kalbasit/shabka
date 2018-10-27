@@ -1,5 +1,5 @@
 {
-  mine.home-manager.config = { name, uid, isAdmin, nixosConfig }: { ... }: {
+  mine.home-manager.config = { userName, uid, isAdmin, nixosConfig }: { ... }: {
     imports = [
       ../../modules/home
     ];
