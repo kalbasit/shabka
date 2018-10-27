@@ -1,4 +1,4 @@
-assert (builtins.pathExists /home/kalbasit/private);
+assert (builtins.pathExists /yl/private);
 
 let
 
@@ -39,10 +39,10 @@ in {
         nobind
         persist-key
         persist-tun
-        ca /home/kalbasit/private/network-secrets/vpn/client/desktop.cratos.WaelNasreddine.vpn.nasreddine.com/ca.crt
-        cert /home/kalbasit/private/network-secrets/vpn/client/desktop.cratos.WaelNasreddine.vpn.nasreddine.com/public.crt
-        key /home/kalbasit/private/network-secrets/vpn/client/desktop.cratos.WaelNasreddine.vpn.nasreddine.com/home/kalbasit/private.key
-        tls-auth /home/kalbasit/private/network-secrets/vpn/client/desktop.cratos.WaelNasreddine.vpn.nasreddine.com/ta.key 1
+        ca /yl/private/network-secrets/vpn/client/desktop.cratos.WaelNasreddine.vpn.nasreddine.com/ca.crt
+        cert /yl/private/network-secrets/vpn/client/desktop.cratos.WaelNasreddine.vpn.nasreddine.com/public.crt
+        key /yl/private/network-secrets/vpn/client/desktop.cratos.WaelNasreddine.vpn.nasreddine.com/yl/private.key
+        tls-auth /yl/private/network-secrets/vpn/client/desktop.cratos.WaelNasreddine.vpn.nasreddine.com/ta.key 1
         verb 1
         cipher aes-128-cbc
         comp-lzo

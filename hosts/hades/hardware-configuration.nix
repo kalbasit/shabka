@@ -16,6 +16,9 @@ let
       "/home/kalbasit/code"    = { device = rootDevice;   subvol = "@code"; };
       "/home/kalbasit/private" = { device = rootDevice;   subvol = "@private"; };
       "/home/kalbasit/storage" = { device = storgeDevice; subvol = "@home-kalbasit-storage"; };
+      "/yl"                    = { device = rootDevice;   subvol = "@yl"; };
+      "/yl/code"               = { device = rootDevice;   subvol = "@code"; options = [ "X-mount.mkdir=0700" ]; };
+      "/yl/private"            = { device = rootDevice;   subvol = "@private"; options = [ "X-mount.mkdir=0700" ]; };
 
       # ArchOS
 

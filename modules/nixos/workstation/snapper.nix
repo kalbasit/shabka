@@ -9,7 +9,7 @@ with lib;
     services.snapper = {
       configs = {
         "code" = {
-          subvolume = "/home/kalbasit/code";
+          subvolume = "/yl/code";
         };
 
         "home" = {
@@ -17,7 +17,7 @@ with lib;
         };
 
         "private" = {
-          subvolume = "/home/kalbasit/private";
+          subvolume = "/yl/private";
         };
       };
     };

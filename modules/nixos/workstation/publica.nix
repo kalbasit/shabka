@@ -4,10 +4,10 @@ with lib;
 with import ../../../util;
 
 let
-  charles_ssl_cert_path     = /home/kalbasit/private/private-home-files/.charles/ca/charles-proxy-ssl-proxying-certificate.pem;
-  publica_dev_ssl_ca_path   = /home/kalbasit/code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/ca.crt;
-  publica_dev_ssl_cert_path = /home/kalbasit/code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/publica.dev.crt;
-  publica_dev_ssl_key_path  = /home/kalbasit/code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/publica.dev.key;
+  charles_ssl_cert_path     = /yl/private/private-home-files/.charles/ca/charles-proxy-ssl-proxying-certificate.pem;
+  publica_dev_ssl_ca_path   = /yl/code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/ca.crt;
+  publica_dev_ssl_cert_path = /yl/code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/publica.dev.crt;
+  publica_dev_ssl_key_path  = /yl/code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/publica.dev.key;
 
   charles_ssl_cert = builtins.readFile charles_ssl_cert_path;
 

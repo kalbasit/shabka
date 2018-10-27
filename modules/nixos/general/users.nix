@@ -10,10 +10,10 @@ let
     }))
   ];
 
-  makeUser = name: { uid, isAdmin ? false, }: nameValuePair
+  makeUser = name: { uid, isAdmin ? false, home ? "/home/${name}" }: nameValuePair
     (name)
     ({
-      inherit uid;
+      inherit home uid;
 
       group = "mine";
       extraGroups = [
@@ -44,14 +44,10 @@ let
     # TODO: remove this once I move to yl users
     kalbasit      = { uid = 1026; isAdmin = true; };
 
-    # Users for my personal user
-    yl              = { uid = 2000; isAdmin = false; };
-    yl_admin        = { uid = 2001; isAdmin = true; };
-    yl_opensource   = { uid = 2002; isAdmin = false; };
-    yl_presentation = { uid = 2003; isAdmin = false; };
-
-    # Users for my professional work sorted by company
-    yl_publica    = { uid = 2016; isAdmin = false; };
+    yl              = { uid = 2000; isAdmin = true;  home = "/yl"; };
+    yl_opensource   = { uid = 2002; isAdmin = false; home = "/yl/opensource"; };
+    yl_presentation = { uid = 2003; isAdmin = false; home = "/yl/presentation"; };
+    yl_publica      = { uid = 2016; isAdmin = false; home = "/yl/publica"; };
   };
 
 in {
