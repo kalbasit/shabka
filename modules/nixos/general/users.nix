@@ -10,10 +10,10 @@ let
     }))
   ];
 
-  makeUser = name: attrs: nameValuePair
+  makeUser = name: { uid, isAdmin ? false, }: nameValuePair
     (name)
     ({
-      inherit (attrs) uid;
+      inherit uid;
 
       group = "mine";
       extraGroups = [
@@ -24,7 +24,7 @@ let
         "users"
         "vboxusers"
         "video"
-      ] ++ (if attrs.isAdmin then ["wheel"] else []);
+      ] ++ (if isAdmin then ["wheel"] else []);
 
       shell = pkgs.zsh;
       hashedPassword = "$6$0bx5eAEsHJRxkD8.$gJ7sdkOOJRf4QCHWLGDUtAmjHV/gJxPQpyCEtHubWocHh9O7pWy10Frkm1Ch8P0/m8UTUg.Oxp.MB3YSQxFXu1";
@@ -33,11 +33,10 @@ let
       openssh.authorizedKeys.keys = sshKeys;
     });
 
-  makeHM = name: attrs: nameValuePair
+  makeHM = name: { uid, isAdmin ? false, ... }: nameValuePair
     (name)
     (config.mine.home-manager.config {
-      inherit (attrs) uid isAdmin;
-      inherit name;
+      inherit name uid isAdmin;
       nixosConfig = config;
     });
 
