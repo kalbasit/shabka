@@ -17,6 +17,7 @@ let
 
       group = "mine";
       extraGroups = [
+        "dialout"
         "docker"
         "fuse"
         "libvirtd"
