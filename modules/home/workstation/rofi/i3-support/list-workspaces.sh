@@ -28,15 +28,15 @@ containsElement () {
 }
 
 function listWorkspaces() {
-	local result current_workspaces current_profile current_story dir elem
+	local result current_workspace current_profile current_story dir elem
 
 	# print out the list of currently active workspaces
 	result=( $(@i3-msg_bin@ -t get_workspaces | @jq_bin@ -r '.[] | if .focused == false then .name else empty end') )
 
 	# print out the list of available stories, but only if we are on the base story
-	current_workspaces="$( @i3-msg_bin@ -t get_workspaces | @jq_bin@ -r '.[] | if .focused == true then .name else empty end' )"
-	current_profile="$( echo "${current_workspaces}" | cut -d\@ -f1 )"
-	current_story="$( echo "${current_workspaces}" | cut -d\@ -f2 )"
+	current_workspace="$( @i3-msg_bin@ -t get_workspaces | @jq_bin@ -r '.[] | if .focused == true then .name else empty end' )"
+	current_profile="$( echo "${current_workspace}" | cut -d\@ -f1 )"
+	current_story="$( echo "${current_workspace}" | cut -d\@ -f2 )"
 	if [[ "${current_story}" == "base" ]]; then
 		for dir in $(find "${HOME}/code/${current_profile}/stories" -mindepth 1 -maxdepth 1); do
 			if [[ -d "${dir}" ]]; then

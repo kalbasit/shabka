@@ -1,4 +1,6 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
+
+with lib;
 
 let
   defaultModifier = "Mod4";
@@ -36,6 +38,35 @@ let
     else "";
 
   extMode = "3440x1440";
+
+  jrnlEntry = pkgs.writeScript "jrnl-entry" ''
+    #!/usr/bin/env bash
+
+    set -euo pipefail
+
+    readonly current_workspace="$( ${getBin pkgs.i3}/bin/i3-msg -t get_workspaces | ${getBin pkgs.jq}/bin/jq -r '.[] | if .focused == true then .name else empty end'  )"
+    readonly current_profile="$( echo "$current_workspace" | cut -d\@ -f1  )"
+    readonly current_story="$( echo "$current_workspace" | cut -d\@ -f2  )"
+
+    # create a temporary file for the jrnl entry
+    jrnl_entry="$(mktemp)"
+    trap "rm $jrnl_entry" EXIT
+
+    cat <<EOF > "$jrnl_entry"
+    # All lines starting with a hash sign are treated as comments and not added to the journal entry.
+    # You are adding a journal entry for profile=$current_profile and story=$current_story
+    # computed from the workspace $current_workspace
+
+    @$current_story
+
+    EOF
+
+    # open a new Alacritty terminal window with vim session inside of it to edit the jrnl entry
+    ${getBin pkgs.alacritty}/bin/alacritty --title jrnl_entry --command nvim +$(wc -l "$jrnl_entry" | awk '{print $1}') +star "$jrnl_entry"
+
+    grep -v '^#' "$jrnl_entry" | ${getBin pkgs.jrnl}/bin/jrnl "$current_profile"
+  '';
+
 in {
   enable = true;
 
@@ -49,6 +80,7 @@ in {
         { command = "floating enable"; criteria = { class = "^SimpleScreenRecorder$"; }; }
         { command = "floating enable"; criteria = { class = "^Tor Browser"; }; }
         { command = "floating enable"; criteria = { class = "^net-filebot-Main$"; }; }
+        { command = "floating enable"; criteria = { title = "^jrnl_entry$"; }; }
 
         { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "^whats-app-nativefier*"; }; }
         { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "pulse-sms"; }; }
@@ -110,6 +142,9 @@ in {
 
       # toggle tiling / floating
       "${thirdModifier}+${secondModifier}+space" = "floating toggle";
+
+      # jrnl entry
+      "${thirdModifier}+j" = "exec ${jrnlEntry}";
 
       # change focus between tiling / floating windows
       "${thirdModifier}+space" = "focus mode_toggle";

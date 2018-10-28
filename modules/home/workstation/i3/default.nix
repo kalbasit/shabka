@@ -12,7 +12,7 @@ with lib;
       enable = true;
 
       windowManager = {
-        i3 = import ./i3-config.lib.nix { inherit config pkgs; };
+        i3 = import ./i3-config.lib.nix { inherit config pkgs lib; };
       };
 
       initExtra = ''
