@@ -21,7 +21,7 @@ in {
 
     gnupg
 
-    go_1_10
+    go
 
     gotop
 
