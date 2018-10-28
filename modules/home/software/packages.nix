@@ -23,6 +23,8 @@ in {
 
     go_1_10
 
+    gotop
+
     jq
 
     jrnl
