@@ -19,6 +19,7 @@ let
       "/yl"                    = { device = rootDevice;   subvol = "@yl"; };
       "/yl/code"               = { device = rootDevice;   subvol = "@code"; options = [ "X-mount.mkdir=0700" ]; };
       "/yl/private"            = { device = rootDevice;   subvol = "@private"; options = [ "X-mount.mkdir=0700" ]; };
+      "/yl/storage"            = { device = storgeDevice; subvol = "@home-kalbasit-storage"; };
 
       # ArchOS
 
