@@ -6,5 +6,5 @@ nixpkgs.mkShell {
     nixops
   ];
 
-  NIXOPS_STATE = "/yl/keybase/private/kalbasit/network/deployments.nixops";
+  NIXOPS_STATE = "/yl/keybase/private/ylcodes/system/deployments.nixops";
 }
