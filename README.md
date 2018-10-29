@@ -17,6 +17,22 @@ NixOS and the other operating systems, including Mac.
 
 # Documentation
 
+## Shabka structure
+
+| Directory   | Description                                                                                        |
+|:----------- |:-------------------------------------------------------------------------------------------------- |
+| overlays    | package and module overrides used throughout the configuration.                                    |
+| scripts     | various development scripts to help with the development.                                          |
+| external    | Nix expressions for fetching externals such as nixos-hardware.                                     |
+| hosts       | top-level expressions specific to individual workstations or servers.                              |
+| modules     |                                                                                                    |
+|  | - nixos  | custom [NixOS][1] modules in the `mine` namespace controlled by host configuration.                |
+|  | - home   | custom [home-manager[4] modules in the `mine` namespace controlled by host configuration.          |
+| util        | Nix expressions, mainly functions, used as helpers in the actual modules.                          |
+| os-specific | OS-specific configuration files, and bootstrap scripts not belonging to NixOS or the home-manager. |
+| libexec     | development helpers, mainly used by the scripts (not invoked directly).                            |
+| network     | top-level expressions describing a NixOps network.                                                 |
+| terraform   | cloud-resources that are not nixops-able.                                                          |
 
 
 ## NixOS
