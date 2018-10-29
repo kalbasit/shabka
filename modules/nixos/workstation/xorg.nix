@@ -14,6 +14,9 @@ in {
     # TODO: move this to the home
     environment.variables.BROWSER = "${pkgs.nur.repos.kalbasit.rbrowser}/bin/rbrowser";
 
+    # start the autorandr service
+    services.autorandr.enable = true;
+
     services.xserver = {
       autorun = true;
       enable = true;
