@@ -1,4 +1,11 @@
-# kalbasit's System
+# Shabka
+
+Shabka, or network in English, is a declarative congruent description of
+my workstations (desktops, and laptops), network and servers.
+
+**TODO**: This README is out of date and will be updated very soon.
+
+====
 
 My system, which describes not only my home dir, but also my entire
 machine, is now managed by [Nix][1] for the home
