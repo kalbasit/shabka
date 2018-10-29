@@ -13,9 +13,6 @@ let
       # NixOS
       "/"                      = { device = rootDevice;   subvol = "@nixos/@root"; };
       "/home"                  = { device = rootDevice;   subvol = "@nixos/@home"; };
-      "/home/kalbasit/code"    = { device = rootDevice;   subvol = "@code"; };
-      "/home/kalbasit/private" = { device = rootDevice;   subvol = "@private"; };
-      "/home/kalbasit/storage" = { device = storgeDevice; subvol = "@home-kalbasit-storage"; };
       "/yl"                    = { device = rootDevice;   subvol = "@yl"; };
       "/yl/code"               = { device = rootDevice;   subvol = "@code"; options = [ "X-mount.mkdir=0700" ]; };
       "/yl/private"            = { device = rootDevice;   subvol = "@private"; options = [ "X-mount.mkdir=0700" ]; };
@@ -23,6 +20,7 @@ let
 
       # ArchOS
 
+      # TODO: Replace kalbasit with yl on ArchLinux
       "/mnt/arch"                       = { device = rootDevice;   subvol = "@arch/@root"; };
       "/mnt/arch/home"                  = { device = rootDevice;   subvol = "@arch/@home"; };
       "/mnt/arch/home/kalbasit/code"    = { device = rootDevice;   subvol = "@code"; };

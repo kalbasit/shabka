@@ -36,7 +36,7 @@ in {
       displayManager.lightdm.enable = true;
       displayManager.lightdm.autoLogin = {
         enable = true;
-        user = "kalbasit";
+        user = "yl";
       };
     };
   };
