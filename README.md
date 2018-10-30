@@ -8,6 +8,8 @@
     - [Convergence](#convergence)
     - [Congruence](#congruence)
     - [Conclusion](#conclusion)
+  - [Why Nix?](#why-nix)
+  - [Why NixOS?](#why-nixos)
 - [Documentation](#documentation)
   - [Shabka structure](#shabka-structure)
   - [NixOS](#nixos)
@@ -107,6 +109,48 @@ reason they broke. Even in the case of hardware failure, all I have to
 do is to replace the hardware knowing full well that my entire system
 can get back online by simply applying the baseline to a fresh machine
 and restore the user data only.
+
+## Why Nix?
+
+[Nix][2] is a powerful package manager for Linux and other Unix systems that
+makes package management reliable and reproducible. It provides atomic
+upgrades and rollbacks, side-by-side installation of multiple versions
+of a package, multi-user package management and easy setup of build
+environments. [Read more…][12]
+
+Packages are built from Nix expressions, which is a simple functional
+language. A Nix expression describes everything that goes into a package
+build action (a “derivation”): other packages, sources, the build
+script, environment variables for the build script, etc. Nix tries very
+hard to ensure that Nix expressions are deterministic: building a Nix
+expression twice should yield the same result.
+
+Because it's a functional language, it's easy to support building
+variants of a package: turn the Nix expression into a function and call
+it any number of times with the appropriate arguments. Due to the
+hashing scheme, variants don't conflict with each other in the Nix
+store.
+
+Nix has a large set of Nix expressions containing thousands of existing
+Unix packages, in the [Nix Packages collection (Nixpkgs)][13].
+
+## Why NixOS?
+
+NixOS is a Linux distribution with a unique approach to package and
+configuration management. Built on top of the [Nix package manager][2],
+it is completely declarative, makes upgrading systems reliable, and has
+[many other advantages][14].
+
+Similar to Nix, NixOS is built upon the concept of atomic system updates
+as well as rollbacks, and that includes the kernel and the initrd images
+for early boot.
+
+You simply cannot find yourself on a system that does not boot anymore,
+provided the hardware is not defective and you have not broken GRUB or
+Systemd-boot.
+
+Please see the [NixOS about page][14] for a quick taste of managing a
+NixOS system.
 
 # Documentation
 
@@ -354,3 +398,6 @@ All source code is licensed under the [MIT License][3].
 [9]: /modules/nixos/general/users.nix
 [10]: /modules/nixos/hardware/
 [11]: https://www.usenix.org/legacy/events/lisa2002/tech/full_papers/traugott/traugott.pdf
+[12]: https://nixos.org/nix/about.html
+[13]: https://nixos.org/nixpkgs
+[14]: https://nixos.org/nixos/about.html
