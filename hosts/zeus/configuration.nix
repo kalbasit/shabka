@@ -22,6 +22,10 @@ in {
     ./home.nix
   ];
 
+  # set the default locale and the timeZone
+  i18n.defaultLocale = "en_US.UTF-8";
+  time.timeZone = "America/Los_Angeles";
+
   networking.hostName = "zeus";
 
   mine.users = { yl = { uid = 2000; isAdmin = true;  home = "/yl"; }; };
