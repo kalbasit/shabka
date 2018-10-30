@@ -73,6 +73,32 @@ See the [home module][8] for more information.
 This option controls the users that get created on the NixOS system.
 They automatically inherit the home manager set in`mine.home-manager.config`.
 
+### `mine.hardware.intel_backlight.enable`
+
+- type: boolean
+- default: false
+
+When this option is enabled, The group of the
+/sys/class/backlight/*/brightness files is changed to the group `video`
+so the user can change the brightness without the need of root.
+
+### `mine.hardware.machine`
+
+- type: string
+- default: empty string
+
+This option describes the make-model, or role of the machine for
+automatic hardware setup. See the [hardware][10] folder.
+
+### `mine.serial_console.enable`
+
+- type: boolean
+- default: false
+
+When this option is enabled, the serial console is enabled for the
+kernel and for GRUB. Although, GRUB is not automatically enabled,
+instead you should do so in the host configuration.
+
 ## Home
 
 TODO
@@ -105,3 +131,4 @@ All source code is licensed under the [MIT License][3].
 [7]: https://github.com/dustinlacewell/dotfiles
 [8]: /modules/home/README.md
 [9]: /modules/nixos/general/users.nix
+[10]: /modules/nixos/hardware/
