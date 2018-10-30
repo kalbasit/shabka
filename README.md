@@ -13,20 +13,21 @@ NixOS and the other operating systems, including Mac.
 - [Documentation](#documentation)
   - [Shabka structure](#shabka-structure)
   - [NixOS](#nixos)
-    - [`mine.useColemakKeyboardLayout`](#mineusecolemakkeyboardlayout)
-    - [`mine.home-manager.config`](#minehome-managerconfig)
-    - [`mine.users`](#mineusers)
-    - [`mine.hardware.intel_backlight.enable`](#minehardwareintel_backlightenable)
-    - [`mine.hardware.machine`](#minehardwaremachine)
-    - [`mine.serial_console.enable`](#mineserial_consoleenable)
-    - [`mine.openvpn.client.expressvpn.enable`](#mineopenvpnclientexpressvpnenable)
-    - [`mine.virtualisation.docker`](#minevirtualisationdocker)
-    - [`mine.gnupg.enable`](#minegnupgenable)
-    - [`mine.plex`](#mineplex)
-    - [`mine.plex.enable`](#mineplexenable)
-    - [`mine.plex.dataDir `](#mineplexdatadir-)
-    - [`mine.printing.enable`](#mineprintingenable)
-    - [`mine.tmux.enable`](#minetmuxenable)
+    - [Options](#options)
+      - [`mine.useColemakKeyboardLayout`](#mineusecolemakkeyboardlayout)
+      - [`mine.home-manager.config`](#minehome-managerconfig)
+      - [`mine.users`](#mineusers)
+      - [`mine.hardware.intel_backlight.enable`](#minehardwareintel_backlightenable)
+      - [`mine.hardware.machine`](#minehardwaremachine)
+      - [`mine.serial_console.enable`](#mineserial_consoleenable)
+      - [`mine.openvpn.client.expressvpn.enable`](#mineopenvpnclientexpressvpnenable)
+      - [`mine.virtualisation.docker`](#minevirtualisationdocker)
+      - [`mine.gnupg.enable`](#minegnupgenable)
+      - [`mine.plex`](#mineplex)
+      - [`mine.plex.enable`](#mineplexenable)
+      - [`mine.plex.dataDir `](#mineplexdatadir-)
+      - [`mine.printing.enable`](#mineprintingenable)
+      - [`mine.tmux.enable`](#minetmuxenable)
   - [Home](#home)
 - [Author](#author)
 - [Credit](#credit)
@@ -58,7 +59,9 @@ NixOS and the other operating systems, including Mac.
 The NixOS module wraps around the upstream NixOS module to provide some
 sensible configuration for the NixOS boxes.
 
-### `mine.useColemakKeyboardLayout`
+### Options
+
+#### `mine.useColemakKeyboardLayout`
 
 - type: boolean
 - default: `false`
@@ -66,7 +69,7 @@ sensible configuration for the NixOS boxes.
 When this option is enabled, the keyboard layout is set to Colemak in
 early console (i.e initrd), the console and the Xorg server.
 
-### `mine.home-manager.config`
+#### `mine.home-manager.config`
 
 - type: Function
 - default: `{ name, uid, isAdmin, nixosConfig }: {...}: {}`
@@ -76,7 +79,7 @@ This option is a function that takes `name`, `uid`, `isAdmin` and
 `home-manager.users.<name>` to configure the home directory of the user.
 See the [home module][8] for more information.
 
-### `mine.users`
+#### `mine.users`
 
 - type: attrs of user to `{ uid, isAdmin, home }`.
 - default: See [users][9] module.
@@ -84,7 +87,7 @@ See the [home module][8] for more information.
 This option controls the users that get created on the NixOS system.
 They automatically inherit the home manager set in`mine.home-manager.config`.
 
-### `mine.hardware.intel_backlight.enable`
+#### `mine.hardware.intel_backlight.enable`
 
 - type: boolean
 - default: false
@@ -93,7 +96,7 @@ When this option is enabled, The group of the
 /sys/class/backlight/*/brightness files is changed to the group `video`
 so the user can change the brightness without the need of root.
 
-### `mine.hardware.machine`
+#### `mine.hardware.machine`
 
 - type: string
 - default: empty string
@@ -101,7 +104,7 @@ so the user can change the brightness without the need of root.
 This option describes the make-model, or role of the machine for
 automatic hardware setup. See the [hardware][10] folder.
 
-### `mine.serial_console.enable`
+#### `mine.serial_console.enable`
 
 - type: boolean
 - default: false
@@ -110,7 +113,7 @@ When this option is enabled, the serial console is enabled for the
 kernel and for GRUB. Although, GRUB is not automatically enabled,
 instead you should do so in the host configuration.
 
-### `mine.openvpn.client.expressvpn.enable`
+#### `mine.openvpn.client.expressvpn.enable`
 
 - type: boolean
 - default: false
@@ -120,37 +123,37 @@ enable any of them.
 
 TODO(low): define the keys and passwords per host.
 
-### `mine.virtualisation.docker`
+#### `mine.virtualisation.docker`
 
 - type: boolean
 - default: false
 
 Enabling this option will install and enable Docker.
 
-### `mine.gnupg.enable`
+#### `mine.gnupg.enable`
 
 - type: boolean
 - default: false
 
 Enabling this option will enable the gnupg agent and the browser socket.
 
-### `mine.plex`
+#### `mine.plex`
 
-### `mine.plex.enable`
+#### `mine.plex.enable`
 
 - type: boolean
 - default: false
 
 Enabling this option will enable the Plex media server.
 
-### `mine.plex.dataDir `
+#### `mine.plex.dataDir `
 
 - type: str
 - default: `""`
 
 Set the dataDir of the Plex Media Server
 
-### `mine.printing.enable`
+#### `mine.printing.enable`
 
 - type: boolean
 - default: false
@@ -159,7 +162,7 @@ Enable printing
 
 TODO(low): add an option to configure the drivers
 
-### `mine.tmux.enable`
+#### `mine.tmux.enable`
 
 - type: boolean
 - default: false
