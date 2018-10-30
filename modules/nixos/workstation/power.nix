@@ -8,8 +8,6 @@ with lib;
   config = mkIf config.mine.workstation.power.enable {
     powerManagement = {
       enable = true;
-      cpuFreqGovernor = null;
     };
   };
 }
-
