@@ -1,3 +1,5 @@
+# TODO(high): This module must be gated by options, specially the mosh firewall one.
+
 { config, lib, ... }:
 
 with lib;

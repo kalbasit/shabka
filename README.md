@@ -99,6 +99,63 @@ When this option is enabled, the serial console is enabled for the
 kernel and for GRUB. Although, GRUB is not automatically enabled,
 instead you should do so in the host configuration.
 
+### `mine.openvpn.client.expressvpn.enable`
+
+- type: boolean
+- default: false
+
+Enabling this option will install the ExpressVPN services, but will not
+enable any of them.
+
+TODO(low): define the keys and passwords per host.
+
+### `mine.virtualisation.docker`
+
+- type: boolean
+- default: false
+
+Enabling this option will install and enable Docker.
+
+### `mine.gnupg.enable`
+
+- type: boolean
+- default: false
+
+Enabling this option will enable the gnupg agent and the browser socket.
+
+### `mine.plex`
+
+### `mine.plex.enable`
+
+- type: boolean
+- default: false
+
+Enabling this option will enable the Plex media server.
+
+### `mine.plex.dataDir `
+
+- type: str
+- default: `""`
+
+Set the dataDir of the Plex Media Server
+
+### `mine.printing.enable`
+
+- type: boolean
+- default: false
+
+Enable printing
+
+TODO(low): add an option to configure the drivers
+
+### `mine.tmux.enable`
+
+- type: boolean
+- default: false
+
+Enable TMux program, pre-configured with my preference.
+
+
 ## Home
 
 TODO

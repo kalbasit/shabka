@@ -16,9 +16,10 @@ in {
   config = mkIf cfg.enable {
     # Plex service
     services.plex = {
+      inherit (cfg) dataDir;
+
       enable = true;
       openFirewall = true;
-      dataDir = cfg.dataDir;
 
       # TODO: setup the plugins after the migration, if any.
       managePlugins = false;
