@@ -7,6 +7,7 @@ let
 
 in {
   network.description = "Network at home, including my VPN on EC2";
+  network.enableRollback = true;
 
   resources = {
     ec2SecurityGroups = {
