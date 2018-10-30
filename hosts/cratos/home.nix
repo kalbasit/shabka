@@ -13,6 +13,7 @@
     mine.pet.enable = true;
     mine.taskwarrior.enable = true;
     mine.timewarrior.enable = true;
+    mine.useColemakKeyboardLayout = true;
     mine.workstation.enable = true;
   };
 }

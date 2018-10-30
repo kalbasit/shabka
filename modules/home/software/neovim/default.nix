@@ -21,7 +21,7 @@ in {
       extraPython3Packages = ps: with ps; [neovim];
 
       configure = {
-        customRC = builtins.readFile (pkgs.substituteAll {
+        customRC = (builtins.readFile (pkgs.substituteAll {
           src = ./init.vim;
 
           ag_bin = "${pkgs.ag}/bin/ag";
@@ -29,73 +29,74 @@ in {
           neovim_node_host_bin = "${pkgs.nodePackages.neovim}/bin/neovim-node-host";
           typescript_server_bin = "${pkgs.nodePackages.typescript}/bin/tsserver";
           xsel_bin = "${pkgs.xsel}/bin/xsel";
-        });
+        })) + (if config.mine.useColemakKeyboardLayout then (builtins.readFile ./colemak.vim) else "");
 
         vam.knownPlugins = pkgs.vimPlugins // my_plugins;
         vam.pluginDictionaries = [
           {
-            names = [ # vimPlugins
-              "Gist"
-              "Gundo"
-              "LanguageClient-neovim"
-              "ack-vim"
-              "ale"
-              "auto-pairs"
-              "caw"
-              "easy-align"
-              "easymotion"
-              "editorconfig-vim"
-              "fzf-vim"
-              "fzfWrapper"
-              "goyo"
-              "multiple-cursors"
-              "nvim-completion-manager"
-              "polyglot"
-              "repeat"
-              "rhubarb"
-              "sleuth"
-              "surround"
-              "vim-airline"
-              "vim-airline-themes"
-              "vim-eunuch"
-              "vim-go"
-              "vim-markdown"
-              "vim-signify"
-              "vim-speeddating"
-              "vimtex"
+            names =
+              [ # vimPlugins
+                "Gist"
+                "Gundo"
+                "LanguageClient-neovim"
+                "ack-vim"
+                "ale"
+                "auto-pairs"
+                "caw"
+                "easy-align"
+                "easymotion"
+                "editorconfig-vim"
+                "fzf-vim"
+                "fzfWrapper"
+                "goyo"
+                "multiple-cursors"
+                "nvim-completion-manager"
+                "polyglot"
+                "repeat"
+                "rhubarb"
+                "sleuth"
+                "surround"
+                "vim-airline"
+                "vim-airline-themes"
+                "vim-eunuch"
+                "vim-go"
+                "vim-markdown"
+                "vim-signify"
+                "vim-speeddating"
+                "vimtex"
 
-              ## DeoPlete completion support
-              "deoplete-nvim"
+                ## DeoPlete completion support
+                "deoplete-nvim"
 
-              # Golang support
-              "deoplete-go"
+                # Golang support
+                "deoplete-go"
 
-              # required by Gist
-              # TODO: https://github.com/NixOS/nixpkgs/pull/43399
-              "webapi-vim"
+                # required by Gist
+                # TODO: https://github.com/NixOS/nixpkgs/pull/43399
+                "webapi-vim"
 
-              "vim-maktaba"
-              "vim-bazel"
-            ] ++ [ # my_plugins
-              "airline-seoul256-theme"
-              "direnv-vim"
-              "traces-vim"
-              "vim-PreserveNoEOL"
-              "vim-better-whitespace"
-              "vim-colemak"
-              "vim-color-seoul256"
-              "vim-csv"
-              "vim-emmet"
-              "vim-fugitive" # update to 2.4
-              "vim-pig"
-              "vim-terraform"
-              "vim-vissort"
-              "vim-zoomwintab"
+                "vim-maktaba"
+                "vim-bazel"
+              ] ++ [ # my_plugins
+                "airline-seoul256-theme"
+                "direnv-vim"
+                "traces-vim"
+                "vim-PreserveNoEOL"
+                "vim-better-whitespace"
+                "vim-color-seoul256"
+                "vim-csv"
+                "vim-emmet"
+                "vim-fugitive" # update to 2.4
+                "vim-pig"
+                "vim-terraform"
+                "vim-vissort"
+                "vim-zoomwintab"
 
-              # Typescript support
-              # "vim-typescript"    # TODO: https://github.com/kalbasit/dotfiles/issues/15
-              "vim-yats"
-            ];
+                # Typescript support
+                # "vim-typescript"    # TODO: https://github.com/kalbasit/dotfiles/issues/15
+                "vim-yats"
+              ]
+              ++ (if config.mine.useColemakKeyboardLayout then ["vim-colemak"] else []);
           }
         ];
       };
