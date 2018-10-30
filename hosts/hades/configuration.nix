@@ -64,6 +64,22 @@ in {
     nasreddineCA
   ];
 
+  services.snapper = {
+    configs = {
+      "code" = {
+        subvolume = "/yl/code";
+      };
+
+      "home" = {
+        subvolume = "/home";
+      };
+
+      "private" = {
+        subvolume = "/yl/private";
+      };
+    };
+  };
+
   services.openvpn.servers = {
     client-nasreddine = {
       autoStart = false;
