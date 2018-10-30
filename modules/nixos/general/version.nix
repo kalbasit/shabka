@@ -16,7 +16,7 @@
 #       generateLabel
 #         (if lib.pathIsDirectory gitDir then gitDir else (builtins.toPath (readGitDir gitDir)));
 #
-#   label = "nixos_${config.system.nixos.version}-system_${system_rev}";
+#   label = "nixos_${config.system.nixos.version}-shabka_${system_rev}";
 #
 # in {
 #   system.nixos.label = label;
@@ -25,7 +25,7 @@
 let
   git_dir = ../../../.git;
   label = "nixos_${config.system.nixos.version}" + (if lib.pathIsDirectory git_dir then
-    "-system_${builtins.substring 0 7 (lib.commitIdFromGitRepo git_dir)}"
+    "-shabka_${builtins.substring 0 7 (lib.commitIdFromGitRepo git_dir)}"
   else "-story");
 
 in {
