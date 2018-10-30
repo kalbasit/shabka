@@ -3,7 +3,7 @@
 **Table of Contents**
 
 - [Shabka](#shabka)
-  - [What is "declarative congruent" system?](#what-is-declarative-congruent-system)
+  - [What is "declarative congruence"?](#what-is-declarative-congruence)
     - [Divergence](#divergence)
     - [Convergence](#convergence)
     - [Congruence](#congruence)
@@ -80,7 +80,7 @@ It's based on the [NixOS][1] operating system, and uses
 [home-manager][4] to setup the home directory of the users, for both
 NixOS and the other operating systems, including Mac.
 
-## What is "declarative congruent" system?
+## What is "declarative congruence"?
 
 There are three system management methods that greatly depend on the
 tools that you are using for managing these systems
