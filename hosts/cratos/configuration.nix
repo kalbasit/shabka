@@ -51,6 +51,10 @@ in {
 
   mine.hardware.machine = "xps-13";
 
+  services.logind.extraConfig = ''
+    HandlePowerKey=suspend
+  '';
+
   security.pki.certificates = [
     nasreddineCA
   ];
