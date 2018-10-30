@@ -1,3 +1,4 @@
+# TODO(high): the gpg key must be configurable
 { config, pkgs, lib, ... }:
 
 with lib;
@@ -253,9 +254,6 @@ with lib;
         # Other Version Control Systems #
         #################################
         ".svn/"
-
-
-
 
 
         # Invert gitingore (Should be last) #
