@@ -4,7 +4,7 @@ with lib;
 
 let
 
-  system-path = builtins.toPath ./../../..;
+  shabka-path = builtins.toPath ./../../..;
 
 in {
   nix = {
@@ -21,7 +21,7 @@ in {
       "nixos-config=/etc/nixos/configuration.nix"
       "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
       "home-manager=/nix/var/nix/profiles/per-user/root/channels/home-manager"
-      "system-path=${system-path}"
+      "shabka-path=${shabka-path}"
     ];
 
     optimise = {
@@ -43,15 +43,5 @@ in {
     useSandbox = true;
 
     distributedBuilds = true;
-    buildMachines = [{
-      hostName = "zeus.home.nasreddine.com";
-      sshUser = "yl";
-      sshKey = "/yl/private/private-home-files/.ssh/personal/id_rsa";
-      system = "x86_64-linux";
-      maxJobs = 8;
-      speedFactor = 2;
-      supportedFeatures = [ ];
-      mandatoryFeatures = [ ];
-    }];
   };
 }
