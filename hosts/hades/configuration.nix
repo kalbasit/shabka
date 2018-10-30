@@ -54,6 +54,10 @@ in {
 
   mine.hardware.machine = "precision-7530";
 
+  services.logind.extraConfig = ''
+    HandlePowerKey=suspend
+  '';
+
   security.pki.certificates = [
     nasreddineCA
   ];
