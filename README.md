@@ -1,15 +1,8 @@
-# Shabka
-
-Shabka (Arabic for Network) is a declarative congruent representation of
-my workstations (desktops, and laptops), network devices and servers.
-It's based on the [NixOS][1] operating system, and uses
-[home-manager][4] to setup the home directory of the users, for both
-NixOS and the other operating systems, including Mac.
-
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
+- [Shabka](#shabka)
 - [Documentation](#documentation)
   - [Shabka structure](#shabka-structure)
   - [NixOS](#nixos)
@@ -44,6 +37,14 @@ NixOS and the other operating systems, including Mac.
 - [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+# Shabka
+
+Shabka (Arabic for Network) is a declarative congruent representation of
+my workstations (desktops, and laptops), network devices and servers.
+It's based on the [NixOS][1] operating system, and uses
+[home-manager][4] to setup the home directory of the users, for both
+NixOS and the other operating systems, including Mac.
 
 # Documentation
 
