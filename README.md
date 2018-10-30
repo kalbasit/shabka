@@ -598,7 +598,7 @@ Thanks to `#nixos` community on Freenode, particularly `infinisil`,
 system and debug it.
 
 The host configuration, the modules and the options are inspired by
-@dustinlacewell 's [dotfiles][7].
+[@dustinlacewell][15]'s [dotfiles][7].
 
 The images from the declarative congruence description above are taken
 from the paper published on Usenet, written by Steve Traugott and Lance
@@ -622,3 +622,4 @@ All source code is licensed under the [MIT License][3].
 [12]: https://nixos.org/nix/about.html
 [13]: https://nixos.org/nixpkgs
 [14]: https://nixos.org/nixos/about.html
+[15]: https://github.com/dustinlacewell
