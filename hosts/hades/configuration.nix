@@ -1,3 +1,4 @@
+# TODO(high): remove the requirement for the private files
 assert (builtins.pathExists /yl/private);
 
 let
@@ -22,6 +23,19 @@ in {
   time.timeZone = "America/Los_Angeles";
 
   networking.hostName = "hades";
+
+  nix.buildMachines =
+    if builtins.pathExists /yl/private/private-home-files/.ssh/personal/id_rsa then
+    [{
+      hostName = "zeus.home.nasreddine.com";
+      sshUser = "yl";
+      sshKey = "/yl/private/private-home-files/.ssh/personal/id_rsa";
+      system = "x86_64-linux";
+      maxJobs = 8;
+      speedFactor = 2;
+      supportedFeatures = [ ];
+      mandatoryFeatures = [ ];
+    }] else [];
 
   mine.gnupg.enable = true;
   mine.hardware.intel_backlight.enable = true;
