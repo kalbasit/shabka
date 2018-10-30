@@ -28,6 +28,16 @@ NixOS and the other operating systems, including Mac.
       - [`mine.plex.dataDir `](#mineplexdatadir-)
       - [`mine.printing.enable`](#mineprintingenable)
       - [`mine.tmux.enable`](#minetmuxenable)
+      - [`mine.workstation.enable`](#mineworkstationenable)
+        - [`mine.workstation.fonts.enable`](#mineworkstationfontsenable)
+        - [`mine.workstation.gnome-keyring.enable`](#mineworkstationgnome-keyringenable)
+        - [`mine.workstation.networking.enable`](#mineworkstationnetworkingenable)
+        - [`mine.workstation.power.enable`](#mineworkstationpowerenable)
+        - [`mine.workstation.redshift.enable`](#mineworkstationredshiftenable)
+        - [`mine.workstation.sound.enable`](#mineworkstationsoundenable)
+        - [`mine.workstation.teamviewer.enable`](#mineworkstationteamviewerenable)
+        - [`mine.workstation.virtualbox.enable`](#mineworkstationvirtualboxenable)
+        - [`mine.workstation.xorg.enable`](#mineworkstationxorgenable)
   - [Home](#home)
 - [Author](#author)
 - [Credit](#credit)
@@ -169,6 +179,83 @@ TODO(low): add an option to configure the drivers
 
 Enable TMux program, pre-configured with my preference.
 
+#### `mine.workstation.enable`
+
+- type: boolean
+- default: false
+
+This option is a meta for all the following options, enabling it will
+enable them all. Set this to true when setting up a workstation.
+
+##### `mine.workstation.fonts.enable`
+
+- type: boolean
+- default: false
+
+Enable this option to install `powerline-fonts` and enable fontDir and
+ghostscriptFonts.
+
+##### `mine.workstation.gnome-keyring.enable`
+
+- type: boolean
+- default: false
+
+Enable this option to start the Gnome3 keyring.
+
+##### `mine.workstation.networking.enable`
+
+- type: boolean
+- default: false
+
+Enable this option to start the Network Manager.
+
+##### `mine.workstation.power.enable`
+
+- type: boolean
+- default: false
+
+Enable power management.
+
+##### `mine.workstation.redshift.enable`
+
+- type: boolean
+- default: false
+
+Enables the redshift service for tunning out blue colors in the dark.
+
+##### `mine.workstation.sound.enable`
+
+- type: boolean
+- default: false
+
+Enables sound via Pule audio and installs pavucontrol in the system
+packages.
+
+##### `mine.workstation.teamviewer.enable`
+
+- type: boolean
+- default: false
+
+Install the TeamViewer application and installs and enables the
+TeamViewer service.
+
+##### `mine.workstation.virtualbox.enable`
+
+- type: boolean
+- default: false
+
+Install and enable VirtualBox with extension pack.
+
+##### `mine.workstation.xorg.enable`
+
+- type: boolean
+- default: false
+
+Enable Xorg and:
+
+- Set the display manager to lightdm
+- Enable libinput and naturalScrolling
+- Install the Gnome3 and Plasma5 desktop managers
 
 ## Home
 
