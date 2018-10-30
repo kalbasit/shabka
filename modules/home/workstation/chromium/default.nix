@@ -1,3 +1,4 @@
+# TODO(high): Surfingkeys must be composed of two files, the main one and the colemak bindings.
 { config, pkgs, lib, ... }:
 
 with lib;

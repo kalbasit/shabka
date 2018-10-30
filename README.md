@@ -61,7 +61,6 @@
         - [`mine.workstation.dunst.enable`](#mineworkstationdunstenable)
         - [`mine.workstation.firefox.enable`](#mineworkstationfirefoxenable)
         - [`mine.workstation.greenclip.enable`](#mineworkstationgreenclipenable)
-        - [`mine.workstation.i3.enable`](#mineworkstationi3enable)
         - [`mine.workstation.locker.enable`](#mineworkstationlockerenable)
         - [`mine.workstation.mysql-workbench.enable`](#mineworkstationmysql-workbenchenable)
         - [`mine.workstation.rofi.enable`](#mineworkstationrofienable)
@@ -473,22 +472,118 @@ Install and configure git.
 Install and configure less.
 
 #### `mine.neovim.enable`
+
+- type: boolean
+- default: false
+
+Install and configure neovim.
+
 #### `mine.pet.enable`
+
+- type: boolean
+- default: false
+
+Install and configure neovim.
+
 #### `mine.taskwarrior.enable`
+
+- type: boolean
+- default: false
+
+Install and configure taskwarrior.
+
 #### `mine.timewarrior.enable`
+
+- type: boolean
+- default: false
+
+Install and configure timewarrior.
+
 #### `mine.workstation.enable`
+
+- type: boolean
+- default: false
+
+This option is a meta for all the following options, enabling it will
+enable them all. Set this to true when setting up a workstation.
+
 ##### `mine.workstation.alacritty.enable`
+
+- type: boolean
+- default: false
+
+Install and configure alacritty.
+
 ##### `mine.workstation.chromium.enable`
+
+- type: boolean
+- default: false
+
+Install and configure chromium with all my profiles and generate and
+install surfingkeys.
+
 ##### `mine.workstation.dropbox.enable`
+
+- type: boolean
+- default: false
+
+Install and configure dropbox.
+
 ##### `mine.workstation.dunst.enable`
+
+- type: boolean
+- default: false
+
+Install and configure dunst.
+
 ##### `mine.workstation.firefox.enable`
+
+- type: boolean
+- default: false
+
+Install and configure firefox.
+
 ##### `mine.workstation.greenclip.enable`
-##### `mine.workstation.i3.enable`
+
+- type: boolean
+- default: false
+
+Install and configure greenclip.
+
 ##### `mine.workstation.locker.enable`
+
+- type: boolean
+- default: false
+
+Install and configure the screen locker.
+
 ##### `mine.workstation.mysql-workbench.enable`
+
+- type: boolean
+- default: false
+
+Install and configure mysql-workbench.
+
 ##### `mine.workstation.rofi.enable`
+
+- type: boolean
+- default: false
+
+Install and configure rofi.
+
 ##### `mine.workstation.termite.enable`
+
+- type: boolean
+- default: false
+
+Install and configure termite.
+
 #### `mine.windowManager`
+
+- type: str
+- default: "i3"
+
+Select the window manager, currently supported i3, Plasma5 and Gnome3.
 
 # Author
 
