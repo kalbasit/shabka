@@ -366,7 +366,101 @@ Enable Xorg and:
 
 ## Home
 
-TODO
+The NixOS module wraps around the upstream home-manager module to provide some
+sensible configuration for all my Unix boxes.
+
+### Options
+
+#### `mine.useColemakKeyboardLayout`
+
+- type: boolean
+- default: `false`
+
+When this option is enabled, the keyboard layout is set to Colemak in
+early console (i.e initrd), the console and the Xorg server.
+
+#### `mine.nixosConfig`
+
+- type: boolean
+- default: `{}`
+
+This option is set by the NixOS module for communicating the system
+configuration down to the home-manager configuration.
+
+#### `mine.gnupg.enable`
+
+- type: boolean
+- default: false
+
+Enabling this option will enable the gnupg agent and the browser socket.
+
+#### `mine.batteryNotifier`
+
+This module provides a systemd service that notifies the user when the
+notifyCapacity is reached and automatically hibernate when the
+hibernateCapacity is reached.
+
+##### `mine.batteryNotifier.enable`
+
+- type: boolean
+- default: false
+
+Enable this to enable the batteryNotifier.
+
+##### `mine.batteryNotifier.device`
+
+- type: str
+- default: "BAT0"
+
+The device representing the battery in your laptop, it must exist under
+`/sys/class/power_supply/`.
+
+##### `mine.batteryNotifier.notifyCapacity`
+
+- type: integer
+- default: 10
+
+The percentage of the battery when reached a notification will be sent
+to the user.
+
+##### `mine.batteryNotifier.hibernateCapacity`
+
+- type: integer
+- default: 10
+
+The percentage of the battery when reached, the system will hibernate.
+
+#### `mine.git.enable`
+
+- type: boolean
+- default: false
+
+Install and configure git.
+
+#### `mine.less.enable`
+
+- type: boolean
+- default: false
+
+Install and configure less.
+
+#### `mine.neovim.enable`
+#### `mine.pet.enable`
+#### `mine.taskwarrior.enable`
+#### `mine.timewarrior.enable`
+#### `mine.workstation.enable`
+##### `mine.workstation.alacritty.enable`
+##### `mine.workstation.chromium.enable`
+##### `mine.workstation.dropbox.enable`
+##### `mine.workstation.dunst.enable`
+##### `mine.workstation.firefox.enable`
+##### `mine.workstation.greenclip.enable`
+##### `mine.workstation.i3.enable`
+##### `mine.workstation.locker.enable`
+##### `mine.workstation.mysql-workbench.enable`
+##### `mine.workstation.rofi.enable`
+##### `mine.workstation.termite.enable`
+#### `mine.windowManager`
 
 # Author
 
