@@ -14,7 +14,6 @@ with import ../../../util;
       "networking"
       "power"
       "redshift"
-      "snapper"
       "sound"
       "teamviewer"
       "virtualbox"
