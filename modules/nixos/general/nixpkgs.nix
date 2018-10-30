@@ -1,5 +1,7 @@
 { lib, ... }:
 
+with lib;
+
 let
 
   pinnedNUR = import ../../../external/nur.nix;
@@ -9,7 +11,7 @@ in {
   nixpkgs.config = {
     allowUnfree = true;
     packageOverrides = pkgs: {
-      nur = lib.recursiveUpdate
+      nur = recursiveUpdate
         (import pinnedNUR { inherit pkgs; })
         ({
           repos = {

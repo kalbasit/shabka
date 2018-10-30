@@ -5,6 +5,11 @@ let
 
   pinnedNH = import ../../external/nixos-hardware.nix;
 
+  nasreddineCA = builtins.readFile (builtins.fetchurl {
+    url = "https://kalbas.it/ca.crt";
+    sha256 = "17x45njva3a535czgdp5z43gmgwl0lk68p4mgip8jclpiycb6qbl";
+  });
+
 in {
   imports = [
     ./hardware-configuration.nix
@@ -48,6 +53,10 @@ in {
   mine.workstation.publica.enable = true;
 
   mine.hardware.machine = "precision-7530";
+
+  security.pki.certificates = [
+    nasreddineCA
+  ];
 
   services.openvpn.servers = {
     client-nasreddine = {
