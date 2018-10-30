@@ -29,6 +29,7 @@ in {
   mine.gnupg.enable = true;
   mine.openvpn.client.expressvpn.enable = true;
   mine.tmux.enable = true;
+  mine.useColemakKeyboardLayout = true;
   mine.virtualisation.docker.enable = true;
 
   mine.hardware.machine = "zeus";
