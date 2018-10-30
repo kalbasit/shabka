@@ -66,58 +66,6 @@ in {
         bind-key -n M-o if-shell "$is_vim" "send-keys M-o"  "select-pane -R"
 
         #
-        # Colemak binding
-        #
-
-        # cursor movement
-        bind-key -r -T copy-mode-vi n send -X cursor-left
-        bind-key -r -T copy-mode-vi e send -X cursor-down
-        bind-key -r -T copy-mode-vi i send -X cursor-up
-        bind-key -r -T copy-mode-vi o send -X cursor-right
-
-        # word movement
-        bind-key -r -T copy-mode-vi u send -X next-word-end
-        bind-key -r -T copy-mode-vi U send -X next-space-end
-        bind-key -r -T copy-mode-vi y send -X next-word
-        bind-key -r -T copy-mode-vi Y send -X next-space
-        bind-key -r -T copy-mode-vi l send -X previous-word
-        bind-key -r -T copy-mode-vi L send -X previous-space
-
-        # search
-        bind-key -r -T copy-mode-vi k send -X search-again
-        bind-key -r -T copy-mode-vi K send -X search-reverse
-
-        # visual mode
-        bind-key -r -T copy-mode-vi a send -X begin-selection
-
-        # yank
-        bind-key -r -T copy-mode-vi c send -X copy-selection-and-cancel
-        bind-key -r -T copy-mode-vi C send -X copy-selection
-
-        # char search
-        bind-key -r -T copy-mode-vi p command-prompt -1 -p "jump to forward" "send -X jump-to-forward \"%%%\""
-        bind-key -r -T copy-mode-vi P command-prompt -1 -p "jump to backward" "send -X jump-to-backward \"%%%\""
-
-        # resize panes
-        bind-key M-n resize-pane -L 5
-        bind-key M-e resize-pane -D 5
-        bind-key M-i resize-pane -U 5
-        bind-key M-o resize-pane -R 5
-
-        # Change window move behavior
-        bind . command-prompt "swap-window -t '%%'"
-        bind > command-prompt "move-window -t '%%'"
-
-        # More straight forward key bindings for splitting
-        unbind %
-        bind h split-window -h
-        unbind '"'
-        bind v split-window -v
-
-        # The shortcut is set to <t> which overrides the default mapping for clock mode
-        bind T clock-mode
-
-        #
         # Settings
         #
 
@@ -181,6 +129,59 @@ in {
         bind-key C-g run "${pkgs.tmux}/bin/tmux save-buffer - | ${pkgs.gist}/bin/gist -f tmux.sh-session --private | ${pkgs.xsel}/bin/xsel --clipboard -i && ${pkgs.libnotify}/bin/notify-send -a Tmux 'Buffer saved as private gist' 'Tmux buffer was saved as Gist, URL in clipboard' --icon=dialog-information"
         bind-key C-c run "${pkgs.tmux}/bin/tmux save-buffer - | ${pkgs.xsel}/bin/xsel --clipboard -i"
         bind-key C-v run "${pkgs.xsel}/bin/xsel --clipboard -o | ${pkgs.tmux}/bin/tmux load-buffer; ${pkgs.tmux}/bin/tmux paste-buffer"
+      '' + optionalString config.mine.useColemakKeyboardLayout ''
+        #
+        # Colemak binding
+        #
+
+        # cursor movement
+        bind-key -r -T copy-mode-vi n send -X cursor-left
+        bind-key -r -T copy-mode-vi e send -X cursor-down
+        bind-key -r -T copy-mode-vi i send -X cursor-up
+        bind-key -r -T copy-mode-vi o send -X cursor-right
+
+        # word movement
+        bind-key -r -T copy-mode-vi u send -X next-word-end
+        bind-key -r -T copy-mode-vi U send -X next-space-end
+        bind-key -r -T copy-mode-vi y send -X next-word
+        bind-key -r -T copy-mode-vi Y send -X next-space
+        bind-key -r -T copy-mode-vi l send -X previous-word
+        bind-key -r -T copy-mode-vi L send -X previous-space
+
+        # search
+        bind-key -r -T copy-mode-vi k send -X search-again
+        bind-key -r -T copy-mode-vi K send -X search-reverse
+
+        # visual mode
+        bind-key -r -T copy-mode-vi a send -X begin-selection
+
+        # yank
+        bind-key -r -T copy-mode-vi c send -X copy-selection-and-cancel
+        bind-key -r -T copy-mode-vi C send -X copy-selection
+
+        # char search
+        bind-key -r -T copy-mode-vi p command-prompt -1 -p "jump to forward" "send -X jump-to-forward \"%%%\""
+        bind-key -r -T copy-mode-vi P command-prompt -1 -p "jump to backward" "send -X jump-to-backward \"%%%\""
+
+        # resize panes
+        bind-key M-n resize-pane -L 5
+        bind-key M-e resize-pane -D 5
+        bind-key M-i resize-pane -U 5
+        bind-key M-o resize-pane -R 5
+
+        # Change window move behavior
+        bind . command-prompt "swap-window -t '%%'"
+        bind > command-prompt "move-window -t '%%'"
+
+        # More straight forward key bindings for splitting
+        unbind %
+        bind h split-window -h
+        unbind '"'
+        bind v split-window -v
+
+        # The shortcut is set to <t> which overrides the default mapping for clock mode
+        bind T clock-mode
+
       '';
     };
   };
