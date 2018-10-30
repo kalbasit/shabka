@@ -601,7 +601,8 @@ The host configuration, the modules and the options are inspired by
 @dustinlacewell 's [dotfiles][7].
 
 The images from the declarative congruence description above are taken
-from the paper published on Usenet.
+from the paper published on Usenet, written by Steve Traugott and Lance
+Brown.
 
 # License
 
