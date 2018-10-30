@@ -121,8 +121,8 @@ representation in order to make the changes that you are attempting.
 ### Conclusion
 
 Working with a declarative baseline for an infrastructure (whatever the
-indented use case of the machine or machines in your network) allows the
-system to be replicated in a matter of minutes with no manual
+indented use case of the machine or machines in your network may be)
+allows the system to be replicated in a matter of minutes with no manual
 configuration or missed steps. It also allows you to know, at any point,
 what's the state of your entire infrastructure by simply reading the
 declarative baseline of it.
@@ -189,8 +189,8 @@ NixOS system.
 | scripts       | various development scripts to help with the development.                                          |
 | external      | Nix expressions for fetching externals such as nixos-hardware.                                     |
 | hosts         | top-level expressions specific to individual workstations or servers.                              |
-| modules/nixos | custom [NixOS][1] modules in the `mine` namespace controlled by host configuration.                |
-| modules/home  | custom [home-manager][4] modules in the `mine` namespace controlled by host configuration.         |
+| modules/nixos | custom [NixOS][1] modules under the `mine` namespace controlled by host configuration.             |
+| modules/home  | custom [home-manager][4] modules under the `mine` namespace controlled by host configuration.      |
 | util          | Nix expressions, mainly functions, used as helpers in the actual modules.                          |
 | os-specific   | OS-specific configuration files, and bootstrap scripts not belonging to NixOS or the home-manager. |
 | libexec       | development helpers, mainly used by the scripts (not invoked directly).                            |
