@@ -75,7 +75,7 @@ They automatically inherit the home manager set in`mine.home-manager.config`.
 
 ## Home
 
-The Home module is documented in details over in the module's [README][6].
+TODO
 
 # Author
 
