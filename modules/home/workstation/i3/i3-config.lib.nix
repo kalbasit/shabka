@@ -185,7 +185,7 @@ in {
       "${defaultModifier}+d" = "focus child";
 
       # start a region screenshot
-      "${defaultModifier}+${secondModifier}+4" = "exec ${pkgs.flameshot}/bin/flameshot gui --delay 500 --path ~/Desktop";
+      "${defaultModifier}+${secondModifier}+4" = "exec ${pkgs.flameshot}/bin/flameshot gui --delay 500 --path ${config.home.homeDirectory}/Desktop";
 
       # start a screen recorder
       "${defaultModifier}+${secondModifier}+5" = "exec ${pkgs.simplescreenrecorder}/bin/simplescreenrecorder";
