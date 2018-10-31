@@ -43,6 +43,9 @@ in {
       supportedFeatures = [ ];
       mandatoryFeatures = [ ];
     }] else [];
+  nix.extraOptions = ''
+    builders-use-substitutes = true
+  '';
 
   mine.gnupg.enable = true;
   mine.hardware.intel_backlight.enable = true;

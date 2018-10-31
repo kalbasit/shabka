@@ -41,6 +41,9 @@ in {
       supportedFeatures = [ ];
       mandatoryFeatures = [ ];
     }] else [];
+  nix.extraOptions = ''
+    builders-use-substitutes = true
+  '';
 
   mine.hardware.intel_backlight.enable = true;
   mine.openvpn.client.expressvpn.enable = true;
