@@ -15,6 +15,16 @@ let
 
       rm -f $out/default.nix
 
+      substituteInPlace $out/c \
+        --subst-var-by tar_bin ${getBin pkgs.gnutar}/bin/tar \
+        --subst-var-by bzip2_bin ${getBin pkgs.bzip2}/bin/bzip2 \
+        --subst-var-by gzip_bin ${getBin pkgs.gzip}/bin/gzip \
+        --subst-var-by zip_bin ${getBin pkgs.zip}/bin/zip
+
+      # TODO:
+      # --subst-var-by rar_bin {getBin pkgs.}/bin/ \
+      # --subst-var-by jar_bin {getBin pkgs.}/bin/ \
+
       substituteInPlace $out/get_pr \
         --subst-var-by curl_bin ${getBin pkgs.curl}/bin/curl \
         --subst-var-by git_bin ${getBin pkgs.git}/bin/git \

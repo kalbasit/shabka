@@ -21,50 +21,50 @@ function c() {
 
 		case "${archive}" in
 			*.tar.bz2)
-				cmd="tar"
+				cmd="@tar_bin@"
 				flags="cjf"
 				;;
 			*.tar.gz)
-				cmd="tar"
+				cmd="@tar_bin@"
 				flags="czf"
 				;;
 			*.bz2)
-				cmd="bzip2"
+				cmd="@bzip2_bin@"
 				flags=""
 				archive="" # Bzip2 takes one Argument
 				;;
 			*.rar)
-				cmd="rar"
+				cmd="@rar_bin@"
 				flags="c"
 				;;
 			*.gz)
-				cmd="gzip"
+				cmd="@gzip_bin@"
 				flags=""
 				archive="" # gzip takes one Argument
 				;;
 			*.tar)
-				cmd="tar"
+				cmd="@tar_bin@"
 				flags="cf"
 				;;
 			*.jar)
-				cmd="jar cf"
+				cmd="@jar cf_bin@"
 				flags="cf"
 				;;
 			*.tbz2)
-				cmd="tar"
+				cmd="@tar_bin@"
 				flags="cjf"
 				;;
 			*.tgz)
-				cmd="tar"
+				cmd="@tar_bin@"
 				flags="czf"
 				;;
 			*.zip|*.xpi)
-				cmd="zip"
+				cmd="@zip_bin@"
 				flags="-r"
 				;;
 				# TODO .Z and .7z formats
 				*)
-				print_error 0 "'${archive}' is not a valid archive type i am aware of."
+				print_error 0 "'${archive}' is not a valid archive type I am aware of."
 				return 1
 				;;
 		esac
