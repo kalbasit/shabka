@@ -7,6 +7,7 @@ with lib;
 
   config = mkIf config.mine.workstation.i3.enable {
     home.file.".config/i3status/config".text = builtins.readFile ./i3status-config;
+    home.file."Desktop/.keep".text = "";
 
     xsession = {
       enable = true;
