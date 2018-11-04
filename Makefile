@@ -1,6 +1,22 @@
-.PHONY: all brew add-channels update-channels update update-nixpkgs update-nixos-hardware update-nur update-kalbasit-nur
+.PHONY: all brew build test switch boot add-channels update-channels update-external update-nixpkgs update-nixos-hardware update-nur update-kalbasit-nur
 
-all: add-channels update-channels
+all: build
+
+build:
+	nixos-rebuild -I nixos-config=$(shell pwd)/hosts/$(shell hostname -s)/configuration.nix build --show-trace
+
+test:
+	sudo -i nixos-rebuild -I nixos-config=$(shell pwd)/hosts/$(shell hostname -s)/configuration.nix test
+
+# switch is not allowed to specify nixos-config as only the base repo (not any
+# of the git worktrees) may switch the system
+switch:
+	sudo -i nixos-rebuild switch
+
+# boot is not allowed to specify nixos-config as only the base repo (not any
+# of the git worktrees) may switch the system
+boot:
+	sudo -i nixos-rebuild boot
 
 brew:
 	brew bundle --file=os-specific/darwin/Brewfile
@@ -18,7 +34,7 @@ update-channels:
 	sudo -i nix-channel --update
 	@echo
 
-update: update-nixpkgs update-nixos-hardware update-kalbasit-nur
+update-external: update-nixpkgs update-nixos-hardware update-kalbasit-nur
 
 update-nixpkgs:
 	nix-shell -p nix-prefetch-git --run 'nix-prefetch-git https://github.com/NixOS/nixpkgs-channels.git refs/heads/nixos-unstable' > external/nixpkgs-version.json
