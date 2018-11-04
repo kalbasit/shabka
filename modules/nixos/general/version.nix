@@ -24,9 +24,9 @@
 
 let
   git_dir = ../../../.git;
-  label = "nixos_${config.system.nixos.version}" + (if lib.pathIsDirectory git_dir then
-    "-shabka_${builtins.substring 0 7 (lib.commitIdFromGitRepo git_dir)}"
-  else "-story");
+  label = "nixos_${config.system.nixos.version}-shabka_" + (if lib.pathIsDirectory git_dir then
+    "${builtins.substring 0 7 (lib.commitIdFromGitRepo git_dir)}"
+  else "story");
 
 in {
   # git is required to compute the label within lib.commitIdFromGitRepo.
