@@ -12,6 +12,9 @@ let
     tmuxPlugins.fzf-tmux-url
   ];
 
+  # TODO(high): Move this over to the theme once TMux module is merged upstream
+  # in home-manager and this nixos module has been moved to the home module.
+  # See https://github.com/rycee/home-manager/pull/388.
   seoul256Color = ''
     set-option -g status-justify left
     set-option -g status-left '#[bg=colour72] #[bg=colour237] #[bg=colour236] #{prefix_highlight} #[bg=colour235]#[fg=colour185] #h #[bg=colour236] '

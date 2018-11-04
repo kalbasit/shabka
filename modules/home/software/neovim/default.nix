@@ -3,11 +3,40 @@
 with lib;
 
 let
-  my_plugins = pkgs.callPackage ./plugins.lib.nix {};
-in {
-  options.mine.neovim.enable = mkEnableOption "neovim";
 
-  config = mkIf config.mine.neovim.enable {
+  cfg = config.mine.neovim;
+
+  my_plugins = pkgs.callPackage ./plugins.lib.nix {};
+
+in {
+  options.mine.neovim = {
+    enable = mkEnableOption "neovim";
+
+    extraRC = mkOption {
+      type = types.str;
+      default = "";
+      description = ''
+        Extra NeoVim init configuration.
+      '';
+    };
+
+    extraKnownPlugins = mkOption {
+      default = {};
+      description = ''
+        Extra NeoVim known plugins.
+      '';
+    };
+
+    extraPluginDictionaries = mkOption {
+      type = with types; listOf attrs;
+      default = [];
+      description = ''
+        Extra NeoVim plugin dictionary.
+      '';
+    };
+  };
+
+  config = mkIf cfg.enable {
     programs.neovim = {
       enable = true;
 
@@ -21,7 +50,7 @@ in {
       extraPython3Packages = ps: with ps; [neovim];
 
       configure = {
-        customRC = (builtins.readFile (pkgs.substituteAll {
+        customRC = cfg.extraRC + (builtins.readFile (pkgs.substituteAll {
           src = ./init.vim;
 
           ag_bin = "${pkgs.ag}/bin/ag";
@@ -31,8 +60,8 @@ in {
           xsel_bin = "${pkgs.xsel}/bin/xsel";
         })) + (if config.mine.useColemakKeyboardLayout then (builtins.readFile ./colemak.vim) else "");
 
-        vam.knownPlugins = pkgs.vimPlugins // my_plugins;
-        vam.pluginDictionaries = [
+        vam.knownPlugins = pkgs.vimPlugins // my_plugins // cfg.extraKnownPlugins;
+        vam.pluginDictionaries = cfg.extraPluginDictionaries ++ [
           {
             names =
               [ # vimPlugins
@@ -78,12 +107,10 @@ in {
                 "vim-maktaba"
                 "vim-bazel"
               ] ++ [ # my_plugins
-                "airline-seoul256-theme"
                 "direnv-vim"
                 "traces-vim"
                 "vim-PreserveNoEOL"
                 "vim-better-whitespace"
-                "vim-color-seoul256"
                 "vim-csv"
                 "vim-emmet"
                 "vim-fugitive" # update to 2.4

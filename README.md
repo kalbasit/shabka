@@ -51,9 +51,13 @@
       - [`mine.git.enable`](#minegitenable)
       - [`mine.less.enable`](#minelessenable)
       - [`mine.neovim.enable`](#mineneovimenable)
+      - [`mine.neovim.extraRC`](#mineneovimextrarc)
+      - [`mine.neovim.extraKnownPlugins`](#mineneovimextraknownplugins)
+      - [`mine.neovim.extraPluginDictionaries`](#mineneovimextraplugindictionaries)
       - [`mine.pet.enable`](#minepetenable)
       - [`mine.taskwarrior.enable`](#minetaskwarriorenable)
       - [`mine.timewarrior.enable`](#minetimewarriorenable)
+      - [`mine.theme`](#minetheme)
       - [`mine.workstation.enable`](#mineworkstationenable-1)
         - [`mine.workstation.alacritty.enable`](#mineworkstationalacrittyenable)
         - [`mine.workstation.chromium.enable`](#mineworkstationchromiumenable)
@@ -478,6 +482,27 @@ Install and configure less.
 
 Install and configure neovim.
 
+#### `mine.neovim.extraRC`
+
+- type: str
+- default: ""
+
+Extra NeoVim configuration.
+
+#### `mine.neovim.extraKnownPlugins`
+
+- type: attrs
+- default: {}
+
+Extra NeoVim known plugins
+
+#### `mine.neovim.extraPluginDictionaries`
+
+- type: list
+- default: []
+
+Extra NeoVim plugin dictionary.
+
 #### `mine.pet.enable`
 
 - type: boolean
@@ -498,6 +523,14 @@ Install and configure taskwarrior.
 - default: false
 
 Install and configure timewarrior.
+
+#### `mine.theme`
+
+- type: string
+- default: "seoul256"
+
+This options controls the theme of all of the applications supported by
+the theme. Please see the [theme][16] folder
 
 #### `mine.workstation.enable`
 
@@ -623,3 +656,4 @@ All source code is licensed under the [MIT License][3].
 [13]: https://nixos.org/nixpkgs
 [14]: https://nixos.org/nixos/about.html
 [15]: https://github.com/dustinlacewell
+[16]: /modules/home/theme

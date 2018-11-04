@@ -5,9 +5,6 @@ let g:nvim_typescript#server_path = '@typescript_server_bin@'
 "" Settings{{{
 ""
 
-" set background=dark
-colorscheme seoul256
-
 " set the mapleader
 let mapleader = ","
 
@@ -134,9 +131,6 @@ let g:airline#extensions#tabline#enabled = 1
 
 " show ALE
 let g:airline#extensions#ale#enabled = 1
-
-" use seoul256 theme
-let g:airline_theme='seoul256'
 
 "" }}}
 "" Ale{{{
