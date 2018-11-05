@@ -7,6 +7,7 @@ let
   neovimExtraKnownPlugins = pkgs.callPackage ./plugins.lib.nix {};
 
 in {
+  # TODO(medium): offer the light version of this theme.
   config = mkIf (config.mine.theme == "seoul256") {
     mine.workstation.alacritty.extraRC = ''
       # When true, bold text is drawn using the bright variant of colors.
