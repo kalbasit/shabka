@@ -1,6 +1,9 @@
-.PHONY: all add-channels update-channels update update-nixpkgs update-nixos-hardware update-nur update-kalbasit-nur
+.PHONY: all brew add-channels update-channels update update-nixpkgs update-nixos-hardware update-nur update-kalbasit-nur
 
 all: add-channels update-channels
+
+brew:
+	brew bundle --file=os-specific/darwin/Brewfile
 
 add-channels:
 	@echo ">>> Adding all the relevant channels, this will override any previously added channel if the version is different"
