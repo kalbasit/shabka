@@ -9,37 +9,39 @@ let
   nosid = "--no-startup-id";
   locker = "${pkgs.xautolock}/bin/xautolock -locknow && sleep 1";
 
+  hostName = config.mine.nixosConfig.networking.hostName;
+
   intMonitor =
-    if config.mine.nixosConfig.networking.hostName == "hades"
+    if hostName == "hades"
     then "eDP-1"
-    else if config.mine.nixosConfig.networking.hostName == "cratos"
+    else if hostName == "cratos"
     then "eDP1"
     else "";
 
   intMode =
-    if config.mine.nixosConfig.networking.hostName == "hades"
+    if hostName == "hades"
     then "1920x1080"
-    else if config.mine.nixosConfig.networking.hostName == "cratos"
+    else if hostName == "cratos"
     then "3200x1800"
     else "";
 
   intScale =
-    if config.mine.nixosConfig.networking.hostName == "hades"
+    if hostName == "hades"
     then "1x1"
-    else if config.mine.nixosConfig.networking.hostName == "cratos"
+    else if hostName == "cratos"
     then "0.6x0.6"
     else "";
 
   extMonitor =
-    if config.mine.nixosConfig.networking.hostName == "hades"
+    if hostName == "hades"
     then "DP-2"
-    else if config.mine.nixosConfig.networking.hostName == "cratos"
+    else if hostName == "cratos"
     then "DP1-2"
     else "";
 
   extMode = "3440x1440";
 
-  jrnlEntry = pkgs.writeScript "jrnl-entry" ''
+  jrnlEntry = pkgs.writeScript "jrnl-entry.sh" ''
     #!/usr/bin/env bash
 
     set -euo pipefail
@@ -62,7 +64,8 @@ let
     EOF
 
     # open a new Alacritty terminal window with vim session inside of it to edit the jrnl entry
-    ${getBin pkgs.alacritty}/bin/alacritty --title jrnl_entry --command nvim +$(wc -l "$jrnl_entry" | awk '{print $1}') +star "$jrnl_entry"
+    readonly line_count="$(wc -l "$jrnl_entry" | awk '{print $1}')"
+    ${getBin pkgs.alacritty}/bin/alacritty --title jrnl_entry --command nvim +$line_count +star -c 'set wrap' -c 'set textwidth=80' -c 'set fo+=t' "$jrnl_entry"
 
     grep -v '^#' "$jrnl_entry" | ${getBin pkgs.jrnl}/bin/jrnl "$current_profile"
   '';
