@@ -15,7 +15,7 @@ let
   # TODO(high): Each color theme is defining it's own status format. The format
   # should be unified and nix should interpolate to set the correct format
 
-  defaultTheme = seoul256Color;
+  defaultTheme = gruvBox256Color;
 
   # TODO(high): Move this over to the theme once TMux module is merged upstream
   # in home-manager and this nixos module has been moved to the home module.
