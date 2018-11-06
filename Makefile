@@ -1,5 +1,10 @@
 .PHONY: all brew build test switch boot add-channels update-channels update-external update-nixpkgs update-nixos-hardware update-nur update-kalbasit-nur
 
+NIXPKGS_REF        ?= refs/heads/nixos-unstable
+NIXOS_HARDWARE_REF ?= refs/heads/master
+NUR_REF            ?= refs/heads/master
+KALBASIT_NUR_REF   ?= refs/heads/master
+
 all: build
 
 build:
@@ -37,13 +42,13 @@ update-channels:
 update-external: update-nixpkgs update-nixos-hardware update-kalbasit-nur
 
 update-nixpkgs:
-	nix-shell -p nix-prefetch-git --run 'nix-prefetch-git https://github.com/NixOS/nixpkgs-channels.git refs/heads/nixos-unstable' > external/nixpkgs-version.json
+	nix-shell -p nix-prefetch-git --run "nix-prefetch-git https://github.com/NixOS/nixpkgs-channels.git $(NIXPKGS_REF)" > external/nixpkgs-version.json
 
 update-nixos-hardware:
-	nix-shell -p nix-prefetch-git --run 'nix-prefetch-git https://github.com/NixOS/nixos-hardware.git refs/heads/master' > external/nixos-hardware-version.json
+	nix-shell -p nix-prefetch-git --run "nix-prefetch-git https://github.com/NixOS/nixos-hardware.git $(NIXOS_HARDWARE_REF)" > external/nixos-hardware-version.json
 
 update-nur:
-	nix-shell -p nix-prefetch-git --run 'nix-prefetch-git https://github.com/nix-community/NUR.git refs/heads/master' > external/nur-version.json
+	nix-shell -p nix-prefetch-git --run "nix-prefetch-git https://github.com/nix-community/NUR.git $(NUR_REF)" > external/nur-version.json
 
 update-kalbasit-nur:
-	nix-shell -p nix-prefetch-git --run 'nix-prefetch-git https://github.com/kalbasit/nur-packages.git refs/heads/master' > external/kalbasit-nur-version.json
+	nix-shell -p nix-prefetch-git --run "nix-prefetch-git https://github.com/kalbasit/nur-packages.git $(KALBASIT_NUR_REF)" > external/kalbasit-nur-version.json
