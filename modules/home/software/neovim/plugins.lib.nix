@@ -15,23 +15,12 @@ with vimUtils;
   };
 
   vim-terraform = buildVimPluginFrom2Nix {
-    name = "vim-terraform-2018-04-16";
+    name = "vim-terraform-2018-08-02";
     src = fetchFromGitHub {
       owner = "hashivim";
       repo = "vim-terraform";
-      rev = "4e91b8c3a73fb9ecbf159fb5ca24ed6f39fad4f9";
-      sha256 = "08qs61lll525ahwi1n4ksain04y830qd62sdxy3hjf6xjlppanzj";
-    };
-    dependencies = [];
-  };
-
-  vim-csv = buildVimPluginFrom2Nix {
-    name = "vim-csv-2018-06-24";
-    src = fetchFromGitHub {
-      owner = "chrisbra";
-      repo = "csv.vim";
-      rev = "918be3bd15920fd9bc79fca5e6870b8055742a1a";
-      sha256 = "01fhw55s5q23ny3n7ldg53n3raysr2wnnkpfybbba2wv55w5vpdy";
+      rev = "7c11252da45c6508524e022d1f2588134902d8d1";
+      sha256 = "1qnjjcin934i7yd2fd0xapraindrpavnik1fasv10x5dw8yzxyrs";
     };
     dependencies = [];
   };
@@ -48,45 +37,34 @@ with vimUtils;
   };
 
   vim-emmet = buildVimPluginFrom2Nix {
-    name = "vim-emmet-2018-05-20";
+    name = "vim-emmet-2018-10-05";
     src = fetchFromGitHub {
       owner = "mattn";
       repo = "emmet-vim";
-      rev = "f5b185e3a27d8db82b93bf7070387a332395abe1";
-      sha256 = "1sl4qjy2afn8vspbf0qgfwffcxk4c6y6ngi2w3yda3bz3ssfrm8l";
+      rev = "7a4bf3463ef1e2c08393218fc67a8729c00948a5";
+      sha256 = "15y5h7b6ll7nngaq9i44xb88rw2jg5ahbvybdn7kdf0nq1m3z409";
     };
     dependencies = [];
   };
 
   vim-yats = buildVimPluginFrom2Nix {
-    name = "vim-yats-2018-06-20";
+    name = "vim-yats-2018-10-16";
     src = fetchFromGitHub {
       owner = "HerringtonDarkholme";
       repo = "yats.vim";
-      rev = "957a351b6ec33b06307c14a25195c73f28770959";
-      sha256 = "1v0ckva8v3157087l9z3i07bq7h2n0b11fb8dn2xl1a6bgvxpy8n";
+      rev = "4675d7ff4b04aa5c5eabd5a1d862fcf78a7cd759";
+      sha256 = "0k6q1x25shzkacmbk2wqgvvq74nx1r7rmhixhsm4vzz9917g22wv";
     };
     dependencies = [];
   };
 
   vim-typescript = buildVimPluginFrom2Nix {
-    name = "vim-typescript-2018-06-05";
+    name = "vim-typescript-2018-11-05";
     src = fetchFromGitHub {
       owner = "mhartington";
       repo = "nvim-typescript";
-      rev = "11074c8f6cf93c4714db2115a2c81cc9b6862acf";
-      sha256 = "0yr9zmky2si663wpzvw26q6hz5kmzz016rnvz5p4lx7y56jwabad";
-    };
-    dependencies = [];
-  };
-
-   vim-go = buildVimPluginFrom2Nix {
-    name = "vim-go-2018-03-27";
-    src = fetchFromGitHub {
-      owner = "fatih";
-      repo = "vim-go";
-      rev = "v1.17";
-      sha256 = "0syawx11mf66clsa049f4x3ajrsqmx4s4iy2fs184xp1d4n4qq8r";
+      rev = "45bf956fb47c02eb2919e995191e115e1a7ffd76";
+      sha256 = "0k6q1x25shzkacmbk2wqgvvq74nx1r7rmhixhsm4vzz9917g22wv";
     };
     dependencies = [];
   };
@@ -138,25 +116,13 @@ with vimUtils;
     dependencies = [];
   };
 
-  # copy from nixpkgs to update
-  vim-fugitive = buildVimPluginFrom2Nix {
-    name = "vim-fugitive-2.4";
-    src = fetchFromGitHub {
-      owner = "tpope";
-      repo = "vim-fugitive";
-      rev = "85c6c7a8376f464feb16c59c007a0c17d61ba3b3"; # v2.4
-      sha256 = "1k0g5qxsgyyzz7wbpj9jzr1isdfyv4mwxhwk6aw5sglk746qjysz";
-    };
-    dependencies = [];
-  };
-
   traces-vim = buildVimPluginFrom2Nix {
-    name = "traces-vim-2018-08-20";
+    name = "traces-vim-2018-10-14";
     src = fetchFromGitHub {
       owner = "markonm";
       repo = "traces.vim";
-      rev = "f3ca6fe2e81aba4d00476349b201605a9d0e86df";
-      sha256 = "0nk7dr38r3aj6z2dl35rvid6m6ji0gq366zcm4vrlgp1rz8kbvp1";
+      rev = "9520ed3837340028b871a9e497dd0d0b07cb4953";
+      sha256 = "0dfm04c4v0qk2f7fycpkwhbws0m5q383bizyaslflb1mmx3jnc48";
     };
     dependencies = [];
   };

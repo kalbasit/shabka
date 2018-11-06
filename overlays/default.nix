@@ -44,4 +44,5 @@ in stable ++ unstable ++ [
   # TODO once stable is fixed, remove these
   (import ./git-appraise.nix)
   (import ./timewarrior.nix)
+  (import ./vim-plugins.nix)
 ]

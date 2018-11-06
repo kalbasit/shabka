@@ -72,6 +72,7 @@ in {
                 "ale"
                 "auto-pairs"
                 "caw"
+                "csv-vim"
                 "easy-align"
                 "easymotion"
                 "editorconfig-vim"
@@ -80,7 +81,6 @@ in {
                 "goyo"
                 "multiple-cursors"
                 "nvim-completion-manager"
-                "polyglot"
                 "repeat"
                 "rhubarb"
                 "sleuth"
@@ -88,11 +88,16 @@ in {
                 "vim-airline"
                 "vim-airline-themes"
                 "vim-eunuch"
-                "vim-go"
+                "vim-fugitive"
                 "vim-markdown"
                 "vim-signify"
                 "vim-speeddating"
                 "vimtex"
+
+                # NOTE: Keep vim-go before PolyGlot. If PolyGlot is loaded first, vim-go will fail with the error `E117: Unknown function: go#config#VersionWarning`.
+                # See https://github.com/sheerun/vim-polyglot/issues/309
+                "vim-go"
+                "polyglot"
 
                 ## DeoPlete completion support
                 "deoplete-nvim"
@@ -111,9 +116,7 @@ in {
                 "traces-vim"
                 "vim-PreserveNoEOL"
                 "vim-better-whitespace"
-                "vim-csv"
                 "vim-emmet"
-                "vim-fugitive" # update to 2.4
                 "vim-pig"
                 "vim-terraform"
                 "vim-vissort"
