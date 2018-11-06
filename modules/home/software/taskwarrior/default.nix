@@ -8,7 +8,6 @@ with lib;
   config = mkIf config.mine.taskwarrior.enable {
     programs.taskwarrior = {
       enable = true;
-      colorTheme = "solarized-dark-256";
 
       extraConfig = ''
         # Urgency settings

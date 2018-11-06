@@ -125,5 +125,7 @@ in {
         color9     = #d75f87
       '';
     };
+
+    programs.taskwarrior.colorTheme = "solarized-dark-256";
   };
 }
