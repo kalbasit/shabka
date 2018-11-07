@@ -45,9 +45,6 @@ let
       substituteInPlace $out/jspp \
         --subst-var-by js-beautify_bin ${getBin pkgs.python36Packages.jsbeautifier}/bin/js-beautify
 
-      substituteInPlace $out/ssh_agents \
-        --subst-var-by readlink_bin ${getBin pkgs.coreutils}/bin/readlink
-
       substituteInPlace $out/new_pr \
         --subst-var-by curl_bin ${getBin pkgs.curl}/bin/curl \
         --subst-var-by git_bin ${getBin pkgs.git}/bin/git \
