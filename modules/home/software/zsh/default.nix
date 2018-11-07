@@ -1,9 +1,10 @@
 { config, pkgs, lib, ... }:
 
 with lib;
+with pkgs;
 
 let
-  myFunctions = pkgs.stdenvNoCC.mkDerivation rec {
+  myFunctions = stdenvNoCC.mkDerivation rec {
     name = "zsh-functions-${version}";
     version = "0.0.1";
     src = ./plugins/functions;
@@ -16,93 +17,93 @@ let
       rm -f $out/default.nix
 
       substituteInPlace $out/c \
-        --subst-var-by tar_bin ${getBin pkgs.gnutar}/bin/tar \
-        --subst-var-by bzip2_bin ${getBin pkgs.bzip2}/bin/bzip2 \
-        --subst-var-by gzip_bin ${getBin pkgs.gzip}/bin/gzip \
-        --subst-var-by zip_bin ${getBin pkgs.zip}/bin/zip
+        --subst-var-by tar_bin ${getBin gnutar}/bin/tar \
+        --subst-var-by bzip2_bin ${getBin bzip2}/bin/bzip2 \
+        --subst-var-by gzip_bin ${getBin gzip}/bin/gzip \
+        --subst-var-by zip_bin ${getBin zip}/bin/zip
 
       # TODO:
       # --subst-var-by rar_bin {getBin pkgs.}/bin/ \
       # --subst-var-by jar_bin {getBin pkgs.}/bin/ \
 
       substituteInPlace $out/gcim \
-        --subst-var-by git_bin ${getBin pkgs.git}/bin/git
+        --subst-var-by git_bin ${getBin git}/bin/git
 
       substituteInPlace $out/gorder \
-        --subst-var-by git_bin ${getBin pkgs.git}/bin/git \
-        --subst-var-by sed_bin ${getBin pkgs.gnused}/bin/sed
+        --subst-var-by git_bin ${getBin git}/bin/git \
+        --subst-var-by sed_bin ${getBin gnused}/bin/sed
 
       substituteInPlace $out/gtime \
-        --subst-var-by git_bin ${getBin pkgs.git}/bin/git \
-        --subst-var-by sed_bin ${getBin pkgs.gnused}/bin/sed
+        --subst-var-by git_bin ${getBin git}/bin/git \
+        --subst-var-by sed_bin ${getBin gnused}/bin/sed
 
       substituteInPlace $out/get_pr \
-        --subst-var-by curl_bin ${getBin pkgs.curl}/bin/curl \
-        --subst-var-by git_bin ${getBin pkgs.git}/bin/git \
-        --subst-var-by jq_bin ${getBin pkgs.jq}/bin/jq \
-        --subst-var-by xsel_bin ${getBin pkgs.xsel}/bin/xsel
+        --subst-var-by curl_bin ${getBin curl}/bin/curl \
+        --subst-var-by git_bin ${getBin git}/bin/git \
+        --subst-var-by jq_bin ${getBin jq}/bin/jq \
+        --subst-var-by xsel_bin ${getBin xsel}/bin/xsel
 
       substituteInPlace $out/git_require_clean_work_tree \
-        --subst-var-by git_bin ${getBin pkgs.git}/bin/git
+        --subst-var-by git_bin ${getBin git}/bin/git
 
       substituteInPlace $out/git_gopath_formatted_repo_path \
-        --subst-var-by git_bin ${getBin pkgs.git}/bin/git \
-        --subst-var-by perl_bin ${getBin pkgs.perl}/bin/perl
+        --subst-var-by git_bin ${getBin git}/bin/git \
+        --subst-var-by perl_bin ${getBin perl}/bin/perl
 
       substituteInPlace $out/jsonpp \
-        --subst-var-by python_bin ${getBin pkgs.python37Full}/bin/python \
-        --subst-var-by pygmentize_bin ${getBin pkgs.python36Packages.pygments}/bin/pygmentize
+        --subst-var-by python_bin ${getBin python37Full}/bin/python \
+        --subst-var-by pygmentize_bin ${getBin python36Packages.pygments}/bin/pygmentize
 
       substituteInPlace $out/jspp \
-        --subst-var-by js-beautify_bin ${getBin pkgs.python36Packages.jsbeautifier}/bin/js-beautify
+        --subst-var-by js-beautify_bin ${getBin python36Packages.jsbeautifier}/bin/js-beautify
 
       substituteInPlace $out/mkfs.enc \
-        --subst-var-by cryptsetup_bin ${getBin pkgs.cryptsetup}/bin/cryptsetup \
-        --subst-var-by mkfs_ext2_bin ${getBin pkgs.e2fsprogs}/bin/mkfs.ext2
+        --subst-var-by cryptsetup_bin ${getBin cryptsetup}/bin/cryptsetup \
+        --subst-var-by mkfs_ext2_bin ${getBin e2fsprogs}/bin/mkfs.ext2
 
       substituteInPlace $out/mount.enc \
-        --subst-var-by cryptsetup_bin ${getBin pkgs.cryptsetup}/bin/cryptsetup \
-        --subst-var-by lpass_bin ${getBin pkgs.lastpass-cli}/bin/lpass
+        --subst-var-by cryptsetup_bin ${getBin cryptsetup}/bin/cryptsetup \
+        --subst-var-by lpass_bin ${getBin lastpass-cli}/bin/lpass
 
       substituteInPlace $out/new_pr \
-        --subst-var-by curl_bin ${getBin pkgs.curl}/bin/curl \
-        --subst-var-by git_bin ${getBin pkgs.git}/bin/git \
-        --subst-var-by jq_bin ${getBin pkgs.jq}/bin/jq \
-        --subst-var-by xsel_bin ${getBin pkgs.xsel}/bin/xsel
+        --subst-var-by curl_bin ${getBin curl}/bin/curl \
+        --subst-var-by git_bin ${getBin git}/bin/git \
+        --subst-var-by jq_bin ${getBin jq}/bin/jq \
+        --subst-var-by xsel_bin ${getBin xsel}/bin/xsel
 
       substituteInPlace $out/sapg \
-        --subst-var-by apg_bin ${getBin pkgs.apg}/bin/apg
+        --subst-var-by apg_bin ${getBin apg}/bin/apg
 
       substituteInPlace $out/tmycli \
-        --subst-var-by mycli_bin ${getBin pkgs.mycli}/bin/mycli \
-        --subst-var-by netstat_bin ${getBin pkgs.nettools}/bin/netstat \
-        --subst-var-by ssh_bin ${getBin pkgs.openssh}/bin/ssh
+        --subst-var-by mycli_bin ${getBin mycli}/bin/mycli \
+        --subst-var-by netstat_bin ${getBin nettools}/bin/netstat \
+        --subst-var-by ssh_bin ${getBin openssh}/bin/ssh
 
       substituteInPlace $out/ulimit_usage \
-        --subst-var-by paste_bin ${getBin pkgs.coreutils}/bin/paste \
-        --subst-var-by cut_bin ${getBin pkgs.coreutils}/bin/cut \
-        --subst-var-by awk_bin ${getBin pkgs.gawk}/bin/awk \
-        --subst-var-by lsof_bin ${getBin pkgs.lsof}/bin/lsof \
-        --subst-var-by sed_bin ${getBin pkgs.gnused}/bin/sed \
-        --subst-var-by bc_bin ${getBin pkgs.bc}/bin/bc
+        --subst-var-by paste_bin ${getBin coreutils}/bin/paste \
+        --subst-var-by cut_bin ${getBin coreutils}/bin/cut \
+        --subst-var-by awk_bin ${getBin gawk}/bin/awk \
+        --subst-var-by lsof_bin ${getBin lsof}/bin/lsof \
+        --subst-var-by sed_bin ${getBin gnused}/bin/sed \
+        --subst-var-by bc_bin ${getBin bc}/bin/bc
 
       substituteInPlace $out/umount.enc \
-        --subst-var-by cryptsetup_bin ${getBin pkgs.cryptsetup}/bin/cryptsetup
+        --subst-var-by cryptsetup_bin ${getBin cryptsetup}/bin/cryptsetup
 
       substituteInPlace $out/pr \
-        --subst-var-by git_bin ${getBin pkgs.git}/bin/git
+        --subst-var-by git_bin ${getBin git}/bin/git
 
       substituteInPlace $out/vim_clean_swap \
-        --subst-var-by vim_bin ${getBin pkgs.vim}/bin/vim
+        --subst-var-by vim_bin ${getBin vim}/bin/vim
 
       substituteInPlace $out/xmlpp \
-        --subst-var-by xmllint_bin ${getBin pkgs.libxml2Python}/bin/xmllint
+        --subst-var-by xmllint_bin ${getBin libxml2Python}/bin/xmllint
     '';
   };
 
 in {
 
-  home.packages = with pkgs; [
+  home.packages = [
     # packages needed by the extract plugin
     # TODO: move this to the extract plugin instead!
     binutils
@@ -113,7 +114,7 @@ in {
   ];
 
   programs.zsh = mkMerge [
-    ({ initExtra = optionalString pkgs.stdenv.isDarwin ''
+    ({ initExtra = optionalString stdenv.isDarwin ''
         # source the nix profiles
         if [[ -r "${config.home.homeDirectory}/.nix-profile/etc/profile.d/nix.sh" ]]; then
           source "${config.home.homeDirectory}/.nix-profile/etc/profile.d/nix.sh"
@@ -127,17 +128,17 @@ in {
       enableAutosuggestions = true;
 
       shellAliases = {
-        cat = "${pkgs.bat}/bin/bat";
+        cat = "${bat}/bin/bat";
         e = "\${EDITOR:-nvim}";
         gl = "github_commit_link";
         http = "http --print=HhBb";
         kube = "kubectl";
-        less = "${pkgs.bat}/bin/bat";
+        less = "${bat}/bin/bat";
         ll = "ls -la";
         pw = "ps aux | grep -v grep | grep -e";
         rot13 = "tr \"[A-Za-z]\" \"[N-ZA-Mn-za-m]\"";
-        serve_this = "${pkgs.python3}/bin/python -m http.server";
-        utf8test = "${pkgs.curl}/bin/curl -L https://github.com/tmux/tmux/raw/master/tools/UTF-8-demo.txt";
+        serve_this = "${python3}/bin/python -m http.server";
+        utf8test = "${curl}/bin/curl -L https://github.com/tmux/tmux/raw/master/tools/UTF-8-demo.txt";
         vi = "nvim";
         vim = "nvim";
 
@@ -162,9 +163,9 @@ in {
         grep = "grep --color=auto";
 
         # send_code sends the code to apollo
-        send_code = "${pkgs.rsync}/bin/rsync -avuz --rsync-path=/usr/bin/rsync --delete --exclude=.snapshots/ --exclude=pkg/ --exclude=bin/ \"$CODE_PATH/\" apollo:/volume1/Code/active/";
+        send_code = "${rsync}/bin/rsync -avuz --rsync-path=/usr/bin/rsync --delete --exclude=.snapshots/ --exclude=pkg/ --exclude=bin/ \"$CODE_PATH/\" apollo:/volume1/Code/active/";
         # get_code gets code from apollo
-        get_code = "${pkgs.rsync}/bin/rsync -avuz --rsync-path=/usr/bin/rsync --delete --exclude=.snapshots/ --exclude=pkg/ --exclude=bin/ apollo:/volume1/Code/active/ \"$CODE_PATH/\"";
+        get_code = "${rsync}/bin/rsync -avuz --rsync-path=/usr/bin/rsync --delete --exclude=.snapshots/ --exclude=pkg/ --exclude=bin/ apollo:/volume1/Code/active/ \"$CODE_PATH/\"";
 
         # OS-Specific aliases
         # TODO: install this only on Mac
@@ -184,15 +185,15 @@ in {
         size = 1000000000;
       };
 
-      initExtra = builtins.readFile (pkgs.substituteAll {
+      initExtra = builtins.readFile (substituteAll {
         src = ./init-extra.zsh;
 
-        exa_bin      = "${getBin pkgs.exa}/bin/exa";
-        fortune_bin  = "${getBin pkgs.fortune}/bin/fortune";
-        fzf_bin      = "${getBin pkgs.fzf}/bin/fzf-tmux";
+        exa_bin      = "${getBin exa}/bin/exa";
+        fortune_bin  = "${getBin fortune}/bin/fortune";
+        fzf_bin      = "${getBin fzf}/bin/fzf-tmux";
         home_path    = "${config.home.homeDirectory}";
-        jq_bin       = "${getBin pkgs.jq}/bin/jq";
-        tput_bin     = "${getBin pkgs.ncurses}/bin/tput";
+        jq_bin       = "${getBin jq}/bin/jq";
+        tput_bin     = "${getBin ncurses}/bin/tput";
       });
 
       oh-my-zsh = {
@@ -208,7 +209,7 @@ in {
         ];
       };
 
-      plugins = with pkgs; [
+      plugins = [
         {
           name = "enhancd";
           file = "init.sh";
