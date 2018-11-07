@@ -1,6 +1,7 @@
 { config, pkgs, lib, ... }:
 
 # TODO: make it work with worktree
+# See https://github.com/input-output-hk/iohk-nix/blob/master/commit-id.nix
 # let
 #   system_rev =
 #     let
