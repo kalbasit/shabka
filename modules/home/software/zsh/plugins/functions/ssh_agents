@@ -62,10 +62,8 @@ function ssh_agents() {
 		# Forget any currently running agent
 		unset SSH_AUTH_SOCK SSH_AGENT_PID
 
-		# no SSH_AGENT_NAME? exit
-		if [[ -z "${SSH_AGENT_NAME}" ]]; then
-			return # do not spawn an agent if we do not know the agent's name
-		fi
+		# no SSH_AGENT_NAME? Hardcode it to global
+		export SSH_AGENT_NAME="${SSH_AGENT_NAME:-global}"
 
 		# compute the path of ssh agent file
 		if [[ "${SSH_AGENT_NAME}" == "global" ]]; then
