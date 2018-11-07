@@ -248,9 +248,6 @@ in {
         # add all the plugins
         ${concatStrings (map (x: "run-shell ${x.rtp}\n") plugins)}
 
-        # tmux-battery settings
-        set -g @batt_remain_short true
-
         ${copyPaste}
       '' + optionalString config.mine.useColemakKeyboardLayout colemakBindings;
     };
