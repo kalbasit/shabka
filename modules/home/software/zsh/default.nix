@@ -25,6 +25,17 @@ let
       # --subst-var-by rar_bin {getBin pkgs.}/bin/ \
       # --subst-var-by jar_bin {getBin pkgs.}/bin/ \
 
+      substituteInPlace $out/gcim \
+        --subst-var-by git_bin ${getBin pkgs.git}/bin/git
+
+      substituteInPlace $out/gorder \
+        --subst-var-by git_bin ${getBin pkgs.git}/bin/git \
+        --subst-var-by sed_bin ${getBin pkgs.gnused}/bin/sed
+
+      substituteInPlace $out/gtime \
+        --subst-var-by git_bin ${getBin pkgs.git}/bin/git \
+        --subst-var-by sed_bin ${getBin pkgs.gnused}/bin/sed
+
       substituteInPlace $out/get_pr \
         --subst-var-by curl_bin ${getBin pkgs.curl}/bin/curl \
         --subst-var-by git_bin ${getBin pkgs.git}/bin/git \
@@ -45,11 +56,22 @@ let
       substituteInPlace $out/jspp \
         --subst-var-by js-beautify_bin ${getBin pkgs.python36Packages.jsbeautifier}/bin/js-beautify
 
+      substituteInPlace $out/mkfs.enc \
+        --subst-var-by cryptsetup_bin ${getBin pkgs.cryptsetup}/bin/cryptsetup \
+        --subst-var-by mkfs_ext2_bin ${getBin pkgs.e2fsprogs}/bin/mkfs.ext2
+
+      substituteInPlace $out/mount.enc \
+        --subst-var-by cryptsetup_bin ${getBin pkgs.cryptsetup}/bin/cryptsetup \
+        --subst-var-by lpass_bin ${getBin pkgs.lastpass-cli}/bin/lpass
+
       substituteInPlace $out/new_pr \
         --subst-var-by curl_bin ${getBin pkgs.curl}/bin/curl \
         --subst-var-by git_bin ${getBin pkgs.git}/bin/git \
         --subst-var-by jq_bin ${getBin pkgs.jq}/bin/jq \
         --subst-var-by xsel_bin ${getBin pkgs.xsel}/bin/xsel
+
+      substituteInPlace $out/sapg \
+        --subst-var-by apg_bin ${getBin pkgs.apg}/bin/apg
 
       substituteInPlace $out/tmycli \
         --subst-var-by mycli_bin ${getBin pkgs.mycli}/bin/mycli \
@@ -63,6 +85,9 @@ let
         --subst-var-by lsof_bin ${getBin pkgs.lsof}/bin/lsof \
         --subst-var-by sed_bin ${getBin pkgs.gnused}/bin/sed \
         --subst-var-by bc_bin ${getBin pkgs.bc}/bin/bc
+
+      substituteInPlace $out/umount.enc \
+        --subst-var-by cryptsetup_bin ${getBin pkgs.cryptsetup}/bin/cryptsetup
 
       substituteInPlace $out/pr \
         --subst-var-by git_bin ${getBin pkgs.git}/bin/git

@@ -98,6 +98,6 @@ function new_pr() {
 		fi
 		print_info "${log_depth}" "${url} copied to the clipboard"
 	} always {
-	unfunction -m "$0_*"
-}
+		unfunction -m "$0_*"
+	}
 }

@@ -20,97 +20,97 @@ function tmx() {
 		}
 
 		function $0_build_projects() {
-		local dir=
-		local i=
-		local profile=
-		local rc="${HOME}/.tmxrc"
-		local rc_length=
+			local dir=
+			local i=
+			local profile=
+			local rc="${HOME}/.tmxrc"
+			local rc_length=
 
-		# compute the length of the rc file
-		rc_length="$( jq length "${rc}" )"
-		debug "rc_length=${rc_length}"
-		for (( i = 0; i < rc_length; i++)); do
-			# extract the profile for this project
-			profile="$( jq -r ".[${i}] .profile" "${rc}" )"
-			if [[ -z "${profile}" ]]; then
-				print_error 0 "profile cannot be empty, this project will be ignored"
-				print_error 1 "$(jq -r .[${i}] "${rc}" )"
-				continue
-			fi
-			# extract the folder for this project
-			dir="$( jq -r ".[${i}] .dir" "${rc}" )"
-			if [[ -z "${dir}" ]]; then
-				print_error 0 "dir cannot be empty, this project will be ignored"
-				print_error 1 "$(jq -r .[${i}] "${rc}" )"
-				continue
-			fi
-			# add this project to the hash
-			projects+=( "${profile}@${dir}" )
-		done
-		# append running sessions, and for each session change '_DOT_' to '.' and
-		# the '_COLUMN_' to ':'
-		projects+=( $( tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" ls -F '#S' | sed -e 's:_DOT_:\.:g' -e 's#_COLUMN_#:#g' ) )
-		# remove duplicates
-		projects=( $(echo "${projects[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' ') )
-	}
-
-	function $0_export_gopath() {
-	export GOPATH="${HOME}/code/${profile}/base"
-	debug "profile=${profile}"
-	debug "GOPATH=${GOPATH}"
-}
-
-	function $0_attach() {
-	# make sure a server is running
-	tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" start-server
-
-	# start a session if one does not exist for it yet
-	if ! tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" list-sessions -F '#{session_name}' | grep -q -e "^${sess}\$"; then
-		{ # begin an always block
-			pushd "${sess_dir}"
-			# start the new tmux session
-			env --unset=TMUX tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" new-session -d -s "${sess}"
-
-			# add the ACTIVE_PROFILE to the environment of the session
-			tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" set-environment -t "${sess}" ACTIVE_PROFILE "${profile}"
-
-			# add the GOPATH to the environment of the session
-			tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" set-environment -t "${sess}" GOPATH "${HOME}/code/${profile}/base"
-
-			# start a new shell on window 1
-			tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" new-window -t "${sess}:1"
-
-			# re-create the first window
-			tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" kill-window -t "${sess}:0"
-			tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" new-window -t "${sess}:0"
-
-			# start the main program
-			if [[ -n "${special_sess[$sess]}" ]]; then
-				tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${sess}:0" "clear; ${special_sess[$sess]}" Enter
-			else
-				# start vim
-				if is_true "${confirm_vim_startup}"; then
-					tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${sess}:0" 'clear; echo "Press Enter to start Vim "; read; vim' Enter
-				else
-					tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${sess}:0" 'clear; vim' Enter
+			# compute the length of the rc file
+			rc_length="$( jq length "${rc}" )"
+			debug "rc_length=${rc_length}"
+			for (( i = 0; i < rc_length; i++)); do
+				# extract the profile for this project
+				profile="$( jq -r ".[${i}] .profile" "${rc}" )"
+				if [[ -z "${profile}" ]]; then
+					print_error 0 "profile cannot be empty, this project will be ignored"
+					print_error 1 "$(jq -r .[${i}] "${rc}" )"
+					continue
 				fi
-			fi
-		} always {
-		popd
-	}
-fi
+				# extract the folder for this project
+				dir="$( jq -r ".[${i}] .dir" "${rc}" )"
+				if [[ -z "${dir}" ]]; then
+					print_error 0 "dir cannot be empty, this project will be ignored"
+					print_error 1 "$(jq -r .[${i}] "${rc}" )"
+					continue
+				fi
+				# add this project to the hash
+				projects+=( "${profile}@${dir}" )
+			done
+			# append running sessions, and for each session change '_DOT_' to '.' and
+			# the '_COLUMN_' to ':'
+			projects+=( $( tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" ls -F '#S' | sed -e 's:_DOT_:\.:g' -e 's#_COLUMN_#:#g' ) )
+			# remove duplicates
+			projects=( $(echo "${projects[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' ') )
+		}
 
-# attach the session now
-if [[ -n "${TMUX}" ]]; then
-	# switch to the selected session
-	tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" switch-client -t "${sess}"
-	# kill the current pane if requested
-	if is_true "${kill_pane}"; then
-		tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" kill-pane
-	fi
-else
-	tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" attach -t "${sess}"
-fi
+		function $0_export_gopath() {
+			export GOPATH="${HOME}/code/${profile}/base"
+			debug "profile=${profile}"
+			debug "GOPATH=${GOPATH}"
+		}
+
+		function $0_attach() {
+			# make sure a server is running
+			tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" start-server
+
+			# start a session if one does not exist for it yet
+			if ! tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" list-sessions -F '#{session_name}' | grep -q -e "^${sess}\$"; then
+				{ # begin an always block
+					pushd "${sess_dir}"
+					# start the new tmux session
+					env --unset=TMUX tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" new-session -d -s "${sess}"
+
+					# add the ACTIVE_PROFILE to the environment of the session
+					tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" set-environment -t "${sess}" ACTIVE_PROFILE "${profile}"
+
+					# add the GOPATH to the environment of the session
+					tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" set-environment -t "${sess}" GOPATH "${HOME}/code/${profile}/base"
+
+					# start a new shell on window 1
+					tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" new-window -t "${sess}:1"
+
+					# re-create the first window
+					tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" kill-window -t "${sess}:0"
+					tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" new-window -t "${sess}:0"
+
+					# start the main program
+					if [[ -n "${special_sess[$sess]}" ]]; then
+						tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${sess}:0" "clear; ${special_sess[$sess]}" Enter
+					else
+						# start vim
+						if is_true "${confirm_vim_startup}"; then
+							tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${sess}:0" 'clear; echo "Press Enter to start Vim "; read; vim' Enter
+						else
+							tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" send-keys -t "${sess}:0" 'clear; vim' Enter
+						fi
+					fi
+				} always {
+					popd
+				}
+			fi
+
+			# attach the session now
+			if [[ -n "${TMUX}" ]]; then
+				# switch to the selected session
+				tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" switch-client -t "${sess}"
+				# kill the current pane if requested
+				if is_true "${kill_pane}"; then
+					tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" kill-pane
+				fi
+			else
+				tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" attach -t "${sess}"
+			fi
 		}
 
 		declare -A special_sess
@@ -311,7 +311,7 @@ fi
 		# create a new session if necessary, and attach it
 		$0_attach
 	} always {
-	unfunction -m "$0_*"
-	export GOPATH="${orig_gopath}"
-}
+		unfunction -m "$0_*"
+		export GOPATH="${orig_gopath}"
+	}
 }

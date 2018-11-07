@@ -155,9 +155,9 @@ function tmycli() {
 		D0_wait_for_tunnel_port
 		@mycli_bin@ --host "localhost" --port "${tunnel_port}" --user "${mysql_username}" --password "${mysql_password}" --database "${mysql_database}"
 	} always {
-	if [[ -n "${ssh_pid}" ]]; then
-		kill "${ssh_pid}"
-	fi
-	unfunction -m "$0_*"
-}
+		if [[ -n "${ssh_pid}" ]]; then
+			kill "${ssh_pid}"
+		fi
+		unfunction -m "$0_*"
+	}
 }

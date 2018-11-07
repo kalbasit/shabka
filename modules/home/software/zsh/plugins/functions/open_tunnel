@@ -121,6 +121,6 @@ function open_tunnel() {
 		D0_wait_for_tunnel_port
 		print_info 0 "A tunnel was opened on port ${tunnel_port}, kill ${ssh_pid} when done"
 	} always {
-	unfunction -m "$0_*"
-}
+		unfunction -m "$0_*"
+	}
 }

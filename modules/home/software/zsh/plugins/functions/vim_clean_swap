@@ -43,7 +43,7 @@ function vim_clean_swap() {
 			fi
 		done
 	} always {
-	rm -f "$RECTXT" "$RECFN"
-	rmdir "$TMPDIR"
-}
+		rm -f "$RECTXT" "$RECFN"
+		rmdir "$TMPDIR"
+	}
 }
