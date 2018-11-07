@@ -85,44 +85,48 @@ let
 
 in
 
-assert assertMsg (builtins.pathExists charles_ssl_cert_path) "Charles certificate was not found";
-assert assertMsg (builtins.pathExists publica_dev_ssl_ca_path) "Publica CA was not found";
-assert assertMsg (builtins.pathExists publica_dev_ssl_cert_path) "Publica certificate was not found";
-assert assertMsg (builtins.pathExists publica_dev_ssl_key_path)  "Publica key was not found";
+  assert assertMsg (builtins.pathExists charles_ssl_cert_path) "Charles certificate was not found";
+  assert assertMsg (builtins.pathExists publica_dev_ssl_ca_path) "Publica CA was not found";
+  assert assertMsg (builtins.pathExists publica_dev_ssl_cert_path) "Publica certificate was not found";
+  assert assertMsg (builtins.pathExists publica_dev_ssl_key_path)  "Publica key was not found";
 
-{
-  options.mine.workstation.publica.enable = mkEnableOption "Enable Publica";
+  {
+    options.mine.workstation.publica.enable = mkEnableOption "Enable Publica";
 
-  config = mkIf config.mine.workstation.publica.enable {
-    # Add the extra hosts
-    networking.extraHosts = ''
-      127.0.0.1 publica.dev k8s.publica.dev ${builtins.concatStringsSep " " (builtins.attrNames hostsPorts)}
-    '';
+    config = mkMerge [
+      (mkIf config.mine.workstation.publica.enable {
+        # Add the extra hosts
+        networking.extraHosts = ''
+          127.0.0.1 publica.dev k8s.publica.dev ${builtins.concatStringsSep " " (builtins.attrNames hostsPorts)}
+        '';
 
-    # NginX configuration for publica
-    services.nginx.enable = true;
+        # NginX configuration for publica
+        services.nginx.enable = true;
 
-    # Add Publica CA
-    security.pki.certificates = [
-      publica_dev_ssl_ca
-      charles_ssl_cert
-    ];
+        # Add Publica CA
+        security.pki.certificates = [
+          publica_dev_ssl_ca
+          charles_ssl_cert
+        ];
 
-    # //console/server
-    services.nginx.virtualHosts = mapAttrs' generateVirtualHosts hostsPorts // {
-      "publica.dev" = {
-        forceSSL = true;
-        serverName = "publica.dev";
-        sslCertificate = builtins.toPath publica_dev_ssl_cert_path;
-        sslCertificateKey = builtins.toPath publica_dev_ssl_key_path;
+        # //console/server
+        services.nginx.virtualHosts = mapAttrs' generateVirtualHosts hostsPorts // {
+          "publica.dev" = {
+            forceSSL = true;
+            serverName = "publica.dev";
+            sslCertificate = builtins.toPath publica_dev_ssl_cert_path;
+            sslCertificateKey = builtins.toPath publica_dev_ssl_key_path;
 
-        locations = {
-          "/" = {
-            index = "index.html";
-            root = publica_index_drv;
+            locations = {
+              "/" = {
+                index = "index.html";
+                root = publica_index_drv;
+              };
+            };
           };
         };
-      };
-    };
-  };
-}
+      })
+
+      (import /yl/private/network-secrets/shabka/publica.nix)
+    ];
+  }
