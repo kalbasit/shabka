@@ -1,4 +1,5 @@
 *.tfplan
 *.tfstate*
-*.tfvars
 .terraform/
+
+!*.tfstate.backend.tf

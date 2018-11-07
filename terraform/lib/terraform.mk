@@ -23,7 +23,7 @@ apply: validate get check-aws-perms
 
 check-aws-perms:
 ifneq "$(shell ../scripts/check-aws-perms.sh)" "1"
-	$(error "The current AWS user is not platform-dev-team, did you set AWS_PROFILE to publica? If not, please run one of the kube_* aliases.")
+	$(error "The current AWS credentials do not have access to write to the state upstream")
 endif
 
 .terraform/terraform.tfstate:
