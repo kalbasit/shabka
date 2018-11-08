@@ -173,6 +173,8 @@ in {
         remove_dangling_images = "docker rmi \$(docker images -f dangling=true -q)";
         remove_dead_containers = "docker rm -v \$(docker ps -a -q -f status=exited)";
 
+        shabka = "t project:shabka";
+
         # Always enable colored `grep` output
         # Note: `GREP_OPTIONS = "--color = auto"` is deprecated, hence the alias usage.
         egrep = "egrep --color=auto";
