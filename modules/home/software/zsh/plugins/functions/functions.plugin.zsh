@@ -8,7 +8,6 @@ source "${functions_root}/pathappend"
 source "${functions_root}/pathprepend"
 source "${functions_root}/pathunmunge"
 source "${functions_root}/sp"
-source "${functions_root}/ssh_agents"
 
 # autoload all of the functions
 for func in $functions_root/*; do
@@ -23,7 +22,6 @@ for func in $functions_root/*; do
     pathprepend) ;;
     pathunmunge) ;;
     sp)          ;;
-    ssh_agents)  ;;
 
     *)
       autoload -U "${func_name}"

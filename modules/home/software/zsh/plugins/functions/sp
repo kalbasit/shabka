@@ -110,7 +110,7 @@ function sp() {
 		# activate the profile
 		pactivate
 		# switch the user agent
-		pssh; eval "$(ssh_agents)"
+		pssh; eval "$( @ssh-agents_bin@ --name "${SSH_AGENT_NAME}" )"
 	} always {
 		unfunction -m "$0_*"
 		unfunction pload pactivate pdeactivate pssh
