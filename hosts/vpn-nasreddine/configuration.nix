@@ -33,23 +33,32 @@ in {
   services.openvpn.servers = {
     server-nasreddine = {
       config = ''
+        # connection
+        comp-lzo
+        keepalive 10 120
+        max-clients 20
+        port 1194
+        proto udp
+        topology subnet
+
+        # client config
+        client-config-dir ${clientConfig}
+        client-to-client
+
+        # credentials
         ca ${caFile}
         cert ${crtFile}
         cipher AES-128-CBC
-        client-config-dir ${clientConfig}
-        client-to-client
-        comp-lzo
-        dev tun
         dh ${dhPem}
-        keepalive 10 120
         key ${keyFile}
-        max-clients 20
+        tls-auth ${taKey} 0
+
+        # VPN device
+        dev tun
         persist-key
         persist-tun
-        port 1194
-        proto udp
-        tls-auth ${taKey} 0
-        topology subnet
+
+        # verbosity config
         verb 3
 
         # server route
