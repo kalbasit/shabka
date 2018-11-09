@@ -10,14 +10,11 @@ let
 
   unstable = [(self: super:
     let
-      pinnedVersion = builtins.fromJSON (builtins.readFile ../external/nixpkgs-version.json);
-      pinnedPkgs = builtins.fetchGit {
-        inherit (pinnedVersion) url rev;
-      };
+      pinnedPkgs = import ../external/nixpkgs.nix;
     in {
       unstable = import pinnedPkgs {
         config = {};
-        overlays = [];#python3 ++ (filteredModules [] ./unstable);
+        overlays = []; #python3 ++ (filteredModules [] ./unstable);
       };
     })];
 
