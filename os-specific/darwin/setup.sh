@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
-
 readonly mthsbeVersion=e72d1060f3df8c157f93af52ea59508dae36ef50
 
 function info() {
@@ -76,7 +74,22 @@ fi
 
 # Brew the Brewfile
 info "Brewing the Brew file"
-brew bundle --file="${here}/Brewfile" --verbose
+if ! brew bundle --file="${here}/Brewfile" --verbose; then
+    info "It looks like HomeBrew has failed, please fix the issues (if any) and hit Enter to retry"
+    info "NOTE: VirtualBox usually fails because of security issue, replaying error here"
+    cat <<-EOF
+        To install and/or use VirtualBox you may need to enable their kernel extension in
+
+          System Preferences → Security & Privacy → General
+
+        For more information refer to vendor documentation or the Apple Technical Note:
+
+        https://developer.apple.com/library/content/technotes/tn2459/_index.html
+    EOF
+
+    read -r q
+    brew bundle --file="${here}/Brewfile" --verbose
+fi
 
 # download the osx setup file from https://mths.be/macos
 info "Downloading and running https://mths.be/macos"
