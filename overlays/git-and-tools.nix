@@ -1,9 +1,7 @@
 self: super:
 
-# assert super.gitAndTools.git-appraise == null;
-
 {
-  gitAndTools = super.gitAndTools // {
+  gitAndTools = assert ! super.gitAndTools ? git-appraise; super.gitAndTools // {
     git-appraise = super.unstable.gitAndTools.git-appraise;
   };
 }
