@@ -6,8 +6,17 @@ set -euo pipefail
 
 readonly mthsbeVersion=e72d1060f3df8c157f93af52ea59508dae36ef50
 
-function info() {
+info() {
 	>&2 echo '[SHABKA]' "${@}"
+}
+
+# Prompt for  sudo password & keep alive
+# Taken from https://github.com/LnL7/nix-darwin/blob/2412c7f9f98377680418625a3aa7b685b2403107/bootstrap.sh#L77-L83
+sudo_prompt(){
+  echo "Please enter your password for sudo authentication"
+  sudo -k
+  sudo echo "sudo authenticaion successful!"
+  while true ; do sudo -n true ; sleep 60 ; kill -0 "$$" || exit ; done 2>/dev/null &
 }
 
 if [[ "${#}" -ne 1 ]]; then
@@ -22,6 +31,8 @@ readonly hostcf="${root}/hosts/${hostname}"
 readonly workdir="$(mktemp -d)"
 readonly xdg_config_nixpkgs="${HOME}/.config/nixpkgs"
 trap "rm -rf ${workdir}" EXIT
+
+sudo_prompt
 
 if ! defaults read com.github.kalbasit.shabka bootstrap >/dev/null 2>&1; then
 	# Wipe all (default) app icons from the Dock
