@@ -46,9 +46,19 @@ if ! defaults read com.github.kalbasit.shabka bootstrap >/dev/null 2>&1; then
 
 		info "Installing nix-darwin"
 		pushd "${workdir}"
-		nix-build https://github.com/LnL7/nix-darwin/archive/master.tar.gz -A installer
-		./result/bin/darwin-installer
-		nix-channel --update darwin
+			nix-build https://github.com/LnL7/nix-darwin/archive/master.tar.gz -A installer
+
+			# TODO{high}: submit a PR upstream to make it possible to use the
+			# installer with all the features available from a script in a
+			# non-interactive mode.
+			./result/bin/darwin-installer
+
+			nix-channel --update darwin
+		popd
+		pushd "${HOME}"
+			mkdir -p .config
+			ln -s "${hostcf}/darwin-configuration.nix" .config/darwin-configuration.nix
+			darwin-rebuild switch -I darwin-config="${HOME}/.config/darwin-configuration.nix"
 		popd
 	}
 
