@@ -66,8 +66,9 @@ let
     # open a new Alacritty terminal window with vim session inside of it to edit the jrnl entry
     readonly line_count="$(wc -l "$jrnl_entry" | awk '{print $1}')"
     ${getBin pkgs.alacritty}/bin/alacritty --title jrnl_entry --command nvim +$line_count +star -c 'set wrap' -c 'set textwidth=80' -c 'set fo+=t' "$jrnl_entry"
+    readonly content="$( grep -v '^#' "$jrnl_entry" )"
 
-    grep -v '^#' "$jrnl_entry" | ${getBin pkgs.jrnl}/bin/jrnl "$current_profile"
+    ${getBin pkgs.jrnl}/bin/jrnl "$current_profile" "$content"
   '';
 
 in {
