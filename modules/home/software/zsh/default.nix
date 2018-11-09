@@ -17,14 +17,7 @@ let
       rm -f $out/default.nix
 
       substituteInPlace $out/c \
-        --subst-var-by tar_bin ${getBin gnutar}/bin/tar \
-        --subst-var-by bzip2_bin ${getBin bzip2}/bin/bzip2 \
-        --subst-var-by gzip_bin ${getBin gzip}/bin/gzip \
-        --subst-var-by zip_bin ${getBin zip}/bin/zip
-
-      # TODO:
-      # --subst-var-by rar_bin {getBin pkgs.}/bin/ \
-      # --subst-var-by jar_bin {getBin pkgs.}/bin/ \
+        --subst-var-by archiver_bin ${getBin unstable.archiver}/bin/arc
 
       substituteInPlace $out/gcim \
         --subst-var-by git_bin ${getBin git}/bin/git
@@ -99,22 +92,15 @@ let
       substituteInPlace $out/vim_clean_swap \
         --subst-var-by vim_bin ${getBin vim}/bin/vim
 
+      substituteInPlace $out/x \
+        --subst-var-by archiver_bin ${getBin unstable.archiver}/bin/arc
+
       substituteInPlace $out/xmlpp \
         --subst-var-by xmllint_bin ${getBin libxml2Python}/bin/xmllint
     '';
   };
 
 in {
-
-  home.packages = [
-    # packages needed by the extract plugin
-    # TODO: move this to the extract plugin instead!
-    binutils
-    bzip2
-    gnutar
-    gzip
-    p7zip
-  ];
 
   programs.zsh = mkMerge [
     ({ initExtra = optionalString stdenv.isDarwin ''
@@ -206,7 +192,6 @@ in {
 
         plugins = [
           "command-not-found"
-          "extract"
           "git"
           "history"
           "kubectl"
