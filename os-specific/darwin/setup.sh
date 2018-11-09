@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
 readonly mthsbeVersion=e72d1060f3df8c157f93af52ea59508dae36ef50
 
 function info() {
