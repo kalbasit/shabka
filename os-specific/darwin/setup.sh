@@ -59,19 +59,14 @@ if ! defaults read com.github.kalbasit.shabka bootstrap >/dev/null 2>&1; then
 		set -u
 
 		info "Installing nix-darwin"
+		pushd "${xdg_config_nixpkgs}"
+			ln -sf "${hostcf}/darwin-configuration.nix" darwin-configuration.nix
+			export NIX_PATH="darwin-config=${xdg_config_nixpkgs}/darwin-configuration.nix:${NIX_PATH}"
+		popd
 		pushd "${workdir}"
 			nix-build https://github.com/LnL7/nix-darwin/archive/master.tar.gz -A installer
-
-			# TODO{high}: submit a PR upstream to make it possible to use the
-			# installer with all the features available from a script in a
-			# non-interactive mode.
-			./result/bin/darwin-installer
-
+			yes | ./result/bin/darwin-installer
 			nix-channel --update darwin
-		popd
-		pushd "${xdg_config_nixpkgs}"
-			ln -s "${hostcf}/darwin-configuration.nix" darwin-configuration.nix
-			darwin-rebuild switch -I darwin-config="${xdg_config_nixpkgs}/darwin-configuration.nix"
 		popd
 	}
 
@@ -79,14 +74,12 @@ if ! defaults read com.github.kalbasit.shabka bootstrap >/dev/null 2>&1; then
 	if [[ -f "${hostcf}/home.nix" ]] && ! [[ -f "${HOME}/.config/home.nix" ]]; then
 		info "Installing home-manager"
 		pushd "${xdg_config_nixpkgs}"
-			ln -s "${hostcf}/home.nix" home.nix
+			ln -sf "${hostcf}/home.nix" home.nix
 		popd
 
 		readonly home_manager_nix_store="$(nix-instantiate --eval --read-write-mode "${root}/external/home-manager.nix" | cut -d\" -f2 | cut -d\" -f1)"
 		HM_PATH="${home_manager_nix_store}" nix-shell "${HM_PATH}" -A install
 	fi
-
-	info "Be ready to type your sudo password"
 
 	# Set computer name (as done via System Preferences → Sharing)
 	info "Setting up the hostname"
