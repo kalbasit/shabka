@@ -8,7 +8,10 @@ let
     inherit (pinnedVersion) url rev;
   };
 
-  importPinned = import pinned {};
+  importPinned = import pinned {
+    config = {};
+    overlays = [];
+  };
 
   mkAssertMsg = name: "${name} is available upsteam, kill this patch";
 
