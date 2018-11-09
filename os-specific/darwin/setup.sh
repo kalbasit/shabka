@@ -38,9 +38,9 @@ if ! defaults read com.github.kalbasit.shabka bootstrap >/dev/null 2>&1; then
         info "Installing Nix"
         curl https://nixos.org/nix/install | sh
         echo "source ~/.nix-profile/etc/profile.d/nix.sh" >> "${HOME}/.profile"
-        set +euo pipefail
+        set +u
             source ~/.nix-profile/etc/profile.d/nix.sh
-        set -euo pipefail
+        set -u
 
         info "Installing nix-darwin"
         pushd "${workdir}"
