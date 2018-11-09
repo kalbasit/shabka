@@ -1,7 +1,3 @@
-"" Provides{{{
-let g:node_host_prog = '@neovim_node_host_bin@'
-let g:nvim_typescript#server_path = '@typescript_server_bin@'
-" }}}
 "" Settings{{{
 ""
 

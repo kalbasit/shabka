@@ -4,20 +4,6 @@ with lib;
 with pkgs;
 
 let
-  ssh-agents = stdenvNoCC.mkDerivation rec {
-    name = "ssh-agents-${version}";
-    version = "1.0.0";
-
-    src = fetchFromGitHub {
-      owner = "kalbasit";
-      repo = "ssh-agents";
-      rev = "v${version}";
-      sha256 = "1bkzrwlgnsq740868k3ac9bwnkxfbwbyn6dcffnbjafgz6mdr3sc";
-    };
-
-    installFlags = [ "PREFIX=$(out)" ];
-  };
-
   myFunctions = stdenvNoCC.mkDerivation rec {
     name = "zsh-functions-${version}";
     version = "0.0.1";
@@ -89,7 +75,7 @@ let
         --subst-var-by apg_bin ${getBin apg}/bin/apg
 
       substituteInPlace $out/sp \
-        --subst-var-by ssh-agents_bin ${getBin ssh-agents}/bin/ssh-agents
+        --subst-var-by ssh-agents_bin ${getBin unstable.ssh-agents}/bin/ssh-agents
 
       substituteInPlace $out/tmycli \
         --subst-var-by mycli_bin ${getBin mycli}/bin/mycli \

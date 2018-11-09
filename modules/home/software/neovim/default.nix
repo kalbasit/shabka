@@ -6,8 +6,6 @@ let
 
   cfg = config.mine.neovim;
 
-  my_plugins = pkgs.callPackage ./plugins.lib.nix {};
-
 in {
   options.mine.neovim = {
     enable = mkEnableOption "neovim";
@@ -55,44 +53,52 @@ in {
 
           ag_bin = "${pkgs.ag}/bin/ag";
           gocode_bin = "${pkgs.nur.repos.kalbasit.gocode}/bin/gocode";
-          neovim_node_host_bin = "${pkgs.nodePackages.neovim}/bin/neovim-node-host";
-          typescript_server_bin = "${pkgs.nodePackages.typescript}/bin/tsserver";
           xsel_bin = "${pkgs.xsel}/bin/xsel";
         })) + (if config.mine.useColemakKeyboardLayout then (builtins.readFile ./colemak.vim) else "");
 
-        vam.knownPlugins = pkgs.vimPlugins // my_plugins // cfg.extraKnownPlugins;
+        vam.knownPlugins = pkgs.vimPlugins // cfg.extraKnownPlugins;
         vam.pluginDictionaries = cfg.extraPluginDictionaries ++ [
           {
             names =
-              [ # vimPlugins
+              [
+
                 "Gist"
                 "Gundo"
                 "LanguageClient-neovim"
+                "PreserveNoEOL"
                 "ack-vim"
                 "ale"
                 "auto-pairs"
                 "caw"
                 "csv-vim"
+                "direnv-vim"
                 "easy-align"
                 "easymotion"
                 "editorconfig-vim"
+                "emmet-vim"
                 "fzf-vim"
                 "fzfWrapper"
                 "goyo"
                 "multiple-cursors"
                 "nvim-completion-manager"
+                "pig-vim"
                 "repeat"
                 "rhubarb"
                 "sleuth"
                 "surround"
+                "traces-vim"
                 "vim-airline"
                 "vim-airline-themes"
+                "vim-better-whitespace"
                 "vim-eunuch"
                 "vim-fugitive"
                 "vim-markdown"
                 "vim-signify"
                 "vim-speeddating"
+                "vim-terraform"
+                "zoomwintab-vim"
                 "vimtex"
+                "vissort-vim"
 
                 # NOTE: Keep vim-go before PolyGlot. If PolyGlot is loaded first, vim-go will fail with the error `E117: Unknown function: go#config#VersionWarning`.
                 # See https://github.com/sheerun/vim-polyglot/issues/309
@@ -105,26 +111,14 @@ in {
                 # Golang support
                 "deoplete-go"
 
-                # required by Gist
-                # TODO: https://github.com/NixOS/nixpkgs/pull/43399
-                "webapi-vim"
-
                 "vim-maktaba"
                 "vim-bazel"
-              ] ++ [ # my_plugins
-                "direnv-vim"
-                "traces-vim"
-                "vim-PreserveNoEOL"
-                "vim-better-whitespace"
-                "vim-emmet"
-                "vim-pig"
-                "vim-terraform"
-                "vim-vissort"
-                "vim-zoomwintab"
+
 
                 # Typescript support
                 # "vim-typescript"    # TODO: https://github.com/kalbasit/dotfiles/issues/15
-                "vim-yats"
+                "yats-vim"
+
               ]
               ++ (if config.mine.useColemakKeyboardLayout then ["vim-colemak"] else []);
           }
