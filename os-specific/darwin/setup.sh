@@ -20,6 +20,7 @@ readonly here="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 readonly root="$( cd "${here}/../.." && pwd )"
 readonly hostcf="${root}/hosts/${hostname}"
 readonly workdir="$(mktemp -d)"
+readonly xdg_config_nixpkgs="${HOME}/.config/nixpkgs"
 trap "rm -rf ${workdir}" EXIT
 
 if ! defaults read com.github.kalbasit.shabka bootstrap >/dev/null 2>&1; then
@@ -37,6 +38,8 @@ if ! defaults read com.github.kalbasit.shabka bootstrap >/dev/null 2>&1; then
 
 	# download and install Nix
 	command -v nix 2>/dev/null || {
+		mkdir -p "${xdg_config_nixpkgs}"
+
 		info "Installing Nix"
 		curl https://nixos.org/nix/install | sh
 		echo "source ~/.nix-profile/etc/profile.d/nix.sh" >> "${HOME}/.profile"
@@ -55,18 +58,18 @@ if ! defaults read com.github.kalbasit.shabka bootstrap >/dev/null 2>&1; then
 
 			nix-channel --update darwin
 		popd
-		pushd "${HOME}"
-			mkdir -p .config
-			ln -s "${hostcf}/darwin-configuration.nix" .config/darwin-configuration.nix
-			darwin-rebuild switch -I darwin-config="${HOME}/.config/darwin-configuration.nix"
+		pushd "${xdg_config_nixpkgs}"
+			ln -s "${hostcf}/darwin-configuration.nix" darwin-configuration.nix
+			darwin-rebuild switch -I darwin-config="${xdg_config_nixpkgs}/darwin-configuration.nix"
 		popd
 	}
 
 	# Finally pull Nix if we already have a hostname
 	if [[ -f "${hostcf}/home.nix" ]] && ! [[ -f "${HOME}/.config/home.nix" ]]; then
 		info "Installing home-manager"
-		mkdir -p "${HOME}/.config"
-		ln -s "${hostcf}/home.nix" "${HOME}/.config/home.nix"
+		pushd "${xdg_config_nixpkgs}"
+			ln -s "${hostcf}/home.nix" home.nix
+		popd
 
 		readonly home_manager_nix_store="$(nix-instantiate --eval --read-write-mode "${root}/external/home-manager.nix" | cut -d\" -f2 | cut -d\" -f1)"
 		HM_PATH="${home_manager_nix_store}" nix-shell "${HM_PATH}" -A install
