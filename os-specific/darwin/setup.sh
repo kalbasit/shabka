@@ -5,8 +5,6 @@
 
 set -euo pipefail
 
-readonly mthsbeVersion=e72d1060f3df8c157f93af52ea59508dae36ef50
-
 readonly color_clear="\033[0m"
 readonly color_red="\033[0;31m"
 readonly color_green="\033[0;32m"
@@ -94,20 +92,12 @@ if ! defaults read com.github.kalbasit.shabka bootstrap >/dev/null 2>&1; then
 		popd
 
 		if [[ -r "${root}/external/home-manager.nix" ]]; then
-			readonly home_manager_nix_store="$(nix-instantiate --eval --read-write-mode "${root}/external/home-manager.nix" | cut -d\" -f2 | cut -d\" -f1)"
+			readonly home_manager_path="$(nix-instantiate --eval --read-write-mode "${root}/external/home-manager.nix" | cut -d\" -f2 | cut -d\" -f1)"
 		else
-			readonly home_manager_nix_store="https://github.com/rycee/home-manager/archive/release-18.09.tar.gz"
+			readonly home_manager_path="https://github.com/rycee/home-manager/archive/release-18.09.tar.gz"
 		fi
-		HM_PATH="${home_manager_nix_store}" nix-shell "${HM_PATH}" -A install
+		nix-shell "${home_manager_path}" -A install
 	fi
-
-	# Set computer name (as done via System Preferences → Sharing)
-	info "Setting up the hostname"
-	readonly hostnameInHex="$(echo -n "${hostname}" | od -A n -t x1 | tr -d ' ' | tr -d '\n' | sed 's/^/0x/')"
-	sudo scutil --set ComputerName "${hostnameInHex}"
-	sudo scutil --set HostName "${hostnameInHex}"
-	sudo scutil --set LocalHostName "${hostnameInHex}"
-	sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "${hostnameInHex}"
 
 	# record that we have bootstrapped so we do not try to bootstrap again
 	defaults write com.github.kalbasit.shabka bootstrap -bool true
@@ -130,25 +120,6 @@ if ! brew bundle --file="${here}/Brewfile" --verbose; then
 
 	read -r q
 	brew bundle --file="${here}/Brewfile" --verbose
-fi
-
-# download the osx setup file from https://mths.be/macos
-info "Downloading and running https://mths.be/macos"
-readonly mthsbe="$(mktemp -d)"
-rm -rf "${mthsbe}"
-git clone https://github.com/mathiasbynens/dotfiles.git "${mthsbe}"
-trap "rm -rf ${mthsbe}" EXIT
-pushd "${mthsbe}"
-git reset --h "${mthsbeVersion}"
-sed -e "s@open '\$HOME/init/@open '${mthsbe}/init/@g" .macos > my-macos
-chmod +x my-macos && ./my-macos
-popd
-
-# run our own macos
-"${here}/macos.sh"
-if [[ -x "${hostcf}/macos.sh" ]]; then
-	info "Running our own host-specific Darwin macos"
-	"${hostcf}/macos.sh"
 fi
 
 } # prevent the script from executing partially downloaded

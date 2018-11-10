@@ -6,5 +6,5 @@
     ../../modules/darwin
   ];
 
-  # TODO fill this up
+  networking.hostName = "athena";
 }
