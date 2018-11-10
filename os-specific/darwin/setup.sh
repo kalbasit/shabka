@@ -1,13 +1,22 @@
 #!/usr/bin/env bash
-
 # vim: sw=2 ts=2 sts=0 noet
+
+{ # prevent the script from executing partially downloaded
 
 set -euo pipefail
 
 readonly mthsbeVersion=e72d1060f3df8c157f93af52ea59508dae36ef50
 
+readonly color_clear="\033[0m"
+readonly color_red="\033[0;31m"
+readonly color_green="\033[0;32m"
+
 info() {
-	>&2 echo '[SHABKA]' "${@}"
+	>&2 echo -e "[SHABKA] ${color_green}${@}${color_clear}"
+}
+
+error() {
+	>&2 echo -e "[SHABKA] ${color_red}${@}${color_clear}"
 }
 
 # Prompt for  sudo password & keep alive
@@ -29,6 +38,7 @@ readonly here="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 readonly root="$( cd "${here}/../.." && pwd )"
 readonly hostcf="${root}/hosts/${hostname}"
 readonly workdir="$(mktemp -d)"
+readonly deprecated_nixpkgs="${HOME}/.nixpkgs"
 readonly xdg_config_nixpkgs="${HOME}/.config/nixpkgs"
 trap "rm -rf ${workdir}" EXIT
 
@@ -50,22 +60,28 @@ if ! defaults read com.github.kalbasit.shabka bootstrap >/dev/null 2>&1; then
 	# download and install Nix
 	command -v nix 2>/dev/null || {
 		mkdir -p "${xdg_config_nixpkgs}"
+		mkdir -p "${deprecated_nixpkgs}"
 
 		info "Installing Nix"
 		curl https://nixos.org/nix/install | sh
-		echo "source ~/.nix-profile/etc/profile.d/nix.sh" >> "${HOME}/.profile"
 		set +u
 			source ~/.nix-profile/etc/profile.d/nix.sh
 		set -u
 
 		info "Installing nix-darwin"
-		pushd "${xdg_config_nixpkgs}"
+		pushd "${deprecated_nixpkgs}"
 			ln -sf "${hostcf}/darwin-configuration.nix" darwin-configuration.nix
-			export NIX_PATH="darwin-config=${xdg_config_nixpkgs}/darwin-configuration.nix:${NIX_PATH}"
 		popd
 		pushd "${workdir}"
 			nix-build https://github.com/LnL7/nix-darwin/archive/master.tar.gz -A installer
-			yes | ./result/bin/darwin-installer
+			set +e
+				(yes | ./result/bin/darwin-installer)
+				RETVAL=?
+			set -e
+			if [[ "${RETVAL}" -ne 0 ]] && [[ "${RETVAL}" -ne 141 ]]; then
+				error "nix-darwin installer exited with status ${RETVAL}"
+				exit "${RETVAL}"
+			fi
 			nix-channel --update darwin
 		popd
 	}
@@ -77,7 +93,11 @@ if ! defaults read com.github.kalbasit.shabka bootstrap >/dev/null 2>&1; then
 			ln -sf "${hostcf}/home.nix" home.nix
 		popd
 
-		readonly home_manager_nix_store="$(nix-instantiate --eval --read-write-mode "${root}/external/home-manager.nix" | cut -d\" -f2 | cut -d\" -f1)"
+		if [[ -r "${root}/external/home-manager.nix" ]]; then
+			readonly home_manager_nix_store="$(nix-instantiate --eval --read-write-mode "${root}/external/home-manager.nix" | cut -d\" -f2 | cut -d\" -f1)"
+		else
+			readonly home_manager_nix_store="https://github.com/rycee/home-manager/archive/release-18.09.tar.gz"
+		fi
 		HM_PATH="${home_manager_nix_store}" nix-shell "${HM_PATH}" -A install
 	fi
 
@@ -130,3 +150,5 @@ if [[ -x "${hostcf}/macos.sh" ]]; then
 	info "Running our own host-specific Darwin macos"
 	"${hostcf}/macos.sh"
 fi
+
+} # prevent the script from executing partially downloaded

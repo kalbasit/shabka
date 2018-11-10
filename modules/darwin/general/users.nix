@@ -17,23 +17,25 @@ let
     ({
       inherit home uid;
 
-      group = "mine";
-      extraGroups = [
-        "dialout"
-        "docker"
-        "fuse"
-        "libvirtd"
-        "networkmanager"
-        "users"
-        "vboxusers"
-        "video"
-      ] ++ (if isAdmin then ["wheel"] else []);
+      gid = 2000;
+
+      # group = "mine";
+      # extraGroups = [
+      #   "dialout"
+      #   "docker"
+      #   "fuse"
+      #   "libvirtd"
+      #   "networkmanager"
+      #   "users"
+      #   "vboxusers"
+      #   "video"
+      # ] ++ (if isAdmin then ["wheel"] else []);
 
       shell = pkgs.zsh;
-      hashedPassword = "$6$0bx5eAEsHJRxkD8.$gJ7sdkOOJRf4QCHWLGDUtAmjHV/gJxPQpyCEtHubWocHh9O7pWy10Frkm1Ch8P0/m8UTUg.Oxp.MB3YSQxFXu1";
-      isNormalUser = true;
+      # hashedPassword = "$6$0bx5eAEsHJRxkD8.$gJ7sdkOOJRf4QCHWLGDUtAmjHV/gJxPQpyCEtHubWocHh9O7pWy10Frkm1Ch8P0/m8UTUg.Oxp.MB3YSQxFXu1";
+      # isNormalUser = true;
 
-      openssh.authorizedKeys.keys = sshKeys;
+      # openssh.authorizedKeys.keys = sshKeys;
     });
 
   makeHM = userName: { uid, isAdmin ? false, ... }: nameValuePair
@@ -64,18 +66,20 @@ in {
 
   config = {
     # set the initial password of the root user
-    security.initialRootPassword = "$6$0bx5eAEsHJRxkD8.$gJ7sdkOOJRf4QCHWLGDUtAmjHV/gJxPQpyCEtHubWocHh9O7pWy10Frkm1Ch8P0/m8UTUg.Oxp.MB3YSQxFXu1";
+    # security.initialRootPassword = "$6$0bx5eAEsHJRxkD8.$gJ7sdkOOJRf4QCHWLGDUtAmjHV/gJxPQpyCEtHubWocHh9O7pWy10Frkm1Ch8P0/m8UTUg.Oxp.MB3YSQxFXu1";
 
     users = {
-      mutableUsers = false;
+      # mutableUsers = false;
 
       groups = { mine = { gid = 2000; }; };
 
       users = mergeAttrs
-        { root = { openssh.authorizedKeys.keys = sshKeys; }; }
+        {
+          # root = { openssh.authorizedKeys.keys = sshKeys; };
+        }
         (mapAttrs' makeUser config.mine.users);
     };
 
-    home-manager.users = mapAttrs' makeHM config.mine.users;
+    # home-manager.users = mapAttrs' makeHM config.mine.users;
   };
 }
