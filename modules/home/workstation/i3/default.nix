@@ -2,8 +2,7 @@
 
 with lib;
 
-let
-in {
+{
   options.mine.workstation.i3.enable = mkEnableOption "workstation.i3";
 
   config = mkIf config.mine.workstation.i3.enable {
