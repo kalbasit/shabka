@@ -1,26 +1,5 @@
-{ config, pkgs, lib, ... }:
-
-let
-
-  # TODO import what I need from this script as configurations to submit upstream
-  mthsDotfiles = pkgs.fetchFromGitHub {
-    owner = "mathiasbynens";
-    repo = "dotfiles";
-    rev = "e72d1060f3df8c157f93af52ea59508dae36ef50";
-    sha256 = "1kifr4fmrzvlrk92q80snx54pnqk5x8rwp7chq5m6ylqg808mmwv";
-  };
-
-in {
+{
   system.activationScripts.postActivation.text = ''
-    readonly tmpWorkDir="$(mktemp -d)"
-    trap "rm -rf ''${tmpWorkDir}" EXIT
-    cp -r "${mthsDotfiles}" "''${tmpWorkDir}/dotfiles"
-
-    pushd "''${tmpWorkDir}/dotfiles"
-      ${lib.getBin pkgs.gnused}/bin/sed -e "s@open '\$HOME/init/@open '$tmpWorkDir/dotfiles/init/@g" -i .macos
-      ./.macos
-    popd
-
     # TODO: move all of these to options
 
     # Enable “natural” (Lion-style) scrolling (mths.be/macos disables it)

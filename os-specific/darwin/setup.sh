@@ -5,6 +5,8 @@
 
 set -euo pipefail
 
+readonly mthsbeVersion=e72d1060f3df8c157f93af52ea59508dae36ef50
+
 readonly color_clear="\033[0m"
 readonly color_red="\033[0;31m"
 readonly color_green="\033[0;32m"
@@ -121,5 +123,17 @@ if ! brew bundle --file="${here}/Brewfile" --verbose; then
 	read -r q
 	brew bundle --file="${here}/Brewfile" --verbose
 fi
+
+# download the osx setup file from https://mths.be/macos
+info "Downloading and running https://mths.be/macos"
+readonly mthsbe="$(mktemp -d)"
+rm -rf "${mthsbe}"
+git clone https://github.com/mathiasbynens/dotfiles.git "${mthsbe}"
+trap "rm -rf ${mthsbe}" EXIT
+pushd "${mthsbe}"
+git reset --h "${mthsbeVersion}"
+sed -e "s@open '\$HOME/init/@open '${mthsbe}/init/@g" .macos > my-macos
+chmod +x my-macos && ./my-macos
+popd
 
 } # prevent the script from executing partially downloaded
