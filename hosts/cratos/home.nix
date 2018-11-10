@@ -7,6 +7,10 @@
   let
     enableEmail = userName == "yl" && builtins.pathExists /yl/private/network-secrets/shabka/email.nix;
     enableSSH = builtins.pathExists /yl/private/network-secrets/shabka/ssh.nix;
+    scaleBy40P = ''
+      # scale by 40%
+      xrandr --output eDP-1 --mode 3200x1800 --scale 0.6x0.6
+    '';
   in {
     imports = [
       ../../modules/home
@@ -30,5 +34,7 @@
       enable = true;
       privateSSHPath = /yl/private/network-secrets/shabka/ssh.nix;
     };
+
+    xsession.initExtra = if nixosConfig != null && nixosConfig.networking.hostName == "cratos" then scaleBy40P else "";
   };
 }

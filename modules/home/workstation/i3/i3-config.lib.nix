@@ -9,7 +9,7 @@ let
   nosid = "--no-startup-id";
   locker = "${pkgs.xautolock}/bin/xautolock -locknow && sleep 1";
 
-  hostName = config.mine.nixosConfig.networking.hostName;
+  hostName = if config.mine.nixosConfig != null then config.mine.nixosConfig.networking.hostName else "";
 
   intMonitor =
     if hostName == "hades"
