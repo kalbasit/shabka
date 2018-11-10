@@ -230,8 +230,8 @@ in {
       # Make the currently focused window a scratchpad
       "${defaultModifier}+Shift+minus" = "move scratchpad";
 
-      # Make the currently focused window a scratchpad
-      "${defaultModifier}+${thirdModifier}+minus" = "scratchpad show";
+      # Show the next scratchpad windows
+      "${defaultModifier}+minus" = "scratchpad show";
 
       # Whatsapp
       "${thirdModifier}+w" = "[class=\"^whats-app-nativefier*\"] scratchpad show";
