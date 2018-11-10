@@ -1,4 +1,9 @@
-{
+let
+  scaleBy40P = ''
+    # scale by 40%
+    xrandr --output eDP-1 --mode 3200x1800 --scale 0.6x0.6
+  '';
+in {
   mine.home-manager.config = { userName, uid, isAdmin, nixosConfig }: { ... }: {
     imports = [
       ../../modules/home
@@ -15,5 +20,7 @@
     mine.timewarrior.enable = true;
     mine.useColemakKeyboardLayout = true;
     mine.workstation.enable = true;
+
+    xsession.initExtra = if nixosConfig != null && nixosConfig.networking.hostName == "cratos" then scaleBy40P else "";
   };
 }
