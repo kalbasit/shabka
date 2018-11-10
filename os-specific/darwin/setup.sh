@@ -98,6 +98,8 @@ if ! defaults read com.github.kalbasit.shabka bootstrap >/dev/null 2>&1; then
 		else
 			readonly home_manager_path="https://github.com/rycee/home-manager/archive/release-18.09.tar.gz"
 		fi
+		nix-channel --add "${home_manager_path}" home-manager
+		nix-channel --update
 		nix-shell "${home_manager_path}" -A install
 	fi
 
