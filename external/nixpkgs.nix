@@ -22,7 +22,7 @@ let
       assert assertMsg (! importPinned ? archiver) (mkAssertMsg "archiver");
       pkgs.fetchpatch {
         url = "https://github.com/NixOS/nixpkgs/pull/49956.patch";
-        sha256 = "1j46xxm1b00a7cyn180zwcyw37ldcikm0hk73yfz0gnbkpcwj2qa";
+        sha256 = "0rqx0w4krm8r3pj4ismf465bc7z687k3fm8akiixacd0qm2nnwgz";
       }
     )
 
