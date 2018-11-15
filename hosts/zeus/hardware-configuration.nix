@@ -37,12 +37,7 @@ in {
       device = "/dev/disk/by-uuid/12ada2e7-bdfe-4bdf-9335-bc26d7404a10";
     };
 
-    cryptroot-1 = {
-      device = "/dev/disk/by-uuid/0f379615-7381-4f40-8e34-4eb930a85f9d";
-      keyFile = "/dev/mapper/cryptkey";
-    };
-
-    cryptroot-2 = {
+    cryptroot = {
       device = "/dev/disk/by-uuid/b6f30e7a-d1f2-43bb-825f-77c0c8f0f435";
       keyFile = "/dev/mapper/cryptkey";
     };
@@ -84,7 +79,7 @@ in {
     };
 
     "/boot" = {
-      device = "/dev/disk/by-uuid/BE41-BF8C";
+      device = "/dev/disk/by-uuid/0EC6-C400";
       fsType = "vfat";
     };
   };
