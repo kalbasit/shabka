@@ -1,9 +1,12 @@
-.PHONY: all brew build test switch boot add-channels update-channels update-external update-nixpkgs update-nixos-hardware update-nur update-kalbasit-nur
+.PHONY: all build test switch boot brew add-channels update-channels \
+	update-external update-home-manager update-nixpkgs update-nixos-hardware \
+	update-nur update-kalbasit-nur
 
-NIXPKGS_REF        ?= refs/heads/nixos-unstable
-NIXOS_HARDWARE_REF ?= refs/heads/master
-NUR_REF            ?= refs/heads/master
+HOME_MANAGER_REF   ?= refs/heads/master
 KALBASIT_NUR_REF   ?= refs/heads/master
+NIXOS_HARDWARE_REF ?= refs/heads/master
+NIXPKGS_REF        ?= refs/heads/nixos-unstable
+NUR_REF            ?= refs/heads/master
 
 all: build
 
@@ -30,7 +33,6 @@ add-channels:
 	@echo ">>> Adding all the relevant channels, this will override any previously added channel if the version is different"
 	@echo
 	sudo -i nix-channel --add https://nixos.org/channels/nixos-18.09 nixos
-	sudo -i nix-channel --add https://github.com/rycee/home-manager/archive/release-18.09.tar.gz home-manager
 	@echo
 
 update-channels:
@@ -39,7 +41,10 @@ update-channels:
 	sudo -i nix-channel --update
 	@echo
 
-update-external: update-nixpkgs update-nixos-hardware update-kalbasit-nur
+update-external: update-home-manager update-nixpkgs update-nixos-hardware update-nur update-kalbasit-nur
+
+update-home-manager:
+	nix-shell -p nix-prefetch-git --run "nix-prefetch-git https://github.com/rycee/home-manager.git $(HOME_MANAGER_REF)" > external/home-manager-version.json
 
 update-nixpkgs:
 	nix-shell -p nix-prefetch-git --run "nix-prefetch-git https://github.com/NixOS/nixpkgs-channels.git $(NIXPKGS_REF)" > external/nixpkgs-version.json
