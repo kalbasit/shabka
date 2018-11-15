@@ -68,6 +68,16 @@ let
         sha256 = "1gqgalilmp0k99vrw7pxriqbr3vbkq2g3xjddcza0yadcp24wn5i";
       }
     )
+
+    # fix the vim-go plugin
+    # https://github.com/NixOS/nixpkgs/pull/50381
+    (
+      assert assertMsg (! importPinned ? go-motion) (mkAssertMsg "go-motion");
+      pkgs.fetchpatch {
+        url = "https://github.com/NixOS/nixpkgs/pull/50381.patch";
+        sha256 = "0ha7mgmf33ykxkza108di1yb954dvy3z9fqd1jq9c7khxqmk1jmy";
+      }
+    )
   ];
 
   patched = pkgs.runCommand "nixpkgs-${pinnedVersion.rev}"
