@@ -6,9 +6,6 @@ let
 
   cfg = config.mine.tmux;
 
-  plugins = with pkgs; [
-  ];
-
   # TODO(high): Each color theme is defining it's own status format. The format
   # should be unified and nix should interpolate to set the correct format
 
@@ -88,7 +85,6 @@ let
     set-window-option -g window-status-current-format "#[fg=colour239, bg=colour248, :nobold, noitalics, nounderscore]#[fg=colour239, bg=colour214] #I #[fg=colour239, bg=colour214, bold] #W #[fg=colour214, bg=colour237, nobold, noitalics, nounderscore]"
     set-window-option -g window-status-format "#[fg=colour237,bg=colour239,noitalics]#[fg=colour223,bg=colour239] #I #[fg=colour223, bg=colour239] #W #[fg=colour239, bg=colour237, noitalics]"
   '';
-
 
   tmuxVimAwarness = ''
     # Smart pane switching with awareness of Vim splits.
