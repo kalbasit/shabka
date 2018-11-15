@@ -7,9 +7,6 @@ let
   cfg = config.mine.tmux;
 
   plugins = with pkgs; [
-    tmuxPlugins.logging
-    tmuxPlugins.prefix-highlight
-    tmuxPlugins.fzf-tmux-url
   ];
 
   # TODO(high): Each color theme is defining it's own status format. The format
@@ -165,10 +162,6 @@ let
       bind-key C-g run "${pkgs.tmux}/bin/tmux save-buffer - | ${pkgs.gist}/bin/gist -f tmux.sh-session --private | ${pkgs.xsel}/bin/xsel --clipboard -i && ${pkgs.libnotify}/bin/notify-send -a Tmux 'Buffer saved as private gist' 'Tmux buffer was saved as Gist, URL in clipboard' --icon=dialog-information"
       bind-key C-c run "${pkgs.tmux}/bin/tmux save-buffer - | ${pkgs.xsel}/bin/xsel --clipboard -i"
       bind-key C-v run "${pkgs.xsel}/bin/xsel --clipboard -o | ${pkgs.tmux}/bin/tmux load-buffer; ${pkgs.tmux}/bin/tmux paste-buffer"
-    '' else if pkgs.stdenv.isDarwin then ''
-      # on OSX, set the default command to reattach-to-user-namespace
-      # TODO: must install reattach-to-user-namespace through Nix to enable this!
-      # set-option -g default-command "reattach-to-user-namespace -l zsh"
     '' else "";
 
 in {
@@ -177,29 +170,46 @@ in {
 
   config = mkIf cfg.enable {
     programs.tmux = {
-      # Rather than constraining window size to the maximum size of any client
-      # connected to the *session*, constrain window size to the maximum size of any
-      # client connected to *that window*. Much more reasonable.
-      aggressiveResize = true;
-
-      # Display the clock in 24 hours format
-      clock24 = true;
-
-      customPaneNavigationAndResize = true;
       enable = true;
-      escapeTime = 0; # no ESC wait time. http://superuser.com/a/252717
-      historyLimit = 50000;
-      keyMode = "vi";
-      shortcut = "t";
-      terminal = "tmux-256color";
 
-      extraTmuxConf = ''
+      plugins = with pkgs.tmuxPlugins; [
+        logging
+        prefix-highlight
+        fzf-tmux-url
+      ];
+
+      extraConfig = ''
         ${defaultTheme}
         ${tmuxVimAwarness}
 
         #
         # Settings
         #
+
+        set  -g default-terminal "tmux-256color"
+        set  -g base-index      0
+        setw -g pane-base-index 0
+
+        set -g mode-keys   vi
+
+        bind h select-pane -L
+        bind j select-pane -D
+        bind k select-pane -U
+        bind l select-pane -R
+
+        bind -r H resize-pane -L 5
+        bind -r J resize-pane -D 5
+        bind -r K resize-pane -U 5
+        bind -r L resize-pane -R 5
+
+        # rebind main key: C-t
+        unbind C-b
+        set -g prefix C-t
+        bind t send-prefix
+        bind C-t last-window
+
+        # Display the clock in 24 hours format
+        setw -g clock-mode-style  24
 
         # don't allow the terminal to rename windows
         set-window-option -g allow-rename off
@@ -223,9 +233,6 @@ in {
         set-option -g bell-action any
         set-option -g visual-bell off
 
-        # reload config
-        bind R source-file /etc/tmux.conf \; display-message "Config reloaded..."
-
         # No Mouse!
         set -g mouse off
 
@@ -241,12 +248,6 @@ in {
         # bind C-n next-window
         bind C-n switch-client -p
         bind C-o switch-client -n
-
-        # online status settings
-        set -g status-interval 5
-
-        # add all the plugins
-        ${concatStrings (map (x: "run-shell ${x.rtp}\n") plugins)}
 
         ${copyPaste}
       '' + optionalString config.mine.useColemakKeyboardLayout colemakBindings;
