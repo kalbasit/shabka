@@ -45,7 +45,7 @@ let
       assert assertMsg (! (builtins.functionArgs neovimFn) ? "withNodeJs") (mkAssertMsg "neovim withNodeJs support");
       pkgs.fetchpatch {
         url = "https://github.com/NixOS/nixpkgs/pull/49884.patch";
-        sha256 = "0hd00ciivmsj3d3idwvwc1wlwi3r599f2l47dyq4i3z0wzfiim08";
+        sha256 = "14486yr3fr73418248xicvy6ivipfzk2hl4rqn3dg1prrdzyj83q";
       }
     )
 
