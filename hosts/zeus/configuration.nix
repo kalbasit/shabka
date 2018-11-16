@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ lib, ... }:
 
 with lib;
 
@@ -55,14 +55,6 @@ in {
   # disable the networkmanager on Zeus as it is really not needed since the
   # network does never change.
   networking.networkmanager.enable = false;
-
-  networking.localCommands = ''
-    while ! ${getBin pkgs.unixtools.ping}/bin/ping -w 1 -c 1 172.25.250.1; do
-      echo .
-      sleep 0.1
-    done
-    systemctl restart sshd.service
-  '';
 
   networking.vlans = {
     ifcns1 = {
