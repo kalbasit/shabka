@@ -16,6 +16,5 @@
     mine.timewarrior.enable = true;
     mine.tmux.enable = true;
     mine.useColemakKeyboardLayout = true;
-    mine.workstation.enable = true;
   };
 }
