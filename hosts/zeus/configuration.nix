@@ -14,8 +14,7 @@ in {
     ./hardware-configuration.nix
 
     "${pinnedNH}/common/cpu/intel"
-    "${pinnedNH}/common/pc/laptop"
-    "${pinnedNH}/common/pc/laptop/ssd"
+    "${pinnedNH}/common/pc/ssd"
 
     ../../modules/nixos
 
