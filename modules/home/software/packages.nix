@@ -15,7 +15,7 @@ in {
 
     browsh
 
-    corgi
+    unstable.corgi
 
     gist
 

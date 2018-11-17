@@ -2,6 +2,8 @@
 , pkgs
 }:
 
+with pkgs.lib;
+
 let
   pinnedVersion = builtins.fromJSON (builtins.readFile ./nixpkgs-version.json);
   pinned = builtins.fetchGit {
@@ -76,6 +78,16 @@ let
       pkgs.fetchpatch {
         url = "https://github.com/NixOS/nixpkgs/pull/50381.patch";
         sha256 = "0ha7mgmf33ykxkza108di1yb954dvy3z9fqd1jq9c7khxqmk1jmy";
+      }
+    )
+
+    # update corgi
+    # https://github.com/NixOS/nixpkgs/pull/50488
+    (
+      assert assertMsg (! versionAtLeast (getVersion importPinned.corgi) "0.2.4") (mkAssertMsg "corgi");
+      pkgs.fetchpatch {
+        url = "https://github.com/NixOS/nixpkgs/pull/50488.patch";
+        sha256 = "01bldiwl79xqjc5lpdc7bv2c8zpz7bkl9ilxaklgrw539sagg4kv";
       }
     )
   ];
