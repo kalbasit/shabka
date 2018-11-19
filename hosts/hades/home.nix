@@ -2,7 +2,9 @@
   mine.home-manager.config = { userName, uid, isAdmin, nixosConfig }: { ... }: {
     imports = [
       ../../modules/home
-    ];
+    ] ++ (if userName == "yl" then [
+      /yl/private/network-secrets/shabka/email.nix
+    ] else []);
 
     mine.nixosConfig = nixosConfig;
 
