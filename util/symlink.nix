@@ -1,10 +1,13 @@
 { lib }:
 
 let
-  pinnedHM = import ../external/home-manager.nix;
+  homeManager = import ../external/home-manager.nix {
+    pkgs = (import <nixpkgs> {});
+    inherit (import ../util) assertMsg;
+  };
 in
 
-with import "${pinnedHM}/modules/lib/dag.nix" { inherit lib; };
+with import "${homeManager}/modules/lib/dag.nix" { inherit lib; };
 
 {
   symlink = src: dst: dagEntryAfter ["installPackages"] ''

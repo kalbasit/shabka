@@ -4,7 +4,10 @@ with pkgs;
 
 let
 
-  homeManager = import ../../../external/home-manager.nix;
+  homeManager = import ../../../external/home-manager.nix {
+    pkgs = (import <nixpkgs> {});
+    inherit (import ../../../util) assertMsg;
+  };
 
 in {
   home.packages = [
