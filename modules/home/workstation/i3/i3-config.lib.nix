@@ -87,6 +87,7 @@ in {
         { command = "floating enable"; criteria = { title = "^jrnl_entry$"; }; }
 
         { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "^whats-app-nativefier*"; }; }
+        { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "astroid"; }; }
         { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "pulse-sms"; }; }
       ];
     };
@@ -236,6 +237,9 @@ in {
 
       # Whatsapp
       "${thirdModifier}+w" = "[class=\"^whats-app-nativefier*\"] scratchpad show";
+
+      # Whatsapp
+      "${thirdModifier}+m" = "[class=\"astroid\"] scratchpad show";
 
       # Pulse
       "${thirdModifier}+p" = "[class=\"pulse-sms\"] scratchpad show";
