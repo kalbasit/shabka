@@ -34,6 +34,8 @@ in {
   mine.useColemakKeyboardLayout = true;
   mine.virtualisation.docker.enable = true;
 
+  virtualisation.libvirtd.enable = true;
+
   mine.hardware.machine = "zeus";
 
   # configure OpenSSH server to listen on the ADMIN interface
