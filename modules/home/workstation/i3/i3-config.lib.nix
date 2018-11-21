@@ -106,10 +106,11 @@ in {
     };
 
     assigns = {
-      "slack" = [{ class = "^Slack$"; }];
-      "tor" = [{ class = "^Tor Browser"; }];
+      "charles"    = [{ class = "^com-xk72-charles-gui-.*$"; }];
+      "discord"    = [{ class = "^discord$"; }];
+      "slack"      = [{ class = "^Slack$"; }];
+      "tor"        = [{ class = "^Tor Browser"; }];
       "virtualbox" = [{ class = "^VirtualBox"; }];
-      "charles" = [{ class = "^com-xk72-charles-gui-.*$"; }];
     };
 
     modifier  = "Mod4";
@@ -337,11 +338,12 @@ in {
     bindsym ${defaultModifier}+${thirdModifier}+w mode "$mode_wm"
 
     # Application launcher
-    set $mode_apps Launch: (p) Chromium personal, (u) Chromium publica, (c) Charles, (s) Slack, (i) Irc, (w) Whatsapp, (t) Teamviewer, (m) Pulse SMS
+    set $mode_apps Launch: (p) Chromium personal, (u) Chromium publica, (c) Charles, (d) Discord, (s) Slack, (i) Irc, (w) Whatsapp, (t) Teamviewer, (m) Pulse SMS
     mode "$mode_apps" {
       bindsym p exec ${pkgs.nur.repos.kalbasit.rbrowser}/bin/rbrowser --profile personal, mode default
       bindsym u exec ${pkgs.nur.repos.kalbasit.rbrowser}/bin/rbrowser --profile publica, mode default
       bindsym c exec ${pkgs.charles}/bin/charles, mode default
+      bindsym d exec ${pkgs.discord}/bin/Discord, mode default
       bindsym s exec ${pkgs.slack}/bin/slack, mode default
       bindsym i exec ${pkgs.alacritty}/bin/alacritty --title=irc --exec=weechat, mode default
       bindsym t exec ${pkgs.teamviewer}/bin/teamviewer, mode default

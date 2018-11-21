@@ -18,8 +18,6 @@ in {
 
     browsh
 
-    unstable.corgi
-
     gist
 
     gnupg
@@ -50,6 +48,8 @@ in {
     lf
 
     nur.repos.kalbasit.swm
+
+    unstable.corgi
 
     unzip
 
