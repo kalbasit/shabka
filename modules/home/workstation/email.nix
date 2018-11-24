@@ -18,6 +18,10 @@ let
     offlineimap = {
       enable = true;
 
+      postSyncHookCommand = ''
+        ${getBin pkgs.notmuch}/bin/notmuch new
+      '';
+
       extraConfig = {
         account = {
           autorefresh = 20;
