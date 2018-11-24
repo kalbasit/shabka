@@ -61,12 +61,7 @@ assert assertMsg (builtins.pathExists privateEmailPath) "Private email configura
       '';
     };
 
-    programs.offlineimap = {
-      enable = true;
-      extraConfig.general = {
-        ui = "basic";
-      };
-    };
+    programs.msmtp.enable = true;
 
     programs.notmuch = {
       enable = true;
@@ -88,5 +83,13 @@ assert assertMsg (builtins.pathExists privateEmailPath) "Private email configura
         '';
       };
     };
+
+    programs.offlineimap = {
+      enable = true;
+      extraConfig.general = {
+        ui = "basic";
+      };
+    };
+
   };
 }
