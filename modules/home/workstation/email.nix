@@ -57,7 +57,7 @@ assert assertMsg (builtins.pathExists privateEmailPath) "Private email configura
     programs.astroid = {
       enable = true;
       externalEditor = ''
-        nvim-qt -- -c 'set ft=mail' '+set fileencoding=utf-8' '+set ff=unix' '+set enc=utf-8' '+set fo+=w' %1
+        ${getBin pkgs.neovim-qt}/bin/nvim-qt -- -c 'set ft=mail' '+set fileencoding=utf-8' '+set ff=unix' '+set enc=utf-8' '+set fo+=w' %1
       '';
     };
 
