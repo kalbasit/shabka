@@ -1,7 +1,7 @@
 {
   "url": "https://github.com/rycee/home-manager.git",
-  "rev": "f247b3b99ba0b6b69a21d2c765a7002fc40ae103",
-  "date": "2018-11-19T23:57:58+01:00",
-  "sha256": "0k6mlps6yz0mnr3mm87pmzvr1cgc1galb88b64jqpsxihnxp63bv",
+  "rev": "fa3d1f98e001eab0e0514414a6429e082962915a",
+  "date": "2018-11-25T13:53:45+01:00",
+  "sha256": "16yq49b184ahc1vb4zv76865zxwlc0fibjkyp8mhhw4fwx77101i",
   "fetchSubmodules": false
 }
