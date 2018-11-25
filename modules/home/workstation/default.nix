@@ -9,14 +9,10 @@ with import ../../../util;
 
   config = mkIf config.mine.workstation.enable {
     services.flameshot.enable = true;
-    services.kbfs.enable = true;
-    services.keybase.enable = true;
     services.network-manager-applet.enable = true;
 
     home = {
       packages = with pkgs; [
-        keybase-gui
-
         nur.repos.kalbasit.rbrowser
 
         remmina

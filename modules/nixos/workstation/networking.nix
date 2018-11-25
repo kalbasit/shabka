@@ -10,6 +10,8 @@ with lib;
       enable = true;
       dns = "dnsmasq";
     };
+
+    mine.userGroups = ["networkmanager"];
   };
 }
 

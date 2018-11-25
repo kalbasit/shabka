@@ -18,14 +18,13 @@ let
       group = "mine";
       extraGroups = [
         "dialout"
-        "docker"
         "fuse"
         "libvirtd"
-        "networkmanager"
         "users"
-        "vboxusers"
         "video"
-      ] ++ (if isAdmin then ["wheel"] else []);
+      ]
+      ++ config.mine.userGroups
+      ++ (optionals isAdmin ["wheel"]);
 
       shell = pkgs.zsh;
       hashedPassword = "$6$0bx5eAEsHJRxkD8.$gJ7sdkOOJRf4QCHWLGDUtAmjHV/gJxPQpyCEtHubWocHh9O7pWy10Frkm1Ch8P0/m8UTUg.Oxp.MB3YSQxFXu1";
@@ -57,6 +56,14 @@ in {
     '';
     description = ''
       The list of users to create.
+    '';
+  };
+
+  options.mine.userGroups = mkOption {
+    type = types.listOf types.str;
+    default = [];
+    description = ''
+      The list of groups to add all users to.
     '';
   };
 

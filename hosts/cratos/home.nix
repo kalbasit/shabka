@@ -8,6 +8,7 @@
 
     mine.batteryNotifier.enable = true;
     mine.git.enable = true;
+    mine.keybase.enable = true;
     mine.less.enable = true;
     mine.neovim.enable = true;
     mine.pet.enable = true;
