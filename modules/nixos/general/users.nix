@@ -44,7 +44,6 @@ let
     yl              = { uid = 2000; isAdmin = true;  home = "/yl"; };
     yl_opensource   = { uid = 2002; isAdmin = false; home = "/yl/opensource"; };
     yl_presentation = { uid = 2003; isAdmin = false; home = "/yl/presentation"; };
-    yl_publica      = { uid = 2016; isAdmin = false; home = "/yl/publica"; };
   };
 
 in {

@@ -54,7 +54,6 @@ in {
   mine.useColemakKeyboardLayout = true;
   mine.virtualisation.docker.enable = true;
   mine.workstation.enable = true;
-  mine.workstation.publica.enable = true;
 
   mine.hardware.machine = "precision-7530";
 
