@@ -2,9 +2,7 @@
   mine.home-manager.config = { userName, uid, isAdmin, nixosConfig }: { ... }: {
     imports = [
       ../../modules/home
-    ] ++ (if userName == "yl" then [
-      /yl/private/network-secrets/shabka/email.nix
-    ] else []);
+    ];
 
     mine.nixosConfig = nixosConfig;
 
@@ -19,5 +17,7 @@
     mine.tmux.enable = true;
     mine.useColemakKeyboardLayout = true;
     mine.workstation.enable = true;
+
+    mine.workstation.email.enable = if userName == "yl" then true else false;
   };
 }
