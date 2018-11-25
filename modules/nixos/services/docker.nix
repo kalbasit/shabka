@@ -7,8 +7,7 @@ in {
   options.mine.virtualisation.docker.enable = mkEnableOption "Enable Docker";
 
   config = mkIf cfg.enable {
-    # Enable docker support
     virtualisation.docker.enable = true;
+    mine.userGroups = ["docker"];
   };
 }
-
