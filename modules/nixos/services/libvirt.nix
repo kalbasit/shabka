@@ -9,6 +9,7 @@ in {
 
   config = mkIf cfg.enable {
     virtualisation.libvirtd.enable = true;
+    virtualisation.libvirtd.qemuRunAsRoot = false;
 
     mine.userGroups = ["libvirtd"];
   };
