@@ -37,6 +37,15 @@ in {
 
   mine.hardware.machine = "zeus";
 
+  # enable iScsi with libvirtd
+  nixpkgs.overlays = [
+    (self: super: {
+      libvirt = super.libvirt.override {
+        enableIscsi = true;
+      };
+    })
+  ];
+
   # configure OpenSSH server to listen on the ADMIN interface
   services.openssh.listenAddresses = [ { addr = "172.25.250.3"; port = 22; } ];
 
