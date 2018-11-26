@@ -134,8 +134,8 @@ in {
   };
 
   # start windows 10 VM
-  # systemd.services.libvirtd-guest-win10 = buildWindows10 "prod";
-  systemd.services.libvirtd-guest-win10-staging = buildWindows10 "staging";
+  systemd.services.libvirtd-guest-win10 = buildWindows10 "prod";
+  # systemd.services.libvirtd-guest-win10-staging = buildWindows10 "staging";
 
   # configure OpenSSH server to listen on the ADMIN interface
   services.openssh.listenAddresses = [ { addr = "172.25.250.3"; port = 22; } ];
