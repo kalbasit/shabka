@@ -102,7 +102,16 @@ in {
     wantedBy = [ "multi-user.target" ];
     before = ["libvirtd.service"];
     serviceConfig.ExecStart = "${getBin pkgs.openiscsi}/bin/iscsid --foreground";
-    postStart = let
+  };
+  systemd.services.iscsid-nas = {
+    wantedBy = [ "multi-user.target" ];
+    after = ["iscsid.service"];
+    requires = ["iscsid.service"];
+    preStart = ''
+      # delay the post script until iscsid has started
+      sleep 30
+    '';
+    script = let
       prodIQN = "iqn.2018-11.com.nasreddine.apollo:win10";
       stagingIQN = "iqn.2018-11.com.nasreddine.apollo:win10.staging";
     in ''
@@ -117,6 +126,7 @@ in {
       ${getBin pkgs.openiscsi}/bin/iscsiadm -m node -T ${prodIQN} -p ${nasIP} -l
       ${getBin pkgs.openiscsi}/bin/iscsiadm -m node -T ${stagingIQN} -p ${nasIP} -l
     '';
+
   };
 
   # start windows 10 VM
