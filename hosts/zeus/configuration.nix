@@ -147,6 +147,10 @@ in {
 
   # configure OpenSSH server to listen on the ADMIN interface
   services.openssh.listenAddresses = [ { addr = "172.25.250.3"; port = 22; } ];
+  systemd.services.sshd = {
+    after = ["network-addresses-ifcadmin.service"];
+    requires = ["network-addresses-ifcadmin.service"];
+  };
 
   mine.plex = {
     enable = true;
