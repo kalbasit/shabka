@@ -1,5 +1,5 @@
 <domain type='kvm' id='2'>
-  <name>win10</name>
+  <name>@name@</name>
   <uuid>UUID</uuid>
   <memory unit='KiB'>16777216</memory>
   <currentMemory unit='KiB'>16777216</currentMemory>
@@ -50,7 +50,7 @@
     <emulator>/run/libvirt/nix-emulators/qemu-kvm</emulator>
     <disk type='block' device='disk'>
       <driver name='qemu' type='raw' cache='none' io='native'/>
-      <source dev='/dev/disk/by-path/ip-172.25.1.2:3260-iscsi-iqn.2018-11.com.nasreddine.apollo:win10-lun-1'/>
+      <source dev='@dev_path@'/>
       <backingStore/>
       <target dev='hda' bus='ide'/>
       <alias name='ide0-0-0'/>
@@ -95,7 +95,7 @@
       <address type='pci' domain='0x0000' bus='0x00' slot='0x06' function='0x0'/>
     </controller>
     <interface type='direct'>
-      <mac address='52:54:00:54:35:95'/>
+      <mac address='@mac_address@'/>
       <source dev='ifcns2' mode='bridge'/>
       <target dev='macvtap0'/>
       <model type='rtl8139'/>

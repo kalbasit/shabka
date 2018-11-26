@@ -9,6 +9,57 @@ let
 
   pinnedNH = import ../../external/nixos-hardware.nix;
 
+  nasIP = "172.25.1.2";
+
+  buildWindows10 = env: let
+    vmName = if env == "prod" then "win10"
+      else if env == "staging" then "win10.staging"
+      else abort "${env} is not supported";
+  in {
+    after = ["libvirtd.service" "iscsid.service"];
+    requires = ["libvirtd.service" "iscsid.service"];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = "yes";
+    };
+
+    script = let
+      xml = pkgs.substituteAll {
+        src = ./win10.xml;
+
+        name = "${vmName}";
+
+        mac_address = if env == "prod" then "52:54:00:54:35:95"
+        else if env == "staging" then "02:68:b3:29:da:98"
+        else abort "${env} is not supported";
+
+        dev_path = if env == "prod" then "/dev/disk/by-path/ip-172.25.1.2:3260-iscsi-iqn.2018-11.com.nasreddine.apollo:win10-lun-1"
+        else if env == "staging" then "/dev/disk/by-path/ip-172.25.1.2:3260-iscsi-iqn.2018-11.com.nasreddine.apollo:win10.staging-lun-1"
+        else abort "${env} is not supported";
+      };
+
+    in ''
+      uuid="$(${getBin pkgs.libvirt}/bin/virsh domuuid '${vmName}' || true)"
+        ${getBin pkgs.libvirt}/bin/virsh define <(sed "s/UUID/$uuid/" '${xml}')
+        ${getBin pkgs.libvirt}/bin/virsh start '${vmName}'
+    '';
+
+    preStop = ''
+      ${getBin pkgs.libvirt}/bin/virsh shutdown '${vmName}'
+      let "timeout = $(date +%s) + 60"
+      while [ "$(${getBin pkgs.libvirt}/bin/virsh list --name | grep --count '^${vmName}$')" -gt 0 ]; do
+        if [ "$(date +%s)" -ge "$timeout" ]; then
+          # Meh, we warned it...
+          ${getBin pkgs.libvirt}/bin/virsh destroy '${vmName}'
+        else
+          # The machine is still running, let's give it some time to shut down
+          sleep 0.5
+        fi
+      done
+    '';
+  };
+
 in {
   imports = [
     ./hardware-configuration.nix
@@ -51,45 +102,26 @@ in {
     wantedBy = [ "multi-user.target" ];
     before = ["libvirtd.service"];
     serviceConfig.ExecStart = "${getBin pkgs.openiscsi}/bin/iscsid --foreground";
-    preStart = ''
+    preStart = let
+      prodIQN = "iqn.2018-11.com.nasreddine.apollo:win10";
+      stagingIQN = "iqn.2018-11.com.nasreddine.apollo:win10.staging";
+    in ''
       if ! [[ -f /etc/iscsi/initiatorname.iscsi ]]; then
         echo "InitiatorName=$(${getBin pkgs.openiscsi}/bin/iscsi-iname)" > /etc/iscsi/initiatorname.iscsi
       fi
+
+      # discover all the iSCSI defices offered by my NAS
+      iscsi_discovery ${nasIP}
+
+      # Login to the IQN
+      iscsiadm -m node -T ${prodIQN} -p ${nasIP} -l
+      iscsiadm -m node -T ${stagingIQN} -p ${nasIP} -l
     '';
   };
 
   # start windows 10 VM
-  systemd.services.libvirtd-guest-win10 = {
-    after = ["libvirtd.service" "iscsid.service"];
-    requires = ["libvirtd.service" "iscsid.service"];
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = "yes";
-    };
-
-    script = let
-      xml = ./win10.xml;
-    in ''
-      uuid="$(${getBin pkgs.libvirt}/bin/virsh domuuid 'win10' || true)"
-        ${getBin pkgs.libvirt}/bin/virsh define <(sed "s/UUID/$uuid/" '${xml}')
-        ${getBin pkgs.libvirt}/bin/virsh start 'win10'
-    '';
-
-    preStop = ''
-      ${getBin pkgs.libvirt}/bin/virsh shutdown 'win10'
-      let "timeout = $(date +%s) + 60"
-      while [ "$(${getBin pkgs.libvirt}/bin/virsh list --name | grep --count '^win10$')" -gt 0 ]; do
-        if [ "$(date +%s)" -ge "$timeout" ]; then
-          # Meh, we warned it...
-          ${getBin pkgs.libvirt}/bin/virsh destroy 'win10'
-        else
-          # The machine is still running, let's give it some time to shut down
-          sleep 0.5
-        fi
-      done
-    '';
-  };
+  systemd.services.libvirtd-guest-win10 = buildWindows10 "prod";
+  systemd.services.libvirtd-guest-win10-staging = buildWindows10 "staging";
 
   # configure OpenSSH server to listen on the ADMIN interface
   services.openssh.listenAddresses = [ { addr = "172.25.250.3"; port = 22; } ];
