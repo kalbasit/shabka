@@ -110,6 +110,10 @@ in {
     after = ["iscsid.service"];
     requires = ["iscsid.service"];
     restartIfChanged = false;
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = "yes";
+    };
     script = let
       prodIQN = "iqn.2018-11.com.nasreddine.apollo:win10";
       stagingIQN = "iqn.2018-11.com.nasreddine.apollo:win10.staging";
