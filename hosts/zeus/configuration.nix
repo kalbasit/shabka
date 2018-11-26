@@ -140,8 +140,12 @@ in {
       done
 
       # Login to the IQN
-      iscsiadm -m node -T ${prodIQN} -p ${nasIP} -l
-      iscsiadm -m node -T ${stagingIQN} -p ${nasIP} -l
+      if ! iscsiadm -m session | grep -q ' ${prodIQN} '; then
+        iscsiadm -m node -T ${prodIQN} -p ${nasIP} -l
+      fi
+      if ! iscsiadm -m session | grep -q ' ${stagingIQN} '; then
+        iscsiadm -m node -T ${stagingIQN} -p ${nasIP} -l
+      fi
     '';
   };
 
