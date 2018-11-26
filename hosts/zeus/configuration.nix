@@ -16,8 +16,8 @@ let
       else if env == "staging" then "win10.staging"
       else abort "${env} is not supported";
   in {
-    after = ["libvirtd.service" "iscsid.service"];
-    requires = ["libvirtd.service" "iscsid.service"];
+    after = ["libvirtd.service" "iscsid.service" "iscsid-nas.service"];
+    requires = ["libvirtd.service" "iscsid.service" "iscsid-nas.service"];
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
       Type = "oneshot";
@@ -117,7 +117,7 @@ in {
 
       # discover all the iSCSI defices offered by my NAS
       let "timeout = $(date +%s) + 60"
-      while ! ${getBin pkgs.openiscsi}/bin/iscsi_discovery ${nasIP}; do
+      while ! ${getBin pkgs.openiscsi}/bin/iscsiadm --mode discovery --type sendtargets --portal ${nasIP}; do
         if [ "$(date +%s)" -ge "$timeout" ]; then
           echo "iSCSI is still not up, aborting"
           exit 1
