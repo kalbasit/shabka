@@ -5,7 +5,7 @@ with lib;
 {
   config = mkIf (config.mine.hardware.machine == "zeus") {
     boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod" ];
-    boot.kernelModules = [ "kvm-intel" ];
+    boot.kernelModules = [ "kvm-intel" "iscsi_tcp" ];
     boot.extraModulePackages = [ ];
 
     boot.loader.grub = {
