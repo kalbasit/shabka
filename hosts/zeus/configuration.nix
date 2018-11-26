@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ pkgs, lib, ... }:
 
 with lib;
 
@@ -45,6 +45,13 @@ in {
       };
     })
   ];
+
+  # start iscsid
+  systemd.services.iscsid = {
+    wantedBy = [ "multi-user.target" ];
+    before = ["libvirtd.service"];
+    serviceConfig.ExecStart = "${getBin pkgs.openiscsi}/bin/iscsid --foreground";
+  };
 
   # configure OpenSSH server to listen on the ADMIN interface
   services.openssh.listenAddresses = [ { addr = "172.25.250.3"; port = 22; } ];
