@@ -1,4 +1,4 @@
-<domain type='kvm' id='2'>
+<domain type='kvm' id='1'>
   <name>@name@</name>
   <uuid>UUID</uuid>
   <memory unit='KiB'>16777216</memory>
@@ -57,9 +57,8 @@
       <address type='drive' controller='0' bus='0' target='0' unit='0'/>
     </disk>
     <disk type='file' device='cdrom'>
-      <driver name='qemu' type='raw'/>
-      <backingStore/>
-      <target dev='hdb' bus='ide' tray='open'/>
+      <driver name='qemu'/>
+      <target dev='hdb' bus='ide'/>
       <readonly/>
       <alias name='ide0-0-1'/>
       <address type='drive' controller='0' bus='0' target='0' unit='1'/>
@@ -103,14 +102,14 @@
       <address type='pci' domain='0x0000' bus='0x00' slot='0x03' function='0x0'/>
     </interface>
     <serial type='pty'>
-      <source path='/dev/pts/4'/>
+      <source path='/dev/pts/0'/>
       <target type='isa-serial' port='0'>
         <model name='isa-serial'/>
       </target>
       <alias name='serial0'/>
     </serial>
-    <console type='pty' tty='/dev/pts/4'>
-      <source path='/dev/pts/4'/>
+    <console type='pty' tty='/dev/pts/0'>
+      <source path='/dev/pts/0'/>
       <target type='serial' port='0'/>
       <alias name='serial0'/>
     </console>
