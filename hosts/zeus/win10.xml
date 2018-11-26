@@ -96,7 +96,7 @@
     </controller>
     <interface type='direct'>
       <mac address='52:54:00:54:35:95'/>
-      <source dev='ifcns1' mode='bridge'/>
+      <source dev='ifcns2' mode='bridge'/>
       <target dev='macvtap0'/>
       <model type='rtl8139'/>
       <alias name='net0'/>
