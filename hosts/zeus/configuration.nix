@@ -107,10 +107,6 @@ in {
     wantedBy = [ "multi-user.target" ];
     after = ["iscsid.service"];
     requires = ["iscsid.service"];
-    preStart = ''
-      # delay the post script until iscsid has started
-      sleep 30
-    '';
     script = let
       prodIQN = "iqn.2018-11.com.nasreddine.apollo:win10";
       stagingIQN = "iqn.2018-11.com.nasreddine.apollo:win10.staging";
@@ -120,7 +116,15 @@ in {
       fi
 
       # discover all the iSCSI defices offered by my NAS
-      ${getBin pkgs.openiscsi}/bin/iscsi_discovery ${nasIP}
+      let "timeout = $(date +%s) + 60"
+      while ! ${getBin pkgs.openiscsi}/bin/iscsi_discovery ${nasIP}; do
+        if [ "$(date +%s)" -ge "$timeout" ]; then
+          echo "iSCSI is still not up, aborting"
+          exit 1
+        else
+          sleep 0.5
+        fi
+      done
 
       # Login to the IQN
       ${getBin pkgs.openiscsi}/bin/iscsiadm -m node -T ${prodIQN} -p ${nasIP} -l
