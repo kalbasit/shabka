@@ -150,6 +150,9 @@ in {
   systemd.services.sshd = {
     after = ["network-addresses-ifcadmin.service"];
     requires = ["network-addresses-ifcadmin.service"];
+    serviceConfig = {
+      RestartSec = "5";
+    };
   };
 
   mine.plex = {
