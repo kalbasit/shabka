@@ -47,13 +47,15 @@ in {
   ];
 
   # start iscsid
-  environment.etc."iscsi/initiatorname.iscsi".text = ''
-    InitiatorName=iqn.2005-03.org.open-iscsi:e4b3b3a17011
-  '';
   systemd.services.iscsid = {
     wantedBy = [ "multi-user.target" ];
     before = ["libvirtd.service"];
     serviceConfig.ExecStart = "${getBin pkgs.openiscsi}/bin/iscsid --foreground";
+    preStart = ''
+      if ! [[ -f /etc/iscsi/initiatorname.iscsi ]]; then
+        echo "InitiatorName=$(${getBin pkgs.openiscsi}/bin/iscsi-iname)" > /etc/iscsi/initiatorname.iscsi
+      fi
+    '';
   };
 
   # configure OpenSSH server to listen on the ADMIN interface
