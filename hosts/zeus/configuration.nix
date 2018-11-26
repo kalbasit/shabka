@@ -98,6 +98,7 @@ in {
   ];
 
   # start iscsid
+  systemd.packages = with pkgs; [ openiscsi ];
   systemd.services.iscsid = {
     wantedBy = [ "multi-user.target" ];
     before = ["libvirtd.service"];
