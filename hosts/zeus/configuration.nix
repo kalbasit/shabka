@@ -119,6 +119,9 @@ in {
         echo "InitiatorName=$(${getBin pkgs.openiscsi}/bin/iscsi-iname)" > /etc/iscsi/initiatorname.iscsi
       fi
 
+      # run iscsi discover, this might fail and that's OK!
+      ${getBin pkgs.openiscsi}/bin/iscsi_discovery ${nasIP} || true
+
       # discover all the iSCSI defices offered by my NAS
       let "timeout = $(date +%s) + 60"
       while ! ${getBin pkgs.openiscsi}/bin/iscsiadm --mode discovery --type sendtargets --portal ${nasIP}; do
