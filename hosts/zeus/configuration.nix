@@ -98,7 +98,6 @@ in {
   ];
 
   # start iscsid
-  systemd.packages = with pkgs; [ openiscsi ];
   systemd.services.iscsid = {
     wantedBy = [ "multi-user.target" ];
     before = ["libvirtd.service"];
@@ -112,11 +111,11 @@ in {
       fi
 
       # discover all the iSCSI defices offered by my NAS
-      iscsi_discovery ${nasIP}
+      ${getBin pkgs.openiscsi}/bin/iscsi_discovery ${nasIP}
 
       # Login to the IQN
-      iscsiadm -m node -T ${prodIQN} -p ${nasIP} -l
-      iscsiadm -m node -T ${stagingIQN} -p ${nasIP} -l
+      ${getBin pkgs.openiscsi}/bin/iscsiadm -m node -T ${prodIQN} -p ${nasIP} -l
+      ${getBin pkgs.openiscsi}/bin/iscsiadm -m node -T ${stagingIQN} -p ${nasIP} -l
     '';
   };
 
