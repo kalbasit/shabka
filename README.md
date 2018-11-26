@@ -127,7 +127,7 @@ NixOS system.
 
 # Documentation
 
-Please see [doc/modules](/docs/modules.md) for documentation on all the
+Please see [doc/modules](/doc/modules.md) for documentation on all the
 supported options.
 
 ## Shabka structure
