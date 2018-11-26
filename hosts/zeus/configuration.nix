@@ -114,17 +114,19 @@ in {
       prodIQN = "iqn.2018-11.com.nasreddine.apollo:win10";
       stagingIQN = "iqn.2018-11.com.nasreddine.apollo:win10.staging";
     in ''
+      export PATH="$PATH:${getBin pkgs.openiscsi}/bin"
+
       if ! [[ -f /etc/iscsi/initiatorname.iscsi ]]; then
         mkdir -p /etc/iscsi
-        echo "InitiatorName=$(${getBin pkgs.openiscsi}/bin/iscsi-iname)" > /etc/iscsi/initiatorname.iscsi
+        echo "InitiatorName=$(iscsi-iname)" > /etc/iscsi/initiatorname.iscsi
       fi
 
       # run iscsi discover, this might fail and that's OK!
-      ${getBin pkgs.openiscsi}/bin/iscsi_discovery ${nasIP} || true
+      iscsi_discovery ${nasIP} || true
 
       # discover all the iSCSI defices offered by my NAS
       let "timeout = $(date +%s) + 60"
-      while ! ${getBin pkgs.openiscsi}/bin/iscsiadm --mode discovery --type sendtargets --portal ${nasIP}; do
+      while ! iscsiadm --mode discovery --type sendtargets --portal ${nasIP}; do
         if [ "$(date +%s)" -ge "$timeout" ]; then
           echo "iSCSI is still not up, aborting"
           exit 1
@@ -134,8 +136,8 @@ in {
       done
 
       # Login to the IQN
-      ${getBin pkgs.openiscsi}/bin/iscsiadm -m node -T ${prodIQN} -p ${nasIP} -l
-      ${getBin pkgs.openiscsi}/bin/iscsiadm -m node -T ${stagingIQN} -p ${nasIP} -l
+      iscsiadm -m node -T ${prodIQN} -p ${nasIP} -l
+      iscsiadm -m node -T ${stagingIQN} -p ${nasIP} -l
     '';
   };
 
