@@ -48,7 +48,7 @@ in {
 
   # start iscsid
   environment.etc."iscsi/initiatorname.iscsi".text = ''
-    InitiatorName=iqn.2018-11.com.nasreddine.zeus:zeus
+    InitiatorName=iqn.2005-03.org.open-iscsi:e4b3b3a17011
   '';
   systemd.services.iscsid = {
     wantedBy = [ "multi-user.target" ];
