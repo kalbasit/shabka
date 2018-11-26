@@ -23,6 +23,7 @@ let
       Type = "oneshot";
       RemainAfterExit = "yes";
     };
+    restartIfChanged = false;
 
     script = let
       xml = pkgs.substituteAll {
@@ -102,11 +103,13 @@ in {
     wantedBy = [ "multi-user.target" ];
     before = ["libvirtd.service"];
     serviceConfig.ExecStart = "${getBin pkgs.openiscsi}/bin/iscsid --foreground";
+    restartIfChanged = false;
   };
   systemd.services.iscsid-nas = {
     wantedBy = [ "multi-user.target" ];
     after = ["iscsid.service"];
     requires = ["iscsid.service"];
+    restartIfChanged = false;
     script = let
       prodIQN = "iqn.2018-11.com.nasreddine.apollo:win10";
       stagingIQN = "iqn.2018-11.com.nasreddine.apollo:win10.staging";
@@ -130,7 +133,6 @@ in {
       ${getBin pkgs.openiscsi}/bin/iscsiadm -m node -T ${prodIQN} -p ${nasIP} -l
       ${getBin pkgs.openiscsi}/bin/iscsiadm -m node -T ${stagingIQN} -p ${nasIP} -l
     '';
-
   };
 
   # start windows 10 VM
