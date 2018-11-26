@@ -71,18 +71,18 @@ in {
     script = let
       xml = ./win10.xml;
     in ''
-      uuid="$(${pkgs.libvirt}/bin/virsh domuuid 'win10' || true)"
-        ${pkgs.libvirt}/bin/virsh define <(sed "s/UUID/$uuid/" '${xml}')
-        ${pkgs.libvirt}/bin/virsh start 'win10'
+      uuid="$(${getBin pkgs.libvirt}/bin/virsh domuuid 'win10' || true)"
+        ${getBin pkgs.libvirt}/bin/virsh define <(sed "s/UUID/$uuid/" '${xml}')
+        ${getBin pkgs.libvirt}/bin/virsh start 'win10'
     '';
 
     preStop = ''
-      ${pkgs.libvirt}/bin/virsh shutdown 'win10'
+      ${getBin pkgs.libvirt}/bin/virsh shutdown 'win10'
       let "timeout = $(date +%s) + 60"
-      while [ "$(${pkgs.libvirt}/bin/virsh list --name | grep --count '^win10$')" -gt 0 ]; do
+      while [ "$(${getBin pkgs.libvirt}/bin/virsh list --name | grep --count '^win10$')" -gt 0 ]; do
         if [ "$(date +%s)" -ge "$timeout" ]; then
           # Meh, we warned it...
-          ${pkgs.libvirt}/bin/virsh destroy 'win10'
+          ${getBin pkgs.libvirt}/bin/virsh destroy 'win10'
         else
           # The machine is still running, let's give it some time to shut down
           sleep 0.5
