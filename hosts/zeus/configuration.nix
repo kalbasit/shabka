@@ -115,6 +115,7 @@ in {
       stagingIQN = "iqn.2018-11.com.nasreddine.apollo:win10.staging";
     in ''
       if ! [[ -f /etc/iscsi/initiatorname.iscsi ]]; then
+        mkdir -p /etc/iscsi
         echo "InitiatorName=$(${getBin pkgs.openiscsi}/bin/iscsi-iname)" > /etc/iscsi/initiatorname.iscsi
       fi
 
