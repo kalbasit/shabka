@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ pkgs, lib, ... }:
 
 with lib;
 
@@ -33,8 +33,28 @@ in {
   mine.openvpn.client.expressvpn.enable = true;
   mine.useColemakKeyboardLayout = true;
   mine.virtualisation.docker.enable = true;
+  mine.virtualisation.libvirtd.enable = true;
 
   mine.hardware.machine = "zeus";
+
+  # enable iScsi with libvirtd
+  nixpkgs.overlays = [
+    (self: super: {
+      libvirt = super.libvirt.override {
+        enableIscsi = true;
+      };
+    })
+  ];
+
+  # start iscsid
+  environment.etc."iscsi/initiatorname.iscsi".text = ''
+    InitiatorName=iqn.2005-03.org.open-iscsi:e4b3b3a17011
+  '';
+  systemd.services.iscsid = {
+    wantedBy = [ "multi-user.target" ];
+    before = ["libvirtd.service"];
+    serviceConfig.ExecStart = "${getBin pkgs.openiscsi}/bin/iscsid --foreground";
+  };
 
   # configure OpenSSH server to listen on the ADMIN interface
   services.openssh.listenAddresses = [ { addr = "172.25.250.3"; port = 22; } ];

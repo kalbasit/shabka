@@ -19,7 +19,6 @@ let
       extraGroups = [
         "dialout"
         "fuse"
-        "libvirtd"
         "users"
         "video"
       ]
