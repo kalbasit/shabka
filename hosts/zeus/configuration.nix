@@ -102,7 +102,7 @@ in {
     wantedBy = [ "multi-user.target" ];
     before = ["libvirtd.service"];
     serviceConfig.ExecStart = "${getBin pkgs.openiscsi}/bin/iscsid --foreground";
-    preStart = let
+    postStart = let
       prodIQN = "iqn.2018-11.com.nasreddine.apollo:win10";
       stagingIQN = "iqn.2018-11.com.nasreddine.apollo:win10.staging";
     in ''
