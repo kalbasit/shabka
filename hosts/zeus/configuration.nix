@@ -29,7 +29,7 @@ let
       xml = pkgs.substituteAll {
         src = ./win10.xml;
 
-        name = "${vmName}";
+        name = vmName;
 
         mac_address = if env == "prod" then "52:54:00:54:35:95"
         else if env == "staging" then "02:68:b3:29:da:98"
@@ -48,7 +48,7 @@ let
 
     preStop = ''
       ${getBin pkgs.libvirt}/bin/virsh shutdown '${vmName}'
-      let "timeout = $(date +%s) + 60"
+      let "timeout = $(date +%s) + 120"
       while [ "$(${getBin pkgs.libvirt}/bin/virsh list --name | grep --count '^${vmName}$')" -gt 0 ]; do
         if [ "$(date +%s)" -ge "$timeout" ]; then
           # Meh, we warned it...
