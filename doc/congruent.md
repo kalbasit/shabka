@@ -1,3 +1,15 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**
+
+- [What is "declarative congruence"?](#what-is-declarative-congruence)
+  - [Divergence](#divergence)
+  - [Convergence](#convergence)
+  - [Congruence](#congruence)
+  - [Conclusion](#conclusion)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # What is "declarative congruence"?
 
 There are three system management methods that greatly depend on the

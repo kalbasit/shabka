@@ -3,11 +3,6 @@
 **Table of Contents**
 
 - [Shabka](#shabka)
-  - [What is "declarative congruence"?](#what-is-declarative-congruence)
-    - [Divergence](#divergence)
-    - [Convergence](#convergence)
-    - [Congruence](#congruence)
-    - [Conclusion](#conclusion)
   - [Why Nix?](#why-nix)
   - [Why NixOS?](#why-nixos)
 - [Documentation](#documentation)
@@ -25,6 +20,9 @@ my workstations (desktops, and laptops), network devices and servers.
 It's based on the [NixOS][1] operating system, and uses
 [home-manager][4] to setup the home directory of the users, for both
 NixOS and the other operating systems, including Mac.
+
+See [What is "declarative congruence"?][5] for more information on the
+subject.
 
 ## Why Nix?
 
@@ -116,6 +114,7 @@ All source code is licensed under the [MIT License][3].
 [2]: https://nixos.org/nix
 [3]: /LICENSE
 [4]: https://github.com/rycee/home-manager
+[5]: /doc/congruent.md
 [7]: https://github.com/dustinlacewell/dotfiles
 [12]: https://nixos.org/nix/about.html
 [13]: https://nixos.org/nixpkgs
