@@ -47,6 +47,9 @@ in {
   ];
 
   # start iscsid
+  environment.etc."iscsi/initiatorname.iscsi".text = ''
+    InitiatorName=iqn.2018-11.com.nasreddine.zeus:zeus
+  '';
   systemd.services.iscsid = {
     wantedBy = [ "multi-user.target" ];
     before = ["libvirtd.service"];
