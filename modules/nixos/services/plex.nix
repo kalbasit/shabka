@@ -27,15 +27,17 @@ in {
 
       package = pkgs.plex.overrideAttrs (_: let
         # see https://www.plex.tv/media-server-downloads/ for 64bit rpm
-        version = "1.13.8.5395";
-        vsnHash = "10d48da0d";
-        sha1 = "pcp4xdkj5ilqwsz4nfdxg2bddradaybp";
+        version = "1.13.9.5456";
+        vsnHash = "ecd600442";
+        sha1 = "1pl98accnmhvxirxznrxl89fx45kg6sn";
       in {
         name = "plex-${version}";
         src = pkgs.fetchurl {
           url = "https://downloads.plex.tv/plex-media-server/${version}-${vsnHash}/plexmediaserver-${version}-${vsnHash}.x86_64.rpm";
           inherit sha1;
         };
+
+        preferLocalBuild = true;
 
         # TODO: remove this once https://github.com/NixOS/nixpkgs/pull/47562 is merged in.
         installPhase = let
