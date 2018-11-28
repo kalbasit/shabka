@@ -340,10 +340,11 @@ in {
     bindsym ${defaultModifier}+${thirdModifier}+w mode "$mode_wm"
 
     # Application launcher
-    set $mode_apps Launch: (d) Discord, (i) Irc, (s) Slack, (t) TaskWarrior
+    set $mode_apps Launch: (d) Discord, (i) Irc, (m) Mail, (s) Slack, (t) TaskWarrior
     mode "$mode_apps" {
       bindsym d exec ${getBin pkgs.discord}/bin/Discord, mode default
       bindsym i exec ${getBin pkgs.alacritty}/bin/alacritty --title=irc --exec=weechat, mode default
+      bindsym m exec astroid, mode default
       bindsym s exec ${getBin pkgs.slack}/bin/slack, mode default
       bindsym t exec ${getBin pkgs.ptask}/bin/ptask, mode default
 
