@@ -37,6 +37,14 @@ let
         sha256 = "01bldiwl79xqjc5lpdc7bv2c8zpz7bkl9ilxaklgrw539sagg4kv";
       }
     )
+
+    # update network-manager to 1.14.4
+    (
+      pkgs.fetchpatch {
+        url = "https://github.com/NixOS/nixpkgs/pull/51122.patch";
+        sha256 = "0qvxwx0vz11najs3x0p005kmwl0c31ga1zwi7h68pd96jwcmg8r8";
+      }
+    )
   ];
 
   patched = pkgs.runCommand "nixpkgs-${pinnedVersion.rev}"
