@@ -2,6 +2,8 @@
 , pkgs
 }:
 
+with pkgs.lib;
+
 let
   pinnedVersion = builtins.fromJSON (builtins.readFile ./nixpkgs-version.json);
   pinned = builtins.fetchGit {
@@ -16,16 +18,6 @@ let
   mkAssertMsg = name: "${name} is available upsteam, kill this patch";
 
   patches = [
-    # archiver
-    # https://github.com/NixOS/nixpkgs/pull/49956
-    (
-      assert assertMsg (! importPinned ? archiver) (mkAssertMsg "archiver");
-      pkgs.fetchpatch {
-        url = "https://github.com/NixOS/nixpkgs/pull/49956.patch";
-        sha256 = "0rqx0w4krm8r3pj4ismf465bc7z687k3fm8akiixacd0qm2nnwgz";
-      }
-    )
-
     # ssh-agents
     # https://github.com/NixOS/nixpkgs/pull/49892
     (
@@ -36,36 +28,21 @@ let
       }
     )
 
-    # neovim with nodejs support
-    # https://github.com/NixOS/nixpkgs/pull/49884
+    # update corgi
+    # https://github.com/NixOS/nixpkgs/pull/50488
     (
-      let
-        neovimFn = import "${pinned}/pkgs/applications/editors/neovim/wrapper.nix";
-      in
-      assert assertMsg (! (builtins.functionArgs neovimFn) ? "withNodeJs") (mkAssertMsg "neovim withNodeJs support");
+      assert assertMsg (! versionAtLeast (getVersion importPinned.corgi) "0.2.4") (mkAssertMsg "corgi");
       pkgs.fetchpatch {
-        url = "https://github.com/NixOS/nixpkgs/pull/49884.patch";
-        sha256 = "0hd00ciivmsj3d3idwvwc1wlwi3r599f2l47dyq4i3z0wzfiim08";
+        url = "https://github.com/NixOS/nixpkgs/pull/50488.patch";
+        sha256 = "01bldiwl79xqjc5lpdc7bv2c8zpz7bkl9ilxaklgrw539sagg4kv";
       }
     )
 
-    # neovim gist-vim depends on WebAPI
-    # https://github.com/NixOS/nixpkgs/pull/49881
+    # update network-manager to 1.14.4
     (
-      assert assertMsg (! importPinned.vimPlugins.gist-vim ? dependencies) (mkAssertMsg "gist-vim");
       pkgs.fetchpatch {
-        url = "https://github.com/NixOS/nixpkgs/pull/49881.patch";
-        sha256 = "1f1vhxfyqkm9x2xmc6aqw62sdq7a71fb6ymns8myg6dlhxniw4gb";
-      }
-    )
-
-    # neovim all my plugins
-    # https://github.com/NixOS/nixpkgs/pull/49879
-    (
-      assert assertMsg (! importPinned.vimPlugins ? yats-vim) (mkAssertMsg "yats-vim");
-      pkgs.fetchpatch {
-        url = "https://github.com/NixOS/nixpkgs/pull/49879.patch";
-        sha256 = "1gqgalilmp0k99vrw7pxriqbr3vbkq2g3xjddcza0yadcp24wn5i";
+        url = "https://github.com/NixOS/nixpkgs/pull/51122.patch";
+        sha256 = "0qvxwx0vz11najs3x0p005kmwl0c31ga1zwi7h68pd96jwcmg8r8";
       }
     )
   ];

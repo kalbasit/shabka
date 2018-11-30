@@ -79,6 +79,8 @@ in {
 
     window = {
       commands = [
+        { command = "floating enable"; criteria = { workspace = "^studio$"; }; }
+
         { command = "floating enable"; criteria = { class = "^Pavucontrol"; }; }
         { command = "floating enable"; criteria = { class = "^ROX-Filer$"; }; }
         { command = "floating enable"; criteria = { class = "^SimpleScreenRecorder$"; }; }
@@ -87,6 +89,8 @@ in {
         { command = "floating enable"; criteria = { title = "^jrnl_entry$"; }; }
 
         { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "^whats-app-nativefier*"; }; }
+        { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "astroid"; }; }
+        { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "Ptask"; }; }
         { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "pulse-sms"; }; }
       ];
     };
@@ -106,10 +110,12 @@ in {
     };
 
     assigns = {
-      "slack" = [{ class = "^Slack$"; }];
-      "tor" = [{ class = "^Tor Browser"; }];
+      "charles"    = [{ class = "^com-xk72-charles-gui-.*$"; }];
+      "discord"    = [{ class = "^discord$"; }];
+      "slack"      = [{ class = "^Slack$"; }];
+      "studio"     = [{ class = "^obs$"; }];
+      "tor"        = [{ class = "^Tor Browser"; }];
       "virtualbox" = [{ class = "^VirtualBox"; }];
-      "charles" = [{ class = "^com-xk72-charles-gui-.*$"; }];
     };
 
     modifier  = "Mod4";
@@ -230,14 +236,14 @@ in {
       # Make the currently focused window a scratchpad
       "${defaultModifier}+Shift+minus" = "move scratchpad";
 
-      # Make the currently focused window a scratchpad
-      "${defaultModifier}+${thirdModifier}+minus" = "scratchpad show";
+      # Show the next scratchpad windows
+      "${defaultModifier}+minus" = "scratchpad show";
 
-      # Whatsapp
+      # Short-cuts for windows hidden in the scratchpad.
       "${thirdModifier}+w" = "[class=\"^whats-app-nativefier*\"] scratchpad show";
-
-      # Pulse
+      "${thirdModifier}+m" = "[class=\"astroid\"] scratchpad show";
       "${thirdModifier}+p" = "[class=\"pulse-sms\"] scratchpad show";
+      "${thirdModifier}+t" = "[class=\"Ptask\"] scratchpad show";
     };
 
     modes = {
@@ -337,18 +343,13 @@ in {
     bindsym ${defaultModifier}+${thirdModifier}+w mode "$mode_wm"
 
     # Application launcher
-    set $mode_apps Launch: (p) Chromium personal, (u) Chromium publica, (c) Charles, (s) Slack, (i) Irc, (w) Whatsapp, (t) Teamviewer, (m) Pulse SMS
+    set $mode_apps Launch: (d) Discord, (i) Irc, (m) Mail, (s) Studio, (t) TaskWarrior
     mode "$mode_apps" {
-      bindsym p exec ${pkgs.nur.repos.kalbasit.rbrowser}/bin/rbrowser --profile personal, mode default
-      bindsym u exec ${pkgs.nur.repos.kalbasit.rbrowser}/bin/rbrowser --profile publica, mode default
-      bindsym c exec ${pkgs.charles}/bin/charles, mode default
-      bindsym s exec ${pkgs.slack}/bin/slack, mode default
-      bindsym i exec ${pkgs.alacritty}/bin/alacritty --title=irc --exec=weechat, mode default
-      bindsym t exec ${pkgs.teamviewer}/bin/teamviewer, mode default
-      # TODO: install this
-      # bindsym w exec whatsapp-web-desktop, mode default
-      # TODO: install Pulse and use the binary here
-      #bindsym m exec ${nosid} /opt/Pulse\ SMS/pulse-sms, mode default
+      bindsym d exec ${getBin pkgs.discord}/bin/Discord, mode default
+      bindsym i exec ${getBin pkgs.alacritty}/bin/alacritty --title=irc --exec=weechat, mode default
+      bindsym m exec astroid, mode default
+      bindsym s exec ${getBin pkgs.obs-studio}/bin/obs, mode default
+      bindsym t exec ${getBin pkgs.ptask}/bin/ptask, mode default
 
       # back to normal: Enter or Escape
       bindsym Return mode default

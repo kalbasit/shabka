@@ -8,15 +8,24 @@ with lib;
     boot.kernelModules = [ "kvm-intel" ];
     boot.extraModulePackages = [ ];
 
-    boot.loader.systemd-boot.editor = false;
-    boot.loader.systemd-boot.enable = true;
+    boot.loader.grub = {
+      configurationLimit = 30;
+      device = "nodev";
+      efiSupport = true;
+      enable = true;
+      enableCryptodisk = true;
+      useOSProber = true;
+    };
 
     boot.loader.efi.canTouchEfiVariables = true;
 
-    nix.maxJobs = lib.mkDefault 12;
-    powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
+    boot.loader.systemd-boot.enable = mkDefault false;
 
-    services.xserver.videoDrivers = lib.mkForce ["modesetting"];
+    nix.maxJobs = mkDefault 12;
+
+    powerManagement.cpuFreqGovernor = mkDefault "powersave";
+
+    services.xserver.videoDrivers = mkForce ["modesetting"];
 
     boot.kernelPackages = pkgs.linuxPackages_latest;
 

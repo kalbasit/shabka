@@ -51,13 +51,14 @@ in {
   mine.hardware.intel_backlight.enable = true;
   mine.openvpn.client.expressvpn.enable = true;
   mine.printing.enable = true;
-  mine.tmux.enable = true;
   mine.useColemakKeyboardLayout = true;
   mine.virtualisation.docker.enable = true;
   mine.workstation.enable = true;
-  mine.workstation.publica.enable = true;
 
   mine.hardware.machine = "precision-7530";
+
+  # Set the hardware clock to local time to support dual booting with Windows.
+  time.hardwareClockInLocalTime = true;
 
   services.logind.extraConfig = ''
     HandlePowerKey=suspend

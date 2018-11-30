@@ -34,15 +34,10 @@ in {
 
   boot.initrd.luks.devices = {
     cryptkey = {
-      device = "/dev/disk/by-uuid/12ada2e7-bdfe-4bdf-9335-bc26d7404a10";
+      device = "/dev/disk/by-uuid/ba45c08d-1708-457b-9c76-0ef5ceaf3cee";
     };
 
-    cryptroot-1 = {
-      device = "/dev/disk/by-uuid/0f379615-7381-4f40-8e34-4eb930a85f9d";
-      keyFile = "/dev/mapper/cryptkey";
-    };
-
-    cryptroot-2 = {
+    cryptroot = {
       device = "/dev/disk/by-uuid/b6f30e7a-d1f2-43bb-825f-77c0c8f0f435";
       keyFile = "/dev/mapper/cryptkey";
     };
@@ -71,20 +66,20 @@ in {
       options = [ "subvol=@nixos/@home" ];
     };
 
-    "/home/kalbasit/code" = {
+    "/yl/code" = {
       device = "/dev/disk/by-uuid/471c4bf2-14c9-4eef-a791-8beebfcfe31a";
       fsType = "btrfs";
       options = [ "subvol=@code" ];
     };
 
-    "/home/kalbasit/private" = {
+    "/yl/private" = {
       device = "/dev/disk/by-uuid/471c4bf2-14c9-4eef-a791-8beebfcfe31a";
       fsType = "btrfs";
       options = [ "subvol=@private" ];
     };
 
     "/boot" = {
-      device = "/dev/disk/by-uuid/BE41-BF8C";
+      device = "/dev/disk/by-uuid/0EC6-C400";
       fsType = "vfat";
     };
   };

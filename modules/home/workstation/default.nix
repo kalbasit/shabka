@@ -4,19 +4,17 @@ with lib;
 
 with import ../../../util;
 
-{
+let
+  privateSSH = import /yl/private/network-secrets/shabka/ssh.nix;
+in {
   options.mine.workstation.enable = mkEnableOption "Workstation Profile";
 
   config = mkIf config.mine.workstation.enable {
     services.flameshot.enable = true;
-    services.kbfs.enable = true;
-    services.keybase.enable = true;
     services.network-manager-applet.enable = true;
 
     home = {
       packages = with pkgs; [
-        keybase-gui
-
         nur.repos.kalbasit.rbrowser
 
         remmina
@@ -64,6 +62,8 @@ with import ../../../util;
       # Set the browser to my relay browser
       export BROWSER="${pkgs.nur.repos.kalbasit.rbrowser}/bin/rbrowser"
     '';
+
+    programs.ssh = privateSSH;
 
     mine.workstation = enableMultiple [
       "alacritty"

@@ -2,7 +2,14 @@
 
 with pkgs;
 
-{
+let
+
+  homeManager = import ../../../external/home-manager.nix {
+    pkgs = (import <nixpkgs> {});
+    inherit (import ../../../util) assertMsg;
+  };
+
+in {
   home.packages = [
     amazon-ecr-credential-helper
     docker-credential-gcr
@@ -10,8 +17,6 @@ with pkgs;
     bat
 
     browsh
-
-    corgi
 
     gist
 
@@ -43,6 +48,8 @@ with pkgs;
     lf
 
     nur.repos.kalbasit.swm
+
+    unstable.corgi
 
     unzip
 

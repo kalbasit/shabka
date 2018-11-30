@@ -2,9 +2,14 @@
 
 with lib;
 
-{
+let
+  homeManager = import ../../../external/home-manager.nix {
+    pkgs = (import <nixpkgs> {});
+    inherit (import ../../../util) assertMsg;
+  };
+in {
   imports = [
-    (import <home-manager> {}).nixos
+    (import homeManager {}).nixos
 
     # load the following when running a VM
     # ("${builtins.fetchTarball https://github.com/rycee/home-manager/archive/nixos-module-user-pkgs.tar.gz}/nixos")

@@ -26,5 +26,8 @@ with lib;
       IsRelative=1
       Path=profiles/publica
     '';
+
+    home.file.".mozilla/firefox/profiles/personal/.keep".text = "";
+    home.file.".mozilla/firefox/profiles/publica/.keep".text = "";
   };
 }

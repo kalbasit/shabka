@@ -10,5 +10,7 @@ with lib;
         sha256 = "033rs0pnm8aiycrfmx04qx8fmnkfdhp4hy3kdpgil3cgbgff9736";
       };
     };
+
+    fonts.fontconfig.enableProfileFonts = true;
   };
 }

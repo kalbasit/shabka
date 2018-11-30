@@ -236,10 +236,6 @@ export MYFS="@home_path@/.local"
 export EDITOR=nvim
 export SUDO_EDITOR=nvim
 
-# Set the notmuch config
-export NOTMUCH_HOME="@home_path@/.mail/.notmuch"
-export NOTMUCH_CONFIG="${NOTMUCH_HOME}/config"
-
 # Set the language support
 export LANG=en_US.UTF-8
 export LC_ALL="${LANG}"
