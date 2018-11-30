@@ -4,9 +4,7 @@ with lib;
 
 with import ../../../util;
 
-let
-  privateSSH = import /yl/private/network-secrets/shabka/ssh.nix;
-in {
+{
   options.mine.workstation.enable = mkEnableOption "Workstation Profile";
 
   config = mkIf config.mine.workstation.enable {
@@ -62,8 +60,6 @@ in {
       # Set the browser to my relay browser
       export BROWSER="${pkgs.nur.repos.kalbasit.rbrowser}/bin/rbrowser"
     '';
-
-    programs.ssh = privateSSH;
 
     mine.workstation = enableMultiple [
       "alacritty"

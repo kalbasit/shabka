@@ -1,5 +1,5 @@
 {
-  mine.home-manager.config = { userName, uid, isAdmin, nixosConfig }: { ... }: {
+  mine.home-manager.config = { userName, uid, isAdmin, home, nixosConfig }: { ... }: {
     imports = [
       ../../modules/home
     ];
@@ -13,6 +13,8 @@
     mine.less.enable = true;
     mine.neovim.enable = true;
     mine.pet.enable = true;
+    mine.ssh.enable = true;
+    mine.ssh.privateSSHPath  = /yl/private/network-secrets/shabka/ssh.nix;
     mine.taskwarrior.enable = true;
     mine.timewarrior.enable = true;
     mine.tmux.enable = true;
