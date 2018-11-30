@@ -22,5 +22,6 @@
     mine.workstation.enable = true;
 
     mine.workstation.email.enable = if userName == "yl" then true else false;
+    mine.workstation.email.privateEmailPath = /yl/private/network-secrets/shabka/email.nix;
   };
 }
