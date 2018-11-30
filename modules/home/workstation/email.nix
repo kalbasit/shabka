@@ -4,9 +4,9 @@ with lib;
 with import ../../../util;
 
 let
-  privateEmailPath = /yl/private/network-secrets/shabka/email.nix;
+  cfg = config.mine.workstation.email;
 
-  private = import privateEmailPath {
+  private = import cfg.privateEmailPath {
     inherit pkgs;
     inherit (pkgs) lib;
   };
@@ -46,12 +46,27 @@ let
 
 in
 
-assert assertMsg (builtins.pathExists privateEmailPath) "Private email configuration does not exist";
 
 {
   options.mine.workstation.email.enable = mkEnableOption "Enable email accounts";
+  options.mine.workstation.email.privateEmailPath = mkOption {
+    type = types.path;
+    defaultText = ''
+      The path to the private Email module
+    '';
+  };
 
-  config = mkIf config.mine.workstation.email.enable {
+  config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = cfg.privateEmailPath != "";
+        message = "privateEmailPath is required";
+      }
+      {
+        assertion = builtins.pathExists cfg.privateEmailPath;
+        message = "privateEmailPath must exist";
+      }
+    ];
     accounts.email.accounts = mapAttrs' extendAccounts private.accounts;
 
     programs.astroid = {
