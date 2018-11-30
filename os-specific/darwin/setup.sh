@@ -87,7 +87,7 @@ if ! defaults read com.github.kalbasit.shabka bootstrap >/dev/null 2>&1; then
 	}
 
 	# Finally pull Nix if we already have a hostname
-	if [[ -f "${hostcf}/home.nix" ]] && ! [[ -f "${HOME}/.config/home.nix" ]]; then
+	if [[ -f "${hostcf}/home.nix" ]] && ! [[ -L "${HOME}/.config/nixpkgs/home.nix" ]]; then
 		info "Installing home-manager"
 		pushd "${xdg_config_nixpkgs}"
 			ln -sf "${hostcf}/home.nix" home.nix
