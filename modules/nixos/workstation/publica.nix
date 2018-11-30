@@ -126,7 +126,5 @@ in
           };
         };
       })
-
-      (import /yl/private/network-secrets/shabka/publica.nix)
     ];
   }
