@@ -50,7 +50,15 @@ in {
   mine.useColemakKeyboardLayout = true;
   mine.virtualisation.docker.enable = true;
   mine.workstation.enable = true;
-  mine.workstation.publica.enable = true;
+
+  mine.workstation.publica = {
+    enable = true;
+
+    charles_ssl_cert_path = /yl/private/private-home-files/.charles/ca/charles-proxy-ssl-proxying-certificate.pem;
+    dev_ssl_ca_path       = /yl/code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/ca.crt;
+    dev_ssl_cert_path     = /yl/code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/publica.dev.crt;
+    dev_ssl_key_path      = /yl/code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/publica.dev.key;
+  };
 
   mine.openvpn.client.expressvpn = {
     enable = true;
