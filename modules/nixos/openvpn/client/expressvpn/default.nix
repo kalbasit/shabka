@@ -222,45 +222,25 @@ in {
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.auth_user_pass != null;
-        message = "auth_user_pass is required";
-      }
-      {
         assertion = builtins.pathExists cfg.auth_user_pass;
         message = "auth_user_pass must exist";
       }
 
-      {
-        assertion = cfg.ca != null;
-        message = "ca is required";
-      }
       {
         assertion = builtins.pathExists cfg.ca;
         message = "ca must exist";
       }
 
       {
-        assertion = cfg.client_cert != null;
-        message = "client_cert is required";
-      }
-      {
         assertion = builtins.pathExists cfg.client_cert;
         message = "client_cert must exist";
       }
 
       {
-        assertion = cfg.client_key != null;
-        message = "client_key is required";
-      }
-      {
         assertion = builtins.pathExists cfg.client_key;
         message = "client_key must exist";
       }
 
-      {
-        assertion = cfg.tls_auth != null;
-        message = "tls_auth is required";
-      }
       {
         assertion = builtins.pathExists cfg.tls_auth;
         message = "tls_auth must exist";
