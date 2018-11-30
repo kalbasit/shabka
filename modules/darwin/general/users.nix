@@ -19,7 +19,7 @@ let
 
       gid = 2000;
 
-      shell = pkgs.zsh;
+      shell = "${getBin pkgs.zsh}/bin/zsh";
     });
 
   makeHM = userName: { uid, isAdmin ? false, ... }: nameValuePair
