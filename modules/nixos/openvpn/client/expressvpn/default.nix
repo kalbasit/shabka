@@ -3,13 +3,9 @@
 with lib;
 with import ../../../../../util;
 
-assert assertMsg (builtins.pathExists /yl/private/network-secrets/vpn/client/expressvpn/auth.txt) "/yl/private/network-secrets does not exist.";
-assert assertMsg (builtins.pathExists /yl/private/network-secrets/vpn/client/expressvpn/ca2.crt) "/yl/private/network-secrets does not exist.";
-assert assertMsg (builtins.pathExists /yl/private/network-secrets/vpn/client/expressvpn/client.crt) "/yl/private/network-secrets does not exist.";
-assert assertMsg (builtins.pathExists /yl/private/network-secrets/vpn/client/expressvpn/client.key) "/yl/private/network-secrets does not exist.";
-assert assertMsg (builtins.pathExists /yl/private/network-secrets/vpn/client/expressvpn/ta.key) "/yl/private/network-secrets does not exist.";
-
 let
+  cfg = config.mine.openvpn.client.expressvpn;
+
   remotes = {
     albania = "albania-ca-version-2.expressnetw.com 1195";
     algeria = "algeria-ca-version-2.expressnetw.com 1195";
@@ -177,18 +173,98 @@ let
       #    them, each on a new line, in the auth.txt file below.
       # 2) Download the ZIP file from step 4 and make them available to cert,
       #    key, tls-auth and ca below.
-      auth_user_pass = /yl/private/network-secrets/vpn/client/expressvpn/auth.txt;
-      ca             = /yl/private/network-secrets/vpn/client/expressvpn/ca2.crt;
-      client_cert    = /yl/private/network-secrets/vpn/client/expressvpn/client.crt;
-      client_key     = /yl/private/network-secrets/vpn/client/expressvpn/client.key;
-      tls_auth       = /yl/private/network-secrets/vpn/client/expressvpn/ta.key;
+      inherit (cfg) auth_user_pass ca client_cert client_key tls_auth;
     });
   };
 
 in {
-  options.mine.openvpn.client.expressvpn.enable = mkEnableOption "Enable ExpressionVPN client configuration";
+  options.mine.openvpn.client.expressvpn = {
+    enable = mkEnableOption "Enable ExpressionVPN client configuration";
 
-  config = mkIf config.mine.openvpn.client.expressvpn.enable {
+    auth_user_pass = mkOption {
+      type = types.path;
+      defaultText = ''
+        Path to the file containing the username and password.
+      '';
+    };
+
+    ca = mkOption {
+      type = types.path;
+      defaultText = ''
+        Path to the certificate authority.
+      '';
+    };
+
+    client_cert = mkOption {
+      type = types.path;
+      defaultText = ''
+        Path to the certificate
+      '';
+    };
+
+    client_key = mkOption {
+      type = types.path;
+      defaultText = ''
+        Path to the private key
+      '';
+    };
+
+    tls_auth = mkOption {
+      type = types.path;
+      defaultText = ''
+        Path to the private TLS auth key
+      '';
+    };
+  };
+
+  config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = cfg.auth_user_pass != null;
+        message = "auth_user_pass is required";
+      }
+      {
+        assertion = builtins.pathExists cfg.auth_user_pass;
+        message = "auth_user_pass must exist";
+      }
+
+      {
+        assertion = cfg.ca != null;
+        message = "ca is required";
+      }
+      {
+        assertion = builtins.pathExists cfg.ca;
+        message = "ca must exist";
+      }
+
+      {
+        assertion = cfg.client_cert != null;
+        message = "client_cert is required";
+      }
+      {
+        assertion = builtins.pathExists cfg.client_cert;
+        message = "client_cert must exist";
+      }
+
+      {
+        assertion = cfg.client_key != null;
+        message = "client_key is required";
+      }
+      {
+        assertion = builtins.pathExists cfg.client_key;
+        message = "client_key must exist";
+      }
+
+      {
+        assertion = cfg.tls_auth != null;
+        message = "tls_auth is required";
+      }
+      {
+        assertion = builtins.pathExists cfg.tls_auth;
+        message = "tls_auth must exist";
+      }
+    ];
+
     services.openvpn.servers = pkgs.lib.mapAttrs' remoteConfig remotes;
   };
 }
