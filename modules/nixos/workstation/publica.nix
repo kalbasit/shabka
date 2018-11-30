@@ -119,36 +119,20 @@ in
     config = {
       assertions = [
         {
-          assertion = cfg.charles_ssl_cert_path != null;
-          message = "charles_ssl_cert_path is required";
-        }
-        {
           assertion = builtins.pathExists cfg.charles_ssl_cert_path;
           message = "charles_ssl_cert_path must exist";
         }
 
-        {
-          assertion = cfg.dev_ssl_ca_path != null;
-          message = "dev_ssl_ca_path is required";
-        }
         {
           assertion = builtins.pathExists cfg.dev_ssl_ca_path;
           message = "dev_ssl_ca_path must exist";
         }
 
         {
-          assertion = cfg.dev_ssl_cert_path != null;
-          message = "dev_ssl_cert_path is required";
-        }
-        {
           assertion = builtins.pathExists cfg.dev_ssl_cert_path;
           message = "dev_ssl_cert_path must exist";
         }
 
-        {
-          assertion = cfg.dev_ssl_key_path != null;
-          message = "dev_ssl_key_path is required";
-        }
         {
           assertion = builtins.pathExists cfg.dev_ssl_key_path;
           message = "dev_ssl_key_path must exist";
