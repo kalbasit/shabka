@@ -18,7 +18,7 @@ in {
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.privateSSHPath != "";
+        assertion = cfg.privateSSHPath != null;
         message = "privateSSHPath is required";
       }
       {

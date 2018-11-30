@@ -49,11 +49,19 @@ in {
 
   mine.gnupg.enable = true;
   mine.hardware.intel_backlight.enable = true;
-  mine.openvpn.client.expressvpn.enable = true;
   mine.printing.enable = true;
   mine.useColemakKeyboardLayout = true;
   mine.virtualisation.docker.enable = true;
   mine.workstation.enable = true;
+
+  mine.openvpn.client.expressvpn = {
+    enable = true;
+    auth_user_pass = /yl/private/network-secrets/vpn/client/expressvpn/auth.txt;
+    ca             = /yl/private/network-secrets/vpn/client/expressvpn/ca2.crt;
+    client_cert    = /yl/private/network-secrets/vpn/client/expressvpn/client.crt;
+    client_key     = /yl/private/network-secrets/vpn/client/expressvpn/client.key;
+    tls_auth       = /yl/private/network-secrets/vpn/client/expressvpn/ta.key;
+  };
 
   mine.hardware.machine = "precision-7530";
 

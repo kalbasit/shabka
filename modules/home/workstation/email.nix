@@ -59,7 +59,7 @@ in
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.privateEmailPath != "";
+        assertion = cfg.privateEmailPath != null;
         message = "privateEmailPath is required";
       }
       {
