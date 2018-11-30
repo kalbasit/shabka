@@ -46,12 +46,17 @@ let
 
 in
 
-assert assertMsg (builtins.pathExists privateEmailPath) "Private email configuration does not exist";
-
 {
   options.mine.workstation.email.enable = mkEnableOption "Enable email accounts";
 
   config = mkIf config.mine.workstation.email.enable {
+    assertions = [
+      {
+        assertion = builtins.pathExists privateEmailPath;
+        message = "Private email configuration does not exist";
+      }
+    ];
+
     accounts.email.accounts = mapAttrs' extendAccounts private.accounts;
 
     programs.astroid = {
