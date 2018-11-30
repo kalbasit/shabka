@@ -63,7 +63,7 @@ in {
       }];
     };
 
-    xsession = if stdenv.isLinux then {
+    xsession = if pkgs.stdenv.isLinux then {
       windowManager.i3.config = {
         bars = [{
           position = "top";
