@@ -82,7 +82,6 @@ in {
   mine.users = { yl = { uid = 2000; isAdmin = true;  home = "/yl"; }; };
 
   mine.gnupg.enable = true;
-  mine.openvpn.client.expressvpn.enable = true;
   mine.useColemakKeyboardLayout = true;
   mine.virtualisation.docker.enable = true;
   mine.virtualisation.libvirtd.enable = true;
