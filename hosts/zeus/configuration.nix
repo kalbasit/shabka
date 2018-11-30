@@ -2,9 +2,6 @@
 
 with lib;
 
-assert (builtins.pathExists /yl/private);
-
-
 let
 
   pinnedNH = import ../../external/nixos-hardware.nix;

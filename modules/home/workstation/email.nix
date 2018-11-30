@@ -48,25 +48,25 @@ in
 
 
 {
-  options.mine.workstation.email.enable = mkEnableOption "Enable email accounts";
-  options.mine.workstation.email.privateEmailPath = mkOption {
-    type = types.path;
-    defaultText = ''
-      The path to the private Email module
-    '';
+  options.mine.workstation.email = {
+    enable = mkEnableOption "Enable email accounts";
+
+    privateEmailPath = mkOption {
+      type = types.path;
+      defaultText = ''
+        The path to the private Email module
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.privateEmailPath != null;
-        message = "privateEmailPath is required";
-      }
-      {
         assertion = builtins.pathExists cfg.privateEmailPath;
         message = "privateEmailPath must exist";
       }
     ];
+
     accounts.email.accounts = mapAttrs' extendAccounts private.accounts;
 
     programs.astroid = {
@@ -109,6 +109,5 @@ in
         ui = "basic";
       };
     };
-
   };
 }
