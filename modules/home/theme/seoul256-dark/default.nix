@@ -63,45 +63,47 @@ in {
       }];
     };
 
-    xsession.windowManager.i3.config = {
-      bars = [{
-        position = "top";
+    xsession = if stdenv.isDarwin then {
+      windowManager.i3.config = {
+        bars = [{
+          position = "top";
+
+          colors = {
+            background = "#626262";
+            statusline = "#00ff00";
+            separator = "#d68787";
+            focusedWorkspace = { border = "#e4e4e4"; background = "#5f865f"; text = "#e4e4e4"; };
+            activeWorkspace = { border = "#e4e4e4"; background = "#ffafaf"; text = "#e4e4e4"; };
+            inactiveWorkspace = { border = "#87af87"; background = "#87af87"; text = "#626262"; };
+            urgentWorkspace = { border = "#ff0000"; background = "#ff0000"; text = "#e4e4e4"; };
+          };
+        }];
 
         colors = {
-          background = "#626262";
-          statusline = "#00ff00";
-          separator = "#d68787";
-          focusedWorkspace = { border = "#e4e4e4"; background = "#5f865f"; text = "#e4e4e4"; };
-          activeWorkspace = { border = "#e4e4e4"; background = "#ffafaf"; text = "#e4e4e4"; };
-          inactiveWorkspace = { border = "#87af87"; background = "#87af87"; text = "#626262"; };
-          urgentWorkspace = { border = "#ff0000"; background = "#ff0000"; text = "#e4e4e4"; };
-        };
-      }];
+          background = "#4e4e4e";
 
-      colors = {
-        background = "#4e4e4e";
+          focused = {
+            border = "#5f865f"; background = "#5f865f"; text = "#e4e4e4";
+            indicator = "#ffafaf"; childBorder = "#285577";
+          };
 
-        focused = {
-          border = "#5f865f"; background = "#5f865f"; text = "#e4e4e4";
-          indicator = "#ffafaf"; childBorder = "#285577";
-        };
+          focusedInactive = {
+            border = "#4e4e4e"; background = "#4e4e4e"; text = "#d0d0d0";
+            indicator = "#ffafaf"; childBorder = "#5f676a";
+          };
 
-        focusedInactive = {
-          border = "#4e4e4e"; background = "#4e4e4e"; text = "#d0d0d0";
-          indicator = "#ffafaf"; childBorder = "#5f676a";
-        };
+          unfocused = {
+            border = "#4e4e4e"; background = "#4e4e4e"; text = "#87d7d7";
+            indicator = "#87af87"; childBorder = "#222222";
+          };
 
-        unfocused = {
-          border = "#4e4e4e"; background = "#4e4e4e"; text = "#87d7d7";
-          indicator = "#87af87"; childBorder = "#222222";
-        };
-
-        urgent = {
-          border = "#ff0000"; background = "#ff0000"; text = "#e4e4e4";
-          indicator = "#d68787"; childBorder = "#900000";
+          urgent = {
+            border = "#ff0000"; background = "#ff0000"; text = "#e4e4e4";
+            indicator = "#d68787"; childBorder = "#900000";
+          };
         };
       };
-    };
+    } else {};
 
     programs.termite = {
       backgroundColor = "#3a3a3a";

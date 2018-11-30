@@ -84,8 +84,9 @@ in {
     #
     # TODO(low): import the green variation from
     # https://github.com/a-schaefers/i3-wm-gruvbox-theme/blob/f6e570d6ab11b00b950e993c8619ac253bbb03ea/i3/config#L136-L141
-    xsession.windowManager.i3.config =
-      let
+    xsession = if stdenv.isDarwin then {
+      windowManager.i3.config =
+        let
         # hard contrast: bg = '#282828'
         bg       = "#282828";
         # soft contrast: bg = '#32302f'
@@ -100,53 +101,54 @@ in {
         white    = "#ebdbb2";
         yellow   = "#d79921";
 
-      in {
-        bars = [{
-          position = "top";
+        in {
+          bars = [{
+            position = "top";
+
+            colors = {
+              background = bg;
+              statusline = yellow;
+              separator = red;
+
+              focusedWorkspace = {
+                border = aqua; background = aqua; text = darkgray;
+              };
+
+              activeWorkspace = {
+                border = darkgray; background = darkgray; text = yellow;
+              };
+
+              inactiveWorkspace = {
+                border = darkgray; background = darkgray; text = yellow;
+              };
+
+              urgentWorkspace = {
+                border = red; background = red; text = bg;
+              };
+            };
+          }];
 
           colors = {
-            background = bg;
-            statusline = yellow;
-            separator = red;
+            background = darkgray;
 
-            focusedWorkspace = {
-              border = aqua; background = aqua; text = darkgray;
+            focused = {
+              border = blue; background = blue; text = darkgray; indicator = purple; childBorder = darkgray;
             };
 
-            activeWorkspace = {
-              border = darkgray; background = darkgray; text = yellow;
+            focusedInactive = {
+              border = darkgray; background = darkgray; text = yellow; indicator = purple; childBorder = darkgray;
             };
 
-            inactiveWorkspace = {
-              border = darkgray; background = darkgray; text = yellow;
+            unfocused = {
+              border = darkgray; background = darkgray; text = yellow; indicator = purple; childBorder = darkgray;
             };
 
-            urgentWorkspace = {
-              border = red; background = red; text = bg;
+            urgent = {
+              border = red; background = red; text = white; indicator = red; childBorder = red;
             };
-          };
-        }];
-
-        colors = {
-          background = darkgray;
-
-          focused = {
-            border = blue; background = blue; text = darkgray; indicator = purple; childBorder = darkgray;
-          };
-
-          focusedInactive = {
-            border = darkgray; background = darkgray; text = yellow; indicator = purple; childBorder = darkgray;
-          };
-
-          unfocused = {
-            border = darkgray; background = darkgray; text = yellow; indicator = purple; childBorder = darkgray;
-          };
-
-          urgent = {
-            border = red; background = red; text = white; indicator = red; childBorder = red;
           };
         };
-      };
+      } else {};
 
     programs.termite = {
       # hard contrast: backgroundColor = "#1d2021";
