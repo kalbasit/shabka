@@ -181,6 +181,8 @@ in {
   options.mine.openvpn.client.expressvpn = {
     enable = mkEnableOption "Enable ExpressionVPN client configuration";
 
+    # TODO(low): options must be camelcase
+
     auth_user_pass = mkOption {
       type = types.path;
       defaultText = ''
