@@ -4,14 +4,11 @@ with lib;
 with import ../../../util;
 
 let
-  charles_ssl_cert_path     = /yl/private/private-home-files/.charles/ca/charles-proxy-ssl-proxying-certificate.pem;
-  publica_dev_ssl_ca_path   = /yl/code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/ca.crt;
-  publica_dev_ssl_cert_path = /yl/code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/publica.dev.crt;
-  publica_dev_ssl_key_path  = /yl/code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/publica.dev.key;
+  cfg = config.mine.workstation.publica;
 
-  charles_ssl_cert = builtins.readFile charles_ssl_cert_path;
+  charles_ssl_cert = builtins.readFile cfg.charles_ssl_cert_path;
 
-  publica_dev_ssl_ca = builtins.readFile publica_dev_ssl_ca_path;
+  dev_ssl_ca = builtins.readFile cfg.dev_ssl_ca_path;
 
   commonLocation = ''
     proxy_set_header      X-Real-IP $remote_addr;
@@ -39,8 +36,8 @@ let
   generateVirtualHostsSet = host: port: {
     forceSSL = true;
     serverName = host;
-    sslCertificate = builtins.toPath publica_dev_ssl_cert_path;
-    sslCertificateKey = builtins.toPath publica_dev_ssl_key_path;
+    sslCertificate = cfg.dev_ssl_cert_path;
+    sslCertificateKey = cfg.dev_ssl_key_path;
 
     locations = {
       "/" = {
@@ -84,17 +81,65 @@ let
   };
 
 in
-
-  assert assertMsg (builtins.pathExists charles_ssl_cert_path) "Charles certificate was not found";
-  assert assertMsg (builtins.pathExists publica_dev_ssl_ca_path) "Publica CA was not found";
-  assert assertMsg (builtins.pathExists publica_dev_ssl_cert_path) "Publica certificate was not found";
-  assert assertMsg (builtins.pathExists publica_dev_ssl_key_path)  "Publica key was not found";
-
   {
-    options.mine.workstation.publica.enable = mkEnableOption "Enable Publica";
+    options.mine.workstation.publica = {
+      enable = mkEnableOption "Enable Publica";
 
-    config = mkMerge [
-      (mkIf config.mine.workstation.publica.enable {
+      # TODO(low): options must be camelcase
+
+      charles_ssl_cert_path = mkOption {
+        type = types.path;
+        defaultText = ''
+          Path to the Charles SSL certificate.
+        '';
+      };
+
+      dev_ssl_ca_path = mkOption {
+        type = types.path;
+        defaultText = ''
+          Path to the development SSL certificate authority.
+        '';
+      };
+
+      dev_ssl_cert_path = mkOption {
+        type = types.path;
+        defaultText = ''
+          Path to the development SSL certificate.
+        '';
+      };
+
+      dev_ssl_key_path = mkOption {
+        type = types.path;
+        defaultText = ''
+          Path to the development SSL private key.
+        '';
+      };
+    };
+
+    config = {
+      assertions = [
+        {
+          assertion = builtins.pathExists cfg.charles_ssl_cert_path;
+          message = "charles_ssl_cert_path must exist";
+        }
+
+        {
+          assertion = builtins.pathExists cfg.dev_ssl_ca_path;
+          message = "dev_ssl_ca_path must exist";
+        }
+
+        {
+          assertion = builtins.pathExists cfg.dev_ssl_cert_path;
+          message = "dev_ssl_cert_path must exist";
+        }
+
+        {
+          assertion = builtins.pathExists cfg.dev_ssl_key_path;
+          message = "dev_ssl_key_path must exist";
+        }
+      ];
+    } // (mkMerge [
+      (mkIf cfg.enable {
         # Add the extra hosts
         networking.extraHosts = ''
           127.0.0.1 publica.dev k8s.publica.dev ${builtins.concatStringsSep " " (builtins.attrNames hostsPorts)}
@@ -105,7 +150,7 @@ in
 
         # Add Publica CA
         security.pki.certificates = [
-          publica_dev_ssl_ca
+          dev_ssl_ca
           charles_ssl_cert
         ];
 
@@ -114,8 +159,8 @@ in
           "publica.dev" = {
             forceSSL = true;
             serverName = "publica.dev";
-            sslCertificate = builtins.toPath publica_dev_ssl_cert_path;
-            sslCertificateKey = builtins.toPath publica_dev_ssl_key_path;
+            sslCertificate = builtins.toPath dev_ssl_cert_path;
+            sslCertificateKey = builtins.toPath dev_ssl_key_path;
 
             locations = {
               "/" = {
@@ -126,7 +171,5 @@ in
           };
         };
       })
-
-      (import /yl/private/network-secrets/shabka/publica.nix)
-    ];
+    ]);
   }

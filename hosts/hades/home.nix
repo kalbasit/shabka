@@ -1,5 +1,13 @@
 {
-  mine.home-manager.config = { userName, uid, isAdmin, nixosConfig }: { ... }: {
+  mine.home-manager.config = { userName, uid, isAdmin, home, nixosConfig }:
+  { lib, ... }:
+
+  with lib;
+
+  let
+    enableEmail = userName == "yl" && builtins.pathExists /yl/private/network-secrets/shabka/email.nix;
+    enableSSH = builtins.pathExists /yl/private/network-secrets/shabka/ssh.nix;
+  in {
     imports = [
       ../../modules/home
     ];
@@ -19,6 +27,14 @@
     mine.useColemakKeyboardLayout = true;
     mine.workstation.enable = true;
 
-    mine.workstation.email.enable = if userName == "yl" then true else false;
+    mine.ssh = mkIf enableSSH {
+      enable = true;
+      privateSSHPath = /yl/private/network-secrets/shabka/ssh.nix;
+    };
+
+    mine.workstation.email = mkIf enableEmail {
+      enable = true;
+      privateEmailPath = /yl/private/network-secrets/shabka/email.nix;
+    };
   };
 }

@@ -1,5 +1,6 @@
-# TODO(high): remove the requirement for the private files
-assert (builtins.pathExists /yl/private);
+{ lib, ... }:
+
+with lib;
 
 let
 
@@ -9,6 +10,17 @@ let
     url = "https://kalbas.it/ca.crt";
     sha256 = "17x45njva3a535czgdp5z43gmgwl0lk68p4mgip8jclpiycb6qbl";
   });
+
+  enablePublica = builtins.pathExists /yl/private/private-home-files/.charles/ca/charles-proxy-ssl-proxying-certificate.pem
+    && builtins.pathExists /yl/code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/ca.crt
+    && builtins.pathExists /yl/code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/publica.dev.crt
+    && builtins.pathExists /yl/code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/publica.dev.key;
+
+  enableExpressVPN = builtins.pathExists /yl/private/network-secrets/vpn/client/expressvpn/auth.txt
+    && builtins.pathExists /yl/private/network-secrets/vpn/client/expressvpn/ca2.crt
+    && builtins.pathExists /yl/private/network-secrets/vpn/client/expressvpn/client.crt
+    && builtins.pathExists /yl/private/network-secrets/vpn/client/expressvpn/client.key
+    && builtins.pathExists /yl/private/network-secrets/vpn/client/expressvpn/ta.key;
 
 in {
   imports = [
@@ -46,12 +58,28 @@ in {
   '';
 
   mine.hardware.intel_backlight.enable = true;
-  mine.openvpn.client.expressvpn.enable = true;
   mine.printing.enable = true;
   mine.useColemakKeyboardLayout = true;
   mine.virtualisation.docker.enable = true;
   mine.workstation.enable = true;
-  mine.workstation.publica.enable = true;
+
+  mine.workstation.publica = mkIf enablePublica {
+    enable = true;
+
+    charles_ssl_cert_path = /yl/private/private-home-files/.charles/ca/charles-proxy-ssl-proxying-certificate.pem;
+    dev_ssl_ca_path       = /yl/code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/ca.crt;
+    dev_ssl_cert_path     = /yl/code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/publica.dev.crt;
+    dev_ssl_key_path      = /yl/code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/publica.dev.key;
+  };
+
+  mine.openvpn.client.expressvpn = mkIf enableExpressVPN {
+    enable = true;
+    auth_user_pass = /yl/private/network-secrets/vpn/client/expressvpn/auth.txt;
+    ca             = /yl/private/network-secrets/vpn/client/expressvpn/ca2.crt;
+    client_cert    = /yl/private/network-secrets/vpn/client/expressvpn/client.crt;
+    client_key     = /yl/private/network-secrets/vpn/client/expressvpn/client.key;
+    tls_auth       = /yl/private/network-secrets/vpn/client/expressvpn/ta.key;
+  };
 
   mine.hardware.machine = "xps-13";
 
