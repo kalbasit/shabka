@@ -8,12 +8,18 @@ env:
 
 matrix:
   include:
-    - name: "linux 18.09"
-      env: NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-18.09 HM_CHANNEL=https://github.com/rycee/home-manager/archive/release-18.09.tar.gz
-      os: linux
-    - name: "osx 18.09"
-      env: NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-18.09 HM_CHANNEL=https://github.com/rycee/home-manager/archive/release-18.09.tar.gz DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
+    - name: "athena osx 18.09"
+      env: HOST=athena NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-18.09 HM_CHANNEL=https://github.com/rycee/home-manager/archive/release-18.09.tar.gz DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
       os: osx
+    - name: "cratos linux 18.09"
+      env: HOST=cratos NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-18.09 HM_CHANNEL=https://github.com/rycee/home-manager/archive/release-18.09.tar.gz DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
+      os: linux
+    - name: "hades linux 18.09"
+      env: HOST=hades NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-18.09 HM_CHANNEL=https://github.com/rycee/home-manager/archive/release-18.09.tar.gz DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
+      os: linux
+    - name: "zeus linux 18.09"
+      env: HOST=zeus NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-18.09 HM_CHANNEL=https://github.com/rycee/home-manager/archive/release-18.09.tar.gz DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
+      os: linux
 
 install:
   - nix-channel --add "${NIXPKGS_CHANNEL}" nixpkgs
@@ -35,14 +41,4 @@ before_script:
   - nix-channel --list
 
 script:
-  - >
-    if [[ "${TRAVIS_OS_NAME}" == "linux"  ]]; then
-      nix build --verbose --show-trace --file ./hosts/cratos/default.nix
-      nix build --verbose --show-trace --file ./hosts/hades/default.nix
-      nix build --verbose --show-trace --file ./hosts/zeus/default.nix
-    elif [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
-      nix build --verbose --show-trace --file ./hosts/athena/default.nix
-    else
-      echo "OS ${TRAVIS_OS_NAME} is not supported".
-      exit 1
-    fi
+  - nix build --verbose --show-trace --file "./hosts/${HOST}/default.nix"
