@@ -6,13 +6,14 @@ matrix:
   include:
     - env:
       NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-18.09
-      HM_CHANNEL=https://github.com/rycee/home-manager/release-18.09.tar.gz
+      HM_CHANNEL=https://github.com/rycee/home-manager/archive/release-18.09.tar.gz
+      DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
 
 install:
- - nix --version
- - nix-channel --add "${NIXPKGS_CHANNEL}" nixpkgs
- - nix-channel --add "${HM_CHANNEL}" home-manager
- - travis_retry nix-channel --update
+  - nix --version
+  - nix-channel --add "${NIXPKGS_CHANNEL}" nixpkgs
+  - nix-channel --add "${HM_CHANNEL}" home-manager
+  - travis_retry nix-channel --update
 
 script:
   - nix build -f ./hosts/athena/default.nix
