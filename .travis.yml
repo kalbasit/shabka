@@ -16,8 +16,11 @@ install:
   - nix-channel --add "${HM_CHANNEL}" home-manager
   - nix-channel --add "${DARWIN_CHANNEL}" darwin
   - travis_retry nix-channel --update
-  - if [ -n "${CACHIX_CACHE}" ]; then nix-env -i cachix; fi
-  - if [ -n "${CACHIX_CACHE}" ]; then cachix use "${CACHIX_CACHE}"; fi
+  - >
+    if [ -n "${CACHIX_CACHE}" ]; then
+      nix-env -i cachix;
+      cachix use "${CACHIX_CACHE}"
+    fi
 
 before_script:
   - nix --version
