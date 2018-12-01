@@ -6,6 +6,10 @@ env:
   global:
     - CACHIX_CACHE=yl
 
+os:
+  - linux
+  - osx
+
 matrix:
   include:
     - name: "18.09"
@@ -31,15 +35,14 @@ before_script:
   - nix-channel --list
 
 script:
-  - nix build --verbose --show-trace --file ./hosts/athena/default.nix
-
-  - nix build --verbose --show-trace --file ./hosts/cratos/default.nix
-
-  - nix build --verbose --show-trace --file ./hosts/hades/default.nix
-
-  - nix-store --gc >/dev/null 2>&1
-  - nix build --verbose --show-trace --file ./hosts/zeus/default.nix
-
-  # Disabled because it requires the private files.
-  # TODO: create a shim files to be used just so we can eval & build
-  # - nix build --verbose --show-trace --file ./hosts/vpn-nasreddine/default.nix
+  - >
+    if [[ "${TRAVIS_OS_NAME}" == "linux"  ]]; then
+      nix build --verbose --show-trace --file ./hosts/cratos/default.nix
+      nix build --verbose --show-trace --file ./hosts/hades/default.nix
+      nix build --verbose --show-trace --file ./hosts/zeus/default.nix
+    elif [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
+      nix build --verbose --show-trace --file ./hosts/athena/default.nix
+    else
+      echo "OS ${TRAVIS_OS_NAME} is not supported".
+      exit 1
+    fi
