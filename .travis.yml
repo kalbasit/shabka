@@ -21,6 +21,10 @@ install:
       nix-env -i cachix;
       cachix use "${CACHIX_CACHE}"
     fi
+  - >
+    if ! echo "${NIX_PATH}" | grep -q "/nix/var/nix/profiles/per-user/$(whoami)/channels"; then
+      export NIX_PATH=/nix/var/nix/profiles/per-user/$(whoami)/channels:$NIX_PATH
+    fi
 
 before_script:
   - nix --version
