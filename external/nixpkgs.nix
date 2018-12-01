@@ -24,7 +24,7 @@ let
       assert assertMsg (! importPinned ? ssh-agents) (mkAssertMsg "ssh-agents");
       pkgs.fetchpatch {
         url = "https://github.com/NixOS/nixpkgs/pull/49892.patch";
-        sha256 = "0nzamsmm50sm0lyyrpanv7csn75hiyx3byzrw8nqs0sdskmrvr8r";
+        sha256 = "07p4xhvbx9m9bh24hhdygyd0zakah5njp8kdhq6ilxm3safnfzlq";
       }
     )
 
