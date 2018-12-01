@@ -1,5 +1,5 @@
 with import ../../util;
 
 {
-  vpn-nasreddine = buildNixOSConfiguration ./configuration.nix;
+  vpn-nasreddine = buildNixOSConfiguration { conf = ./configuration.nix; withShim = true; };
 }

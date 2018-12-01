@@ -1,5 +1,5 @@
 with import ../../util;
 
 {
-  hades = buildNixOSConfiguration ./configuration.nix;
+  hades = buildNixOSConfiguration { conf = ./configuration.nix; };
 }
