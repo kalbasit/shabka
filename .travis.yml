@@ -27,8 +27,11 @@ before_script:
   - nix-channel --list
 
 script:
-  - nix build -f ./hosts/athena/default.nix
-  - nix build -f ./hosts/cratos/default.nix
-  - nix build -f ./hosts/hades/default.nix
-  - nix build -f ./hosts/vpn-nasreddine/default.nix
-  - nix build -f ./hosts/zeus/default.nix
+  - nix build --verbose --debug --show-trace --file ./hosts/athena/default.nix
+  - nix build --verbose --debug --show-trace --file ./hosts/cratos/default.nix
+  - nix build --verbose --debug --show-trace --file ./hosts/hades/default.nix
+  - nix build --verbose --debug --show-trace --file ./hosts/zeus/default.nix
+
+  # Disabled because it requires the private files.
+  # TODO: create a shim files to be used just so we can eval & build
+  # - nix build --verbose --debug --show-trace --file ./hosts/vpn-nasreddine/default.nix
