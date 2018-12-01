@@ -2,17 +2,25 @@ language: nix
 
 sudo: false
 
+env:
+  global:
+    - CACHIX_CACHE=yl
+
 matrix:
   include:
     - name: "18.09"
       env: NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-18.09 HM_CHANNEL=https://github.com/rycee/home-manager/archive/release-18.09.tar.gz DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
 
-before_script:
-  - nix --version
+install:
   - nix-channel --add "${NIXPKGS_CHANNEL}" nixpkgs
   - nix-channel --add "${HM_CHANNEL}" home-manager
   - nix-channel --add "${DARWIN_CHANNEL}" darwin
   - travis_retry nix-channel --update
+  - if [ -n "${CACHIX_CACHE}" ]; then nix-env -i cachix; fi
+  - if [ -n "${CACHIX_CACHE}" ]; then cachix use "${CACHIX_CACHE}"; fi
+
+before_script:
+  - nix --version
   - nix-channel --list
 
 script:
