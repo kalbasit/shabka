@@ -13,6 +13,7 @@ before_script:
   - nix-channel --add "${HM_CHANNEL}" home-manager
   - nix-channel --add "${DARWIN_CHANNEL}" darwin
   - travis_retry nix-channel --update
+  - nix-channel --list
 
 script:
   - nix build -f ./hosts/athena/default.nix
