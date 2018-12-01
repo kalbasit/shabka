@@ -27,7 +27,7 @@ install:
   - nix-channel --add "${DARWIN_CHANNEL}" darwin
   - travis_retry nix-channel --update
   - >
-    if [ -n "${CACHIX_CACHE}" ]; then
+    if [ -n "${CACHIX_CACHE}" ] && [ "${TRAVIS_OS_NAME}" = "linux" ]; then
       nix-env -i cachix;
       cachix use "${CACHIX_CACHE}"
     fi
