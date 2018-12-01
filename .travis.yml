@@ -1,0 +1,22 @@
+language: nix
+
+sudo: false
+
+matrix:
+  include:
+    - env:
+      NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-18.09
+      HM_CHANNEL=https://github.com/rycee/home-manager/release-18.09.tar.gz
+
+install:
+ - nix --version
+ - nix-channel --add "${NIXPKGS_CHANNEL}" nixpkgs
+ - nix-channel --add "${HM_CHANNEL}" home-manager
+ - travis_retry nix-channel --update
+
+script:
+  - nix build -f ./hosts/athena/default.nix
+  - nix build -f ./hosts/cratos/default.nix
+  - nix build -f ./hosts/hades/default.nix
+  - nix build -f ./hosts/vpn-nasreddine/default.nix
+  - nix build -f ./hosts/zeus/default.nix
