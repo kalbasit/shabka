@@ -31,13 +31,10 @@ before_script:
   - nix-channel --list
 
 script:
-  - nix-store --gc >/dev/null 2>&1
   - nix build --verbose --show-trace --file ./hosts/athena/default.nix
 
-  - nix-store --gc >/dev/null 2>&1
   - nix build --verbose --show-trace --file ./hosts/cratos/default.nix
 
-  - nix-store --gc >/dev/null 2>&1
   - nix build --verbose --show-trace --file ./hosts/hades/default.nix
 
   - nix-store --gc >/dev/null 2>&1
