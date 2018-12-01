@@ -28,11 +28,14 @@ before_script:
 
 script:
   - nix build --verbose --show-trace --file ./hosts/athena/default.nix
-  - nix-collect-garbage -d
+  # - nix-collect-garbage -d
+  - nix-store --gc
   - nix build --verbose --show-trace --file ./hosts/cratos/default.nix
-  - nix-collect-garbage -d
+  # - nix-collect-garbage -d
+  - nix-store --gc
   - nix build --verbose --show-trace --file ./hosts/hades/default.nix
-  - nix-collect-garbage -d
+  # - nix-collect-garbage -d
+  - nix-store --gc
   - nix build --verbose --show-trace --file ./hosts/zeus/default.nix
 
   # Disabled because it requires the private files.
