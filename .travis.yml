@@ -4,10 +4,8 @@ sudo: false
 
 matrix:
   include:
-    - env:
-      NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-18.09
-      HM_CHANNEL=https://github.com/rycee/home-manager/archive/release-18.09.tar.gz
-      DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
+    - name: "18.09"
+      env: NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-18.09 HM_CHANNEL=https://github.com/rycee/home-manager/archive/release-18.09.tar.gz DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
 
 install:
   - nix --version
