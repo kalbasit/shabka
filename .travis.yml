@@ -6,14 +6,14 @@ env:
   global:
     - CACHIX_CACHE=yl
 
-os:
-  - linux
-  - osx
-
 matrix:
   include:
-    - name: "18.09"
+    - name: "linux 18.09"
+      env: NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-18.09 HM_CHANNEL=https://github.com/rycee/home-manager/archive/release-18.09.tar.gz
+      os: linux
+    - name: "osx 18.09"
       env: NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-18.09 HM_CHANNEL=https://github.com/rycee/home-manager/archive/release-18.09.tar.gz DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
+      os: osx
 
 install:
   - nix-channel --add "${NIXPKGS_CHANNEL}" nixpkgs
