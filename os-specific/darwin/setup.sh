@@ -79,7 +79,7 @@ if ! defaults read com.github.kalbasit.shabka bootstrap >/dev/null 2>&1; then
 			nix-build https://github.com/LnL7/nix-darwin/archive/master.tar.gz -A installer
 			set +e
 				(yes | ./result/bin/darwin-installer)
-				RETVAL=?
+				RETVAL=$?
 			set -e
 			if [[ "${RETVAL}" -ne 0 ]] && [[ "${RETVAL}" -ne 141 ]]; then
 				error "nix-darwin installer exited with status ${RETVAL}"
