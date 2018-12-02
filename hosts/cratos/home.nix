@@ -31,8 +31,6 @@
     mine.useColemakKeyboardLayout = true;
     mine.workstation.enable = true;
 
-    xsession.initExtra = if nixosConfig != null && nixosConfig.networking.hostName == "cratos" then scaleBy40P else "";
-
     mine.ssh = mkIf enableSSH {
       enable = true;
       privateSSHPath = /yl/private/network-secrets/shabka/ssh.nix;
