@@ -27,32 +27,33 @@ matrix:
       env: HOST=zeus NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-18.09 DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
       os: linux
 
-    - name: "athena osx unstable"
-      env: HOST=athena NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-unstable DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
-      os: osx
-    - name: "cratos linux unstable"
-      env: HOST=cratos NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-unstable DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
-      os: linux
-    - name: "hades linux unstable"
-      env: HOST=hades NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-unstable DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
-      os: linux
-    - name: "zeus linux unstable"
-      env: HOST=zeus NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-unstable DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
-      os: linux
-
-  allow_failures:
-    - name: "athena osx unstable"
-      env: HOST=athena NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-unstable DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
-      os: osx
-    - name: "cratos linux unstable"
-      env: HOST=cratos NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-unstable DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
-      os: linux
-    - name: "hades linux unstable"
-      env: HOST=hades NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-unstable DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
-      os: linux
-    - name: "zeus linux unstable"
-      env: HOST=zeus NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-unstable DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
-      os: linux
+  # TODO: add support testing my changes over unstable
+  #   - name: "athena osx unstable"
+  #     env: HOST=athena NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-unstable DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
+  #     os: osx
+  #   - name: "cratos linux unstable"
+  #     env: HOST=cratos NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-unstable DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
+  #     os: linux
+  #   - name: "hades linux unstable"
+  #     env: HOST=hades NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-unstable DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
+  #     os: linux
+  #   - name: "zeus linux unstable"
+  #     env: HOST=zeus NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-unstable DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
+  #     os: linux
+  #
+  # allow_failures:
+  #   - name: "athena osx unstable"
+  #     env: HOST=athena NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-unstable DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
+  #     os: osx
+  #   - name: "cratos linux unstable"
+  #     env: HOST=cratos NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-unstable DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
+  #     os: linux
+  #   - name: "hades linux unstable"
+  #     env: HOST=hades NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-unstable DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
+  #     os: linux
+  #   - name: "zeus linux unstable"
+  #     env: HOST=zeus NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-unstable DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
+  #     os: linux
 
 install:
   - nix-channel --add "${NIXPKGS_CHANNEL}" nixpkgs
