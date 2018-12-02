@@ -50,14 +50,6 @@ let
       substituteInPlace $out/jspp \
         --subst-var-by js-beautify_bin ${getBin python36Packages.jsbeautifier}/bin/js-beautify
 
-      substituteInPlace $out/mkfs.enc \
-        --subst-var-by cryptsetup_bin ${getBin cryptsetup}/bin/cryptsetup \
-        --subst-var-by mkfs_ext2_bin ${getBin e2fsprogs}/bin/mkfs.ext2
-
-      substituteInPlace $out/mount.enc \
-        --subst-var-by cryptsetup_bin ${getBin cryptsetup}/bin/cryptsetup \
-        --subst-var-by lpass_bin ${getBin lastpass-cli}/bin/lpass
-
       substituteInPlace $out/new_pr \
         --subst-var-by curl_bin ${getBin curl}/bin/curl \
         --subst-var-by git_bin ${getBin git}/bin/git \
@@ -83,9 +75,6 @@ let
         --subst-var-by sed_bin ${getBin gnused}/bin/sed \
         --subst-var-by bc_bin ${getBin bc}/bin/bc
 
-      substituteInPlace $out/umount.enc \
-        --subst-var-by cryptsetup_bin ${getBin cryptsetup}/bin/cryptsetup
-
       substituteInPlace $out/pr \
         --subst-var-by git_bin ${getBin git}/bin/git
 
@@ -97,6 +86,23 @@ let
 
       substituteInPlace $out/xmlpp \
         --subst-var-by xmllint_bin ${getBin libxml2Python}/bin/xmllint
+    ''
+
+    + lib.optionalString stdenv.isLinux ''
+      substituteInPlace $out/mkfs.enc \
+        --subst-var-by cryptsetup_bin ${getBin cryptsetup}/bin/cryptsetup \
+        --subst-var-by mkfs_ext2_bin ${getBin e2fsprogs}/bin/mkfs.ext2
+
+      substituteInPlace $out/mount.enc \
+        --subst-var-by cryptsetup_bin ${getBin cryptsetup}/bin/cryptsetup \
+        --subst-var-by lpass_bin ${getBin lastpass-cli}/bin/lpass
+
+      substituteInPlace $out/umount.enc \
+        --subst-var-by cryptsetup_bin ${getBin cryptsetup}/bin/cryptsetup
+    ''
+
+    + lib.optionalString stdenv.isDarwin ''
+      rm -f $out/mkfs.enc $out/mount.enc $out/umount.enc
     '';
   };
 

@@ -37,5 +37,7 @@
       enable = true;
       privateSSHPath = /yl/private/network-secrets/shabka/ssh.nix;
     };
+
+    xsession.initExtra = if nixosConfig != null && nixosConfig.networking.hostName == "cratos" then scaleBy40P else "";
   };
 }
