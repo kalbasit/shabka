@@ -45,4 +45,4 @@ script:
   # a dedicated Nix bot on Zeus for the job of the CI.
   #
   # - nix build --verbose --show-trace --file "./hosts/${HOST}"
-  - nix-instantiate "./hosts/${HOST}" -A "${HOST}"
+  - nix-instantiate "./hosts/${HOST}"
