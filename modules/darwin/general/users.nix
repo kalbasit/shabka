@@ -22,11 +22,11 @@ let
       shell = "${getBin pkgs.zsh}/bin/zsh";
     });
 
-  makeHM = userName: { uid, isAdmin ? false, ... }: nameValuePair
+  makeHM = userName: { uid, isAdmin, home, ... }: nameValuePair
     (userName)
     (config.mine.home-manager.config {
-      inherit userName uid isAdmin;
-      nixosConfig = config;
+      inherit userName uid isAdmin home;
+      darwinConfig = config;
     });
 
   defaultUsers = {
@@ -59,7 +59,6 @@ in {
 
     };
 
-    # TODO: https://github.com/rycee/home-manager/pull/240
-    # home-manager.users = mapAttrs' makeHM config.mine.users;
+    home-manager.users = mapAttrs' makeHM config.mine.users;
   };
 }

@@ -86,23 +86,6 @@ if ! defaults read com.github.kalbasit.shabka bootstrap >/dev/null 2>&1; then
 		popd
 	}
 
-	# Finally pull Nix if we already have a hostname
-	if [[ -f "${hostcf}/home.nix" ]] && ! [[ -L "${HOME}/.config/nixpkgs/home.nix" ]]; then
-		info "Installing home-manager"
-		pushd "${xdg_config_nixpkgs}"
-			ln -sf "${hostcf}/home.nix" home.nix
-		popd
-
-		if [[ -r "${root}/external/home-manager.nix" ]]; then
-			readonly home_manager_path="$(nix-instantiate --eval --read-write-mode "${root}/external/home-manager.nix" | cut -d\" -f2 | cut -d\" -f1)"
-		else
-			readonly home_manager_path="https://github.com/rycee/home-manager/archive/release-18.09.tar.gz"
-		fi
-		nix-channel --add "${home_manager_path}" home-manager
-		nix-channel --update
-		nix-shell "${home_manager_path}" -A install
-	fi
-
 	# record that we have bootstrapped so we do not try to bootstrap again
 	defaults write com.github.kalbasit.shabka bootstrap -bool true
 fi

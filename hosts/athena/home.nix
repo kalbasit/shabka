@@ -1,20 +1,24 @@
 {
-  imports = [
-   ../../modules/home
-  ];
+  mine.home-manager.config = { userName, uid, isAdmin, home, darwinConfig }:
+  { ... }:
 
-  # TODO: getting an error that this is only compatible with systemd. A port to launchd is probably what I need.
-  # mine.gnupg.enable = true;
+  {
+    imports = [
+     ../../modules/home
+    ];
 
-  # TODO: plug nix-darwin here
-  mine.darwinConfig = { todo = "me"; };
+    # TODO: getting an error that this is only compatible with systemd. A port to launchd is probably what I need.
+    # mine.gnupg.enable = true;
 
-  mine.git.enable = true;
-  mine.less.enable = true;
-  mine.neovim.enable = true;
-  mine.pet.enable = true;
-  mine.taskwarrior.enable = true;
-  mine.timewarrior.enable = true;
-  mine.tmux.enable = true;
-  mine.useColemakKeyboardLayout = true;
+    mine.darwinConfig = darwinConfig;
+
+    mine.git.enable = true;
+    mine.less.enable = true;
+    mine.neovim.enable = true;
+    mine.pet.enable = true;
+    mine.taskwarrior.enable = true;
+    mine.timewarrior.enable = true;
+    mine.tmux.enable = true;
+    mine.useColemakKeyboardLayout = true;
+  };
 }
