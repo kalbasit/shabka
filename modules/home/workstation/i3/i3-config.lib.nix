@@ -7,9 +7,9 @@ let
   secondModifier = "Shift";
   thirdModifier = "Mod1";
   nosid = "--no-startup-id";
-  locker = "${pkgs.xautolock}/bin/xautolock -locknow && sleep 1";
+  locker = "${getBin pkgs.xautolock}/bin/xautolock -locknow && sleep 1";
 
-  hostName = config.mine.nixosConfig.networking.hostName;
+  hostName = if config.mine.nixosConfig != {} then config.mine.nixosConfig.networking.hostName else "";
 
   intMonitor =
     if hostName == "hades"
@@ -195,10 +195,10 @@ in {
       "${defaultModifier}+d" = "focus child";
 
       # start a region screenshot
-      "${defaultModifier}+${secondModifier}+4" = "exec ${pkgs.flameshot}/bin/flameshot gui --delay 500 --path ${config.home.homeDirectory}/Desktop";
+      "${defaultModifier}+${secondModifier}+4" = "exec ${getBin pkgs.flameshot}/bin/flameshot gui --delay 500 --path ${config.home.homeDirectory}/Desktop";
 
       # start a screen recorder
-      "${defaultModifier}+${secondModifier}+5" = "exec ${pkgs.simplescreenrecorder}/bin/simplescreenrecorder";
+      "${defaultModifier}+${secondModifier}+5" = "exec ${getBin pkgs.simplescreenrecorder}/bin/simplescreenrecorder";
 
       # focus the urgent window
       "${defaultModifier}+x" = "[urgent=latest] focus";
@@ -209,25 +209,25 @@ in {
       "${defaultModifier}+apostrophe" = "exec i3-input -F '[con_mark=\"%s\"] focus' -l 1 -P 'Go to: '";
 
       # volume support
-      "XF86AudioRaiseVolume" = "exec ${nosid} ${pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ false, exec ${nosid} ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ +5%";
-      "XF86AudioLowerVolume" = "exec ${nosid} ${pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ false, exec ${nosid} ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ -5%";
-      "XF86AudioMute" = "exec ${nosid} ${pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle";
+      "XF86AudioRaiseVolume" = "exec ${nosid} ${getBin pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ false, exec ${nosid} ${getBin pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ +5%";
+      "XF86AudioLowerVolume" = "exec ${nosid} ${getBin pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ false, exec ${nosid} ${getBin pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ -5%";
+      "XF86AudioMute" = "exec ${nosid} ${getBin pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle";
 
       # brightness support
-      "XF86MonBrightnessUp" = "exec ${nosid} ${pkgs.brightnessctl}/bin/brightnessctl s +5%";
-      "XF86MonBrightnessDown" = "exec ${nosid} ${pkgs.brightnessctl}/bin/brightnessctl s 5%-";
-      "${secondModifier}+XF86MonBrightnessUp" = "exec ${nosid} ${pkgs.brightnessctl}/bin/brightnessctl s +1%";
-      "${secondModifier}+XF86MonBrightnessDown" = "exec ${nosid} ${pkgs.brightnessctl}/bin/brightnessctl s 1%-";
+      "XF86MonBrightnessUp" = "exec ${nosid} ${getBin pkgs.brightnessctl}/bin/brightnessctl s +5%";
+      "XF86MonBrightnessDown" = "exec ${nosid} ${getBin pkgs.brightnessctl}/bin/brightnessctl s 5%-";
+      "${secondModifier}+XF86MonBrightnessUp" = "exec ${nosid} ${getBin pkgs.brightnessctl}/bin/brightnessctl s +1%";
+      "${secondModifier}+XF86MonBrightnessDown" = "exec ${nosid} ${getBin pkgs.brightnessctl}/bin/brightnessctl s 1%-";
 
       # sleep support
       "XF86PowerOff" = "exec ${nosid} ${locker} && systemctl suspend";
 
       # clipboard history
-      "${defaultModifier}+${thirdModifier}+c" = "exec ${pkgs.rofi}/bin/rofi -modi \"clipboard:${pkgs.haskellPackages.greenclip}/bin/greenclip print\" -show clipboard";
+      "${defaultModifier}+${thirdModifier}+c" = "exec ${getBin pkgs.rofi}/bin/rofi -modi \"clipboard:${getBin pkgs.haskellPackages.greenclip}/bin/greenclip print\" -show clipboard";
 
       # Terminals
-      "${defaultModifier}+Return" = "exec ${pkgs.alacritty}/bin/alacritty";
-      "${defaultModifier}+${secondModifier}+Return" = "exec ${pkgs.termite}/bin/termite";
+      "${defaultModifier}+Return" = "exec ${getBin pkgs.alacritty}/bin/alacritty";
+      "${defaultModifier}+${secondModifier}+Return" = "exec ${getBin pkgs.termite}/bin/termite";
 
       # Modes
       "${defaultModifier}+${thirdModifier}+r" = "mode resize";
@@ -297,10 +297,10 @@ in {
     };
 
     startup = [
-      { command = "${pkgs.xlibs.xset}/bin/xset r rate 300 30"; always = false; notification = false; }
-      { command = "${pkgs.xcape}/bin/xcape -e 'Control_L=Escape'"; always = false; notification = false; }
-      { command = "${pkgs.haskellPackages.greenclip}/bin/greenclip daemon"; always = false; notification = false; }
-      { command = "i3-msg \"workspace personal@base; exec ${nosid} ${pkgs.alacritty}/bin/alacritty\""; always = false; notification = true; }
+      { command = "${getBin pkgs.xlibs.xset}/bin/xset r rate 300 30"; always = false; notification = false; }
+      { command = "${getBin pkgs.xcape}/bin/xcape -e 'Control_L=Escape'"; always = false; notification = false; }
+      { command = "${getBin pkgs.haskellPackages.greenclip}/bin/greenclip daemon"; always = false; notification = false; }
+      { command = "i3-msg \"workspace personal@base; exec ${nosid} ${getBin pkgs.alacritty}/bin/alacritty\""; always = false; notification = true; }
     ];
   };
 
@@ -321,8 +321,8 @@ in {
     # Daemon launcher
     set $mode_daemon Launch: (x) Xcape, (g) Greenclip
     mode "$mode_daemon" {
-      bindsym x exec ${nosid} ${pkgs.xcape}/bin/xcape -e 'Control_L=Escape', mode default
-      bindsym g exec ${nosid} ${pkgs.haskellPackages.greenclip}/bin/greenclip daemon, mode default
+      bindsym x exec ${nosid} ${getBin pkgs.xcape}/bin/xcape -e 'Control_L=Escape', mode default
+      bindsym g exec ${nosid} ${getBin pkgs.haskellPackages.greenclip}/bin/greenclip daemon, mode default
 
       # back to normal: Enter or Escape
       bindsym Return mode default
@@ -333,8 +333,8 @@ in {
     # Window Manager mode, this mode allows me to control i3
     set $mode_wm WM: (r) Reload i3, (e) Restart i3
     mode "$mode_wm" {
-      bindsym r reload; exec ${nosid} ${pkgs.libnotify}/bin/notify-send 'i3 configuration reloaded', mode default
-      bindsym e restart; exec ${nosid} ${pkgs.libnotify}/bin/notify-send 'i3 restarted', mode default
+      bindsym r reload; exec ${nosid} ${getBin pkgs.libnotify}/bin/notify-send 'i3 configuration reloaded', mode default
+      bindsym e restart; exec ${nosid} ${getBin pkgs.libnotify}/bin/notify-send 'i3 restarted', mode default
 
       # back to normal: Enter or Escape
       bindsym Return mode default
@@ -345,11 +345,11 @@ in {
     # Application launcher
     set $mode_apps Launch: (d) Discord, (i) Irc, (m) Mail, (s) Studio, (t) TaskWarrior
     mode "$mode_apps" {
-      bindsym d exec ${getBin pkgs.discord}/bin/Discord, mode default
-      bindsym i exec ${getBin pkgs.alacritty}/bin/alacritty --title=irc --exec=weechat, mode default
+      bindsym d exec ${getBin getBin pkgs.discord}/bin/Discord, mode default
+      bindsym i exec ${getBin getBin pkgs.alacritty}/bin/alacritty --title=irc --exec=weechat, mode default
       bindsym m exec astroid, mode default
-      bindsym s exec ${getBin pkgs.obs-studio}/bin/obs, mode default
-      bindsym t exec ${getBin pkgs.ptask}/bin/ptask, mode default
+      bindsym s exec ${getBin getBin pkgs.obs-studio}/bin/obs, mode default
+      bindsym t exec ${getBin getBin pkgs.ptask}/bin/ptask, mode default
 
       # back to normal: Enter or Escape
       bindsym Return mode default
@@ -360,9 +360,9 @@ in {
     # Display mode allows output/resolution selection
     set $mode_display (l) Laptop screen, (m) Multiple screen, (w) Wide screen
     mode "$mode_display" {
-      bindsym l exec ${nosid} ${pkgs.xlibs.xrandr}/bin/xrandr --output ${intMonitor} --mode ${intMode} --scale ${intScale} --output ${extMonitor} --off, mode default
-      bindsym m exec ${nosid} ${pkgs.xlibs.xrandr}/bin/xrandr --output ${intMonitor} --mode ${intMode} --scale ${intScale} --output ${extMonitor} --primary --mode 3440x1440 --right-of ${intMonitor}, mode default
-      bindsym w exec ${nosid} ${pkgs.xlibs.xrandr}/bin/xrandr --output ${intMonitor} --off --output ${extMonitor} --mode ${extMode}, mode default
+      bindsym l exec ${nosid} ${getBin pkgs.xlibs.xrandr}/bin/xrandr --output ${intMonitor} --mode ${intMode} --scale ${intScale} --output ${extMonitor} --off, mode default
+      bindsym m exec ${nosid} ${getBin pkgs.xlibs.xrandr}/bin/xrandr --output ${intMonitor} --mode ${intMode} --scale ${intScale} --output ${extMonitor} --primary --mode 3440x1440 --right-of ${intMonitor}, mode default
+      bindsym w exec ${nosid} ${getBin pkgs.xlibs.xrandr}/bin/xrandr --output ${intMonitor} --off --output ${extMonitor} --mode ${extMode}, mode default
 
       # back to normal: Enter or Escape
       bindsym Return mode default
@@ -389,8 +389,8 @@ in {
     # CPU governor selection
     set $mode_cpugovernor CPU Scaling governor: (p) Performance, (o) Powersave
     mode "$mode_cpugovernor" {
-      bindsym p exec ${nosid} ${pkgs.gksu}/bin/gksudo -- ${pkgs.linuxPackages.cpupower}/bin/cpupower frequency-set --governor performance, mode default
-      bindsym o exec ${nosid} ${pkgs.gksu}/bin/gksudo -- ${pkgs.linuxPackages.cpupower}/bin/cpupower frequency-set --governor powersave, mode default
+      bindsym p exec ${nosid} ${getBin pkgs.gksu}/bin/gksudo -- ${getBin pkgs.linuxPackages.cpupower}/bin/cpupower frequency-set --governor performance, mode default
+      bindsym o exec ${nosid} ${getBin pkgs.gksu}/bin/gksudo -- ${getBin pkgs.linuxPackages.cpupower}/bin/cpupower frequency-set --governor powersave, mode default
 
       # back to normal: Enter or Escape
       bindsym Return mode default

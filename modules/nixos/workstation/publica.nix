@@ -159,8 +159,8 @@ in
           "publica.dev" = {
             forceSSL = true;
             serverName = "publica.dev";
-            sslCertificate = builtins.toPath dev_ssl_cert_path;
-            sslCertificateKey = builtins.toPath dev_ssl_key_path;
+            sslCertificate = builtins.toPath cfg.dev_ssl_cert_path;
+            sslCertificateKey = builtins.toPath cfg.dev_ssl_key_path;
 
             locations = {
               "/" = {
