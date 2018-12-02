@@ -88,7 +88,7 @@ let
         --subst-var-by xmllint_bin ${getBin libxml2Python}/bin/xmllint
     ''
 
-    ++ lib.optional stdenv.isLinux ''
+    ++ lib.optionalString stdenv.isLinux ''
       substituteInPlace $out/mkfs.enc \
         --subst-var-by cryptsetup_bin ${getBin cryptsetup}/bin/cryptsetup \
         --subst-var-by mkfs_ext2_bin ${getBin e2fsprogs}/bin/mkfs.ext2
@@ -101,7 +101,7 @@ let
         --subst-var-by cryptsetup_bin ${getBin cryptsetup}/bin/cryptsetup
     ''
 
-    ++ lib.optional stdenv.isDarwin ''
+    ++ lib.optionalString stdenv.isDarwin ''
       rm -f $out/mkfs.enc $out/mount.enc $out/umount.enc
     '';
   };
