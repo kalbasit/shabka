@@ -12,7 +12,12 @@ let
 
   mkAssertMsg = name: "${name} is available upsteam, kill this patch";
 
-  patches = [];
+  patches = [
+    (pkgs.fetchpatch {
+      url = "https://github.com/rycee/home-manager/commit/ba1551ba7c970b783b627b1176112b9630c58ca0.patch";
+      sha256 = "1laz1r78ailkizxzcdrgki4yapbvwnzmjn92vzjlkq91x6l3k8hw";
+    })
+  ];
 
   patched = pkgs.runCommand "home-manager-${pinnedVersion.rev}"
     {
