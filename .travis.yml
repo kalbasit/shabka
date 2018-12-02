@@ -41,4 +41,5 @@ before_script:
   - nix-channel --list
 
 script:
-  - nix build --verbose --show-trace --file "./hosts/${HOST}/default.nix"
+  # - nix build --verbose --show-trace --file "./hosts/${HOST}"
+  - nix-instantiate "./hosts/${HOST}" -A "${HOST}"
