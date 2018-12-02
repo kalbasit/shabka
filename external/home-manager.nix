@@ -33,7 +33,7 @@ let
 
     (
       pkgs.fetchpatch {
-        url = "https://github.com/rycee/home-manager/commit/d28791043c047e6fdc6c42d6110a0e69abfde8e9.patch";
+        url = "https://github.com/rycee/home-manager/commit/2d22efd647ea4920c90958f1a3991fdea5375811.patch";
         sha256 = "1npvw7l5iwvcqqcwfpgxb2y01f8hmg5mqiqw2kx7xxf1sg35zhd0";
       }
     )
