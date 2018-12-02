@@ -2,6 +2,10 @@ language: nix
 
 sudo: false
 
+branches:
+  only:
+  - master
+
 # env is apparently required!
 # See https://docs.travis-ci.com/user/build-matrix/#sts=Rows%20that%20are%20Allowed%20to%20Fail%20#
 env:
