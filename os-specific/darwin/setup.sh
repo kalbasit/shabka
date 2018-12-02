@@ -85,7 +85,6 @@ if ! defaults read com.github.kalbasit.shabka bootstrap >/dev/null 2>&1; then
 				error "nix-darwin installer exited with status ${RETVAL}"
 				exit "${RETVAL}"
 			fi
-			nix-channel --update darwin
 		popd
 	}
 
