@@ -11,48 +11,47 @@ env:
 matrix:
   include:
     - name: "athena osx 18.09"
-      env: HOST=athena NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-18.09 HM_CHANNEL=https://github.com/rycee/home-manager/archive/release-18.09.tar.gz DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
+      env: HOST=athena NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-18.09 DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
       os: osx
     - name: "cratos linux 18.09"
-      env: HOST=cratos NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-18.09 HM_CHANNEL=https://github.com/rycee/home-manager/archive/release-18.09.tar.gz DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
+      env: HOST=cratos NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-18.09 DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
       os: linux
     - name: "hades linux 18.09"
-      env: HOST=hades NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-18.09 HM_CHANNEL=https://github.com/rycee/home-manager/archive/release-18.09.tar.gz DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
+      env: HOST=hades NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-18.09 DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
       os: linux
     - name: "zeus linux 18.09"
-      env: HOST=zeus NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-18.09 HM_CHANNEL=https://github.com/rycee/home-manager/archive/release-18.09.tar.gz DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
+      env: HOST=zeus NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-18.09 DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
       os: linux
 
     - name: "athena osx unstable"
-      env: HOST=athena NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-unstable HM_CHANNEL=https://github.com/rycee/home-manager/archive/master.tar.gz DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
+      env: HOST=athena NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-unstable DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
       os: osx
     - name: "cratos linux unstable"
-      env: HOST=cratos NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-unstable HM_CHANNEL=https://github.com/rycee/home-manager/archive/master.tar.gz DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
+      env: HOST=cratos NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-unstable DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
       os: linux
     - name: "hades linux unstable"
-      env: HOST=hades NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-unstable HM_CHANNEL=https://github.com/rycee/home-manager/archive/master.tar.gz DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
+      env: HOST=hades NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-unstable DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
       os: linux
     - name: "zeus linux unstable"
-      env: HOST=zeus NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-unstable HM_CHANNEL=https://github.com/rycee/home-manager/archive/master.tar.gz DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
+      env: HOST=zeus NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-unstable DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
       os: linux
 
   allow_failures:
     - name: "athena osx unstable"
-      env: HOST=athena NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-unstable HM_CHANNEL=https://github.com/rycee/home-manager/archive/master.tar.gz DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
+      env: HOST=athena NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-unstable DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
       os: osx
     - name: "cratos linux unstable"
-      env: HOST=cratos NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-unstable HM_CHANNEL=https://github.com/rycee/home-manager/archive/master.tar.gz DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
+      env: HOST=cratos NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-unstable DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
       os: linux
     - name: "hades linux unstable"
-      env: HOST=hades NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-unstable HM_CHANNEL=https://github.com/rycee/home-manager/archive/master.tar.gz DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
+      env: HOST=hades NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-unstable DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
       os: linux
     - name: "zeus linux unstable"
-      env: HOST=zeus NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-unstable HM_CHANNEL=https://github.com/rycee/home-manager/archive/master.tar.gz DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
+      env: HOST=zeus NIXPKGS_CHANNEL=https://nixos.org/channels/nixos-unstable DARWIN_CHANNEL=https://github.com/LnL7/nix-darwin/archive/master.tar.gz
       os: linux
 
 install:
   - nix-channel --add "${NIXPKGS_CHANNEL}" nixpkgs
-  - nix-channel --add "${HM_CHANNEL}" home-manager
   - nix-channel --add "${DARWIN_CHANNEL}" darwin
   - travis_retry nix-channel --update
   - >
