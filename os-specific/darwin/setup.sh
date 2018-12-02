@@ -64,6 +64,9 @@ if ! defaults read com.github.kalbasit.shabka bootstrap >/dev/null 2>&1; then
 
 		info "Installing Nix"
 		curl https://nixos.org/nix/install | sh
+		if ! grep -q nix.sh ~/.profile; then
+			echo '. ~/.nix-profile/etc/profile.d/nix.sh' >> ~/.profile
+		fi
 		set +u
 			source ~/.nix-profile/etc/profile.d/nix.sh
 		set -u
