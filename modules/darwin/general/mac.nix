@@ -28,6 +28,10 @@
     # Stop iTunes from responding to the keyboard media keys
     launchctl unload -w /System/Library/LaunchAgents/com.apple.rcd.plist 2> /dev/null
 
+    # Override the keyboard repeat rate to something more sensible.
+    defaults write NSGlobalDomain KeyRepeat -int 2
+    defaults write NSGlobalDomain InitialKeyRepeat -int 15
+
     # setup CapsLock as Control
     #
     # Use `ioreg -p IOUSB -c IOUSBDevice | grep -e class -e idVendor -e idProduct` to list the
