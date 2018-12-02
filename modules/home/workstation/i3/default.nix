@@ -6,8 +6,15 @@ with lib;
   options.mine.workstation.i3.enable = mkEnableOption "workstation.i3";
 
   config = mkIf config.mine.workstation.i3.enable {
-    home.file.".config/i3status/config".text = builtins.readFile ./i3status-config;
+    assertions = [
+      {
+        assertion = config.mine.nixosConfig != {} && config.mine.darwinConfig == {};
+        message = "mine.workstation.i3.enable must be false on Darwin!";
+      }
+    ];
+
     home.file."Desktop/.keep".text = "";
+    xdg.configFile."i3status/config".source = ./i3status-config;
 
     xsession = {
       enable = true;
