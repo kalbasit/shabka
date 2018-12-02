@@ -10,18 +10,26 @@ let
     inherit (pinnedVersion) url rev;
   };
 
+  importPinned = import pinned {};
+
   mkAssertMsg = name: "${name} is available upsteam, kill this patch";
 
   patches = [
-    (pkgs.fetchpatch {
-      url = "https://github.com/rycee/home-manager/commit/f84e886d68d5c6d9afc6e2128403b3d139bae7e3.patch";
-      sha256 = "1laz1r78ailkizxzcdrgki4yapbvwnzmjn92vzjlkq91x6l3k8hw";
-    })
+    # https://github.com/rycee/home-manager/pull/472
+    (
+      pkgs.fetchpatch {
+        url = "https://github.com/rycee/home-manager/commit/f84e886d68d5c6d9afc6e2128403b3d139bae7e3.patch";
+        sha256 = "1laz1r78ailkizxzcdrgki4yapbvwnzmjn92vzjlkq91x6l3k8hw";
+      }
+    )
 
-    (pkgs.fetchpatch {
-      url = "https://github.com/rycee/home-manager/commit/c3a3e49b7b0c05c47d98e829fb14dc482c4ff217.patch";
-      sha256 = "0v5yrxdjsgafzdnzlqzy1h6b69xnz1l1sy9ay1armz8c11y1sbcj";
-    })
+    # https://github.com/rycee/home-manager/pull/473
+    (
+      pkgs.fetchpatch {
+        url = "https://github.com/rycee/home-manager/commit/c3a3e49b7b0c05c47d98e829fb14dc482c4ff217.patch";
+        sha256 = "0v5yrxdjsgafzdnzlqzy1h6b69xnz1l1sy9ay1armz8c11y1sbcj";
+      }
+    )
   ];
 
   patched = pkgs.runCommand "home-manager-${pinnedVersion.rev}"
