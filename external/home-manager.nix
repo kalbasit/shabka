@@ -30,6 +30,13 @@ let
         sha256 = "0v5yrxdjsgafzdnzlqzy1h6b69xnz1l1sy9ay1armz8c11y1sbcj";
       }
     )
+
+    (
+      pkgs.fetchpatch {
+        url = "https://github.com/rycee/home-manager/commit/d28791043c047e6fdc6c42d6110a0e69abfde8e9.patch";
+        sha256 = "1npvw7l5iwvcqqcwfpgxb2y01f8hmg5mqiqw2kx7xxf1sg35zhd0";
+      }
+    )
   ];
 
   patched = pkgs.runCommand "home-manager-${pinnedVersion.rev}"
