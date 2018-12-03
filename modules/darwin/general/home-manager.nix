@@ -9,7 +9,7 @@ let
   };
 in {
   imports = [
-    (import homeManager {}).nix-darwin
+    (import "${homeManager}/nix-darwin")
 
     # load the following when running a VM
     # ("${builtins.fetchTarball https://github.com/rycee/home-manager/archive/nixos-module-user-pkgs.tar.gz}/nix-darwin")

@@ -23,14 +23,6 @@ let
       }
     )
 
-    # https://github.com/rycee/home-manager/pull/473
-    (
-      pkgs.fetchpatch {
-        url = "https://github.com/rycee/home-manager/commit/c3a3e49b7b0c05c47d98e829fb14dc482c4ff217.patch";
-        sha256 = "0v5yrxdjsgafzdnzlqzy1h6b69xnz1l1sy9ay1armz8c11y1sbcj";
-      }
-    )
-
     # https://github.com/rycee/home-manager/pull/474
     (
       pkgs.fetchpatch {
