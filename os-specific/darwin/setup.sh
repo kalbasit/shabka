@@ -49,7 +49,11 @@ if ! defaults read com.github.kalbasit.shabka bootstrap >/dev/null 2>&1; then
 	defaults write com.apple.dock persistent-apps -array
 
 	info "Installing Xcode command line tools"
-	xcode-select --install || true
+	if xcode-select --install; then
+		echo "Software update menu has now opened, please follow the instructions to get it installed."
+		echo "Once the installation is finished, please press Enter"
+		read -rn1
+	fi
 
 	# download and install Homebrew if it's not installed already
 	command -v brew 2>/dev/null || {
