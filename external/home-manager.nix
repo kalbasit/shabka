@@ -14,7 +14,7 @@ let
 
   patches = [
     (pkgs.fetchpatch {
-      url = "https://github.com/rycee/home-manager/commit/ba1551ba7c970b783b627b1176112b9630c58ca0.patch";
+      url = "https://github.com/rycee/home-manager/pull/472.patch";
       sha256 = "1laz1r78ailkizxzcdrgki4yapbvwnzmjn92vzjlkq91x6l3k8hw";
     })
   ];
