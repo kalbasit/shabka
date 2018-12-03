@@ -75,6 +75,10 @@ if ! defaults read com.github.kalbasit.shabka bootstrap >/dev/null 2>&1; then
 			source ~/.nix-profile/etc/profile.d/nix.sh
 		set -u
 
+		info "Replacing the channel with stable"
+		nix-channel --add https://nixos.org/channels/nixpkgs-18.09-darwin nixpkgs
+		nix-channel --update
+
 		info "Installing nix-darwin"
 		pushd "${deprecated_nixpkgs}"
 			ln -sf "${hostcf}/darwin-configuration.nix" darwin-configuration.nix
