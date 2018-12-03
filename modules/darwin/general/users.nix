@@ -30,7 +30,7 @@ let
     });
 
   defaultUsers = {
-    yl = { uid = 2000; isAdmin = true;  home = "/Users/yl"; };
+    yl = { uid = 501; isAdmin = true;  home = "/Users/yl"; };
   };
 
 in {
