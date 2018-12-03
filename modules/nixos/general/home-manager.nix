@@ -9,7 +9,7 @@ let
   };
 in {
   imports = [
-    (import homeManager {}).nixos
+    (import "${homeManager}/nixos")
 
     # load the following when running a VM
     # ("${builtins.fetchTarball https://github.com/rycee/home-manager/archive/nixos-module-user-pkgs.tar.gz}/nixos")
