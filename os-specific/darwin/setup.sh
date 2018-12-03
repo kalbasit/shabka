@@ -76,9 +76,8 @@ if ! defaults read com.github.kalbasit.shabka bootstrap >/dev/null 2>&1; then
 			ln -sf "${hostcf}/darwin-configuration.nix" darwin-configuration.nix
 		popd
 		pushd "${workdir}"
-			nix-build https://github.com/LnL7/nix-darwin/archive/master.tar.gz -A installer
 			set +e
-				(yes | ./result/bin/darwin-installer)
+				(yes | nix run -f https://github.com/LnL7/nix-darwin/archive/master.tar.gz installer -c darwin-installer)
 				RETVAL=$?
 			set -e
 			if [[ "${RETVAL}" -ne 0 ]] && [[ "${RETVAL}" -ne 141 ]]; then
