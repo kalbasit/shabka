@@ -38,6 +38,11 @@ in {
     deployment.targetHost = "zeus.home.nasreddine.com";
   };
 
+  staurn = {
+    imports = [ ../hosts/staurn/configuration.nix ];
+    deployment.targetHost = "staurn.home.nasreddine.com";
+  };
+
   vpn-nasreddine = { resources, ... }: {
     imports = [ ../hosts/vpn-nasreddine/configuration.nix ];
     deployment = {
