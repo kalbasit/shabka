@@ -39,8 +39,8 @@ in {
   };
 
   staurn = {
-    imports = [ ../hosts/staurn/configuration.nix ];
-    deployment.targetHost = "staurn.home.nasreddine.com";
+    imports = [ ../hosts/saturn/configuration.nix ];
+    deployment.targetHost = "saturn.home.nasreddine.com";
   };
 
   vpn-nasreddine = { resources, ... }: {
