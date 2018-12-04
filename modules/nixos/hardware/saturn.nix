@@ -3,25 +3,20 @@
 with lib;
 
 {
-  config = mkIf (config.mine.hardware.machine == "zeus") {
+  config = mkIf (config.mine.hardware.machine == "saturn") {
     boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod" ];
     boot.kernelModules = [ "kvm-intel" "iscsi_tcp" ];
     boot.extraModulePackages = [ ];
 
     boot.loader.grub = {
       configurationLimit = 30;
-      device = "nodev";
-      efiSupport = true;
+      device = "/dev/sda";
       enable = true;
       enableCryptodisk = true;
       version = 2;
     };
 
-    boot.loader.efi.canTouchEfiVariables = true;
-
-    nix.maxJobs = lib.mkDefault 12;
-
-    boot.kernelPackages = pkgs.linuxPackages_latest;
+    nix.maxJobs = lib.mkDefault 32;
 
     mine.serial_console.enable = true;
 
