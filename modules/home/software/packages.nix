@@ -50,6 +50,7 @@ in {
     nur.repos.kalbasit.swm
 
     unstable.corgi
+    unstable.bluejeans-gui
 
     unzip
 
