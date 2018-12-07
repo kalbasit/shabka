@@ -7,7 +7,7 @@ let
   };
 in {
   unstable = import pinnedPkgs {
-    config = {};
+    config = { allowUnfree = true; };
     overlays = [];
   };
 }
