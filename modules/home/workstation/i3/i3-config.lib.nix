@@ -345,11 +345,11 @@ in {
     # Application launcher
     set $mode_apps Launch: (d) Discord, (i) Irc, (m) Mail, (s) Studio, (t) TaskWarrior
     mode "$mode_apps" {
-      bindsym d exec ${getBin getBin pkgs.discord}/bin/Discord, mode default
-      bindsym i exec ${getBin getBin pkgs.alacritty}/bin/alacritty --title=irc --exec=weechat, mode default
+      bindsym d exec ${getBin pkgs.discord}/bin/Discord, mode default
+      bindsym i exec ${getBin pkgs.alacritty}/bin/alacritty --title=irc --exec=weechat, mode default
       bindsym m exec astroid, mode default
-      bindsym s exec ${getBin getBin pkgs.obs-studio}/bin/obs, mode default
-      bindsym t exec ${getBin getBin pkgs.ptask}/bin/ptask, mode default
+      bindsym s exec ${getBin pkgs.obs-studio}/bin/obs, mode default
+      bindsym t exec ${getBin pkgs.ptask}/bin/ptask, mode default
 
       # back to normal: Enter or Escape
       bindsym Return mode default
