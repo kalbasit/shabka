@@ -9,6 +9,7 @@ with lib;
   config = mkIf config.mine.workstation.chromium.enable {
     home.file.".config/chromium/profiles/anya/.keep".text = "";
     home.file.".config/chromium/profiles/ihab/.keep".text = "";
+    home.file.".config/chromium/profiles/keeptruckin/.keep".text = "";
     home.file.".config/chromium/profiles/nosecurity/.keep".text = "";
     home.file.".config/chromium/profiles/personal/.keep".text = "";
     home.file.".config/chromium/profiles/publica/.keep".text = "";

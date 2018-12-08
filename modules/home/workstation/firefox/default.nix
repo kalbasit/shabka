@@ -25,9 +25,15 @@ with lib;
       Name=publica
       IsRelative=1
       Path=profiles/publica
+
+      [Profile2]
+      Name=keeptruckin
+      IsRelative=1
+      Path=profiles/keeptruckin
     '';
 
     home.file.".mozilla/firefox/profiles/personal/.keep".text = "";
     home.file.".mozilla/firefox/profiles/publica/.keep".text = "";
+    home.file.".mozilla/firefox/profiles/keeptruckin/.keep".text = "";
   };
 }

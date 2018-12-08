@@ -403,9 +403,10 @@ in {
     ########################
 
     # assign important spaces to my external monitor
+    workspace irc output ${extMonitor}
+    workspace keeptruckin@base output ${extMonitor}
+    workspace mail output ${extMonitor}
     workspace personal@base output ${extMonitor}
     workspace publica@base output ${extMonitor}
-    workspace irc output ${extMonitor}
-    workspace mail output ${extMonitor}
   '';
 }
