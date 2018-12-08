@@ -18,26 +18,6 @@ let
   mkAssertMsg = name: "${name} is available upsteam, kill this patch";
 
   patches = [
-    # ssh-agents
-    # https://github.com/NixOS/nixpkgs/pull/49892
-    (
-      assert assertMsg (! importPinned ? ssh-agents) (mkAssertMsg "ssh-agents");
-      pkgs.fetchpatch {
-        url = "https://github.com/NixOS/nixpkgs/pull/49892.patch";
-        sha256 = "07p4xhvbx9m9bh24hhdygyd0zakah5njp8kdhq6ilxm3safnfzlq";
-      }
-    )
-
-    # update corgi
-    # https://github.com/NixOS/nixpkgs/pull/50488
-    (
-      assert assertMsg (! versionAtLeast (getVersion importPinned.corgi) "0.2.4") (mkAssertMsg "corgi");
-      pkgs.fetchpatch {
-        url = "https://github.com/NixOS/nixpkgs/pull/50488.patch";
-        sha256 = "01bldiwl79xqjc5lpdc7bv2c8zpz7bkl9ilxaklgrw539sagg4kv";
-      }
-    )
-
     # update network-manager to 1.14.4
     (
       pkgs.fetchpatch {
