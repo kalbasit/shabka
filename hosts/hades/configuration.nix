@@ -66,6 +66,8 @@ in {
   mine.virtualisation.docker.enable = true;
   mine.workstation.enable = true;
 
+  mine.workstation.keeptruckin.enable = true;
+
   mine.openvpn.client.expressvpn = mkIf enableExpressVPN {
     enable = true;
     auth_user_pass = /yl/private/network-secrets/vpn/client/expressvpn/auth.txt;
