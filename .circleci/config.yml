@@ -23,6 +23,28 @@ var_3: &install-dependencies
 
 version: 2
 jobs:
+  athena:
+    macos:
+      xcode: "9.0"
+
+    working_directory: /go/src/github.com/kalbasit/shabka
+
+    environment:
+      <<: *global_env
+
+    docker:
+      - image: nixos/nix
+
+    steps:
+      - checkout
+      - *add-channels
+      - *update-channels
+      - *install-dependencies
+      - run:
+          name: Instantiate athena
+          working_directory: /go/src/github.com/kalbasit/shabka
+          command: nix-instantiate ./hosts/athena
+
   cratos:
     working_directory: /go/src/github.com/kalbasit/shabka
 
@@ -84,8 +106,8 @@ workflows:
   version: 2
   testing:
     jobs:
-      # - athena:
-      #     context: org-global
+      - athena:
+          context: org-global
       - cratos:
           context: org-global
       - hades:
