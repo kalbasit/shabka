@@ -15,6 +15,12 @@ var_2: &update-channels
     command: |
       nix-channel --update
 
+var_3: &install-dependencies
+  run:
+    name: Install dependencies
+    command: |
+      nix-env -iA nixpkgs.gitAndTools.git
+
 version: 2
 jobs:
   cratos:
@@ -30,6 +36,7 @@ jobs:
       - checkout
       - *add-channels
       - *update-channels
+      - *install-dependencies
       - run:
           name: Instantiate cratos
           working_directory: /go/src/github.com/kalbasit/shabka
@@ -48,6 +55,7 @@ jobs:
       - checkout
       - *add-channels
       - *update-channels
+      - *install-dependencies
       - run:
           name: Instantiate hades
           working_directory: /go/src/github.com/kalbasit/shabka
@@ -66,6 +74,7 @@ jobs:
       - checkout
       - *add-channels
       - *update-channels
+      - *install-dependencies
       - run:
           name: Instantiate zeus
           working_directory: /go/src/github.com/kalbasit/shabka
