@@ -50,7 +50,10 @@ in {
 
     systemd.services.dynamodb = {
       wantedBy = [ "multi-user.target" ];
-      serviceConfig.ExecStart = "${getBin dynamodb}/bin/dynamodb";
+      serviceConfig = {
+        User = "nobody";
+        ExecStart = "${getBin dynamodb}/bin/dynamodb";
+      };
     };
   };
 }
