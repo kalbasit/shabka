@@ -1,0 +1,85 @@
+var_0: &global_env
+  NIXPKGS_CHANNEL: https://nixos.org/channels/nixos-18.09
+  DARWIN_CHANNEL: https://github.com/LnL7/nix-darwin/archive/master.tar.gz
+
+var_1: &add-channels
+  run:
+    name: Adding all channels
+    command: |
+      nix-channel --add "${NIXPKGS_CHANNEL}" nixpkgs
+      nix-channel --add "${DARWIN_CHANNEL}" darwin
+
+var_2: &update-channels
+  run:
+    name: Updating all channels
+    command: |
+      nix-channel --update
+
+version: 2
+jobs:
+  cratos:
+    working_directory: /go/src/github.com/kalbasit/shabka
+
+    environment:
+      <<: *global_env
+
+    docker:
+      - image: nixos/nix
+
+    steps:
+      - checkout
+      - *add-channels
+      - *update-channels
+      - run:
+          name: Instantiate cratos
+          working_directory: /go/src/github.com/kalbasit/shabka
+          command: nix-instantiate ./hosts/cratos
+
+  hades:
+    working_directory: /go/src/github.com/kalbasit/shabka
+
+    environment:
+      <<: *global_env
+
+    docker:
+      - image: nixos/nix
+
+    steps:
+      - checkout
+      - *add-channels
+      - *update-channels
+      - run:
+          name: Instantiate hades
+          working_directory: /go/src/github.com/kalbasit/shabka
+          command: nix-instantiate ./hosts/hades
+
+  zeus:
+    working_directory: /go/src/github.com/kalbasit/shabka
+
+    environment:
+      <<: *global_env
+
+    docker:
+      - image: nixos/nix
+
+    steps:
+      - checkout
+      - *add-channels
+      - *update-channels
+      - run:
+          name: Instantiate zeus
+          working_directory: /go/src/github.com/kalbasit/shabka
+          command: nix-instantiate ./hosts/zeus
+
+workflows:
+  version: 2
+  testing:
+    jobs:
+      # - athena:
+      #     context: org-global
+      - cratos:
+          context: org-global
+      - hades:
+          context: org-global
+      - zeus:
+          context: org-global
