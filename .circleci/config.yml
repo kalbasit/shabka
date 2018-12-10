@@ -1,0 +1,127 @@
+var_0: &global_env
+  NIXPKGS_CHANNEL: https://nixos.org/channels/nixos-18.09
+  DARWIN_CHANNEL: https://github.com/LnL7/nix-darwin/archive/master.tar.gz
+  CACHIX_CACHE: yl
+
+var_1: &add-channels
+  run:
+    name: Adding all channels
+    command: |
+      nix-channel --add "${NIXPKGS_CHANNEL}" nixpkgs
+      nix-channel --add "${DARWIN_CHANNEL}" darwin
+
+var_2: &update-channels
+  run:
+    name: Updating all channels
+    command: |
+      nix-channel --update
+
+var_3: &install-dependencies
+  run:
+    name: Install dependencies
+    command: |
+      nix-env -iA nixpkgs.gitAndTools.git nixpkgs.cachix
+
+var_4: &enable-cachix
+  run:
+    name: Enable cachix
+    command: |
+      cachix use "${CACHIX_CACHE}"
+
+version: 2
+jobs:
+  athena:
+    macos:
+      xcode: "9.0"
+
+    working_directory: /go/src/github.com/kalbasit/shabka
+
+    environment:
+      <<: *global_env
+
+    docker:
+      - image: nixos/nix
+
+    steps:
+      - checkout
+      - *add-channels
+      - *update-channels
+      - *install-dependencies
+      - *enable-cachix
+      - run:
+          name: Instantiate athena
+          working_directory: /go/src/github.com/kalbasit/shabka
+          command: nix-instantiate ./hosts/athena
+
+  cratos:
+    working_directory: /go/src/github.com/kalbasit/shabka
+
+    environment:
+      <<: *global_env
+
+    docker:
+      - image: nixos/nix
+
+    steps:
+      - checkout
+      - *add-channels
+      - *update-channels
+      - *install-dependencies
+      - *enable-cachix
+      - run:
+          name: Instantiate cratos
+          working_directory: /go/src/github.com/kalbasit/shabka
+          command: nix-instantiate ./hosts/cratos
+
+  hades:
+    working_directory: /go/src/github.com/kalbasit/shabka
+
+    environment:
+      <<: *global_env
+
+    docker:
+      - image: nixos/nix
+
+    steps:
+      - checkout
+      - *add-channels
+      - *update-channels
+      - *install-dependencies
+      - *enable-cachix
+      - run:
+          name: Instantiate hades
+          working_directory: /go/src/github.com/kalbasit/shabka
+          command: nix-instantiate ./hosts/hades
+
+  zeus:
+    working_directory: /go/src/github.com/kalbasit/shabka
+
+    environment:
+      <<: *global_env
+
+    docker:
+      - image: nixos/nix
+
+    steps:
+      - checkout
+      - *add-channels
+      - *update-channels
+      - *install-dependencies
+      - *enable-cachix
+      - run:
+          name: Instantiate zeus
+          working_directory: /go/src/github.com/kalbasit/shabka
+          command: nix-instantiate ./hosts/zeus
+
+workflows:
+  version: 2
+  testing:
+    jobs:
+      - athena:
+          context: org-global
+      - cratos:
+          context: org-global
+      - hades:
+          context: org-global
+      - zeus:
+          context: org-global
