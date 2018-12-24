@@ -22,7 +22,7 @@ let
     (
       pkgs.fetchpatch {
         url = "https://github.com/NixOS/nixpkgs/pull/51122.patch";
-        sha256 = "0qvxwx0vz11najs3x0p005kmwl0c31ga1zwi7h68pd96jwcmg8r8";
+        sha256 = "1hw965vfb1x3ypvmqfxn3dilzgj6x5s3bk7fhmwdvvb49p6gh3k1";
       }
     )
   ];
