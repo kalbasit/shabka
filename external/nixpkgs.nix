@@ -17,15 +17,7 @@ let
 
   mkAssertMsg = name: "${name} is available upsteam, kill this patch";
 
-  patches = [
-    # update network-manager to 1.14.4
-    (
-      pkgs.fetchpatch {
-        url = "https://github.com/NixOS/nixpkgs/pull/51122.patch";
-        sha256 = "1hw965vfb1x3ypvmqfxn3dilzgj6x5s3bk7fhmwdvvb49p6gh3k1";
-      }
-    )
-  ];
+  patches = [];
 
   patched = pkgs.runCommand "nixpkgs-${pinnedVersion.rev}"
     {
