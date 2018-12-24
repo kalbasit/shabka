@@ -42,10 +42,10 @@ in {
       vimAlias = true;
 
       withPython = true;
-      extraPythonPackages = ps: with ps; [neovim];
+      extraPythonPackages = ps: with ps; [ pynvim ];
 
       withPython3 = true;
-      extraPython3Packages = ps: with ps; [neovim];
+      extraPython3Packages = ps: with ps; [ pynvim ];
 
       configure = {
         customRC = cfg.extraRC + (builtins.readFile (pkgs.substituteAll {
