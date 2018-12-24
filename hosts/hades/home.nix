@@ -16,6 +16,7 @@
 
     mine.batteryNotifier.enable = true;
     mine.git.enable = true;
+    mine.pijul.enable = true;
     mine.gnupg.enable = true;
     mine.keybase.enable = true;
     mine.less.enable = true;
