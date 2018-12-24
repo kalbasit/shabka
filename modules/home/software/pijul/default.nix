@@ -7,7 +7,7 @@ with lib;
 
   config = mkIf config.mine.pijul.enable {
     home.packages = with pkgs; [
-      pijul
+      unstable.pijul
     ];
   };
 }
