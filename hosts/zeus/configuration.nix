@@ -82,7 +82,6 @@ in {
 
   mine.gnupg.enable = true;
   mine.useColemakKeyboardLayout = true;
-  mine.virtualisation.docker.enable = true;
   mine.virtualisation.libvirtd.enable = true;
 
   mine.hardware.machine = "zeus";
