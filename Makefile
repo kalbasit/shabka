@@ -1,11 +1,12 @@
 .PHONY: all build test switch boot brew add-channels update-channels \
-	update-external update-home-manager update-nixpkgs-unstable update-nixos-hardware \
+	update-external update-home-manager update-nixpkgs-stable update-nixpkgs-unstable update-nixos-hardware \
 	update-nur update-kalbasit-nur
 
 HOME_MANAGER_REF     ?= refs/heads/master
 KALBASIT_NUR_REF     ?= refs/heads/master
 NIXOS_HARDWARE_REF   ?= refs/heads/master
 NIXPKGS_UNSTABLE_REF ?= refs/heads/nixos-unstable
+NIXPKGS_STABLE_REF   ?= refs/heads/nixos-18.09
 NUR_REF              ?= refs/heads/master
 
 all: build
@@ -41,10 +42,13 @@ update-channels:
 	sudo -i nix-channel --update
 	@echo
 
-update-external: update-home-manager update-nixpkgs-unstable update-nixos-hardware update-nur update-kalbasit-nur
+update-external: update-home-manager update-nixpkgs-stable update-nixpkgs-unstable update-nixos-hardware update-nur update-kalbasit-nur
 
 update-home-manager:
 	nix-shell -p nix-prefetch-git --run "nix-prefetch-git https://github.com/rycee/home-manager.git $(HOME_MANAGER_REF)" > external/home-manager-version.json
+
+update-nixpkgs-stable:
+	nix-shell -p nix-prefetch-git --run "nix-prefetch-git https://github.com/NixOS/nixpkgs-channels.git $(NIXPKGS_STABLE_REF)" > external/nixpkgs-stable-version.json
 
 update-nixpkgs-unstable:
 	nix-shell -p nix-prefetch-git --run "nix-prefetch-git https://github.com/NixOS/nixpkgs-channels.git $(NIXPKGS_UNSTABLE_REF)" > external/nixpkgs-unstable-version.json
