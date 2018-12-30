@@ -5,7 +5,7 @@
 with pkgs.lib;
 
 let
-  pinnedVersion = builtins.fromJSON (builtins.readFile ./nixpkgs-version.json);
+  pinnedVersion = builtins.fromJSON (builtins.readFile ./nixpkgs-unstable-version.json);
   pinned = builtins.fetchGit {
     inherit (pinnedVersion) url rev;
   };
@@ -19,7 +19,7 @@ let
 
   patches = [];
 
-  patched = pkgs.runCommand "nixpkgs-${pinnedVersion.rev}"
+  patched = pkgs.runCommand "nixpkgs-unstable-${pinnedVersion.rev}"
     {
       inherit pinned patches;
 
