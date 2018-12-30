@@ -37,9 +37,6 @@
       privateSSHPath = /yl/private/network-secrets/shabka/ssh.nix;
     };
 
-    xsession.initExtra =
-      if nixosConfig != null && nixosConfig.networking.hostName == "cratos"
-      then scaleBy40P
-      else "";
+    xsession.initExtra = if nixosConfig != null then scaleBy40P else "";
   };
 }
