@@ -20,6 +20,8 @@
 
     mine.batteryNotifier.enable = true;
     mine.git.enable = true;
+    mine.pijul.enable = true;
+    mine.gnupg.enable = true;
     mine.keybase.enable = true;
     mine.less.enable = true;
     mine.neovim.enable = true;
@@ -35,6 +37,6 @@
       privateSSHPath = /yl/private/network-secrets/shabka/ssh.nix;
     };
 
-    xsession.initExtra = if nixosConfig != null && nixosConfig.networking.hostName == "cratos" then scaleBy40P else "";
+    xsession.initExtra = if nixosConfig != null then scaleBy40P else "";
   };
 }
