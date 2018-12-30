@@ -19,7 +19,7 @@ with lib;
 
     boot.loader.efi.canTouchEfiVariables = true;
 
-    boot.loader.systemd-boot.enable = mkDefault false;
+    boot.loader.systemd-boot.enable = false;
 
     nix.maxJobs = lib.mkDefault 4;
 
