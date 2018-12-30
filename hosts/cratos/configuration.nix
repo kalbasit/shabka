@@ -17,10 +17,10 @@ let
     && builtins.pathExists /yl/private/network-secrets/vpn/client/expressvpn/client.key
     && builtins.pathExists /yl/private/network-secrets/vpn/client/expressvpn/ta.key;
 
-  enableNasreddineVPN =  builtins.pathExists /yl/private/network-secrets/vpn/client/desktop.hades.WaelNasreddine.vpn.nasreddine.com/ca.crt
-    && builtins.pathExists /yl/private/network-secrets/vpn/client/desktop.hades.WaelNasreddine.vpn.nasreddine.com/public.crt
-    && builtins.pathExists /yl/private/network-secrets/vpn/client/desktop.hades.WaelNasreddine.vpn.nasreddine.com/private.key
-    && builtins.pathExists /yl/private/network-secrets/vpn/client/desktop.hades.WaelNasreddine.vpn.nasreddine.com/ta.key;
+  enableNasreddineVPN =  builtins.pathExists /yl/private/network-secrets/vpn/client/desktop.cratos.WaelNasreddine.vpn.nasreddine.com/ca.crt
+    && builtins.pathExists /yl/private/network-secrets/vpn/client/desktop.cratos.WaelNasreddine.vpn.nasreddine.com/public.crt
+    && builtins.pathExists /yl/private/network-secrets/vpn/client/desktop.cratos.WaelNasreddine.vpn.nasreddine.com/private.key
+    && builtins.pathExists /yl/private/network-secrets/vpn/client/desktop.cratos.WaelNasreddine.vpn.nasreddine.com/ta.key;
 
 in {
   imports = [
@@ -111,10 +111,10 @@ in {
         nobind
         persist-key
         persist-tun
-        ca /yl/private/network-secrets/vpn/client/desktop.hades.WaelNasreddine.vpn.nasreddine.com/ca.crt
-        cert /yl/private/network-secrets/vpn/client/desktop.hades.WaelNasreddine.vpn.nasreddine.com/public.crt
-        key /yl/private/network-secrets/vpn/client/desktop.hades.WaelNasreddine.vpn.nasreddine.com/private.key
-        tls-auth /yl/private/network-secrets/vpn/client/desktop.hades.WaelNasreddine.vpn.nasreddine.com/ta.key 1
+        ca /yl/private/network-secrets/vpn/client/desktop.cratos.WaelNasreddine.vpn.nasreddine.com/ca.crt
+        cert /yl/private/network-secrets/vpn/client/desktop.cratos.WaelNasreddine.vpn.nasreddine.com/public.crt
+        key /yl/private/network-secrets/vpn/client/desktop.cratos.WaelNasreddine.vpn.nasreddine.com/private.key
+        tls-auth /yl/private/network-secrets/vpn/client/desktop.cratos.WaelNasreddine.vpn.nasreddine.com/ta.key 1
         verb 1
         cipher aes-128-cbc
         comp-lzo
