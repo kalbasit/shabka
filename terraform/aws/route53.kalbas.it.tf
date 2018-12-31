@@ -110,6 +110,6 @@ resource "aws_route53_record" "_keybase-kalbas-it-txt" {
   ttl     = "3600"
 
   records = [
-    "keybase-site-verification=2_gNzPUWGmG_Cb9s9S7eVkBEkTLf4bSQZAZgcr69sqA",
+    "keybase-site-verification=28VcnO1S8jaoiOzfi2vLm3U8q9ViMGzoFZkedcfN9j0",
   ]
 }

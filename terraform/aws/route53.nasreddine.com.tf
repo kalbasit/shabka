@@ -135,17 +135,6 @@ resource "aws_route53_record" "jad-nasreddine-com-cname" {
   ]
 }
 
-resource "aws_route53_record" "aphrodite-nasreddine-com-a" {
-  zone_id = "${aws_route53_zone.nasreddine-com.zone_id}"
-  name    = "aphrodite.nasreddine.com"
-  type    = "A"
-  ttl     = "60"
-
-  records = [
-    "54.183.205.218",
-  ]
-}
-
 resource "aws_route53_record" "vpn-nasreddine-com-cname" {
   zone_id = "${aws_route53_zone.nasreddine-com.zone_id}"
   name    = "vpn.nasreddine.com"
