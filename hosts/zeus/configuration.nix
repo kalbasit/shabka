@@ -95,6 +95,18 @@ in {
     })
   ];
 
+  # Enable UPS power management
+  power.ups = {
+    enable = true;
+    mode = "netclient";
+    ups = {
+      "synology" = {
+        driver = "usbhid-ups";
+        port = "ups@172.25.1.2";
+      };
+    };
+  };
+
   # start iscsid
   systemd.services.iscsid = {
     wantedBy = [ "multi-user.target" ];
