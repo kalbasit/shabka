@@ -19,8 +19,8 @@ in {
 
     nixPath = [
       "nixos-config=/etc/nixos/configuration.nix"
-      "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
-      "shabka-path=${shabka-path}"
+      "nixpkgs=/etc/nixpkgs"
+      "shabka-path=/etc/shabka"
     ];
 
     optimise = {

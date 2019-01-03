@@ -4,6 +4,7 @@ with lib;
 
 let
 
+  pinnedNixpkgs = import ../../../external/nixpkgs-stable.nix {};
   pinnedNUR = import ../../../external/nur.nix;
   pinnedKalbasitNUR = import ../../../external/kalbasit-nur.nix;
 
