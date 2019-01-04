@@ -30,6 +30,7 @@ in {
       text = ''
         ln -sfn ${pinnedNixpkgs} /etc/nixpkgs
       '';
+      deps = [];
     };
   };
 }
