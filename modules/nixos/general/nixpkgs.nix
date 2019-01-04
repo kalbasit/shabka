@@ -23,4 +23,13 @@ in {
   };
 
   nixpkgs.overlays = import ../../../overlays;
+
+  # TODO: This is not working!!
+  system.activationScripts = {
+    nixpkgsPin = {
+      text = ''
+        ln -sfn ${pinnedNixpkgs} /etc/nixpkgs
+      '';
+    };
+  };
 }
