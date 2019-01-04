@@ -1,3 +1,4 @@
+# Why this importPinned? See scripts/nixos-rebuild.sh
 { importPinned ? true }:
 
 let
