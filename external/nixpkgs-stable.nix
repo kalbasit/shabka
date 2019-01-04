@@ -1,9 +1,9 @@
-{}:
+{ importPinned ? true }:
 
 let
   pinnedVersion = builtins.fromJSON (builtins.readFile ./nixpkgs-stable-version.json);
-  pinned = import (builtins.fetchGit {
+  pinned = builtins.fetchGit {
     inherit (pinnedVersion) url rev ref;
-  }) {};
+  };
 in
-  pinned
+  if importPinned then import pinned {} else pinned

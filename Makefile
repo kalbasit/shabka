@@ -10,23 +10,19 @@ all: build
 
 .PHONY: build
 build:
-	NIX_PATH= nixos-rebuild -I nixpkgs=$(shell pwd)/external/nixpkgs-stable.nix -I nixos-config=$(shell pwd)/hosts/$(shell hostname -s)/configuration.nix build --show-trace
+	./scripts/nixos-rebuild.sh "$(shell pwd)/hosts/$(shell hostname -s)/configuration.nix" build --show-trace
 
 .PHONY: test
 test:
-	sudo -i nixos-rebuild -I nixos-config=$(shell pwd)/hosts/$(shell hostname -s)/configuration.nix test
+	sudo -i ./scripts/nixos-rebuild.sh "$(shell pwd)/hosts/$(shell hostname -s)/configuration.nix" test --show-trace
 
-# switch is not allowed to specify nixos-config as only the base repo (not any
-# of the git worktrees) may switch the system
 .PHONY: switch
 switch:
-	sudo -i nixos-rebuild switch
+	sudo -i ./scripts/nixos-rebuild.sh "$(shell pwd)/hosts/$(shell hostname -s)/configuration.nix" switch --show-trace
 
-# boot is not allowed to specify nixos-config as only the base repo (not any
-# of the git worktrees) may switch the system
 .PHONY: boot
 boot:
-	sudo -i nixos-rebuild boot
+	sudo -i ./scripts/nixos-rebuild.sh "$(shell pwd)/hosts/$(shell hostname -s)/configuration.nix" boot --show-trace
 
 .PHONY: brew
 brew:
