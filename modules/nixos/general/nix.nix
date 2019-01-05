@@ -21,7 +21,7 @@ in {
 
     nixPath = [
       "nixos-config=/etc/nixos/configuration.nix"
-      "nixpkgs=/etc/nixpkgs"
+      "nixpkgs=/run/current-system//nixpkgs"
       "shabka-path=/etc/shabka"
     ];
 
@@ -45,12 +45,12 @@ in {
     distributedBuilds = true;
   };
 
+
+  # Pin the nixpkgs under /run/current-system/nixpkgs
+  # Alternatively, this can be via the activationScripts
   # system.activationScripts.pinnixpkgs = ''
-  #   echo "setting up /etc/nixpkgs..."
-  #   ln -sfn ${pinnedNixpkgs} /etc/nixpkgs
+  #   echo "setting up /run/current-nixpkgs..."
+  #   ln -sfn ${pinnedNixpkgs} /run/current-nixpkgs
   # '';
-
-  # system.extraSystemBuilderCmds = ''ln -sv ${pinnedNixpkgs} $out/nixpkgs'';
-
-  environment.etc = [ { source = pinnedNixpkgs; target = "nixpkgs"; } ];
+  system.extraSystemBuilderCmds = ''ln -sv ${pinnedNixpkgs} $out/nixpkgs'';
 }
