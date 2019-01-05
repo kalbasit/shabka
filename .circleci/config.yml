@@ -7,17 +7,7 @@ var_1: &install-dependencies
     command: |
       nix-env -iA nixpkgs.gitAndTools.git nixpkgs.cachix
 
-var_2: &compute-nix-path
-  run:
-    name: Computing NIX_PATH
-    command: |
-      readonly shabka_path="$( pwd )"
-      readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
-      readonly nixpkgs="$( nix eval --raw "(import ${nixpkgs_stable} {})" )"
-
-      export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=${shabka_path}"
-
-var_3: &enable-cachix
+var_2: &enable-cachix
   run:
     name: Enable cachix
     command: |
@@ -40,12 +30,17 @@ jobs:
     steps:
       - checkout
       - *install-dependencies
-      - *compute-nix-path
       - *enable-cachix
       - run:
           name: Instantiate athena
           working_directory: /go/src/github.com/kalbasit/shabka
           command: |
+            readonly shabka_path="$( pwd )"
+            readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
+            readonly nixpkgs="$( nix eval --raw "(import ${nixpkgs_stable} {})" )"
+
+            export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=${shabka_path}"
+
             nix-instantiate ./hosts/athena
 
   cratos:
@@ -60,12 +55,17 @@ jobs:
     steps:
       - checkout
       - *install-dependencies
-      - *compute-nix-path
       - *enable-cachix
       - run:
           name: Instantiate cratos
           working_directory: /go/src/github.com/kalbasit/shabka
           command: |
+            readonly shabka_path="$( pwd )"
+            readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
+            readonly nixpkgs="$( nix eval --raw "(import ${nixpkgs_stable} {})" )"
+
+            export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=${shabka_path}"
+
             nix-instantiate ./hosts/cratos
 
   hades:
@@ -80,12 +80,17 @@ jobs:
     steps:
       - checkout
       - *install-dependencies
-      - *compute-nix-path
       - *enable-cachix
       - run:
           name: Instantiate hades
           working_directory: /go/src/github.com/kalbasit/shabka
           command: |
+            readonly shabka_path="$( pwd )"
+            readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
+            readonly nixpkgs="$( nix eval --raw "(import ${nixpkgs_stable} {})" )"
+
+            export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=${shabka_path}"
+
             nix-instantiate ./hosts/hades
 
   zeus:
@@ -100,12 +105,17 @@ jobs:
     steps:
       - checkout
       - *install-dependencies
-      - *compute-nix-path
       - *enable-cachix
       - run:
           name: Instantiate zeus
           working_directory: /go/src/github.com/kalbasit/shabka
           command: |
+            readonly shabka_path="$( pwd )"
+            readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
+            readonly nixpkgs="$( nix eval --raw "(import ${nixpkgs_stable} {})" )"
+
+            export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=${shabka_path}"
+
             nix-instantiate ./hosts/zeus
 
 workflows:
