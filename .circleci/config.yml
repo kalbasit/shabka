@@ -5,10 +5,11 @@ var_1: &compute-nix-path
   run:
     name: Computing NIX_PATH
     command: |
-      readonly nixpkgs_stable="$( pwd )/external/nixpkgs-stable.nix"
+      readonly shabka_path="$( pwd )"
+      readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
       readonly nixpkgs="$( nix eval --raw "(import ${nixpkgs_stable} {})" )"
 
-      export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=$( pwd )"
+      export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=${shabka_path}"
 
 var_2: &install-dependencies
   run:
