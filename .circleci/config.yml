@@ -1,7 +1,13 @@
 var_0: &global_env
   CACHIX_CACHE: yl
 
-var_1: &compute-nix-path
+var_1: &install-dependencies
+  run:
+    name: Install dependencies
+    command: |
+      nix-env -iA nixpkgs.gitAndTools.git nixpkgs.cachix
+
+var_2: &compute-nix-path
   run:
     name: Computing NIX_PATH
     command: |
@@ -10,12 +16,6 @@ var_1: &compute-nix-path
       readonly nixpkgs="$( nix eval --raw "(import ${nixpkgs_stable} {})" )"
 
       export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=${shabka_path}"
-
-var_2: &install-dependencies
-  run:
-    name: Install dependencies
-    command: |
-      nix-env -iA nixpkgs.gitAndTools.git nixpkgs.cachix
 
 var_3: &enable-cachix
   run:
@@ -39,8 +39,8 @@ jobs:
 
     steps:
       - checkout
-      - *compute-nix-path
       - *install-dependencies
+      - *compute-nix-path
       - *enable-cachix
       - run:
           name: Instantiate athena
@@ -59,8 +59,8 @@ jobs:
 
     steps:
       - checkout
-      - *compute-nix-path
       - *install-dependencies
+      - *compute-nix-path
       - *enable-cachix
       - run:
           name: Instantiate cratos
@@ -79,8 +79,8 @@ jobs:
 
     steps:
       - checkout
-      - *compute-nix-path
       - *install-dependencies
+      - *compute-nix-path
       - *enable-cachix
       - run:
           name: Instantiate hades
@@ -99,8 +99,8 @@ jobs:
 
     steps:
       - checkout
-      - *compute-nix-path
       - *install-dependencies
+      - *compute-nix-path
       - *enable-cachix
       - run:
           name: Instantiate zeus
