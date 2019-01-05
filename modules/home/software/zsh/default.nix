@@ -184,7 +184,7 @@ in {
       initExtra = builtins.readFile (substituteAll {
         src = ./init-extra.zsh;
 
-        bat_bin     = "${getBin bat}/bin/bat";
+        bat_bin      = "${getBin bat}/bin/bat";
         exa_bin      = "${getBin exa}/bin/exa";
         fortune_bin  = "${getBin fortune}/bin/fortune";
         fzf_bin      = "${getBin fzf}/bin/fzf-tmux";
