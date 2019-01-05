@@ -21,8 +21,8 @@ in {
 
     nixPath = [
       "nixos-config=/etc/nixos/configuration.nix"
-      "nixpkgs=/run/current-system//nixpkgs"
-      "shabka-path=/etc/shabka"
+      "nixpkgs=/run/current-system/nixpkgs"
+      "shabka-path=/run/current-system/shabka"
     ];
 
     optimise = {
@@ -52,5 +52,8 @@ in {
   #   echo "setting up /run/current-nixpkgs..."
   #   ln -sfn ${pinnedNixpkgs} /run/current-nixpkgs
   # '';
-  system.extraSystemBuilderCmds = ''ln -sv ${pinnedNixpkgs} $out/nixpkgs'';
+  system.extraSystemBuilderCmds = ''
+    ln -sv ${pinnedNixpkgs} $out/nixpkgs
+    ln -sv ${shabka-path} $out/shabka
+  '';
 }
