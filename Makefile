@@ -14,15 +14,15 @@ build:
 
 .PHONY: test
 test:
-	sudo -i ./scripts/nixos-rebuild.sh "$(shell pwd)/hosts/$(shell hostname -s)/configuration.nix" test --show-trace
+	sudo ./scripts/nixos-rebuild.sh "$(shell pwd)/hosts/$(shell hostname -s)/configuration.nix" test --show-trace
 
 .PHONY: switch
 switch:
-	sudo -i ./scripts/nixos-rebuild.sh "$(shell pwd)/hosts/$(shell hostname -s)/configuration.nix" switch --show-trace
+	sudo ./scripts/nixos-rebuild.sh "$(shell pwd)/hosts/$(shell hostname -s)/configuration.nix" switch --show-trace
 
 .PHONY: boot
 boot:
-	sudo -i ./scripts/nixos-rebuild.sh "$(shell pwd)/hosts/$(shell hostname -s)/configuration.nix" boot --show-trace
+	sudo ./scripts/nixos-rebuild.sh "$(shell pwd)/hosts/$(shell hostname -s)/configuration.nix" boot --show-trace
 
 .PHONY: brew
 brew:
