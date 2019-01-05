@@ -1,28 +1,22 @@
 var_0: &global_env
-  NIXPKGS_CHANNEL: https://nixos.org/channels/nixos-18.09
-  DARWIN_CHANNEL: https://github.com/LnL7/nix-darwin/archive/master.tar.gz
   CACHIX_CACHE: yl
 
-var_1: &add-channels
+var_1: &compute-nix-path
   run:
-    name: Adding all channels
+    name: Computing NIX_PATH
     command: |
-      nix-channel --add "${NIXPKGS_CHANNEL}" nixpkgs
-      nix-channel --add "${DARWIN_CHANNEL}" darwin
+      readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
+      readonly nixpkgs="$( nix eval --raw "(import ${nixpkgs_stable} {})" )"
 
-var_2: &update-channels
-  run:
-    name: Updating all channels
-    command: |
-      nix-channel --update
+      export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=$( pwd )"
 
-var_3: &install-dependencies
+var_2: &install-dependencies
   run:
     name: Install dependencies
     command: |
       nix-env -iA nixpkgs.gitAndTools.git nixpkgs.cachix
 
-var_4: &enable-cachix
+var_3: &enable-cachix
   run:
     name: Enable cachix
     command: |
@@ -44,14 +38,14 @@ jobs:
 
     steps:
       - checkout
-      - *add-channels
-      - *update-channels
+      - *compute-nix-path
       - *install-dependencies
       - *enable-cachix
       - run:
           name: Instantiate athena
           working_directory: /go/src/github.com/kalbasit/shabka
-          command: nix-instantiate ./hosts/athena
+          command: |
+            nix-instantiate ./hosts/athena
 
   cratos:
     working_directory: /go/src/github.com/kalbasit/shabka
@@ -64,14 +58,14 @@ jobs:
 
     steps:
       - checkout
-      - *add-channels
-      - *update-channels
+      - *compute-nix-path
       - *install-dependencies
       - *enable-cachix
       - run:
           name: Instantiate cratos
           working_directory: /go/src/github.com/kalbasit/shabka
-          command: nix-instantiate ./hosts/cratos
+          command: |
+            nix-instantiate ./hosts/cratos
 
   hades:
     working_directory: /go/src/github.com/kalbasit/shabka
@@ -84,14 +78,14 @@ jobs:
 
     steps:
       - checkout
-      - *add-channels
-      - *update-channels
+      - *compute-nix-path
       - *install-dependencies
       - *enable-cachix
       - run:
           name: Instantiate hades
           working_directory: /go/src/github.com/kalbasit/shabka
-          command: nix-instantiate ./hosts/hades
+          command: |
+            nix-instantiate ./hosts/hades
 
   zeus:
     working_directory: /go/src/github.com/kalbasit/shabka
@@ -104,14 +98,14 @@ jobs:
 
     steps:
       - checkout
-      - *add-channels
-      - *update-channels
+      - *compute-nix-path
       - *install-dependencies
       - *enable-cachix
       - run:
           name: Instantiate zeus
           working_directory: /go/src/github.com/kalbasit/shabka
-          command: nix-instantiate ./hosts/zeus
+          command: |
+            nix-instantiate ./hosts/zeus
 
 workflows:
   version: 2
