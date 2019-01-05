@@ -1,6 +1,5 @@
 #! /usr/bin/env nix-shell
 
-#! nix-shell -I nixpkgs=./external/nixpkgs-stable.nix
 #! nix-shell -i bash -p nix-prefetch-git jq
 
 # TODO: The purpose of this script is to print the ref (if not a commit) as

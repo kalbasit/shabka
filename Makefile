@@ -33,30 +33,30 @@ update-external: update-home-manager update-nixpkgs-stable update-nixpkgs-unstab
 
 .PHONY: update-home-manager
 update-home-manager:
-	$(shell pwd)/scripts/nix-prefetch-git.sh https://github.com/rycee/home-manager.git "$(HOME_MANAGER_REF)" | tee tmp
-	mv tmp external/home-manager-version.json
+	$(shell pwd)/scripts/nix-prefetch-git.sh https://github.com/rycee/home-manager.git "$(HOME_MANAGER_REF)" > tmp && mv tmp external/home-manager-version.json
+	rm -f tmp
 
 .PHONY: update-nixpkgs-stable
 update-nixpkgs-stable:
-	$(shell pwd)/scripts/nix-prefetch-git.sh https://github.com/NixOS/nixpkgs-channels.git "$(NIXPKGS_STABLE_REF)" | tee tmp
-	mv tmp external/nixpkgs-stable-version.json
+	$(shell pwd)/scripts/nix-prefetch-git.sh https://github.com/NixOS/nixpkgs-channels.git "$(NIXPKGS_STABLE_REF)" > tmp && mv tmp external/nixpkgs-stable-version.json
+	rm -f tmp
 
 .PHONY: update-nixpkgs-unstable
 update-nixpkgs-unstable:
-	$(shell pwd)/scripts/nix-prefetch-git.sh https://github.com/NixOS/nixpkgs-channels.git "$(NIXPKGS_UNSTABLE_REF)" | tee tmp
-	mv tmp external/nixpkgs-unstable-version.json
+	$(shell pwd)/scripts/nix-prefetch-git.sh https://github.com/NixOS/nixpkgs-channels.git "$(NIXPKGS_UNSTABLE_REF)" > tmp && mv tmp external/nixpkgs-unstable-version.json
+	rm -f tmp
 
 .PHONY: update-nixos-hardware
 update-nixos-hardware:
-	$(shell pwd)/scripts/nix-prefetch-git.sh https://github.com/NixOS/nixos-hardware.git "$(NIXOS_HARDWARE_REF)" | tee tmp
-	mv tmp external/nixos-hardware-version.json
+	$(shell pwd)/scripts/nix-prefetch-git.sh https://github.com/NixOS/nixos-hardware.git "$(NIXOS_HARDWARE_REF)" > tmp && mv tmp external/nixos-hardware-version.json
+	rm -f tmp
 
 .PHONY: update-nur
 update-nur:
-	$(shell pwd)/scripts/nix-prefetch-git.sh https://github.com/nix-community/NUR.git "$(NUR_REF)" | tee tmp
-	mv tmp external/nur-version.json
+	$(shell pwd)/scripts/nix-prefetch-git.sh https://github.com/nix-community/NUR.git "$(NUR_REF)" > tmp && mv tmp external/nur-version.json
+	rm -f tmp
 
 .PHONY: update-kalbasit-nur
 update-kalbasit-nur:
-	$(shell pwd)/scripts/nix-prefetch-git.sh https://github.com/kalbasit/nur-packages.git "$(KALBASIT_NUR_REF)" | tee tmp
-	mv tmp external/kalbasit-nur-version.json
+	$(shell pwd)/scripts/nix-prefetch-git.sh https://github.com/kalbasit/nur-packages.git "$(KALBASIT_NUR_REF)" > tmp && mv tmp external/kalbasit-nur-version.json
+	rm -f tmp
