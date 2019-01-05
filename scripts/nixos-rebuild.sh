@@ -29,4 +29,7 @@ fi
 readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
 readonly nixpkgs="$( nix eval --raw "(import ${nixpkgs_stable} {})" )"
 
-nixos-rebuild -I nixpkgs="${nixpkgs}" -I "nixos_config=${nixos_config}" "${action}" "${@}"
+unset NIX_PATH
+
+set -x
+nixos-rebuild -I nixpkgs="${nixpkgs}" -I "nixos-config=${nixos_config}" "${action}" "${@}"
