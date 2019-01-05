@@ -1,10 +1,12 @@
-{ config, pkgs, lib, ... }:
+{ pkgs, lib, ... }:
 
 with lib;
 
 let
 
   shabka-path = builtins.toPath ./../../..;
+
+  pinnedNixpkgs = import ../../../external/nixpkgs-stable.nix {};
 
 in {
   nix = {
@@ -42,4 +44,13 @@ in {
 
     distributedBuilds = true;
   };
+
+  # system.activationScripts.pinnixpkgs = ''
+  #   echo "setting up /etc/nixpkgs..."
+  #   ln -sfn ${pinnedNixpkgs} /etc/nixpkgs
+  # '';
+
+  # system.extraSystemBuilderCmds = ''ln -sv ${pinnedNixpkgs} $out/nixpkgs'';
+
+  environment.etc = [ { source = pinnedNixpkgs; target = "nixpkgs"; } ];
 }
