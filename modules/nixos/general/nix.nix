@@ -32,7 +32,6 @@ in {
 
     binaryCaches = [
       "https://cache.nixos.org/"
-      "https://kalbasit.cachix.org"
       "https://yl.cachix.org"
     ];
     binaryCachePublicKeys = [
