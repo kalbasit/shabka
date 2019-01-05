@@ -128,7 +128,6 @@ in {
         gl = "github_commit_link";
         http = "http --print=HhBb";
         kube = "kubectl";
-        less = "${bat}/bin/bat";
         ll = "ls -la";
         pw = "ps aux | grep -v grep | grep -e";
         rot13 = "tr \"[A-Za-z]\" \"[N-ZA-Mn-za-m]\"";
@@ -185,11 +184,13 @@ in {
       initExtra = builtins.readFile (substituteAll {
         src = ./init-extra.zsh;
 
+        bat_bin      = "${getBin bat}/bin/bat";
         exa_bin      = "${getBin exa}/bin/exa";
         fortune_bin  = "${getBin fortune}/bin/fortune";
         fzf_bin      = "${getBin fzf}/bin/fzf-tmux";
         home_path    = "${config.home.homeDirectory}";
         jq_bin       = "${getBin jq}/bin/jq";
+        less_bin     = "${getBin less}/bin/less";
         tput_bin     = "${getBin ncurses}/bin/tput";
       });
 
