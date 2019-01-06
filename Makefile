@@ -1,59 +1,62 @@
-.PHONY: all build test switch boot brew add-channels update-channels \
-	update-external update-home-manager update-nixpkgs update-nixos-hardware \
-	update-nur update-kalbasit-nur
+HOME_MANAGER_REF     ?= refs/heads/master
+KALBASIT_NUR_REF     ?= refs/heads/master
+NIXOS_HARDWARE_REF   ?= refs/heads/master
+NIXPKGS_UNSTABLE_REF ?= refs/heads/nixos-unstable
+NIXPKGS_STABLE_REF   ?= refs/heads/nixos-18.09
+NUR_REF              ?= refs/heads/master
 
-HOME_MANAGER_REF   ?= refs/heads/master
-KALBASIT_NUR_REF   ?= refs/heads/master
-NIXOS_HARDWARE_REF ?= refs/heads/master
-NIXPKGS_REF        ?= refs/heads/nixos-unstable
-NUR_REF            ?= refs/heads/master
-
+.PHONY: all
 all: build
 
+.PHONY: build
 build:
-	nixos-rebuild -I nixos-config=$(shell pwd)/hosts/$(shell hostname -s)/configuration.nix build --show-trace
+	./scripts/nixos-rebuild.sh "$(shell pwd)/hosts/$(shell hostname -s)/configuration.nix" build --show-trace
 
+.PHONY: test
 test:
-	sudo -i nixos-rebuild -I nixos-config=$(shell pwd)/hosts/$(shell hostname -s)/configuration.nix test
+	sudo ./scripts/nixos-rebuild.sh "$(shell pwd)/hosts/$(shell hostname -s)/configuration.nix" test --show-trace
 
-# switch is not allowed to specify nixos-config as only the base repo (not any
-# of the git worktrees) may switch the system
+.PHONY: switch
 switch:
-	sudo -i nixos-rebuild switch
+	sudo ./scripts/nixos-rebuild.sh "$(shell pwd)/hosts/$(shell hostname -s)/configuration.nix" switch --show-trace
 
-# boot is not allowed to specify nixos-config as only the base repo (not any
-# of the git worktrees) may switch the system
+.PHONY: boot
 boot:
-	sudo -i nixos-rebuild boot
+	sudo ./scripts/nixos-rebuild.sh "$(shell pwd)/hosts/$(shell hostname -s)/configuration.nix" boot --show-trace
 
+.PHONY: brew
 brew:
 	brew bundle --file=os-specific/darwin/Brewfile
 
-add-channels:
-	@echo ">>> Adding all the relevant channels, this will override any previously added channel if the version is different"
-	@echo
-	sudo -i nix-channel --add https://nixos.org/channels/nixos-18.09 nixos
-	@echo
+.PHONY: update-external
+update-external: update-home-manager update-nixpkgs-stable update-nixpkgs-unstable update-nixos-hardware update-nur update-kalbasit-nur
 
-update-channels:
-	@echo ">>> Updating all channels"
-	@echo
-	sudo -i nix-channel --update
-	@echo
-
-update-external: update-home-manager update-nixpkgs update-nixos-hardware update-nur update-kalbasit-nur
-
+.PHONY: update-home-manager
 update-home-manager:
-	nix-shell -p nix-prefetch-git --run "nix-prefetch-git https://github.com/rycee/home-manager.git $(HOME_MANAGER_REF)" > external/home-manager-version.json
+	$(shell pwd)/scripts/nix-prefetch-git.sh https://github.com/rycee/home-manager.git "$(HOME_MANAGER_REF)" > tmp && mv tmp external/home-manager-version.json
+	rm -f tmp
 
-update-nixpkgs:
-	nix-shell -p nix-prefetch-git --run "nix-prefetch-git https://github.com/NixOS/nixpkgs-channels.git $(NIXPKGS_REF)" > external/nixpkgs-version.json
+.PHONY: update-nixpkgs-stable
+update-nixpkgs-stable:
+	$(shell pwd)/scripts/nix-prefetch-git.sh https://github.com/NixOS/nixpkgs-channels.git "$(NIXPKGS_STABLE_REF)" > tmp && mv tmp external/nixpkgs-stable-version.json
+	rm -f tmp
 
+.PHONY: update-nixpkgs-unstable
+update-nixpkgs-unstable:
+	$(shell pwd)/scripts/nix-prefetch-git.sh https://github.com/NixOS/nixpkgs-channels.git "$(NIXPKGS_UNSTABLE_REF)" > tmp && mv tmp external/nixpkgs-unstable-version.json
+	rm -f tmp
+
+.PHONY: update-nixos-hardware
 update-nixos-hardware:
-	nix-shell -p nix-prefetch-git --run "nix-prefetch-git https://github.com/NixOS/nixos-hardware.git $(NIXOS_HARDWARE_REF)" > external/nixos-hardware-version.json
+	$(shell pwd)/scripts/nix-prefetch-git.sh https://github.com/NixOS/nixos-hardware.git "$(NIXOS_HARDWARE_REF)" > tmp && mv tmp external/nixos-hardware-version.json
+	rm -f tmp
 
+.PHONY: update-nur
 update-nur:
-	nix-shell -p nix-prefetch-git --run "nix-prefetch-git https://github.com/nix-community/NUR.git $(NUR_REF)" > external/nur-version.json
+	$(shell pwd)/scripts/nix-prefetch-git.sh https://github.com/nix-community/NUR.git "$(NUR_REF)" > tmp && mv tmp external/nur-version.json
+	rm -f tmp
 
+.PHONY: update-kalbasit-nur
 update-kalbasit-nur:
-	nix-shell -p nix-prefetch-git --run "nix-prefetch-git https://github.com/kalbasit/nur-packages.git $(KALBASIT_NUR_REF)" > external/kalbasit-nur-version.json
+	$(shell pwd)/scripts/nix-prefetch-git.sh https://github.com/kalbasit/nur-packages.git "$(KALBASIT_NUR_REF)" > tmp && mv tmp external/kalbasit-nur-version.json
+	rm -f tmp

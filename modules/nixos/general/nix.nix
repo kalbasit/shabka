@@ -1,10 +1,12 @@
-{ config, pkgs, lib, ... }:
+{ pkgs, lib, ... }:
 
 with lib;
 
 let
 
   shabka-path = builtins.toPath ./../../..;
+
+  pinnedNixpkgs = import ../../../external/nixpkgs-stable.nix {};
 
 in {
   nix = {
@@ -19,8 +21,8 @@ in {
 
     nixPath = [
       "nixos-config=/etc/nixos/configuration.nix"
-      "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
-      "shabka-path=${shabka-path}"
+      "nixpkgs=/run/current-system/nixpkgs"
+      "shabka-path=/run/current-system/shabka"
     ];
 
     optimise = {
@@ -30,7 +32,6 @@ in {
 
     binaryCaches = [
       "https://cache.nixos.org/"
-      "https://kalbasit.cachix.org"
       "https://yl.cachix.org"
     ];
     binaryCachePublicKeys = [
@@ -42,4 +43,16 @@ in {
 
     distributedBuilds = true;
   };
+
+
+  # Pin the nixpkgs under /run/current-system/nixpkgs
+  # Alternatively, this can be via the activationScripts
+  # system.activationScripts.pinnixpkgs = ''
+  #   echo "setting up /run/current-nixpkgs..."
+  #   ln -sfn ${pinnedNixpkgs} /run/current-nixpkgs
+  # '';
+  system.extraSystemBuilderCmds = ''
+    ln -sv ${pinnedNixpkgs} $out/nixpkgs
+    ln -sv ${shabka-path} $out/shabka
+  '';
 }

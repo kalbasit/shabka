@@ -9,6 +9,4 @@ nixpkgs.mkShell {
       ps.aws
     ]))
   ];
-
-  NIXOPS_STATE = "/yl/keybase/private/ylcodes/system/deployments.nixops";
 }
