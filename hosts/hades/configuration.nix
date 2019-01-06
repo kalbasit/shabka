@@ -59,10 +59,6 @@ in {
     builders-use-substitutes = true
   '';
 
-  services.autorandr = {
-    enable = true;
-  };
-
   mine.gnupg.enable = true;
   mine.hardware.intel_backlight.enable = true;
   mine.printing.enable = true;

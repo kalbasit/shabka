@@ -9,6 +9,7 @@ with import ../../../util;
 
   config = mkIf config.mine.workstation.enable {
     mine.workstation = enableMultiple [
+      "autorandr"
       "fonts"
       "gnome-keyring"
       "networking"
