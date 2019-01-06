@@ -13,6 +13,8 @@ with lib;
       }
     ];
 
+    services.polybar = import ./polybar.lib.nix { inherit config pkgs lib; };
+
     home.file."Desktop/.keep".text = "";
     xdg.configFile."i3status/config".source = ./i3status-config;
 
