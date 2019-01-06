@@ -23,7 +23,7 @@ in {
               enable = true;
               position = "0x0";
               mode = "1920x1080";
-              gamma = "1.0:0.769:0.556";
+              gamma = "1.0:0.909:0.909";
               rate = "60.03";
             };
           };
@@ -40,7 +40,7 @@ in {
               enable = true;
               position = "0x0";
               mode = "1920x1080";
-              gamma = "1.0:0.769:0.556";
+              gamma = "1.0:0.909:0.909";
               rate = "60.03";
             };
 
@@ -49,7 +49,7 @@ in {
               primary = true;
               position = "1920x0";
               mode = "3440x1440";
-              gamma = "1.0:0.769:0.556";
+              gamma = "1.0:0.909:0.909";
               rate = "59.97";
             };
           };
