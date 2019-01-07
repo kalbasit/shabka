@@ -2,6 +2,7 @@
 , pkgs
 }:
 
+with pkgs;
 with pkgs.lib;
 
 let
@@ -10,11 +11,27 @@ let
     inherit (pinnedVersion) url rev;
   };
 
+  importPinned = import pinned {};
+
   mkAssertMsg = name: "${name} is available upsteam, kill this patch";
 
-  patches = [];
+  patches = [
+    # https://github.com/rycee/home-manager/pull/529
+    (
+      let
+        importPinned.programs.autorandr.profiles = {
+          "default" = { config = { eDP1 = {}; }; };
+        };
+      in
+        assert assertMsg (! importPinned.programs.autorandr.profiles."default".config.eDP1 ? transform) (mkAssertMsg "transform");
+        fetchpatch {
+          url = "https://github.com/rycee/home-manager/pull/529.patch";
+          sha256 = "0k7d2za7hzsgqx77flzdkkadal0l3awzf047i521rzszkldc138r";
+        }
+    )
+  ];
 
-  patched = pkgs.runCommand "home-manager-${pinnedVersion.rev}"
+  patched = runCommand "home-manager-${pinnedVersion.rev}"
     {
       inherit pinned patches;
 

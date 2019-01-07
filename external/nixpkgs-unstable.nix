@@ -2,6 +2,7 @@
 , pkgs
 }:
 
+with pkgs;
 with pkgs.lib;
 
 let
@@ -19,7 +20,7 @@ let
 
   patches = [];
 
-  patched = pkgs.runCommand "nixpkgs-unstable-${pinnedVersion.rev}"
+  patched = runCommand "nixpkgs-unstable-${pinnedVersion.rev}"
     {
       inherit pinned patches;
 
