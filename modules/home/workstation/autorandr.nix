@@ -7,10 +7,6 @@ let
 in {
   options.mine.workstation.autorandr = {
     enable = mkEnableOption "Enable autorandr";
-    monitor = mkOption {
-      description = "The EDID of the internal monitor";
-      type = types.str;
-    };
   };
 
   config = mkIf cfg.enable {
@@ -44,50 +40,6 @@ in {
             # Go to my personal workspace
             i3-msg "workspace personal@base"
           '';
-        };
-      };
-
-      profiles = {
-        "default" = {
-          fingerprint = {
-            eDP-1 = cfg.monitor;
-          };
-
-          config = {
-            eDP-1 = {
-              enable = true;
-              position = "0x0";
-              mode = "1920x1080";
-              gamma = "1.0:0.909:0.909";
-              rate = "60.03";
-            };
-          };
-        };
-
-        "home" = {
-          fingerprint = {
-            eDP-1 = cfg.monitor;
-            DP-2 = "00ffffffffffff001e6de25a28530600071a0104a55022789eca95a6554ea1260f50542108007140818081c0a9c0b300d1c081000101e77c70a0d0a0295030203a00204f3100001a9d6770a0d0a0225030203a00204f3100001a000000fd00383d1e5a20000a202020202020000000fc004c4720554c545241574944450a01e4020316712309060749100403011f13595a12830100009f3d70a0d0a0155030203a00204f3100001a7e4800e0a0381f4040403a00204f31000018011d007251d01e206e285500204f3100001e8c0ad08a20e02d10103e9600204f31000018000000000000000000000000000000000000000000000000000000000000000000aa";
-          };
-
-          config = {
-            eDP-1 = {
-              enable = true;
-              position = "0x0";
-              mode = "1920x1080";
-              gamma = "1.0:0.909:0.909";
-              rate = "60.03";
-            };
-
-            DP-2 = {
-              enable = true;
-              primary = true;
-              position = "1920x0";
-              mode = "3440x1440";
-              gamma = "1.0:0.909:0.909";
-              rate = "59.97";
-            };
-          };
         };
       };
     };
