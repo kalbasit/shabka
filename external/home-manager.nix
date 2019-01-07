@@ -26,7 +26,7 @@ let
         assert assertMsg (! importPinned.programs.autorandr.profiles."default".config.eDP1 ? transform) (mkAssertMsg "transform");
         fetchpatch {
           url = "https://github.com/rycee/home-manager/pull/529.patch";
-          sha256 = "0pcg4na9nqkc7xhjs71d2bdaysh2r0ydf19vn4xqmnb9fmvr8gmp";
+          sha256 = "0k7d2za7hzsgqx77flzdkkadal0l3awzf047i521rzszkldc138r";
         }
     )
   ];
