@@ -21,6 +21,7 @@ in {
             # Make sure that i3 is running
             if [[ "$( ${getBin pkgs.i3}/bin/i3-msg -t get_outputs | ${getBin pkgs.jq}/bin/jq -r '.[] | select(.active == true) | .name' | wc -l )" -eq 1 ]]; then
               echo "no other monitor, bailing out"
+              exit 0
             fi
 
             # Figure out the identifier of the main monitor
