@@ -62,8 +62,13 @@ in {
   mine.printing.enable = true;
   mine.useColemakKeyboardLayout = true;
   mine.virtualisation.docker.enable = true;
-  mine.workstation.enable = true;
-  mine.workstation.keeptruckin.enable = true;
+
+  mine.workstation = {
+    enable = true;
+
+    autorandr.enable = true;
+    keeptruckin.enable = true;
+  };
 
   mine.openvpn.client.expressvpn = mkIf enableExpressVPN {
     enable = true;
