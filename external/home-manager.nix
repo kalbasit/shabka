@@ -15,21 +15,7 @@ let
 
   mkAssertMsg = name: "${name} is available upsteam, kill this patch";
 
-  patches = [
-    # https://github.com/rycee/home-manager/pull/529
-    (
-      let
-        importPinned.programs.autorandr.profiles = {
-          "default" = { config = { eDP1 = {}; }; };
-        };
-      in
-        assert assertMsg (! importPinned.programs.autorandr.profiles."default".config.eDP1 ? transform) (mkAssertMsg "transform");
-        fetchpatch {
-          url = "https://github.com/rycee/home-manager/pull/529.patch";
-          sha256 = "0k8x79wla8nfrjr57wfx05kcxv4yjbjhaaa2l91hhm75drjswiig";
-        }
-    )
-  ];
+  patches = [];
 
   patched = runCommand "home-manager-${pinnedVersion.rev}"
     {
