@@ -16,7 +16,7 @@ with lib;
     home.file = {
       "ssh/authorized_keys".source = builtins.fetchurl {
         url = "https://github.com/kalbasit.keys";
-        sha256 = "033rs0pnm8aiycrfmx04qx8fmnkfdhp4hy3kdpgil3cgbgff9736";
+        sha256 = "1ijzn5nmh7fcpky9zz6dsbps3pad67nlp0cs0zrs46f0bcy9cqjr";
       };
     };
 
