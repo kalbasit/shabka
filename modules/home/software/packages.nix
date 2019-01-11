@@ -26,6 +26,8 @@ in {
 
     gotop
 
+    jetbrains.idea-community
+
     jq
 
     jrnl
