@@ -92,6 +92,7 @@ in {
         { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "astroid"; }; }
         { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "Ptask"; }; }
         { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "pulse-sms"; }; }
+        { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "Keybase"; }; }
       ];
     };
 
@@ -244,6 +245,7 @@ in {
       "${thirdModifier}+m" = "[class=\"astroid\"] scratchpad show";
       "${thirdModifier}+p" = "[class=\"pulse-sms\"] scratchpad show";
       "${thirdModifier}+t" = "[class=\"Ptask\"] scratchpad show";
+      "${thirdModifier}+k" = "[class=\"Keybase\"] scratchpad show";
     };
 
     modes = {
@@ -343,10 +345,11 @@ in {
     bindsym ${defaultModifier}+${thirdModifier}+w mode "$mode_wm"
 
     # Application launcher
-    set $mode_apps Launch: (d) Discord, (i) Irc, (m) Mail, (s) Studio, (t) TaskWarrior, (w) Work IM
+    set $mode_apps Launch: (d) Discord, (i) Irc, (k) Keybase, (m) Mail, (s) Studio, (t) TaskWarrior, (w) Work IM
     mode "$mode_apps" {
       bindsym d exec ${getBin pkgs.discord}/bin/Discord, mode default
       bindsym i exec ${getBin pkgs.alacritty}/bin/alacritty --title=irc --exec=weechat, mode default
+      bindsym k exec ${getBin pkgs.keybase-gui}/bin/keybase-gui, mode default
       bindsym m exec astroid, mode default
       bindsym s exec ${getBin pkgs.obs-studio}/bin/obs, mode default
       bindsym t exec ${getBin pkgs.ptask}/bin/ptask, mode default
