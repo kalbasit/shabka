@@ -118,6 +118,25 @@ jobs:
 
             nix-instantiate ./hosts/zeus
 
+  deploy:
+    working_directory: /go/src/github.com/kalbasit/shabka
+
+    environment:
+      <<: *global_env
+
+    docker:
+      - image: nixos/nix
+
+    steps:
+      - checkout
+      - *install-dependencies
+      - *enable-cachix
+      - run:
+          name: Deploy!
+          working_directory: /go/src/github.com/kalbasit/shabka
+          command: |
+            echo "Deployment is done"
+
 workflows:
   version: 2
   testing:
@@ -130,3 +149,13 @@ workflows:
           context: org-global
       - zeus:
           context: org-global
+      - deploy-approval:
+          type: approval
+          requires:
+            - athena
+            - cratos
+            - hades
+            - zeus
+      - deploy:
+          requires:
+            - deploy-approval
