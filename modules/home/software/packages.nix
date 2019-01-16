@@ -52,6 +52,7 @@ in {
     nur.repos.kalbasit.swm
 
     unstable.corgi
+    unstable.vgo2nix
 
     unzip
 
