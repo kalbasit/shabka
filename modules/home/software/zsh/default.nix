@@ -16,9 +16,6 @@ let
 
       rm -f $out/default.nix
 
-      substituteInPlace $out/add_u2f_key \
-        --subst-var-by pamu2fcfg_bin ${getBin pam_u2f}/bin/pamu2fcfg
-
       substituteInPlace $out/c \
         --subst-var-by archiver_bin ${getBin unstable.archiver}/bin/arc
 
@@ -58,6 +55,9 @@ let
         --subst-var-by git_bin ${getBin git}/bin/git \
         --subst-var-by jq_bin ${getBin jq}/bin/jq \
         --subst-var-by xsel_bin ${getBin xsel}/bin/xsel
+
+      substituteInPlace $out/register_u2f \
+        --subst-var-by pamu2fcfg_bin ${getBin pam_u2f}/bin/pamu2fcfg
 
       substituteInPlace $out/sapg \
         --subst-var-by apg_bin ${getBin apg}/bin/apg
