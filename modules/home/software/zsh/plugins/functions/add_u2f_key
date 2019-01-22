@@ -2,7 +2,6 @@
 # vim:ft=zsh:
 #
 
-
 function add_u2f_key() {
 	{ # begin an always block
 		# TODO: The location of the u2f_keys should be set to
