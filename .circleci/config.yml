@@ -5,9 +5,13 @@ var_1: &install-dependencies
   run:
     name: Install dependencies
     command: |
+      # install git
+      nix-env -f '<nixpkgs>' -iA gitAndTools.git
+
+      # install cachix from nixpkgs at stable
       readonly nixpkgs_stable="external/nixpkgs-stable.nix"
       readonly nixpkgs="$( nix eval --raw "(import ${nixpkgs_stable} {})" )"
-      nix-env -I nixpkgs="${nixpkgs}" -f '<nixpkgs>' -iA gitAndTools.git cachix
+      nix-env -I nixpkgs="${nixpkgs}" -f '<nixpkgs>' -iA cachix
 
 var_2: &enable-cachix
   run:
