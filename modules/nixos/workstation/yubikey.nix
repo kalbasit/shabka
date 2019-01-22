@@ -9,10 +9,9 @@
     yubico-piv-tool
   ];
 
-  services.udev.packages = with pkgs; [
-    libu2f-host
-    yubikey-personalization
-  ];
+  hardware.u2f.enable = true;
 
   services.pcscd.enable = true;
+
+  security.pam.enableU2F = true;
 }
