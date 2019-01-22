@@ -1,0 +1,17 @@
+#
+# vim:ft=zsh:
+#
+
+
+function add_u2f_key() {
+	{ # begin an always block
+		# TODO: The location of the u2f_keys should be set to
+		# security.pam.u2f.authfile after the PR
+		# https://github.com/NixOS/nixpkgs/pull/11886 is merged!
+		readonly u2f_keys="${HOME}/.config/Yubico/u2f_keys"
+		mkdir -p "$( dirname "${u2f_keys}" )"
+		@pamu2fcfg_bin@ >> "${u2f_keys}"
+	} always {
+		unfunction -m "$0_*"
+	}
+}

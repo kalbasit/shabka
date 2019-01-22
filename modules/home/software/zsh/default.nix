@@ -16,6 +16,9 @@ let
 
       rm -f $out/default.nix
 
+      substituteInPlace $out/add_u2f_key \
+        --subst-var-by pamu2fcfg_bin ${getBin pam_u2f}/bin/pamu2fcfg
+
       substituteInPlace $out/c \
         --subst-var-by archiver_bin ${getBin unstable.archiver}/bin/arc
 
