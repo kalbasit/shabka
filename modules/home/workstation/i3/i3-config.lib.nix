@@ -74,6 +74,8 @@ let
 in {
   enable = true;
 
+  package = pkgs.i3-gaps;
+
   config = {
     fonts = [ "pango:SourceCodePro Regular 8" ];
 
@@ -237,7 +239,7 @@ in {
       "${defaultModifier}+${thirdModifier}+m" = "mode move";
 
       # Make the currently focused window a scratchpad
-      "${defaultModifier}+Shift+minus" = "move scratchpad";
+      "${defaultModifier}+${secondModifier}+minus" = "move scratchpad";
 
       # Show the next scratchpad windows
       "${defaultModifier}+minus" = "scratchpad show";
@@ -307,6 +309,13 @@ in {
       { command = "${getBin pkgs.haskellPackages.greenclip}/bin/greenclip daemon"; always = false; notification = false; }
       { command = "i3-msg \"workspace personal@base; exec ${nosid} ${getBin pkgs.termite}/bin/termite\""; always = false; notification = true; }
     ];
+
+    gaps = {
+      inner = 10;
+      outer = 10;
+      smartGaps = true;
+      smartBorders = "on";
+    };
   };
 
   extraConfig = ''
@@ -377,6 +386,50 @@ in {
       bindsym Escape mode default
     }
     bindsym ${defaultModifier}+${thirdModifier}+d mode "$mode_display"
+
+    ## Management of i3 Gaps
+    set $mode_gaps Gaps: (o)uter, (i)nner, (h)orizontal, (v)ertical, (t)op, (r)ight, (b)ottom, (l)eft
+    set $mode_gaps_outer Outer Gaps: +|-|0 (local), Shift + +|-|0 (global)
+    set $mode_gaps_inner Inner Gaps: +|-|0 (local), Shift + +|-|0 (global)
+    set $mode_gaps_horiz Horizontal Gaps: +|-|0 (local), Shift + +|-|0 (global)
+    set $mode_gaps_verti Vertical Gaps: +|-|0 (local), Shift + +|-|0 (global)
+    set $mode_gaps_top Top Gaps: +|-|0 (local), Shift + +|-|0 (global)
+    set $mode_gaps_right Right Gaps: +|-|0 (local), Shift + +|-|0 (global)
+    set $mode_gaps_bottom Bottom Gaps: +|-|0 (local), Shift + +|-|0 (global)
+    set $mode_gaps_left Left Gaps: +|-|0 (local), Shift + +|-|0 (global)
+    bindsym ${defaultModifier}+${secondModifier}+g mode "$mode_gaps"
+
+    mode "$mode_gaps" {
+            bindsym o      mode "$mode_gaps_outer"
+            bindsym i      mode "$mode_gaps_inner"
+            bindsym Return mode "$mode_gaps"
+            bindsym Escape mode "default"
+    }
+
+    mode "$mode_gaps_outer" {
+            bindsym plus  gaps outer current plus 5
+            bindsym minus gaps outer current minus 5
+            bindsym 0     gaps outer current set 0
+
+            bindsym ${secondModifier}+plus  gaps outer all plus 5
+            bindsym ${secondModifier}+minus gaps outer all minus 5
+            bindsym ${secondModifier}+0     gaps outer all set 0
+
+            bindsym Return mode "$mode_gaps"
+            bindsym Escape mode "default"
+    }
+    mode "$mode_gaps_inner" {
+            bindsym plus  gaps inner current plus 5
+            bindsym minus gaps inner current minus 5
+            bindsym 0     gaps inner current set 0
+
+            bindsym ${secondModifier}+plus  gaps inner all plus 5
+            bindsym ${secondModifier}+minus gaps inner all minus 5
+            bindsym ${secondModifier}+0     gaps inner all set 0
+
+            bindsym Return mode "$mode_gaps"
+            bindsym Escape mode "default"
+    }
 
     ## Management of power
     set $mode_power System: (l) lock, (o) logout, (s) suspend, (h) hibernate, (r) reboot, (${secondModifier}+s) shutdown
