@@ -81,6 +81,7 @@ in {
       commands = [
         { command = "floating enable"; criteria = { workspace = "^studio$"; }; }
 
+        { command = "floating enable"; criteria = { class = "^Arandr"; }; }
         { command = "floating enable"; criteria = { class = "^Pavucontrol"; }; }
         { command = "floating enable"; criteria = { class = "^ROX-Filer$"; }; }
         { command = "floating enable"; criteria = { class = "^SimpleScreenRecorder$"; }; }
@@ -347,8 +348,9 @@ in {
     bindsym ${defaultModifier}+${thirdModifier}+w mode "$mode_wm"
 
     # Application launcher
-    set $mode_apps Launch: (d) Discord, (i) Irc${optionalString config.mine.keybase.enable ", (k) Keybase"}, (m) Mail, (s) Studio, (t) TaskWarrior, (w) Work IM
+    set $mode_apps Launch: (a) ARandR, (d) Discord, (i) Irc${optionalString config.mine.keybase.enable ", (k) Keybase"}, (m) Mail, (s) Studio, (t) TaskWarrior, (w) Work IM
     mode "$mode_apps" {
+      bindsym a exec ${getBin pkgs.arandr}/bin/arandr, mode default
       bindsym d exec ${getBin pkgs.discord}/bin/Discord, mode default
       bindsym i exec ${getBin pkgs.termite}/bin/termite --title=irc --exec=weechat, mode default
       ${optionalString config.mine.keybase.enable "bindsym k exec ${getBin pkgs.keybase-gui}/bin/keybase-gui, mode default"}
