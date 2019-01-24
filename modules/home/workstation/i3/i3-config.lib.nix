@@ -63,9 +63,9 @@ let
 
     EOF
 
-    # open a new Alacritty terminal window with vim session inside of it to edit the jrnl entry
+    # open a new terminal window with vim session inside of it to edit the jrnl entry
     readonly line_count="$(wc -l "$jrnl_entry" | awk '{print $1}')"
-    ${getBin pkgs.alacritty}/bin/alacritty --title jrnl_entry --command nvim +$line_count +star -c 'set wrap' -c 'set textwidth=80' -c 'set fo+=t' "$jrnl_entry"
+    ${getBin pkgs.termite}/bin/termite --title jrnl_entry --exec="nvim +$line_count +star -c 'set wrap' -c 'set textwidth=80' -c 'set fo+=t'" "$jrnl_entry"
     readonly content="$( grep -v '^#' "$jrnl_entry" )"
 
     ${getBin pkgs.jrnl}/bin/jrnl "$current_profile" "$content"
@@ -228,8 +228,8 @@ in {
       "${defaultModifier}+${thirdModifier}+c" = "exec ${getBin pkgs.rofi}/bin/rofi -modi \"clipboard:${getBin pkgs.haskellPackages.greenclip}/bin/greenclip print\" -show clipboard";
 
       # Terminals
-      "${defaultModifier}+Return" = "exec ${getBin pkgs.alacritty}/bin/alacritty";
-      "${defaultModifier}+${secondModifier}+Return" = "exec ${getBin pkgs.termite}/bin/termite";
+      "${defaultModifier}+Return" = "exec ${getBin pkgs.termite}/bin/termite";
+      "${defaultModifier}+${secondModifier}+Return" = "exec ${getBin pkgs.alacritty}/bin/alacritty";
 
       # Modes
       "${defaultModifier}+${thirdModifier}+r" = "mode resize";
@@ -304,7 +304,7 @@ in {
       { command = "${getBin pkgs.xlibs.xset}/bin/xset r rate 300 30"; always = false; notification = false; }
       { command = "${getBin pkgs.xcape}/bin/xcape -e 'Control_L=Escape'"; always = false; notification = false; }
       { command = "${getBin pkgs.haskellPackages.greenclip}/bin/greenclip daemon"; always = false; notification = false; }
-      { command = "i3-msg \"workspace personal@base; exec ${nosid} ${getBin pkgs.alacritty}/bin/alacritty\""; always = false; notification = true; }
+      { command = "i3-msg \"workspace personal@base; exec ${nosid} ${getBin pkgs.termite}/bin/termite\""; always = false; notification = true; }
     ];
   };
 
@@ -350,7 +350,7 @@ in {
     set $mode_apps Launch: (d) Discord, (i) Irc${optionalString config.mine.keybase.enable ", (k) Keybase"}, (m) Mail, (s) Studio, (t) TaskWarrior, (w) Work IM
     mode "$mode_apps" {
       bindsym d exec ${getBin pkgs.discord}/bin/Discord, mode default
-      bindsym i exec ${getBin pkgs.alacritty}/bin/alacritty --title=irc --exec=weechat, mode default
+      bindsym i exec ${getBin pkgs.termite}/bin/termite --title=irc --exec=weechat, mode default
       ${optionalString config.mine.keybase.enable "bindsym k exec ${getBin pkgs.keybase-gui}/bin/keybase-gui, mode default"}
       bindsym m exec astroid, mode default
       bindsym s exec ${getBin pkgs.obs-studio}/bin/obs, mode default
