@@ -2,11 +2,12 @@
 
 {
   environment.systemPackages = with pkgs; [
+    yubico-piv-tool
+    yubikey-manager
+    yubikey-neo-manager
     yubikey-personalization
     yubikey-personalization-gui
-    yubikey-neo-manager
     yubioath-desktop
-    yubico-piv-tool
   ];
 
   hardware.u2f.enable = true;
