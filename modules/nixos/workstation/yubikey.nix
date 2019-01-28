@@ -14,5 +14,8 @@
 
   services.pcscd.enable = true;
 
-  security.pam.enableU2F = true;
+  security.pam.u2f = {
+    enable = true;
+    cue = true;
+  };
 }
