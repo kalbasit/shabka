@@ -1,20 +1,30 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-with pkgs;
 
 let
 
-  fakeExt4 = stdenv.mkDerivation rec {
+  fakeExt4 = pkgs.stdenv.mkDerivation rec {
     name = "fakext4-${version}";
     version = "0.0.1";
 
-    src = fetchFromGitHub {
+    src = pkgs.fetchFromGitHub {
       owner = "dimaryaz";
       repo = "dropbox_ext4";
-      ref = "7cb936588ddd5992fb2c2c8f19b6015cf607a4f5";
-      sha256 = "0000000000000000000000000000000000000000000000000000";
+      rev = "7cb936588ddd5992fb2c2c8f19b6015cf607a4f5";
+      sha256 = "18rhjxar46qm38j6cw22xlqrbbl1gvlhrqdpkyd6h3a9lzrplp3a";
     };
+
+    makeFlags = [ "INSTALL_DIR=$(out)" ];
+
+    preInstall = ''
+      mkdir -p $out/lib
+      mkdir -p $out/bin
+    '';
+
+    postInstall = ''
+      rm -rf $out/bin
+    '';
   };
 
 in {
@@ -23,7 +33,7 @@ in {
   config = mkIf config.mine.workstation.dropbox.enable {
     systemd.user.services.dropbox = {
       Environment = {
-        LP_PRELOAD = "${getLib fakeExt4}/lib";
+        LP_PRELOAD = "${getLib fakeExt4}/lib/libdropbox_ext4.so";
       };
 
       Unit = {
