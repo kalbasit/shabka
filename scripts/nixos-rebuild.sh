@@ -27,7 +27,7 @@ fi
 # https://gist.github.com/kalbasit/deec7b74b64f70d24ca1967883c8e7b6 for more
 # details.
 readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
-readonly nixpkgs="$( nix eval --raw "(import ${nixpkgs_stable} {})" )"
+readonly nixpkgs="$( nix-build --no-out-link ${nixpkgs_stable} )"
 
 unset NIX_PATH
 

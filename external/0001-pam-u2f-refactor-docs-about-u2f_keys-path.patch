@@ -1,0 +1,220 @@
+From 9c76ff036fc7a50342b4933a0c1572c578a6edf5 Mon Sep 17 00:00:00 2001
+From: "Wael M. Nasreddine" <wael.nasreddine@gmail.com>
+Date: Sun, 27 Jan 2019 19:12:28 -0800
+Subject: [PATCH] pam-u2f: refactor, docs about u2f_keys path
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+* change enableU2F option to u2f.* set
+* add few u2f options (not all) to customize pam-u2f module
+* document default u2f_keys locations
+
+Co-authored-by: Tomasz Czyż <tomasz.czyz@gmail.com>
+Co-authored-by: Arda Xi <arda@ardaxi.com>
+---
+ nixos/modules/rename.nix       |   3 +
+ nixos/modules/security/pam.nix | 104 +++++++++++++++++++++++++++++----
+ nixos/release.nix              |   1 +
+ nixos/tests/pam-u2f.nix        |  24 ++++++++
+ 4 files changed, 121 insertions(+), 11 deletions(-)
+ create mode 100644 nixos/tests/pam-u2f.nix
+
+diff --git a/nixos/modules/rename.nix b/nixos/modules/rename.nix
+index 4a6bdfe83dd..21e5914f5d4 100644
+--- a/nixos/modules/rename.nix
++++ b/nixos/modules/rename.nix
+@@ -65,6 +65,9 @@ with lib;
+     (mkRemovedOptionModule [ "security" "setuidOwners" ] "Use security.wrappers instead")
+     (mkRemovedOptionModule [ "security" "setuidPrograms" ] "Use security.wrappers instead")
+ 
++    # PAM
++    (mkRenamedOptionModule [ "security" "pam" "enableU2F" ] [ "security" "pam" "u2f" "enable" ])
++
+     (mkRemovedOptionModule [ "services" "rmilter" "bindInetSockets" ] "Use services.rmilter.bindSocket.* instead")
+     (mkRemovedOptionModule [ "services" "rmilter" "bindUnixSockets" ] "Use services.rmilter.bindSocket.* instead")
+ 
+diff --git a/nixos/modules/security/pam.nix b/nixos/modules/security/pam.nix
+index bef10b4fe61..e590b500dbc 100644
+--- a/nixos/modules/security/pam.nix
++++ b/nixos/modules/security/pam.nix
+@@ -37,12 +37,14 @@ let
+       };
+ 
+       u2fAuth = mkOption {
+-        default = config.security.pam.enableU2F;
++        default = config.security.pam.u2f.enable;
+         type = types.bool;
+         description = ''
+           If set, users listed in
+-          <filename>~/.config/Yubico/u2f_keys</filename> are able to log in
+-          with the associated U2F key.
++          <filename>$XDG_CONFIG_HOME/Yubico/u2f_keys</filename> (or
++          <filename>$HOME/.config/Yubico/u2f_keys</filename> if XDG variable is
++          not set) are able to log in with the associated U2F key. Path can be
++          changed using <literal>security.pam.u2f.authfile</literal> option.
+         '';
+       };
+ 
+@@ -290,8 +292,8 @@ let
+               "auth sufficient ${pkgs.pam_ssh_agent_auth}/libexec/pam_ssh_agent_auth.so file=~/.ssh/authorized_keys:~/.ssh/authorized_keys2:/etc/ssh/authorized_keys.d/%u"}
+           ${optionalString cfg.fprintAuth
+               "auth sufficient ${pkgs.fprintd}/lib/security/pam_fprintd.so"}
+-          ${optionalString cfg.u2fAuth
+-              "auth sufficient ${pkgs.pam_u2f}/lib/security/pam_u2f.so"}
++          ${let u2f = config.security.pam.u2f; in optionalString cfg.u2fAuth
++              "auth ${u2f.control} ${pkgs.pam_u2f}/lib/security/pam_u2f.so ${optionalString u2f.debug "debug"} ${optionalString (u2f.authfile != "") "authfile=${u2f.authfile}"} ${optionalString u2f.interactive "interactive"} ${optionalString u2f.cue "cue"}"}
+           ${optionalString cfg.usbAuth
+               "auth sufficient ${pkgs.pam_usb}/lib/security/pam_usb.so"}
+           ${let oath = config.security.pam.oath; in optionalString cfg.oathAuth
+@@ -497,11 +499,91 @@ in
+       '';
+     };
+ 
+-    security.pam.enableU2F = mkOption {
+-      default = false;
+-      description = ''
+-        Enable the U2F PAM module.
+-      '';
++    security.pam.u2f = {
++      enable = mkOption {
++        default = false;
++        type = types.bool;
++        description = ''
++          Enables U2F PAM (<literal>pam-u2f</literal>) module.
++
++          If set, users listed in
++          <filename>$XDG_CONFIG_HOME/Yubico/u2f_keys</filename> (or
++          <filename>$HOME/.config/Yubico/u2f_keys</filename> if XDG variable is
++          not set) are able to log in with the associated U2F key.
++          Path can be changed using <literal>authfile</literal> option.
++
++          File format is:
++          <literal>username:first_keyHandle,first_public_key: second_keyHandle,second_public_key</literal>
++          This file can be generated using <command>pamu2fcfg</command> command.
++
++          More about that you can read on
++          <literal>https://developers.yubico.com/pam-u2f/</literal>.
++        '';
++      };
++
++      authfile = mkOption {
++        default = "";
++        type = types.str;
++        description = ''
++          By default <literal>pam-u2f</literal> module reads the keys from
++          <filename>$XDG_CONFIG_HOME/Yubico/u2f_keys</filename> (or
++          <filename>$HOME/.config/Yubico/u2f_keys</filename> if XDG variable is
++          not set).
++
++          If you want to change auth file locations or centralize database (for
++          example use <filename>/etc/u2f-mappings</filename>) you can set this
++          option.
++
++          File format is:
++          <literal>username:first_keyHandle,first_public_key: second_keyHandle,second_public_key</literal>
++          This file can be generated using <command>pamu2fcfg</command> command.
++
++          More about that you can read on
++          <literal>https://developers.yubico.com/pam-u2f/</literal>.
++        '';
++      };
++
++      control = mkOption {
++        default = "sufficient";
++        type = types.addCheck (types.str) (x : if elem x ["required" "requisite" "sufficient" "optional"] then true else abort "control must be one of (required, requisite, sufficient, optional)");
++        description = ''
++          This option sets pam "control". Can be one of: required, requisite, sufficient, optional.
++          If you want to have multi factor authentication, use "required".
++          If you want to use U2F device instead of regular password, use "sufficient".
++
++          Read <literal>man pam.conf</literal> for better understanding of this option.
++        '';
++      };
++
++      debug = mkOption {
++        default = false;
++        type = types.bool;
++        description = ''
++          Debug output to stderr.
++        '';
++      };
++
++      interactive = mkOption {
++        default = false;
++        type = types.bool;
++        description = ''
++          Set to prompt a message and wait before testing the presence of a U2F device.
++          Recommended if your device doesn’t have a tactile trigger.
++        '';
++      };
++
++      cue = mkOption {
++        default = false;
++        type = types.bool;
++        description = ''
++          By default <literal>pam-u2f</literal> module does not inform user
++          that he needs to use the u2f device, it just waits without a prompt.
++
++          If you set this option to <literal>true</literal>,
++          <literal>cue</literal> option is added to <literal>pam-u2f</literal>
++          module and reminder message will be displayed.
++        '';
++      };
+     };
+ 
+     security.pam.enableEcryptfs = mkOption {
+@@ -533,7 +615,7 @@ in
+       ++ optionals config.krb5.enable [pam_krb5 pam_ccreds]
+       ++ optionals config.security.pam.enableOTPW [ pkgs.otpw ]
+       ++ optionals config.security.pam.oath.enable [ pkgs.oathToolkit ]
+-      ++ optionals config.security.pam.enableU2F [ pkgs.pam_u2f ];
++      ++ optionals config.security.pam.u2f.enable [ pkgs.pam_u2f ];
+ 
+     boot.supportedFilesystems = optionals config.security.pam.enableEcryptfs [ "ecryptfs" ];
+ 
+diff --git a/nixos/release.nix b/nixos/release.nix
+index 6ea075eedae..f2b6d72a596 100644
+--- a/nixos/release.nix
++++ b/nixos/release.nix
+@@ -377,6 +377,7 @@ in rec {
+   tests.opensmtpd = callTest tests/opensmtpd.nix {};
+   tests.owncloud = callTest tests/owncloud.nix {};
+   tests.pam-oath-login = callTest tests/pam-oath-login.nix {};
++  tests.pam-u2f = callTest tests/pam-u2f.nix {};
+   tests.peerflix = callTest tests/peerflix.nix {};
+   tests.php-pcre = callTest tests/php-pcre.nix {};
+   tests.postgresql = callSubTests tests/postgresql.nix {};
+diff --git a/nixos/tests/pam-u2f.nix b/nixos/tests/pam-u2f.nix
+new file mode 100644
+index 00000000000..f36698359be
+--- /dev/null
++++ b/nixos/tests/pam-u2f.nix
+@@ -0,0 +1,24 @@
++import ./make-test.nix ({ pkgs, latestKernel ? false, ... }:
++
++{
++  name = "pam-u2f";
++
++  machine =
++    { config, pkgs, lib, ... }:
++    {
++      security.pam.u2f = {
++        enable = true;
++        interactive=true;
++        control="sufficient";
++        cue=true;
++        debug=true;
++      };
++    };
++
++  testScript =
++    ''
++      $machine->waitForUnit('multi-user.target');
++      $machine->succeed('egrep "auth sufficient .*u2f.*" /etc/pam.d/ -R ');
++
++    '';
++})
+-- 
+2.18.1
+
