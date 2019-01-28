@@ -1,30 +1,21 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-with import ../../../util;
+with pkgs;
 
 let
 
-  fakeExt4 = writeCLib "fake-ext4" ''
-    #include <stdlib.h>
-    #include <dlfcn.h>
-    #include <sys/vfs.h>
-    #include <linux/magic.h>
+  fakeExt4 = stdenv.mkDerivation rec {
+    name = "fakext4-${version}";
+    version = "0.0.1";
 
-    int statfs64(const char *path, struct statfs64 *buf) {
-      static int (*orig_statfs64)(const char *path, struct statfs64 *buf) = NULL;
-
-      if (orig_statfs64 == NULL) {
-        orig_statfs64 = dlsym(RTLD_NEXT, "statfs64");
-      }
-
-      int retval = orig_statfs64(path, buf);
-      if (retval == 0) {
-        buf->f_type = EXT4_SUPER_MAGIC;
-      }
-      return retval;
-    }
-  '';
+    src = fetchFromGitHub {
+      owner = "dimaryaz";
+      repo = "dropbox_ext4";
+      ref = "7cb936588ddd5992fb2c2c8f19b6015cf607a4f5";
+      sha256 = "0000000000000000000000000000000000000000000000000000";
+    };
+  };
 
 in {
   options.mine.workstation.dropbox.enable = mkEnableOption "Enable Dropbox";
@@ -32,7 +23,7 @@ in {
   config = mkIf config.mine.workstation.dropbox.enable {
     systemd.user.services.dropbox = {
       Environment = {
-        LP_PRELOAD = fakeExt4;
+        LP_PRELOAD = "${getLib fakeExt4}/lib";
       };
 
       Unit = {
