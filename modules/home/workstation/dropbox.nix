@@ -14,10 +14,17 @@ with lib;
       };
 
       Service = {
+        ExecStart = "${getBin pkgs.dropbox}/bin/dropbox";
+        ExecReload = "${getBin pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        KillMode = "control-group"; # upstream recommends process
         Restart = "on-failure";
-        RestartSec = 1;
-        ExecStart = "${pkgs.dropbox}/bin/dropbox";
-        Environment = "QT_PLUGIN_PATH=/run/current-system/sw/${pkgs.qt5.qtbase.qtPluginPrefix}";
+        PrivateTmp = true;
+        ProtectSystem = "full";
+        Nice = 10;
+        environment = [
+          "QML2_IMPORT_PATH=/run/current-system/sw/${pkgs.qt5.qtbase.qtQmlPrefix}"
+          "QT_PLUGIN_PATH=/run/current-system/sw/${pkgs.qt5.qtbase.qtPluginPrefix}"
+        ];
       };
 
       Install = {
