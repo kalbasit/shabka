@@ -366,8 +366,9 @@ in {
     bindsym ${defaultModifier}+${thirdModifier}+a mode "$mode_apps"
 
     # Display mode allows output/resolution selection
-    set $mode_display (l) Laptop screen, (m) Multiple screen, (w) Wide screen
+    set $mode_display (a) Auto, (l) Laptop screen, (m) Multiple screen, (w) Wide screen
     mode "$mode_display" {
+      bindsym a exec ${nosid} ${getBin pkgs.autorandr}/bin/autorandr --change, mode default
       bindsym l exec ${nosid} ${getBin pkgs.xlibs.xrandr}/bin/xrandr --output ${intMonitor} --mode ${intMode} --scale ${intScale} --output ${extMonitor} --off, mode default
       bindsym m exec ${nosid} ${getBin pkgs.xlibs.xrandr}/bin/xrandr --output ${intMonitor} --mode ${intMode} --scale ${intScale} --output ${extMonitor} --primary --mode 3440x1440 --right-of ${intMonitor}, mode default
       bindsym w exec ${nosid} ${getBin pkgs.xlibs.xrandr}/bin/xrandr --output ${intMonitor} --off --output ${extMonitor} --mode ${extMode}, mode default
