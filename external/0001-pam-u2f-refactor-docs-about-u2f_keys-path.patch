@@ -1,4 +1,4 @@
-From 9c76ff036fc7a50342b4933a0c1572c578a6edf5 Mon Sep 17 00:00:00 2001
+From b5888da0ad2e35757985d05ebb0a877614a2c674 Mon Sep 17 00:00:00 2001
 From: "Wael M. Nasreddine" <wael.nasreddine@gmail.com>
 Date: Sun, 27 Jan 2019 19:12:28 -0800
 Subject: [PATCH] pam-u2f: refactor, docs about u2f_keys path
@@ -35,7 +35,7 @@ index 4a6bdfe83dd..21e5914f5d4 100644
      (mkRemovedOptionModule [ "services" "rmilter" "bindUnixSockets" ] "Use services.rmilter.bindSocket.* instead")
  
 diff --git a/nixos/modules/security/pam.nix b/nixos/modules/security/pam.nix
-index bef10b4fe61..e590b500dbc 100644
+index bef10b4fe61..75b21d0c99c 100644
 --- a/nixos/modules/security/pam.nix
 +++ b/nixos/modules/security/pam.nix
 @@ -37,12 +37,14 @@ let
@@ -122,7 +122,7 @@ index bef10b4fe61..e590b500dbc 100644
 +
 +      control = mkOption {
 +        default = "sufficient";
-+        type = types.addCheck (types.str) (x : if elem x ["required" "requisite" "sufficient" "optional"] then true else abort "control must be one of (required, requisite, sufficient, optional)");
++        type = types.enum [ "required" "requisite" "sufficient" "optional" ];
 +        description = ''
 +          This option sets pam "control". Can be one of: required, requisite, sufficient, optional.
 +          If you want to have multi factor authentication, use "required".
