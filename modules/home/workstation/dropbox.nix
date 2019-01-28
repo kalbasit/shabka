@@ -9,21 +9,16 @@ let
     version = "0.0.1";
 
     src = pkgs.fetchFromGitHub {
-      owner = "dimaryaz";
-      repo = "dropbox_ext4";
-      rev = "7cb936588ddd5992fb2c2c8f19b6015cf607a4f5";
-      sha256 = "18rhjxar46qm38j6cw22xlqrbbl1gvlhrqdpkyd6h3a9lzrplp3a";
+      owner = "dark";
+      repo = "dropbox-filesystem-fix";
+      rev = "d284f5d4884003c2dad24eac88b5e285f6281624";
+      sha256 = "0a5gfb11nb26lpavppyfifklnw515sg402sy9cqm8h39gw2zkb87";
     };
 
-    makeFlags = [ "INSTALL_DIR=$(out)" ];
+    buildInputs = [ pkgs.makeWrapper ];
 
-    preInstall = ''
-      mkdir -p $out/lib
-      mkdir -p $out/bin
-    '';
-
-    postInstall = ''
-      rm -rf $out/bin
+    installPhase = ''
+      install -Dm644 libdropbox_fs_fix.so $out/lib/libdropbox_fs_fix.so
     '';
   };
 
@@ -32,10 +27,6 @@ in {
 
   config = mkIf config.mine.workstation.dropbox.enable {
     systemd.user.services.dropbox = {
-      Environment = {
-        LP_PRELOAD = "${getLib fakeExt4}/lib/libdropbox_ext4.so";
-      };
-
       Unit = {
         Description = "Dropbox";
         After = [ "graphical-session-pre.target" ];
@@ -43,10 +34,18 @@ in {
       };
 
       Service = {
+        ExecStart = "${getBin pkgs.dropbox}/bin/dropbox";
+        ExecReload = "${getBin pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        KillMode = "control-group"; # upstream recommends process
         Restart = "on-failure";
-        RestartSec = 1;
-        ExecStart = "${pkgs.dropbox}/bin/dropbox";
-        Environment = "QT_PLUGIN_PATH=/run/current-system/sw/${pkgs.qt5.qtbase.qtPluginPrefix}";
+        PrivateTmp = true;
+        ProtectSystem = "full";
+        Nice = 10;
+        environment = [
+          "LD_PRELOAD=${getLib fakeExt4}/lib/libdropbox_fs_fix.so"
+          "QML2_IMPORT_PATH=/run/current-system/sw/${pkgs.qt5.qtbase.qtQmlPrefix}"
+          "QT_PLUGIN_PATH=/run/current-system/sw/${pkgs.qt5.qtbase.qtPluginPrefix}"
+        ];
       };
 
       Install = {
