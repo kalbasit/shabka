@@ -10,7 +10,7 @@ var_1: &install-dependencies
 
       # install cachix from nixpkgs at stable
       readonly nixpkgs_stable="external/nixpkgs-stable.nix"
-      readonly nixpkgs="$( nix eval --raw "(import ${nixpkgs_stable} {})" )"
+      readonly nixpkgs="$( nix-build --no-out-link ${nixpkgs_stable} )"
       nix-env -I nixpkgs="${nixpkgs}" -f '<nixpkgs>' -iA cachix
 
 var_2: &enable-cachix
@@ -43,7 +43,7 @@ jobs:
           command: |
             readonly shabka_path="$( pwd )"
             readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
-            readonly nixpkgs="$( nix eval --raw "(import ${nixpkgs_stable} {})" )"
+            readonly nixpkgs="$( nix-build --no-out-link ${nixpkgs_stable} )"
 
             export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=${shabka_path}"
 
@@ -68,7 +68,7 @@ jobs:
           command: |
             readonly shabka_path="$( pwd )"
             readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
-            readonly nixpkgs="$( nix eval --raw "(import ${nixpkgs_stable} {})" )"
+            readonly nixpkgs="$( nix-build --no-out-link ${nixpkgs_stable} )"
 
             export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=${shabka_path}"
 
@@ -93,7 +93,7 @@ jobs:
           command: |
             readonly shabka_path="$( pwd )"
             readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
-            readonly nixpkgs="$( nix eval --raw "(import ${nixpkgs_stable} {})" )"
+            readonly nixpkgs="$( nix-build --no-out-link ${nixpkgs_stable} )"
 
             export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=${shabka_path}"
 
@@ -118,7 +118,7 @@ jobs:
           command: |
             readonly shabka_path="$( pwd )"
             readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
-            readonly nixpkgs="$( nix eval --raw "(import ${nixpkgs_stable} {})" )"
+            readonly nixpkgs="$( nix-build --no-out-link ${nixpkgs_stable} )"
 
             export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=${shabka_path}"
 
