@@ -83,9 +83,6 @@ in {
 
   mine.hardware.machine = "precision-7530";
 
-  # Set the hardware clock to local time to support dual booting with Windows.
-  time.hardwareClockInLocalTime = true;
-
   services.logind.extraConfig = ''
     HandlePowerKey=suspend
   '';
