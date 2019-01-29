@@ -99,6 +99,31 @@ jobs:
 
             nix-instantiate ./hosts/hades
 
+  hera:
+    working_directory: /go/src/github.com/kalbasit/shabka
+
+    environment:
+      <<: *global_env
+
+    docker:
+      - image: nixos/nix
+
+    steps:
+      - checkout
+      - *install-dependencies
+      - *enable-cachix
+      - run:
+          name: Instantiate hera
+          working_directory: /go/src/github.com/kalbasit/shabka
+          command: |
+            readonly shabka_path="$( pwd )"
+            readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
+            readonly nixpkgs="$( nix-build --no-out-link ${nixpkgs_stable} )"
+
+            export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=${shabka_path}"
+
+            nix-instantiate ./hosts/hera
+
   zeus:
     working_directory: /go/src/github.com/kalbasit/shabka
 
@@ -133,6 +158,8 @@ workflows:
       - cratos:
           context: org-global
       - hades:
+          context: org-global
+      - hera:
           context: org-global
       - zeus:
           context: org-global

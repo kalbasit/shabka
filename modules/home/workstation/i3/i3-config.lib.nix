@@ -14,12 +14,16 @@ let
   intMonitor =
     if hostName == "hades"
     then "eDP-1"
+    else if hostName == "hera"
+    then "eDP-1"
     else if hostName == "cratos"
     then "eDP1"
     else "";
 
   intMode =
     if hostName == "hades"
+    then "1920x1080"
+    else if hostName == "hera"
     then "1920x1080"
     else if hostName == "cratos"
     then "3200x1800"
@@ -28,12 +32,16 @@ let
   intScale =
     if hostName == "hades"
     then "1x1"
+    else if hostName == "hera"
+    then "1x1"
     else if hostName == "cratos"
     then "0.6x0.6"
     else "";
 
   extMonitor =
     if hostName == "hades"
+    then "DP-2"
+    else if hostName == "hera"
     then "DP-2"
     else if hostName == "cratos"
     then "DP1-2"
