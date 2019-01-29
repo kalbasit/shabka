@@ -236,6 +236,10 @@ export MYFS="@home_path@/.local"
 export EDITOR=nvim
 export SUDO_EDITOR=nvim
 
+# Set the pager
+export PAGER=@bat_bin@
+export BAT_PAGER="@less_bin@"
+
 # Set the language support
 export LANG=en_US.UTF-8
 export LC_ALL="${LANG}"

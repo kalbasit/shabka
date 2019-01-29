@@ -63,9 +63,9 @@ let
 
     EOF
 
-    # open a new Alacritty terminal window with vim session inside of it to edit the jrnl entry
+    # open a new terminal window with vim session inside of it to edit the jrnl entry
     readonly line_count="$(wc -l "$jrnl_entry" | awk '{print $1}')"
-    ${getBin pkgs.alacritty}/bin/alacritty --title jrnl_entry --command nvim +$line_count +star -c 'set wrap' -c 'set textwidth=80' -c 'set fo+=t' "$jrnl_entry"
+    ${getBin pkgs.termite}/bin/termite --title jrnl_entry --exec="nvim +$line_count +star -c 'set wrap' -c 'set textwidth=80' -c 'set fo+=t'" "$jrnl_entry"
     readonly content="$( grep -v '^#' "$jrnl_entry" )"
 
     ${getBin pkgs.jrnl}/bin/jrnl "$current_profile" "$content"
@@ -81,6 +81,7 @@ in {
       commands = [
         { command = "floating enable"; criteria = { workspace = "^studio$"; }; }
 
+        { command = "floating enable"; criteria = { class = "^Arandr"; }; }
         { command = "floating enable"; criteria = { class = "^Pavucontrol"; }; }
         { command = "floating enable"; criteria = { class = "^ROX-Filer$"; }; }
         { command = "floating enable"; criteria = { class = "^SimpleScreenRecorder$"; }; }
@@ -92,6 +93,8 @@ in {
         { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "astroid"; }; }
         { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "Ptask"; }; }
         { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "pulse-sms"; }; }
+      ] ++ optionals config.mine.keybase.enable [
+        { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "Keybase"; }; }
       ];
     };
 
@@ -226,8 +229,8 @@ in {
       "${defaultModifier}+${thirdModifier}+c" = "exec ${getBin pkgs.rofi}/bin/rofi -modi \"clipboard:${getBin pkgs.haskellPackages.greenclip}/bin/greenclip print\" -show clipboard";
 
       # Terminals
-      "${defaultModifier}+Return" = "exec ${getBin pkgs.alacritty}/bin/alacritty";
-      "${defaultModifier}+${secondModifier}+Return" = "exec ${getBin pkgs.termite}/bin/termite";
+      "${defaultModifier}+Return" = "exec ${getBin pkgs.termite}/bin/termite";
+      "${defaultModifier}+${secondModifier}+Return" = "exec ${getBin pkgs.alacritty}/bin/alacritty";
 
       # Modes
       "${defaultModifier}+${thirdModifier}+r" = "mode resize";
@@ -244,7 +247,9 @@ in {
       "${thirdModifier}+m" = "[class=\"astroid\"] scratchpad show";
       "${thirdModifier}+p" = "[class=\"pulse-sms\"] scratchpad show";
       "${thirdModifier}+t" = "[class=\"Ptask\"] scratchpad show";
-    };
+    } // (if config.mine.keybase.enable == true then {
+      "${thirdModifier}+k" = "[class=\"Keybase\"] scratchpad show";
+    } else {});
 
     modes = {
       resize = {
@@ -300,7 +305,7 @@ in {
       { command = "${getBin pkgs.xlibs.xset}/bin/xset r rate 300 30"; always = false; notification = false; }
       { command = "${getBin pkgs.xcape}/bin/xcape -e 'Control_L=Escape'"; always = false; notification = false; }
       { command = "${getBin pkgs.haskellPackages.greenclip}/bin/greenclip daemon"; always = false; notification = false; }
-      { command = "i3-msg \"workspace personal@base; exec ${nosid} ${getBin pkgs.alacritty}/bin/alacritty\""; always = false; notification = true; }
+      { command = "i3-msg \"workspace personal@base; exec ${nosid} ${getBin pkgs.termite}/bin/termite\""; always = false; notification = true; }
     ];
   };
 
@@ -343,13 +348,16 @@ in {
     bindsym ${defaultModifier}+${thirdModifier}+w mode "$mode_wm"
 
     # Application launcher
-    set $mode_apps Launch: (d) Discord, (i) Irc, (m) Mail, (s) Studio, (t) TaskWarrior
+    set $mode_apps Launch: (a) ARandR, (d) Discord, (i) Irc${optionalString config.mine.keybase.enable ", (k) Keybase"}, (m) Mail, (s) Studio, (t) TaskWarrior, (w) Work IM
     mode "$mode_apps" {
-      bindsym d exec ${getBin getBin pkgs.discord}/bin/Discord, mode default
-      bindsym i exec ${getBin getBin pkgs.alacritty}/bin/alacritty --title=irc --exec=weechat, mode default
+      bindsym a exec ${getBin pkgs.arandr}/bin/arandr, mode default
+      bindsym d exec ${getBin pkgs.discord}/bin/Discord, mode default
+      bindsym i exec ${getBin pkgs.termite}/bin/termite --title=irc --exec=weechat, mode default
+      ${optionalString config.mine.keybase.enable "bindsym k exec ${getBin pkgs.keybase-gui}/bin/keybase-gui, mode default"}
       bindsym m exec astroid, mode default
-      bindsym s exec ${getBin getBin pkgs.obs-studio}/bin/obs, mode default
-      bindsym t exec ${getBin getBin pkgs.ptask}/bin/ptask, mode default
+      bindsym s exec ${getBin pkgs.obs-studio}/bin/obs, mode default
+      bindsym t exec ${getBin pkgs.ptask}/bin/ptask, mode default
+      bindsym w exec ${getBin pkgs.slack}/bin/slack, mode default
 
       # back to normal: Enter or Escape
       bindsym Return mode default
@@ -358,8 +366,9 @@ in {
     bindsym ${defaultModifier}+${thirdModifier}+a mode "$mode_apps"
 
     # Display mode allows output/resolution selection
-    set $mode_display (l) Laptop screen, (m) Multiple screen, (w) Wide screen
+    set $mode_display (a) Auto, (l) Laptop screen, (m) Multiple screen, (w) Wide screen
     mode "$mode_display" {
+      bindsym a exec ${nosid} ${getBin pkgs.autorandr}/bin/autorandr --change, mode default
       bindsym l exec ${nosid} ${getBin pkgs.xlibs.xrandr}/bin/xrandr --output ${intMonitor} --mode ${intMode} --scale ${intScale} --output ${extMonitor} --off, mode default
       bindsym m exec ${nosid} ${getBin pkgs.xlibs.xrandr}/bin/xrandr --output ${intMonitor} --mode ${intMode} --scale ${intScale} --output ${extMonitor} --primary --mode 3440x1440 --right-of ${intMonitor}, mode default
       bindsym w exec ${nosid} ${getBin pkgs.xlibs.xrandr}/bin/xrandr --output ${intMonitor} --off --output ${extMonitor} --mode ${extMode}, mode default
@@ -403,9 +412,10 @@ in {
     ########################
 
     # assign important spaces to my external monitor
+    workspace irc output ${extMonitor}
+    workspace keeptruckin@base output ${extMonitor}
+    workspace mail output ${extMonitor}
     workspace personal@base output ${extMonitor}
     workspace publica@base output ${extMonitor}
-    workspace irc output ${extMonitor}
-    workspace mail output ${extMonitor}
   '';
 }

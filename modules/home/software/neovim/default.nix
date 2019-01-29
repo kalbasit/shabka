@@ -42,10 +42,10 @@ in {
       vimAlias = true;
 
       withPython = true;
-      extraPythonPackages = ps: with ps; [neovim];
+      extraPythonPackages = ps: with ps; [ pynvim ];
 
       withPython3 = true;
-      extraPython3Packages = ps: with ps; [neovim];
+      extraPython3Packages = ps: with ps; [ pynvim ];
 
       configure = {
         customRC = cfg.extraRC + (builtins.readFile (pkgs.substituteAll {
@@ -61,7 +61,6 @@ in {
           {
             names =
               [
-
                 "Gist"
                 "Gundo"
                 "LanguageClient-neovim"
@@ -80,7 +79,7 @@ in {
                 "fzfWrapper"
                 "goyo"
                 "multiple-cursors"
-                "nvim-completion-manager"
+                "ncm2"
                 "pig-vim"
                 "repeat"
                 "rhubarb"
@@ -96,9 +95,9 @@ in {
                 "vim-signify"
                 "vim-speeddating"
                 "vim-terraform"
-                "zoomwintab-vim"
                 "vimtex"
                 "vissort-vim"
+                "zoomwintab-vim"
 
                 # NOTE: Keep vim-go before PolyGlot. If PolyGlot is loaded first, vim-go will fail with the error `E117: Unknown function: go#config#VersionWarning`.
                 # See https://github.com/sheerun/vim-polyglot/issues/309

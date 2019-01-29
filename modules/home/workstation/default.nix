@@ -64,7 +64,6 @@ with import ../../../util;
     mine.workstation = enableMultiple [
       "alacritty"
       "chromium"
-      "dropbox"
       "dunst"
       "firefox"
       "greenclip"

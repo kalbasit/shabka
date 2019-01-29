@@ -26,6 +26,8 @@ in {
 
     gotop
 
+    jetbrains.idea-community
+
     jq
 
     jrnl
@@ -50,6 +52,7 @@ in {
     nur.repos.kalbasit.swm
 
     unstable.corgi
+    unstable.vgo2nix
 
     unzip
 

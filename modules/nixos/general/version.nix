@@ -25,7 +25,10 @@
 
 let
   git_dir = ../../../.git;
-  label = "nixos_${config.system.nixos.version}-shabka_" + (if lib.pathIsDirectory git_dir then
+
+  pinnedNixpkgsVersion = builtins.fromJSON (builtins.readFile ../../../external/nixpkgs-stable-version.json);
+
+  label = "nixos_${config.system.nixos.release}-${builtins.substring 0 7 pinnedNixpkgsVersion.rev}-shabka_" + (if lib.pathIsDirectory git_dir then
     "${builtins.substring 0 7 (lib.commitIdFromGitRepo git_dir)}"
   else "story");
 

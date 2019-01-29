@@ -35,8 +35,9 @@ with lib;
         report._reviewed.filter=( reviewed.none: or reviewed.before:now-1week ) and ( +PENDING or +WAITING )
 
         # Context settings
-        context.publica=+publica
+        context.keeptruckin=+keeptruckin
         context.personal=-publica
+        context.publica=+publica
       '';
     };
 

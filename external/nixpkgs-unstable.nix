@@ -6,26 +6,21 @@ with pkgs;
 with pkgs.lib;
 
 let
-  pinnedVersion = builtins.fromJSON (builtins.readFile ./home-manager-version.json);
+  pinnedVersion = builtins.fromJSON (builtins.readFile ./nixpkgs-unstable-version.json);
   pinned = builtins.fetchGit {
     inherit (pinnedVersion) url rev;
   };
 
-  importPinned = import pinned {};
+  importPinned = import pinned {
+    config = {};
+    overlays = [];
+  };
 
   mkAssertMsg = name: "${name} is available upsteam, kill this patch";
 
-  patches = [
-    # https://github.com/rycee/home-manager/pull/474
-    (
-      pkgs.fetchpatch {
-        url = "https://github.com/rycee/home-manager/pull/474.patch";
-        sha256 = "01rnl2c9k3kx0s33ap81p02ijjxciak2y1cvl553i45xx4g8siw1";
-      }
-    )
-  ];
+  patches = [];
 
-  patched = runCommand "home-manager-${pinnedVersion.rev}"
+  patched = runCommand "nixpkgs-unstable-${pinnedVersion.rev}"
     {
       inherit pinned patches;
 

@@ -27,9 +27,9 @@ in {
 
       package = pkgs.plex.overrideAttrs (_: let
         # see https://www.plex.tv/media-server-downloads/ for 64bit rpm
-        version = "1.13.9.5456";
-        vsnHash = "ecd600442";
-        sha1 = "1pl98accnmhvxirxznrxl89fx45kg6sn";
+        version = "1.14.1.5488";
+        vsnHash = "cc260c476";
+        sha1 = "r7sp2qx6vhvi7q02ygxzdl7w8ydmnzja";
       in {
         name = "plex-${version}";
         src = pkgs.fetchurl {

@@ -2,17 +2,20 @@
 
 {
   environment.systemPackages = with pkgs; [
+    yubico-piv-tool
+    yubikey-manager
+    yubikey-neo-manager
     yubikey-personalization
     yubikey-personalization-gui
-    yubikey-neo-manager
     yubioath-desktop
-    yubico-piv-tool
   ];
 
-  services.udev.packages = with pkgs; [
-    libu2f-host
-    yubikey-personalization
-  ];
+  hardware.u2f.enable = true;
 
   services.pcscd.enable = true;
+
+  security.pam.u2f = {
+    enable = true;
+    cue = true;
+  };
 }

@@ -6,7 +6,7 @@ let
 
   pinnedNH = import ../../external/nixos-hardware.nix;
 
-  nasIP = "172.25.1.2";
+  nasIP = "172.25.2.2";
 
   buildWindows10 = env: let
     vmName = if env == "prod" then "win10"
@@ -32,9 +32,11 @@ let
         else if env == "staging" then "02:68:b3:29:da:98"
         else abort "${env} is not supported";
 
-        dev_path = if env == "prod" then "/dev/disk/by-path/ip-172.25.1.2:3260-iscsi-iqn.2018-11.com.nasreddine.apollo:win10-lun-1"
-        else if env == "staging" then "/dev/disk/by-path/ip-172.25.1.2:3260-iscsi-iqn.2018-11.com.nasreddine.apollo:win10.staging-lun-1"
+        dev_path = if env == "prod" then "/dev/disk/by-path/ip-${nasIP}:3260-iscsi-iqn.2018-11.com.nasreddine.apollo:win10-lun-1"
+        else if env == "staging" then "/dev/disk/by-path/ip-${nasIP}:3260-iscsi-iqn.2018-11.com.nasreddine.apollo:win10.staging-lun-1"
         else abort "${env} is not supported";
+
+        source_dev = "ifcns1";
       };
 
     in ''
@@ -80,7 +82,6 @@ in {
 
   mine.gnupg.enable = true;
   mine.useColemakKeyboardLayout = true;
-  mine.virtualisation.docker.enable = true;
   mine.virtualisation.libvirtd.enable = true;
 
   mine.hardware.machine = "zeus";

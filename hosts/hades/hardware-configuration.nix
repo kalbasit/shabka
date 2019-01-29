@@ -17,14 +17,6 @@ let
       "/yl/code"               = { device = rootDevice;   subvol = "@code"; options = [ "X-mount.mkdir=0700" ]; };
       "/yl/private"            = { device = rootDevice;   subvol = "@private"; options = [ "X-mount.mkdir=0700" ]; };
       "/yl/storage"            = { device = storgeDevice; subvol = "@home-kalbasit-storage"; };
-
-      # ArchOS
-
-      # TODO: Replace kalbasit with yl on ArchLinux
-      "/mnt/arch"                       = { device = rootDevice;   subvol = "@arch/@root"; };
-      "/mnt/arch/home"                  = { device = rootDevice;   subvol = "@arch/@home"; };
-      "/mnt/arch/home/kalbasit/code"    = { device = rootDevice;   subvol = "@code"; };
-      "/mnt/arch/home/kalbasit/storage" = { device = storgeDevice; subvol = "@home-kalbasit-storage"; };
     };
 
   mkBtrfsSubvolume = mountPoint: { device, subvol, options ? [] }:
@@ -59,10 +51,6 @@ in {
       # Storage
 
       "/mnt/volumes/storage" = { device = storgeDevice; fsType = "btrfs"; };
-
-      # ArchOS
-
-      "/mnt/arch/boot/efi" = { device = bootDevice; fsType = "vfat"; };
     };
 
   swapDevices = [ { device = swapDevice; } ];

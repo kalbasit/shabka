@@ -1,0 +1,138 @@
+var_0: &global_env
+  CACHIX_CACHE: yl
+
+var_1: &install-dependencies
+  run:
+    name: Install dependencies
+    command: |
+      # install git
+      nix-env -f '<nixpkgs>' -iA gitAndTools.git
+
+      # install cachix from nixpkgs at stable
+      readonly nixpkgs_stable="external/nixpkgs-stable.nix"
+      readonly nixpkgs="$( nix-build --no-out-link ${nixpkgs_stable} )"
+      nix-env -I nixpkgs="${nixpkgs}" -f '<nixpkgs>' -iA cachix
+
+var_2: &enable-cachix
+  run:
+    name: Enable cachix
+    command: |
+      cachix use "${CACHIX_CACHE}"
+
+version: 2
+jobs:
+  athena:
+    macos:
+      xcode: "9.0"
+
+    working_directory: /go/src/github.com/kalbasit/shabka
+
+    environment:
+      <<: *global_env
+
+    docker:
+      - image: nixos/nix
+
+    steps:
+      - checkout
+      - *install-dependencies
+      - *enable-cachix
+      - run:
+          name: Instantiate athena
+          working_directory: /go/src/github.com/kalbasit/shabka
+          command: |
+            readonly shabka_path="$( pwd )"
+            readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
+            readonly nixpkgs="$( nix-build --no-out-link ${nixpkgs_stable} )"
+
+            export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=${shabka_path}"
+
+            nix-instantiate ./hosts/athena
+
+  cratos:
+    working_directory: /go/src/github.com/kalbasit/shabka
+
+    environment:
+      <<: *global_env
+
+    docker:
+      - image: nixos/nix
+
+    steps:
+      - checkout
+      - *install-dependencies
+      - *enable-cachix
+      - run:
+          name: Instantiate cratos
+          working_directory: /go/src/github.com/kalbasit/shabka
+          command: |
+            readonly shabka_path="$( pwd )"
+            readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
+            readonly nixpkgs="$( nix-build --no-out-link ${nixpkgs_stable} )"
+
+            export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=${shabka_path}"
+
+            nix-instantiate ./hosts/cratos
+
+  hades:
+    working_directory: /go/src/github.com/kalbasit/shabka
+
+    environment:
+      <<: *global_env
+
+    docker:
+      - image: nixos/nix
+
+    steps:
+      - checkout
+      - *install-dependencies
+      - *enable-cachix
+      - run:
+          name: Instantiate hades
+          working_directory: /go/src/github.com/kalbasit/shabka
+          command: |
+            readonly shabka_path="$( pwd )"
+            readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
+            readonly nixpkgs="$( nix-build --no-out-link ${nixpkgs_stable} )"
+
+            export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=${shabka_path}"
+
+            nix-instantiate ./hosts/hades
+
+  zeus:
+    working_directory: /go/src/github.com/kalbasit/shabka
+
+    environment:
+      <<: *global_env
+
+    docker:
+      - image: nixos/nix
+
+    steps:
+      - checkout
+      - *install-dependencies
+      - *enable-cachix
+      - run:
+          name: Instantiate zeus
+          working_directory: /go/src/github.com/kalbasit/shabka
+          command: |
+            readonly shabka_path="$( pwd )"
+            readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
+            readonly nixpkgs="$( nix-build --no-out-link ${nixpkgs_stable} )"
+
+            export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=${shabka_path}"
+
+            nix-instantiate ./hosts/zeus
+
+workflows:
+  version: 2
+  testing:
+    jobs:
+      - athena:
+          context: org-global
+      - cratos:
+          context: org-global
+      - hades:
+          context: org-global
+      - zeus:
+          context: org-global

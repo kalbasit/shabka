@@ -11,16 +11,16 @@ let
     sha256 = "17x45njva3a535czgdp5z43gmgwl0lk68p4mgip8jclpiycb6qbl";
   });
 
-  enablePublica = builtins.pathExists /yl/private/private-home-files/.charles/ca/charles-proxy-ssl-proxying-certificate.pem
-    && builtins.pathExists /yl/code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/ca.crt
-    && builtins.pathExists /yl/code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/publica.dev.crt
-    && builtins.pathExists /yl/code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/publica.dev.key;
-
   enableExpressVPN = builtins.pathExists /yl/private/network-secrets/vpn/client/expressvpn/auth.txt
     && builtins.pathExists /yl/private/network-secrets/vpn/client/expressvpn/ca2.crt
     && builtins.pathExists /yl/private/network-secrets/vpn/client/expressvpn/client.crt
     && builtins.pathExists /yl/private/network-secrets/vpn/client/expressvpn/client.key
     && builtins.pathExists /yl/private/network-secrets/vpn/client/expressvpn/ta.key;
+
+  enableNasreddineVPN =  builtins.pathExists /yl/private/network-secrets/vpn/client/desktop.cratos.WaelNasreddine.vpn.nasreddine.com/ca.crt
+    && builtins.pathExists /yl/private/network-secrets/vpn/client/desktop.cratos.WaelNasreddine.vpn.nasreddine.com/public.crt
+    && builtins.pathExists /yl/private/network-secrets/vpn/client/desktop.cratos.WaelNasreddine.vpn.nasreddine.com/private.key
+    && builtins.pathExists /yl/private/network-secrets/vpn/client/desktop.cratos.WaelNasreddine.vpn.nasreddine.com/ta.key;
 
 in {
   imports = [
@@ -57,19 +57,17 @@ in {
     builders-use-substitutes = true
   '';
 
+  mine.gnupg.enable = true;
   mine.hardware.intel_backlight.enable = true;
   mine.printing.enable = true;
   mine.useColemakKeyboardLayout = true;
   mine.virtualisation.docker.enable = true;
-  mine.workstation.enable = true;
 
-  mine.workstation.publica = mkIf enablePublica {
+  mine.workstation = {
     enable = true;
 
-    charles_ssl_cert_path = /yl/private/private-home-files/.charles/ca/charles-proxy-ssl-proxying-certificate.pem;
-    dev_ssl_ca_path       = /yl/code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/ca.crt;
-    dev_ssl_cert_path     = /yl/code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/publica.dev.crt;
-    dev_ssl_key_path      = /yl/code/publica/base/src/github.com/publica-project/platform/contrib/nginx/ssl/publica.dev.key;
+    autorandr.enable = true;
+    keeptruckin.enable = true;
   };
 
   mine.openvpn.client.expressvpn = mkIf enableExpressVPN {
@@ -108,7 +106,7 @@ in {
   };
 
   services.openvpn.servers = {
-    client-nasreddine = {
+    client-nasreddine = mkIf enableNasreddineVPN {
       autoStart = false;
 
       config = ''
