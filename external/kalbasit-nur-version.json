@@ -1,8 +1,5 @@
 {
-  "url": "https://github.com/kalbasit/nur-packages.git",
-  "rev": "c84d1989b6068fd36f3f6a620f5a2b170b6733ea",
-  "date": "2019-01-01T19:59:02-08:00",
+  "url": "https://github.com/kalbasit/nur-packages/archive/c84d1989b6068fd36f3f6a620f5a2b170b6733ea.tar.gz",
   "sha256": "1p64zag5a15ykn3nnk7z6zyp7l2l60j8p0xz2n7404xlqh7jd93w",
-  "fetchSubmodules": false,
-  "ref": "refs/heads/master"
+  "rev": "c84d1989b6068fd36f3f6a620f5a2b170b6733ea"
 }

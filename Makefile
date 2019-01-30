@@ -1,9 +1,9 @@
-HOME_MANAGER_REF     ?= refs/heads/master
-KALBASIT_NUR_REF     ?= refs/heads/master
-NIXOS_HARDWARE_REF   ?= refs/heads/master
-NIXPKGS_UNSTABLE_REF ?= refs/heads/nixos-unstable
-NIXPKGS_STABLE_REF   ?= refs/heads/nixos-18.09
-NUR_REF              ?= refs/heads/master
+HOME_MANAGER_REF     ?= master
+KALBASIT_NUR_REF     ?= master
+NIXOS_HARDWARE_REF   ?= master
+NIXPKGS_UNSTABLE_REF ?= nixos-unstable
+NIXPKGS_STABLE_REF   ?= nixos-18.09
+NUR_REF              ?= master
 
 .PHONY: all
 all: build
@@ -33,30 +33,30 @@ update-external: update-home-manager update-nixpkgs-stable update-nixpkgs-unstab
 
 .PHONY: update-home-manager
 update-home-manager:
-	$(shell pwd)/scripts/nix-prefetch-git.sh https://github.com/rycee/home-manager.git "$(HOME_MANAGER_REF)" > tmp && mv tmp external/home-manager-version.json
-	rm -f tmp
+	$(eval TMP := $(shell mktemp))
+	$(shell pwd)/scripts/nix-prefetch-github-url.sh rycee home-manager "$(HOME_MANAGER_REF)" > $(TMP) && mv $(TMP) external/home-manager-version.json
 
 .PHONY: update-nixpkgs-stable
 update-nixpkgs-stable:
-	$(shell pwd)/scripts/nix-prefetch-git.sh https://github.com/NixOS/nixpkgs-channels.git "$(NIXPKGS_STABLE_REF)" > tmp && mv tmp external/nixpkgs-stable-version.json
-	rm -f tmp
+	$(eval TMP := $(shell mktemp))
+	$(shell pwd)/scripts/nix-prefetch-github-url.sh NixOS nixpkgs-channels "$(NIXPKGS_STABLE_REF)" > $(TMP) && mv $(TMP) external/nixpkgs-stable-version.json
 
 .PHONY: update-nixpkgs-unstable
 update-nixpkgs-unstable:
-	$(shell pwd)/scripts/nix-prefetch-git.sh https://github.com/NixOS/nixpkgs-channels.git "$(NIXPKGS_UNSTABLE_REF)" > tmp && mv tmp external/nixpkgs-unstable-version.json
-	rm -f tmp
+	$(eval TMP := $(shell mktemp))
+	$(shell pwd)/scripts/nix-prefetch-github-url.sh NixOS nixpkgs-channels "$(NIXPKGS_UNSTABLE_REF)" > $(TMP) && mv $(TMP) external/nixpkgs-unstable-version.json
 
 .PHONY: update-nixos-hardware
 update-nixos-hardware:
-	$(shell pwd)/scripts/nix-prefetch-git.sh https://github.com/NixOS/nixos-hardware.git "$(NIXOS_HARDWARE_REF)" > tmp && mv tmp external/nixos-hardware-version.json
-	rm -f tmp
+	$(eval TMP := $(shell mktemp))
+	$(shell pwd)/scripts/nix-prefetch-github-url.sh NixOS nixos-hardware "$(NIXOS_HARDWARE_REF)" > $(TMP) && mv $(TMP) external/nixos-hardware-version.json
 
 .PHONY: update-nur
 update-nur:
-	$(shell pwd)/scripts/nix-prefetch-git.sh https://github.com/nix-community/NUR.git "$(NUR_REF)" > tmp && mv tmp external/nur-version.json
-	rm -f tmp
+	$(eval TMP := $(shell mktemp))
+	$(shell pwd)/scripts/nix-prefetch-github-url.sh nix-community NUR "$(NUR_REF)" > $(TMP) && mv $(TMP) external/nur-version.json
 
 .PHONY: update-kalbasit-nur
 update-kalbasit-nur:
-	$(shell pwd)/scripts/nix-prefetch-git.sh https://github.com/kalbasit/nur-packages.git "$(KALBASIT_NUR_REF)" > tmp && mv tmp external/kalbasit-nur-version.json
-	rm -f tmp
+	$(eval TMP := $(shell mktemp))
+	$(shell pwd)/scripts/nix-prefetch-github-url.sh kalbasit nur-packages "$(KALBASIT_NUR_REF)" > $(TMP) && mv $(TMP) external/kalbasit-nur-version.json

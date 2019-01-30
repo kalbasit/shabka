@@ -2,8 +2,8 @@
 
 let
   pinnedVersion = builtins.fromJSON (builtins.readFile ./nixpkgs-stable-version.json);
-  pinned = builtins.fetchGit {
-    inherit (pinnedVersion) url rev ref;
+  pinned = builtins.fetchTarball {
+    inherit (pinnedVersion) url sha256;
   };
 
   importPinned = import pinned {
@@ -13,8 +13,8 @@ let
 
   patches = [
     # Improve pam.security.u2f
-    # https://github.com/NixOS/nixpkgs/pull/54756/files
-    ./0001-pam-u2f-refactor-docs-about-u2f_keys-path.patch
+    # https://github.com/NixOS/nixpkgs/commit/f072cfe1ebff79efaa409258a38646a62c94dbff
+    ./0001-nixos-pam-refactor-U2F-docs-about-u2f_keys-path-5475.patch
   ];
 
   patched = importPinned.runCommand "nixpkgs-stable-${pinnedVersion.rev}"
