@@ -7,8 +7,8 @@ with pkgs.lib;
 
 let
   pinnedVersion = builtins.fromJSON (builtins.readFile ./nixpkgs-unstable-version.json);
-  pinned = builtins.fetchGit {
-    inherit (pinnedVersion) url rev;
+  pinned = builtins.fetchTarball {
+    inherit (pinnedVersion) url sha256;
   };
 
   importPinned = import pinned {

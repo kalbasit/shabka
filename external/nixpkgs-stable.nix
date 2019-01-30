@@ -2,8 +2,8 @@
 
 let
   pinnedVersion = builtins.fromJSON (builtins.readFile ./nixpkgs-stable-version.json);
-  pinned = builtins.fetchGit {
-    inherit (pinnedVersion) url rev ref;
+  pinned = builtins.fetchTarball {
+    inherit (pinnedVersion) url sha256;
   };
 
   importPinned = import pinned {
