@@ -22,4 +22,4 @@ if [[ -z "${sha256}" ]]; then
     exit 1
 fi
 
-echo "{\"url\":\"${url}\",\"sha256\":\"${sha256}\",\"rev\":\"${rev}\"}"
+jq '.' <(echo "{\"url\":\"${url}\",\"sha256\":\"${sha256}\",\"rev\":\"${rev}\"}")
