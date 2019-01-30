@@ -17,7 +17,7 @@ var_2: &enable-cachix
   run:
     name: Enable cachix
     command: |
-      echo cachix use "${CACHIX_CACHE}"
+      cachix use "${CACHIX_CACHE}"
 
 version: 2
 jobs:
