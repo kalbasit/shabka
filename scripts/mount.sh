@@ -10,8 +10,8 @@ set +e
 swapon /dev/mapper/cryptswap
 set +e
 
-mount -o subvol=@nixos/@root /mnt
-mount -o subvol=@nixos/@home /mnt/home
-mount -o subvol=@yl /mnt/yl
-mount -o subvol=@yl/code /mnt/yl/code
-mount -o subvol=@yl/private /mnt/yl/private
+mount -o subvol=@nixos/@root /dev/mapper/cryptroot /mnt
+mount -o subvol=@nixos/@home /dev/mapper/cryptroot /mnt/home
+mount -o subvol=@yl /dev/mapper/cryptroot /mnt/yl
+mount -o subvol=@yl/code /dev/mapper/cryptroot /mnt/yl/code
+mount -o subvol=@yl/private /dev/mapper/cryptroot /mnt/yl/private
