@@ -47,7 +47,7 @@ jobs:
 
             export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=${shabka_path}"
 
-            nix-instantiate ./hosts/athena
+            nix-build --no-out-link ./hosts/athena | cachix push "${CACHIX_CACHE}"
 
   cratos:
     working_directory: /go/src/github.com/kalbasit/shabka
@@ -72,7 +72,7 @@ jobs:
 
             export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=${shabka_path}"
 
-            nix-instantiate ./hosts/cratos
+            nix-build --no-out-link ./hosts/cratos | cachix push "${CACHIX_CACHE}"
 
   hades:
     working_directory: /go/src/github.com/kalbasit/shabka
@@ -97,7 +97,7 @@ jobs:
 
             export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=${shabka_path}"
 
-            nix-instantiate ./hosts/hades
+            nix-build --no-out-link ./hosts/hades | cachix push "${CACHIX_CACHE}"
 
   hera:
     working_directory: /go/src/github.com/kalbasit/shabka
@@ -122,7 +122,7 @@ jobs:
 
             export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=${shabka_path}"
 
-            nix-instantiate ./hosts/hera
+            nix-build --no-out-link ./hosts/hera | cachix push "${CACHIX_CACHE}"
 
   zeus:
     working_directory: /go/src/github.com/kalbasit/shabka
@@ -147,7 +147,7 @@ jobs:
 
             export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=${shabka_path}"
 
-            nix-instantiate ./hosts/zeus
+            nix-build --no-out-link ./hosts/zeus | cachix push "${CACHIX_CACHE}"
 
 workflows:
   version: 2
