@@ -4,6 +4,7 @@ set -euo pipefail
 
 # TODO: This must be able to mount any host by parsing directly the hardware
 # configuration
+# nix eval "(import ./hosts/hades/hardware-configuration.nix {lib = (import <nixpkgs> {}).lib;}).boot.initrd.luks.devices"
 
 echo ">>> Starting, please expect to enter your cryptsetup password!"
 
