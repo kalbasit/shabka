@@ -4,7 +4,7 @@ with lib;
 
 let
   rootDevice   = "/dev/disk/by-uuid/9ee04791-04d5-4796-86d6-71fa8ca4932c";
-  bootDevice   = "/dev/disk/by-uuid/026B-3B06";
+  bootDevice   = "/dev/disk/by-uuid/4733-872F";
   swapDevice   = "/dev/disk/by-uuid/62947932-6c57-422f-9221-2a9b017ab158";
 
   subVolumes =
