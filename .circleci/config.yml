@@ -154,12 +154,12 @@ workflows:
   testing:
     jobs:
       - athena:
-          context: org-global
+          context: nix-global
       - cratos:
-          context: org-global
+          context: nix-global
       - hades:
-          context: org-global
+          context: nix-global
       - hera:
-          context: org-global
+          context: nix-global
       - zeus:
-          context: org-global
+          context: nix-global
