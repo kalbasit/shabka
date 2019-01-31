@@ -160,6 +160,11 @@ in {
     };
   };
 
+  services.hydra = {
+    enable = true;
+    hydraURL = "https://hydra.nasreddine.com";
+  };
+
   mine.plex = {
     enable = true;
     dataDir = "/nas/Plex/Library/Application\ Support";
