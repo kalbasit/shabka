@@ -14,7 +14,6 @@ with lib;
       efiSupport = true;
       enable = true;
       enableCryptodisk = true;
-      useOSProber = true;
     };
 
     boot.loader.efi.canTouchEfiVariables = true;
