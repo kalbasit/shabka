@@ -26,7 +26,7 @@ in {
   imports = [
     ./hardware-configuration.nix
 
-    "${pinnedNH}/dell/xps/13-9360"
+    "${pinnedNH}/dell/xps/13-9370"
 
     ../../modules/nixos
 
