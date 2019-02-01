@@ -64,7 +64,7 @@
 
           DP-1 = {
             enable = true;
-            position = "3200x0";
+            position = "1920x0";
             mode = "2560x1440";
             gamma = "1.0:0.909:0.909";
             rate = "59.95";
