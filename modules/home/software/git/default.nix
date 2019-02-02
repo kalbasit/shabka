@@ -268,7 +268,7 @@ with lib;
       ];
 
       signing = {
-        key = "wael.nasreddine@gmail.com";
+        key = "me@yl.codes";
         signByDefault = true;
       };
     };
