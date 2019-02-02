@@ -268,7 +268,7 @@ with lib;
       ];
 
       signing = {
-        key = "0x2D1A12A5FF7D3A91";
+        key = "me@yl.codes";
         signByDefault = true;
       };
     };
