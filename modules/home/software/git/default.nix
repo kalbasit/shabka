@@ -268,7 +268,6 @@ with lib;
       ];
 
       signing = {
-        key = "0x2D1A12A5FF7D3A91";
         signByDefault = true;
       };
     };
