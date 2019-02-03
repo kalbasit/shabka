@@ -62,9 +62,6 @@ let
       substituteInPlace $out/sapg \
         --subst-var-by apg_bin ${getBin apg}/bin/apg
 
-      substituteInPlace $out/sp \
-        --subst-var-by ssh-agents_bin ${getBin unstable.ssh-agents}/bin/ssh-agents
-
       substituteInPlace $out/tmycli \
         --subst-var-by mycli_bin ${getBin mycli}/bin/mycli \
         --subst-var-by netstat_bin ${getBin nettools}/bin/netstat \
