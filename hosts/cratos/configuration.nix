@@ -42,11 +42,11 @@ in {
   networking.hostName = "cratos";
 
   nix.buildMachines =
-    if builtins.pathExists /yl/private/network-secrets/shabka/hosts/zeus/id_rsa.pub then
+    if builtins.pathExists /yl/private/network-secrets/shabka/hosts/zeus/id_rsa then
     [{
       hostName = "zeus.home.nasreddine.com";
       sshUser = "builder";
-      sshKey = "/yl/private/network-secrets/shabka/hosts/zeus/id_rsa.pub";
+      sshKey = "/yl/private/network-secrets/shabka/hosts/zeus/id_rsa";
       system = "x86_64-linux";
       maxJobs = 8;
       speedFactor = 2;
