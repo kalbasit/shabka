@@ -14,6 +14,7 @@ let
 
       group = "mine";
       extraGroups = [
+        "builders"
         "dialout"
         "fuse"
         "users"
@@ -69,7 +70,10 @@ in {
     users = {
       mutableUsers = false;
 
-      groups = { mine = { gid = 2000; }; };
+      groups = {
+        builders = { gid = 1999; };
+        mine = { gid = 2000; };
+      };
 
       users = mergeAttrs
         { root = { openssh.authorizedKeys.keys = sshKeys; }; }

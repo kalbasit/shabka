@@ -75,9 +75,11 @@ in {
   # allow Zeus to be used as a builder
   users.users = if builtins.pathExists /yl/private/network-secrets/shabka/hosts/zeus/id_rsa.pub then {
     builder = {
+      extraGroups = ["builders"];
       openssh.authorizedKeys.keys = [
         (builtins.readFile /yl/private/network-secrets/shabka/hosts/zeus/id_rsa.pub)
       ];
+      isNormalUser = true;
     };
   } else {};
 
