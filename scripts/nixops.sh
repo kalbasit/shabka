@@ -15,7 +15,7 @@ readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
 readonly nixpkgs="$( nix-build --no-out-link ${nixpkgs_stable} )"
 
 export NIX_PATH="nixpkgs=${nixpkgs}"
-export NIXOPS_STATE="${HOME}/keybase/private/ylcodes/system/deployments.nixops";
+export NIXOPS_STATE="${HOME}/keybase/private/ylcodes/shabka/deployments.nixops";
 
 set -x
 nixops "${@}"
