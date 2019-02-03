@@ -131,7 +131,15 @@ in {
       fi
 
       # run iscsi discover, this might fail and that's OK!
-      iscsi_discovery ${nasIP} || true
+      let "timeout = $(date +%s) + 60"
+      while ! iscsi_discovery ${nasIP}; do
+        if [ "$(date +%s)" -ge "$timeout" ]; then
+          echo "unable to run iscsi_discovery, going to skip this step"
+          break
+        else
+          sleep 0.5
+        fi
+      done
 
       # discover all the iSCSI defices offered by my NAS
       let "timeout = $(date +%s) + 60"
