@@ -86,6 +86,9 @@ in {
   # Set the hardware clock to local time to support dual booting with Windows.
   time.hardwareClockInLocalTime = true;
 
+  # Detect windows Hard Drive
+  boot.loader.grub.useOSProber = true;
+
   services.logind.extraConfig = ''
     HandlePowerKey=suspend
   '';
