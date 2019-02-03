@@ -16,7 +16,6 @@ let
     "Stand-upComedy"
     "TVShows"
     "docker"
-    "homes"
     "music"
   ];
 
