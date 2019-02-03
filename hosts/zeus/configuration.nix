@@ -80,7 +80,6 @@ in {
 
   mine.users = { yl = { uid = 2000; isAdmin = true;  home = "/yl"; }; };
 
-  mine.gnupg.enable = true;
   mine.useColemakKeyboardLayout = true;
   mine.virtualisation.libvirtd.enable = true;
 
