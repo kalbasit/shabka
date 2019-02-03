@@ -3,6 +3,9 @@
 with lib;
 
 let
+  sshKeys = [
+    (builtins.readFile (import ../../external/kalbasit-keys.nix))
+  ];
 
   pinnedNH = import ../../external/nixos-hardware.nix;
 
@@ -73,23 +76,25 @@ in {
   ];
 
   # allow Zeus to be used as a builder
-  users.users = if builtins.pathExists /yl/private/network-secrets/shabka/hosts/zeus/id_rsa.pub then {
-    builder = {
-      extraGroups = ["builders"];
-      openssh.authorizedKeys.keys = [
-        (builtins.readFile /yl/private/network-secrets/shabka/hosts/zeus/id_rsa.pub)
-      ];
-      isNormalUser = true;
-    };
-  } else {};
+  users.users = mkMerge [
+    { root = { openssh.authorizedKeys.keys = sshKeys; }; }
+
+    (if builtins.pathExists /yl/private/network-secrets/shabka/hosts/zeus/id_rsa.pub then {
+      builder = {
+        extraGroups = ["builders"];
+        openssh.authorizedKeys.keys = [
+          (builtins.readFile /yl/private/network-secrets/shabka/hosts/zeus/id_rsa.pub)
+        ];
+        isNormalUser = true;
+      };
+    } else {})
+  ];
 
   # set the default locale and the timeZone
   i18n.defaultLocale = "en_US.UTF-8";
   time.timeZone = "America/Los_Angeles";
 
   networking.hostName = "zeus";
-
-  mine.users = { yl = { uid = 2000; isAdmin = true;  home = "/yl"; }; };
 
   mine.useColemakKeyboardLayout = true;
   mine.virtualisation.libvirtd.enable = true;
