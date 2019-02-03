@@ -72,6 +72,15 @@ in {
     ./home.nix
   ];
 
+  # allow Zeus to be used as a builder
+  users.users = if builtins.pathExists /yl/private/network-secrets/shabka/hosts/zeus/id_rsa.pub then {
+    builder = {
+      openssh.authorizedKeys.keys = [
+        (builtins.readFile /yl/private/network-secrets/shabka/hosts/zeus/id_rsa.pub)
+      ];
+    };
+  } else {};
+
   # set the default locale and the timeZone
   i18n.defaultLocale = "en_US.UTF-8";
   time.timeZone = "America/Los_Angeles";
