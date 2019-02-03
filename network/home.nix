@@ -2,7 +2,7 @@ let
 
   region = "us-west-1";
   accessKeyId = "personal";
-  keyPair = "aws_global";
+  keyPair = "yubikey_5c_09501258";
   ami = "ami-07aa7f56d612ddd38";
 
 in {
