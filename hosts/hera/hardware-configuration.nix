@@ -3,9 +3,9 @@
 with lib;
 
 let
-  rootDevice   = "/dev/disk/by-uuid/015a0fac-a78b-45d9-90b5-eb1bd369c241";
-  bootDevice   = "/dev/disk/by-uuid/ADE1-3154";
-  swapDevice   = "/dev/disk/by-uuid/a54fc702-d678-4bb1-9448-940f2337cefe";
+  rootDevice   = "/dev/disk/by-uuid/80a02fae-e860-4e9d-945b-63fe9ece252f";
+  bootDevice   = "/dev/disk/by-uuid/2E37-9536";
+  swapDevice   = "/dev/disk/by-uuid/a7e5c6a5-79e1-4256-aa3a-e0a92ef526e0";
 
   subVolumes =
     {
@@ -32,9 +32,9 @@ in {
   imports = [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix> ];
 
   boot.initrd.luks.devices = {
-    cryptkey     = { device = "/dev/disk/by-uuid/339cc5ba-1a34-428d-bc9b-b5e10b14eaf0"; };
-    cryptroot    = { device = "/dev/disk/by-uuid/15d91894-a9dc-4288-9589-bcb7945d02ce"; keyFile = "/dev/mapper/cryptkey"; };
-    cryptswap    = { device = "/dev/disk/by-uuid/7cd0fad9-4af1-40af-9576-af9c6212d9b9"; keyFile = "/dev/mapper/cryptkey"; };
+    cryptkey     = { device = "/dev/disk/by-uuid/7cb0ed7a-eb28-4a92-8280-5bc3e68cb4a3"; };
+    cryptroot    = { device = "/dev/disk/by-uuid/a9e0d610-e61c-4852-a4bb-eacdf7291dd4"; keyFile = "/dev/mapper/cryptkey"; };
+    cryptswap    = { device = "/dev/disk/by-uuid/7be87c50-1beb-435e-bdf6-a16925cd890e"; keyFile = "/dev/mapper/cryptkey"; };
   };
 
   fileSystems = mergeAttrs
