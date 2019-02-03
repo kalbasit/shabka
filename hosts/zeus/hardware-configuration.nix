@@ -35,6 +35,7 @@ in {
   boot.initrd.luks.devices = {
     cryptkey = {
       device = "/dev/disk/by-uuid/ba45c08d-1708-457b-9c76-0ef5ceaf3cee";
+      keyFile = "/dev/disk/by-uuid/c9ae674b-6ec3-4ac9-bc13-3a409cdf352a";
     };
 
     cryptroot = {
