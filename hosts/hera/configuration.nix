@@ -44,11 +44,11 @@ in {
   networking.hostName = "hera";
 
   nix.buildMachines =
-    if builtins.pathExists /yl/private/private-home-files/.ssh/personal/id_rsa then
+    if builtins.pathExists /yl/private/network-secrets/shabka/hosts/zeus/id_rsa then
     [{
       hostName = "zeus.home.nasreddine.com";
-      sshUser = "yl";
-      sshKey = "/yl/private/private-home-files/.ssh/personal/id_rsa";
+      sshUser = "builder";
+      sshKey = "/yl/private/network-secrets/shabka/hosts/zeus/id_rsa";
       system = "x86_64-linux";
       maxJobs = 8;
       speedFactor = 2;
