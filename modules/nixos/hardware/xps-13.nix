@@ -26,7 +26,9 @@ with lib;
 
     services.xserver.videoDrivers = lib.mkForce ["modesetting"];
 
-    boot.kernelPackages = pkgs.linuxPackages_latest;
+    # use unstable kernel and Virtualbox from unstable so it compiles
+    boot.kernelPackages = pkgs.unstable.linuxPackages_latest;
+    virtualisation.virtualbox.host.package = pkgs.unstable.virtualbox;
 
     i18n.consoleFont = "Lat2-Terminus16";
   };
