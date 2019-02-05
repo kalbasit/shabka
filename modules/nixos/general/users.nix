@@ -4,10 +4,7 @@ with lib;
 
 let
   sshKeys = [
-    (builtins.readFile (builtins.fetchurl {
-      url = "https://github.com/kalbasit.keys";
-      sha256 = "1ijzn5nmh7fcpky9zz6dsbps3pad67nlp0cs0zrs46f0bcy9cqjr";
-    }))
+    (builtins.readFile (import ../../../external/kalbasit-keys.nix))
   ];
 
   makeUser = userName: { uid, isAdmin ? false, home ? "/home/${userName}" }: nameValuePair
@@ -17,6 +14,7 @@ let
 
       group = "mine";
       extraGroups = [
+        "builders"
         "dialout"
         "fuse"
         "users"
@@ -72,7 +70,10 @@ in {
     users = {
       mutableUsers = false;
 
-      groups = { mine = { gid = 2000; }; };
+      groups = {
+        builders = { gid = 1999; };
+        mine = { gid = 2000; };
+      };
 
       users = mergeAttrs
         { root = { openssh.authorizedKeys.keys = sshKeys; }; }

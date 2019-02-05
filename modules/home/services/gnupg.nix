@@ -10,6 +10,7 @@ with lib;
       enable = true;
 
       defaultCacheTtl = 68400;
+      enableSshSupport = true;
       maxCacheTtl = 68400;
     };
   };

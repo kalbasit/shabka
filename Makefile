@@ -29,7 +29,7 @@ brew:
 	brew bundle --file=os-specific/darwin/Brewfile
 
 .PHONY: update-external
-update-external: update-home-manager update-nixpkgs-stable update-nixpkgs-unstable update-nixos-hardware update-nur update-kalbasit-nur
+update-external: update-home-manager update-nixpkgs-stable update-nixpkgs-unstable update-nixos-hardware update-nur update-kalbasit-nur update-kalbasit-keys
 
 .PHONY: update-home-manager
 update-home-manager:
@@ -60,3 +60,8 @@ update-nur:
 update-kalbasit-nur:
 	$(eval TMP := $(shell mktemp))
 	$(shell pwd)/scripts/nix-prefetch-github-url.sh kalbasit nur-packages "$(KALBASIT_NUR_REF)" > $(TMP) && mv $(TMP) external/kalbasit-nur-version.json
+
+.PHONY: update-kalbasit-keys
+update-kalbasit-keys:
+	$(eval TMP := $(shell mktemp))
+	echo "{\"url\":\"https://github.com/kalbasit.keys\",\"sha256\":\"$(shell nix-prefetch-url https://github.com/kalbasit.keys)\"}" > $(TMP) && mv $(TMP) external/kalbasit-keys-version.json

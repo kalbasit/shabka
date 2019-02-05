@@ -26,7 +26,7 @@ in {
   imports = [
     ./hardware-configuration.nix
 
-    "${pinnedNH}/dell/xps/13-9360"
+    "${pinnedNH}/dell/xps/13-9370"
 
     ../../modules/nixos
 
@@ -42,11 +42,11 @@ in {
   networking.hostName = "cratos";
 
   nix.buildMachines =
-    if builtins.pathExists /yl/private/private-home-files/.ssh/personal/id_rsa then
+    if builtins.pathExists /yl/private/network-secrets/shabka/hosts/zeus/id_rsa then
     [{
       hostName = "zeus.home.nasreddine.com";
-      sshUser = "yl";
-      sshKey = "/yl/private/private-home-files/.ssh/personal/id_rsa";
+      sshUser = "builder";
+      sshKey = "/yl/private/network-secrets/shabka/hosts/zeus/id_rsa";
       system = "x86_64-linux";
       maxJobs = 8;
       speedFactor = 2;
@@ -57,7 +57,6 @@ in {
     builders-use-substitutes = true
   '';
 
-  mine.gnupg.enable = true;
   mine.hardware.intel_backlight.enable = true;
   mine.printing.enable = true;
   mine.useColemakKeyboardLayout = true;

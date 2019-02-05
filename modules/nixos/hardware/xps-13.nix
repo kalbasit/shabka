@@ -14,20 +14,21 @@ with lib;
       efiSupport = true;
       enable = true;
       enableCryptodisk = true;
-      useOSProber = true;
     };
 
     boot.loader.efi.canTouchEfiVariables = true;
 
     boot.loader.systemd-boot.enable = false;
 
-    nix.maxJobs = lib.mkDefault 4;
+    nix.maxJobs = lib.mkDefault 8;
 
     powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
     services.xserver.videoDrivers = lib.mkForce ["modesetting"];
 
     boot.kernelPackages = pkgs.linuxPackages_latest;
+
+    i18n.consoleFont = "Lat2-Terminus16";
   };
 }
 
