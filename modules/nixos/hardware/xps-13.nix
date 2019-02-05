@@ -26,7 +26,11 @@ with lib;
 
     services.xserver.videoDrivers = lib.mkForce ["modesetting"];
 
-    boot.kernelPackages = pkgs.linuxPackages_latest;
+    # use unstable kernel to fix modesetting issues that turn the screen black.
+    # TODO: unfortunately Virtualbox is not working with this kernel so I'm
+    # going to disable it.
+    boot.kernelPackages = pkgs.unstable.linuxPackages_latest;
+    mine.workstation.virtualbox.enable = mkForce false;
 
     i18n.consoleFont = "Lat2-Terminus16";
   };
