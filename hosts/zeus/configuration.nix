@@ -188,6 +188,7 @@ in {
   services.hydra = {
     enable = true;
     hydraURL = "https://hydra.nasreddine.com";
+    notificationSender = "wael.nasreddine+hydra@gmail.com";
   };
 
   mine.plex = {
