@@ -1,12 +1,12 @@
 with import ../../util;
 
-{
-  hades = buildNixOSConfiguration { conf = ./configuration.nix; };
-  hades-home = (import ./home.nix).mine.home-manager.config {
+rec {
+  nixos = buildNixOSConfiguration { conf = ./configuration.nix; };
+  home = buildHomeManagerConfiguration ((import ./home.nix).mine.home-manager.config {
     userName = "yl";
     uid = 2000;
     isAdmin = true;
     home = "/yl";
-    nixosConfig = {};
-  };
+    nixosConfig = nixos.config;
+  } { lib = (import <nixpkgs>).lib; });
 }

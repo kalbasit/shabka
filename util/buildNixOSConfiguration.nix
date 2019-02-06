@@ -19,5 +19,5 @@ let
 in {
   buildNixOSConfiguration = {conf, withShim ? false}: (import <nixpkgs/nixos> {
     configuration.imports = [conf] ++ (if withShim then [ shim ] else []);
-  }).system;
+  });
 }

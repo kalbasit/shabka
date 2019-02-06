@@ -10,5 +10,5 @@ in {
   buildHomeManagerConfiguration = conf: (import "${homeManager}/home-manager/home-manager.nix" {
     confPath = conf;
     confAttr = "";
-  }).activationPackage;
+  });
 }
