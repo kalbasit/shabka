@@ -4,7 +4,16 @@ with lib;
 
 let
 
-  pinnedNH = import ../../external/nixos-hardware.nix;
+  pinnedNH =
+    # I'm getting an infinite loop when I import pkgs as a dependency to this
+    # function. Why is that? It forces me to import nixpkgs again here!
+    let
+
+      nixpkgs = (import ../../external/nixpkgs-stable.nix {});
+
+    in import ../../external/nixos-hardware.nix {
+      inherit (import nixpkgs {}) fetchpatch runCommand;
+    };
 
   nasreddineCA = builtins.readFile (builtins.fetchurl {
     url = "https://kalbas.it/ca.crt";
