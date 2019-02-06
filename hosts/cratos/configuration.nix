@@ -26,12 +26,23 @@ in {
   imports = [
     ./hardware-configuration.nix
 
-    "${pinnedNH}/dell/xps/13-9370"
+    # "${pinnedNH}/dell/xps/13-9370"
+    "${pinnedNH}/common/pc/laptop"
+    "${pinnedNH}/common/pc/laptop/acpi_call.nix"
+    "${pinnedNH}/common/pc/laptop/cpu-throttling-bug.nix"
+    "${pinnedNH}/common/cpu/intel"
 
     ../../modules/nixos
 
     ./home.nix
   ];
+
+
+  # Force S3 sleep mode. See README.wiki for details.
+  boot.kernelParams = [ "mem_sleep_default=deep" ];
+
+  # touchpad goes over i2c
+  boot.blacklistedKernelModules = [ "psmouse" ];
 
   boot.tmpOnTmpfs = true;
 
