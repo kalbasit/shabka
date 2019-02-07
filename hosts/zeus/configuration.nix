@@ -99,9 +99,6 @@ in {
     } else {})
   ];
 
-  # TODO: install neovim same as home one!
-  environment.systemPackages = with pkgs; [ tmux mosh ];
-
   # set the default locale and the timeZone
   i18n.defaultLocale = "en_US.UTF-8";
   time.timeZone = "America/Los_Angeles";
