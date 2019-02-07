@@ -19,6 +19,7 @@ in {
     };
 
     extraKnownPlugins = mkOption {
+      type = types.attrs;
       default = {};
       description = ''
         Extra NeoVim known plugins.
@@ -34,7 +35,7 @@ in {
     };
 
     keyboardLayout = mkOption {
-      type = with types; enum [ "colemak" "qwerty" ];
+      type = types.enum [ "colemak" "qwerty" ];
       default = if config.mine.useColemakKeyboardLayout then "colemak" else "qwerty";
       description = ''
         The keyboard layout to use.
@@ -43,13 +44,16 @@ in {
   };
 
   config = mkIf cfg.enable {
-    programs.neovim = (import ../../../neovim {
-      inherit lib pkgs;
+    programs.neovim = mkMerge [
+      (import ../../../neovim {
+        inherit lib pkgs;
 
-      config = {
-        inherit (cfg) extraRC extraKnownPlugins extraPluginDictionaries keyboardLayout;
-      };
+        config.shabka.neovim = {
+          inherit (cfg) enable extraRC extraKnownPlugins extraPluginDictionaries keyboardLayout;
+        };
+      }).config
 
-    }).config // { enable = true; };
+      { enable = true; }
+    ];
   };
 }

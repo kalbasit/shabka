@@ -19,6 +19,7 @@ in {
     };
 
     extraKnownPlugins = mkOption {
+      type = types.attrs;
       default = {};
       description = ''
         Extra NeoVim known plugins.
@@ -34,7 +35,7 @@ in {
     };
 
     keyboardLayout = mkOption {
-      type = with types; enum [ "colemak" "qwerty" ];
+      type = types.enum [ "colemak" "qwerty" ];
       default = "qwerty";
       description = ''
         The keyboard layout to use.
@@ -62,13 +63,13 @@ in {
           xsel_bin = "${pkgs.xsel}/bin/xsel";
         }))
 
-        extraRC
+        cfg.extraRC
 
-        (builtins.readFile ./keyboard_layouts + "${keyboardLayout}.vim")
+        (builtins.readFile ./keyboard_layouts + "${cfg.keyboardLayout}.vim")
       ];
 
-      vam.knownPlugins = pkgs.vimPlugins // extraKnownPlugins;
-      vam.pluginDictionaries = extraPluginDictionaries ++ [
+      vam.knownPlugins = pkgs.vimPlugins // cfg.extraKnownPlugins;
+      vam.pluginDictionaries = cfg.extraPluginDictionaries ++ [
         {
           names =
             [
@@ -130,7 +131,7 @@ in {
               "yats-vim"
 
             ]
-            ++ (if keyboardLayout == "colemak" then ["vim-colemak"] else []);
+            ++ (if cfg.keyboardLayout == "colemak" then ["vim-colemak"] else []);
         }
       ];
     };
