@@ -5,8 +5,7 @@
 , pkgs
 }:
 
-with pkgs;
-with lib;
+with pkgs.lib;
 
 {
   viAlias = true;
@@ -23,12 +22,12 @@ with lib;
 
   configure = {
     customRC = builtins.concatStringsSep " " [
-      (builtins.readFile (substituteAll {
+      (builtins.readFile (pkgs.substituteAll {
         src = ./init.vim;
 
-        ag_bin = "${getBin ag}/bin/ag";
-        gocode_bin = "${getBin nur.repos.kalbasit.gocode}/bin/gocode";
-        xsel_bin = "${getBin xsel}/bin/xsel";
+        ag_bin = "${getBin pkgs.ag}/bin/ag";
+        gocode_bin = "${getBin pkgs.nur.repos.kalbasit.gocode}/bin/gocode";
+        xsel_bin = "${getBin pkgs.xsel}/bin/xsel";
       }))
 
       (builtins.readFile (./keyboard_layouts + "/${keyboardLayout}.vim"))
@@ -36,7 +35,7 @@ with lib;
       extraRC
     ];
 
-    vam.knownPlugins = vimPlugins // extraKnownPlugins;
+    vam.knownPlugins = pkgs.vimPlugins // extraKnownPlugins;
     vam.pluginDictionaries = extraPluginDictionaries ++ [
       {
         names =

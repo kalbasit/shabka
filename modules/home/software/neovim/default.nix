@@ -48,6 +48,8 @@ in {
   };
 
   config = {
-    programs.neovim = neovimConfig // { inherit (cfg) enable; };
+    programs.neovim = neovimConfig // {
+      inherit (cfg) enable;
+    };
   };
 }
