@@ -108,6 +108,7 @@ in {
   mine.users = {};
 
   mine.useColemakKeyboardLayout = true;
+  mine.neovim.enable = true;
   mine.virtualisation.libvirtd.enable = true;
 
   mine.hardware.machine = "zeus";
