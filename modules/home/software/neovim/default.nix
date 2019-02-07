@@ -47,7 +47,7 @@ in {
     };
   };
 
-  config = {
+  config = mkIf cfg.enable {
     programs.neovim = neovimConfig // {
       inherit (cfg) enable;
     };
