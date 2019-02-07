@@ -18,6 +18,9 @@ with lib;
   withPython3 = true;
   extraPython3Packages = ps: with ps; [ pynvim ];
 
+  withNodeJs = true;
+  withRuby = true;
+
   configure = {
     customRC = builtins.concatStringsSep " " [
       (builtins.readFile (substituteAll {

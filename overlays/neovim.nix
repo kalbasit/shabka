@@ -1,6 +1,7 @@
 self: super:
 
 {
+  neovim = super.unstable.neovim;
   vimPlugins = super.unstable.vimPlugins;
-  neovim = super.unstable.neovim.override { withNodeJs = true; };
+  wrapNeovim = super.unstable.wrapNeovim;
 }
