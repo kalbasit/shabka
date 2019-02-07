@@ -7,6 +7,10 @@ let
   cfg = config.mine.neovim;
 
 in {
+  imports = [
+    ../../../neovim
+  ];
+
   options.mine.neovim = {
     enable = mkEnableOption "neovim";
 
@@ -43,17 +47,25 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
-    programs.neovim = mkMerge [
+  config = {
+    programs.neovim = mkIf cfg.enable {
+      config.shabka.neovim = {
+        inherit (cfg) enable extraRC extraKnownPlugins extraPluginDictionaries keyboardLayout;
+      };
+
+      programs.neovim = {
+
+      };
+    }
+      mkMerge [
       (import ../../../neovim {
         inherit lib pkgs;
 
         config.shabka.neovim = {
-          inherit (cfg) enable extraRC extraKnownPlugins extraPluginDictionaries keyboardLayout;
         };
       }).config
 
-      { enable = true; }
+      { inherit (cfg) enable; }
     ];
   };
 }
