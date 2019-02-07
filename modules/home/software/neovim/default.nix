@@ -35,7 +35,7 @@ in {
 
     keyboardLayout = mkOption {
       type = with types; enum [ "colemak" "qwerty" ];
-      default = /*if config.mine.useColemakKeyboardLayout then*/ "colemak" /* else "qwerty"*/;
+      default = if config.mine.useColemakKeyboardLayout then "colemak" else "qwerty";
       description = ''
         The keyboard layout to use.
       '';
