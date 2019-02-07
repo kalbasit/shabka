@@ -9,6 +9,8 @@ let
 
 in {
   environment.systemPackages = with pkgs; [
+    direnv
+
     (wrapNeovim neovim.unwrapped {
       inherit (neovimConfig)
           extraPython3Packages withPython3
