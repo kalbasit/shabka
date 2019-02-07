@@ -3,22 +3,21 @@
 , extraPluginDictionaries ? []
 , keyboardLayout ? "qwerty"
 , pkgs
+, viAlias ? true
+, vimAlias ? true
+, withNodeJs ? true
+, withPython ? true
+, withPython3 ? true
+, withRuby ? true
 }:
 
 with pkgs.lib;
 
 {
-  viAlias = true;
-  vimAlias = true;
+  inherit viAlias vimAlias withNodeJs withPython withPython3 withRuby;
 
-  withPython = true;
   extraPythonPackages = ps: with ps; [ pynvim ];
-
-  withPython3 = true;
   extraPython3Packages = ps: with ps; [ pynvim ];
-
-  withNodeJs = true;
-  withRuby = true;
 
   configure = {
     customRC = builtins.concatStringsSep " " [
