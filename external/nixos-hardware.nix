@@ -11,7 +11,7 @@ let
     # https://github.com/NixOS/nixos-hardware/pull/97
     (fetchpatch {
       url = "https://github.com/NixOS/nixos-hardware/pull/97.patch";
-      sha256 = "1pryw8kwk8h99ag08wni6gmkyrpabgyzm55lf8b6zd25ph4027m5";
+      sha256 = "0la5qyfvayzxm7nz4xrfdcybcyzipjzw17na07277wcnaa1bmb15";
     })
   ];
 
