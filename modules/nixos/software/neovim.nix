@@ -1,21 +1,62 @@
-{ pkgs, ... }:
+{ config, pkgs, lib, ... }:
+
+with lib;
 
 let
+
+  cfg = config.mine.neovim;
+
   neovimConfig = import ../../neovim {
-    # inherit (cfg) extraRC extraKnownPlugins extraPluginDictionaries keyboardLayout;
+    inherit (cfg) extraRC extraKnownPlugins extraPluginDictionaries keyboardLayout;
     inherit pkgs;
-    keyboardLayout = "colemak";
   };
 
 in {
-  environment.systemPackages = with pkgs; [
-    direnv
+  options.mine.neovim = {
+    enable = mkEnableOption "neovim";
 
-    (wrapNeovim neovim.unwrapped {
-      inherit (neovimConfig)
-          extraPython3Packages withPython3
-          extraPythonPackages withPython
-          withNodeJs withRuby viAlias vimAlias configure;
-    })
-  ];
+    extraRC = mkOption {
+      type = types.str;
+      default = "";
+      description = ''
+        Extra NeoVim init configuration.
+      '';
+    };
+
+    extraKnownPlugins = mkOption {
+      default = {};
+      description = ''
+        Extra NeoVim known plugins.
+      '';
+    };
+
+    extraPluginDictionaries = mkOption {
+      type = with types; listOf attrs;
+      default = [];
+      description = ''
+        Extra NeoVim plugin dictionary.
+      '';
+    };
+
+    keyboardLayout = mkOption {
+      type = with types; enum [ "colemak" "qwerty" ];
+      default = if config.mine.useColemakKeyboardLayout then "colemak" else "qwerty";
+      description = ''
+        The keyboard layout to use.
+      '';
+    };
+  };
+
+  config = {
+    environment.systemPackages = with pkgs; [
+      direnv
+
+      (wrapNeovim neovim.unwrapped {
+        inherit (neovimConfig)
+        extraPython3Packages withPython3
+        extraPythonPackages withPython
+        withNodeJs withRuby viAlias vimAlias configure;
+      })
+    ];
+  };
 }
