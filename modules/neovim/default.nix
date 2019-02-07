@@ -28,7 +28,7 @@ with lib;
         xsel_bin = "${getBin xsel}/bin/xsel";
       }))
 
-      (builtins.readFile ./keyboard_layouts + "${keyboardLayout}.vim")
+      (builtins.readFile (./keyboard_layouts + "/${keyboardLayout}.vim"))
 
       extraRC
     ];
