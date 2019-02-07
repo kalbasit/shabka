@@ -6,7 +6,7 @@ let
 
   cfg = config.mine.neovim;
 
-  neovimConfig = import ../../../neovim {
+  neovimConfig = import ../../neovim {
     inherit (cfg) extraRC extraKnownPlugins extraPluginDictionaries keyboardLayout;
     inherit pkgs;
   };
@@ -48,8 +48,15 @@ in {
   };
 
   config = mkIf cfg.enable {
-    programs.neovim = neovimConfig // {
-      inherit (cfg) enable;
-    };
+    environment.systemPackages = with pkgs; [
+      direnv
+
+      (wrapNeovim neovim.unwrapped {
+        inherit (neovimConfig)
+        extraPython3Packages withPython3
+        extraPythonPackages withPython
+        withNodeJs withRuby viAlias vimAlias configure;
+      })
+    ];
   };
 }
