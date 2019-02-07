@@ -43,9 +43,13 @@ in {
   };
 
   config = mkIf cfg.enable {
-    programs.neovim = import ../../../neovim {
-      inherit (cfg) extraRC extraKnownPlugins extraPluginDictionaries keyboardLayout;
-      inherit pkgs;
-    };
+    programs.neovim = (import ../../../neovim {
+      inherit lib pkgs;
+
+      config = {
+        inherit (cfg) extraRC extraKnownPlugins extraPluginDictionaries keyboardLayout;
+      };
+
+    }).config // { enable = true; };
   };
 }
