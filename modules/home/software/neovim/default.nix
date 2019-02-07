@@ -6,6 +6,11 @@ let
 
   cfg = config.mine.neovim;
 
+  neovimConfig = import ../../../neovim {
+    inherit (cfg) extraRC extraKnownPlugins extraPluginDictionaries keyboardLayout;
+    inherit pkgs;
+  };
+
 in {
   options.mine.neovim = {
     enable = mkEnableOption "neovim";
@@ -35,17 +40,14 @@ in {
 
     keyboardLayout = mkOption {
       type = with types; enum [ "colemak" "qwerty" ];
-      default = /*if config.mine.useColemakKeyboardLayout then*/ "colemak" /* else "qwerty"*/;
+      default = if config.mine.useColemakKeyboardLayout then "colemak" else "qwerty";
       description = ''
         The keyboard layout to use.
       '';
     };
   };
 
-  config = mkIf cfg.enable {
-    programs.neovim = import ../../../neovim {
-      inherit (cfg) extraRC extraKnownPlugins extraPluginDictionaries keyboardLayout;
-      inherit pkgs;
-    };
+  config = {
+    programs.neovim = neovimConfig // { inherit (cfg) enable; };
   };
 }

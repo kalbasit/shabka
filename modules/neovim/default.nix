@@ -1,13 +1,14 @@
-{ extraRC
-, extraKnownPlugins
-, extraPluginDictionaries
-, keyboardLayout
+{ extraRC ? ""
+, extraKnownPlugins ? {}
+, extraPluginDictionaries ? []
+, keyboardLayout ? "qwerty"
 , pkgs
 }:
 
-{
-  enable = true;
+with pkgs;
+with lib;
 
+{
   viAlias = true;
   vimAlias = true;
 
@@ -19,20 +20,20 @@
 
   configure = {
     customRC = builtins.concatStringsSep " " [
-      (builtins.readFile (pkgs.substituteAll {
+      (builtins.readFile (substituteAll {
         src = ./init.vim;
 
-        ag_bin = "${pkgs.ag}/bin/ag";
-        gocode_bin = "${pkgs.nur.repos.kalbasit.gocode}/bin/gocode";
-        xsel_bin = "${pkgs.xsel}/bin/xsel";
+        ag_bin = "${getBin ag}/bin/ag";
+        gocode_bin = "${getBin nur.repos.kalbasit.gocode}/bin/gocode";
+        xsel_bin = "${getBin xsel}/bin/xsel";
       }))
 
-      extraRC
-
       (builtins.readFile ./keyboard_layouts + "${keyboardLayout}.vim")
+
+      extraRC
     ];
 
-    vam.knownPlugins = pkgs.vimPlugins // extraKnownPlugins;
+    vam.knownPlugins = vimPlugins // extraKnownPlugins;
     vam.pluginDictionaries = extraPluginDictionaries ++ [
       {
         names =
