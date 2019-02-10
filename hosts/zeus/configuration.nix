@@ -82,6 +82,9 @@ in {
     ../../modules/nixos
 
     ./home.nix
+  ]
+  ++ optionals (builtins.pathExists /yl/private/network-secrets/shabka/hosts/zeus/hydra.nix) [
+    /yl/private/network-secrets/shabka/hosts/zeus/hydra.nix
   ];
 
   # allow Zeus to be used as a builder
@@ -193,12 +196,6 @@ in {
     serviceConfig = {
       RestartSec = "5";
     };
-  };
-
-  services.hydra = {
-    enable = true;
-    hydraURL = "https://hydra.nasreddine.com";
-    notificationSender = "wael.nasreddine+hydra@gmail.com";
   };
 
   mine.plex = {
