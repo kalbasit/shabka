@@ -42,10 +42,11 @@ in {
         twemoji-color-font
 
         # Consider just symbola instead of noto-*
-        noto-fonts
-        noto-fonts-extra
-        noto-fonts-emoji
-        noto-fonts-cjk
+        # noto-fonts
+        # noto-fonts-extra
+        # noto-fonts-emoji
+        # noto-fonts-cjk
+        symbola
 
         # helvetica
         vegur # the official NixOS font
