@@ -35,17 +35,16 @@ in {
     fonts = {
       enableFontDir = true;
       enableGhostscriptFonts = true;
-      # https://github.com/grahamc/nixos-config/blob/7b34cbea59b78a3b61e7a955b874ca414f182bd9/main-configuration.nix#L167-L182
       fonts = with pkgs; [
         powerline-fonts
         source-code-pro
         twemoji-color-font
 
-        # Consider just symbola instead of noto-*
-        # noto-fonts
-        # noto-fonts-extra
-        # noto-fonts-emoji
-        # noto-fonts-cjk
+        noto-fonts
+        noto-fonts-extra
+        noto-fonts-emoji
+        noto-fonts-cjk
+
         symbola
 
         # helvetica
@@ -56,4 +55,5 @@ in {
   };
 }
 
-
+# References:
+# - https://github.com/grahamc/nixos-config/blob/7b34cbea59b78a3b61e7a955b874ca414f182bd9/main-configuration.nix#L167-L182
