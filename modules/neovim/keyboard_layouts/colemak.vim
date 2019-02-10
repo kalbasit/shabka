@@ -1,3 +1,7 @@
+""
+"" Colemak keyboard bindings
+""
+
 "" AutoPairs{{{
 
 " disable shortcuts, <A-n> conflicts with Colemak movement
