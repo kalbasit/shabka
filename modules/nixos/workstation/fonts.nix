@@ -49,6 +49,8 @@ in {
 
         # helvetica
         vegur # the official NixOS font
+
+        # TODO: This has already landed in unstable!
         font-b612
       ];
     };
