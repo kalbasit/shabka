@@ -33,7 +33,6 @@ in {
 
   config = mkIf config.mine.workstation.fonts.enable {
     fonts = {
-      enableDefaultFonts = true;
       enableFontDir = true;
       enableGhostscriptFonts = true;
       fonts = with pkgs; [
