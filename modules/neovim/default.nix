@@ -88,14 +88,13 @@ with pkgs.lib;
             # Golang support
             "deoplete-go"
 
-            "vim-maktaba"
-            "vim-bazel"
-
+            # TODO(#152): vim-bazel is broken.
+            # "vim-maktaba"
+            # "vim-bazel"
 
             # Typescript support
             # "vim-typescript"    # TODO: https://github.com/kalbasit/dotfiles/issues/15
             "yats-vim"
-
           ]
           ++ (if keyboardLayout == "colemak" then ["vim-colemak"] else []);
       }
