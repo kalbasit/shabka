@@ -4,17 +4,19 @@
 
 set -euo pipefail
 
-if [[ "${#}" -lt 2 ]]; then
-    echo "USAGE: ${BASH_SOURCE[0]} <nixos_config> <action>"
-    echo "ERR: You must provide <nixos_config> and an <action>."
+if [[ "${#}" -lt 1 ]]; then
+    echo "USAGE: ${BASH_SOURCE[0]} <action>"
+    echo "ERR: You must provide an <action>."
     exit 1
 fi
 
-readonly nixos_config="${1}"
-readonly action="${2}"
-shift 2
-
 readonly shabka_path="$(cd $(dirname "${BASH_SOURCE[0]}")/../ && pwd)"
+
+readonly action="${1}"
+shift
+
+readonly host="$( hostname -s )"
+readonly nixos_config="${shabka_path}/hosts/${host}/configuration.nix"
 
 if ! [[ -r "${nixos_config}" ]]; then
     echo "ERR: configuration for nixos_config ${nixos_config} does not exist."
