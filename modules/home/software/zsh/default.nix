@@ -106,6 +106,26 @@ let
     '';
   };
 
+  lsColors = stdenvNoCC.mkDerivation rec {
+    name = "lscolors-${version}";
+    version = "2019-02-01";
+
+    src = fetchFromGitHub {
+      owner = "trapd00r";
+      repo = "LS_COLORS";
+      rev = "ea316590b3f6c9784c21445bd575e16fc4b1ff2f";
+      sha256 = "1bj3q6s7yfglj7bpc8hjw05bz1byhm95ml2iyzr72vda4jn6ll7m";
+    };
+
+    buildPhase = ''
+      dircolors -b $src/LS_COLORS > ls-colors.zsh
+    '';
+
+    installPhase = ''
+      mv ls-colors.zsh $out
+    '';
+  };
+
 in {
 
   programs.zsh = mkMerge [
@@ -181,18 +201,20 @@ in {
         size = 1000000000;
       };
 
-      initExtra = builtins.readFile (substituteAll {
+      initExtra = ''
+        # source in the LS_COLORS
+        source "${lsColors}"
+      '' + (builtins.readFile (substituteAll {
         src = ./init-extra.zsh;
 
         bat_bin      = "${getBin bat}/bin/bat";
-        exa_bin      = "${getBin exa}/bin/exa";
         fortune_bin  = "${getBin fortune}/bin/fortune";
         fzf_bin      = "${getBin fzf}/bin/fzf-tmux";
         home_path    = "${config.home.homeDirectory}";
         jq_bin       = "${getBin jq}/bin/jq";
         less_bin     = "${getBin less}/bin/less";
         tput_bin     = "${getBin ncurses}/bin/tput";
-      });
+      }));
 
       oh-my-zsh = {
         enable = true;
