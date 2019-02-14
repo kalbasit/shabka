@@ -181,18 +181,20 @@ in {
         size = 1000000000;
       };
 
-      initExtra = builtins.readFile (substituteAll {
+      initExtra = ''
+        # source in the LS_COLORS
+        source "${nur.repos.kalbasit.ls-colors}/ls-colors/bourne-shell.sh"
+      '' + (builtins.readFile (substituteAll {
         src = ./init-extra.zsh;
 
         bat_bin      = "${getBin bat}/bin/bat";
-        exa_bin      = "${getBin exa}/bin/exa";
         fortune_bin  = "${getBin fortune}/bin/fortune";
         fzf_bin      = "${getBin fzf}/bin/fzf-tmux";
         home_path    = "${config.home.homeDirectory}";
         jq_bin       = "${getBin jq}/bin/jq";
         less_bin     = "${getBin less}/bin/less";
         tput_bin     = "${getBin ncurses}/bin/tput";
-      });
+      }));
 
       oh-my-zsh = {
         enable = true;
