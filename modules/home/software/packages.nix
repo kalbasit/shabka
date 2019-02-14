@@ -58,7 +58,7 @@ in {
 
     nix-zsh-completions
 
-    slack-cli
+    unstable.slack-cli
   ] ++ (if stdenv.isLinux then [
     #
     # Linux applications
