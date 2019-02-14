@@ -19,6 +19,35 @@ var_2: &enable-cachix
     command: |
       cachix use "${CACHIX_CACHE}"
 
+var_3: &instantiate-host
+  run:
+    name: Instantiate the host
+    working_directory: /go/src/github.com/kalbasit/shabka
+    command: |
+      readonly shabka_path="$( pwd )"
+      readonly host="${CIRCLE_JOB}"
+
+      if [[ -r "${shabka_path}/hosts/${host}/release" ]]; then
+        readonly release="$( cat "hosts/${host}/release" )"
+      else
+        # fallback to the default release
+        readonly release="stable"
+      fi
+
+      readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
+      readonly nixpkgs_unstable="${shabka_path}/external/nixpkgs-unstable.nix"
+
+      if [[ "${release}" = "stable" ]]; then
+          readonly nixpkgs="$( nix-build --no-out-link ${nixpkgs_stable} )"
+      else
+          # TODO: improve the beild command
+          readonly nixpkgs="$( nix-build --no-out-link ./external/nixpkgs-unstable.nix --arg runCommand '(import <nixpkgs> {}).runCommand' --arg fetchpatch '(import <nixpkgs> {}).fetchpatch' )"
+      fi
+
+      export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=${shabka_path}"
+
+      nix-instantiate "${shabka_path}/hosts/${host}"
+
 version: 2
 jobs:
   athena:
@@ -37,17 +66,7 @@ jobs:
       - checkout
       - *install-dependencies
       - *enable-cachix
-      - run:
-          name: Instantiate athena
-          working_directory: /go/src/github.com/kalbasit/shabka
-          command: |
-            readonly shabka_path="$( pwd )"
-            readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
-            readonly nixpkgs="$( nix-build --no-out-link ${nixpkgs_stable} )"
-
-            export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=${shabka_path}"
-
-            nix-instantiate ./hosts/athena
+      - *instantiate-host
 
   cratos:
     working_directory: /go/src/github.com/kalbasit/shabka
@@ -62,17 +81,7 @@ jobs:
       - checkout
       - *install-dependencies
       - *enable-cachix
-      - run:
-          name: Instantiate cratos
-          working_directory: /go/src/github.com/kalbasit/shabka
-          command: |
-            readonly shabka_path="$( pwd )"
-            readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
-            readonly nixpkgs="$( nix-build --no-out-link ${nixpkgs_stable} )"
-
-            export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=${shabka_path}"
-
-            nix-instantiate ./hosts/cratos
+      - *instantiate-host
 
   hades:
     working_directory: /go/src/github.com/kalbasit/shabka
@@ -87,17 +96,7 @@ jobs:
       - checkout
       - *install-dependencies
       - *enable-cachix
-      - run:
-          name: Instantiate hades
-          working_directory: /go/src/github.com/kalbasit/shabka
-          command: |
-            readonly shabka_path="$( pwd )"
-            readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
-            readonly nixpkgs="$( nix-build --no-out-link ${nixpkgs_stable} )"
-
-            export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=${shabka_path}"
-
-            nix-instantiate ./hosts/hades
+      - *instantiate-host
 
   hera:
     working_directory: /go/src/github.com/kalbasit/shabka
@@ -112,17 +111,7 @@ jobs:
       - checkout
       - *install-dependencies
       - *enable-cachix
-      - run:
-          name: Instantiate hera
-          working_directory: /go/src/github.com/kalbasit/shabka
-          command: |
-            readonly shabka_path="$( pwd )"
-            readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
-            readonly nixpkgs="$( nix-build --no-out-link ${nixpkgs_stable} )"
-
-            export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=${shabka_path}"
-
-            nix-instantiate ./hosts/hera
+      - *instantiate-host
 
   zeus:
     working_directory: /go/src/github.com/kalbasit/shabka
@@ -137,17 +126,7 @@ jobs:
       - checkout
       - *install-dependencies
       - *enable-cachix
-      - run:
-          name: Instantiate zeus
-          working_directory: /go/src/github.com/kalbasit/shabka
-          command: |
-            readonly shabka_path="$( pwd )"
-            readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
-            readonly nixpkgs="$( nix-build --no-out-link ${nixpkgs_stable} )"
-
-            export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=${shabka_path}"
-
-            nix-instantiate ./hosts/zeus
+      - *instantiate-host
 
 workflows:
   version: 2
