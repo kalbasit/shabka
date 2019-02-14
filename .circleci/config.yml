@@ -25,6 +25,8 @@ var_3: &instantiate-host
     working_directory: /go/src/github.com/kalbasit/shabka
     command: |
       readonly shabka_path="$( pwd )"
+      readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
+      readonly nixpkgs_unstable="${shabka_path}/external/nixpkgs-unstable.nix"
       readonly host="${CIRCLE_JOB}"
 
       if [[ -r "${shabka_path}/hosts/${host}/release" ]]; then
@@ -34,14 +36,11 @@ var_3: &instantiate-host
         readonly release="stable"
       fi
 
-      readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
-      readonly nixpkgs_unstable="${shabka_path}/external/nixpkgs-unstable.nix"
-
       if [[ "${release}" = "stable" ]]; then
-          readonly nixpkgs="$( nix-build --no-out-link ${nixpkgs_stable} )"
+          readonly nixpkgs="$( nix-build --no-out-link "${nixpkgs_stable}" )"
       else
           # TODO: improve the beild command
-          readonly nixpkgs="$( nix-build --no-out-link ./external/nixpkgs-unstable.nix --arg runCommand '(import <nixpkgs> {}).runCommand' --arg fetchpatch '(import <nixpkgs> {}).fetchpatch' )"
+          readonly nixpkgs="$( nix-build --no-out-link "${nixpkgs_unstable}" --arg runCommand '(import <nixpkgs> {}).runCommand' --arg fetchpatch '(import <nixpkgs> {}).fetchpatch' )"
       fi
 
       export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=${shabka_path}"
