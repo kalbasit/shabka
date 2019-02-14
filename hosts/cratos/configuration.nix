@@ -1,11 +1,8 @@
 { lib, ... }:
 
 with lib;
-with import ../../util;
 
 let
-
-  shabka-path = builtins.toPath ./../..;
 
   pinnedNH =
     let
