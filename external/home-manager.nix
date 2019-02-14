@@ -6,8 +6,6 @@ let
     inherit (pinnedVersion) url sha256;
   };
 
-  importPinned = import pinned {};
-
   patches = [];
 
   patched = runCommand "home-manager-${pinnedVersion.rev}"
