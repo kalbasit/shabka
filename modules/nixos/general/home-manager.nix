@@ -1,18 +1,15 @@
-{ lib, ... }:
+# fetchpatch and runCommand are causing an infinite loop here
+{ fetchpatch, runCommand, lib, ... }:
 
 with lib;
 
 let
   homeManager = import ../../../external/home-manager.nix {
-    pkgs = (import <nixpkgs> {});
-    inherit (import ../../../util) assertMsg;
+    inherit fetchpatch runCommand;
   };
 in {
   imports = [
     (import "${homeManager}/nixos")
-
-    # load the following when running a VM
-    # ("${builtins.fetchTarball https://github.com/rycee/home-manager/archive/nixos-module-user-pkgs.tar.gz}/nixos")
   ];
 
   options.mine.home-manager.config = mkOption {
