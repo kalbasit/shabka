@@ -11,7 +11,7 @@ var_2: &install-dependencies
   run:
     name: Install dependencies
     command: |
-      if [[ -r "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]];
+      if [[ -r "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]]; then
         source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
       fi
 
@@ -27,7 +27,7 @@ var_3: &enable-cachix
   run:
     name: Enable cachix
     command: |
-      if [[ -r "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]];
+      if [[ -r "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]]; then
         source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
       fi
 
@@ -38,7 +38,7 @@ var_4: &instantiate-host
     name: Instantiate the host
     working_directory: ~/shabka
     command: |
-      if [[ -r "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]];
+      if [[ -r "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]]; then
         source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
       fi
 
