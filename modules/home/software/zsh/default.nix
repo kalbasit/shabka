@@ -47,9 +47,8 @@ let
         --subst-var-by python_bin ${getBin python37Full}/bin/python \
         --subst-var-by pygmentize_bin ${getBin python36Packages.pygments}/bin/pygmentize
 
-      # TODO: This is not working on unstable
-      # substituteInPlace $out/jspp \
-      #   --subst-var-by js-beautify_bin ''${getBin python36Packages.jsbeautifier}/bin/js-beautify
+      substituteInPlace $out/jspp \
+        --subst-var-by js-beautify_bin ${getBin python36Packages.jsbeautifier}/bin/js-beautify
 
       substituteInPlace $out/new_pr \
         --subst-var-by curl_bin ${getBin curl}/bin/curl \

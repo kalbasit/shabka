@@ -11,7 +11,10 @@ let
     overlays = [];
   };
 
-  patches = [];
+  patches = [
+    # TODO: jsbeautifier is not working upstream and tests need to be disabled
+    ./python36Packages-jsbeautifier-disable-check.patch
+  ];
 
   patched = runCommand "nixpkgs-unstable-${pinnedVersion.rev}"
     {
