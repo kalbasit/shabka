@@ -5,7 +5,7 @@ var_1: &install-nix
   run:
     name: Install Nix
     command: |
-      curl https://nixos.org/nix/install | sh
+      sh <(curl https://nixos.org/nix/install) --daemon
 
 var_2: &install-dependencies
   run:
