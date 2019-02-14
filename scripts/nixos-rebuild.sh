@@ -48,18 +48,17 @@ if [[ -z "${release}" ]]; then
     fi
 fi
 
+# use nix-build to get the nixpkgs source path in the nix store. nix-shell can
+# be pointed to nixpkgs.nix as is and it's able to call the function to get the
+# actual source but for some reason this is not work with nixos-rebuild. See
+# https://gist.github.com/kalbasit/deec7b74b64f70d24ca1967883c8e7b6 for more
+# details.
 if [[ "${release}" = "stable" ]]; then
     readonly nixpkgs="$( nix-build --no-out-link ${nixpkgs_stable} )"
 else
     # TODO: improve the beild command
     readonly nixpkgs="$( nix-build --no-out-link ./external/nixpkgs-unstable.nix --arg runCommand '(import <nixpkgs> {}).runCommand' --arg fetchpatch '(import <nixpkgs> {}).fetchpatch' )"
 fi
-
-# use nix-build to get the nixpkgs source path in the nix store. nix-shell can
-# be pointed to nixpkgs.nix as is and it's able to call the function to get the
-# actual source but for some reason this is not work with nixos-rebuild. See
-# https://gist.github.com/kalbasit/deec7b74b64f70d24ca1967883c8e7b6 for more
-# details.
 
 unset NIX_PATH
 
