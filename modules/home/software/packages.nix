@@ -57,6 +57,8 @@ in {
     unzip
 
     nix-zsh-completions
+
+    slack-cli
   ] ++ (if stdenv.isLinux then [
     #
     # Linux applications
