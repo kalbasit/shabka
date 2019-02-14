@@ -26,8 +26,6 @@ in {
 
     gotop
 
-    jetbrains.idea-community
-
     jq
 
     jrnl
@@ -63,6 +61,8 @@ in {
     #
     # Linux applications
     #
+
+    jetbrains.idea-community
 
     keybase
 
