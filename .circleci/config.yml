@@ -1,7 +1,13 @@
 var_0: &global_env
   CACHIX_CACHE: yl
 
-var_1: &install-dependencies
+var_1: &install-nix
+  run:
+    name: Install Nix
+    command: |
+      curl https://nixos.org/nix/install | sh
+
+var_2: &install-dependencies
   run:
     name: Install dependencies
     command: |
@@ -13,13 +19,13 @@ var_1: &install-dependencies
       readonly nixpkgs="$( nix-build --no-out-link ${nixpkgs_stable} )"
       nix-env -I nixpkgs="${nixpkgs}" -f '<nixpkgs>' -iA cachix
 
-var_2: &enable-cachix
+var_3: &enable-cachix
   run:
     name: Enable cachix
     command: |
       cachix use "${CACHIX_CACHE}"
 
-var_3: &instantiate-host
+var_4: &instantiate-host
   run:
     name: Instantiate the host
     working_directory: /go/src/github.com/kalbasit/shabka
@@ -59,11 +65,9 @@ jobs:
     environment:
       <<: *global_env
 
-    docker:
-      - image: nixos/nix
-
     steps:
       - checkout
+      - *install-nix
       - *install-dependencies
       - *enable-cachix
       - *instantiate-host
