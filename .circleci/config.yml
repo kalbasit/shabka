@@ -45,7 +45,7 @@ var_3: &instantiate-host
 
       export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=${shabka_path}"
 
-      echo ">>> Instantiating the hostname '${host}' using nixpkgs at '${nixpkgs}'. NIX_PATH is set to '${NIX_PATH}'"
+      >&2 echo ">>> Instantiating the hostname '${host}' using nixpkgs at '${nixpkgs}'. NIX_PATH is set to '${NIX_PATH}'"
       nix-instantiate "${shabka_path}/hosts/${host}"
 
 version: 2
