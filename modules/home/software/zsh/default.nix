@@ -106,26 +106,6 @@ let
     '';
   };
 
-  lsColors = stdenvNoCC.mkDerivation rec {
-    name = "lscolors-${version}";
-    version = "2019-02-01";
-
-    src = fetchFromGitHub {
-      owner = "trapd00r";
-      repo = "LS_COLORS";
-      rev = "ea316590b3f6c9784c21445bd575e16fc4b1ff2f";
-      sha256 = "1bj3q6s7yfglj7bpc8hjw05bz1byhm95ml2iyzr72vda4jn6ll7m";
-    };
-
-    buildPhase = ''
-      dircolors -b $src/LS_COLORS > ls-colors.zsh
-    '';
-
-    installPhase = ''
-      mv ls-colors.zsh $out
-    '';
-  };
-
 in {
 
   programs.zsh = mkMerge [
@@ -203,7 +183,7 @@ in {
 
       initExtra = ''
         # source in the LS_COLORS
-        source "${lsColors}"
+        source "${nur.repos.kalbasit.ls-colors}/ls-colors/bourne-shell.sh"
       '' + (builtins.readFile (substituteAll {
         src = ./init-extra.zsh;
 
