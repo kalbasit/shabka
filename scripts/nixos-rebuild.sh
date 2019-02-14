@@ -10,12 +10,15 @@ readonly nixpkgs_unstable="${shabka_path}/external/nixpkgs-unstable.nix"
 
 # define all local variables
 host="$( hostname -s )"
-release="stable"
+release=
 
-while getopts ":h:u" opt; do
+while getopts ":h:u:s" opt; do
     case "${opt}" in
         h)
             host="${OPTARG}"
+            ;;
+        s)
+            release="stable"
             ;;
         u)
             release="unstable"
@@ -34,6 +37,15 @@ readonly nixos_config="hosts/${host}/configuration.nix"
 if ! [[ -r "${nixos_config}" ]]; then
     echo "ERR: configuration for nixos_config ${nixos_config} does not exist."
     exit 1
+fi
+
+if [[ -z "${release}" ]]; then
+    if [[ -r "hosts/${host}/release" ]]; then
+        release="$( cat "hosts/${host}/release" )"
+    else
+        # fallback to the default release
+        release="stable"
+    fi
 fi
 
 if [[ "${release}" = "stable" ]]; then
