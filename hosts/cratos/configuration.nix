@@ -82,6 +82,8 @@ in {
 
     autorandr.enable = true;
     keeptruckin.enable = true;
+    # TODO: This is not working on unstable
+    virtualbox.enable = mkForce false;
   };
 
   mine.openvpn.client.expressvpn = mkIf enableExpressVPN {
