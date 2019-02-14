@@ -10,19 +10,19 @@ all: build
 
 .PHONY: build
 build:
-	./scripts/nixos-rebuild.sh "$(shell pwd)/hosts/$(shell hostname -s)/configuration.nix" build --show-trace
+	./scripts/nixos-rebuild.sh build --show-trace
 
 .PHONY: test
 test:
-	sudo ./scripts/nixos-rebuild.sh "$(shell pwd)/hosts/$(shell hostname -s)/configuration.nix" test --show-trace
+	sudo ./scripts/nixos-rebuild.sh test --show-trace
 
 .PHONY: switch
 switch:
-	sudo ./scripts/nixos-rebuild.sh "$(shell pwd)/hosts/$(shell hostname -s)/configuration.nix" switch --show-trace
+	sudo ./scripts/nixos-rebuild.sh switch --show-trace
 
 .PHONY: boot
 boot:
-	sudo ./scripts/nixos-rebuild.sh "$(shell pwd)/hosts/$(shell hostname -s)/configuration.nix" boot --show-trace
+	sudo ./scripts/nixos-rebuild.sh boot --show-trace
 
 .PHONY: brew
 brew:

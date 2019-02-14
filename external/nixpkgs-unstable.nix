@@ -1,9 +1,4 @@
-{ assertMsg
-, pkgs
-}:
-
-with pkgs;
-with pkgs.lib;
+{ fetchpatch, runCommand }:
 
 let
   pinnedVersion = builtins.fromJSON (builtins.readFile ./nixpkgs-unstable-version.json);
@@ -15,8 +10,6 @@ let
     config = {};
     overlays = [];
   };
-
-  mkAssertMsg = name: "${name} is available upsteam, kill this patch";
 
   patches = [];
 

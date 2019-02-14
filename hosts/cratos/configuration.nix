@@ -1,18 +1,24 @@
-{ lib, ... }:
+{ pkgs, lib, ... }:
 
 with lib;
+with import ../../util;
 
 let
+
+  shabka-path = builtins.toPath ./../..;
 
   pinnedNH =
     # I'm getting an infinite loop when I import pkgs as a dependency to this
     # function. Why is that? It forces me to import nixpkgs again here!
     let
 
-      nixpkgs = (import ../../external/nixpkgs-stable.nix {});
+      # TODO: This needs to use the version of pkgs, but I'm also getting
+      # infinite recursion, why?
+      # nixpkgs = (import pkgs.path {});
+      nixpkgs = (import ./../external/nixpkgs-stable.nix {});
 
     in import ../../external/nixos-hardware.nix {
-      inherit (import nixpkgs {}) fetchpatch runCommand;
+      inherit (import <nixpkgs> {}) fetchpatch runCommand;
     };
 
   nasreddineCA = builtins.readFile (builtins.fetchurl {
