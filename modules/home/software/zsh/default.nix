@@ -56,9 +56,6 @@ let
         --subst-var-by jq_bin ${getBin jq}/bin/jq \
         --subst-var-by xsel_bin ${getBin xsel}/bin/xsel
 
-      substituteInPlace $out/register_u2f \
-        --subst-var-by pamu2fcfg_bin ${getBin pam_u2f}/bin/pamu2fcfg
-
       substituteInPlace $out/sapg \
         --subst-var-by apg_bin ${getBin apg}/bin/apg
 
@@ -99,10 +96,13 @@ let
 
       substituteInPlace $out/umount.enc \
         --subst-var-by cryptsetup_bin ${getBin cryptsetup}/bin/cryptsetup
+
+      substituteInPlace $out/register_u2f \
+        --subst-var-by pamu2fcfg_bin ${getBin pam_u2f}/bin/pamu2fcfg
     ''
 
     + lib.optionalString stdenv.isDarwin ''
-      rm -f $out/mkfs.enc $out/mount.enc $out/umount.enc
+      rm -f $out/mkfs.enc $out/mount.enc $out/umount.enc $out/register_u2f
     '';
   };
 
