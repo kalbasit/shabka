@@ -84,7 +84,7 @@ in {
     #
     # TODO(low): import the green variation from
     # https://github.com/a-schaefers/i3-wm-gruvbox-theme/blob/f6e570d6ab11b00b950e993c8619ac253bbb03ea/i3/config#L136-L141
-    xsession = if stdenv.isLinux then {
+    xsession = optionalAttrs stdenv.isLinux {
       windowManager.i3.config =
         let
         # hard contrast: bg = '#282828'
@@ -148,7 +148,7 @@ in {
             };
           };
         };
-      } else {};
+      };
 
     programs.rofi.theme = "gruvbox-dark";
 
