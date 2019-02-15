@@ -19,7 +19,7 @@ let
     # https://github.com/NixOS/nixpkgs/pull/53120
     ./53120-upgrade-virtualbox.patch
 
-    # PR:
+    # XXX: PR https://github.com/NixOS/nixpkgs/pull/55800
     ./gnome3.dconf-fix-build-on-Darwin.patch
   ];
 
