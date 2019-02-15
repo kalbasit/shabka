@@ -5,8 +5,6 @@
 
 set -euo pipefail
 
-readonly nixpkgs_channel="https://nixos.org/channels/nixpkgs-18.09-darwin"
-
 readonly mthsbeVersion=e72d1060f3df8c157f93af52ea59508dae36ef50
 
 readonly color_clear="\033[0m"
@@ -37,8 +35,8 @@ fi
 
 readonly hostname="${1}"
 readonly here="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-readonly root="$( cd "${here}/../.." && pwd )"
-readonly hostcf="${root}/hosts/${hostname}"
+readonly shabka_path="$( cd "${here}/../.." && pwd )"
+readonly hostcf="${shabka_path}/hosts/${hostname}"
 readonly workdir="$(mktemp -d)"
 readonly deprecated_nixpkgs="${HOME}/.nixpkgs"
 readonly xdg_config_nixpkgs="${HOME}/.config/nixpkgs"
@@ -77,17 +75,13 @@ if ! defaults read com.github.kalbasit.shabka bootstrap >/dev/null 2>&1; then
 			source ~/.nix-profile/etc/profile.d/nix.sh
 		set -u
 
-		info "Replacing the channel with stable"
-		nix-channel --add "${nixpkgs_channel}" nixpkgs
-		nix-channel --update
-
 		info "Installing nix-darwin"
 		pushd "${deprecated_nixpkgs}"
 			ln -sf "${hostcf}/darwin-configuration.nix" darwin-configuration.nix
 		popd
 		pushd "${workdir}"
 			set +e
-				(yes | nix run -f https://github.com/LnL7/nix-darwin/archive/master.tar.gz installer -c darwin-installer)
+				(yes | nix run -f "${shabka_path}/external/nix-darwin.nix" installer -c darwin-installer)
 				RETVAL=$?
 			set -e
 			if [[ "${RETVAL}" -ne 0 ]] && [[ "${RETVAL}" -ne 141 ]]; then
