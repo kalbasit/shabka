@@ -1,0 +1,292 @@
+From e0e27ef70ef18e7c4a49a64bc5d215d44dc5fead Mon Sep 17 00:00:00 2001
+From: Piotr Halama <ptrhlm0@gmail.com>
+Date: Mon, 28 Jan 2019 02:39:13 +0100
+Subject: [PATCH] virtualbox: 5.2.22 -> 6.0.4
+
+---
+ .../virtualisation/virtualbox-host.nix        |  2 +-
+ .../virtualization/virtualbox/default.nix     |  9 +---
+ .../virtualization/virtualbox/extpack.nix     |  4 +-
+ .../virtualbox/guest-additions/default.nix    |  2 +-
+ .../guest-additions/fix_kerndir.patch         | 30 ++++++++-----
+ .../virtualbox/qtx11extras.patch              | 42 +++++++++++++-----
+ .../linux/virtualbox/fix_kerndir.patch        | 44 ++++++++++++-------
+ 7 files changed, 82 insertions(+), 51 deletions(-)
+
+diff --git a/nixos/modules/virtualisation/virtualbox-host.nix b/nixos/modules/virtualisation/virtualbox-host.nix
+index 60779579402c..b5bc6e8529d0 100644
+--- a/nixos/modules/virtualisation/virtualbox-host.nix
++++ b/nixos/modules/virtualisation/virtualbox-host.nix
+@@ -102,7 +102,7 @@ in
+       "VBoxNetNAT"
+       "VBoxSDL"
+       "VBoxVolInfo"
+-      "VirtualBox"
++      "VirtualBoxVM"
+     ]));
+ 
+     users.groups.vboxusers.gid = config.ids.gids.vboxusers;
+diff --git a/pkgs/applications/virtualization/virtualbox/default.nix b/pkgs/applications/virtualization/virtualbox/default.nix
+index 828db24c325a..a170fdbda118 100644
+--- a/pkgs/applications/virtualization/virtualbox/default.nix
++++ b/pkgs/applications/virtualization/virtualbox/default.nix
+@@ -20,8 +20,8 @@ let
+   python = python2;
+   buildType = "release";
+   # Remember to change the extpackRev and version in extpack.nix as well.
+-  main = "1m48ywa913g6zgqslvrihxs2fbr4gmljypbdpjma2hck6isyi02m";
+-  version = "5.2.22";
++  main = "f80b0c68182c946fb74ada8034960c38159ad91085b153da1277e4f191af6e1f";
++  version = "6.0.4";
+ in stdenv.mkDerivation {
+   name = "virtualbox-${version}";
+ 
+@@ -75,11 +75,6 @@ in stdenv.mkDerivation {
+      optional enableHardening ./hardened.patch
+   ++ [
+     ./qtx11extras.patch
+-    (fetchpatch {
+-      name = "010-qt-5.11.patch";
+-      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/010-qt-5.11.patch?h=packages/virtualbox";
+-      sha256 = "0hjx99pg40wqyggnrpylrp5zngva4xrnk7r90i0ynrqc7n84g9pn";
+-    })
+   ];
+ 
+   postPatch = ''
+diff --git a/pkgs/applications/virtualization/virtualbox/extpack.nix b/pkgs/applications/virtualization/virtualbox/extpack.nix
+index d2c513e899af..dc97382ba10f 100644
+--- a/pkgs/applications/virtualization/virtualbox/extpack.nix
++++ b/pkgs/applications/virtualization/virtualbox/extpack.nix
+@@ -2,7 +2,7 @@
+ 
+ with lib;
+ 
+-let version = "5.2.22";
++let version = "6.0.4";
+ in
+ fetchurl rec {
+   name = "Oracle_VM_VirtualBox_Extension_Pack-${version}.vbox-extpack";
+@@ -10,7 +10,7 @@ fetchurl rec {
+   sha256 =
+     # Manually sha256sum the extensionPack file, must be hex!
+     # Thus do not use `nix-prefetch-url` but instead plain old `sha256sum`.
+-    let value = "779250666551b2f5426e86c2d21ceb0209b46174536971611025f753535131ef";
++    let value = "8887d5dd9dd26bd376926b38857715e28f2d678b6d3a034144ddc3fde4a387d9";
+     in assert (builtins.stringLength value) == 64; value;
+ 
+   meta = {
+diff --git a/pkgs/applications/virtualization/virtualbox/guest-additions/default.nix b/pkgs/applications/virtualization/virtualbox/guest-additions/default.nix
+index 259f2b268fe3..deefea2faa7f 100644
+--- a/pkgs/applications/virtualization/virtualbox/guest-additions/default.nix
++++ b/pkgs/applications/virtualization/virtualbox/guest-additions/default.nix
+@@ -19,7 +19,7 @@ stdenv.mkDerivation {
+ 
+   src = fetchurl {
+     url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
+-    sha256 = "e51e33500a265b5c2d7bb2d03d32208df880523dfcb1e2dde2c78a0e0daa0603";
++    sha256 = "749b0c76aa6b588e3310d718fc90ea472fdc0b7c8953f7419c20be7e7fa6584a";
+   };
+ 
+   KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+diff --git a/pkgs/applications/virtualization/virtualbox/guest-additions/fix_kerndir.patch b/pkgs/applications/virtualization/virtualbox/guest-additions/fix_kerndir.patch
+index 0be949f63c92..62a8fe149d5b 100644
+--- a/pkgs/applications/virtualization/virtualbox/guest-additions/fix_kerndir.patch
++++ b/pkgs/applications/virtualization/virtualbox/guest-additions/fix_kerndir.patch
+@@ -2,37 +2,43 @@ diff --git a/vboxsf/Makefile.include.header b/vboxsf/Makefile.include.header
+ index 8df1eb4d25..5a3e5604e7 100644
+ --- a/vboxsf/Makefile.include.header
+ +++ b/vboxsf/Makefile.include.header
+-@@ -117,7 +117,6 @@ else # neq($(KERNELRELEASE),)
++@@ -136,9 +136,6 @@
+  endif # neq($(KERNELRELEASE),)
+-
++ 
+  # Kernel build folder
+--KERN_DIR := /lib/modules/$(KERN_VER)/build
++-ifeq ($(KERN_DIR),)
++- KERN_DIR := /lib/modules/$(KERN_VER)/build
++-endif
+  ifneq ($(shell if test -d $(KERN_DIR); then echo yes; fi),yes)
+   $(error Error: unable to find the headers of the Linux kernel to build against. \
+-           Specify KERN_VER=<version> and run Make again)
++           Specify KERN_VER=<version> (currently $(KERN_VER)) and run Make again)
+ 
+ diff --git a/vboxguest/Makefile.include.header b/vboxguest/Makefile.include.header
+ index 8df1eb4d25..5a3e5604e7 100644
+ --- a/vboxguest/Makefile.include.header
+ +++ b/vboxguest/Makefile.include.header
+-@@ -117,7 +117,6 @@ else # neq($(KERNELRELEASE),)
++@@ -136,9 +136,6 @@
+  endif # neq($(KERNELRELEASE),)
+-
++ 
+  # Kernel build folder
+--KERN_DIR := /lib/modules/$(KERN_VER)/build
++-ifeq ($(KERN_DIR),)
++- KERN_DIR := /lib/modules/$(KERN_VER)/build
++-endif
+  ifneq ($(shell if test -d $(KERN_DIR); then echo yes; fi),yes)
+   $(error Error: unable to find the headers of the Linux kernel to build against. \
+-           Specify KERN_VER=<version> and run Make again)
++           Specify KERN_VER=<version> (currently $(KERN_VER)) and run Make again)
+ 
+ diff --git a/vboxvideo/Makefile.include.header b/vboxvideo/Makefile.include.header
+ index 8df1eb4d25..5a3e5604e7 100644
+ --- a/vboxvideo/Makefile.include.header
+ +++ b/vboxvideo/Makefile.include.header
+-@@ -117,7 +117,6 @@ else # neq($(KERNELRELEASE),)
++@@ -136,9 +136,6 @@
+  endif # neq($(KERNELRELEASE),)
+-
++ 
+  # Kernel build folder
+--KERN_DIR := /lib/modules/$(KERN_VER)/build
++-ifeq ($(KERN_DIR),)
++- KERN_DIR := /lib/modules/$(KERN_VER)/build
++-endif
+  ifneq ($(shell if test -d $(KERN_DIR); then echo yes; fi),yes)
+   $(error Error: unable to find the headers of the Linux kernel to build against. \
+-           Specify KERN_VER=<version> and run Make again)
++           Specify KERN_VER=<version> (currently $(KERN_VER)) and run Make again)
+diff --git a/pkgs/applications/virtualization/virtualbox/qtx11extras.patch b/pkgs/applications/virtualization/virtualbox/qtx11extras.patch
+index 6ed74e3e23ed..03c77c8d2a39 100644
+--- a/pkgs/applications/virtualization/virtualbox/qtx11extras.patch
++++ b/pkgs/applications/virtualization/virtualbox/qtx11extras.patch
+@@ -1,8 +1,7 @@
+-diff --git a/kBuild/units/qt5.kmk b/kBuild/units/qt5.kmk
+-index 71b96a3..73391f0 100644
+---- a/kBuild/units/qt5.kmk
+-+++ b/kBuild/units/qt5.kmk
+-@@ -1019,9 +1019,10 @@ else
++diff -u -r a/kBuild/units/qt5.kmk b/kBuild/units/qt5.kmk
++--- a/kBuild/units/qt5.kmk	2019-01-05 02:40:31.000000000 +0100
+++++ b/kBuild/units/qt5.kmk	2019-01-28 22:19:54.744898574 +0100
++@@ -1054,9 +1054,10 @@
+     $(eval $(target)_LIBS   += $(PATH_SDK_QT5_LIB)/$(qt_prefix)qtmain$(qt_infix)$(SUFF_LIB) )
+    endif
+   else
+@@ -14,14 +13,13 @@ index 71b96a3..73391f0 100644
+ + $(eval $(target)_INCS     += $(addprefix $(PATH_SDK_QT5_INC)/Qt,$(qt_modules)) $(PATH_SDK_QT5_INC) $(PATH_QT5_X11_EXTRAS_INC)/QtX11Extras )
+  endif
+  $(eval $(target)_DEFS      += $(foreach module,$(toupper $(qt_modules)), QT_$(module)_LIB) )
+-
+-diff --git a/src/VBox/Frontends/VirtualBox/Makefile.kmk b/src/VBox/Frontends/VirtualBox/Makefile.kmk
+-index 3295bfefe7..796370623c 100644
+---- a/src/VBox/Frontends/VirtualBox/Makefile.kmk
+-+++ b/src/VBox/Frontends/VirtualBox/Makefile.kmk
+-@@ -916,9 +916,6 @@ endif
+- # The Qt modules we're using.
++ 
++diff -u -r a/src/VBox/Frontends/VirtualBox/Makefile.kmk b/src/VBox/Frontends/VirtualBox/Makefile.kmk
++--- a/src/VBox/Frontends/VirtualBox/Makefile.kmk	2019-01-25 19:19:19.000000000 +0100
+++++ b/src/VBox/Frontends/VirtualBox/Makefile.kmk	2019-01-28 22:15:13.243032544 +0100
++@@ -1431,9 +1431,6 @@
+  # (The include directory and lib/framework for each module will be added by the Qt unit.)
++ #
+  VirtualBox_QT_MODULES = Core Gui Widgets PrintSupport
+ -VirtualBox_QT_MODULES.linux   += X11Extras
+ -VirtualBox_QT_MODULES.solaris += X11Extras
+@@ -29,3 +27,23 @@ index 3295bfefe7..796370623c 100644
+  VirtualBox_QT_MODULES.darwin  += MacExtras
+  VirtualBox_QT_MODULES.win     += WinExtras
+  if defined(VBOX_WITH_VIDEOHWACCEL) || defined(VBOX_GUI_USE_QGL)
++@@ -1447,9 +1444,6 @@
++ # (The include directory and lib/framework for each module will be added by the Qt unit.)
++ #
++ VirtualBoxVM_QT_MODULES = Core Gui Widgets PrintSupport
++-VirtualBoxVM_QT_MODULES.linux   += X11Extras
++-VirtualBoxVM_QT_MODULES.solaris += X11Extras
++-VirtualBoxVM_QT_MODULES.freebsd += X11Extras
++ VirtualBoxVM_QT_MODULES.darwin  += MacExtras
++ VirtualBoxVM_QT_MODULES.win     += WinExtras
++ if defined(VBOX_WITH_VIDEOHWACCEL) || defined(VBOX_GUI_USE_QGL)
++@@ -1463,9 +1457,6 @@
++ # (The include directory and lib/framework for each module will be added by the Qt unit.)
++ #
++ VBoxGlobal_QT_MODULES = Core Gui Widgets
++-VBoxGlobal_QT_MODULES.linux   += X11Extras
++-VBoxGlobal_QT_MODULES.solaris += X11Extras
++-VBoxGlobal_QT_MODULES.freebsd += X11Extras
++ VBoxGlobal_QT_MODULES.darwin  += MacExtras
++ VBoxGlobal_QT_MODULES.win     += WinExtras
++ if defined(VBOX_WITH_VIDEOHWACCEL) || defined(VBOX_GUI_USE_QGL)
+diff --git a/pkgs/os-specific/linux/virtualbox/fix_kerndir.patch b/pkgs/os-specific/linux/virtualbox/fix_kerndir.patch
+index 70ddbbb2ebd5..6ad38374415c 100644
+--- a/pkgs/os-specific/linux/virtualbox/fix_kerndir.patch
++++ b/pkgs/os-specific/linux/virtualbox/fix_kerndir.patch
+@@ -2,47 +2,59 @@ diff --git a/vboxdrv/Makefile.include.header b/vboxdrv/Makefile.include.header
+ index 8df1eb4d25..5a3e5604e7 100644
+ --- a/vboxdrv/Makefile.include.header
+ +++ b/vboxdrv/Makefile.include.header
+-@@ -117,7 +117,6 @@ else # neq($(KERNELRELEASE),)
++@@ -136,9 +136,6 @@
+  endif # neq($(KERNELRELEASE),)
+-
++ 
+  # Kernel build folder
+--KERN_DIR := /lib/modules/$(KERN_VER)/build
++-ifeq ($(KERN_DIR),)
++- KERN_DIR := /lib/modules/$(KERN_VER)/build
++-endif
+  ifneq ($(shell if test -d $(KERN_DIR); then echo yes; fi),yes)
+   $(error Error: unable to find the headers of the Linux kernel to build against. \
+-           Specify KERN_VER=<version> and run Make again)
++           Specify KERN_VER=<version> (currently $(KERN_VER)) and run Make again)
++
+ diff --git a/vboxnetadp/Makefile.include.header b/vboxnetadp/Makefile.include.header
+ index 8df1eb4d25..5a3e5604e7 100644
+ --- a/vboxnetadp/Makefile.include.header
+ +++ b/vboxnetadp/Makefile.include.header
+-@@ -117,7 +117,6 @@ else # neq($(KERNELRELEASE),)
++@@ -136,9 +136,6 @@
+  endif # neq($(KERNELRELEASE),)
+-
++ 
+  # Kernel build folder
+--KERN_DIR := /lib/modules/$(KERN_VER)/build
++-ifeq ($(KERN_DIR),)
++- KERN_DIR := /lib/modules/$(KERN_VER)/build
++-endif
+  ifneq ($(shell if test -d $(KERN_DIR); then echo yes; fi),yes)
+   $(error Error: unable to find the headers of the Linux kernel to build against. \
+-           Specify KERN_VER=<version> and run Make again)
++           Specify KERN_VER=<version> (currently $(KERN_VER)) and run Make again)
++
+ diff --git a/vboxnetflt/Makefile.include.header b/vboxnetflt/Makefile.include.header
+ index 8df1eb4d25..5a3e5604e7 100644
+ --- a/vboxnetflt/Makefile.include.header
+ +++ b/vboxnetflt/Makefile.include.header
+-@@ -117,7 +117,6 @@ else # neq($(KERNELRELEASE),)
++@@ -136,9 +136,6 @@
+  endif # neq($(KERNELRELEASE),)
+-
++ 
+  # Kernel build folder
+--KERN_DIR := /lib/modules/$(KERN_VER)/build
++-ifeq ($(KERN_DIR),)
++- KERN_DIR := /lib/modules/$(KERN_VER)/build
++-endif
+  ifneq ($(shell if test -d $(KERN_DIR); then echo yes; fi),yes)
+   $(error Error: unable to find the headers of the Linux kernel to build against. \
+-           Specify KERN_VER=<version> and run Make again)
++           Specify KERN_VER=<version> (currently $(KERN_VER)) and run Make again)
++
+ diff --git a/vboxpci/Makefile.include.header b/vboxpci/Makefile.include.header
+ index 8df1eb4d25..5a3e5604e7 100644
+ --- a/vboxpci/Makefile.include.header
+ +++ b/vboxpci/Makefile.include.header
+-@@ -117,7 +117,6 @@ else # neq($(KERNELRELEASE),)
++@@ -136,9 +136,6 @@
+  endif # neq($(KERNELRELEASE),)
+-
++ 
+  # Kernel build folder
+--KERN_DIR := /lib/modules/$(KERN_VER)/build
++-ifeq ($(KERN_DIR),)
++- KERN_DIR := /lib/modules/$(KERN_VER)/build
++-endif
+  ifneq ($(shell if test -d $(KERN_DIR); then echo yes; fi),yes)
+   $(error Error: unable to find the headers of the Linux kernel to build against. \
+-           Specify KERN_VER=<version> and run Make again)
++           Specify KERN_VER=<version> (currently $(KERN_VER)) and run Make again)
++

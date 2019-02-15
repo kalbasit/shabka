@@ -46,8 +46,6 @@ in {
       '';
 
       font = "SourceCodePro 9";
-
-      theme = "Adapta-Nokto";
     };
   };
 }

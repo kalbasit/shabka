@@ -56,14 +56,8 @@ let
         --subst-var-by jq_bin ${getBin jq}/bin/jq \
         --subst-var-by xsel_bin ${getBin xsel}/bin/xsel
 
-      substituteInPlace $out/register_u2f \
-        --subst-var-by pamu2fcfg_bin ${getBin pam_u2f}/bin/pamu2fcfg
-
       substituteInPlace $out/sapg \
         --subst-var-by apg_bin ${getBin apg}/bin/apg
-
-      substituteInPlace $out/sp \
-        --subst-var-by ssh-agents_bin ${getBin unstable.ssh-agents}/bin/ssh-agents
 
       substituteInPlace $out/tmycli \
         --subst-var-by mycli_bin ${getBin mycli}/bin/mycli \
@@ -102,10 +96,13 @@ let
 
       substituteInPlace $out/umount.enc \
         --subst-var-by cryptsetup_bin ${getBin cryptsetup}/bin/cryptsetup
+
+      substituteInPlace $out/register_u2f \
+        --subst-var-by pamu2fcfg_bin ${getBin pam_u2f}/bin/pamu2fcfg
     ''
 
     + lib.optionalString stdenv.isDarwin ''
-      rm -f $out/mkfs.enc $out/mount.enc $out/umount.enc
+      rm -f $out/mkfs.enc $out/mount.enc $out/umount.enc $out/register_u2f
     '';
   };
 
@@ -184,18 +181,20 @@ in {
         size = 1000000000;
       };
 
-      initExtra = builtins.readFile (substituteAll {
+      initExtra = ''
+        # source in the LS_COLORS
+        source "${nur.repos.kalbasit.ls-colors}/ls-colors/bourne-shell.sh"
+      '' + (builtins.readFile (substituteAll {
         src = ./init-extra.zsh;
 
         bat_bin      = "${getBin bat}/bin/bat";
-        exa_bin      = "${getBin exa}/bin/exa";
         fortune_bin  = "${getBin fortune}/bin/fortune";
         fzf_bin      = "${getBin fzf}/bin/fzf-tmux";
         home_path    = "${config.home.homeDirectory}";
         jq_bin       = "${getBin jq}/bin/jq";
         less_bin     = "${getBin less}/bin/less";
         tput_bin     = "${getBin ncurses}/bin/tput";
-      });
+      }));
 
       oh-my-zsh = {
         enable = true;

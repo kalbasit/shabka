@@ -105,6 +105,8 @@ in {
       };
     } else {};
 
+    programs.rofi.theme = "Adapta-Nokto";
+
     programs.termite = {
       backgroundColor = "#3a3a3a";
       foregroundColor = "#d0d0d0";

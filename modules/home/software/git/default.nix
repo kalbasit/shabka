@@ -8,7 +8,7 @@ with lib;
 
   config = mkIf config.mine.git.enable {
     home.packages = with pkgs; [
-      gitAndTools.git-appraise
+      (gitAndTools.git-appraise or unstable.gitAndTools.git-appraise)
       gitAndTools.hub
       gitAndTools.tig
     ];
@@ -268,7 +268,7 @@ with lib;
       ];
 
       signing = {
-        key = "0x2D1A12A5FF7D3A91";
+        key = "me@yl.codes";
         signByDefault = true;
       };
     };

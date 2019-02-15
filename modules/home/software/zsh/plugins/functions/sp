@@ -55,7 +55,6 @@ function sp() {
 					;;
 				-k|--kill)
 					if [[ -n "${ACTIVE_PROFILE}" ]]; then
-						function pssh() { export SSH_AGENT_NAME="${ACTIVE_PROFILE}" }
 						# shellcheck disable=SC1090
 						source "${HOME}/.zsh/profiles/${ACTIVE_PROFILE}.zsh"
 						if [[ -n "${GOPATH}" ]] && [[ -z "${ACTIVE_STORY}" ]]; then
@@ -63,7 +62,7 @@ function sp() {
 							unset GOPATH
 						fi
 						pdeactivate
-						unset ACTIVE_PROFILE SSH_AGENT_PID SSH_AUTH_SOCK SSH_AGENT_NAME
+						unset ACTIVE_PROFILE
 					fi
 					return
 					;;
@@ -91,10 +90,9 @@ function sp() {
 			sp --kill
 		fi
 		# source the profile
-		function pssh() { export SSH_AGENT_NAME="${ACTIVE_PROFILE}" }
 		# shellcheck disable=SC1090
 		source "${HOME}/.zsh/profiles/${requested_profile}.zsh"
-		# let the terminal know which profile is loaded and which ssh-agent to use
+		# let the terminal know which profile is loaded
 		export ACTIVE_PROFILE="${requested_profile}"
 		# set the GOPATH
 		if [[ -z "${GOPATH}" ]] && [[ -n "${ACTIVE_STORY}" ]]; then
@@ -109,10 +107,8 @@ function sp() {
 		fi
 		# activate the profile
 		pactivate
-		# switch the user agent
-		pssh; eval "$( @ssh-agents_bin@ --name "${SSH_AGENT_NAME}" )"
 	} always {
 		unfunction -m "$0_*"
-		unfunction pload pactivate pdeactivate pssh
+		unfunction pload pactivate pdeactivate
 	}
 }

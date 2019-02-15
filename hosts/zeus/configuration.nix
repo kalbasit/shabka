@@ -3,8 +3,20 @@
 with lib;
 
 let
+  sshKeys = [
+    (builtins.readFile (import ../../external/kalbasit-keys.nix))
+  ];
 
-  pinnedNH = import ../../external/nixos-hardware.nix;
+  pinnedNH =
+    let
+      nixpkgs = import ../../external/nixpkgs-stable.nix;
+      pkgs = import nixpkgs {
+        config = {};
+        overlays = [];
+      };
+    in import ../../external/nixos-hardware.nix {
+      inherit (pkgs) fetchpatch runCommand;
+    };
 
   nasIP = "172.25.2.2";
 
@@ -72,16 +84,31 @@ in {
     ./home.nix
   ];
 
+  # allow Zeus to be used as a builder
+  users.users = mkMerge [
+    { root = { openssh.authorizedKeys.keys = sshKeys; }; }
+
+    (if builtins.pathExists /yl/private/network-secrets/shabka/hosts/zeus/id_rsa.pub then {
+      builder = {
+        extraGroups = ["builders"];
+        openssh.authorizedKeys.keys = [
+          (builtins.readFile /yl/private/network-secrets/shabka/hosts/zeus/id_rsa.pub)
+        ];
+        isNormalUser = true;
+      };
+    } else {})
+  ];
+
   # set the default locale and the timeZone
   i18n.defaultLocale = "en_US.UTF-8";
   time.timeZone = "America/Los_Angeles";
 
   networking.hostName = "zeus";
 
-  mine.users = { yl = { uid = 2000; isAdmin = true;  home = "/yl"; }; };
+  mine.users = {};
 
-  mine.gnupg.enable = true;
   mine.useColemakKeyboardLayout = true;
+  mine.neovim.enable = true;
   mine.virtualisation.libvirtd.enable = true;
 
   mine.hardware.machine = "zeus";
@@ -123,7 +150,15 @@ in {
       fi
 
       # run iscsi discover, this might fail and that's OK!
-      iscsi_discovery ${nasIP} || true
+      let "timeout = $(date +%s) + 60"
+      while ! iscsi_discovery ${nasIP}; do
+        if [ "$(date +%s)" -ge "$timeout" ]; then
+          echo "unable to run iscsi_discovery, going to skip this step"
+          break
+        else
+          sleep 0.5
+        fi
+      done
 
       # discover all the iSCSI defices offered by my NAS
       let "timeout = $(date +%s) + 60"

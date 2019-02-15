@@ -14,10 +14,7 @@ with lib;
 
   config = mkIf (config.mine.darwinConfig != {}) {
     home.file = {
-      "ssh/authorized_keys".source = builtins.fetchurl {
-        url = "https://github.com/kalbasit.keys";
-        sha256 = "1ijzn5nmh7fcpky9zz6dsbps3pad67nlp0cs0zrs46f0bcy9cqjr";
-      };
+      "ssh/authorized_keys".source = import ../../../external/kalbasit-keys.nix;
     };
 
     fonts.fontconfig.enableProfileFonts = true;

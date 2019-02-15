@@ -1,10 +1,16 @@
 { pkgs, lib }:
 
 let
-  homeManager = import ../external/home-manager.nix {
-    inherit pkgs;
-    inherit (import ./assertMsg.nix { inherit lib; }) assertMsg;
-  };
+  homeManager =
+    let
+      nixpkgs = import ../external/nixpkgs-stable.nix;
+      pkgs = import nixpkgs {
+        config = {};
+        overlays = [];
+      };
+    in import ../external/home-manager.nix {
+      inherit (pkgs) fetchpatch runCommand;
+    };
 
 in {
   buildHomeManagerConfiguration = conf: (import "${homeManager}/home-manager/home-manager.nix" {

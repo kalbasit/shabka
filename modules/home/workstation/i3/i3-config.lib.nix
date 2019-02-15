@@ -9,38 +9,6 @@ let
   nosid = "--no-startup-id";
   locker = "${getBin pkgs.xautolock}/bin/xautolock -locknow && sleep 1";
 
-  hostName = if config.mine.nixosConfig != {} then config.mine.nixosConfig.networking.hostName else "";
-
-  intMonitor =
-    if hostName == "hades"
-    then "eDP-1"
-    else if hostName == "cratos"
-    then "eDP1"
-    else "";
-
-  intMode =
-    if hostName == "hades"
-    then "1920x1080"
-    else if hostName == "cratos"
-    then "3200x1800"
-    else "";
-
-  intScale =
-    if hostName == "hades"
-    then "1x1"
-    else if hostName == "cratos"
-    then "0.6x0.6"
-    else "";
-
-  extMonitor =
-    if hostName == "hades"
-    then "DP-2"
-    else if hostName == "cratos"
-    then "DP1-2"
-    else "";
-
-  extMode = "3440x1440";
-
   jrnlEntry = pkgs.writeScript "jrnl-entry.sh" ''
     #!/usr/bin/env bash
 
@@ -366,12 +334,9 @@ in {
     bindsym ${defaultModifier}+${thirdModifier}+a mode "$mode_apps"
 
     # Display mode allows output/resolution selection
-    set $mode_display (a) Auto, (l) Laptop screen, (m) Multiple screen, (w) Wide screen
+    set $mode_display (a) Auto
     mode "$mode_display" {
       bindsym a exec ${nosid} ${getBin pkgs.autorandr}/bin/autorandr --change, mode default
-      bindsym l exec ${nosid} ${getBin pkgs.xlibs.xrandr}/bin/xrandr --output ${intMonitor} --mode ${intMode} --scale ${intScale} --output ${extMonitor} --off, mode default
-      bindsym m exec ${nosid} ${getBin pkgs.xlibs.xrandr}/bin/xrandr --output ${intMonitor} --mode ${intMode} --scale ${intScale} --output ${extMonitor} --primary --mode 3440x1440 --right-of ${intMonitor}, mode default
-      bindsym w exec ${nosid} ${getBin pkgs.xlibs.xrandr}/bin/xrandr --output ${intMonitor} --off --output ${extMonitor} --mode ${extMode}, mode default
 
       # back to normal: Enter or Escape
       bindsym Return mode default
@@ -406,16 +371,5 @@ in {
       bindsym Escape mode default
     }
     bindsym ${defaultModifier}+${thirdModifier}+g mode "$mode_cpugovernor"
-
-    ########################
-    # Workspace assignment #
-    ########################
-
-    # assign important spaces to my external monitor
-    workspace irc output ${extMonitor}
-    workspace keeptruckin@base output ${extMonitor}
-    workspace mail output ${extMonitor}
-    workspace personal@base output ${extMonitor}
-    workspace publica@base output ${extMonitor}
   '';
 }

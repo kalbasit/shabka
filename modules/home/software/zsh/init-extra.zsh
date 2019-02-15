@@ -317,9 +317,7 @@ export ERROR="${FG_RED_B}"
 
 # Find the option for using colors in ls, depending on the version
 if [[ -o interactive ]]; then
-	if type @exa_bin@ &>/dev/null; then
-		alias ls='@exa_bin@'
-	elif [[ "$OSTYPE" == netbsd* ]]; then
+	if [[ "$OSTYPE" == netbsd* ]]; then
 		# On NetBSD, test if "gls" (GNU ls) is installed (this one supports colors);
 		# otherwise, leave ls as is, because NetBSD's ls doesn't support -G
 		gls --color -d . &>/dev/null && alias ls='gls --color=tty'

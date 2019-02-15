@@ -150,6 +150,8 @@ in {
         };
       } else {};
 
+    programs.rofi.theme = "gruvbox-dark";
+
     programs.termite = {
       # hard contrast: backgroundColor = "#1d2021";
       backgroundColor = "#282828";

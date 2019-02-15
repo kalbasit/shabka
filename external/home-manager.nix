@@ -1,19 +1,10 @@
-{ assertMsg
-, pkgs
-}:
-
-with pkgs;
-with pkgs.lib;
+{ fetchpatch, runCommand }:
 
 let
   pinnedVersion = builtins.fromJSON (builtins.readFile ./home-manager-version.json);
-  pinned = builtins.fetchGit {
-    inherit (pinnedVersion) url rev;
+  pinned = builtins.fetchTarball {
+    inherit (pinnedVersion) url sha256;
   };
-
-  importPinned = import pinned {};
-
-  mkAssertMsg = name: "${name} is available upsteam, kill this patch";
 
   patches = [
     # https://github.com/rycee/home-manager/pull/474
