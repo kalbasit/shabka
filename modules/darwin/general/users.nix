@@ -6,10 +6,7 @@ with lib;
 
 let
   sshKeys = [
-    (builtins.readFile (builtins.fetchurl {
-      url = "https://github.com/kalbasit.keys";
-      sha256 = "033rs0pnm8aiycrfmx04qx8fmnkfdhp4hy3kdpgil3cgbgff9736";
-    }))
+    (builtins.readFile (import ../../../external/kalbasit-keys.nix))
   ];
 
   makeUser = userName: { uid, isAdmin ? false, home ? "/home/${userName}" }: nameValuePair
