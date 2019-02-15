@@ -1,10 +1,20 @@
 var_0: &global_env
   CACHIX_CACHE: yl
 
-var_1: &install-dependencies
+var_1: &install-nix
+  run:
+    name: Install Nix
+    command: |
+      curl https://nixos.org/nix/install | sh
+
+var_2: &install-dependencies
   run:
     name: Install dependencies
     command: |
+      if [[ -r "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]]; then
+        source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
+      fi
+
       # install git
       nix-env -f '<nixpkgs>' -iA gitAndTools.git
 
@@ -13,17 +23,25 @@ var_1: &install-dependencies
       readonly nixpkgs="$( nix-build --no-out-link ${nixpkgs_stable} )"
       nix-env -I nixpkgs="${nixpkgs}" -f '<nixpkgs>' -iA cachix
 
-var_2: &enable-cachix
+var_3: &enable-cachix
   run:
     name: Enable cachix
     command: |
+      if [[ -r "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]]; then
+        source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
+      fi
+
       cachix use "${CACHIX_CACHE}"
 
-var_3: &instantiate-host
+var_4: &instantiate-host
   run:
     name: Instantiate the host
-    working_directory: /go/src/github.com/kalbasit/shabka
+    working_directory: ~/shabka
     command: |
+      if [[ -r "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]]; then
+        source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
+      fi
+
       readonly shabka_path="$( pwd )"
       readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
       readonly nixpkgs_unstable="${shabka_path}/external/nixpkgs-unstable.nix"
@@ -54,22 +72,20 @@ jobs:
     macos:
       xcode: "9.0"
 
-    working_directory: /go/src/github.com/kalbasit/shabka
+    working_directory: ~/shabka
 
     environment:
       <<: *global_env
 
-    docker:
-      - image: nixos/nix
-
     steps:
       - checkout
+      - *install-nix
       - *install-dependencies
       - *enable-cachix
       - *instantiate-host
 
   cratos:
-    working_directory: /go/src/github.com/kalbasit/shabka
+    working_directory: ~/shabka
 
     environment:
       <<: *global_env
@@ -84,7 +100,7 @@ jobs:
       - *instantiate-host
 
   hades:
-    working_directory: /go/src/github.com/kalbasit/shabka
+    working_directory: ~/shabka
 
     environment:
       <<: *global_env
@@ -99,7 +115,7 @@ jobs:
       - *instantiate-host
 
   hera:
-    working_directory: /go/src/github.com/kalbasit/shabka
+    working_directory: ~/shabka
 
     environment:
       <<: *global_env
@@ -114,7 +130,7 @@ jobs:
       - *instantiate-host
 
   zeus:
-    working_directory: /go/src/github.com/kalbasit/shabka
+    working_directory: ~/shabka
 
     environment:
       <<: *global_env
