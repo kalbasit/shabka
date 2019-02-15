@@ -1,5 +1,3 @@
-{}:
-
 let
   pinnedVersion = builtins.fromJSON (builtins.readFile ./nixpkgs-stable-version.json);
   pinned = builtins.fetchTarball {

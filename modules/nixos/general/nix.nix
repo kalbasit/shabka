@@ -6,8 +6,6 @@ let
 
   shabka-path = builtins.toPath ./../../..;
 
-  pinnedNixpkgs = import ../../../external/nixpkgs-stable.nix {};
-
 in {
   nix = {
     autoOptimiseStore = true;
@@ -52,7 +50,7 @@ in {
   #   ln -sfn ${pinnedNixpkgs} /run/current-nixpkgs
   # '';
   system.extraSystemBuilderCmds = ''
-    ln -sv ${pinnedNixpkgs} $out/nixpkgs
+    ln -sv ${pkgs.path} $out/nixpkgs
     ln -sv ${shabka-path} $out/shabka
   '';
 }

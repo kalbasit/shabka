@@ -1,9 +1,4 @@
-{ assertMsg
-, pkgs
-}:
-
-with pkgs;
-with pkgs.lib;
+{ fetchpatch, runCommand }:
 
 let
   pinnedVersion = builtins.fromJSON (builtins.readFile ./nixpkgs-unstable-version.json);
@@ -16,9 +11,14 @@ let
     overlays = [];
   };
 
-  mkAssertMsg = name: "${name} is available upsteam, kill this patch";
+  patches = [
+    # TODO: jsbeautifier is not working upstream and tests need to be disabled
+    ./python36Packages-jsbeautifier-disable-check.patch
 
-  patches = [];
+    # TODO: VirtualBox 5 does not work with latest kernel. Update to VirtualBox 6
+    # https://github.com/NixOS/nixpkgs/pull/53120
+    ./53120-upgrade-virtualbox.patch
+  ];
 
   patched = runCommand "nixpkgs-unstable-${pinnedVersion.rev}"
     {
