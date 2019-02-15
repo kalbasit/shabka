@@ -107,7 +107,7 @@ with lib;
           prompt = true;
         };
 
-        "mergetool \"vimdiff\"" = optional config.mine.neovim.enable {
+        "mergetool \"vimdiff\"" = optionalAttrs config.mine.neovim.enable {
           cmd = "nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'";
         };
 
