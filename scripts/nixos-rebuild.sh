@@ -56,8 +56,7 @@ fi
 if [[ "${release}" = "stable" ]]; then
     readonly nixpkgs="$( nix-build --no-out-link "${nixpkgs_stable}" )"
 else
-    # TODO: improve the beild command
-    readonly nixpkgs="$( nix-build --no-out-link "${nixpkgs_unstable}" --arg runCommand '(import <nixpkgs> {}).runCommand' --arg fetchpatch '(import <nixpkgs> {}).fetchpatch' )"
+    readonly nixpkgs="$( nix-build --no-out-link -E "with import (import ${nixpkgs_stable}) {}; import ${nixpkgs_unstable} { inherit runCommand fetchpatch; }" )"
 fi
 
 unset NIX_PATH
