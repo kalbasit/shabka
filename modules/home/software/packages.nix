@@ -85,5 +85,6 @@ in {
   # install home-manager but only if it's darwin
   programs.home-manager = if stdenv.isDarwin then {
     enable = true;
+    path = builtins.toString homeManager;
   } else {};
 }
