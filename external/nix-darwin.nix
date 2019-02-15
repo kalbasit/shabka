@@ -1,3 +1,5 @@
+{ fetchpatch, runCommand }:
+
 let
   pinnedVersion = builtins.fromJSON (builtins.readFile ./nix-darwin-version.json);
   pinned = builtins.fetchTarball {
@@ -6,7 +8,7 @@ let
 
   patches = [];
 
-  patched = importPinned.runCommand "nix-darwin-${pinnedVersion.rev}"
+  patched = runCommand "nix-darwin-${pinnedVersion.rev}"
     {
       inherit pinned patches;
 

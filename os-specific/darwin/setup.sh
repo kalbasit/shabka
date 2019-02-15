@@ -40,6 +40,7 @@ readonly hostcf="${shabka_path}/hosts/${hostname}"
 readonly workdir="$(mktemp -d)"
 readonly deprecated_nixpkgs="${HOME}/.nixpkgs"
 readonly xdg_config_nixpkgs="${HOME}/.config/nixpkgs"
+readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
 trap "rm -rf ${workdir}" EXIT
 
 sudo_prompt
@@ -80,8 +81,9 @@ if ! defaults read com.github.kalbasit.shabka bootstrap >/dev/null 2>&1; then
 			ln -sf "${hostcf}/darwin-configuration.nix" darwin-configuration.nix
 		popd
 		pushd "${workdir}"
+			readonly nix_darwin="$( nix-build --no-out-link -E "with import (import ${nixpkgs_stable}) {}; import ${shabka_path}/external/nix-darwin.nix { inherit runCommand fetchpatch; }" )"
 			set +e
-				(yes | nix run -f "${shabka_path}/external/nix-darwin.nix" installer -c darwin-installer)
+				(yes | nix run -f "${nix_darwin}" installer -c darwin-installer)
 				RETVAL=$?
 			set -e
 			if [[ "${RETVAL}" -ne 0 ]] && [[ "${RETVAL}" -ne 141 ]]; then
