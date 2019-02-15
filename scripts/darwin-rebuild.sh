@@ -3,8 +3,8 @@
 set -euo pipefail
 
 readonly shabka_path="$(cd $(dirname "${BASH_SOURCE[0]}")/../ && pwd)"
-readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
-readonly nixpkgs_unstable="${shabka_path}/external/nixpkgs-unstable.nix"
+readonly nixpkgs_stable="$( nix-build --no-out-link "${shabka_path}/external/nixpkgs-stable.nix" )"
+readonly nixpkgs_unstable="$( nix-build --no-out-link -E "with import (import ${shabka_path}/external/nixpkgs-stable.nix) {}; import ${shabka_path}/external/nixpkgs-unstable.nix { inherit runCommand fetchpatch; }" )"
 
 # define all local variables
 host="$( hostname -s )"
@@ -52,9 +52,9 @@ fi
 # https://gist.github.com/kalbasit/deec7b74b64f70d24ca1967883c8e7b6 for more
 # details.
 if [[ "${release}" = "stable" ]]; then
-    readonly nixpkgs="$( nix-build --no-out-link "${nixpkgs_stable}" )"
+    readonly nixpkgs="${nixpkgs_stable}"
 else
-    readonly nixpkgs="$( nix-build --no-out-link -E "with import (import ${nixpkgs_stable}) {}; import ${nixpkgs_unstable} { inherit runCommand fetchpatch; }" )"
+    readonly nixpkgs="${nixpkgs_unstable}"
 fi
 
 unset NIX_PATH
