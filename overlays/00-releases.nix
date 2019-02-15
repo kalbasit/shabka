@@ -1,9 +1,7 @@
 self: super:
 
 let
-  pinnedStable = import ../external/nixpkgs-stable.nix {
-    inherit (super) fetchpatch runCommand;
-  };
+  pinnedStable = import ../external/nixpkgs-stable.nix;
 
   pinnedUnstable = import ../external/nixpkgs-unstable.nix {
     inherit (super) fetchpatch runCommand;
