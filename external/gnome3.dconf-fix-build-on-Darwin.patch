@@ -1,0 +1,37 @@
+From d0eadfe06244fcce6117335feb82aa27df25ce4b Mon Sep 17 00:00:00 2001
+From: "Wael M. Nasreddine" <wael.nasreddine@gmail.com>
+Date: Thu, 14 Feb 2019 21:25:30 -0800
+Subject: [PATCH] gnome3.dconf: fix build on Darwin
+
+---
+ pkgs/desktops/gnome-3/core/dconf/default.nix | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/pkgs/desktops/gnome-3/core/dconf/default.nix b/pkgs/desktops/gnome-3/core/dconf/default.nix
+index 9c1d7d7d1a9..8c454e82f96 100644
+--- a/pkgs/desktops/gnome-3/core/dconf/default.nix
++++ b/pkgs/desktops/gnome-3/core/dconf/default.nix
+@@ -1,5 +1,5 @@
+ { stdenv, fetchurl, meson, ninja, python3, vala, libxslt, pkgconfig, glib, bash-completion, dbus, gnome3
+-, libxml2, gtk-doc, docbook_xsl, docbook_xml_dtd_42 }:
++, libxml2, gtk-doc, docbook_xsl, docbook_xml_dtd_42, fetchpatch }:
+ 
+ let
+   pname = "dconf";
+@@ -13,6 +13,13 @@ stdenv.mkDerivation rec {
+     sha256 = "1dq2dn7qmxr4fxzx9wnag89ck24gxq17p2n4gl81h4w8qdy3m6jl";
+   };
+ 
++  patches = [
++    (fetchpatch {
++      url = "https://gitlab.gnome.org/GNOME/dconf/commit/49f4d916e1151af3975df52c522c69de98ed2fbb.patch";
++      sha256 = "00klkr1jzli9ap0aj6399m1bj2bxxz48pmcj4r16dsy6dfdl6325";
++    })
++  ];
++
+   postPatch = ''
+     chmod +x meson_post_install.py
+     patchShebangs meson_post_install.py
+-- 
+2.18.1
+
