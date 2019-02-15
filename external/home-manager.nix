@@ -9,7 +9,7 @@ let
   patches = [
     # https://github.com/rycee/home-manager/pull/474
     (
-      pkgs.fetchpatch {
+      fetchpatch {
         url = "https://github.com/rycee/home-manager/pull/474.patch";
         sha256 = "01rnl2c9k3kx0s33ap81p02ijjxciak2y1cvl553i45xx4g8siw1";
       }
