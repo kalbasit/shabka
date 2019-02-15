@@ -63,7 +63,7 @@ in {
       }];
     };
 
-    xsession = if pkgs.stdenv.isLinux then {
+    xsession = optionalAttrs pkgs.stdenv.isLinux {
       windowManager.i3.config = {
         bars = [{
           position = "top";
@@ -103,7 +103,7 @@ in {
           };
         };
       };
-    } else {};
+    };
 
     programs.rofi.theme = "Adapta-Nokto";
 
