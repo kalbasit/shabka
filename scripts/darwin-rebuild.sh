@@ -5,7 +5,7 @@ set -euo pipefail
 readonly shabka_path="$(cd $(dirname "${BASH_SOURCE[0]}")/../ && pwd)"
 readonly nixpkgs_stable="$( nix-build --no-out-link "${shabka_path}/external/nixpkgs-stable.nix" )"
 readonly nixpkgs_unstable="$( nix-build --no-out-link -E "with import (import ${shabka_path}/external/nixpkgs-stable.nix) {}; import ${shabka_path}/external/nixpkgs-unstable.nix { inherit runCommand fetchpatch; }" )"
-readonly nix_darwin="$( nix-build --no-out-link -E "with import ${nixpkgs} {}; import ${shabka_path}/external/nix-darwin.nix { inherit runCommand fetchpatch; }" )"
+readonly nix_darwin="$( nix-build --no-out-link -E "with import ${nixpkgs_stable} {}; import ${shabka_path}/external/nix-darwin.nix { inherit runCommand fetchpatch; }" )"
 
 # define all local variables
 host="$( hostname -s )"
