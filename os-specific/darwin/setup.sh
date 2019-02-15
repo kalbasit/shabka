@@ -38,10 +38,8 @@ readonly here="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 readonly shabka_path="$( cd "${here}/../.." && pwd )"
 readonly hostcf="${shabka_path}/hosts/${hostname}"
 readonly workdir="$(mktemp -d)"
-readonly deprecated_nixpkgs="${HOME}/.nixpkgs"
 readonly xdg_config_nixpkgs="${HOME}/.config/nixpkgs"
 readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
-readonly nixpkgs="$( nix-build --no-out-link "${nixpkgs_stable}" )"
 trap "rm -rf ${workdir}" EXIT
 
 sudo_prompt
@@ -66,7 +64,6 @@ if ! defaults read com.github.kalbasit.shabka bootstrap >/dev/null 2>&1; then
 	# download and install Nix
 	command -v nix 2>/dev/null || {
 		mkdir -p "${xdg_config_nixpkgs}"
-		mkdir -p "${deprecated_nixpkgs}"
 
 		info "Installing Nix"
 		curl https://nixos.org/nix/install | sh
@@ -78,9 +75,6 @@ if ! defaults read com.github.kalbasit.shabka bootstrap >/dev/null 2>&1; then
 		set -u
 
 		info "Installing nix-darwin"
-		pushd "${deprecated_nixpkgs}"
-			ln -sf "${hostcf}/darwin-configuration.nix" darwin-configuration.nix
-		popd
 		pushd "${workdir}"
 			readonly nixpkgs="$( nix-build --no-out-link "${nixpkgs_stable}" )"
 			readonly nix_darwin="$( nix-build --no-out-link -E "with import (import ${nixpkgs_stable}) {}; import ${shabka_path}/external/nix-darwin.nix { inherit runCommand fetchpatch; }" )"
