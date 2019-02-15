@@ -80,7 +80,7 @@ if ! defaults read com.github.kalbasit.shabka bootstrap >/dev/null 2>&1; then
 			readonly nixpkgs="${nixpkgs_unstable}"
 			readonly nix_darwin="$( nix-build --no-out-link -E "with import ${nixpkgs} {}; import ${shabka_path}/external/nix-darwin.nix { inherit runCommand fetchpatch; }" )"
 			set +e
-				(yes | nix run -I darwin-config="${hostcf}/darwin-configuration.nix" -f "${nix_darwin}" --arg nixpkgs "${nixpkgs}" installer -c darwin-installer)
+				(yes | nix run -I darwin-config="${hostcf}/configuration.nix" -f "${nix_darwin}" --arg nixpkgs "${nixpkgs}" installer -c darwin-installer)
 				RETVAL=$?
 			set -e
 			if [[ "${RETVAL}" -ne 0 ]] && [[ "${RETVAL}" -ne 141 ]]; then
