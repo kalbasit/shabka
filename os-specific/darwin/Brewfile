@@ -11,12 +11,10 @@ cask "sequel-pro"                 # MySQL frontend supporting connections throug
 cask "slack"                      # Team communication
 cask "teamviewer"                 # TeamViewer for remote login
 cask "keybase"                    # Keybase for accessing my encrypted repositories
+cask "virtualbox"                 # VirtualBox for VM
+cask "virtualbox-extension-pack"  # VirtualBox extensions
 cask "whatsapp"                   # WhatsApp application
 cask "vlc"                        # VideoLan video player
-
-# TODO: It seems to be installing on Darwin now
-#cask "virtualbox"                 # VirtualBox for VM
-#cask "virtualbox-extension-pack"  # VirtualBox extensions
 
 # TODO: Whatever does not install via nix, install it via Brew. Below, is the contents of my old Brewfile.
 #
