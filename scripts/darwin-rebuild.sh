@@ -57,9 +57,9 @@ else
     readonly nixpkgs="${nixpkgs_unstable}"
 fi
 
-readonly nix_darwin="$( nix-build --no-out-link -E "with import ${nixpkgs} {}; import ${shabka_path}/external/nix-darwin.nix { inherit runCommand fetchpatch; }" )"
+readonly darwin="$( nix-build --no-out-link -E "with import ${nixpkgs} {}; import ${shabka_path}/external/nix-darwin.nix { inherit runCommand fetchpatch; }" )"
 
 unset NIX_PATH
 
 set -x
-darwin-rebuild -I nixpkgs="${nixpkgs}" -I "darwin=${nix_darwin}" -I "darwin-config=${darwin_config}" "${@}"
+darwin-rebuild -I nixpkgs="${nixpkgs}" -I "darwin=${darwin}" -I "darwin-config=${darwin_config}" "${@}"
