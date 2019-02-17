@@ -48,7 +48,6 @@ in {
       knownGroups = [ "mine" ];
 
       users = (mapAttrs' makeUser config.mine.users);
-
     };
 
     home-manager.users = mapAttrs' makeHM config.mine.users;
