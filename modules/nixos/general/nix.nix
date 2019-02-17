@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 with lib;
 
@@ -18,7 +18,7 @@ in {
     '';
 
     nixPath = [
-      "nixos-config=/etc/nixos/configuration.nix"
+      "nixos-config=/run/current-system/shabka/hosts/${config.networking.hostName}/configuration.nix"
       "nixpkgs=/run/current-system/nixpkgs"
       "shabka-path=/run/current-system/shabka"
     ];
