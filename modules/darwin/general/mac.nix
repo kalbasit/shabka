@@ -246,7 +246,7 @@
   system.defaults.NSGlobalDomain.NSUseAnimatedFocusRing = false;
 
   # Increase window resize speed for Cocoa applications
-  system.defaults.NSGlobalDomain.NSWindowResizeTime = 0.001;
+  system.defaults.NSGlobalDomain.NSWindowResizeTime = "0.001";
 
   # Expand save panel by default
   system.defaults.NSGlobalDomain.NSNavPanelExpandedStateForSaveMode = true;
@@ -355,7 +355,7 @@
   system.defaults.dock.launchanim = false;
 
   # Speed up Mission Control animations
-  system.defaults.dock.expose-animation-duration = 0.1;
+  system.defaults.dock.expose-animation-duration = "0.1";
 
   # Don’t group windows by application in Mission Control
   # (i.e. use the old Exposé behavior instead)
@@ -368,9 +368,9 @@
   system.defaults.dock.mru-spaces = false;
 
   # Remove the auto-hiding Dock delay
-  system.defaults.dock.autohide-delay = 0;
+  system.defaults.dock.autohide-delay = "0";
   # Remove the animation when hiding/showing the Dock
-  system.defaults.dock.autohide-time-modifier = 0;
+  system.defaults.dock.autohide-time-modifier = "0";
 
   # Automatically hide and show the Dock
   system.defaults.dock.autohide = true;
