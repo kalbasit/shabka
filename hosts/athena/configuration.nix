@@ -8,11 +8,11 @@
   networking.hostName = "athena";
 
   nix.buildMachines =
-    if builtins.pathExists /yl/private/network-secrets/shabka/hosts/zeus/id_rsa then
+    if builtins.pathExists /Users/yl/private/network-secrets/shabka/hosts/zeus/id_rsa then
     [{
       hostName = "zeus.home.nasreddine.com";
       sshUser = "builder";
-      sshKey = "/yl/private/network-secrets/shabka/hosts/zeus/id_rsa";
+      sshKey = "/Users/yl/private/network-secrets/shabka/hosts/zeus/id_rsa";
       system = "x86_64-linux";
       maxJobs = 8;
       speedFactor = 2;
