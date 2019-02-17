@@ -20,8 +20,14 @@ readonly owner="${1}"
 readonly repo="${2}"
 readonly branch="${3}"
 readonly external_file="${4}"
-readonly old_rev="$(jq -r '.rev' "${external_file}")"
 readonly tmp="$(mktemp)"
+
+if [[ -r "${external_file}" ]]; then
+    readonly new=0
+    readonly old_rev="$(jq -r '.rev' "${external_file}")"
+else
+    readonly new=1
+fi
 
 # make sure that there are no changes to the state
 if [[ "$( git diff -- "${external_file}" | wc -l )" -gt 0 ]]; then
@@ -31,7 +37,7 @@ fi
 
 ${root_dir}/scripts/nix-prefetch-github-url.sh "${owner}" "${repo}" "${branch}" > "${tmp}" && mv "${tmp}" "${external_file}"
 
-if [[ "$( git  diff -- "${external_file}" | wc -l )" -eq 0 ]]; then
+if [[ "${new}" -eq 0 ]] && [[ "$( git  diff -- "${external_file}" | wc -l )" -eq 0 ]]; then
     >&2 echo ">>> No changes were detected at ${external_file}."
     exit 0
 fi
@@ -40,5 +46,9 @@ readonly new_rev="$(jq -r '.rev' "${external_file}")"
 
 git add -A "${external_file}"
 
-git commit -m "${external_file%%-version.json}: update to ${new_rev}" \
-    -m "Compare changes at https://github.com/${owner}/${repo}/compare/${old_rev}...${new_rev}"
+if [[ "${new}" -eq 0 ]]; then
+    git commit -m "${external_file%%-version.json}: update to ${new_rev}" \
+        -m "Compare changes at https://github.com/${owner}/${repo}/compare/${old_rev}...${new_rev}"
+else
+    git commit -m "${external_file%%-version.json}: update to ${new_rev}"
+fi
