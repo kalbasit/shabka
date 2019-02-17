@@ -9,7 +9,7 @@ let
     (builtins.readFile (import ../../../external/kalbasit-keys.nix))
   ];
 
-  makeUser = userName: { uid, isAdmin ? false, home ? "/home/${userName}" }: nameValuePair
+  makeUser = userName: { uid, isAdmin ? false, home ? "/Users/${userName}" }: nameValuePair
     (userName)
     ({
       inherit home uid;
@@ -27,7 +27,7 @@ let
     });
 
   defaultUsers = {
-    yl = { uid = 501; isAdmin = true;  home = "/Users/yl"; };
+    yl = { uid = 501; isAdmin = true; };
   };
 
 in {
