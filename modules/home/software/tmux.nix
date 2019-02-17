@@ -131,12 +131,6 @@ let
     bind-key -r -T copy-mode-vi p command-prompt -1 -p "jump to forward" "send -X jump-to-forward \"%%%\""
     bind-key -r -T copy-mode-vi P command-prompt -1 -p "jump to backward" "send -X jump-to-backward \"%%%\""
 
-    # resize panes
-    bind-key M-n resize-pane -L 5
-    bind-key M-e resize-pane -D 5
-    bind-key M-i resize-pane -U 5
-    bind-key M-o resize-pane -R 5
-
     # Change window move behavior
     bind . command-prompt "swap-window -t '%%'"
     bind > command-prompt "move-window -t '%%'"
@@ -149,6 +143,16 @@ let
 
     # The shortcut is set to <t> which overrides the default mapping for clock mode
     bind T clock-mode
+
+    # Bind pane selection and pane resize for Vim Bindings in Colemak!
+    bind n select-pane -L
+    bind e select-pane -D
+    bind i select-pane -U
+    bind o select-pane -R
+    bind -r N resize-pane -L 5
+    bind -r E resize-pane -D 5
+    bind -r I resize-pane -U 5
+    bind -r O resize-pane -R 5
   '';
 
   copyPaste =
@@ -174,6 +178,13 @@ in {
         fzf-tmux-url
       ];
 
+      clock24 = true;
+      customPaneNavigationAndResize = !config.mine.useColemakKeyboardLayout;
+      escapeTime = 0;
+      historyLimit = 10000;
+      keyMode = "vi";
+      shortcut = "t";
+
       extraConfig = ''
         ${defaultTheme}
         ${tmuxVimAwarness}
@@ -183,29 +194,6 @@ in {
         #
 
         set  -g default-terminal "tmux-256color"
-        set  -g base-index      0
-        setw -g pane-base-index 0
-
-        set -g mode-keys   vi
-
-        bind h select-pane -L
-        bind j select-pane -D
-        bind k select-pane -U
-        bind l select-pane -R
-
-        bind -r H resize-pane -L 5
-        bind -r J resize-pane -D 5
-        bind -r K resize-pane -U 5
-        bind -r L resize-pane -R 5
-
-        # rebind main key: C-t
-        unbind C-b
-        set -g prefix C-t
-        bind t send-prefix
-        bind C-t last-window
-
-        # Display the clock in 24 hours format
-        setw -g clock-mode-style  24
 
         # don't allow the terminal to rename windows
         set-window-option -g allow-rename off
