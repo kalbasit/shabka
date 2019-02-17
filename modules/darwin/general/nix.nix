@@ -11,6 +11,7 @@ in {
     # useSandbox = true;
 
     nixPath = [
+      "darwin-config=/run/current-system/shabka/hosts/${config.networking.hostName}/configuration.nix"
       "nixpkgs=/run/current-system/nixpkgs"
       "shabka-path=/run/current-system/shabka"
     ];
