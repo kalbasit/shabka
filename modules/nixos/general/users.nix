@@ -30,7 +30,7 @@ let
       openssh.authorizedKeys.keys = sshKeys;
     });
 
-  makeHM = userName: { uid, isAdmin, home, ... }: nameValuePair
+  makeHM = userName: { uid, isAdmin, home ? "/home/${userName}", ... }: nameValuePair
     (userName)
     (config.mine.home-manager.config {
       inherit userName uid isAdmin home;

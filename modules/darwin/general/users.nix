@@ -19,7 +19,7 @@ let
       shell = "${getBin pkgs.zsh}/bin/zsh";
     });
 
-  makeHM = userName: { uid, isAdmin, home, ... }: nameValuePair
+  makeHM = userName: { uid, isAdmin, home ? "/Users/${userName}", ... }: nameValuePair
     (userName)
     (config.mine.home-manager.config {
       inherit userName uid isAdmin home;
