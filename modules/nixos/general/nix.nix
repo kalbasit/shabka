@@ -52,7 +52,7 @@ in {
   #   ln -sfn ${pinnedNixpkgs} /run/current-nixpkgs
   # '';
   system.extraSystemBuilderCmds = ''
-    ln -sfnv ${pkgs.path} $out/nixpkgs
-    ln -sfnv ${shabka-path} $out/shabka
+    ln -sfn ${pkgs.path} $out/nixpkgs
+    ln -sfn ${shabka-path} $out/shabka
   '';
 }
