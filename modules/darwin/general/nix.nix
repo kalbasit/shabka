@@ -8,7 +8,7 @@ in {
   nix = {
     buildCores = 0;
     distributedBuilds = true;
-    useSandbox = true;
+    # useSandbox = true;
 
     nixPath = [
       "nixpkgs=/run/current-system/nixpkgs"
