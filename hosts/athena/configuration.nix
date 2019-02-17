@@ -22,8 +22,4 @@
   nix.extraOptions = ''
     builders-use-substitutes = true
   '';
-
-  nix.nixPath = [
-    "darwin-config=${builtins.toPath ./configuration.nix}"
-  ];
 }
