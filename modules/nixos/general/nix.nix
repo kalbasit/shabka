@@ -12,6 +12,8 @@ in {
     buildCores = 0;
     daemonIONiceLevel = 7;
     daemonNiceLevel = 10;
+    distributedBuilds = true;
+    useSandbox = true;
 
     extraOptions = ''
       auto-optimise-store = true
@@ -32,14 +34,14 @@ in {
       "https://cache.nixos.org/"
       "https://yl.cachix.org"
     ];
+
     binaryCachePublicKeys = [
       "yl.cachix.org-1:Abr5VClgHbNd2oszU+ivr+ujB0Jt2swLo2ddoeSMkm0="
     ];
-    trustedUsers = [ "root" "@wheel" "@builders"];
 
-    useSandbox = true;
-
-    distributedBuilds = true;
+    trustedUsers = [
+      "root" "@wheel" "@builders"
+    ];
   };
 
 
