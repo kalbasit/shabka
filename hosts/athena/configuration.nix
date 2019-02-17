@@ -22,4 +22,6 @@
   nix.extraOptions = ''
     builders-use-substitutes = true
   '';
+
+  time.timeZone = "America/Los_Angeles";
 }
