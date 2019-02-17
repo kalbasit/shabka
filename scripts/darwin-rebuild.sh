@@ -10,7 +10,7 @@ readonly nixpkgs_unstable="$( nix-build --no-out-link -E "with import (import ${
 host="$( hostname -s )"
 release=
 
-while getopts ":h:u:s" opt; do
+while getopts ":h:us" opt; do
     case "${opt}" in
         h)
             host="${OPTARG}"
