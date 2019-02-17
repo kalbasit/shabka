@@ -1,3 +1,7 @@
+{ lib, ... }:
+
+with lib;
+
 {
   # XXX: The checks fail when the nix-darwin does not find the configuration at
   # ~/.nixpkgs/darwin-configuration.nix. We force it to empty string to disable
