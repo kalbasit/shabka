@@ -7,9 +7,6 @@
      ../../modules/home
     ];
 
-    # TODO: getting an error that this is only compatible with systemd. A port to launchd is probably what I need.
-    # mine.gnupg.enable = true;
-
     mine.darwinConfig = darwinConfig;
 
     mine.git.enable = true;
