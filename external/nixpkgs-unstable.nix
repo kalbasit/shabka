@@ -19,9 +19,6 @@ let
     # https://github.com/NixOS/nixpkgs/pull/53120
     ./53120-upgrade-virtualbox.patch
 
-    # XXX: PR https://github.com/NixOS/nixpkgs/pull/55800
-    ./gnome3.dconf-fix-build-on-Darwin.patch
-
     # luarocks: patch sw_vers and gcc
     # This fixes luarocks on Darwin
     # https://github.com/NixOS/nixpkgs/issues/55553
