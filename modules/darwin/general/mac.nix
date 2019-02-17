@@ -1,5 +1,7 @@
 {
   system.activationScripts.postActivation.text = ''
+    # TODO: Rewrite as much of these as possible using nix-darwin
+
     # From https://github.com/mathiasbynens/dotfiles/blob/master/.macos taken
     # at commit e72d1060f3df8c157f93af52ea59508dae36ef50.
 
