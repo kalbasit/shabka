@@ -7,8 +7,8 @@ with lib;
 
   config = mkIf config.mine.gnupg.enable {
     programs.gnupg = {
-      enable = true;
-      enableSSHSupport = true;
+      agent.enable = true;
+      agent.enableSSHSupport = true;
     };
   };
 }
