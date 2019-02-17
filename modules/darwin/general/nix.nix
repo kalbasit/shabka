@@ -26,7 +26,7 @@ in {
   };
 
   system.activationScripts.postActivation.text = ''
-    ln -sv ${pkgs.path} $out/nixpkgs
-    ln -sv ${shabka-path} $out/shabka
+    ln -sfnv ${pkgs.path} $systemConfig/nixpkgs
+    ln -sfnv ${shabka-path} $systemConfig/shabka
   '';
 }
