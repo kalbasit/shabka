@@ -27,7 +27,7 @@ let
     });
 
   defaultUsers = {
-    yl = { uid = 501; isAdmin = true; };
+    yl = { uid = 2000; isAdmin = true; };
   };
 
 in {
@@ -49,6 +49,13 @@ in {
 
       groups = {
         mine = { gid = 2000; };
+
+        admin = {
+          members = ["yl"]; # TODO: This must be computed from the config.mine.users
+        };
+        staff = {
+          members = ["yl"]; # TODO: This must be computed from the config.mine.users
+        };
       };
 
       users = (mapAttrs' makeUser config.mine.users);
