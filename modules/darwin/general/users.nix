@@ -14,7 +14,7 @@ let
     ({
       inherit home uid;
 
-      gid = 20;
+      gid = 2000;
       isHidden = false;
       shell = pkgs.zsh;
     });
@@ -46,6 +46,10 @@ in {
     users = {
       knownUsers = builtins.attrNames config.mine.users;
       knownGroups = [ "mine" ];
+
+      groups = {
+        mine = { gid = 2000; };
+      };
 
       users = (mapAttrs' makeUser config.mine.users);
     };
