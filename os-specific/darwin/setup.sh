@@ -94,22 +94,18 @@ fi
 
 # Brew the Brewfile
 info "Brewing the Brew file"
-if ! brew bundle --file="${here}/Brewfile" --verbose; then
-	info "It looks like HomeBrew has failed, please fix the issues (if any) and hit Enter to retry"
-	info "NOTE: VirtualBox usually fails because of security issue, replaying error here"
-	cat <<-EOF
-	To install and/or use VirtualBox you may need to enable their kernel extension in
+while ! brew bundle --file="${here}/Brewfile" --verbose; do
+	error "It looks like HomeBrew has failed, retry [Y/n]"
 
-			System Preferences → Security & Privacy → General
+	answer=
+	while [[ -z "${answer}" ]] || ( [[ "${answer,,}" != "y" ]] && [[ "${answer,,}" != "n" ]] ); do
+		read -r answer
+	done
 
-	For more information refer to vendor documentation or the Apple Technical Note:
-
-	https://developer.apple.com/library/content/technotes/tn2459/_index.html
-	EOF
-
-	read -r q
-	brew bundle --file="${here}/Brewfile" --verbose
-fi
+	if [[ "${answer,,}" == "n" ]]; then
+		break
+	fi
+done
 
 # Wipe all (default) app icons from the Dock
 # This is only really useful when setting up a new Mac, or if you don’t use
@@ -117,6 +113,17 @@ fi
 defaults write com.apple.dock persistent-apps -array
 
 # Finally, switch the generation
-"${shabka_path}/scripts/darwin-rebuild.sh" -h "${hostname}" switch
+while ! "${shabka_path}/scripts/darwin-rebuild.sh" -h "${hostname}" switch; do
+	error "It looks like Darwin Rebuild has failed, retry [Y/n]"
+
+	answer=
+	while [[ -z "${answer}" ]] || ( [[ "${answer,,}" != "y" ]] && [[ "${answer,,}" != "n" ]] ); do
+		read -r answer
+	done
+
+	if [[ "${answer,,}" == "n" ]]; then
+		break
+	fi
+done
 
 } # prevent the script from executing partially downloaded
