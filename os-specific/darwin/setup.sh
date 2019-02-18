@@ -112,6 +112,14 @@ while ! brew bundle --file="${here}/Brewfile" --verbose; do
 	fi
 done
 
+# Move zshrc and zprofile out of the way
+if [[ -f /etc/zshrc ]] && [[ ! -f /etc/zshrc.orig ]]; then
+	mv /etc/zshrc /etc/zshrc.orig
+fi
+if [[ -f /etc/zprofile ]] && [[ ! -f /etc/zprofile.orig ]]; then
+	mv /etc/zprofile /etc/zprofile.orig
+fi
+
 # Finally, switch the generation
 while ! "${shabka_path}/scripts/darwin-rebuild.sh" -h "${hostname}" switch; do
 	error "It looks like Darwin Rebuild has failed, retry [Y/n]"
