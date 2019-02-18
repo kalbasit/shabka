@@ -316,16 +316,26 @@ in {
     bindsym ${defaultModifier}+${thirdModifier}+w mode "$mode_wm"
 
     # Application launcher
-    set $mode_apps Launch: (a) ARandR, (d) Discord, (i) Irc${optionalString config.mine.keybase.enable ", (k) Keybase"}, (m) Mail, (s) Studio, (t) TaskWarrior, (w) Work IM
+    set $mode_apps_social (l) Slack, (t) Studio
+    set $mode_apps Launch: (a) ARandR, (d) Discord, (i) Irc${optionalString config.mine.keybase.enable ", (k) Keybase"}, (m) Mail, (s) Social, (t) TaskWarrior, (w) Work IM
+
+    mode "$mode_apps_social" {
+      bindsym l exec ${getBin pkgs.slack}/bin/slack, mode default
+      bindsym t exec ${getBin pkgs.obs-studio}/bin/obs, mode default
+
+      # back to normal: Enter or Escape
+      bindsym Return mode default
+      bindsym Escape mode default
+    }
+
     mode "$mode_apps" {
       bindsym a exec ${getBin pkgs.arandr}/bin/arandr, mode default
       bindsym d exec ${getBin pkgs.discord}/bin/Discord, mode default
       bindsym i exec ${getBin pkgs.termite}/bin/termite --title=irc --exec=weechat, mode default
       ${optionalString config.mine.keybase.enable "bindsym k exec ${getBin pkgs.keybase-gui}/bin/keybase-gui, mode default"}
+      bindsym s mode $mode_apps_social
       bindsym m exec astroid, mode default
-      bindsym s exec ${getBin pkgs.obs-studio}/bin/obs, mode default
       bindsym t exec ${getBin pkgs.ptask}/bin/ptask, mode default
-      bindsym w exec ${getBin pkgs.slack}/bin/slack, mode default
 
       # back to normal: Enter or Escape
       bindsym Return mode default
