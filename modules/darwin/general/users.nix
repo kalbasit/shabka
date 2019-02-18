@@ -51,9 +51,11 @@ in {
         mine = { gid = 2000; };
 
         admin = {
+          gid = 80;
           members = ["yl"]; # TODO: This must be computed from the config.mine.users
         };
         staff = {
+          gid = 20;
           members = ["yl"]; # TODO: This must be computed from the config.mine.users
         };
       };
