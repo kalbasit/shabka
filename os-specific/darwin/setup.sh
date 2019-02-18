@@ -116,4 +116,7 @@ fi
 # the Dock to launch apps.
 defaults write com.apple.dock persistent-apps -array
 
+# Finally, switch the generation
+"${shabka_path}/scripts/darwin-rebuild.sh" -h "${hostname}" switch
+
 } # prevent the script from executing partially downloaded
