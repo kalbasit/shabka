@@ -114,10 +114,10 @@ done
 
 # Move zshrc and zprofile out of the way
 if [[ -f /etc/zshrc ]] && [[ ! -f /etc/zshrc.orig ]]; then
-	mv /etc/zshrc /etc/zshrc.orig
+	sudo mv /etc/zshrc /etc/zshrc.orig
 fi
 if [[ -f /etc/zprofile ]] && [[ ! -f /etc/zprofile.orig ]]; then
-	mv /etc/zprofile /etc/zprofile.orig
+	sudo mv /etc/zprofile /etc/zprofile.orig
 fi
 
 # Finally, switch the generation
