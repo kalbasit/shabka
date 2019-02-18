@@ -14,7 +14,7 @@ let
     ({
       inherit home uid;
 
-      gid = 2000;
+      gid = 20;
       isHidden = false;
       shell = pkgs.zsh;
     });
@@ -48,14 +48,8 @@ in {
       knownGroups = [ "mine" ];
 
       groups = {
-        mine = { gid = 2000; };
-
-        admin = {
-          gid = 80;
-          members = ["yl"]; # TODO: This must be computed from the config.mine.users
-        };
-        staff = {
-          gid = 20;
+        mine = {
+          gid = 2000;
           members = ["yl"]; # TODO: This must be computed from the config.mine.users
         };
       };
