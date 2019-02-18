@@ -133,14 +133,15 @@ fi
 # Brew the Brewfile
 info "Brewing the Brew file"
 while ! brew bundle --file="${here}/Brewfile" --verbose; do
-	error "It looks like HomeBrew has failed, retry [Y/n]"
+	error "It looks like HomeBrew has failed, retry [y/n]"
 
-	answer=
-	while [[ -z "${answer}" ]] || ( [[ "${answer,,}" != "y" ]] && [[ "${answer,,}" != "n" ]] ); do
+	read -r answer
+	while [[ -z "${answer}" ]] || ( [[ "${answer}" != "y" ]] && [[ "${answer}" != "n" ]] ); do
+		error "I only understand y or n. Please respond with either y or n"
 		read -r answer
 	done
 
-	if [[ "${answer,,}" == "n" ]]; then
+	if [[ "${answer}" == "n" ]]; then
 		break
 	fi
 done
@@ -155,14 +156,15 @@ fi
 
 # Finally, switch the generation
 while ! "${shabka_path}/scripts/darwin-rebuild.sh" -h "${hostname}" switch; do
-	error "It looks like Darwin Rebuild has failed, retry [Y/n]"
+	error "It looks like Darwin Rebuild has failed, retry [y/n]"
 
-	answer=
-	while [[ -z "${answer}" ]] || ( [[ "${answer,,}" != "y" ]] && [[ "${answer,,}" != "n" ]] ); do
+	read -r answer
+	while [[ -z "${answer}" ]] || ( [[ "${answer}" != "y" ]] && [[ "${answer}" != "n" ]] ); do
+		error "I only understand y or n. Please respond with either y or n"
 		read -r answer
 	done
 
-	if [[ "${answer,,}" == "n" ]]; then
+	if [[ "${answer}" == "n" ]]; then
 		break
 	fi
 done
