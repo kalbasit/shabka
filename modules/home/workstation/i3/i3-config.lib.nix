@@ -328,12 +328,11 @@ in {
       bindsym Escape mode "$mode_apps"
     }
 
-    set $mode_apps Launch: (a) ARandR, (m) Mail, (s) Social, (t) TaskWarrior, (o) Obs Studio
+    set $mode_apps Launch: (a) ARandR, (m) Mail, (s) Social, (o) Obs Studio
     mode "$mode_apps" {
       bindsym a exec ${getBin pkgs.arandr}/bin/arandr, mode default
       bindsym m exec astroid, mode default
       bindsym s mode "$mode_apps_social"
-      bindsym t exec ${getBin pkgs.ptask}/bin/ptask, mode default
       bindsym o exec ${getBin pkgs.obs-studio}/bin/obs, mode default
 
       # back to normal: Enter or Escape
