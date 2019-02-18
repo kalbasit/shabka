@@ -117,6 +117,14 @@ if ! defaults read com.github.kalbasit.shabka bootstrap >/dev/null 2>&1; then
 			if [[ "${RETVAL}" -ne 0 ]] && [[ "${RETVAL}" -ne 141 ]]; then
 				error "nix-darwin installer exited with status ${RETVAL}"
 				exit "${RETVAL}"
+			else
+				if [[ -r /etc/static/bashrc ]]; then
+					set +u
+						source /etc/static/bashrc
+					set -u
+				else
+					>&2 echo "ERR: Nix-Darwin was installed successfully, but was not able find /etc/static/bashrc"
+				fi
 			fi
 		popd
 	}
