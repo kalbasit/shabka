@@ -20,10 +20,10 @@ error() {
 # Prompt for  sudo password & keep alive
 # Taken from https://github.com/LnL7/nix-darwin/blob/2412c7f9f98377680418625a3aa7b685b2403107/bootstrap.sh#L77-L83
 sudo_prompt(){
-  echo "Please enter your password for sudo authentication"
-  sudo -k
-  sudo echo "sudo authenticaion successful!"
-  while true ; do sudo -n true ; sleep 60 ; kill -0 "$$" || exit ; done 2>/dev/null &
+	echo "Please enter your password for sudo authentication"
+	sudo -k
+	sudo echo "sudo authenticaion successful!"
+	while true ; do sudo -n true ; sleep 60 ; kill -0 "$$" || exit ; done 2>/dev/null &
 }
 
 if [[ "${#}" -ne 1 ]]; then
@@ -111,16 +111,16 @@ if ! brew bundle --file="${here}/Brewfile" --verbose; then
 	brew bundle --file="${here}/Brewfile" --verbose
 fi
 
-	# Wipe all (default) app icons from the Dock
-	# This is only really useful when setting up a new Mac, or if you don’t use
-	# the Dock to launch apps.
-	defaults write com.apple.dock persistent-apps -array
+# Wipe all (default) app icons from the Dock
+# This is only really useful when setting up a new Mac, or if you don’t use
+# the Dock to launch apps.
+defaults write com.apple.dock persistent-apps -array
 
-	# Remove the sleep image file to save disk space
-	sudo rm /private/var/vm/sleepimage
-	# Create a zero-byte file instead…
-	sudo touch /private/var/vm/sleepimage
-	# …and make sure it can’t be rewritten
-	sudo chflags uchg /private/var/vm/sleepimage<Plug>_
+# Remove the sleep image file to save disk space
+yes | sudo rm /private/var/vm/sleepimage
+# Create a zero-byte file instead…
+sudo touch /private/var/vm/sleepimage
+# …and make sure it can’t be rewritten
+sudo chflags uchg /private/var/vm/sleepimage
 
 } # prevent the script from executing partially downloaded
