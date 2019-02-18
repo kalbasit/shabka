@@ -16,7 +16,9 @@ let
 
       gid = 20;
 
-      shell = "${getBin pkgs.zsh}/bin/zsh";
+      isHidden = false;
+
+      shell = pkgs.zsh;
     });
 
   makeHM = userName: { uid, isAdmin, home ? "/Users/${userName}", ... }: nameValuePair
