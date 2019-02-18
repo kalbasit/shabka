@@ -15,9 +15,7 @@ let
       inherit home uid;
 
       gid = 20;
-
       isHidden = false;
-
       shell = pkgs.zsh;
     });
 

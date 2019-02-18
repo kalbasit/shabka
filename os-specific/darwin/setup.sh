@@ -88,6 +88,11 @@ if ! defaults read com.github.kalbasit.shabka bootstrap >/dev/null 2>&1; then
 		popd
 	}
 
+	# Wipe all (default) app icons from the Dock
+	# This is only really useful when setting up a new Mac, or if you don’t use
+	# the Dock to launch apps.
+	defaults write com.apple.dock persistent-apps -array
+
 	# record that we have bootstrapped so we do not try to bootstrap again
 	defaults write com.github.kalbasit.shabka bootstrap -bool true
 fi
@@ -106,11 +111,6 @@ while ! brew bundle --file="${here}/Brewfile" --verbose; do
 		break
 	fi
 done
-
-# Wipe all (default) app icons from the Dock
-# This is only really useful when setting up a new Mac, or if you don’t use
-# the Dock to launch apps.
-defaults write com.apple.dock persistent-apps -array
 
 # Finally, switch the generation
 while ! "${shabka_path}/scripts/darwin-rebuild.sh" -h "${hostname}" switch; do
