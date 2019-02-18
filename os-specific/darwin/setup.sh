@@ -116,11 +116,4 @@ fi
 # the Dock to launch apps.
 defaults write com.apple.dock persistent-apps -array
 
-# Remove the sleep image file to save disk space
-yes | sudo rm /private/var/vm/sleepimage
-# Create a zero-byte file instead…
-sudo touch /private/var/vm/sleepimage
-# …and make sure it can’t be rewritten
-sudo chflags uchg /private/var/vm/sleepimage
-
 } # prevent the script from executing partially downloaded
