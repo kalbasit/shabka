@@ -8,14 +8,10 @@ let
 
   patches = [
     # https://github.com/rycee/home-manager/pull/474
-    (
-      fetchpatch {
-        url = "https://github.com/rycee/home-manager/pull/474.patch";
-        sha256 = "01rnl2c9k3kx0s33ap81p02ijjxciak2y1cvl553i45xx4g8siw1";
-      }
-    )
+    ./474-fix-switch-user-without-profile.patch
 
-    ./tmp.patch
+    # https://github.com/rycee/home-manager/pull/583
+    ./583-activate-hm-through-postactivation.patch
   ];
 
   patched = runCommand "home-manager-${pinnedVersion.rev}"

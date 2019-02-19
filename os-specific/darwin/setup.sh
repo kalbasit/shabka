@@ -63,46 +63,13 @@ if ! defaults read com.github.kalbasit.shabka bootstrap >/dev/null 2>&1; then
 		mkdir -p "${xdg_config_nixpkgs}"
 
 		info "Installing Nix"
-		sh <(curl https://nixos.org/nix/install) --daemon </dev/null >/dev/stdout 2>&1
-		if ! grep -q nix-daemon.sh ~/.profile 2>/dev/null; then
-			cat <<-EOF >> ~/.profile
-			if [[ -r "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh" ]]; then
-				source "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh"
-			fi
-			EOF
+		curl https://nixos.org/nix/install | sh
+		if ! grep -q nix.sh ~/.profile 2>/dev/null; then
+			echo '. ~/.nix-profile/etc/profile.d/nix.sh' >> ~/.profile
 		fi
 		set +u
-			# include nix in the current shell so we can install stuff
-			if [[ -r "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh" ]]; then
-				source "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh"
-			else
-				>&2 echo "ERR: unable to find the nix-daemon script at /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh"
-				exit 1
-			fi
+			source ~/.nix-profile/etc/profile.d/nix.sh
 		set -u
-
-		# make sure nix is now available
-		if ! nix-shell -p hello --run 'hello' &>/dev/null; then
-			# The following condition addresses https://github.com/NixOS/nix/issues/2523
-			if [[ "$(uname -s)" == "Darwin" ]] && [[ "$( grep -E 'nix-daemon.*fork()' /var/log/system.log | wc -l )" -gt 0 ]]; then
-				>&2 echo ">>> I ran into a Mac-specific bug (https://github.com/NixOS/nix/issues/2523) and I'm applying the workaround automatically for it."
-				sudo launchctl remove org.nixos.nix-daemon
-				sed \
-					-e "s:<key>Program</key>:<key>EnvironmentVariables</key><dict><key>OBJC_DISABLE_INITIALIZE_FORK_SAFETY</key><string>YES</string></dict>&:g" \
-					/Library/LaunchDaemons/org.nixos.nix-daemon.plist > /tmp/org.nixos.nix-daemon.plist
-				sudo mv /tmp/org.nixos.nix-daemon.plist /Library/LaunchDaemons/org.nixos.nix-daemon.plist
-				sudo chown root: /Library/LaunchDaemons/org.nixos.nix-daemon.plist
-				sudo launchctl load /Library/LaunchDaemons/org.nixos.nix-daemon.plist
-				if ! nix-shell -p hello --run 'hello' &>/dev/null; then
-					>&2 echo "ERR: The workaround was applied, but it's still not working!"
-					exit 1
-				fi
-			else
-				>&2 echo "ERR: Nix was installed but unable to use it. Running the command again for inspection."
-				>&2 nix-shell -p hello --run 'hello'
-				exit 1
-			fi
-		fi
 
 		info "Installing nix-darwin"
 		pushd "${workdir}"
@@ -117,14 +84,6 @@ if ! defaults read com.github.kalbasit.shabka bootstrap >/dev/null 2>&1; then
 			if [[ "${RETVAL}" -ne 0 ]] && [[ "${RETVAL}" -ne 141 ]]; then
 				error "nix-darwin installer exited with status ${RETVAL}"
 				exit "${RETVAL}"
-			else
-				if [[ -r /etc/static/bashrc ]]; then
-					set +u
-						source /etc/static/bashrc
-					set -u
-				else
-					>&2 echo "ERR: Nix-Darwin was installed successfully, but was not able find /etc/static/bashrc"
-				fi
 			fi
 		popd
 	}

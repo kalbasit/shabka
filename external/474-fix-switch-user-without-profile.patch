@@ -1,0 +1,74 @@
+From 2d22efd647ea4920c90958f1a3991fdea5375811 Mon Sep 17 00:00:00 2001
+From: "Wael M. Nasreddine" <wael.nasreddine@gmail.com>
+Date: Sun, 2 Dec 2018 01:08:59 -0800
+Subject: [PATCH 1/2] home-manager: fix error attempting to expire generations
+
+This happens only when the user does not have a profile directory yet.
+---
+ home-manager/home-manager | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/home-manager/home-manager b/home-manager/home-manager
+index 88c8a32c..e8ff104c 100644
+--- a/home-manager/home-manager
++++ b/home-manager/home-manager
+@@ -238,6 +238,14 @@ function doRmGenerations() {
+ function doExpireGenerations() {
+     local profileDir="/nix/var/nix/profiles/per-user/$USER"
+ 
++    if ! [[ -d "${profileDir}" ]]; then
++        if [[ -v VERBOSE ]]; then
++            echo "No generations to expire"
++        fi
++
++        return
++    fi
++
+     local generations
+     generations="$( \
+         find "$profileDir" -name 'home-manager-*-link' -not -newermt "$1" \
+
+From a6ecae221a1bdd9990c24821080608874c774ae5 Mon Sep 17 00:00:00 2001
+From: "Wael M. Nasreddine" <wael.nasreddine@gmail.com>
+Date: Sun, 2 Dec 2018 02:17:44 -0800
+Subject: [PATCH 2/2] activation: do not error out if the user has no profile
+ yet
+
+---
+ modules/lib-bash/activation-init.sh | 22 ++++++++++++----------
+ 1 file changed, 12 insertions(+), 10 deletions(-)
+
+diff --git a/modules/lib-bash/activation-init.sh b/modules/lib-bash/activation-init.sh
+index 5cdb66e5..89080b78 100755
+--- a/modules/lib-bash/activation-init.sh
++++ b/modules/lib-bash/activation-init.sh
+@@ -5,17 +5,19 @@ function setupVars() {
+     local gcPath="/nix/var/nix/gcroots/per-user/$USER"
+     local greatestGenNum
+ 
+-    greatestGenNum=$( \
+-        find "$profilesPath" -name 'home-manager-*-link' \
+-            | sed 's/^.*-\([0-9]*\)-link$/\1/' \
+-            | sort -rn \
+-            | head -1)
++    newGenNum=1
+ 
+-    if [[ -n $greatestGenNum ]] ; then
+-        oldGenNum=$greatestGenNum
+-        newGenNum=$((oldGenNum + 1))
+-    else
+-        newGenNum=1
++    if [[ -d "${profilesPath}" ]]; then
++        greatestGenNum=$( \
++            find "$profilesPath" -name 'home-manager-*-link' \
++                | sed 's/^.*-\([0-9]*\)-link$/\1/' \
++                | sort -rn \
++                | head -1)
++
++        if [[ -n $greatestGenNum ]] ; then
++            oldGenNum=$greatestGenNum
++            newGenNum=$((oldGenNum + 1))
++        fi
+     fi
+ 
+     if [[ -e $gcPath/current-home ]] ; then
