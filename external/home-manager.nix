@@ -12,6 +12,8 @@ let
 
     # https://github.com/rycee/home-manager/pull/583
     ./home-manager.583-activate-hm-through-postactivation.patch
+
+    ./home-manager.PR-PENDING-enable-user-packages.patch
   ];
 
   patched = runCommand "home-manager-${pinnedVersion.rev}"

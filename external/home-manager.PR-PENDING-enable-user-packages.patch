@@ -1,0 +1,12 @@
+diff --git a/nix-darwin/default.nix b/nix-darwin/default.nix
+index 810b3e5..0dd7681 100644
+--- a/nix-darwin/default.nix
++++ b/nix-darwin/default.nix
+@@ -10,6 +10,7 @@ let
+     imports = import ../modules/modules.nix { inherit lib pkgs; };
+ 
+     config = {
++      useUserPackages = true;
+       submoduleSupport.enable = true;
+       home.username = config.users.users.${name}.name;
+       home.homeDirectory = config.users.users.${name}.home;
