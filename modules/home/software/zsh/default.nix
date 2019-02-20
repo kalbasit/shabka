@@ -143,7 +143,7 @@ in {
         # TODO: move this to the swm package
         s = "swm tmux switch-client";
         sb = "swm --story base tmux switch-client";
-        vim_ready = ""; # TODO: run direnv here
+        vim_ready = "sleep 1";
 
         # TODO: move to docker-config, how to tell ZSH to import them?
         remove_created_containers = "docker rm -v \$(docker ps -a -q -f status=created)";
