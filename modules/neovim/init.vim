@@ -178,7 +178,7 @@ if has("autocmd")
   " Remember last location in file, but not for commit messages.
   " see :help last-position-jump
   au BufReadPost * if &filetype !~ '^git\c' && line("'\"") > 0 && line("'\"") <= line("$")
-	\| exe "normal! g`\"" | endif
+    \| exe "normal! g`\"" | endif
 
   " Delete certain buffers in order to not cluttering up the buffer list
   au BufReadPost fugitive://* set bufhidden=delete
@@ -297,20 +297,14 @@ let g:multi_cursor_prev_key            = '<C-p>'
 let g:multi_cursor_skip_key            = '<C-x>'
 let g:multi_cursor_quit_key            = '<Esc>'
 
-" Prevent conflict with Neocomplete
+" Prevent conflict with deoplete
 " Called once right before you start selecting multiple cursors
 function! Multiple_cursors_before()
   call deoplete#disable()
-  if exists(':NeoCompleteLock')==2
-    exe 'NeoCompleteLock'
-  endif
 endfunction
 " Called once only when the multiple selection is canceled (default <Esc>)
 function! Multiple_cursors_after()
   call deoplete#enable()
-  if exists(':NeoCompleteUnlock')==2
-    exe 'NeoCompleteUnlock'
-  endif
 endfunction
 
 "" }}}
@@ -680,7 +674,7 @@ function! AlternateRubyFile(current_file)
     if !filereadable(new_file)
       let spec_file = substitute(new_file, '\.rb$', '.rake', "")
       if filereadable(spec_file)
-	let new_file = spec_file
+        let new_file = spec_file
       endif
     endif
   endif
