@@ -1,0 +1,146 @@
+From 4ffabd184a0901fdcae226af928a087fcac7a409 Mon Sep 17 00:00:00 2001
+From: "Wael M. Nasreddine" <wael.nasreddine@gmail.com>
+Date: Wed, 20 Feb 2019 08:20:32 -0800
+Subject: [PATCH 1/3] users: install user packages via
+ users.users.<name?>.packages
+
+---
+ modules/users/default.nix | 11 +++++++++++
+ modules/users/user.nix    | 11 +++++++++++
+ tests/users-packages.nix  | 17 +++++++++++++++++
+ 3 files changed, 39 insertions(+)
+ create mode 100644 tests/users-packages.nix
+
+diff --git a/modules/users/default.nix b/modules/users/default.nix
+index f537f6b..aaf2f9a 100644
+--- a/modules/users/default.nix
++++ b/modules/users/default.nix
+@@ -158,5 +158,16 @@ in
+       '') deletedUsers}
+     '';
+ 
++    environment.etc = mapAttrs' (name: { packages, ... }: {
++      name = "profiles/per-user/${name}";
++      value.source = pkgs.buildEnv {
++        name = "user-environment";
++        paths = packages;
++        inherit (config.environment) pathsToLink extraOutputsToInstall;
++        inherit (config.system.path) postBuild;
++      };
++    }) (filterAttrs (_: u: u.packages != []) cfg.users);
++
++    environment.profiles = [ "/etc/profiles/per-user/$USER" ];
+   };
+ }
+diff --git a/modules/users/user.nix b/modules/users/user.nix
+index 3f39473..ec8ecb8 100644
+--- a/modules/users/user.nix
++++ b/modules/users/user.nix
+@@ -57,6 +57,17 @@ with lib;
+       example = literalExample "pkgs.bashInteractive";
+       description = "The user's shell.";
+     };
++
++    packages = mkOption {
++      type = types.listOf types.package;
++      default = [];
++      example = literalExample "[ pkgs.firefox pkgs.thunderbird ]";
++      description = ''
++        The set of packages that should be made availabe to the user.
++        This is in contrast to <option>environment.systemPackages</option>,
++        which adds packages to all users.
++      '';
++    };
+   };
+ 
+   config = {
+diff --git a/tests/users-packages.nix b/tests/users-packages.nix
+new file mode 100644
+index 0000000..dfcc743
+--- /dev/null
++++ b/tests/users-packages.nix
+@@ -0,0 +1,17 @@
++{ config, pkgs, ... }:
++
++{
++  users.knownUsers = [ "foo" ];
++  users.users.foo.uid = 42000;
++  users.users.foo.gid = 42000;
++  users.users.foo.description = "Foo user";
++  users.users.foo.isHidden = false;
++  users.users.foo.home = "/Users/foo";
++  users.users.foo.shell = "/run/current-system/sw/bin/bash";
++  users.users.foo.packages = [ pkgs.hello ];
++
++  test = ''
++    echo "checking for hello in /etc/profiles/per-user/foo" >&2
++    test -x /etc/profiles/per-user/foo/bin/hello
++  '';
++}
+
+From 59d84f93e4acc0b18812825901194fd6b251c449 Mon Sep 17 00:00:00 2001
+From: "Wael M. Nasreddine" <wael.nasreddine@gmail.com>
+Date: Wed, 20 Feb 2019 08:39:12 -0800
+Subject: [PATCH 2/3] do actually source the test
+
+---
+ release.nix | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/release.nix b/release.nix
+index 78c43b3..8445f2f 100644
+--- a/release.nix
++++ b/release.nix
+@@ -117,6 +117,7 @@ let
+     tests.system-path = makeTest ./tests/system-path.nix;
+     tests.system-shells = makeTest ./tests/system-shells.nix;
+     tests.users-groups = makeTest ./tests/users-groups.nix;
++    tests.users-packages = makeTest ./tests/users-packages.nix;
+     tests.fonts = makeTest ./tests/fonts.nix;
+ 
+   }
+
+From af347fe1ec4593e273c9a4c8c2e1f386ec9ee9dd Mon Sep 17 00:00:00 2001
+From: "Wael M. Nasreddine" <wael.nasreddine@gmail.com>
+Date: Wed, 20 Feb 2019 08:39:44 -0800
+Subject: [PATCH 3/3] copy systemPackages test to userPackages
+
+---
+ tests/users-packages.nix | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
+
+diff --git a/tests/users-packages.nix b/tests/users-packages.nix
+index dfcc743..c7d9895 100644
+--- a/tests/users-packages.nix
++++ b/tests/users-packages.nix
+@@ -1,5 +1,12 @@
+ { config, pkgs, ... }:
+ 
++let
++  hello = pkgs.runCommand "hello-0.0.0" {} ''
++    mkdir -p $out/bin $out/lib
++    touch $out/bin/hello $out/lib/libhello.dylib
++  '';
++in
++
+ {
+   users.knownUsers = [ "foo" ];
+   users.users.foo.uid = 42000;
+@@ -8,10 +15,14 @@
+   users.users.foo.isHidden = false;
+   users.users.foo.home = "/Users/foo";
+   users.users.foo.shell = "/run/current-system/sw/bin/bash";
+-  users.users.foo.packages = [ pkgs.hello ];
++  users.users.foo.packages = [ hello ];
+ 
+   test = ''
+-    echo "checking for hello in /etc/profiles/per-user/foo" >&2
+-    test -x /etc/profiles/per-user/foo/bin/hello
++    echo checking hello binary in /etc/profiles/per-user/foo/bin >&2
++    test -e ${config.out}/etc/profiles/per-user/foo/bin/hello
++    test "$(readlink -f ${config.out}/etc/profiles/per-user/foo/bin/hello)" = "${hello}/bin/hello"
++
++    echo checking for unexpected paths in /etc/profiles/per-user/foo/bin >&2
++    test -e ${config.out}/etc/profiles/per-user/foo/lib/libhello.dylib && return
+   '';
+ }

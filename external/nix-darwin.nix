@@ -6,7 +6,10 @@ let
     inherit (pinnedVersion) url sha256;
   };
 
-  patches = [];
+  patches = [
+    # https://github.com/LnL7/nix-darwin/pull/127
+    ./nix-darwin.127-user-packages.patch
+  ];
 
   patched = runCommand "nix-darwin-${pinnedVersion.rev}"
     {
