@@ -13,15 +13,11 @@ let
     # https://github.com/rycee/home-manager/pull/583
     ./home-manager.583-activate-hm-through-postactivation.patch
 
-    # XXX: PR PENDING
-    # profile: opensource
-    # story: home-manager_login-as-user-before-activating
-    ./home-manager.PR-PENDING-enable-user-packages.patch
+    # https://github.com/rycee/home-manager/pull/586
+    ./home-manager.586-install-packages-through-user-packages.patch
 
-    # XXX: PR PENDING
-    # profile: opensource
-    # story: home-manager_nix-darwin-install-as-user-packages
-    ./home-manager.PR-PENDING-login-as-user.patch
+    # https://github.com/rycee/home-manager/pull/587
+    ./home-manager.587-login-as-user.patch
   ];
 
   patched = runCommand "home-manager-${pinnedVersion.rev}"

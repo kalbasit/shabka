@@ -1,0 +1,70 @@
+From 65a58006a05108a40619ab95c5bff3199b65ac9f Mon Sep 17 00:00:00 2001
+From: "Wael M. Nasreddine" <wael.nasreddine@gmail.com>
+Date: Wed, 20 Feb 2019 23:39:49 -0800
+Subject: [PATCH 1/2] nix-darwin: install packages through user packages
+
+---
+ nix-darwin/default.nix | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/nix-darwin/default.nix b/nix-darwin/default.nix
+index 810b3e5e..695cef64 100644
+--- a/nix-darwin/default.nix
++++ b/nix-darwin/default.nix
+@@ -11,6 +11,8 @@ let
+ 
+     config = {
+       submoduleSupport.enable = true;
++      submoduleSupport.externalPackageInstall = true;
++
+       home.username = config.users.users.${name}.name;
+       home.homeDirectory = config.users.users.${name}.home;
+     };
+
+From 60dd3536138329ee10484796d5a32488dd169280 Mon Sep 17 00:00:00 2001
+From: "Wael M. Nasreddine" <wael.nasreddine@gmail.com>
+Date: Thu, 21 Feb 2019 00:10:39 -0800
+Subject: [PATCH 2/2] gate it with an option
+
+---
+ nix-darwin/default.nix | 19 +++++++++++++------
+ 1 file changed, 13 insertions(+), 6 deletions(-)
+
+diff --git a/nix-darwin/default.nix b/nix-darwin/default.nix
+index 695cef64..1739bde9 100644
+--- a/nix-darwin/default.nix
++++ b/nix-darwin/default.nix
+@@ -11,7 +11,7 @@ let
+ 
+     config = {
+       submoduleSupport.enable = true;
+-      submoduleSupport.externalPackageInstall = true;
++      submoduleSupport.externalPackageInstall = cfg.useUserPackages;
+ 
+       home.username = config.users.users.${name}.name;
+       home.homeDirectory = config.users.users.${name}.home;
+@@ -22,12 +22,19 @@ in
+ 
+ {
+   options = {
+-    home-manager.users = mkOption {
+-      type = types.attrsOf hmModule;
+-      default = {};
+-      description = ''
+-        Per-user Home Manager configuration.
++    home-manager = {
++      useUserPackages = mkEnableOption ''
++        installation of user packages through the
++        <option>users.users.&lt;name?&gt;.packages</option> option.
+       '';
++
++      users = mkOption {
++        type = types.attrsOf hmModule;
++        default = {};
++        description = ''
++          Per-user Home Manager configuration.
++        '';
++      };
+     };
+   };
+ 

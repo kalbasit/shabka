@@ -1,0 +1,22 @@
+From 5338389e4d2f050eb4e4131ffb21223725f2a738 Mon Sep 17 00:00:00 2001
+From: "Wael M. Nasreddine" <wael.nasreddine@gmail.com>
+Date: Wed, 20 Feb 2019 23:48:58 -0800
+Subject: [PATCH] users: create the home-directory for a new user
+
+---
+ modules/users/default.nix | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/modules/users/default.nix b/modules/users/default.nix
+index f537f6b..cae5283 100644
+--- a/modules/users/default.nix
++++ b/modules/users/default.nix
+@@ -137,6 +137,8 @@ in
+           dscl . -create '/Users/${v.name}' RealName '${v.description}'
+           dscl . -create '/Users/${v.name}' NFSHomeDirectory '${v.home}'
+           dscl . -create '/Users/${v.name}' UserShell '${v.shell}'
++          mkdir -p '${v.home}'
++          chown '${toString v.uid}:${toString v.gid}' '${v.home}'
+         else
+           if [ "$u" -ne ${toString v.uid} ]; then
+             echo "[1;31mwarning: existing user '${v.name}' has unexpected uid $u, skipping...[0m" >&2

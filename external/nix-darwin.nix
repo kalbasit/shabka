@@ -10,10 +10,8 @@ let
     # https://github.com/LnL7/nix-darwin/pull/127
     ./nix-darwin.127-user-packages.patch
 
-    # XXX: PR PENDING
-    # profile: opensource
-    # story: nix-darwin_create-user-directory
-    ./nix-darwin.PR-PENDING-create-home-directory-new-user.patch
+    # https://github.com/LnL7/nix-darwin/pull/128
+    ./nix-darwin.128-create-home-when-creating-user.patch
   ];
 
   patched = runCommand "nix-darwin-${pinnedVersion.rev}"
