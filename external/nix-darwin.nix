@@ -9,6 +9,11 @@ let
   patches = [
     # https://github.com/LnL7/nix-darwin/pull/127
     ./nix-darwin.127-user-packages.patch
+
+    # XXX: PR PENDING
+    # profile: opensource
+    # story: nix-darwin_create-user-directory
+    ./nix-darwin.PR-PENDING-create-home-directory-new-user.patch
   ];
 
   patched = runCommand "nix-darwin-${pinnedVersion.rev}"
