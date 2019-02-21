@@ -14,7 +14,7 @@ let
     ({
       inherit home uid;
 
-      gid = 20;
+      gid = 80;
       isHidden = false;
       shell = "${getBin pkgs.zsh}/bin/zsh";
     });
