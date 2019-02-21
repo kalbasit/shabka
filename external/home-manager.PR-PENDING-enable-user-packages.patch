@@ -1,3 +1,12 @@
+From 65a58006a05108a40619ab95c5bff3199b65ac9f Mon Sep 17 00:00:00 2001
+From: "Wael M. Nasreddine" <wael.nasreddine@gmail.com>
+Date: Wed, 20 Feb 2019 23:39:49 -0800
+Subject: [PATCH] nix-darwin: install packages through user packages
+
+---
+ nix-darwin/default.nix | 2 ++
+ 1 file changed, 2 insertions(+)
+
 diff --git a/nix-darwin/default.nix b/nix-darwin/default.nix
 index 810b3e5..695cef6 100644
 --- a/nix-darwin/default.nix
@@ -11,3 +20,6 @@ index 810b3e5..695cef6 100644
        home.username = config.users.users.${name}.name;
        home.homeDirectory = config.users.users.${name}.home;
      };
+-- 
+2.18.1
+
