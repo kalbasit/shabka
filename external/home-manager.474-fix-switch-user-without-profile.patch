@@ -1,7 +1,7 @@
-From 2d22efd647ea4920c90958f1a3991fdea5375811 Mon Sep 17 00:00:00 2001
+From f44b2077f5a10d1b4c6097c8389289e0467617ea Mon Sep 17 00:00:00 2001
 From: "Wael M. Nasreddine" <wael.nasreddine@gmail.com>
 Date: Sun, 2 Dec 2018 01:08:59 -0800
-Subject: [PATCH 1/2] home-manager: fix error attempting to expire generations
+Subject: [PATCH 1/4] home-manager: fix error attempting to expire generations
 
 This happens only when the user does not have a profile directory yet.
 ---
@@ -9,10 +9,10 @@ This happens only when the user does not have a profile directory yet.
  1 file changed, 8 insertions(+)
 
 diff --git a/home-manager/home-manager b/home-manager/home-manager
-index 88c8a32c..e8ff104c 100644
+index 65c54c63..3acaf1a7 100644
 --- a/home-manager/home-manager
 +++ b/home-manager/home-manager
-@@ -238,6 +238,14 @@ function doRmGenerations() {
+@@ -249,6 +249,14 @@ function doRmGenerations() {
  function doExpireGenerations() {
      local profileDir="/nix/var/nix/profiles/per-user/$USER"
  
@@ -28,10 +28,10 @@ index 88c8a32c..e8ff104c 100644
      generations="$( \
          find "$profileDir" -name 'home-manager-*-link' -not -newermt "$1" \
 
-From a6ecae221a1bdd9990c24821080608874c774ae5 Mon Sep 17 00:00:00 2001
+From 99b6f637c042347ec5d8336b937403baa240dc27 Mon Sep 17 00:00:00 2001
 From: "Wael M. Nasreddine" <wael.nasreddine@gmail.com>
 Date: Sun, 2 Dec 2018 02:17:44 -0800
-Subject: [PATCH 2/2] activation: do not error out if the user has no profile
+Subject: [PATCH 2/4] activation: do not error out if the user has no profile
  yet
 
 ---
@@ -72,3 +72,98 @@ index 5cdb66e5..89080b78 100755
      fi
  
      if [[ -e $gcPath/current-home ]] ; then
+
+From 47f93faf344691fb9dcf7f04218da22a7d13b10e Mon Sep 17 00:00:00 2001
+From: "Wael M. Nasreddine" <wael.nasreddine@gmail.com>
+Date: Wed, 20 Feb 2019 22:53:35 -0800
+Subject: [PATCH 3/4] create the profile/gc-root
+
+---
+ modules/lib-bash/activation-init.sh | 43 ++++++++++++-----------------
+ 1 file changed, 17 insertions(+), 26 deletions(-)
+
+diff --git a/modules/lib-bash/activation-init.sh b/modules/lib-bash/activation-init.sh
+index 89080b78..e0dbd7f2 100755
+--- a/modules/lib-bash/activation-init.sh
++++ b/modules/lib-bash/activation-init.sh
+@@ -5,40 +5,31 @@ function setupVars() {
+     local gcPath="/nix/var/nix/gcroots/per-user/$USER"
+     local greatestGenNum
+ 
+-    newGenNum=1
++    if [[ ! -d "${profilesPath}" ]]; then
++        mkdir -p "${profilesPath}"
++    fi
++
++    if [[ ! -d "${gcPath}" ]]; then
++        mkdir -p "${gcPath}"
++    fi
+ 
+-    if [[ -d "${profilesPath}" ]]; then
+-        greatestGenNum=$( \
+-            find "$profilesPath" -name 'home-manager-*-link' \
+-                | sed 's/^.*-\([0-9]*\)-link$/\1/' \
+-                | sort -rn \
+-                | head -1)
++    greatestGenNum=$( \
++        find "$profilesPath" -name 'home-manager-*-link' \
++            | sed 's/^.*-\([0-9]*\)-link$/\1/' \
++            | sort -rn \
++            | head -1)
+ 
+-        if [[ -n $greatestGenNum ]] ; then
+-            oldGenNum=$greatestGenNum
+-            newGenNum=$((oldGenNum + 1))
+-        fi
++    if [[ -n $greatestGenNum ]] ; then
++        oldGenNum=$greatestGenNum
++    else
++        oldGenNum=0
+     fi
++    newGenNum=$((oldGenNum + 1))
+ 
+     if [[ -e $gcPath/current-home ]] ; then
+         oldGenPath="$(readlink -e "$gcPath/current-home")"
+     fi
+ 
+-    $VERBOSE_ECHO "Sanity checking oldGenNum and oldGenPath"
+-    if [[ -v oldGenNum && ! -v oldGenPath
+-            || ! -v oldGenNum && -v oldGenPath ]]; then
+-        errorEcho "Invalid profile number and GC root values! These must be"
+-        errorEcho "either both empty or both set but are now set to"
+-        errorEcho "    '${oldGenNum:-}' and '${oldGenPath:-}'"
+-        errorEcho "If you don't mind losing previous profile generations then"
+-        errorEcho "the easiest solution is probably to run"
+-        errorEcho "   rm $profilesPath/home-manager*"
+-        errorEcho "   rm $gcPath/current-home"
+-        errorEcho "and trying home-manager switch again. Good luck!"
+-        exit 1
+-    fi
+-
+-
+     genProfilePath="$profilesPath/home-manager"
+     newGenPath="@GENERATION_DIR@";
+     newGenProfilePath="$profilesPath/home-manager-$newGenNum-link"
+
+From 82a4c3250fd3a30c8c214182d2f5e7081360055f Mon Sep 17 00:00:00 2001
+From: "Wael M. Nasreddine" <wael.nasreddine@gmail.com>
+Date: Wed, 20 Feb 2019 23:29:08 -0800
+Subject: [PATCH 4/4] protect aginst an unbound variable
+
+---
+ modules/lib-bash/activation-init.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/modules/lib-bash/activation-init.sh b/modules/lib-bash/activation-init.sh
+index e0dbd7f2..6e67dc33 100755
+--- a/modules/lib-bash/activation-init.sh
++++ b/modules/lib-bash/activation-init.sh
+@@ -62,7 +62,7 @@ if [[ -v VERBOSE ]]; then
+ fi
+ 
+ $VERBOSE_ECHO "Activation variables:"
+-if [[ -v oldGenNum ]] ; then
++if [[ -v oldGenNum ]] && [[ "${oldGenNum}" -gt 0 ]] ; then
+     $VERBOSE_ECHO "  oldGenNum=$oldGenNum"
+     $VERBOSE_ECHO "  oldGenPath=$oldGenPath"
+ else
