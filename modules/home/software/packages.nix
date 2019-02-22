@@ -3,12 +3,16 @@
 with pkgs;
 
 let
-
-  homeManager = import ../../../external/home-manager.nix {
-    pkgs = (import <nixpkgs> {});
-    inherit (import ../../../util) assertMsg;
-  };
-
+  homeManager =
+    let
+      nixpkgs = import ../../../external/nixpkgs-stable.nix;
+      pkgs = import nixpkgs {
+        config = {};
+        overlays = [];
+      };
+    in import ../../../external/home-manager.nix {
+      inherit (pkgs) fetchpatch runCommand;
+    };
 in {
   home.packages = [
     amazon-ecr-credential-helper
@@ -25,8 +29,6 @@ in {
     go
 
     gotop
-
-    jetbrains.idea-community
 
     jq
 
@@ -57,10 +59,14 @@ in {
     unzip
 
     nix-zsh-completions
+
+    unstable.slack-cli
   ] ++ (if stdenv.isLinux then [
     #
     # Linux applications
     #
+
+    jetbrains.idea-community
 
     keybase
 

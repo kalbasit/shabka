@@ -8,14 +8,14 @@ let
   ];
 
   pinnedNH =
-    # I'm getting an infinite loop when I import pkgs as a dependency to this
-    # function. Why is that? It forces me to import nixpkgs again here!
     let
-
-      nixpkgs = (import ../../external/nixpkgs-stable.nix {});
-
+      nixpkgs = import ../../external/nixpkgs-stable.nix;
+      pkgs = import nixpkgs {
+        config = {};
+        overlays = [];
+      };
     in import ../../external/nixos-hardware.nix {
-      inherit (import nixpkgs {}) fetchpatch runCommand;
+      inherit (pkgs) fetchpatch runCommand;
     };
 
   nasIP = "172.25.2.2";

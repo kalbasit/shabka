@@ -6,14 +6,7 @@ let
     inherit (pinnedVersion) url sha256;
   };
 
-  patches = [
-    # Dell XPS 9380 hardware profile
-    # https://github.com/NixOS/nixos-hardware/pull/97
-    (fetchpatch {
-      url = "https://github.com/NixOS/nixos-hardware/pull/97.patch";
-      sha256 = "0la5qyfvayzxm7nz4xrfdcybcyzipjzw17na07277wcnaa1bmb15";
-    })
-  ];
+  patches = [];
 
   patched = runCommand "nixos-hardware-${pinnedVersion.rev}"
     {
@@ -29,6 +22,5 @@ let
         patch -d $out -p1 < "$p";
       done
     '';
-
 in
   patched

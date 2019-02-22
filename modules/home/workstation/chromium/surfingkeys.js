@@ -788,5 +788,8 @@ mapkey('V', '#1Paste and go in a new tab', () => {
 	});
 });
 
+// disable emoji auto-completion
+iunmap(":");
+
 // END Custom bindings }}}
 //////////////////////////////////////

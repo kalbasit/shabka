@@ -8,7 +8,7 @@ with lib;
 
   config = mkIf config.mine.git.enable {
     home.packages = with pkgs; [
-      gitAndTools.git-appraise
+      (gitAndTools.git-appraise or unstable.gitAndTools.git-appraise)
       gitAndTools.hub
       gitAndTools.tig
     ];

@@ -3,16 +3,19 @@
 with lib;
 
 let
-  homeManager = import ../../../external/home-manager.nix {
-    pkgs = (import <nixpkgs> {});
-    inherit (import ../../../util) assertMsg;
-  };
+  homeManager =
+    let
+      nixpkgs = import ../../../external/nixpkgs-stable.nix;
+      pkgs = import nixpkgs {
+        config = {};
+        overlays = [];
+      };
+    in import ../../../external/home-manager.nix {
+      inherit (pkgs) fetchpatch runCommand;
+    };
 in {
   imports = [
     (import "${homeManager}/nixos")
-
-    # load the following when running a VM
-    # ("${builtins.fetchTarball https://github.com/rycee/home-manager/archive/nixos-module-user-pkgs.tar.gz}/nixos")
   ];
 
   options.mine.home-manager.config = mkOption {
@@ -20,5 +23,9 @@ in {
     description = ''
       Function that returns the Home Manager configuration.
     '';
+  };
+
+  config = {
+    home-manager.useUserPackages = true;
   };
 }

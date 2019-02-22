@@ -1,10 +1,20 @@
 var_0: &global_env
   CACHIX_CACHE: yl
 
-var_1: &install-dependencies
+var_1: &install-nix
+  run:
+    name: Install Nix
+    command: |
+      curl https://nixos.org/nix/install | sh
+
+var_2: &install-dependencies
   run:
     name: Install dependencies
     command: |
+      if [[ -r "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]]; then
+        source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
+      fi
+
       # install git
       nix-env -f '<nixpkgs>' -iA gitAndTools.git
 
@@ -13,11 +23,48 @@ var_1: &install-dependencies
       readonly nixpkgs="$( nix-build --no-out-link ${nixpkgs_stable} )"
       nix-env -I nixpkgs="${nixpkgs}" -f '<nixpkgs>' -iA cachix
 
-var_2: &enable-cachix
+var_3: &enable-cachix
   run:
     name: Enable cachix
     command: |
+      if [[ -r "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]]; then
+        source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
+      fi
+
       cachix use "${CACHIX_CACHE}"
+
+var_4: &instantiate-host
+  run:
+    name: Instantiate the host
+    working_directory: ~/shabka
+    command: |
+      if [[ -r "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]]; then
+        source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
+      fi
+
+      readonly shabka_path="$( pwd )"
+      readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
+      readonly nixpkgs_unstable="${shabka_path}/external/nixpkgs-unstable.nix"
+      readonly host="${CIRCLE_JOB}"
+
+      if [[ -r "${shabka_path}/hosts/${host}/release" ]]; then
+        readonly release="$( cat "hosts/${host}/release" )"
+      else
+        # fallback to the default release
+        readonly release="stable"
+      fi
+
+      if [[ "${release}" = "stable" ]]; then
+          readonly nixpkgs="$( nix-build --no-out-link "${nixpkgs_stable}" )"
+      else
+          # TODO: improve the beild command
+          readonly nixpkgs="$( nix-build --no-out-link "${nixpkgs_unstable}" --arg runCommand '(import <nixpkgs> {}).runCommand' --arg fetchpatch '(import <nixpkgs> {}).fetchpatch' )"
+      fi
+
+      export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=${shabka_path}"
+
+      echo ">>> Instantiating the hostname '${host}' using nixpkgs at '${nixpkgs}'. NIX_PATH is set to '${NIX_PATH}'"
+      nix-instantiate "${shabka_path}/hosts/${host}"
 
 version: 2
 jobs:
@@ -25,32 +72,20 @@ jobs:
     macos:
       xcode: "9.0"
 
-    working_directory: /go/src/github.com/kalbasit/shabka
+    working_directory: ~/shabka
 
     environment:
       <<: *global_env
 
-    docker:
-      - image: nixos/nix
-
     steps:
       - checkout
+      - *install-nix
       - *install-dependencies
       - *enable-cachix
-      - run:
-          name: Instantiate athena
-          working_directory: /go/src/github.com/kalbasit/shabka
-          command: |
-            readonly shabka_path="$( pwd )"
-            readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
-            readonly nixpkgs="$( nix-build --no-out-link ${nixpkgs_stable} )"
-
-            export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=${shabka_path}"
-
-            nix-instantiate ./hosts/athena
+      - *instantiate-host
 
   cratos:
-    working_directory: /go/src/github.com/kalbasit/shabka
+    working_directory: ~/shabka
 
     environment:
       <<: *global_env
@@ -62,20 +97,10 @@ jobs:
       - checkout
       - *install-dependencies
       - *enable-cachix
-      - run:
-          name: Instantiate cratos
-          working_directory: /go/src/github.com/kalbasit/shabka
-          command: |
-            readonly shabka_path="$( pwd )"
-            readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
-            readonly nixpkgs="$( nix-build --no-out-link ${nixpkgs_stable} )"
-
-            export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=${shabka_path}"
-
-            nix-instantiate ./hosts/cratos
+      - *instantiate-host
 
   hades:
-    working_directory: /go/src/github.com/kalbasit/shabka
+    working_directory: ~/shabka
 
     environment:
       <<: *global_env
@@ -87,20 +112,10 @@ jobs:
       - checkout
       - *install-dependencies
       - *enable-cachix
-      - run:
-          name: Instantiate hades
-          working_directory: /go/src/github.com/kalbasit/shabka
-          command: |
-            readonly shabka_path="$( pwd )"
-            readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
-            readonly nixpkgs="$( nix-build --no-out-link ${nixpkgs_stable} )"
-
-            export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=${shabka_path}"
-
-            nix-instantiate ./hosts/hades
+      - *instantiate-host
 
   hera:
-    working_directory: /go/src/github.com/kalbasit/shabka
+    working_directory: ~/shabka
 
     environment:
       <<: *global_env
@@ -112,20 +127,10 @@ jobs:
       - checkout
       - *install-dependencies
       - *enable-cachix
-      - run:
-          name: Instantiate hera
-          working_directory: /go/src/github.com/kalbasit/shabka
-          command: |
-            readonly shabka_path="$( pwd )"
-            readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
-            readonly nixpkgs="$( nix-build --no-out-link ${nixpkgs_stable} )"
-
-            export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=${shabka_path}"
-
-            nix-instantiate ./hosts/hera
+      - *instantiate-host
 
   zeus:
-    working_directory: /go/src/github.com/kalbasit/shabka
+    working_directory: ~/shabka
 
     environment:
       <<: *global_env
@@ -137,17 +142,7 @@ jobs:
       - checkout
       - *install-dependencies
       - *enable-cachix
-      - run:
-          name: Instantiate zeus
-          working_directory: /go/src/github.com/kalbasit/shabka
-          command: |
-            readonly shabka_path="$( pwd )"
-            readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
-            readonly nixpkgs="$( nix-build --no-out-link ${nixpkgs_stable} )"
-
-            export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=${shabka_path}"
-
-            nix-instantiate ./hosts/zeus
+      - *instantiate-host
 
 workflows:
   version: 2
