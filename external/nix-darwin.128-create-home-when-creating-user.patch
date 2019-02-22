@@ -1,7 +1,7 @@
 From 5338389e4d2f050eb4e4131ffb21223725f2a738 Mon Sep 17 00:00:00 2001
 From: "Wael M. Nasreddine" <wael.nasreddine@gmail.com>
 Date: Wed, 20 Feb 2019 23:48:58 -0800
-Subject: [PATCH] users: create the home-directory for a new user
+Subject: [PATCH 1/2] users: create the home-directory for a new user
 
 ---
  modules/users/default.nix | 2 ++
@@ -17,6 +17,34 @@ index f537f6b..cae5283 100644
            dscl . -create '/Users/${v.name}' UserShell '${v.shell}'
 +          mkdir -p '${v.home}'
 +          chown '${toString v.uid}:${toString v.gid}' '${v.home}'
+         else
+           if [ "$u" -ne ${toString v.uid} ]; then
+             echo "[1;31mwarning: existing user '${v.name}' has unexpected uid $u, skipping...[0m" >&2
+
+From 777af7b8691a507e08d656c425bdc1e8ccfcb957 Mon Sep 17 00:00:00 2001
+From: "Wael M. Nasreddine" <wael.nasreddine@gmail.com>
+Date: Thu, 21 Feb 2019 16:04:59 -0800
+Subject: [PATCH 2/2] create/chown the home only when it is different than
+ /var/empty
+
+---
+ modules/users/default.nix | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/modules/users/default.nix b/modules/users/default.nix
+index cae5283..4b735e0 100644
+--- a/modules/users/default.nix
++++ b/modules/users/default.nix
+@@ -137,8 +137,10 @@ in
+           dscl . -create '/Users/${v.name}' RealName '${v.description}'
+           dscl . -create '/Users/${v.name}' NFSHomeDirectory '${v.home}'
+           dscl . -create '/Users/${v.name}' UserShell '${v.shell}'
+-          mkdir -p '${v.home}'
+-          chown '${toString v.uid}:${toString v.gid}' '${v.home}'
++          ${optionalString v.home != "/var/empty" ''
++            mkdir -p '${v.home}'
++            chown '${toString v.uid}:${toString v.gid}' '${v.home}'
++          ''}
          else
            if [ "$u" -ne ${toString v.uid} ]; then
              echo "[1;31mwarning: existing user '${v.name}' has unexpected uid $u, skipping...[0m" >&2
