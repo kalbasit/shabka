@@ -9,9 +9,9 @@ let
     (builtins.readFile (import ../../../external/kalbasit-keys.nix))
   ];
 
-  makeUser = userName: { }: nameValuePair
+  makeUser = userName: { home ? "/Users/${userName}"}: nameValuePair
     userName
-    {};
+    { inherit home; };
 
   makeHM = userName: { }: nameValuePair
     userName
