@@ -33,7 +33,5 @@ in {
 
   config = {
     home-manager.useUserPackages = true;
-    home-manager.users = mapAttrs' makeHM "yl";
   };
 }
-
