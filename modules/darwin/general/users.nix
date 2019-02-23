@@ -19,17 +19,18 @@ let
       shell = "${getBin pkgs.zsh}/bin/zsh";
     });
 
-  makeHM = userName: nameValuePair
+  makeHM = userName: { }: nameValuePair
     (userName)
     (config.mine.home-manager.config {
+      inherit userName uid isAdmin home;
       darwinConfig = config;
     });
 
-  defaultUsers = [
-    "yl"
-  ];
+  defaultUsers = {
+    yl = {};
+  };
 
 in {
-  users.users = (map makeUser defaultUsers);
+  users.users = (mapAttrs' makeUser defaultUsers);
   home-manager.users = mapAttrs' makeHM defaultUsers;
 }
