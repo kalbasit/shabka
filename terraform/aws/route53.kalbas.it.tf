@@ -83,12 +83,14 @@ resource "aws_route53_record" "me-kalbas-it-a" {
   zone_id = "${aws_route53_zone.kalbas-it.zone_id}"
   name    = "me.kalbas.it"
   type    = "A"
+  ttl     = 300
 
-  alias {
-    name                   = "${aws_cloudfront_distribution.me-kalbas-it.domain_name}"
-    zone_id                = "${aws_cloudfront_distribution.me-kalbas-it.hosted_zone_id}"
-    evaluate_target_health = true
-  }
+  records = [
+    "185.199.108.153",
+    "185.199.109.153",
+    "185.199.110.153",
+    "185.199.111.153",
+  ]
 }
 
 resource "aws_route53_record" "www-kalbas-it-a" {
