@@ -1,7 +1,7 @@
 From 5338389e4d2f050eb4e4131ffb21223725f2a738 Mon Sep 17 00:00:00 2001
 From: "Wael M. Nasreddine" <wael.nasreddine@gmail.com>
 Date: Wed, 20 Feb 2019 23:48:58 -0800
-Subject: [PATCH 1/3] users: create the home-directory for a new user
+Subject: [PATCH 1/6] users: create the home-directory for a new user
 
 ---
  modules/users/default.nix | 2 ++
@@ -24,7 +24,7 @@ index f537f6b..cae5283 100644
 From 777af7b8691a507e08d656c425bdc1e8ccfcb957 Mon Sep 17 00:00:00 2001
 From: "Wael M. Nasreddine" <wael.nasreddine@gmail.com>
 Date: Thu, 21 Feb 2019 16:04:59 -0800
-Subject: [PATCH 2/3] create/chown the home only when it is different than
+Subject: [PATCH 2/6] create/chown the home only when it is different than
  /var/empty
 
 ---
@@ -52,7 +52,7 @@ index cae5283..4b735e0 100644
 From 931c9f46835f15c5109c3a3abebec23e38dd51aa Mon Sep 17 00:00:00 2001
 From: "Wael M. Nasreddine" <wael.nasreddine@gmail.com>
 Date: Thu, 21 Feb 2019 16:17:30 -0800
-Subject: [PATCH 3/3] attempting to fix the build
+Subject: [PATCH 3/6] attempting to fix the build
 
 ---
  modules/users/default.nix | 2 +-
@@ -71,3 +71,101 @@ index 4b735e0..33069d4 100644
              mkdir -p '${v.home}'
              chown '${toString v.uid}:${toString v.gid}' '${v.home}'
            ''}
+
+From 6ab75b62c6ef8f86b84aeaa4497331fd44a02fec Mon Sep 17 00:00:00 2001
+From: "Wael M. Nasreddine" <wael.nasreddine@gmail.com>
+Date: Sat, 23 Feb 2019 08:29:57 -0800
+Subject: [PATCH 4/6] gate the creation with an option, false by default and
+ use createhomedir
+
+---
+ modules/users/default.nix | 5 +----
+ modules/users/user.nix    | 6 ++++++
+ 2 files changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/modules/users/default.nix b/modules/users/default.nix
+index daadde3..4904ee3 100644
+--- a/modules/users/default.nix
++++ b/modules/users/default.nix
+@@ -139,10 +139,7 @@ in
+           dscl . -create '/Users/${v.name}' RealName '${v.description}'
+           dscl . -create '/Users/${v.name}' NFSHomeDirectory '${v.home}'
+           dscl . -create '/Users/${v.name}' UserShell '${v.shell}'
+-          ${optionalString (v.home != "/var/empty") ''
+-            mkdir -p '${v.home}'
+-            chown '${toString v.uid}:${toString v.gid}' '${v.home}'
+-          ''}
++          ${optionalString v.createHome "sudo createhomedir -u '${v.name}'"}
+         else
+           if [ "$u" -ne ${toString v.uid} ]; then
+             echo "[1;31mwarning: existing user '${v.name}' has unexpected uid $u, skipping...[0m" >&2
+diff --git a/modules/users/user.nix b/modules/users/user.nix
+index ec8ecb8..44fb107 100644
+--- a/modules/users/user.nix
++++ b/modules/users/user.nix
+@@ -51,6 +51,12 @@ with lib;
+       description = "The user's home directory.";
+     };
+ 
++    createHome = mkOption {
++      type = types.bool;
++      default = false;
++      description = "Create the home directory when creating the user.";
++    };
++
+     shell = mkOption {
+       type = types.either types.shellPackage types.path;
+       default = "/sbin/nologin";
+
+From f7ecbd9d70125f5a70ba4562e967cc414f54d42f Mon Sep 17 00:00:00 2001
+From: "Wael M. Nasreddine" <wael.nasreddine@gmail.com>
+Date: Sat, 23 Feb 2019 13:07:13 -0800
+Subject: [PATCH 5/6] must use cu
+
+---
+ modules/users/default.nix | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/modules/users/default.nix b/modules/users/default.nix
+index 4904ee3..07c139f 100644
+--- a/modules/users/default.nix
++++ b/modules/users/default.nix
+@@ -139,7 +139,7 @@ in
+           dscl . -create '/Users/${v.name}' RealName '${v.description}'
+           dscl . -create '/Users/${v.name}' NFSHomeDirectory '${v.home}'
+           dscl . -create '/Users/${v.name}' UserShell '${v.shell}'
+-          ${optionalString v.createHome "sudo createhomedir -u '${v.name}'"}
++          ${optionalString v.createHome "sudo createhomedir -cu '${v.name}'"}
+         else
+           if [ "$u" -ne ${toString v.uid} ]; then
+             echo "[1;31mwarning: existing user '${v.name}' has unexpected uid $u, skipping...[0m" >&2
+
+From e52b9cb05bcb49bb77887b0ae84196baffebbb5a Mon Sep 17 00:00:00 2001
+From: "Wael M. Nasreddine" <wael.nasreddine@gmail.com>
+Date: Sat, 23 Feb 2019 13:11:39 -0800
+Subject: [PATCH 6/6] test out the createHome
+
+---
+ tests/users-groups.nix | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/tests/users-groups.nix b/tests/users-groups.nix
+index ef37204..2f75d55 100644
+--- a/tests/users-groups.nix
++++ b/tests/users-groups.nix
+@@ -15,6 +15,7 @@
+   users.users.foo.description = "Foo user";
+   users.users.foo.isHidden = false;
+   users.users.foo.home = "/Users/foo";
++  users.users.foo.createHome = true;
+   users.users.foo.shell = "/run/current-system/sw/bin/bash";
+ 
+   users.users."created.user".uid = 42001;
+@@ -47,6 +48,7 @@
+     grep "dscl . -create '/Users/foo' NFSHomeDirectory '/Users/foo'" ${config.out}/activate
+     grep "dscl . -create '/Users/foo' UserShell '/run/current-system/sw/bin/bash'" ${config.out}/activate
+     grep "dscl . -create '/Users/created.user' UniqueID 42001" ${config.out}/activate
++    grep "sudo createhomedir -cu 'foo'" ${config.out}/activate
+     grep -qv "dscl . -delete '/Groups/created.user'" ${config.out}/activate
+ 
+     echo "checking user deletion in /activate" >&2
