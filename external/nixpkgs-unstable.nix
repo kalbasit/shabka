@@ -15,9 +15,10 @@ let
     # TODO: jsbeautifier is not working upstream and tests need to be disabled
     ./nixpkgs-unstable.python36Packages-jsbeautifier-disable-check.patch
 
-    # TODO: VirtualBox 5 does not work with latest kernel. Update to VirtualBox 6
-    # https://github.com/NixOS/nixpkgs/pull/53120
-    ./nixpkgs-unstable.53120-upgrade-virtualbox.patch
+    # XXX: VirtualBox 5.2.22 does not work with latest kernel, update to
+    # version 5.2.26.
+    # https://github.com/NixOS/nixpkgs/pull/56210
+    ./nixpkgs-unstable.56210-update-vbox-5.2.26.patch
 
     # luarocks: patch sw_vers and gcc
     # This fixes luarocks on Darwin
