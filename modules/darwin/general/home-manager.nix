@@ -30,8 +30,4 @@ in {
       Function that returns the Home Manager configuration.
     '';
   };
-
-  config = {
-    home-manager.useUserPackages = true;
-  };
 }
