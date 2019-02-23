@@ -13,6 +13,12 @@ let
     in import ../../../external/home-manager.nix {
       inherit (pkgs) fetchpatch runCommand;
     };
+
+  makeHM = userName: nameValuePair
+    (userName)
+    (config.mine.home-manager.config {
+      nixosConfig = config;
+    });
 in {
   imports = [
     (import "${homeManager}/nix-darwin")
@@ -27,6 +33,7 @@ in {
 
   config = {
     home-manager.useUserPackages = true;
+    home-manager.users = mapAttrs' makeHM "yl";
   };
 }
 

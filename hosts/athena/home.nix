@@ -1,5 +1,5 @@
 {
-  mine.home-manager.config = { userName, uid, isAdmin, home, darwinConfig }:
+  mine.home-manager.config = { darwinConfig }:
   { ... }:
 
   {
