@@ -22,7 +22,6 @@ let
   makeHM = userName: { }: nameValuePair
     (userName)
     (config.mine.home-manager.config {
-      inherit userName uid isAdmin home;
       darwinConfig = config;
     });
 
