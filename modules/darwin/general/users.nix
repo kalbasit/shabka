@@ -9,18 +9,12 @@ let
     (builtins.readFile (import ../../../external/kalbasit-keys.nix))
   ];
 
-  makeUser = userName: { uid, isAdmin ? false, home ? "/Users/${userName}" }: nameValuePair
-    (userName)
-    ({
-      inherit home uid;
-
-      gid = 80;
-      isHidden = false;
-      shell = "${getBin pkgs.zsh}/bin/zsh";
-    });
+  makeUser = userName: { }: nameValuePair
+    userName
+    {};
 
   makeHM = userName: { }: nameValuePair
-    (userName)
+    userName
     (config.mine.home-manager.config {
       darwinConfig = config;
     });

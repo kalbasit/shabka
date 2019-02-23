@@ -8,8 +8,8 @@ let
   ];
 
   makeUser = userName: { uid, isAdmin ? false, home ? "/home/${userName}" }: nameValuePair
-    (userName)
-    ({
+    userName
+    {
       inherit home uid;
 
       group = "mine";
@@ -28,10 +28,10 @@ let
       isNormalUser = true;
 
       openssh.authorizedKeys.keys = sshKeys;
-    });
+    };
 
   makeHM = userName: { uid, isAdmin, home ? "/home/${userName}", ... }: nameValuePair
-    (userName)
+    userName
     (config.mine.home-manager.config {
       inherit userName uid isAdmin home;
       nixosConfig = config;
