@@ -17,7 +17,7 @@ let
 
     # TODO: VirtualBox 5 does not work with latest kernel. Update to VirtualBox 6
     # https://github.com/NixOS/nixpkgs/pull/53120
-    ./53120-upgrade-virtualbox.patch
+    ./nixpkgs-unstable.56210-update-vbox-5.2.26.patch
   ];
 
   patched = runCommand "nixpkgs-unstable-${pinnedVersion.rev}"
