@@ -9,7 +9,7 @@ let
     (builtins.readFile (import ../../../external/kalbasit-keys.nix))
   ];
 
-  makeUser = userName: { home ? "/Users/${userName}"}: nameValuePair
+  makeUser = userName: { home ? "/Users/${userName}" }: nameValuePair
     userName
     { inherit home; };
 
@@ -26,4 +26,7 @@ let
 in {
   users.users = (mapAttrs' makeUser defaultUsers);
   home-manager.users = mapAttrs' makeHM defaultUsers;
+  system.activationScripts.postActivation.text = ''
+    sudo chsh -s ${getBin pkgs.zsh}/bin/zsh yl
+  '';
 }
