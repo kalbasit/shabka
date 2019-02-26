@@ -12,7 +12,7 @@ let
   patches = [
     # Improve pam.security.u2f
     # https://github.com/NixOS/nixpkgs/commit/f072cfe1ebff79efaa409258a38646a62c94dbff
-    ./0001-nixos-pam-refactor-U2F-docs-about-u2f_keys-path-5475.patch
+    ./nixpkgs-stable.54756-nixos-pam-refactor-U2F-docs-about-u2f_keys-path.patch
   ];
 
   patched = importPinned.runCommand "nixpkgs-stable-${pinnedVersion.rev}"

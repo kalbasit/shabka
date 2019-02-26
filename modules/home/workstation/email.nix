@@ -44,10 +44,7 @@ let
 
   extendAccounts = name: value: nameValuePair name (commonEmailAccount // value);
 
-in
-
-
-{
+in {
   options.mine.workstation.email = {
     enable = mkEnableOption "Enable email accounts";
 

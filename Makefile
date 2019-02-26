@@ -1,8 +1,9 @@
 HOME_MANAGER_REF     ?= master
 KALBASIT_NUR_REF     ?= master
 NIXOS_HARDWARE_REF   ?= master
-NIXPKGS_UNSTABLE_REF ?= nixos-unstable
 NIXPKGS_STABLE_REF   ?= nixos-18.09
+NIXPKGS_UNSTABLE_REF ?= nixos-unstable
+NIX_DARWIN_REF       ?= master
 NUR_REF              ?= master
 
 .PHONY: all
@@ -34,6 +35,10 @@ update-external: update-home-manager update-nixpkgs-stable update-nixpkgs-unstab
 .PHONY: update-home-manager
 update-home-manager:
 	$(shell pwd)/scripts/update-external.sh rycee home-manager "$(HOME_MANAGER_REF)" external/home-manager-version.json
+
+.PHONY: update-nix-darwin
+update-nix-darwin:
+	$(shell pwd)/scripts/update-external.sh LnL7 nix-darwin "$(NIX_DARWIN_REF)" external/nix-darwin-version.json
 
 .PHONY: update-nixpkgs-stable
 update-nixpkgs-stable:

@@ -61,7 +61,9 @@ var_4: &instantiate-host
           readonly nixpkgs="$( nix-build --no-out-link "${nixpkgs_unstable}" --arg runCommand '(import <nixpkgs> {}).runCommand' --arg fetchpatch '(import <nixpkgs> {}).fetchpatch' )"
       fi
 
-      export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=${shabka_path}"
+      readonly darwin="$( nix-build --no-out-link -E "with import ${nixpkgs} {}; import ${shabka_path}/external/nix-darwin.nix { inherit runCommand fetchpatch; }" )"
+
+      export NIX_PATH="nixpkgs=${nixpkgs}:darwin=${darwin}:shabka-path=${shabka_path}"
 
       echo ">>> Instantiating the hostname '${host}' using nixpkgs at '${nixpkgs}'. NIX_PATH is set to '${NIX_PATH}'"
       nix-instantiate "${shabka_path}/hosts/${host}"
@@ -129,6 +131,22 @@ jobs:
       - *enable-cachix
       - *instantiate-host
 
+  poseidon:
+    macos:
+      xcode: "9.0"
+
+    working_directory: ~/shabka
+
+    environment:
+      <<: *global_env
+
+    steps:
+      - checkout
+      - *install-nix
+      - *install-dependencies
+      - *enable-cachix
+      - *instantiate-host
+
   zeus:
     working_directory: ~/shabka
 
@@ -155,6 +173,8 @@ workflows:
       - hades:
           context: org-global
       - hera:
+          context: org-global
+      - poseidon:
           context: org-global
       - zeus:
           context: org-global

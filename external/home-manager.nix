@@ -6,7 +6,19 @@ let
     inherit (pinnedVersion) url sha256;
   };
 
-  patches = [];
+  patches = [
+    # https://github.com/rycee/home-manager/pull/474
+    ./home-manager.474-fix-switch-user-without-profile.patch
+
+    # https://github.com/rycee/home-manager/pull/583
+    ./home-manager.583-activate-hm-through-postactivation.patch
+
+    # https://github.com/rycee/home-manager/pull/586
+    ./home-manager.586-install-packages-through-user-packages.patch
+
+    # https://github.com/rycee/home-manager/pull/587
+    ./home-manager.587-login-as-user.patch
+  ];
 
   patched = runCommand "home-manager-${pinnedVersion.rev}"
     {

@@ -107,8 +107,8 @@ with lib;
           prompt = true;
         };
 
-        "mergetool \"vimdiff\"" = {
-          cmd = "${pkgs.neovim}/bin/nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'";
+        "mergetool \"vimdiff\"" = optionalAttrs config.mine.neovim.enable {
+          cmd = "nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'";
         };
 
         "protocol \"keybase\"" = {

@@ -31,9 +31,9 @@ while getopts ":h:us" opt; do
 done
 shift $((OPTIND -1))
 
-readonly nixos_config="hosts/${host}/configuration.nix"
-if ! [[ -r "${nixos_config}" ]]; then
-    echo "ERR: configuration for nixos_config ${nixos_config} does not exist."
+readonly darwin_config="hosts/${host}/configuration.nix"
+if ! [[ -r "${darwin_config}" ]]; then
+    echo "ERR: configuration for darwin_config ${darwin_config} does not exist."
     exit 1
 fi
 
@@ -48,7 +48,7 @@ fi
 
 # use nix-build to get the nixpkgs source path in the nix store. nix-shell can
 # be pointed to nixpkgs.nix as is and it's able to call the function to get the
-# actual source but for some reason this is not work with nixos-rebuild. See
+# actual source but for some reason this is not work with darwin-rebuild. See
 # https://gist.github.com/kalbasit/deec7b74b64f70d24ca1967883c8e7b6 for more
 # details.
 if [[ "${release}" = "stable" ]]; then
@@ -57,7 +57,9 @@ else
     readonly nixpkgs="${nixpkgs_unstable}"
 fi
 
+readonly darwin="$( nix-build --no-out-link -E "with import ${nixpkgs} {}; import ${shabka_path}/external/nix-darwin.nix { inherit runCommand fetchpatch; }" )"
+
 unset NIX_PATH
 
 set -x
-nixos-rebuild -I nixpkgs="${nixpkgs}" -I "nixos-config=${nixos_config}" "${@}"
+darwin-rebuild -I nixpkgs="${nixpkgs}" -I "darwin=${darwin}" -I "darwin-config=${darwin_config}" "${@}"
