@@ -27,4 +27,5 @@
 
   # mine.gnupg.enable = true;
   mine.useColemakKeyboardLayout = true;
+  mine.fonts.enable = true;
 }
