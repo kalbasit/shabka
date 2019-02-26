@@ -14,7 +14,7 @@ with lib;
 
   config = mkIf (config.mine.darwinConfig != {}) {
     home.file = {
-      "ssh/authorized_keys".source = import ../../../external/kalbasit-keys.nix;
+      ".ssh/authorized_keys".source = import ../../../external/kalbasit-keys.nix;
     };
 
     fonts.fontconfig.enableProfileFonts = true;
