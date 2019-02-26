@@ -19,12 +19,6 @@ let
     # version 5.2.26.
     # https://github.com/NixOS/nixpkgs/pull/56210
     ./nixpkgs-unstable.56210-update-vbox-5.2.26.patch
-
-    # luarocks: patch sw_vers and gcc
-    # This fixes luarocks on Darwin
-    # https://github.com/NixOS/nixpkgs/issues/55553
-    # https://github.com/NixOS/nixpkgs/pull/55580
-    ./nixpkgs-unstable.55580-fix-luarocks-on-darwin.patch
   ];
 
   patched = runCommand "nixpkgs-unstable-${pinnedVersion.rev}"
