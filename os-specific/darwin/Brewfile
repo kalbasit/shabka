@@ -7,14 +7,15 @@ cask "charles"                    # Charles Proxy
 cask "google-chrome"              # my browser of choice
 cask "insomniax"                  # keep the laptop awake
 cask "iterm2"                     # my terminal of choice
+cask "karabiner-elements"         # Change caps_lock to control when used as modifier, escape when used alone
+cask "keybase"                    # Keybase for accessing my encrypted repositories
 cask "sequel-pro"                 # MySQL frontend supporting connections through a tunnel
 cask "slack"                      # Team communication
 cask "teamviewer"                 # TeamViewer for remote login
-cask "keybase"                    # Keybase for accessing my encrypted repositories
 cask "virtualbox"                 # VirtualBox for VM
 cask "virtualbox-extension-pack"  # VirtualBox extensions
-cask "whatsapp"                   # WhatsApp application
 cask "vlc"                        # VideoLan video player
+cask "whatsapp"                   # WhatsApp application
 
 # TODO: Whatever does not install via nix, install it via Brew. Below, is the contents of my old Brewfile.
 #
