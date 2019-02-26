@@ -25,7 +25,7 @@ in {
   ];
 
   options.mine.home-manager.config = mkOption {
-    default = { name, uid, isAdmin, darwinConfig }: {...}: {};
+    default = { darwinConfig }: {...}: {};
     description = ''
       Function that returns the Home Manager configuration.
     '';
