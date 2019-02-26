@@ -70,7 +70,15 @@ if ! defaults read com.github.kalbasit.shabka bootstrap >/dev/null 2>&1; then
 		set +u
 			source ~/.nix-profile/etc/profile.d/nix.sh
 		set -u
+	}
 
+	if ! command -v darwin-rebuild && [[ -r /etc/static/bashrc ]]; then
+		set +u
+			source /etc/static/bashrc
+		set -u
+	fi
+
+	command -v darwin-rebuild 2>/dev/null || {
 		info "Installing nix-darwin"
 		pushd "${workdir}"
 			readonly nixpkgs_stable="$( nix-build --no-out-link "${shabka_path}/external/nixpkgs-stable.nix" )"
