@@ -137,6 +137,12 @@ if [[ -f /etc/zprofile ]] && [[ ! -f /etc/zprofile.orig ]]; then
 	sudo mv /etc/zprofile /etc/zprofile.orig
 fi
 
+if ! command -v darwin-rebuild && [[ -r /etc/static/bashrc ]]; then
+	set +u
+		source /etc/static/bashrc
+	set -u
+fi
+
 # Finally, switch the generation
 while ! "${shabka_path}/scripts/darwin-rebuild.sh" -h "${hostname}" switch; do
 	error "It looks like Darwin Rebuild has failed, retry [y/n]"
