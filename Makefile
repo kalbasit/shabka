@@ -1,7 +1,7 @@
 HOME_MANAGER_REF     ?= master
 KALBASIT_NUR_REF     ?= master
 NIXOS_HARDWARE_REF   ?= master
-NIXPKGS_STABLE_REF   ?= nixos-18.09
+NIXPKGS_STABLE_REF   ?= nixos-19.03
 NIXPKGS_UNSTABLE_REF ?= nixos-unstable
 NIX_DARWIN_REF       ?= master
 NUR_REF              ?= master
