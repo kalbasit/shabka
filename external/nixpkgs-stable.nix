@@ -9,11 +9,7 @@ let
     overlays = [];
   };
 
-  patches = [
-    # Improve pam.security.u2f
-    # https://github.com/NixOS/nixpkgs/commit/f072cfe1ebff79efaa409258a38646a62c94dbff
-    ./nixpkgs-stable.54756-nixos-pam-refactor-U2F-docs-about-u2f_keys-path.patch
-  ];
+  patches = [];
 
   patched = importPinned.runCommand "nixpkgs-stable-${pinnedVersion.rev}"
     {
