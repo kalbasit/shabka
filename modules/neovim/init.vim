@@ -277,15 +277,6 @@ nmap <Leader>go :GundoToggle<CR>
 let g:vim_markdown_folding_disabled = 1
 
 "" }}}
-"" Markdown preview{{{
-
-if executable('grip')
-  let g:vim_markdown_preview_github=1
-endif
-
-let g:vim_markdown_preview_use_xdg_open=1
-
-"" }}}
 "" Multiple cursors{{{
 
 let g:multi_cursor_use_default_mapping=0
