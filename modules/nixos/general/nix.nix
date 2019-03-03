@@ -21,6 +21,7 @@ in {
 
     nixPath = [
       "nixos-config=/run/current-system/shabka/hosts/${config.networking.hostName}/configuration.nix"
+      "nixpkgs-unstable=/run/current-system/nixpkgs-unstable"
       "nixpkgs=/run/current-system/nixpkgs"
       "shabka-path=/run/current-system/shabka"
     ];
@@ -52,6 +53,7 @@ in {
   #   ln -sfn ${pinnedNixpkgs} /run/current-nixpkgs
   # '';
   system.extraSystemBuilderCmds = ''
+    ln -sfn ${pkgs.unstable.path} $out/nixpkgs-unstable
     ln -sfn ${pkgs.path} $out/nixpkgs
     ln -sfn ${shabka-path} $out/shabka
   '';

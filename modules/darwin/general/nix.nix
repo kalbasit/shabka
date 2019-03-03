@@ -12,6 +12,7 @@ in {
 
     nixPath = [
       "darwin-config=/run/current-system/shabka/hosts/${config.networking.hostName}/configuration.nix"
+      "nixpkgs-unstable=/run/current-system/nixpkgs-unstable"
       "nixpkgs=/run/current-system/nixpkgs"
       "shabka-path=/run/current-system/shabka"
     ];
@@ -27,6 +28,7 @@ in {
   };
 
   system.activationScripts.postActivation.text = ''
+    ln -sfn ${pkgs.unstable.path} $systemConfig/nixpkgs
     ln -sfn ${pkgs.path} $systemConfig/nixpkgs
     ln -sfn ${shabka-path} $systemConfig/shabka
   '';

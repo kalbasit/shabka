@@ -1,11 +1,15 @@
-{ nixpkgs ? import <nixpkgs> {} }:
+{
+  nixpkgs ? import <nixpkgs> {
+    overlays = import ./overlays;
+  }
+}:
 
 nixpkgs.mkShell {
   buildInputs = with nixpkgs; [
     gnumake
     nixops
     awscli
-    (terraform.withPlugins (ps: [
+    (unstable.terraform_0_12.withPlugins (ps: [
       ps.aws
     ]))
   ];

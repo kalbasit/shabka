@@ -19,6 +19,8 @@ let
     # version 5.2.26.
     # https://github.com/NixOS/nixpkgs/pull/56210
     ./nixpkgs-unstable.56210-update-vbox-5.2.26.patch
+
+    ./nixpkgs-unstable.56767-update-terraform.patch
   ];
 
   patched = runCommand "nixpkgs-unstable-${pinnedVersion.rev}"

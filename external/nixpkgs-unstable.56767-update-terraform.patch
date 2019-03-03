@@ -1,0 +1,24 @@
+From 8868fc7e57d38129241d9c2a0d0373d39a906b54 Mon Sep 17 00:00:00 2001
+From: "Wael M. Nasreddine" <wael.nasreddine@gmail.com>
+Date: Sat, 2 Mar 2019 22:09:54 -0800
+Subject: [PATCH] terraform_0_12: 0.12.0-alpha4 -> 0.12.0-beta1
+
+---
+ pkgs/applications/networking/cluster/terraform/default.nix | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/pkgs/applications/networking/cluster/terraform/default.nix b/pkgs/applications/networking/cluster/terraform/default.nix
+index a9d8faf62b56..45c8dcf98002 100644
+--- a/pkgs/applications/networking/cluster/terraform/default.nix
++++ b/pkgs/applications/networking/cluster/terraform/default.nix
+@@ -97,8 +97,8 @@ in rec {
+   terraform_0_11-full = terraform_0_11.full;
+ 
+   terraform_0_12 = pluggable (generic {
+-    version = "0.12.0-alpha4";
+-    sha256 = "16cwqxxb19m91d7rx7awri1awz7d8cfnrv0rbql9rbg5qjyqxcp9";
++    version = "0.12.0-beta1";
++    sha256 = "0djakf2agbhpfqis4x0lf2i8s1ahvrdyfkcgr6lzp0nsks652rcm";
+     patches = [ ./provider-path.patch ];
+     passthru = { inherit plugins; };
+   });

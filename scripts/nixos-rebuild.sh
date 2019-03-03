@@ -60,4 +60,4 @@ fi
 unset NIX_PATH
 
 set -x
-nixos-rebuild -I nixpkgs="${nixpkgs}" -I "nixos-config=${nixos_config}" "${@}"
+nixos-rebuild -I nixpkgs="${nixpkgs}" -I nixpkgs_unstable="${nixpkgs_unstable}" -I "nixos-config=${nixos_config}" "${@}"
