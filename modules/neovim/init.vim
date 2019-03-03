@@ -318,7 +318,14 @@ endfunc
 "" Polyglot{{{
 ""
 
-let g:polyglot_disabled = ['csv', 'go', 'latex', 'ruby', 'terraform', 'typescript']
+let g:polyglot_disabled = [
+  \   'csv',
+  \   'go',
+  \   'latex',
+  \   'ruby',
+  \   'terraform',
+  \   'typescript',
+  \ ]
 
 " }}}
 "" Surround{{{
