@@ -323,6 +323,7 @@ let g:polyglot_disabled = [
   \   'csv',
   \   'go',
   \   'latex',
+  \   'markdown',
   \   'ruby',
   \   'terraform',
   \   'typescript',
