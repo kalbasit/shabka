@@ -167,10 +167,6 @@ if has("autocmd")
   " Set the Ruby filetype for a number of common Ruby files without .rb
   au BufRead,BufNewFile {Gemfile,Rakefile,Vagrantfile,Thorfile,Procfile,Guardfile,config.ru,*.rake} set ft=ruby
 
-  " Make sure all mardown files have the correct filetype set and setup wrapping
-  au BufRead,BufNewFile *.{md,markdown,mdown,mkd,mkdn,txt} set ft=markdown
-  au FileType markdown setlocal wrap linebreak textwidth=72 nolist
-
   " make Python follow PEP8 for whitespace.
   " http://www.python.org/dev/peps/pep-0008/
   au FileType python setlocal tabstop=4 shiftwidth=4 expandtab
