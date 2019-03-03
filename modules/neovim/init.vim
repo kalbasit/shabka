@@ -567,24 +567,6 @@ function! ExtractVariable()
   normal! $p
 endfunction
 
-" TODO: candidate for removal
-function! ShowRoutes()
-  " Requires 'scratch' plugin
-  :topleft 100 :split __Routes__
-  " Make sure Vim doesn't write __Routes__ as a file
-  :set buftype=nofile
-  " Delete everything
-  :normal 1GdG
-  " Put routes output in buffer
-  :0r! rake -s routes
-  " Size window to number of lines (1 plus rake output length)
-  :exec ":normal " . line("$") . _ "
-  " Move cursor to bottom
-  :normal 1GG
-  " Delete empty trailing line
-  :normal dd
-endfunction
-
 function! InlineVariable()
   " Copy the variable under the cursor into the 'a' register
   :let l:tmp_a = @a
@@ -608,6 +590,7 @@ function! InlineVariable()
   :let @b = l:tmp_b
 endfunction
 
+" TODO: Extract this logic into an open-source module
 function! OpenTestAlternate(position)
   let current_file = expand("%")
   let new_file = current_file
