@@ -66,7 +66,7 @@ var_4: &instantiate-host
       export NIX_PATH="nixpkgs=${nixpkgs}:darwin=${darwin}:shabka-path=${shabka_path}"
 
       echo ">>> Instantiating the hostname '${host}' using nixpkgs at '${nixpkgs}'. NIX_PATH is set to '${NIX_PATH}'"
-      nix-build "${shabka_path}/hosts/${host}"
+      nix-instantiate "${shabka_path}/hosts/${host}" > "result.${host}"
 
 var_5: &cachix-push
   run:
@@ -77,7 +77,7 @@ var_5: &cachix-push
         source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
       fi
 
-      cachix push "${CACHIX_CACHE}"
+      cat "result.${host}" | cachix push "${CACHIX_CACHE}"
 
 version: 2
 jobs:
