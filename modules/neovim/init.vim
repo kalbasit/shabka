@@ -272,6 +272,11 @@ let g:go_highlight_build_constraints = 1
 "" Gundo{{{
 nmap <Leader>go :GundoToggle<CR>
 "" }}}
+"" Markdown{{{
+
+let g:vim_markdown_folding_disabled = 1
+
+"" }}}
 "" Markdown preview{{{
 
 if executable('grip')
