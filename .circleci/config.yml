@@ -68,6 +68,17 @@ var_4: &instantiate-host
       echo ">>> Instantiating the hostname '${host}' using nixpkgs at '${nixpkgs}'. NIX_PATH is set to '${NIX_PATH}'"
       nix-instantiate "${shabka_path}/hosts/${host}"
 
+var_5: &cachix-push
+  run:
+    name: Cachix push
+    working_directory: ~/shabka
+    command: |
+      if [[ -r "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]]; then
+        source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
+      fi
+
+      cachix push "${CACHIX_CACHE}"
+
 version: 2
 jobs:
   athena:
@@ -85,6 +96,7 @@ jobs:
       - *install-dependencies
       - *enable-cachix
       - *instantiate-host
+      - *cachix-push
 
   cratos:
     working_directory: ~/shabka
@@ -100,6 +112,7 @@ jobs:
       - *install-dependencies
       - *enable-cachix
       - *instantiate-host
+      - *cachix-push
 
   hades:
     working_directory: ~/shabka
@@ -115,6 +128,7 @@ jobs:
       - *install-dependencies
       - *enable-cachix
       - *instantiate-host
+      - *cachix-push
 
   hera:
     working_directory: ~/shabka
@@ -130,6 +144,7 @@ jobs:
       - *install-dependencies
       - *enable-cachix
       - *instantiate-host
+      - *cachix-push
 
   poseidon:
     macos:
@@ -146,6 +161,7 @@ jobs:
       - *install-dependencies
       - *enable-cachix
       - *instantiate-host
+      - *cachix-push
 
   zeus:
     working_directory: ~/shabka
@@ -161,20 +177,21 @@ jobs:
       - *install-dependencies
       - *enable-cachix
       - *instantiate-host
+      - *cachix-push
 
 workflows:
   version: 2
   testing:
     jobs:
       - athena:
-          context: org-global
+          context: nix-global
       - cratos:
-          context: org-global
+          context: nix-global
       - hades:
-          context: org-global
+          context: nix-global
       - hera:
-          context: org-global
+          context: nix-global
       - poseidon:
-          context: org-global
+          context: nix-global
       - zeus:
-          context: org-global
+          context: nix-global
