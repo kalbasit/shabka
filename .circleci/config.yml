@@ -77,19 +77,7 @@ var_5: &cachix-push
         source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
       fi
 
-      cachix push "${CACHIX_CACHE}" "$(nix-store -q --deriver result)"
-
-var_6: &restore-cache
-  restore_cache:
-    keys:
-      - nix-store-v1-{{ arch }}
-      - nix-store-v1-
-
-var_7:
-  save_cache:
-    key: nix-store-v1-{{ arch }}
-    paths:
-      - /nix/store
+      cachix push "${CACHIX_CACHE}"
 
 version: 2
 jobs:
@@ -105,12 +93,10 @@ jobs:
     steps:
       - checkout
       - *install-nix
-      - *restore-cache
       - *install-dependencies
       - *enable-cachix
       - *instantiate-host
       - *cachix-push
-      - *push-cache
 
   cratos:
     working_directory: ~/shabka
@@ -123,12 +109,10 @@ jobs:
 
     steps:
       - checkout
-      - *restore-cache
       - *install-dependencies
       - *enable-cachix
       - *instantiate-host
       - *cachix-push
-      - *push-cache
 
   hades:
     working_directory: ~/shabka
@@ -141,12 +125,10 @@ jobs:
 
     steps:
       - checkout
-      - *restore-cache
       - *install-dependencies
       - *enable-cachix
       - *instantiate-host
       - *cachix-push
-      - *push-cache
 
   hera:
     working_directory: ~/shabka
@@ -159,12 +141,10 @@ jobs:
 
     steps:
       - checkout
-      - *restore-cache
       - *install-dependencies
       - *enable-cachix
       - *instantiate-host
       - *cachix-push
-      - *push-cache
 
   poseidon:
     macos:
@@ -178,12 +158,10 @@ jobs:
     steps:
       - checkout
       - *install-nix
-      - *restore-cache
       - *install-dependencies
       - *enable-cachix
       - *instantiate-host
       - *cachix-push
-      - *push-cache
 
   zeus:
     working_directory: ~/shabka
@@ -196,12 +174,10 @@ jobs:
 
     steps:
       - checkout
-      - *restore-cache
       - *install-dependencies
       - *enable-cachix
       - *instantiate-host
       - *cachix-push
-      - *push-cache
 
 workflows:
   version: 2
