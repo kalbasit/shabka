@@ -77,6 +77,8 @@ var_5: &cachix-push
         source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
       fi
 
+      readonly host="${CIRCLE_JOB}"
+
       cat "result.${host}" | cachix push "${CACHIX_CACHE}"
 
 version: 2
