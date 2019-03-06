@@ -64,6 +64,7 @@
 
           DP-2-1 = {
             enable = true;
+            primary = true;
             position = "1920x0";
             mode = "3440x1440";
             gamma = "1.0:0.909:0.909";
@@ -89,6 +90,7 @@
 
           DP-1 = {
             enable = true;
+            primary = true;
             position = "1920x0";
             mode = "2560x1440";
             gamma = "1.0:0.909:0.909";
