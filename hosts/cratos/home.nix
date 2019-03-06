@@ -62,7 +62,7 @@
             rate = "60.03";
           };
 
-          DP-1 = {
+          DP-2-1 = {
             enable = true;
             position = "1920x0";
             mode = "3440x1440";
