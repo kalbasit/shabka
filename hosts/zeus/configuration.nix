@@ -210,7 +210,7 @@ in {
       enable = true;
       host = "gitlab.nasreddine.com"; # visible only within my network
       https = true;
-      port = 30000;
+      port = 443;
       backupPath = "/nas/docker/persistence/zeus/gitlab/state/backup";
       statePath = "/nas/docker/persistence/zeus/gitlab/state";
 
