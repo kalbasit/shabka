@@ -221,6 +221,15 @@ in {
         gitlab-shell = pkgs.unstable.gitlab-shell;
         gitlab-workhorse = pkgs.unstable.gitlab-workhorse;
       };
+
+      extraConfig = {
+        gitlab = {
+          email_from = "gitlab@nasreddine.com";
+          email_display_name = "GitLab";
+          email_reply_to = "wael@nasreddine.com";
+          default_projects_features = { builds = false; };
+        };
+      };
     }
 
     (optionalAttrs (builtins.pathExists /yl/private/network-secrets/shabka/hosts/zeus/gitlab.nix)
