@@ -19,6 +19,7 @@ var_2: &install-dependencies
       nix-env -f '<nixpkgs>' -iA gitAndTools.git
 
       # install cachix from nixpkgs at stable
+      readonly shabka_path="$( pwd )"
       readonly nixpkgs="$( nix-build "${shabka_path}/external" -A "nixpkgs.release-18-09.path" )"
       nix-env -I nixpkgs="${nixpkgs}" -f '<nixpkgs>' -iA cachix
 
