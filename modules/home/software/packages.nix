@@ -53,14 +53,14 @@ in {
 
     nur.repos.kalbasit.swm
 
-    unstable.corgi
-    unstable.vgo2nix
+    external.nixpkgs.unstable.corgi
+    external.nixpkgs.unstable.vgo2nix
 
     unzip
 
     nix-zsh-completions
 
-    unstable.slack-cli
+    external.nixpkgs.unstable.slack-cli
   ] ++ (if stdenv.isLinux then [
     #
     # Linux applications
