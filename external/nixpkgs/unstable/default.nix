@@ -32,6 +32,4 @@ let
     '';
 in {
   path = patched;
-  config = [];
-  overlays = [];
 }
