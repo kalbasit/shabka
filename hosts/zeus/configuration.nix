@@ -200,6 +200,33 @@ in {
     dataDir = "/nas/Plex/Library/Application\ Support";
   };
 
+  # postgresql defaults to true by gitlab, but I run postgres on Apollo
+  services.postgresql = {
+    enable = false;
+    package = pkgs.unstable.postgresql_11;
+  };
+  services.gitlab = mkMerge [
+    {
+      enable = true;
+      host = "gitlab.nasreddine.com"; # visible only within my network
+      https = true;
+      port = 30000;
+      backupPath = "/nas/docker/persistence/zeus/gitlab/state/backup";
+      statePath = "/nas/docker/persistence/zeus/gitlab/state";
+
+      # use packages from unstable
+      packages = {
+        gitaly = pkgs.unstable.gitaly;
+        gitlab = pkgs.unstable.gitlab;
+        gitlab-shell = pkgs.unstable.gitlab-shell;
+        gitlab-workhorse = pkgs.unstable.gitlab-workhorse;
+      };
+    }
+
+    (optionalAttrs (builtins.pathExists /yl/private/network-secrets/shabka/hosts/zeus/gitlab.nix)
+      (import /yl/private/network-secrets/shabka/hosts/zeus/gitlab.nix))
+  ];
+
   #
   # Network
   #
