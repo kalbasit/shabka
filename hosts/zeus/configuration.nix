@@ -230,16 +230,16 @@ in {
     {
       enable = true;
       upstreams = {
-        gitlab = {
+        gitlab-workhorse = {
           servers = {
-            "unix:/run/gitlab/gitlab.socket" = {};
+            "unix:/run/gitlab/gitlab-workhorse.socket" = {};
           };
         };
       };
       virtualHosts = {
         "gitlab.nasreddine.com" = {
           locations."/" = {
-            proxyPass = "http://gitlab";
+            proxyPass = "http://gitlab-workhorse";
           };
         };
       };
