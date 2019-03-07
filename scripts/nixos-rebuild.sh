@@ -3,23 +3,18 @@
 set -euo pipefail
 
 readonly shabka_path="$(cd $(dirname "${BASH_SOURCE[0]}")/../ && pwd)"
-readonly nixpkgs_stable="$( nix-build --no-out-link "${shabka_path}/external/nixpkgs-stable.nix" )"
-readonly nixpkgs_unstable="$( nix-build --no-out-link -E "with import (import ${shabka_path}/external/nixpkgs-stable.nix) {}; import ${shabka_path}/external/nixpkgs-unstable.nix { inherit runCommand fetchpatch; }" )"
 
 # define all local variables
 host="$( hostname -s )"
 release=
 
-while getopts ":h:us" opt; do
+while getopts ":h:r:" opt; do
     case "${opt}" in
         h)
             host="${OPTARG}"
             ;;
-        s)
-            release="stable"
-            ;;
-        u)
-            release="unstable"
+        r)
+            release="${OPTARG}"
             ;;
         :)
             fail "Invalid option: $OPTARG requires an argument"
@@ -42,20 +37,11 @@ if [[ -z "${release}" ]]; then
         release="$( cat "hosts/${host}/release" )"
     else
         # fallback to the default release
-        release="stable"
+        release="$( tr -d "\n" < "${shabka_path}/.release" )"
     fi
 fi
 
-# use nix-build to get the nixpkgs source path in the nix store. nix-shell can
-# be pointed to nixpkgs.nix as is and it's able to call the function to get the
-# actual source but for some reason this is not work with nixos-rebuild. See
-# https://gist.github.com/kalbasit/deec7b74b64f70d24ca1967883c8e7b6 for more
-# details.
-if [[ "${release}" = "stable" ]]; then
-    readonly nixpkgs="${nixpkgs_stable}"
-else
-    readonly nixpkgs="${nixpkgs_unstable}"
-fi
+readonly nixpkgs="$( nix-build "${shabka_path}/external" -A "nixpkgs.${release/./-}" )"
 
 unset NIX_PATH
 
