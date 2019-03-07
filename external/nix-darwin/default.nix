@@ -1,7 +1,7 @@
 { fetchpatch, runCommand }:
 
 let
-  pinnedVersion = builtins.fromJSON (builtins.readFile ./nix-darwin-version.json);
+  pinnedVersion = builtins.fromJSON (builtins.readFile ./version.json);
   pinned = builtins.fetchTarball {
     inherit (pinnedVersion) url sha256;
   };

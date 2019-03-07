@@ -1,14 +1,18 @@
 { fetchpatch, runCommand }:
 
 let
-  pinnedVersion = builtins.fromJSON (builtins.readFile ./nixos-hardware-version.json);
+  pinnedVersion = builtins.fromJSON (builtins.readFile ./version.json);
   pinned = builtins.fetchTarball {
     inherit (pinnedVersion) url sha256;
   };
 
-  patches = [];
+  patches = [
+    # Improve pam.security.u2f
+    # https://github.com/NixOS/nixpkgs/commit/f072cfe1ebff79efaa409258a38646a62c94dbff
+    ./54756-nixos-pam-refactor-U2F-docs-about-u2f_keys-path.patch
+  ];
 
-  patched = runCommand "nixos-hardware-${pinnedVersion.rev}"
+  patched = runCommand "nixpkgs-18.09-${pinnedVersion.rev}"
     {
       inherit pinned patches;
 
