@@ -226,6 +226,28 @@ in {
     (optionalAttrs (builtins.pathExists /yl/private/network-secrets/shabka/hosts/zeus/gitlab.nix)
       (import /yl/private/network-secrets/shabka/hosts/zeus/gitlab.nix))
   ];
+  services.nginx = mkMerge [
+    {
+      enable = true;
+      upstreams = {
+        gitlab = {
+          servers = {
+            "unix:/run/gitlab/gitlab.socket" = {};
+          };
+        };
+      };
+      virtualHosts = {
+        "gitlab.nasreddine.com" = {
+          locations."/" = {
+            proxyPass = "http://gitlab";
+          };
+        };
+      };
+    }
+
+    (optionalAttrs (builtins.pathExists /yl/private/network-secrets/shabka/hosts/zeus/nginx.nix)
+      (import /yl/private/network-secrets/shabka/hosts/zeus/nginx.nix { inherit pkgs; }))
+  ];
 
   #
   # Network
