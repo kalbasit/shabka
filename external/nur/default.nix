@@ -15,6 +15,7 @@ let
       preferLocalBuild = true;
     }
     ''
+      echo -n "${pinnedVersion.rev}" > $pinned/.git-revision
       cp -r $pinned $out
       chmod -R +w $out
       for p in $patches; do

@@ -20,6 +20,7 @@ let
     }
     ''
       cp -r $pinned $out
+      echo -n "${pinnedVersion.rev}" > $out/.git-revision
       chmod -R +w $out
       for p in $patches; do
         echo "Applying patch $p";
