@@ -20,7 +20,7 @@ var_2: &install-dependencies
 
       # install cachix from nixpkgs at stable
       readonly shabka_path="$( pwd )"
-      readonly nixpkgs="$( nix-build "${shabka_path}/external" -A "nixpkgs.release-18-09.path" )"
+      readonly nixpkgs="$( nix-build "${shabka_path}" -A "external.nixpkgs.release-18-09.path" )"
       nix-env -I nixpkgs="${nixpkgs}" -f '<nixpkgs>' -iA cachix
 
 var_3: &enable-cachix
@@ -52,10 +52,10 @@ var_4: &instantiate-host
           release="$( tr -d "\n" < "${shabka_path}/.release" )"
       fi
 
-      readonly nixpkgs="$( nix-build "${shabka_path}/external" -A "nixpkgs.release-${release/./-}.path" )"
-      readonly darwin="$( nix-build "${shabka_path}/external" -A "nix-darwin.path" )"
+      readonly nixpkgs="$( nix-build "${shabka_path}" -A "external.nixpkgs.release-${release/./-}.path" )"
+      readonly darwin="$( nix-build "${shabka_path}" -A "external.nix-darwin.path" )"
 
-      export NIX_PATH="nixpkgs=${nixpkgs}:darwin=${darwin}:shabka-path=${shabka_path}"
+      export NIX_PATH="nixpkgs=${nixpkgs}:darwin=${darwin}:shabka=${shabka_path}"
 
       echo ">>> Instantiating the hostname '${host}' using nixpkgs at '${nixpkgs}'. NIX_PATH is set to '${NIX_PATH}'"
       nix-instantiate "${shabka_path}/hosts/${host}"
