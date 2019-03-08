@@ -19,11 +19,13 @@ let
 
       fixupPhase = ":";
     };
+
+    callPackage2 = path: args: callPackage path (args // { inherit mkExternal; });
 in {
-  home-manager = callPackage ./home-manager { inherit mkExternal; };
-  kalbasit = callPackage ./kalbasit { inherit mkExternal; };
-  nix-darwin = callPackage ./nix-darwin { inherit mkExternal; };
-  nixos-hardware = callPackage ./nixos-hardware { inherit mkExternal; };
-  nixpkgs = callPackage ./nixpkgs { inherit mkExternal; };
-  nur = callPackage ./nur { inherit mkExternal; };
+  home-manager = callPackage2 ./home-manager { };
+  kalbasit = callPackage2 ./kalbasit { };
+  nix-darwin = callPackage2 ./nix-darwin { };
+  nixos-hardware = callPackage2 ./nixos-hardware { };
+  nixpkgs = callPackage2 ./nixpkgs { };
+  nur = callPackage2 ./nur { };
 }
