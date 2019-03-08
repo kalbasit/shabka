@@ -32,4 +32,10 @@ let
     '';
 in {
   path = patched;
+  imported = import patched {
+    config = {
+      nixpkgs.config.allowUnfree = true; # TODO: this should be inherited, not hardcoded!
+    };
+    overlays = [];
+  };
 }

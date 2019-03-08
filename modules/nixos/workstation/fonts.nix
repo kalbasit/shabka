@@ -24,7 +24,7 @@ with lib;
         # helvetica
         vegur # the official NixOS font
 
-        external.nixpkgs.unstable.b612
+        shabka.external.nixpkgs.release-unstable.imported.b612
       ];
     };
   };

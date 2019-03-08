@@ -1,5 +1,5 @@
 self: super:
 
 {
-  external = super.callPackage ./external { };
+  shabka.external = super.callPackage ../external { };
 }

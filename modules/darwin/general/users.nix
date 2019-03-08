@@ -5,10 +5,6 @@
 with lib;
 
 let
-  sshKeys = [
-    (builtins.readFile (import ../../../external/kalbasit-keys.nix))
-  ];
-
   makeUser = userName: { home ? "/Users/${userName}" }: nameValuePair
     userName
     { inherit home; };

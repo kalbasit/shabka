@@ -1,7 +1,7 @@
 self: super:
 
 {
-  neovim = super.external.nixpkgs.unstable.neovim.override { withNodeJs = true; };
-  vimPlugins = super.external.nixpkgs.unstable.vimPlugins;
-  wrapNeovim = super.external.nixpkgs.unstable.wrapNeovim;
+  neovim = super.shabka.external.nixpkgs.release-unstable.imported.neovim.override { withNodeJs = true; };
+  vimPlugins = super.shabka.external.nixpkgs.release-unstable.imported.vimPlugins;
+  wrapNeovim = super.shabka.external.nixpkgs.release-unstable.imported.wrapNeovim;
 }

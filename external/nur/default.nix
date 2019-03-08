@@ -22,5 +22,6 @@ let
         patch -d $out -p1 < "$p";
       done
     '';
-in
-  patched
+in {
+  path = patched;
+}
