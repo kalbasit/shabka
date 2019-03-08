@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, shabka ? import <shabka> { inherit pkgs; }, lib, ... }:
 
 with lib;
 
@@ -7,10 +7,10 @@ with lib;
     allowUnfree = true;
     packageOverrides = pkgs: {
       nur = recursiveUpdate
-        (import pkgs.shabka.external.nur.path { inherit pkgs; })
+        (import shabka.external.nur.path { inherit pkgs; })
         ({
           repos = {
-            kalbasit = import pkgs.shabka.external.kalbasit.nur.path { inherit pkgs; };
+            kalbasit = import shabka.external.kalbasit.nur.path { inherit pkgs; };
           };
         });
     };

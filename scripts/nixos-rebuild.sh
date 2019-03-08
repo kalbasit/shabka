@@ -12,7 +12,5 @@ if ! [[ -r "${nixos_config}" ]]; then
     exit 1
 fi
 
-unset NIX_PATH
-
 set -x
-nixos-rebuild -I nixpkgs="${nixpkgs}" -I "nixos-config=${nixos_config}" "${@}"
+nixos-rebuild -I "nixos-config=${nixos_config}" "${@}"

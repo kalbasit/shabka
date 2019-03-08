@@ -12,7 +12,5 @@ if ! [[ -r "${darwin_config}" ]]; then
     exit 1
 fi
 
-unset NIX_PATH
-
 set -x
-darwin-rebuild -I nixpkgs="${nixpkgs}" -I "darwin=${darwin}" -I "darwin-config=${darwin_config}" "${@}"
+darwin-rebuild -I "darwin-config=${darwin_config}" "${@}"

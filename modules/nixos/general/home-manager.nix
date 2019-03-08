@@ -1,12 +1,10 @@
-{ lib, ... }:
+{ lib, shabka ? import <shabka> { }, ... }:
 
 with lib;
 
-let
-  external = import ../../../external {};
-in {
+{
   imports = [
-    (import "${external.home-manager.path}/nixos")
+    (import "${shabka.external.home-manager.path}/nixos")
   ];
 
   options.mine.home-manager.config = mkOption {

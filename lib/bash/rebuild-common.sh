@@ -33,5 +33,7 @@ if [[ -z "${release}" ]]; then
     fi
 fi
 
-readonly nixpkgs="$( nix-build "${shabka_path}/external" -A "nixpkgs.release-${release/./-}.path" )"
-readonly darwin="$( nix-build "${shabka_path}/external" -A "nix-darwin.path" )"
+readonly nixpkgs="$( nix-build "${shabka_path}" -A "external.nixpkgs.release-${release/./-}.path" )"
+readonly darwin="$( nix-build "${shabka_path}" -A "external.nix-darwin.path" )"
+
+export NIX_PATH="darwin=${darwin}:nixpkgs=${nixpkgs}:shabka=${shabka_path}"

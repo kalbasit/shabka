@@ -1,6 +1,4 @@
-{ pkgs ? import <nixpkgs> { config = { }; overlays = [ ]; } }:
-
-with pkgs;
+{ stdenvNoCC, callPackage }:
 
 let
   mkExternal =

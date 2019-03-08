@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, shabka ? import <shabka> { inherit pkgs; }, lib, ... }:
 
 with lib;
 

@@ -1,7 +1,6 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, shabka ? import <shabka> { inherit pkgs; }, lib, ... }:
 
 let
-  external = import ../../../external {};
 
   configFile = pkgs.writeText "config.nix" ''
     { pkgs, ... }:
@@ -11,10 +10,10 @@ let
 
       packageOverrides = pkgs: {
         nur = pkgs.lib.recursiveUpdate
-          (import ${external.nur.path} { inherit pkgs; })
+          (import ${shabka.external.nur.path} { inherit pkgs; })
           ({
             repos = {
-              kalbasit = import ${external.kalbasit.nur.path} { inherit pkgs; };
+              kalbasit = import ${shabka.external.kalbasit.nur.path} { inherit pkgs; };
             };
           });
       };
@@ -32,10 +31,10 @@ in {
 
       packageOverrides = pkgs: {
         nur = pkgs.lib.recursiveUpdate
-          (import external.nur.path { inherit pkgs; })
+          (import shabka.external.nur.path { inherit pkgs; })
           ({
             repos = {
-              kalbasit = import external.kalbasit.nur.path { inherit pkgs; };
+              kalbasit = import shabka.external.kalbasit.nur.path { inherit pkgs; };
             };
           });
       };

@@ -1,9 +1,8 @@
-{ lib, ... }:
+{ lib, shabka ? import <shabka> { , ... }:
 
 with lib;
 
 let
-  external = import ../../external {};
 
   nasreddineCA = builtins.readFile (builtins.fetchurl {
     url = "https://s3-us-west-1.amazonaws.com/nasreddine-infra/ca.crt";
@@ -25,9 +24,9 @@ in {
   imports = [
     ./hardware-configuration.nix
 
-    "${external.nixos-hardware.path}/common/cpu/intel"
-    "${external.nixos-hardware.path}/common/pc/laptop"
-    "${external.nixos-hardware.path}/common/pc/laptop/ssd"
+    "${shabka.external.nixos-hardware.path}/common/cpu/intel"
+    "${shabka.external.nixos-hardware.path}/common/pc/laptop"
+    "${shabka.external.nixos-hardware.path}/common/pc/laptop/ssd"
 
     ../../modules/nixos
 

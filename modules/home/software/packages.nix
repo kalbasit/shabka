@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, shabka ? import <shabka> { inherit pkgs; }, ... }:
 
 with pkgs;
 

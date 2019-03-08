@@ -1,10 +1,8 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, shabka ? import <shabka> { inherit pkgs; }, lib, ... }:
 
 with lib;
 
 let
-
-  shabka-path = builtins.toPath ./../../..;
 
 in {
   nix = {
@@ -22,7 +20,7 @@ in {
     nixPath = [
       "nixos-config=/run/current-system/shabka/hosts/${config.networking.hostName}/configuration.nix"
       "nixpkgs=/run/current-system/nixpkgs"
-      "shabka-path=/run/current-system/shabka"
+      "shabka=/run/current-system/shabka"
     ];
 
     optimise = {
@@ -53,6 +51,6 @@ in {
   # '';
   system.extraSystemBuilderCmds = ''
     ln -sfn ${pkgs.path} $out/nixpkgs
-    ln -sfn ${shabka-path} $out/shabka
+    ln -sfn ${shabka.path} $out/shabka
   '';
 }

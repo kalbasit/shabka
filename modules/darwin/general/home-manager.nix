@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, shabka ? import <shabka> { inherit pkgs; }, lib, ... }:
 
 with lib;
 
@@ -10,7 +10,7 @@ let
     });
 in {
   imports = [
-    (import "${pkgs.shabka.external.home-manager.path}/nix-darwin")
+    (import "${shabka.external.home-manager.path}/nix-darwin")
   ];
 
   options.mine.home-manager.config = mkOption {

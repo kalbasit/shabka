@@ -1,9 +1,8 @@
-{ pkgs, lib, ... }:
+{ pkgs, shabka ? import <shabka> { inherit pkgs; }, lib, ... }:
 
 with lib;
 
 let
-  external = import ../../external {};
 
   nasIP = "172.25.2.2";
 
@@ -63,8 +62,8 @@ in {
   imports = [
     ./hardware-configuration.nix
 
-    "${external.nixos-hardware.path}/common/cpu/intel"
-    "${external.nixos-hardware.path}/common/pc/ssd"
+    "${shabka.external.nixos-hardware.path}/common/cpu/intel"
+    "${shabka.external.nixos-hardware.path}/common/pc/ssd"
 
     ../../modules/nixos
 
@@ -73,7 +72,7 @@ in {
 
   # allow Zeus to be used as a builder
   users.users = mkMerge [
-    { root = { openssh.authorizedKeys.keys = singleton external.kalbasit.keys; }; }
+    { root = { openssh.authorizedKeys.keys = singleton shabka.external.kalbasit.keys; }; }
 
     (if builtins.pathExists /yl/private/network-secrets/shabka/hosts/zeus/id_rsa.pub then {
       builder = {

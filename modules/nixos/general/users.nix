@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, shabka ? import <shabka> { inherit pkgs; }, lib, ... }:
 
 with lib;
 
@@ -23,7 +23,7 @@ let
       hashedPassword = "$6$0bx5eAEsHJRxkD8.$gJ7sdkOOJRf4QCHWLGDUtAmjHV/gJxPQpyCEtHubWocHh9O7pWy10Frkm1Ch8P0/m8UTUg.Oxp.MB3YSQxFXu1";
       isNormalUser = true;
 
-      openssh.authorizedKeys.keys = singleton pkgs.shabka.external.kalbasit.keys;
+      openssh.authorizedKeys.keys = singleton shabka.external.kalbasit.keys;
     };
 
   makeHM = userName: { uid, isAdmin, home ? "/home/${userName}", ... }: nameValuePair
@@ -74,7 +74,7 @@ in {
       };
 
       users = mergeAttrs
-        { root = { openssh.authorizedKeys.keys = singleton pkgs.shabka.external.kalbasit.keys; }; }
+        { root = { openssh.authorizedKeys.keys = singleton shabka.external.kalbasit.keys; }; }
         (mapAttrs' makeUser config.mine.users);
     };
 

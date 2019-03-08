@@ -1,5 +1,5 @@
 # TODO(high): the gpg key must be configurable
-{ config, pkgs, lib, ... }:
+{ config, pkgs, shabka ? import <shabka> { inherit pkgs; }, lib, ... }:
 
 with lib;
 
