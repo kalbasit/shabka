@@ -1,6 +1,7 @@
-{ config, pkgs, shabka ? import <shabka> { inherit pkgs; }, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 let
+  shabka = import <shabka> { };
 
   configFile = pkgs.writeText "config.nix" ''
     { pkgs, ... }:

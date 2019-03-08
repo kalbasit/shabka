@@ -1,9 +1,9 @@
-{ config, pkgs, shabka ? import <shabka> { inherit pkgs; }, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 with lib;
 
 let
-
+  shabka = import <shabka> { };
 in {
   nix = {
     autoOptimiseStore = true;

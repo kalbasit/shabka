@@ -1,8 +1,10 @@
-{ pkgs, shabka ? import <shabka> { inherit pkgs; }, ... }:
+{ pkgs, ... }:
 
 with pkgs;
 
-{
+let
+  shabka = import <shabka> { };
+in {
   home.packages = [
     amazon-ecr-credential-helper
     docker-credential-gcr

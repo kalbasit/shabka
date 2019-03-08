@@ -1,8 +1,10 @@
-{ pkgs, shabka ? import <shabka> { inherit pkgs; }, config, lib, ... }:
+{ pkgs, config, lib, ... }:
 
 with lib;
 
-{
+let
+  shabka = import <shabka> { };
+in {
   options.mine.darwinConfig = mkOption {
     type = types.attrs;
     default = {};

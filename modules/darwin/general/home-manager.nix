@@ -1,8 +1,10 @@
-{ config, pkgs, shabka ? import <shabka> { inherit pkgs; }, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 with lib;
 
 let
+  shabka = import <shabka> { };
+
   makeHM = userName: nameValuePair
     (userName)
     (config.mine.home-manager.config {

@@ -1,9 +1,11 @@
-{ config, pkgs, shabka ? import <shabka> { inherit pkgs; }, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 with lib;
 with pkgs;
 
 let
+  shabka = import <shabka> { };
+
   myFunctions = stdenvNoCC.mkDerivation rec {
     name = "zsh-functions-${version}";
     version = "0.0.1";

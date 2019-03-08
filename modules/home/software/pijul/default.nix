@@ -1,8 +1,10 @@
-{ config, pkgs, shabka ? import <shabka> { inherit pkgs; }, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 with lib;
 
-{
+let
+  shabka = import <shabka> { };
+in {
   options.mine.pijul.enable = mkEnableOption "pijul";
 
   config = mkIf config.mine.pijul.enable {

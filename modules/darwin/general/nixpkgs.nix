@@ -1,8 +1,10 @@
-{ pkgs, shabka ? import <shabka> { inherit pkgs; }, lib, ... }:
+{ pkgs, lib, ... }:
 
 with lib;
 
-{
+let
+  shabka = import <shabka> { };
+in {
   nixpkgs.config = {
     allowUnfree = true;
     packageOverrides = pkgs: {

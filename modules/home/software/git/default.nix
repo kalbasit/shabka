@@ -1,9 +1,11 @@
 # TODO(high): the gpg key must be configurable
-{ config, pkgs, shabka ? import <shabka> { inherit pkgs; }, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 with lib;
 
-{
+let
+  shabka = import <shabka> { };
+in {
   options.mine.git.enable = mkEnableOption "git";
 
   config = mkIf config.mine.git.enable {

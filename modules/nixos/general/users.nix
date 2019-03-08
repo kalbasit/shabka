@@ -1,8 +1,10 @@
-{ config, pkgs, shabka ? import <shabka> { inherit pkgs; }, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 with lib;
 
 let
+  shabka = import <shabka> { };
+
   makeUser = userName: { uid, isAdmin ? false, home ? "/home/${userName}" }: nameValuePair
     userName
     {

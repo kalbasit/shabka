@@ -1,10 +1,10 @@
 { lib }:
 
 let
-  external = import ../external {};
+  shabka = import <shabka> { };
 in
 
-with import "${external.home-manager.path}/modules/lib/dag.nix" { inherit lib; };
+with import "${shabka.external.home-manager.path}/modules/lib/dag.nix" { inherit lib; };
 
 {
   symlink = src: dst: dagEntryAfter ["installPackages"] ''

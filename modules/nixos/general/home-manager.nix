@@ -1,8 +1,10 @@
-{ lib, shabka ? import <shabka> { }, ... }:
+{ lib, ... }:
 
 with lib;
 
-{
+let
+  shabka = import <shabka> { };
+in {
   imports = [
     (import "${shabka.external.home-manager.path}/nixos")
   ];
