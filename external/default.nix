@@ -4,23 +4,23 @@ with pkgs;
 
 let
   mkExternal =
-    { name, revision, src, patches }:
-    runCommand "${name}-${revision}"
-      {
-        inherit src patches;
+    { name, revision, src, patches }@args:
 
-        preferLocalBuild = true;
-      }
-      ''
+    stdenvNoCC.mkDerivation rec {
+      inherit src patches;
+      name = "${args.name}-${revision}";
+      preferLocalBuild = true;
+
+      buildPhase = ''
         echo -n "${revision}" > .git-revision
-        cp -r . $out
-        chmod -R +w $out
-        for p in $patches; do
-          echo "Applying patch $p";
-          patch -d $out -p1 < "$p";
-        done
       '';
 
+      installPhase = ''
+        cp -r . $out
+      '';
+
+      fixupPhase = ":";
+    };
 in {
   home-manager = callPackage ./home-manager { inherit mkExternal; };
   kalbasit = callPackage ./kalbasit { inherit mkExternal; };

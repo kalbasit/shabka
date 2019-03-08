@@ -1,4 +1,4 @@
-{ fetchpatch, runCommand }:
+{ mkExternal }:
 
 let
   pinnedVersion = builtins.fromJSON (builtins.readFile ./version.json);
