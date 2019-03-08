@@ -4,11 +4,11 @@ with pkgs;
 
 let
   mkExternal =
-    { name, revision, src, patches }@args:
+    { name, revision, src, patches }:
 
-    stdenvNoCC.mkDerivation rec {
+    stdenvNoCC.mkDerivation {
       inherit src patches;
-      name = "${args.name}-${revision}";
+      name = "${name}-${revision}";
       preferLocalBuild = true;
 
       buildPhase = ''
