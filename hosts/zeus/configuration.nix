@@ -73,7 +73,7 @@ in {
 
   # allow Zeus to be used as a builder
   users.users = mkMerge [
-    { root = { openssh.authorizedKeys.keys = external.kalbasit.keys; }; }
+    { root = { openssh.authorizedKeys.keys = singleton external.kalbasit.keys; }; }
 
     (if builtins.pathExists /yl/private/network-secrets/shabka/hosts/zeus/id_rsa.pub then {
       builder = {
