@@ -27,9 +27,9 @@ in {
 
     "${shabka.external.nixos-hardware.path}/dell/xps/13-9380"
 
-    # ../../modules/nixos
-    #
-    # ./home.nix
+    ../../modules/nixos
+
+    ./home.nix
   ];
 
   boot.tmpOnTmpfs = true;
@@ -56,29 +56,29 @@ in {
     builders-use-substitutes = true
   '';
 
-  # mine.hardware.intel_backlight.enable = true;
-  # mine.printing.enable = true;
-  # mine.useColemakKeyboardLayout = true;
-  # mine.virtualisation.docker.enable = true;
-  #
-  # mine.workstation = {
-  #   enable = true;
-  #
-  #   autorandr.enable = true;
-  #   keeptruckin.enable = true;
-  # };
-  #
-  # mine.openvpn.client.expressvpn = mkIf enableExpressVPN {
-  #   enable = true;
-  #   auth_user_pass = /yl/private/network-secrets/vpn/client/expressvpn/auth.txt;
-  #   ca             = /yl/private/network-secrets/vpn/client/expressvpn/ca2.crt;
-  #   client_cert    = /yl/private/network-secrets/vpn/client/expressvpn/client.crt;
-  #   client_key     = /yl/private/network-secrets/vpn/client/expressvpn/client.key;
-  #   tls_auth       = /yl/private/network-secrets/vpn/client/expressvpn/ta.key;
-  # };
-  #
-  # mine.hardware.machine = "xps-13";
-  #
+  mine.hardware.intel_backlight.enable = true;
+  mine.printing.enable = true;
+  mine.useColemakKeyboardLayout = true;
+  mine.virtualisation.docker.enable = true;
+
+  mine.workstation = {
+    enable = true;
+
+    autorandr.enable = true;
+    keeptruckin.enable = true;
+  };
+
+  mine.openvpn.client.expressvpn = mkIf enableExpressVPN {
+    enable = true;
+    auth_user_pass = /yl/private/network-secrets/vpn/client/expressvpn/auth.txt;
+    ca             = /yl/private/network-secrets/vpn/client/expressvpn/ca2.crt;
+    client_cert    = /yl/private/network-secrets/vpn/client/expressvpn/client.crt;
+    client_key     = /yl/private/network-secrets/vpn/client/expressvpn/client.key;
+    tls_auth       = /yl/private/network-secrets/vpn/client/expressvpn/ta.key;
+  };
+
+  mine.hardware.machine = "xps-13";
+
   services.logind.extraConfig = ''
     HandlePowerKey=suspend
   '';
