@@ -20,6 +20,7 @@ let
       fixupPhase = ":";
     };
 
+    # XXX: callPackage must make mkExternal visible
     callPackage2 = path: args: callPackage path (args // { inherit mkExternal; });
 in {
   home-manager = callPackage2 ./home-manager { };
