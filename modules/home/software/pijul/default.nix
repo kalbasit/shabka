@@ -7,7 +7,7 @@ with lib;
 
   config = mkIf config.mine.pijul.enable {
     home.packages = with pkgs; [
-      shabka.external.nixpkgs.release-unstable.imported.pijul
+      shabka.external.nixpkgs.release-unstable.pijul
     ];
   };
 }

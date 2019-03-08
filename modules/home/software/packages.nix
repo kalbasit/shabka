@@ -42,14 +42,14 @@ with pkgs;
 
     nur.repos.kalbasit.swm
 
-    shabka.external.nixpkgs.release-unstable.imported.corgi
-    shabka.external.nixpkgs.release-unstable.imported.vgo2nix
+    shabka.external.nixpkgs.release-unstable.corgi
+    shabka.external.nixpkgs.release-unstable.vgo2nix
 
     unzip
 
     nix-zsh-completions
 
-    shabka.external.nixpkgs.release-unstable.imported.slack-cli
+    shabka.external.nixpkgs.release-unstable.slack-cli
   ] ++ (if stdenv.isLinux then [
     #
     # Linux applications

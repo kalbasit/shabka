@@ -8,7 +8,7 @@ with lib;
 
   config = mkIf config.mine.git.enable {
     home.packages = with pkgs; [
-      (gitAndTools.git-appraise or shabka.external.nixpkgs.release-unstable.imported.gitAndTools.git-appraise)
+      (gitAndTools.git-appraise or shabka.external.nixpkgs.release-unstable.gitAndTools.git-appraise)
       gitAndTools.hub
       gitAndTools.tig
     ];
