@@ -1,8 +1,9 @@
-{ lib, shabka ? import <shabka> { , ... }:
+{ lib, ... }:
 
 with lib;
 
 let
+  shabka = import <shabka> { };
 
   nasreddineCA = builtins.readFile (builtins.fetchurl {
     url = "https://s3-us-west-1.amazonaws.com/nasreddine-infra/ca.crt";

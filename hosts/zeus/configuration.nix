@@ -1,8 +1,9 @@
-{ pkgs, shabka ? import <shabka> { inherit pkgs; }, lib, ... }:
+{ pkgs, lib, ... }:
 
 with lib;
 
 let
+  shabka = import <shabka> { };
 
   nasIP = "172.25.2.2";
 
