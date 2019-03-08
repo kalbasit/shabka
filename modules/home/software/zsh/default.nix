@@ -127,7 +127,6 @@ in {
         e = "\${EDITOR:-nvim}";
         gl = "github_commit_link";
         http = "http --print=HhBb";
-        kube = "kubectl";
         ll = "ls -la";
         pw = "ps aux | grep -v grep | grep -e";
         rot13 = "tr \"[A-Za-z]\" \"[N-ZA-Mn-za-m]\"";
@@ -203,7 +202,6 @@ in {
           "command-not-found"
           "git"
           "history"
-          "kubectl"
           "sudo"
         ];
       };
