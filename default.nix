@@ -13,5 +13,5 @@
 with pkgs;
 
 {
-  external = callPackage ./external { };
+  external = import ./external { inherit stdenvNoCC; };
 }

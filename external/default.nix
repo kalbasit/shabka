@@ -1,4 +1,4 @@
-{ stdenvNoCC, callPackage }:
+{ stdenvNoCC }:
 
 let
   mkExternal =
@@ -20,13 +20,11 @@ let
       fixupPhase = ":";
     };
 
-    # XXX: callPackage must make mkExternal visible
-    callPackage2 = path: args: callPackage path (args // { inherit mkExternal; });
 in {
-  home-manager = callPackage2 ./home-manager { };
-  kalbasit = callPackage2 ./kalbasit { };
-  nix-darwin = callPackage2 ./nix-darwin { };
-  nixos-hardware = callPackage2 ./nixos-hardware { };
-  nixpkgs = callPackage2 ./nixpkgs { };
-  nur = callPackage2 ./nur { };
+  home-manager = import ./home-manager { inherit mkExternal; };
+  kalbasit = import ./kalbasit { inherit mkExternal; };
+  nix-darwin = import ./nix-darwin { inherit mkExternal; };
+  nixos-hardware = import ./nixos-hardware { inherit mkExternal; };
+  nixpkgs = import ./nixpkgs { inherit mkExternal; };
+  nur = import ./nur { inherit mkExternal; };
 }

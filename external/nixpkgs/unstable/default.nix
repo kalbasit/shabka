@@ -24,4 +24,4 @@ let
     revision = pinnedVersion.rev;
   };
 in
-  import patched { config = {}; overlays = []; }
+  (import patched { config = {}; overlays = []; } // { path = patched; })
