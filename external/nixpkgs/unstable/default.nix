@@ -1,8 +1,9 @@
-{ fetchpatch, runCommand }:
+{ mkExternal }:
 
 let
   pinnedVersion = builtins.fromJSON (builtins.readFile ./version.json);
-  pinned = builtins.fetchTarball {
+
+  src = builtins.fetchTarball {
     inherit (pinnedVersion) url sha256;
   };
 
@@ -16,21 +17,12 @@ let
     ./56210-update-vbox-5.2.26.patch
   ];
 
-  patched = runCommand "nixpkgs-unstable-${pinnedVersion.rev}"
-    {
-      inherit pinned patches;
+  patched = mkExternal {
+    inherit src patches;
 
-      preferLocalBuild = true;
-    }
-    ''
-      cp -r $pinned $out
-      echo -n "${pinnedVersion.rev}" > $out/.git-revision
-      chmod -R +w $out
-      for p in $patches; do
-        echo "Applying patch $p";
-        patch -d $out -p1 < "$p";
-      done
-    '';
+    name = "nixpkgs-release-unstable";
+    revision = pinnedVersion.rev;
+  };
 in {
   path = patched;
   imported = import patched {

@@ -1,28 +1,20 @@
-{ fetchpatch, runCommand }:
+{ mkExternal }:
 
 let
   pinnedVersion = builtins.fromJSON (builtins.readFile ./version.json);
-  pinned = builtins.fetchTarball {
+
+  src = builtins.fetchTarball {
     inherit (pinnedVersion) url sha256;
   };
 
   patches = [];
 
-  patched = runCommand "kalbasit-nur-${pinnedVersion.rev}"
-    {
-      inherit pinned patches;
+  patched = mkExternal {
+    inherit src patches;
 
-      preferLocalBuild = true;
-    }
-    ''
-      cp -r $pinned $out
-      echo -n "${pinnedVersion.rev}" > $out/.git-revision
-      chmod -R +w $out
-      for p in $patches; do
-        echo "Applying patch $p";
-        patch -d $out -p1 < "$p";
-      done
-    '';
+    name = "kalbasit-nur";
+    revision = pinnedVersion.rev;
+  };
 in {
   path = patched;
 }

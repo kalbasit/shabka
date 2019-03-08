@@ -1,6 +1,6 @@
-{ callPackage }:
+{ callPackage, mkExternal }:
 
 {
   keys = callPackage ./keys { };
-  nur = callPackage ./nur { };
+  nur = callPackage ./nur { inherit mkExternal; };
 }
