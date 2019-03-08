@@ -44,7 +44,13 @@ var_4: &instantiate-host
 
       readonly shabka_path="$( pwd )"
       readonly host="${CIRCLE_JOB}"
-      readonly release="$( cat "hosts/${host}/release" )"
+
+      if [[ -r "${shabka_path}/hosts/${host}/release" ]]; then
+          release="$( cat "${shabka_path}/hosts/${host}/release" )"
+      else
+          # fallback to the default release
+          release="$( tr -d "\n" < "${shabka_path}/.release" )"
+      fi
 
       readonly nixpkgs="$( nix-build "${shabka_path}/external" -A "nixpkgs.release-${release/./-}.path" )"
       readonly darwin="$( nix-build "${shabka_path}/external" -A "nix-darwin.path" )"
