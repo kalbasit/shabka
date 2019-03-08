@@ -23,12 +23,5 @@ let
     name = "nixpkgs-release-unstable";
     revision = pinnedVersion.rev;
   };
-in {
-  path = patched;
-  imported = import patched {
-    config = {
-      nixpkgs.config.allowUnfree = true; # TODO: this should be inherited, not hardcoded!
-    };
-    overlays = [];
-  };
-}
+in
+  import patched { config = {}; overlays = []; }

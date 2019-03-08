@@ -12,5 +12,6 @@ if ! [[ -r "${nixos_config}" ]]; then
     exit 1
 fi
 
+echo "NIX_PATH=$NIX_PATH"
 set -x
 nixos-rebuild -I "nixos-config=${nixos_config}" "${@}"

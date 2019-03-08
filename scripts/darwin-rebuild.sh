@@ -12,5 +12,6 @@ if ! [[ -r "${darwin_config}" ]]; then
     exit 1
 fi
 
+echo "NIX_PATH=$NIX_PATH"
 set -x
 darwin-rebuild -I "darwin-config=${darwin_config}" "${@}"
