@@ -3,16 +3,7 @@
 with lib;
 
 let
-  homeManager =
-    let
-      nixpkgs = import ../../../external/nixpkgs-stable.nix;
-      pkgs = import nixpkgs {
-        config = {};
-        overlays = [];
-      };
-    in import ../../../external/home-manager.nix {
-      inherit (pkgs) fetchpatch runCommand;
-    };
+  shabka = import <shabka> { };
 
   makeHM = userName: nameValuePair
     (userName)
@@ -21,7 +12,7 @@ let
     });
 in {
   imports = [
-    (import "${homeManager}/nix-darwin")
+    (import "${shabka.external.home-manager.path}/nix-darwin")
   ];
 
   options.mine.home-manager.config = mkOption {

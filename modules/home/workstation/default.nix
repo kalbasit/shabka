@@ -27,8 +27,8 @@ with import ../../../util;
 
       activation = {
         rbrowser-desktop-link = symlink
-        "${pkgs.nur.repos.kalbasit.rbrowser}/share/applications/rbrowser.desktop"
-        "${config.home.homeDirectory}/.local/share/applications/rbrowser.desktop";
+          "${pkgs.nur.repos.kalbasit.rbrowser}/share/applications/rbrowser.desktop"
+          "${config.home.homeDirectory}/.local/share/applications/rbrowser.desktop";
       };
 
       file = {

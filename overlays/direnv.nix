@@ -1,5 +1,5 @@
 self: super:
 
 {
-  direnv = super.unstable.direnv;
+  direnv = super.shabka.external.nixpkgs.release-unstable.direnv;
 }

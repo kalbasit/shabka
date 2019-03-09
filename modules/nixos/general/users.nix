@@ -3,9 +3,7 @@
 with lib;
 
 let
-  sshKeys = [
-    (builtins.readFile (import ../../../external/kalbasit-keys.nix))
-  ];
+  shabka = import <shabka> { };
 
   makeUser = userName: { uid, isAdmin ? false, home ? "/home/${userName}" }: nameValuePair
     userName
@@ -27,7 +25,7 @@ let
       hashedPassword = "$6$0bx5eAEsHJRxkD8.$gJ7sdkOOJRf4QCHWLGDUtAmjHV/gJxPQpyCEtHubWocHh9O7pWy10Frkm1Ch8P0/m8UTUg.Oxp.MB3YSQxFXu1";
       isNormalUser = true;
 
-      openssh.authorizedKeys.keys = sshKeys;
+      openssh.authorizedKeys.keys = singleton shabka.external.kalbasit.keys;
     };
 
   makeHM = userName: { uid, isAdmin, home ? "/home/${userName}", ... }: nameValuePair
@@ -78,7 +76,7 @@ in {
       };
 
       users = mergeAttrs
-        { root = { openssh.authorizedKeys.keys = sshKeys; }; }
+        { root = { openssh.authorizedKeys.keys = singleton shabka.external.kalbasit.keys; }; }
         (mapAttrs' makeUser config.mine.users);
     };
 

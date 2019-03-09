@@ -1,8 +1,10 @@
-{ config, lib, ... }:
+{ pkgs, config, lib, ... }:
 
 with lib;
 
-{
+let
+  shabka = import <shabka> { };
+in {
   options.mine.darwinConfig = mkOption {
     type = types.attrs;
     default = {};
@@ -14,7 +16,7 @@ with lib;
 
   config = mkIf (config.mine.darwinConfig != {}) {
     home.file = {
-      ".ssh/authorized_keys".source = import ../../../external/kalbasit-keys.nix;
+      ".ssh/authorized_keys".text = shabka.external.kalbasit.keys;
     };
 
     fonts.fontconfig.enableProfileFonts = true;

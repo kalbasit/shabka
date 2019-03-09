@@ -3,20 +3,7 @@
 with lib;
 
 let
-  sshKeys = [
-    (builtins.readFile (import ../../external/kalbasit-keys.nix))
-  ];
-
-  pinnedNH =
-    let
-      nixpkgs = import ../../external/nixpkgs-stable.nix;
-      pkgs = import nixpkgs {
-        config = {};
-        overlays = [];
-      };
-    in import ../../external/nixos-hardware.nix {
-      inherit (pkgs) fetchpatch runCommand;
-    };
+  shabka = import <shabka> { };
 
   nasIP = "172.25.2.2";
 
@@ -76,8 +63,8 @@ in {
   imports = [
     ./hardware-configuration.nix
 
-    "${pinnedNH}/common/cpu/intel"
-    "${pinnedNH}/common/pc/ssd"
+    "${shabka.external.nixos-hardware.path}/common/cpu/intel"
+    "${shabka.external.nixos-hardware.path}/common/pc/ssd"
 
     ../../modules/nixos
 
@@ -86,7 +73,7 @@ in {
 
   # allow Zeus to be used as a builder
   users.users = mkMerge [
-    { root = { openssh.authorizedKeys.keys = sshKeys; }; }
+    { root = { openssh.authorizedKeys.keys = singleton shabka.external.kalbasit.keys; }; }
 
     (if builtins.pathExists /yl/private/network-secrets/shabka/hosts/zeus/id_rsa.pub then {
       builder = {

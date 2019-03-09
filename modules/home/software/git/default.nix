@@ -3,12 +3,14 @@
 
 with lib;
 
-{
+let
+  shabka = import <shabka> { };
+in {
   options.mine.git.enable = mkEnableOption "git";
 
   config = mkIf config.mine.git.enable {
     home.packages = with pkgs; [
-      (gitAndTools.git-appraise or unstable.gitAndTools.git-appraise)
+      (gitAndTools.git-appraise or shabka.external.nixpkgs.release-unstable.gitAndTools.git-appraise)
       gitAndTools.hub
       gitAndTools.tig
     ];

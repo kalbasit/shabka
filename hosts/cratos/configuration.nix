@@ -3,17 +3,7 @@
 with lib;
 
 let
-
-  pinnedNH =
-    let
-      nixpkgs = import ../../external/nixpkgs-stable.nix;
-      pkgs = import nixpkgs {
-        config = {};
-        overlays = [];
-      };
-    in import ../../external/nixos-hardware.nix {
-      inherit (pkgs) fetchpatch runCommand;
-    };
+  shabka = import <shabka> { };
 
   nasreddineCA = builtins.readFile (builtins.fetchurl {
     url = "https://s3-us-west-1.amazonaws.com/nasreddine-infra/ca.crt";
@@ -35,7 +25,7 @@ in {
   imports = [
     ./hardware-configuration.nix
 
-    "${pinnedNH}/dell/xps/13-9380"
+    "${shabka.external.nixos-hardware.path}/dell/xps/13-9380"
 
     ../../modules/nixos
 

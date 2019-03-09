@@ -3,9 +3,7 @@
 with lib;
 
 let
-
-  shabka-path = builtins.toPath ./../../..;
-
+  shabka = import <shabka> { };
 in {
   nix = {
     autoOptimiseStore = true;
@@ -22,7 +20,7 @@ in {
     nixPath = [
       "nixos-config=/run/current-system/shabka/hosts/${config.networking.hostName}/configuration.nix"
       "nixpkgs=/run/current-system/nixpkgs"
-      "shabka-path=/run/current-system/shabka"
+      "shabka=/run/current-system/shabka"
     ];
 
     optimise = {
@@ -53,6 +51,6 @@ in {
   # '';
   system.extraSystemBuilderCmds = ''
     ln -sfn ${pkgs.path} $out/nixpkgs
-    ln -sfn ${shabka-path} $out/shabka
+    ln -sfn ${shabka.path} $out/shabka
   '';
 }

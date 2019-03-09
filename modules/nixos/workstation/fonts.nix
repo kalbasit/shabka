@@ -2,7 +2,9 @@
 
 with lib;
 
-{
+let
+  shabka = import <shabka> { };
+in {
   options.mine.workstation.fonts.enable = mkEnableOption "workstation.fonts";
 
   config = mkIf config.mine.workstation.fonts.enable {
@@ -24,7 +26,7 @@ with lib;
         # helvetica
         vegur # the official NixOS font
 
-        unstable.b612
+        shabka.external.nixpkgs.release-unstable.b612
       ];
     };
   };
