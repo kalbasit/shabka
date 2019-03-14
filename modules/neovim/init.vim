@@ -316,11 +316,18 @@ let g:polyglot_disabled = [
   \   'latex',
   \   'markdown',
   \   'ruby',
+  \   'scala',
   \   'terraform',
   \   'typescript',
   \ ]
 
 " }}}
+"" Scala{{{
+
+" https://github.com/derekwyatt/vim-scala#scaladoc-comment-indentation
+let g:scala_scaladoc_indent = 1
+
+"}}}
 "" Surround{{{
 let g:surround_no_mappings = 1
 "}}}
