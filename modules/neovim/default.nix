@@ -61,6 +61,7 @@ with pkgs.lib;
             "pig-vim"
             "repeat"
             "rhubarb"
+            "vim-scala"
             "sleuth"
             "surround"
             "traces-vim"
