@@ -63,6 +63,7 @@ with import ../../../util;
 
     mine.workstation = enableMultiple [
       "alacritty"
+      "bluetooth"
       "chromium"
       "dunst"
       "firefox"
