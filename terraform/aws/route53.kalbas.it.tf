@@ -75,7 +75,7 @@ resource "aws_route53_record" "kalbas-it-a" {
   alias {
     name                   = "${aws_cloudfront_distribution.kalbas-it.domain_name}"
     zone_id                = "${aws_cloudfront_distribution.kalbas-it.hosted_zone_id}"
-    evaluate_target_health = true
+    evaluate_target_health = false
   }
 }
 
