@@ -20,7 +20,7 @@ resource "aws_route53_record" "kalbas-it-mx" {
   zone_id = "${aws_route53_zone.kalbas-it.zone_id}"
   name    = "kalbas.it"
   type    = "MX"
-  ttl     = "3600"
+  ttl     = 86400
 
   records = [
     "1 ASPMX.L.GOOGLE.COM",
@@ -35,7 +35,7 @@ resource "aws_route53_record" "google_apps_domains-kalbas-it-cname" {
   zone_id = "${aws_route53_zone.kalbas-it.zone_id}"
   name    = "${element(var.google_apps_domains, count.index)}.kalbas.it"
   type    = "CNAME"
-  ttl     = "3600"
+  ttl     = 86400
 
   records = [
     "ghs.googlehosted.com",
@@ -48,7 +48,7 @@ resource "aws_route53_record" "kalbas-it-spf" {
   zone_id = "${aws_route53_zone.kalbas-it.zone_id}"
   name    = "kalbas.it"
   type    = "SPF"
-  ttl     = "3600"
+  ttl     = 86400
 
   records = [
     "v=spf1 include:_spf.google.com ~all",
@@ -59,7 +59,7 @@ resource "aws_route53_record" "kalbas-it-txt" {
   zone_id = "${aws_route53_zone.kalbas-it.zone_id}"
   name    = "kalbas.it"
   type    = "TXT"
-  ttl     = "3600"
+  ttl     = 86400
 
   records = [
     "google-site-verification=UvJ449OuIFMATBgpg0XNswXJV2l5FDGcPVDZEZ4BZ-Y",
@@ -85,7 +85,7 @@ resource "aws_route53_record" "me-kalbas-it-a" {
   zone_id = "${aws_route53_zone.kalbas-it.zone_id}"
   name    = "me.kalbas.it"
   type    = "A"
-  ttl     = 300
+  ttl     = 86400
 
   records = [
     "185.199.108.153",
@@ -111,7 +111,7 @@ resource "aws_route53_record" "_keybase-kalbas-it-txt" {
   zone_id = "${aws_route53_zone.kalbas-it.zone_id}"
   name    = "_keybase.kalbas.it"
   type    = "TXT"
-  ttl     = "3600"
+  ttl     = 86400
 
   records = [
     "keybase-site-verification=28VcnO1S8jaoiOzfi2vLm3U8q9ViMGzoFZkedcfN9j0",
