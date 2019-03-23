@@ -167,10 +167,6 @@ if has("autocmd")
   " Set the Ruby filetype for a number of common Ruby files without .rb
   au BufRead,BufNewFile {Gemfile,Rakefile,Vagrantfile,Thorfile,Procfile,Guardfile,config.ru,*.rake} set ft=ruby
 
-  " Make sure all mardown files have the correct filetype set and setup wrapping
-  au BufRead,BufNewFile *.{md,markdown,mdown,mkd,mkdn,txt} set ft=markdown
-  au FileType markdown setlocal wrap linebreak textwidth=72 nolist
-
   " make Python follow PEP8 for whitespace.
   " http://www.python.org/dev/peps/pep-0008/
   au FileType python setlocal tabstop=4 shiftwidth=4 expandtab
@@ -276,13 +272,9 @@ let g:go_highlight_build_constraints = 1
 "" Gundo{{{
 nmap <Leader>go :GundoToggle<CR>
 "" }}}
-"" Markdown preview{{{
+"" Markdown{{{
 
-if executable('grip')
-  let g:vim_markdown_preview_github=1
-endif
-
-let g:vim_markdown_preview_use_xdg_open=1
+let g:vim_markdown_folding_disabled = 1
 
 "" }}}
 "" Multiple cursors{{{
@@ -318,9 +310,24 @@ endfunc
 "" Polyglot{{{
 ""
 
-let g:polyglot_disabled = ['csv', 'go', 'latex', 'ruby', 'terraform', 'typescript']
+let g:polyglot_disabled = [
+  \   'csv',
+  \   'go',
+  \   'latex',
+  \   'markdown',
+  \   'ruby',
+  \   'scala',
+  \   'terraform',
+  \   'typescript',
+  \ ]
 
 " }}}
+"" Scala{{{
+
+" https://github.com/derekwyatt/vim-scala#scaladoc-comment-indentation
+let g:scala_scaladoc_indent = 1
+
+"}}}
 "" Surround{{{
 let g:surround_no_mappings = 1
 "}}}
@@ -397,6 +404,7 @@ augroup END
 "" Terraform{{{
 ""
 
+let g:terraform_align=1
 let g:terraform_fmt_on_save = 1
 
 ""}}}
@@ -566,24 +574,6 @@ function! ExtractVariable()
   normal! $p
 endfunction
 
-" TODO: candidate for removal
-function! ShowRoutes()
-  " Requires 'scratch' plugin
-  :topleft 100 :split __Routes__
-  " Make sure Vim doesn't write __Routes__ as a file
-  :set buftype=nofile
-  " Delete everything
-  :normal 1GdG
-  " Put routes output in buffer
-  :0r! rake -s routes
-  " Size window to number of lines (1 plus rake output length)
-  :exec ":normal " . line("$") . _ "
-  " Move cursor to bottom
-  :normal 1GG
-  " Delete empty trailing line
-  :normal dd
-endfunction
-
 function! InlineVariable()
   " Copy the variable under the cursor into the 'a' register
   :let l:tmp_a = @a
@@ -607,6 +597,7 @@ function! InlineVariable()
   :let @b = l:tmp_b
 endfunction
 
+" TODO: Extract this logic into an open-source module
 function! OpenTestAlternate(position)
   let current_file = expand("%")
   let new_file = current_file

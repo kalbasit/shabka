@@ -3,20 +3,10 @@
 with lib;
 
 let
-
-  pinnedNH =
-    let
-      nixpkgs = import ../../external/nixpkgs-stable.nix;
-      pkgs = import nixpkgs {
-        config = {};
-        overlays = [];
-      };
-    in import ../../external/nixos-hardware.nix {
-      inherit (pkgs) fetchpatch runCommand;
-    };
+  shabka = import <shabka> { };
 
   nasreddineCA = builtins.readFile (builtins.fetchurl {
-    url = "https://kalbas.it/ca.crt";
+    url = "https://s3-us-west-1.amazonaws.com/nasreddine-infra/ca.crt";
     sha256 = "17x45njva3a535czgdp5z43gmgwl0lk68p4mgip8jclpiycb6qbl";
   });
 
@@ -35,9 +25,9 @@ in {
   imports = [
     ./hardware-configuration.nix
 
-    "${pinnedNH}/common/cpu/intel"
-    "${pinnedNH}/common/pc/laptop"
-    "${pinnedNH}/common/pc/laptop/ssd"
+    "${shabka.external.nixos-hardware.path}/common/cpu/intel"
+    "${shabka.external.nixos-hardware.path}/common/pc/laptop"
+    "${shabka.external.nixos-hardware.path}/common/pc/laptop/ssd"
 
     ../../modules/nixos
 

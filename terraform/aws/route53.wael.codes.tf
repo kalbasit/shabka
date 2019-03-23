@@ -75,7 +75,7 @@ resource "aws_route53_record" "wael-codes-a" {
   alias {
     name                   = "${aws_s3_bucket.wael-codes.website_domain}"
     zone_id                = "${aws_s3_bucket.wael-codes.hosted_zone_id}"
-    evaluate_target_health = true
+    evaluate_target_health = false
   }
 }
 

@@ -1,19 +1,10 @@
 { lib }:
 
 let
-  homeManager =
-    let
-      nixpkgs = import ../external/nixpkgs-stable.nix;
-      pkgs = import nixpkgs {
-        config = {};
-        overlays = [];
-      };
-    in import ../external/home-manager.nix {
-      inherit (pkgs) fetchpatch runCommand;
-    };
+  shabka = import <shabka> { };
 in
 
-with import "${homeManager}/modules/lib/dag.nix" { inherit lib; };
+with import "${shabka.external.home-manager.path}/modules/lib/dag.nix" { inherit lib; };
 
 {
   symlink = src: dst: dagEntryAfter ["installPackages"] ''

@@ -4,6 +4,8 @@ with lib;
 with pkgs;
 
 let
+  shabka = import <shabka> { };
+
   myFunctions = stdenvNoCC.mkDerivation rec {
     name = "zsh-functions-${version}";
     version = "0.0.1";
@@ -17,7 +19,7 @@ let
       rm -f $out/default.nix
 
       substituteInPlace $out/c \
-        --subst-var-by archiver_bin ${getBin unstable.archiver}/bin/arc
+        --subst-var-by archiver_bin ${getBin shabka.external.nixpkgs.release-unstable.archiver}/bin/arc
 
       substituteInPlace $out/gcim \
         --subst-var-by git_bin ${getBin git}/bin/git
@@ -79,7 +81,7 @@ let
         --subst-var-by vim_bin ${getBin vim}/bin/vim
 
       substituteInPlace $out/x \
-        --subst-var-by archiver_bin ${getBin unstable.archiver}/bin/arc
+        --subst-var-by archiver_bin ${getBin shabka.external.nixpkgs.release-unstable.archiver}/bin/arc
 
       substituteInPlace $out/xmlpp \
         --subst-var-by xmllint_bin ${getBin libxml2Python}/bin/xmllint
@@ -127,7 +129,7 @@ in {
         e = "\${EDITOR:-nvim}";
         gl = "github_commit_link";
         http = "http --print=HhBb";
-        kube = "kubectl";
+        kc = "kubectl";
         ll = "ls -la";
         pw = "ps aux | grep -v grep | grep -e";
         rot13 = "tr \"[A-Za-z]\" \"[N-ZA-Mn-za-m]\"";
@@ -203,7 +205,6 @@ in {
           "command-not-found"
           "git"
           "history"
-          "kubectl"
           "sudo"
         ];
       };

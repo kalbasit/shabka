@@ -3,12 +3,14 @@
 
 with lib;
 
-{
+let
+  shabka = import <shabka> { };
+in {
   options.mine.git.enable = mkEnableOption "git";
 
   config = mkIf config.mine.git.enable {
     home.packages = with pkgs; [
-      (gitAndTools.git-appraise or unstable.gitAndTools.git-appraise)
+      (gitAndTools.git-appraise or shabka.external.nixpkgs.release-unstable.gitAndTools.git-appraise)
       gitAndTools.hub
       gitAndTools.tig
     ];
@@ -107,8 +109,8 @@ with lib;
           prompt = true;
         };
 
-        "mergetool \"vimdiff\"" = {
-          cmd = "${pkgs.neovim}/bin/nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'";
+        "mergetool \"vimdiff\"" = optionalAttrs config.mine.neovim.enable {
+          cmd = "nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'";
         };
 
         "protocol \"keybase\"" = {

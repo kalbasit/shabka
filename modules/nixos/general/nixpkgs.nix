@@ -3,19 +3,16 @@
 with lib;
 
 let
-
-  pinnedNUR = import ../../../external/nur.nix;
-  pinnedKalbasitNUR = import ../../../external/kalbasit-nur.nix;
-
+  shabka = import <shabka> { };
 in {
   nixpkgs.config = {
     allowUnfree = true;
     packageOverrides = pkgs: {
       nur = recursiveUpdate
-        (import pinnedNUR { inherit pkgs; })
+        (import shabka.external.nur.path { inherit pkgs; })
         ({
           repos = {
-            kalbasit = import pinnedKalbasitNUR { inherit pkgs; };
+            kalbasit = import shabka.external.kalbasit.nur.path { inherit pkgs; };
           };
         });
     };

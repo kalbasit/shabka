@@ -39,6 +39,7 @@
         config = {
           eDP-1 = {
             enable = true;
+            primary = true;
             position = "0x0";
             mode = "1920x1080";
             gamma = "1.0:0.909:0.909";

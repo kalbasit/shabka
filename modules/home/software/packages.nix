@@ -3,16 +3,7 @@
 with pkgs;
 
 let
-  homeManager =
-    let
-      nixpkgs = import ../../../external/nixpkgs-stable.nix;
-      pkgs = import nixpkgs {
-        config = {};
-        overlays = [];
-      };
-    in import ../../../external/home-manager.nix {
-      inherit (pkgs) fetchpatch runCommand;
-    };
+  shabka = import <shabka> { };
 in {
   home.packages = [
     amazon-ecr-credential-helper
@@ -53,14 +44,14 @@ in {
 
     nur.repos.kalbasit.swm
 
-    unstable.corgi
-    unstable.vgo2nix
+    shabka.external.nixpkgs.release-unstable.corgi
+    shabka.external.nixpkgs.release-unstable.vgo2nix
 
     unzip
 
     nix-zsh-completions
 
-    unstable.slack-cli
+    shabka.external.nixpkgs.release-unstable.slack-cli
   ] ++ (if stdenv.isLinux then [
     #
     # Linux applications
@@ -85,6 +76,6 @@ in {
   # install home-manager but only if it's darwin
   programs.home-manager = if stdenv.isDarwin then {
     enable = true;
-    path = builtins.toString homeManager;
+    path = builtins.toString shabka.external.home-manager.path;
   } else {};
 }
