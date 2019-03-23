@@ -40,7 +40,7 @@ in {
   i18n.defaultLocale = "en_US.UTF-8";
   time.timeZone = "America/Los_Angeles";
 
-  networking.hostName = "hades";
+  networking.hostName = mkDefault "hades";
 
   nix.buildMachines =
     if builtins.pathExists /yl/private/network-secrets/shabka/hosts/zeus/id_rsa then

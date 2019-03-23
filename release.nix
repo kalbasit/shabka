@@ -10,5 +10,17 @@ let
     modules = [ configuration ];
   };
 in rec {
-  hades = (eval "x86_64-linux" /*(hostConf "hades")*/ ./hosts/hades/configuration.nix /* <- */).config.system.build.toplevel;
+  # hades = (eval "x86_64-linux" /*(hostConf "hades")*/ ./hosts/hades/configuration.nix /* <- */).config.system.build.toplevel;
+
+  hades = import "${pkgs.path}/nixos/tests/make-test.nix" ({ pkgs, ... }: {
+    machine =
+      { ... }:
+      { imports = [ ./hosts/hades/configuration.nix ]; };
+    testScript =
+      ''
+        $machine->waitForX;
+        $machine->sleep(10);
+        $machine->screenshot("screen");
+      '';
+    });
 }
