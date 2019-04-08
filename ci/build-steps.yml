@@ -1,0 +1,13 @@
+steps:
+  - checkout: self
+    fetchDepth: 1
+  - bash: |
+      set -euo pipefail
+      curl -sfL https://nixos.org/nix/install | bash
+    displayName: 'Install Nix'
+  - bash: |
+      set -euo pipefail
+      source $HOME/.nix-profile/etc/profile.d/nix.sh
+
+      nix build -f ./hosts/hades hades
+    displayName: 'Build'
