@@ -22,6 +22,7 @@ let
 
 in {
   home-manager = import ./home-manager { inherit mkExternal; };
+  iohk-nix = import ./iohk-nix { inherit mkExternal; };
   kalbasit = import ./kalbasit { inherit mkExternal; };
   nix-darwin = import ./nix-darwin { inherit mkExternal; };
   nixos-hardware = import ./nixos-hardware { inherit mkExternal; };
