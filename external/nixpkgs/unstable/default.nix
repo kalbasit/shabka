@@ -8,13 +8,10 @@ let
   };
 
   patches = [
-    # TODO: jsbeautifier is not working upstream and tests need to be disabled
+    # TODO: This was fixed in https://github.com/NixOS/nixpkgs/pull/58632
+    # Remove this patch once the PR landed in my version updates.
     ./python36Packages-jsbeautifier-disable-check.patch
 
-    # XXX: VirtualBox 5.2.22 does not work with latest kernel, update to
-    # version 5.2.26.
-    # https://github.com/NixOS/nixpkgs/pull/56210
-    ./56210-update-vbox-5.2.26.patch
   ];
 
   patched = mkExternal {
