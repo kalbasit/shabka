@@ -46,9 +46,12 @@ readonly new_rev="$(jq -r '.rev' "${external_file}")"
 
 git add -A "${external_file}"
 
+external_module="${external_file%%/version.json}"
+external_module="${external_module##${root_dir}/}"
+
 if [[ "${new}" -eq 0 ]]; then
-    git commit -m "${external_file%%-version.json}: update to ${new_rev}" \
+    git commit -m "${external_module}: update to ${new_rev}" \
         -m "Compare changes at https://github.com/${owner}/${repo}/compare/${old_rev}...${new_rev}"
 else
-    git commit -m "${external_file%%-version.json}: update to ${new_rev}"
+    git commit -m "${external_module}: update to ${new_rev}"
 fi
