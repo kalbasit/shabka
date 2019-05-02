@@ -12,6 +12,8 @@
       "vim.useCtrlKeys" = true;
       "vim.useSystemClipboard" = true;
       "vim.changeWordIncludesWhitespace" = true;
+
+      # XXX: This is a colemak setting!
       "vim.visualModeKeyBindingsNonRecursive" = [
         {
           before = ["n"];
