@@ -1,165 +1,56 @@
-{ pkgs, lib, ... }:
+{ config, pkgs, lib, ... }:
 
-{
-  programs.vscode = {
-    enable = true;
-    userSettings = {
-      "vim.enableNeovim" = true;
-      "vim.hlsearch" = true;
-      "vim.incsearch" = true;
-      "vim.leader" = ";";
-      "vim.neovimPath" = "${lib.getBin pkgs.neovim}/bin/nvim";
-      "vim.useCtrlKeys" = true;
-      "vim.useSystemClipboard" = true;
-      "vim.changeWordIncludesWhitespace" = true;
+with lib;
 
-      # XXX: This is a colemak setting!
-      "vim.visualModeKeyBindingsNonRecursive" = [
-        {
-          before = ["n"];
-          after = ["<left>"];
-        }
-        {
-          before = ["e"];
-          after = ["<down>"];
-        }
-        {
-          before = ["i"];
-          after = ["<up>"];
-        }
-        {
-          before = ["o"];
-          after = ["<right>"];
-        }
-        {
-          before = ["c"];
-          after = ["y"];
-        }
-        {
-          before = ["v"];
-          after = ["p"];
-        }
-      ];
+let
 
-      "vim.normalModeKeyBindingsNonRecursive" = [
+  cfg = config.mine.vscode;
+
+  vscodeConfig = import ../../../vscode {
+    inherit (cfg) userSettings keyboardLayout;
+    inherit pkgs;
+  };
+
+in {
+  options.mine.vscode = {
+    enable = mkEnableOption "vscode";
+
+    userSettings = mkOption {
+      type = types.attrs;
+      default = {};
+      example = literalExample ''
         {
-          before = ["n"];
-          after = ["<left>"];
+          "update.channel" = "none";
+          "[nix]"."editor.tabSize" = 2;
         }
-        {
-          before = ["e"];
-          after = ["<down>"];
-        }
-        {
-          before = ["i"];
-          after = ["<up>"];
-        }
-        {
-          before = ["o"];
-          after = ["<right>"];
-        }
-        {
-          before = ["s"];
-          after = ["i" ];
-        }
-        {
-          before = ["<leader>" "w" "w"];
-          after = [];
-          commands = [
-            {
-              command = ":wall";
-            }
-          ];
-        }
-        {
-          before = ["h"];
-          after = ["o"];
-        }
-        {
-          before = ["H"];
-          after = ["O"];
-        }
-        {
-          before = ["<c-j>"];
-          after = ["<c-n>"];
-        }
-        {
-          before = ["k"];
-          after = ["n"];
-        }
-        {
-          before = ["K"];
-          after = ["N"];
-        }
-        {
-          before = ["u"];
-          after = ["i"];
-        }
-        {
-          before = ["U"];
-          after = ["I"];
-        }
-        {
-          before = ["l"];
-          after = ["u"];
-        }
-        {
-          before = ["L"];
-          after = ["U"];
-        }
-        {
-          before = ["N"];
-          after = ["J"];
-        }
-        {
-          before = ["E"];
-          after = ["K"];
-        }
-        {
-          before = ["I"];
-          after = ["L"];
-        }
-        {
-          before = ["j"];
-          after = ["e"];
-        }
-        {
-          before = ["J"];
-          after = ["E"];
-        }
-        {
-          before = ["t"];
-          after = ["a"];
-        }
-        {
-          before = ["T"];
-          after = ["A"];
-        }
-        {
-          before = ["c"];
-          after = ["y"];
-        }
-        {
-          before = ["C"];
-          after = ["Y"];
-        }
-        {
-          before = ["v"];
-          after = ["p"];
-        }
-        {
-          before = ["V"];
-          after = ["P"];
-        }
-        {
-          before = ["a"];
-          after = ["v"];
-        }
-        {
-          before = ["A"];
-          after = ["V"];
-        }
-      ];
+      '';
+      description = ''
+        Configuration written to
+        <filename>~/.config/Code/User/settings.json</filename>.
+      '';
+    };
+
+    extensions = mkOption {
+      type = types.listOf types.package;
+      default = [];
+      description = ''
+        The extensions Visual Studio Code should be started with.
+        These will override but not delete manually installed ones.
+      '';
+    };
+
+    keyboardLayout = mkOption {
+      type = with types; enum [ "colemak" "qwerty" ];
+      default = if config.mine.useColemakKeyboardLayout then "colemak" else "qwerty";
+      description = ''
+        The keyboard layout to use.
+      '';
+    };
+  };
+
+  config = mkIf cfg.enable {
+    programs.vscode = vscodeConfig // {
+      inherit (cfg) enable extensions;
     };
   };
 }
