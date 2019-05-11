@@ -27,6 +27,10 @@ in {
 
   mine.hardware.machine = "cloud";
 
+  mine.users = {
+    yl = { uid = 2000; isAdmin = true;  home = "/yl"; };
+  };
+
   mine.useColemakKeyboardLayout = true;
   mine.virtualisation.docker.enable = true;
 
