@@ -1,10 +1,5 @@
 let
-
-  region = "us-west-1";
-  accessKeyId = "personal";
-  keyPair = "yubikey_5c_09501258";
-  ami = "ami-07aa7f56d612ddd38";
-
+  secrets = import /yl/private/network-secrets/shabka/network/home.nix;
 in {
   network.description = "Network at home, including my VPN on EC2";
   network.enableRollback = true;
@@ -12,7 +7,7 @@ in {
   resources = {
     ec2SecurityGroups = {
       "ssh-in" = {
-        inherit accessKeyId region;
+        inherit (secrets) accessKeyId region;
         description = "Allow incoming SSH connection from anywhere";
         rules = [
           {fromPort = 22; toPort = 22; protocol = "tcp"; sourceIp = "0.0.0.0/0"; }
@@ -22,7 +17,7 @@ in {
       };
 
       "vpn-in" = {
-        inherit accessKeyId region;
+        inherit (secrets) accessKeyId region;
         description = "Allow incoming VPN connection from anywhere";
         rules = [
           {fromPort = 1194; toPort = 1194; protocol = "udp"; sourceIp = "0.0.0.0/0"; }
@@ -43,7 +38,7 @@ in {
     deployment = {
       targetEnv = "ec2";
       ec2 = {
-        inherit accessKeyId region keyPair ami;
+        inherit (secrets) accessKeyId region keyPair ami;
 
         instanceType = "t2.nano";
 
