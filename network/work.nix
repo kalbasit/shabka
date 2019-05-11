@@ -91,7 +91,7 @@ in {
       vpcId = resources.vpc.nixops;
       description = "Allow incoming MOSH connection from anywhere";
       rules = [
-        {fromPort = 60001; toPort = 60001; protocol = "udp"; sourceIp = "0.0.0.0/0"; }
+        {fromPort = 60001; toPort = 60051; protocol = "udp"; sourceIp = "0.0.0.0/0"; }
       ];
     };
   };
