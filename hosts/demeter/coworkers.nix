@@ -14,7 +14,7 @@ let
   #       });
   #     };
   #   }
-  coworkersExpr = /yl/private/network-secrets/shabka/hosts/demeter/coworkers.nix;
+  coworkersExpr = /yl/private/network-secrets/shabka/hosts/demeter/coworkers;
 
   coworkers = optionalAttrs (builtins.pathExists coworkersExpr) (import coworkersExpr);
 
