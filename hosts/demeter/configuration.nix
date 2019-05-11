@@ -33,7 +33,7 @@ in {
 
   # allow Demeter to be used as a builder
   # XXX: DRY this up with Zeus's configuration
-  users.users = (if builtins.pathExists /yl/private/network-secrets/shabka/hosts/demeter/id_rsa.pub then {
+  users.users = lib.optionalAttrs (builtins.pathExists /yl/private/network-secrets/shabka/hosts/demeter/id_rsa.pub) {
     builder = {
       extraGroups = ["builders"];
       openssh.authorizedKeys.keys = [
@@ -41,7 +41,7 @@ in {
       ];
       isNormalUser = true;
     };
-  } else {});
+  };
 
   mine.useColemakKeyboardLayout = true;
   mine.virtualisation.docker.enable = true;

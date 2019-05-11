@@ -40,9 +40,19 @@ in {
 
   networking.hostName = "cratos";
 
-  nix.buildMachines =
-    if builtins.pathExists /yl/private/network-secrets/shabka/hosts/zeus/id_rsa then
-    [{
+  nix.buildMachines = [
+    (optionalAttrs (builtins.pathExists /yl/private/network-secrets/shabka/hosts/demeter/id_rsa) {
+      hostName = fileContents /yl/private/network-secrets/shabka/hosts/demeter/hostname;
+      sshUser = "builder";
+      sshKey = "/yl/private/network-secrets/shabka/hosts/demeter/id_rsa";
+      system = "x86_64-linux";
+      maxJobs = 8;
+      speedFactor = 2;
+      supportedFeatures = [ ];
+      mandatoryFeatures = [ ];
+    })
+
+    (optionalAttrs (builtins.pathExists /yl/private/network-secrets/shabka/hosts/zeus/id_rsa) {
       hostName = "zeus.home.nasreddine.com";
       sshUser = "builder";
       sshKey = "/yl/private/network-secrets/shabka/hosts/zeus/id_rsa";
@@ -51,7 +61,8 @@ in {
       speedFactor = 2;
       supportedFeatures = [ ];
       mandatoryFeatures = [ ];
-    }] else [];
+    })
+  ];
   nix.extraOptions = ''
     builders-use-substitutes = true
   '';
