@@ -35,7 +35,5 @@ let
     };
 
 in {
-  users = {
-    users = (mapAttrs' makeUser coworkers);
-  };
+  users.users = (mapAttrs' makeUser coworkers);
 }
