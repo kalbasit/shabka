@@ -85,6 +85,15 @@ in {
         # {fromPort = 22; toPort = 22; protocol = "tcp"; sourceIp = "::/0"; }
       ];
     };
+
+    mosh-in = { resources, ... }: {
+      inherit (secrets) accessKeyId region;
+      vpcId = resources.vpc.nixops;
+      description = "Allow incoming MOSH connection from anywhere";
+      rules = [
+        {fromPort = 60001; toPort = 60001; protocol = "udp"; sourceIp = "0.0.0.0/0"; }
+      ];
+    };
   };
 
   demeter = { resources, ... }: {
