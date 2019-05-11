@@ -7,7 +7,7 @@ let
   #   {
   #     # name
   #     github-username = {
-  #       uid = 2100;
+  #       uid = nnnn;
   #       sshAuthorizedKeys = with builtins; readFile (fetchurl {
   #         url = https://github.com/github-username.keys;
   #         sha256 = "0000000000000000000000000000000000000000000000000000";
