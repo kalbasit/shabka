@@ -1,5 +1,5 @@
 let
-  secrets = import /yl/private/network-secrets/shabka/network/home.nix;
+  secrets = import /yl/private/network-secrets/shabka/network/work.nix;
 in {
   network.description = "Network at work";
   network.enableRollback = true;
