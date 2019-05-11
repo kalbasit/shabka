@@ -109,7 +109,10 @@ in {
         ebsInitialRootDiskSize = 1024;
         associatePublicIpAddress = true;
 
-        securityGroupIds = [ resources.ec2SecurityGroups.ssh-in.name ];
+        securityGroupIds = [
+          resources.ec2SecurityGroups.ssh-in.name
+          resources.ec2SecurityGroups.mosh-in.name
+        ];
 
         tags = {
           Source = "NixOps";
