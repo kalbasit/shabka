@@ -31,6 +31,18 @@ in {
     yl = { uid = 2000; isAdmin = true;  home = "/yl"; };
   };
 
+  # allow Demeter to be used as a builder
+  # XXX: DRY this up with Zeus's configuration
+  users.users = (if builtins.pathExists /yl/private/network-secrets/shabka/hosts/demeter/id_rsa.pub then {
+    builder = {
+      extraGroups = ["builders"];
+      openssh.authorizedKeys.keys = [
+        (builtins.readFile /yl/private/network-secrets/shabka/hosts/demeter/id_rsa.pub)
+      ];
+      isNormalUser = true;
+    };
+  } else {});
+
   mine.useColemakKeyboardLayout = true;
   mine.virtualisation.docker.enable = true;
 
