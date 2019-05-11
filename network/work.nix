@@ -19,7 +19,7 @@ in {
   };
 
   demeter = { resources, ... }: {
-    imports = [ ../hosts/demeter /configuration.nix ];
+    imports = [ ../hosts/demeter/configuration.nix ];
     deployment = {
       targetEnv = "ec2";
       ec2 = {
