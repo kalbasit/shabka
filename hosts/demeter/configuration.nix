@@ -35,7 +35,6 @@ with lib;
     };
   };
 
-  mine.useColemakKeyboardLayout = true;
   mine.virtualisation.docker.enable = true;
 
   # This value determines the NixOS release with which your system is to be
