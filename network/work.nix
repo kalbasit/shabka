@@ -12,6 +12,7 @@ in {
 
     tags = {
       Source = "NixOps";
+      Owner = "wael";
     };
   };
 
@@ -26,6 +27,7 @@ in {
           mapPublicIpOnLaunch = true;
           tags = {
             Source = "NixOps";
+            Owner = "wael";
           };
         };
     in
