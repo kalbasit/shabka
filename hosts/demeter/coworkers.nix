@@ -23,11 +23,10 @@ let
     {
       inherit home uid;
 
-      group = "mine";
+      group = "users";
       extraGroups = [
         "builders"
         "fuse"
-        "users"
       ];
 
       isNormalUser = true;
