@@ -8,10 +8,10 @@
   networking.hostName = "poseidon";
 
   nix.buildMachines = [
-    (optionalAttrs (builtins.pathExists /yl/private/network-secrets/shabka/hosts/demeter/id_rsa) {
-      hostName = fileContents /yl/private/network-secrets/shabka/hosts/demeter/hostname;
+    (optionalAttrs (builtins.pathExists /Users/yl/private/network-secrets/shabka/hosts/demeter/id_rsa) {
+      hostName = fileContents /Users/yl/private/network-secrets/shabka/hosts/demeter/hostname;
       sshUser = "builder";
-      sshKey = "/yl/private/network-secrets/shabka/hosts/demeter/id_rsa";
+      sshKey = "/Users/yl/private/network-secrets/shabka/hosts/demeter/id_rsa";
       system = "x86_64-linux";
       maxJobs = 8;
       speedFactor = 2;
@@ -19,10 +19,10 @@
       mandatoryFeatures = [ ];
     })
 
-    (optionalAttrs (builtins.pathExists /yl/private/network-secrets/shabka/hosts/zeus/id_rsa) {
+    (optionalAttrs (builtins.pathExists /Users/yl/private/network-secrets/shabka/hosts/zeus/id_rsa) {
       hostName = "zeus.home.nasreddine.com";
       sshUser = "builder";
-      sshKey = "/yl/private/network-secrets/shabka/hosts/zeus/id_rsa";
+      sshKey = "/Users/yl/private/network-secrets/shabka/hosts/zeus/id_rsa";
       system = "x86_64-linux";
       maxJobs = 8;
       speedFactor = 2;
