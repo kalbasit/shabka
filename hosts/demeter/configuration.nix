@@ -25,6 +25,8 @@ in {
 
   networking.hostName = "demeter";
 
+  mine.hardware.machine = "cloud";
+
   mine.useColemakKeyboardLayout = true;
   mine.virtualisation.docker.enable = true;
 

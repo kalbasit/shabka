@@ -1,4 +1,5 @@
+{ config, lib, ... }:
+
 {
-  # Enable fwupd
-  services.fwupd.enable = true;
+  services.fwupd.enable = lib.optionlString (config.mine.hardware.machine != "cloud") true;
 }
