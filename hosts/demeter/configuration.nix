@@ -6,6 +6,7 @@ with lib;
   imports = [
     ../../modules/nixos
 
+    ./coworkers.nix
     ./home.nix
   ];
 
