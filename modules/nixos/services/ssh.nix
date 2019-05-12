@@ -13,7 +13,7 @@ let
         (user: if hasPrefix "yl" user then user else "")
         (builtins.attrNames config.users.users));
 
-  sshExtraConfig = concatStringsSep
+  swmSupport = concatStringsSep
     "\n"
     (map
       (user: if (hasPrefix "yl" user) then ''
@@ -23,11 +23,15 @@ let
       '' else "")
       myUsers);
 
+  extraSocketSupport = ''
+    StreamLocalBindUnlink yes
+  '';
+
 in {
   services.openssh.enable = true;
 
   # Support for my workflow. This can be removed once SWM v2 lands.
-  services.openssh.extraConfig = sshExtraConfig;
+  services.openssh.extraConfig = swmSupport;
 
   # allow Mosh server in
   networking.firewall.allowedUDPPortRanges = [ { from = 60000; to = 61000; } ];
