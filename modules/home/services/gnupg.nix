@@ -11,6 +11,7 @@ with lib;
 
       defaultCacheTtl = 68400;
       enableSshSupport = true;
+      enableExtraSocket = true;
       maxCacheTtl = 68400;
     };
   };
