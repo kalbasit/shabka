@@ -13,6 +13,10 @@ with lib;
       enableSshSupport = true;
       enableExtraSocket = true;
       maxCacheTtl = 68400;
+
+      extraConfig = ''
+        extra-socket /run/user/2000/gnupg/S.gpg-agent.extra
+      '';
     };
   };
 }
