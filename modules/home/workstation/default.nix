@@ -68,6 +68,7 @@ with import ../../../util;
       "dunst"
       "firefox"
       "greenclip"
+      "gtk"
       "locker"
       "mysql-workbench"
       "rofi"

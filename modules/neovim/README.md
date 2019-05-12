@@ -2,7 +2,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
-- [NeoVim and Vim config files](#neovim-and-vim-config-files)
+- [NeoVim config files](#neovim-config-files)
 - [Keyboard layout and movement](#keyboard-layout-and-movement)
 - [Developement](#developement)
   - [Auto completion](#auto-completion)
@@ -11,14 +11,13 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# NeoVim and Vim config files
+# NeoVim config files
 
-This (Neo)Vim config works for both without limitations with just a few
-exceptions.
+This is NeoVim configuration module.
 
 # Keyboard layout and movement
 
-Vim is configured around the Colemak keyboard layout. From the [Colemak
+NeoVim is configured around the Colemak keyboard layout. From the [Colemak
 README][6]:
 
 ```
@@ -92,8 +91,7 @@ Legend:
 
 ## Auto completion
 
-Auto completion is provided by [deoplete](2) for NeoVim and by
-[YouCompleteMe](3) for Vim. Supported languages:
+Auto completion is provided by [deoplete](2). Supported languages:
 
 - Golang
 - Typescript

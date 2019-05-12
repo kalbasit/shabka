@@ -1,4 +1,5 @@
+{ config, ... }:
+
 {
-  # Enable fwupd
-  services.fwupd.enable = true;
+  services.fwupd.enable = config.mine.hardware.machine != "cloud";
 }
