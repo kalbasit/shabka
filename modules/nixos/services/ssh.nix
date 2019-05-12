@@ -31,7 +31,7 @@ in {
   services.openssh.enable = true;
 
   # Support for my workflow. This can be removed once SWM v2 lands.
-  services.openssh.extraConfig = swmSupport;
+  services.openssh.extraConfig = swmSupport + extraSocketSupport;
 
   # allow Mosh server in
   networking.firewall.allowedUDPPortRanges = [ { from = 60000; to = 61000; } ];
