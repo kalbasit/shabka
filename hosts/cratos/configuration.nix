@@ -45,7 +45,7 @@ in {
   '';
 
   nix.buildMachines =
-    (optional (builtins.pathExists /yl/private/network-secrets/shabka/hosts/demeter/id_rsa) (singleton {
+    (optionals (builtins.pathExists /yl/private/network-secrets/shabka/hosts/demeter/id_rsa) (singleton {
       hostName = fileContents /yl/private/network-secrets/shabka/hosts/demeter/hostname;
       sshUser = "builder";
       sshKey = "/yl/private/network-secrets/shabka/hosts/demeter/id_rsa";
@@ -55,7 +55,7 @@ in {
       supportedFeatures = [ ];
       mandatoryFeatures = [ ];
     }))
-    ++ (optional (builtins.pathExists /yl/private/network-secrets/shabka/hosts/zeus/id_rsa) (singleton {
+    ++ (optionals (builtins.pathExists /yl/private/network-secrets/shabka/hosts/zeus/id_rsa) (singleton {
       hostName = "zeus.home.nasreddine.com";
       sshUser = "builder";
       sshKey = "/yl/private/network-secrets/shabka/hosts/zeus/id_rsa";
