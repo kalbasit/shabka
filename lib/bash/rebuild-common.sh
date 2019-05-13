@@ -18,7 +18,8 @@ while getopts ":h:r:" opt; do
             fail "Invalid option: $OPTARG requires an argument"
             ;;
         \?)
-            fail "Invalid option: $OPTARG"
+            # end of possible arguments, rest are for the command
+            break
             ;;
     esac
 done
