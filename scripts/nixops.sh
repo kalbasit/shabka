@@ -23,6 +23,7 @@ fi
 
 export NIXOPS_STATE="${network_secrets}/${state_location}";
 
+echo "NIX_PATH=$NIX_PATH"
 set +e
 (
     set -x
