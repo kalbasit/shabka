@@ -4,7 +4,7 @@ set -euo pipefail
 
 readonly shabka_path="$(cd $(dirname "${BASH_SOURCE[0]}")/../ && pwd)"
 
-readonly release="18.09" # hardcode the release to 18.09 for all my networks
+readonly release="$( tr -d "\n" < "${shabka_path}/.release" )"
 source "${shabka_path}/lib/bash/rebuild-common.sh"
 
 readonly network_secrets="${HOME}/private/network-secrets"

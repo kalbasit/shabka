@@ -12,7 +12,7 @@ let
   patched = mkExternal {
     inherit src patches;
 
-    name = "nixpkgs-release-18-09";
+    name = "nixpkgs-release-19-03";
     revision = pinnedVersion.rev;
   };
 in
