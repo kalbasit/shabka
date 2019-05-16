@@ -4,6 +4,7 @@ set -euo pipefail
 
 readonly shabka_path="$(cd $(dirname "${BASH_SOURCE[0]}")/../ && pwd)"
 
+readonly release="18.09" # hardcode the release to 18.09 for all my networks
 source "${shabka_path}/lib/bash/rebuild-common.sh"
 
 readonly network_secrets="${HOME}/private/network-secrets"
@@ -23,6 +24,7 @@ fi
 
 export NIXOPS_STATE="${network_secrets}/${state_location}";
 
+echo "NIX_PATH=$NIX_PATH"
 set +e
 (
     set -x

@@ -4,7 +4,9 @@ set -euo pipefail
 
 # define all local variables
 host="$( hostname -s )"
-release=
+if ! [[ -v release ]] || [[ -z "${release:-}" ]]; then
+    release=
+fi
 
 while getopts ":h:r:" opt; do
     case "${opt}" in

@@ -40,8 +40,12 @@ in {
 
   networking.hostName = "cratos";
 
-  nix.buildMachines = [
-    (optionalAttrs (builtins.pathExists /yl/private/network-secrets/shabka/hosts/demeter/id_rsa) {
+  nix.extraOptions = ''
+    builders-use-substitutes = true
+  '';
+
+  nix.buildMachines =
+    (optionals (builtins.pathExists /yl/private/network-secrets/shabka/hosts/demeter/id_rsa) (singleton {
       hostName = fileContents /yl/private/network-secrets/shabka/hosts/demeter/hostname;
       sshUser = "builder";
       sshKey = "/yl/private/network-secrets/shabka/hosts/demeter/id_rsa";
@@ -50,9 +54,8 @@ in {
       speedFactor = 2;
       supportedFeatures = [ ];
       mandatoryFeatures = [ ];
-    })
-
-    (optionalAttrs (builtins.pathExists /yl/private/network-secrets/shabka/hosts/zeus/id_rsa) {
+    }))
+    ++ (optionals (builtins.pathExists /yl/private/network-secrets/shabka/hosts/zeus/id_rsa) (singleton {
       hostName = "zeus.home.nasreddine.com";
       sshUser = "builder";
       sshKey = "/yl/private/network-secrets/shabka/hosts/zeus/id_rsa";
@@ -61,11 +64,7 @@ in {
       speedFactor = 2;
       supportedFeatures = [ ];
       mandatoryFeatures = [ ];
-    })
-  ];
-  nix.extraOptions = ''
-    builders-use-substitutes = true
-  '';
+    }));
 
   mine.hardware.intel_backlight.enable = true;
   mine.printing.enable = true;
