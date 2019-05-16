@@ -7,10 +7,7 @@ let
     inherit (pinnedVersion) url sha256;
   };
 
-  patches = [
-    # TODO: jsbeautifier is not working upstream and tests need to be disabled
-    ./python36Packages-jsbeautifier-disable-check.patch
-  ];
+  patches = [];
 
   patched = mkExternal {
     inherit src patches;
