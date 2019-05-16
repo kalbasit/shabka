@@ -39,4 +39,4 @@ fi
 readonly nixpkgs="$( nix-build "${shabka_path}" -A "external.nixpkgs.release-${release/./-}.path" )"
 readonly darwin="$( nix-build "${shabka_path}" -A "external.nix-darwin.path" )"
 
-export NIX_PATH="darwin=${darwin}:nixpkgs=${nixpkgs}:shabka=${shabka_path}"
+export NIX_PATH="$( "${shabka_path}/lib/bash/nix-path.sh" "${release}" )"
