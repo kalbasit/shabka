@@ -10,7 +10,7 @@ in {
   ];
 
   options.mine.home-manager.config = mkOption {
-    default = { name, uid, isAdmin, nixosConfig }: {...}: {};
+    default = { name, uid, isAdmin, sshKeys, nixosConfig }: {...}: {};
     description = ''
       Function that returns the Home Manager configuration.
     '';

@@ -28,13 +28,8 @@ in {
       dates = [ "12:00" ];
     };
 
-    binaryCaches = [
+    binaryCaches = [ #TODO: allow for more binary caches
       "https://cache.nixos.org/"
-      "https://yl.cachix.org"
-    ];
-
-    binaryCachePublicKeys = [
-      "yl.cachix.org-1:Abr5VClgHbNd2oszU+ivr+ujB0Jt2swLo2ddoeSMkm0="
     ];
 
     trustedUsers = [
