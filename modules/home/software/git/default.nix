@@ -9,27 +9,25 @@ in {
   options = {
 
     mine.git = {
-
       enable = mkEnableOption "git";
 
-      userName = mkOption{
+      userName = mkOption {
         type = types.str;
         default = "Wael M. Nasreddine";
         description = "git user name";
       };
 
-      userEmail = {
+      userEmail = mkOption {
         type = types.str;
         default = "wael.nasreddine@gmail.com";
         description = "git user email";
       };
 
-      gpgSigningKey = mkOption{
+      gpgSigningKey = mkOption {
         type = types.str;
         default = "me@yl.codes";
         description = "git PGP signing key";
       };
-
     };
   };
 
