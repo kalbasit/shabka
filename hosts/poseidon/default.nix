@@ -1,6 +1,6 @@
 with import ../../util;
 
 {
-  nixos = buildNixDarwinConfiguration ./configuration.nix;
+  darwin = buildNixDarwinConfiguration ./configuration.nix;
   # home = buildHomeManagerConfiguration ./home.nix;
 }
