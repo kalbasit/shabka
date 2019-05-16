@@ -12,6 +12,11 @@ if [[ -d /yl/private/network-secrets ]]; then
     exit 1
 fi
 
+if [[ -z "${CACHIX_SIGNING_KEY:-}" ]]; then
+	>&2 echo "ERR: Please set the environment variable CACHIX_SIGNING_KEY before calling the script."
+    exit 1
+fi
+
 for host in "${shabka_path}"/hosts/*; do
     if grep -q '\<nixos\>' "${host}/default.nix"; then
         echo "Pushing the cache for ${host}"
