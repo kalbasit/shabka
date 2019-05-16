@@ -1,5 +1,5 @@
 with import ../../util;
 
 {
-  zeus = buildNixOSConfiguration { conf = ./configuration.nix; };
+  nixos = buildNixOSConfiguration { conf = ./configuration.nix; };
 }
