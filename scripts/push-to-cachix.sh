@@ -17,9 +17,15 @@ if [[ -z "${CACHIX_SIGNING_KEY:-}" ]]; then
     exit 1
 fi
 
-for host in "${shabka_path}"/hosts/*; do
-    if grep -q '\<nixos\>' "${host}/default.nix"; then
-        echo "Pushing the cache for ${host}"
-        nix-build --option builders '' "${host}" -A nixos | cachix push yl
-    fi
-done
+if [[ "${#}" -eq 1 ]]; then
+    readonly host="${1}"
+    echo "Pushing the cache for ${host}"
+    nix-build --option builders '' "${host}" -A nixos | cachix push yl
+else
+    for host in "${shabka_path}"/hosts/*; do
+        if grep -q '\<nixos\>' "${host}/default.nix"; then
+            echo "Pushing the cache for ${host}"
+            nix-build --option builders '' "${host}" -A nixos | cachix push yl
+        fi
+    done
+fi
