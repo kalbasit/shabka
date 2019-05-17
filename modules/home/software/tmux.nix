@@ -48,14 +48,9 @@ let
     set-window-option -g window-status-bell-style fg=colour235,bg=colour167 #bg, red
 
     ## Theme settings mixed with colors (unfortunately, but there is no cleaner way)
-    set-option -g status-attr "none"
     set-option -g status-justify "left"
-    set-option -g status-left-attr "none"
     set-option -g status-left-length "80"
-    set-option -g status-right-attr "none"
     set-option -g status-right-length "80"
-    set-window-option -g window-status-activity-attr "none"
-    set-window-option -g window-status-attr "none"
     set-window-option -g window-status-separator ""
 
     set-option -g status-left "#[fg=colour248, bg=colour241] #S #[fg=colour241, bg=colour237, nobold, noitalics, nounderscore]"
@@ -66,24 +61,26 @@ let
   ''
   + (if versionAtLeast (builtins.parseDrvName pkgs.tmux.name).version "2.9" then ''
       # default statusbar colors
-      set-option -g status-status bg=colour237,fg=colour223
+      set-option -g status-style bg=colour237,fg=colour223,none
+      set-option -g status-left-style none
+      set-option -g status-right-style none
 
       # default window title colors
-      set-window-option -g window-status-status bg=colour214,fg=colour237
+      set-window-option -g window-status-style bg=colour214,fg=colour237,none
 
-      set-window-option -g window-status-activity-status bg=colour237,fg=colour248
+      set-window-option -g window-status-activity-style bg=colour237,fg=colour248,none
 
       # active window title colors
-      set-window-option -g window-status-current-status bg=default,fg=colour237
+      set-window-option -g window-status-current-style bg=default,fg=colour237
 
       # pane border
-      set-option -g pane-active-border-status fg=colour250,fg=colour237
+      set-option -g pane-active-border-style fg=colour250,fg=colour237
 
       # message infos
-      set-option -g message-status bg=colour239,fg=colour223
+      set-option -g message-style bg=colour239,fg=colour223
 
       # writting commands inactive
-      set-option -g message-command-status bg=colour239fg=colour223
+      set-option -g message-command-style bg=colour239,fg=colour223
     '' else ''
       # default statusbar colors
       set-option -g status-bg colour237 #bg1
@@ -111,6 +108,12 @@ let
       # writting commands inactive
       set-option -g message-command-bg colour239 #fg3
       set-option -g message-command-fg colour223 #bg1
+
+      set-option -g status-attr "none"
+      set-option -g status-left-attr "none"
+      set-option -g status-right-attr "none"
+      set-window-option -g window-status-activity-attr "none"
+      set-window-option -g window-status-attr "none"
     '');
 
 
