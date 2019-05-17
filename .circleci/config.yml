@@ -20,7 +20,7 @@ var_2: &install-dependencies
 
       # install cachix from nixpkgs at stable
       readonly shabka_path="$( pwd )"
-      readonly nixpkgs="$( nix-build "${shabka_path}" -A "external.nixpkgs.release-18-09.path" )"
+      readonly nixpkgs="$( nix-build "${shabka_path}" -A "external.nixpkgs.release-19-03.path" )"
       nix-env -I nixpkgs="${nixpkgs}" -f '<nixpkgs>' -iA cachix
 
 var_3: &enable-cachix

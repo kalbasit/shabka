@@ -1,6 +1,6 @@
 with import ../../util;
 
 {
-  athena = buildNixDarwinConfiguration ./configuration.nix;
-  # athena-home = buildHomeManagerConfiguration ./home.nix;
+  darwin = buildNixDarwinConfiguration ./configuration.nix;
+  # home = buildHomeManagerConfiguration ./home.nix;
 }
