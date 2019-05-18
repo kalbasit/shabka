@@ -18,13 +18,13 @@ if [[ -z "${CACHIX_SIGNING_KEY:-}" ]]; then
 fi
 
 if [[ "${#}" -eq 1 ]]; then
-    readonly host="${1}"
+    host="${1}"
     echo "Pushing the cache for ${host}"
     nix-build --option builders '' "${shabka_path}/hosts/${host}" -A nixos | cachix push yl
 else
     for hostPath in "${shabka_path}"/hosts/*; do
-        readonly host="$(basename "${hostPath}")"
-        if grep -q '\<nixos\>' "${host}/default.nix"; then
+        host="$(basename "${hostPath}")"
+        if grep -q '\<nixos\>' "${shabka_path}/hosts/${host}/default.nix"; then
             echo "Pushing the cache for ${host}"
             nix-build --option builders '' "${shabka_path}/hosts/${host}" -A nixos | cachix push yl
         fi
