@@ -8,7 +8,7 @@
     imports = [
       ../../modules/home
     ]
-    ++ (optionals (builtins.pathExists ./../../secrets/home.nix) (singleton ./../../secrets/home.nix));
+    ++ (optionals (builtins.pathExists ./../../secrets/home) (singleton ./../../secrets/home));
 
     mine.nixosConfig = nixosConfig;
 
