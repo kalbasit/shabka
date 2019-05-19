@@ -20,7 +20,7 @@ in {
 
     ./home.nix
   ]
-  ++ (optionals (builtins.pathExists ./../../secrets.nix) (singleton ./../../secrets.nix));
+  ++ (optionals (builtins.pathExists ./../../secrets/nixos/hosts/cratos) (singleton ./../../secrets/nixos/hosts/cratos));
 
   boot.tmpOnTmpfs = true;
 
