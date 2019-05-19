@@ -24,7 +24,7 @@ let
 in {
   options.mine.less.enable = mkEnableOption "less";
 
-  config = mkIf (config.mine.less.enable && config.mine.useColemakKeyboardLayout) {
+  config = mkIf (config.mine.less.enable && (builtins.head config.mine.keyboard) == "colemak" ) {
     home.file.".less".source = "${less-config}/share/less/less";
   };
 }
