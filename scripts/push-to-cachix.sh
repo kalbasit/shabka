@@ -13,20 +13,37 @@ if [[ -e "${shabka_path}/secrets" ]]; then
 fi
 
 if [[ -z "${CACHIX_SIGNING_KEY:-}" ]]; then
-	>&2 echo "ERR: Please set the environment variable CACHIX_SIGNING_KEY before calling the script."
+    >&2 echo "ERR: Please set the environment variable CACHIX_SIGNING_KEY before calling the script."
     exit 1
 fi
 
-if [[ "${#}" -eq 1 ]]; then
-    readonly host="${1}"
+push_host() {
+    local host="${1}"
+    local release
+
+    if [[ -r "${shabka_path}/hosts/${host}/release" ]]; then
+        release="$( cat "${shabka_path}/hosts/${host}/release" )"
+    else
+        # fallback to the default release
+        release="$( tr -d "\n" < "${shabka_path}/.release" )"
+    fi
+
+    if ! grep -q '\<nixos\>' "${shabka_path}/hosts/${host}/default.nix"; then
+        >&2 echo "WARN: The host ${host} does not configure NixOS. Skipping..."
+        return
+    fi
+
     echo "Pushing the cache for ${host}"
-    nix-build --option builders '' "${shabka_path}/hosts/${host}" -A nixos | cachix push yl
-else
-    for hostPath in "${shabka_path}"/hosts/*; do
-        readonly host="$(basename "${hostPath}")"
-        if grep -q '\<nixos\>' "${host}/default.nix"; then
-            echo "Pushing the cache for ${host}"
-            nix-build --option builders '' "${shabka_path}/hosts/${host}" -A nixos | cachix push yl
-        fi
-    done
+    NIX_PATH="$( "${shabka_path}/lib/bash/nix-path.sh" "${release}" )" \
+        nix-build --option builders '' "${shabka_path}/hosts/${host}" -A nixos | cachix push yl
+}
+
+
+if [[ "${#}" -eq 1 ]]; then
+    push_host "${1}"
+    exit
 fi
+
+for hostPath in "${shabka_path}"/hosts/*; do
+    push_host "$(basename "${hostPath}")"
+done
