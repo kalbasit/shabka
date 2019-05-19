@@ -6,7 +6,6 @@ with lib;
   imports = [
     ../../modules/nixos
 
-    ./coworkers.nix
     ./home.nix
   ]
   ++ (optionals (builtins.pathExists ./../../secrets/nixos) (singleton ./../../secrets/nixos));
