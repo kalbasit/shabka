@@ -69,22 +69,11 @@ in {
     ../../modules/nixos
 
     ./home.nix
-  ];
+  ]
+  ++ (optionals (builtins.pathExists ./../../secrets.nix) (singleton ./../../secrets.nix));
 
   # allow Zeus to be used as a builder
-  users.users = mkMerge [
-    { root = { openssh.authorizedKeys.keys = singleton shabka.external.kalbasit.keys; }; }
-
-    (if builtins.pathExists /yl/private/network-secrets/shabka/hosts/zeus/id_rsa.pub then {
-      builder = {
-        extraGroups = ["builders"];
-        openssh.authorizedKeys.keys = [
-          (builtins.readFile /yl/private/network-secrets/shabka/hosts/zeus/id_rsa.pub)
-        ];
-        isNormalUser = true;
-      };
-    } else {})
-  ];
+  users.users = { root = { openssh.authorizedKeys.keys = singleton shabka.external.kalbasit.keys; }; };
 
   # set the default locale and the timeZone
   i18n.defaultLocale = "en_US.UTF-8";
