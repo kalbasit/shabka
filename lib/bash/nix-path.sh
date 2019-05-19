@@ -10,7 +10,7 @@ fi
 
 readonly release="${1}"
 
-readonly nixpkgs="$( nix-build "${shabka_path}" -A "external.nixpkgs.release-${release/./-}.path" )"
-readonly darwin="$( nix-build "${shabka_path}" -A "external.nix-darwin.path" )"
+readonly nixpkgs="$( nix-build --no-out-link "${shabka_path}" -A "external.nixpkgs.release-${release/./-}.path" )"
+readonly darwin="$( nix-build --no-out-link "${shabka_path}" -A "external.nix-darwin.path" )"
 
 echo "darwin=${darwin}:nixpkgs=${nixpkgs}:shabka=${shabka_path}"
