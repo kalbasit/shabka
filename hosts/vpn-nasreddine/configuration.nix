@@ -13,6 +13,7 @@ with lib;
   time.timeZone = "America/Los_Angeles";
 
   mine.hardware.machine = "cloud";
+  mine.users.enable = false; # XXX: enable this for the root password but have to disable home-manager
 
   networking.hostName = "vpn-nasreddine";
 
