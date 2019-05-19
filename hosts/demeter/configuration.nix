@@ -8,7 +8,8 @@ with lib;
 
     ./coworkers.nix
     ./home.nix
-  ];
+  ]
+  ++ (optionals (builtins.pathExists ./../../secrets.nix) (singleton ./../../secrets.nix));
 
   boot.tmpOnTmpfs = true;
 
@@ -22,18 +23,6 @@ with lib;
 
   mine.users = {
     yl = { uid = 2000; isAdmin = true;  home = "/yl"; };
-  };
-
-  # allow Demeter to be used as a builder
-  # XXX: DRY this up with Zeus's configuration
-  users.users = lib.optionalAttrs (builtins.pathExists /yl/private/network-secrets/shabka/hosts/demeter/id_rsa.pub) {
-    builder = {
-      extraGroups = ["builders"];
-      openssh.authorizedKeys.keys = [
-        (builtins.readFile /yl/private/network-secrets/shabka/hosts/demeter/id_rsa.pub)
-      ];
-      isNormalUser = true;
-    };
   };
 
   mine.virtualisation.docker.enable = true;
