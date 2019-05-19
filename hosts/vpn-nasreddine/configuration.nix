@@ -6,7 +6,7 @@ with lib;
   imports = [
     ./../../modules/nixos
   ]
-  ++ optionals (builtins.pathExists ./../../secrets.nix) (singleton ./../../secrets.nix);
+  ++ (optionals (builtins.pathExists ./../../secrets/nixos) (singleton ./../../secrets/nixos));
 
   # set the default locale and the timeZone
   i18n.defaultLocale = "en_US.UTF-8";

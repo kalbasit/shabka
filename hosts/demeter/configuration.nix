@@ -9,7 +9,7 @@ with lib;
     ./coworkers.nix
     ./home.nix
   ]
-  ++ (optionals (builtins.pathExists ./../../secrets.nix) (singleton ./../../secrets.nix));
+  ++ (optionals (builtins.pathExists ./../../secrets/nixos) (singleton ./../../secrets/nixos));
 
   boot.tmpOnTmpfs = true;
 
