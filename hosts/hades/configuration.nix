@@ -21,10 +21,8 @@ in {
     ../../modules/nixos
 
     ./home.nix
-
-    ./../../secrets.nix];
-  # ]
-  # ++ (optionals (builtins.pathExists ./../../secrets.nix) (singleton ./../../secrets.nix));
+  ]
+  ++ (optionals (builtins.pathExists ./../../secrets.nix) (singleton ./../../secrets.nix));
 
   boot.tmpOnTmpfs = true;
 
