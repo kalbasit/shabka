@@ -11,6 +11,6 @@ in {
     virtualisation.libvirtd.enable = true;
     virtualisation.libvirtd.qemuRunAsRoot = false;
 
-    mine.userGroups = ["libvirtd"];
+    mine.users.groups = ["libvirtd"];
   };
 }

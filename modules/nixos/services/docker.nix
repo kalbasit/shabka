@@ -8,6 +8,6 @@ in {
 
   config = mkIf cfg.enable {
     virtualisation.docker.enable = true;
-    mine.userGroups = ["docker"];
+    mine.users.groups = ["docker"];
   };
 }

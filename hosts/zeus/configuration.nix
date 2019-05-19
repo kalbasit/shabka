@@ -69,22 +69,8 @@ in {
     ../../modules/nixos
 
     ./home.nix
-  ];
-
-  # allow Zeus to be used as a builder
-  users.users = mkMerge [
-    { root = { openssh.authorizedKeys.keys = singleton shabka.external.kalbasit.keys; }; }
-
-    (if builtins.pathExists /yl/private/network-secrets/shabka/hosts/zeus/id_rsa.pub then {
-      builder = {
-        extraGroups = ["builders"];
-        openssh.authorizedKeys.keys = [
-          (builtins.readFile /yl/private/network-secrets/shabka/hosts/zeus/id_rsa.pub)
-        ];
-        isNormalUser = true;
-      };
-    } else {})
-  ];
+  ]
+  ++ (optionals (builtins.pathExists ./../../secrets/nixos) (singleton ./../../secrets/nixos));
 
   # set the default locale and the timeZone
   i18n.defaultLocale = "en_US.UTF-8";
@@ -92,11 +78,17 @@ in {
 
   networking.hostName = "zeus";
 
-  mine.users = {};
-
   mine.useColemakKeyboardLayout = true;
   mine.neovim.enable = true;
   mine.virtualisation.libvirtd.enable = true;
+
+  mine.users = {
+    enable = true;
+
+    users = {
+      yl = { uid = 2000; isAdmin = true;  home = "/yl"; };
+    };
+  };
 
   mine.hardware.machine = "zeus";
 

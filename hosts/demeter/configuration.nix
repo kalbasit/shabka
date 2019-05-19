@@ -6,9 +6,9 @@ with lib;
   imports = [
     ../../modules/nixos
 
-    ./coworkers.nix
     ./home.nix
-  ];
+  ]
+  ++ (optionals (builtins.pathExists ./../../secrets/nixos) (singleton ./../../secrets/nixos));
 
   boot.tmpOnTmpfs = true;
 
@@ -21,18 +21,10 @@ with lib;
   mine.hardware.machine = "cloud";
 
   mine.users = {
-    yl = { uid = 2000; isAdmin = true;  home = "/yl"; };
-  };
+    enable = true;
 
-  # allow Demeter to be used as a builder
-  # XXX: DRY this up with Zeus's configuration
-  users.users = lib.optionalAttrs (builtins.pathExists /yl/private/network-secrets/shabka/hosts/demeter/id_rsa.pub) {
-    builder = {
-      extraGroups = ["builders"];
-      openssh.authorizedKeys.keys = [
-        (builtins.readFile /yl/private/network-secrets/shabka/hosts/demeter/id_rsa.pub)
-      ];
-      isNormalUser = true;
+    users = {
+      yl = { uid = 2000; isAdmin = true;  home = "/yl"; };
     };
   };
 

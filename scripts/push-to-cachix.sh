@@ -7,8 +7,8 @@ readonly shabka_path="$(cd $(dirname "${BASH_SOURCE[0]}")/../ && pwd)"
 # I don't want to ever make the mistake of pushing while my private files are
 # accessible. This is meant to go away eventually, see #216 for more
 # information
-if [[ -d /yl/private/network-secrets ]]; then
-    >&2 echo "ERR: /yl/private/network-secrets exists and is accessible. Will not continue!"
+if [[ -e "${shabka_path}/secrets" ]]; then
+    >&2 echo "ERR: ${shabka_path}/secrets exists. Will not continue!"
     exit 1
 fi
 

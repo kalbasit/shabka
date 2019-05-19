@@ -223,27 +223,27 @@ in {
     assertions = [
       {
         assertion = builtins.pathExists cfg.auth_user_pass;
-        message = "auth_user_pass must exist";
+        message = "auth_user_pass: No such file or directory: ${builtins.toString cfg.auth_user_pass}";
       }
 
       {
         assertion = builtins.pathExists cfg.ca;
-        message = "ca must exist";
+        message = "ca: No such file or directory: ${builtins.toString cfg.ca}";
       }
 
       {
         assertion = builtins.pathExists cfg.client_cert;
-        message = "client_cert must exist";
+        message = "client_cert: No such file or directory: ${builtins.toString cfg.client_cert}";
       }
 
       {
         assertion = builtins.pathExists cfg.client_key;
-        message = "client_key must exist";
+        message = "client_key: No such file or directory: ${builtins.toString cfg.client_key}";
       }
 
       {
         assertion = builtins.pathExists cfg.tls_auth;
-        message = "tls_auth must exist";
+        message = "tls_auth: No such file or directory: ${builtins.toString cfg.tls_auth}";
       }
     ];
 

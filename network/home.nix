@@ -1,5 +1,5 @@
 let
-  secrets = import /yl/private/network-secrets/shabka/network/home.nix;
+  secrets = import ../secrets/network/home.nix;
 in {
   network.description = "Network at home, including my VPN on EC2";
   network.enableRollback = true;

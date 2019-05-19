@@ -10,17 +10,6 @@ let
     sha256 = "17x45njva3a535czgdp5z43gmgwl0lk68p4mgip8jclpiycb6qbl";
   });
 
-  enableExpressVPN = builtins.pathExists /yl/private/network-secrets/vpn/client/expressvpn/auth.txt
-    && builtins.pathExists /yl/private/network-secrets/vpn/client/expressvpn/ca2.crt
-    && builtins.pathExists /yl/private/network-secrets/vpn/client/expressvpn/client.crt
-    && builtins.pathExists /yl/private/network-secrets/vpn/client/expressvpn/client.key
-    && builtins.pathExists /yl/private/network-secrets/vpn/client/expressvpn/ta.key;
-
-  enableNasreddineVPN =  builtins.pathExists /yl/private/network-secrets/vpn/client/desktop.hades.WaelNasreddine.vpn.nasreddine.com/ca.crt
-    && builtins.pathExists /yl/private/network-secrets/vpn/client/desktop.hades.WaelNasreddine.vpn.nasreddine.com/public.crt
-    && builtins.pathExists /yl/private/network-secrets/vpn/client/desktop.hades.WaelNasreddine.vpn.nasreddine.com/private.key
-    && builtins.pathExists /yl/private/network-secrets/vpn/client/desktop.hades.WaelNasreddine.vpn.nasreddine.com/ta.key;
-
 in {
   imports = [
     ./hardware-configuration.nix
@@ -32,7 +21,8 @@ in {
     ../../modules/nixos
 
     ./home.nix
-  ];
+  ]
+  ++ (optionals (builtins.pathExists ./../../secrets/nixos) (singleton ./../../secrets/nixos));
 
   boot.tmpOnTmpfs = true;
 
@@ -46,31 +36,10 @@ in {
     builders-use-substitutes = true
   '';
 
-  nix.buildMachines =
-    (optionals (builtins.pathExists /yl/private/network-secrets/shabka/hosts/demeter/id_rsa) (singleton {
-      hostName = fileContents /yl/private/network-secrets/shabka/hosts/demeter/hostname;
-      sshUser = "builder";
-      sshKey = "/yl/private/network-secrets/shabka/hosts/demeter/id_rsa";
-      system = "x86_64-linux";
-      maxJobs = 8;
-      speedFactor = 2;
-      supportedFeatures = [ ];
-      mandatoryFeatures = [ ];
-    }))
-    ++ (optionals (builtins.pathExists /yl/private/network-secrets/shabka/hosts/zeus/id_rsa) (singleton {
-      hostName = "zeus.home.nasreddine.com";
-      sshUser = "builder";
-      sshKey = "/yl/private/network-secrets/shabka/hosts/zeus/id_rsa";
-      system = "x86_64-linux";
-      maxJobs = 8;
-      speedFactor = 2;
-      supportedFeatures = [ ];
-      mandatoryFeatures = [ ];
-    }));
-
   mine.hardware.intel_backlight.enable = true;
   mine.printing.enable = true;
   mine.useColemakKeyboardLayout = true;
+  mine.users.enable = true;
   mine.virtualisation.docker.enable = true;
 
   mine.workstation = {
@@ -78,15 +47,6 @@ in {
 
     autorandr.enable = true;
     keeptruckin.enable = true;
-  };
-
-  mine.openvpn.client.expressvpn = mkIf enableExpressVPN {
-    enable = true;
-    auth_user_pass = /yl/private/network-secrets/vpn/client/expressvpn/auth.txt;
-    ca             = /yl/private/network-secrets/vpn/client/expressvpn/ca2.crt;
-    client_cert    = /yl/private/network-secrets/vpn/client/expressvpn/client.crt;
-    client_key     = /yl/private/network-secrets/vpn/client/expressvpn/client.key;
-    tls_auth       = /yl/private/network-secrets/vpn/client/expressvpn/ta.key;
   };
 
   mine.hardware.machine = "precision-7530";
@@ -118,31 +78,6 @@ in {
       "private" = {
         subvolume = "/yl/private";
       };
-    };
-  };
-
-  services.openvpn.servers = {
-    client-nasreddine = mkIf enableNasreddineVPN {
-      autoStart = false;
-
-      config = ''
-        client
-        dev tun
-        proto udp
-        remote vpn.nasreddine.com 1194
-        nobind
-        persist-key
-        persist-tun
-        ca /yl/private/network-secrets/vpn/client/desktop.hades.WaelNasreddine.vpn.nasreddine.com/ca.crt
-        cert /yl/private/network-secrets/vpn/client/desktop.hades.WaelNasreddine.vpn.nasreddine.com/public.crt
-        key /yl/private/network-secrets/vpn/client/desktop.hades.WaelNasreddine.vpn.nasreddine.com/private.key
-        tls-auth /yl/private/network-secrets/vpn/client/desktop.hades.WaelNasreddine.vpn.nasreddine.com/ta.key 1
-        verb 1
-        cipher aes-128-cbc
-        comp-lzo
-      '';
-
-      updateResolvConf = true;
     };
   };
 

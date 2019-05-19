@@ -1,6 +1,6 @@
 let
   lib = (import <nixpkgs> {}).lib;
-  secrets = import /yl/private/network-secrets/shabka/network/work.nix;
+  secrets = import ../secrets/network/work.nix;
 in {
   network.description = "wael-network";
   network.enableRollback = true;
