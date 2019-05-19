@@ -36,7 +36,7 @@ in {
 
   mine.hardware.intel_backlight.enable = true;
   mine.printing.enable = true;
-  mine.useColemakKeyboardLayout = true;
+  mine.keyboard = [ "colemak" ];
   mine.users.enable = true;
   mine.virtualisation.docker.enable = true;
 

@@ -78,7 +78,7 @@ in {
 
   networking.hostName = "zeus";
 
-  mine.useColemakKeyboardLayout = true;
+  mine.keyboard = [ "colemak" ];
   mine.neovim.enable = true;
   mine.virtualisation.libvirtd.enable = true;
 
