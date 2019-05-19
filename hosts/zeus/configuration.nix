@@ -70,7 +70,7 @@ in {
 
     ./home.nix
   ]
-  ++ (optionals (builtins.pathExists ./../../secrets/nixos) (singleton ./../../secrets/nixos));
+  ++ (optionals (builtins.pathExists ./../../secrets/nixos.nix) (singleton ./../../secrets/nixos.nix));
 
   # allow Zeus to be used as a builder
   users.users = { root = { openssh.authorizedKeys.keys = singleton shabka.external.kalbasit.keys; }; };

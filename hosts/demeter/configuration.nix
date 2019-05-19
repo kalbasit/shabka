@@ -8,7 +8,7 @@ with lib;
 
     ./home.nix
   ]
-  ++ (optionals (builtins.pathExists ./../../secrets/nixos) (singleton ./../../secrets/nixos));
+  ++ (optionals (builtins.pathExists ./../../secrets/nixos.nix) (singleton ./../../secrets/nixos.nix));
 
   boot.tmpOnTmpfs = true;
 
