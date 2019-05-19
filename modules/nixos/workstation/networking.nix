@@ -11,7 +11,7 @@ with lib;
       dns = "dnsmasq";
     };
 
-    mine.userGroups = ["networkmanager"];
+    mine.users.groups = ["networkmanager"];
   };
 }
 

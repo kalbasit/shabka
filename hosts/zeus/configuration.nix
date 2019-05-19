@@ -81,11 +81,17 @@ in {
 
   networking.hostName = "zeus";
 
-  mine.users = {};
-
   mine.useColemakKeyboardLayout = true;
   mine.neovim.enable = true;
   mine.virtualisation.libvirtd.enable = true;
+
+  mine.users = {
+    enable = true;
+
+    users = {
+      yl = { uid = 2000; isAdmin = true;  home = "/yl"; };
+    };
+  };
 
   mine.hardware.machine = "zeus";
 

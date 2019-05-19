@@ -9,6 +9,6 @@ with lib;
     virtualisation.virtualbox.host.enable = true;
     virtualisation.virtualbox.host.enableExtensionPack = true;
 
-    mine.userGroups = ["vboxusers"];
+    mine.users.groups = ["vboxusers"];
   };
 }

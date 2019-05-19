@@ -22,7 +22,11 @@ with lib;
   mine.hardware.machine = "cloud";
 
   mine.users = {
-    yl = { uid = 2000; isAdmin = true;  home = "/yl"; };
+    enable = true;
+
+    users = {
+      yl = { uid = 2000; isAdmin = true;  home = "/yl"; };
+    };
   };
 
   mine.virtualisation.docker.enable = true;
