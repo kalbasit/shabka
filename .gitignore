@@ -3,3 +3,4 @@
 .pijul/
 result
 result-bin
+secrets.nix
