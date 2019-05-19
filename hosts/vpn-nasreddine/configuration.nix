@@ -3,11 +3,16 @@
 with lib;
 
 {
-  imports = optionals (builtins.pathExists ./../../secrets.nix) (singleton ./../../secrets.nix);
+  imports = [
+    ./../../modules/nixos
+  ]
+  ++ optionals (builtins.pathExists ./../../secrets.nix) (singleton ./../../secrets.nix);
 
   # set the default locale and the timeZone
   i18n.defaultLocale = "en_US.UTF-8";
   time.timeZone = "America/Los_Angeles";
+
+  mine.hardware.machine = "cloud";
 
   networking.hostName = "vpn-nasreddine";
 
