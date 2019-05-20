@@ -36,8 +36,6 @@ with lib;
 
         # Context settings
         context.keeptruckin=+keeptruckin
-        context.personal=-publica
-        context.publica=+publica
       '';
     };
 

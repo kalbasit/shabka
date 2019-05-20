@@ -1,23 +1,64 @@
 var_0: &global_env
   CACHIX_CACHE: yl
 
-var_1: &install-dependencies
+var_1: &install-nix
+  run:
+    name: Install Nix
+    command: |
+      curl https://nixos.org/nix/install | sh
+
+var_2: &install-dependencies
   run:
     name: Install dependencies
     command: |
+      if [[ -r "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]]; then
+        source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
+      fi
+
       # install git
       nix-env -f '<nixpkgs>' -iA gitAndTools.git
 
       # install cachix from nixpkgs at stable
-      readonly nixpkgs_stable="external/nixpkgs-stable.nix"
-      readonly nixpkgs="$( nix-build --no-out-link ${nixpkgs_stable} )"
+      readonly shabka_path="$( pwd )"
+      readonly nixpkgs="$( nix-build "${shabka_path}" -A "external.nixpkgs.release-19-03.path" )"
       nix-env -I nixpkgs="${nixpkgs}" -f '<nixpkgs>' -iA cachix
 
-var_2: &enable-cachix
+var_3: &enable-cachix
   run:
     name: Enable cachix
     command: |
+      if [[ -r "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]]; then
+        source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
+      fi
+
       cachix use "${CACHIX_CACHE}"
+
+var_4: &instantiate-host
+  run:
+    name: Instantiate the host
+    working_directory: ~/shabka
+    command: |
+      if [[ -r "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]]; then
+        source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
+      fi
+
+      readonly shabka_path="$( pwd )"
+      readonly host="${CIRCLE_JOB}"
+
+      if [[ -r "${shabka_path}/hosts/${host}/release" ]]; then
+          release="$( cat "${shabka_path}/hosts/${host}/release" )"
+      else
+          # fallback to the default release
+          release="$( tr -d "\n" < "${shabka_path}/.release" )"
+      fi
+
+      readonly nixpkgs="$( nix-build "${shabka_path}" -A "external.nixpkgs.release-${release/./-}.path" )"
+      readonly darwin="$( nix-build "${shabka_path}" -A "external.nix-darwin.path" )"
+
+      export NIX_PATH="nixpkgs=${nixpkgs}:darwin=${darwin}:shabka=${shabka_path}"
+
+      echo ">>> Instantiating the hostname '${host}' using nixpkgs at '${nixpkgs}'. NIX_PATH is set to '${NIX_PATH}'"
+      nix-instantiate "${shabka_path}/hosts/${host}"
 
 version: 2
 jobs:
@@ -25,32 +66,20 @@ jobs:
     macos:
       xcode: "9.0"
 
-    working_directory: /go/src/github.com/kalbasit/shabka
+    working_directory: ~/shabka
 
     environment:
       <<: *global_env
 
-    docker:
-      - image: nixos/nix
-
     steps:
       - checkout
+      - *install-nix
       - *install-dependencies
       - *enable-cachix
-      - run:
-          name: Instantiate athena
-          working_directory: /go/src/github.com/kalbasit/shabka
-          command: |
-            readonly shabka_path="$( pwd )"
-            readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
-            readonly nixpkgs="$( nix-build --no-out-link ${nixpkgs_stable} )"
-
-            export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=${shabka_path}"
-
-            nix-instantiate ./hosts/athena
+      - *instantiate-host
 
   cratos:
-    working_directory: /go/src/github.com/kalbasit/shabka
+    working_directory: ~/shabka
 
     environment:
       <<: *global_env
@@ -62,20 +91,10 @@ jobs:
       - checkout
       - *install-dependencies
       - *enable-cachix
-      - run:
-          name: Instantiate cratos
-          working_directory: /go/src/github.com/kalbasit/shabka
-          command: |
-            readonly shabka_path="$( pwd )"
-            readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
-            readonly nixpkgs="$( nix-build --no-out-link ${nixpkgs_stable} )"
-
-            export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=${shabka_path}"
-
-            nix-instantiate ./hosts/cratos
+      - *instantiate-host
 
   hades:
-    working_directory: /go/src/github.com/kalbasit/shabka
+    working_directory: ~/shabka
 
     environment:
       <<: *global_env
@@ -87,20 +106,10 @@ jobs:
       - checkout
       - *install-dependencies
       - *enable-cachix
-      - run:
-          name: Instantiate hades
-          working_directory: /go/src/github.com/kalbasit/shabka
-          command: |
-            readonly shabka_path="$( pwd )"
-            readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
-            readonly nixpkgs="$( nix-build --no-out-link ${nixpkgs_stable} )"
-
-            export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=${shabka_path}"
-
-            nix-instantiate ./hosts/hades
+      - *instantiate-host
 
   hera:
-    working_directory: /go/src/github.com/kalbasit/shabka
+    working_directory: ~/shabka
 
     environment:
       <<: *global_env
@@ -112,20 +121,26 @@ jobs:
       - checkout
       - *install-dependencies
       - *enable-cachix
-      - run:
-          name: Instantiate hera
-          working_directory: /go/src/github.com/kalbasit/shabka
-          command: |
-            readonly shabka_path="$( pwd )"
-            readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
-            readonly nixpkgs="$( nix-build --no-out-link ${nixpkgs_stable} )"
+      - *instantiate-host
 
-            export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=${shabka_path}"
+  poseidon:
+    macos:
+      xcode: "9.0"
 
-            nix-instantiate ./hosts/hera
+    working_directory: ~/shabka
+
+    environment:
+      <<: *global_env
+
+    steps:
+      - checkout
+      - *install-nix
+      - *install-dependencies
+      - *enable-cachix
+      - *instantiate-host
 
   zeus:
-    working_directory: /go/src/github.com/kalbasit/shabka
+    working_directory: ~/shabka
 
     environment:
       <<: *global_env
@@ -137,17 +152,7 @@ jobs:
       - checkout
       - *install-dependencies
       - *enable-cachix
-      - run:
-          name: Instantiate zeus
-          working_directory: /go/src/github.com/kalbasit/shabka
-          command: |
-            readonly shabka_path="$( pwd )"
-            readonly nixpkgs_stable="${shabka_path}/external/nixpkgs-stable.nix"
-            readonly nixpkgs="$( nix-build --no-out-link ${nixpkgs_stable} )"
-
-            export NIX_PATH="nixpkgs=${nixpkgs}:shabka-path=${shabka_path}"
-
-            nix-instantiate ./hosts/zeus
+      - *instantiate-host
 
 workflows:
   version: 2
@@ -160,6 +165,8 @@ workflows:
       - hades:
           context: org-global
       - hera:
+          context: org-global
+      - poseidon:
           context: org-global
       - zeus:
           context: org-global

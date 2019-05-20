@@ -4,13 +4,11 @@
 
   with lib;
 
-  let
-    enableEmail = userName == "yl" && builtins.pathExists /yl/private/network-secrets/shabka/email.nix;
-    enableSSH = builtins.pathExists /yl/private/network-secrets/shabka/ssh.nix;
-  in {
+  {
     imports = [
       ../../modules/home
-    ];
+    ]
+    ++ (optionals (builtins.pathExists ./../../secrets/home) (singleton ./../../secrets/home));
 
     mine.nixosConfig = nixosConfig;
 
@@ -39,10 +37,37 @@
         config = {
           eDP-1 = {
             enable = true;
+            primary = true;
             position = "0x0";
             mode = "1920x1080";
             gamma = "1.0:0.909:0.909";
             rate = "60.03";
+          };
+        };
+      };
+
+      "home" = {
+        fingerprint = {
+          eDP-1 = "00ffffffffffff0006af2d5b00000000001c0104a51d107803ee95a3544c99260f505400000001010101010101010101010101010101b43780a070383e403a2a350025a21000001a902c80a070383e403a2a350025a21000001a000000fe003036564736804231333348414e0000000000024122a8011100000a010a202000f1";
+          DP-2-1 = "00ffffffffffff001e6df67628530600071a010380502278eaca95a6554ea1260f50542108007140818081c0a9c0b300d1c081000101e77c70a0d0a0295030203a00204f3100001a9d6770a0d0a0225030203a00204f3100001a000000fd00383d1e5a20000a202020202020000000fc004c4720554c545241574944450a018e02031ef12309070749100403011f13595a128301000067030c00200038409f3d70a0d0a0155030203a00204f3100001a7e4800e0a0381f4040403a00204f31000018011d007251d01e206e285500204f3100001e8c0ad08a20e02d10103e9600204f31000018000000ff003630374e54504343363530340a0000000000000026";
+        };
+
+        config = {
+          eDP-1 = {
+            enable = true;
+            position = "0x0";
+            mode = "1920x1080";
+            gamma = "1.0:0.909:0.909";
+            rate = "60.03";
+          };
+
+          DP-2-1 = {
+            enable = true;
+            primary = true;
+            position = "1920x0";
+            mode = "3440x1440";
+            gamma = "1.0:0.909:0.909";
+            rate = "59.97";
           };
         };
       };
@@ -64,6 +89,7 @@
 
           DP-1 = {
             enable = true;
+            primary = true;
             position = "1920x0";
             mode = "2560x1440";
             gamma = "1.0:0.909:0.909";
@@ -71,11 +97,6 @@
           };
         };
       };
-    };
-
-    mine.ssh = mkIf enableSSH {
-      enable = true;
-      privateSSHPath = /yl/private/network-secrets/shabka/ssh.nix;
     };
   };
 }

@@ -3,46 +3,26 @@
 with lib;
 
 let
-
-  pinnedNH =
-    # I'm getting an infinite loop when I import pkgs as a dependency to this
-    # function. Why is that? It forces me to import nixpkgs again here!
-    let
-
-      nixpkgs = (import ../../external/nixpkgs-stable.nix {});
-
-    in import ../../external/nixos-hardware.nix {
-      inherit (import nixpkgs {}) fetchpatch runCommand;
-    };
+  shabka = import <shabka> { };
 
   nasreddineCA = builtins.readFile (builtins.fetchurl {
-    url = "https://kalbas.it/ca.crt";
+    url = "https://s3-us-west-1.amazonaws.com/nasreddine-infra/ca.crt";
     sha256 = "17x45njva3a535czgdp5z43gmgwl0lk68p4mgip8jclpiycb6qbl";
   });
-
-  enableExpressVPN = builtins.pathExists /yl/private/network-secrets/vpn/client/expressvpn/auth.txt
-    && builtins.pathExists /yl/private/network-secrets/vpn/client/expressvpn/ca2.crt
-    && builtins.pathExists /yl/private/network-secrets/vpn/client/expressvpn/client.crt
-    && builtins.pathExists /yl/private/network-secrets/vpn/client/expressvpn/client.key
-    && builtins.pathExists /yl/private/network-secrets/vpn/client/expressvpn/ta.key;
-
-  enableNasreddineVPN =  builtins.pathExists /yl/private/network-secrets/vpn/client/desktop.hades.WaelNasreddine.vpn.nasreddine.com/ca.crt
-    && builtins.pathExists /yl/private/network-secrets/vpn/client/desktop.hades.WaelNasreddine.vpn.nasreddine.com/public.crt
-    && builtins.pathExists /yl/private/network-secrets/vpn/client/desktop.hades.WaelNasreddine.vpn.nasreddine.com/private.key
-    && builtins.pathExists /yl/private/network-secrets/vpn/client/desktop.hades.WaelNasreddine.vpn.nasreddine.com/ta.key;
 
 in {
   imports = [
     ./hardware-configuration.nix
 
-    "${pinnedNH}/common/cpu/intel"
-    "${pinnedNH}/common/pc/laptop"
-    "${pinnedNH}/common/pc/laptop/ssd"
+    "${shabka.external.nixos-hardware.path}/common/cpu/intel"
+    "${shabka.external.nixos-hardware.path}/common/pc/laptop"
+    "${shabka.external.nixos-hardware.path}/common/pc/laptop/ssd"
 
     ../../modules/nixos
 
     ./home.nix
-  ];
+  ]
+  ++ (optionals (builtins.pathExists ./../../secrets/nixos) (singleton ./../../secrets/nixos));
 
   boot.tmpOnTmpfs = true;
 
@@ -52,18 +32,6 @@ in {
 
   networking.hostName = "hades";
 
-  nix.buildMachines =
-    if builtins.pathExists /yl/private/network-secrets/shabka/hosts/zeus/id_rsa then
-    [{
-      hostName = "zeus.home.nasreddine.com";
-      sshUser = "builder";
-      sshKey = "/yl/private/network-secrets/shabka/hosts/zeus/id_rsa";
-      system = "x86_64-linux";
-      maxJobs = 8;
-      speedFactor = 2;
-      supportedFeatures = [ ];
-      mandatoryFeatures = [ ];
-    }] else [];
   nix.extraOptions = ''
     builders-use-substitutes = true
   '';
@@ -71,6 +39,7 @@ in {
   mine.hardware.intel_backlight.enable = true;
   mine.printing.enable = true;
   mine.useColemakKeyboardLayout = true;
+  mine.users.enable = true;
   mine.virtualisation.docker.enable = true;
 
   mine.workstation = {
@@ -78,15 +47,6 @@ in {
 
     autorandr.enable = true;
     keeptruckin.enable = true;
-  };
-
-  mine.openvpn.client.expressvpn = mkIf enableExpressVPN {
-    enable = true;
-    auth_user_pass = /yl/private/network-secrets/vpn/client/expressvpn/auth.txt;
-    ca             = /yl/private/network-secrets/vpn/client/expressvpn/ca2.crt;
-    client_cert    = /yl/private/network-secrets/vpn/client/expressvpn/client.crt;
-    client_key     = /yl/private/network-secrets/vpn/client/expressvpn/client.key;
-    tls_auth       = /yl/private/network-secrets/vpn/client/expressvpn/ta.key;
   };
 
   mine.hardware.machine = "precision-7530";
@@ -118,31 +78,6 @@ in {
       "private" = {
         subvolume = "/yl/private";
       };
-    };
-  };
-
-  services.openvpn.servers = {
-    client-nasreddine = mkIf enableNasreddineVPN {
-      autoStart = false;
-
-      config = ''
-        client
-        dev tun
-        proto udp
-        remote vpn.nasreddine.com 1194
-        nobind
-        persist-key
-        persist-tun
-        ca /yl/private/network-secrets/vpn/client/desktop.hades.WaelNasreddine.vpn.nasreddine.com/ca.crt
-        cert /yl/private/network-secrets/vpn/client/desktop.hades.WaelNasreddine.vpn.nasreddine.com/public.crt
-        key /yl/private/network-secrets/vpn/client/desktop.hades.WaelNasreddine.vpn.nasreddine.com/private.key
-        tls-auth /yl/private/network-secrets/vpn/client/desktop.hades.WaelNasreddine.vpn.nasreddine.com/ta.key 1
-        verb 1
-        cipher aes-128-cbc
-        comp-lzo
-      '';
-
-      updateResolvConf = true;
     };
   };
 

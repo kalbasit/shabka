@@ -3,20 +3,7 @@
 with lib;
 
 let
-  sshKeys = [
-    (builtins.readFile (import ../../external/kalbasit-keys.nix))
-  ];
-
-  pinnedNH =
-    # I'm getting an infinite loop when I import pkgs as a dependency to this
-    # function. Why is that? It forces me to import nixpkgs again here!
-    let
-
-      nixpkgs = (import ../../external/nixpkgs-stable.nix {});
-
-    in import ../../external/nixos-hardware.nix {
-      inherit (import nixpkgs {}) fetchpatch runCommand;
-    };
+  shabka = import <shabka> { };
 
   nasIP = "172.25.2.2";
 
@@ -76,28 +63,14 @@ in {
   imports = [
     ./hardware-configuration.nix
 
-    "${pinnedNH}/common/cpu/intel"
-    "${pinnedNH}/common/pc/ssd"
+    "${shabka.external.nixos-hardware.path}/common/cpu/intel"
+    "${shabka.external.nixos-hardware.path}/common/pc/ssd"
 
     ../../modules/nixos
 
     ./home.nix
-  ];
-
-  # allow Zeus to be used as a builder
-  users.users = mkMerge [
-    { root = { openssh.authorizedKeys.keys = sshKeys; }; }
-
-    (if builtins.pathExists /yl/private/network-secrets/shabka/hosts/zeus/id_rsa.pub then {
-      builder = {
-        extraGroups = ["builders"];
-        openssh.authorizedKeys.keys = [
-          (builtins.readFile /yl/private/network-secrets/shabka/hosts/zeus/id_rsa.pub)
-        ];
-        isNormalUser = true;
-      };
-    } else {})
-  ];
+  ]
+  ++ (optionals (builtins.pathExists ./../../secrets/nixos) (singleton ./../../secrets/nixos));
 
   # set the default locale and the timeZone
   i18n.defaultLocale = "en_US.UTF-8";
@@ -105,11 +78,17 @@ in {
 
   networking.hostName = "zeus";
 
-  mine.users = {};
-
   mine.useColemakKeyboardLayout = true;
   mine.neovim.enable = true;
   mine.virtualisation.libvirtd.enable = true;
+
+  mine.users = {
+    enable = true;
+
+    users = {
+      yl = { uid = 2000; isAdmin = true;  home = "/yl"; };
+    };
+  };
 
   mine.hardware.machine = "zeus";
 

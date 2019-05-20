@@ -24,13 +24,16 @@
 # }
 
 let
+  shabka = import <shabka> { };
+
+  iohk-nix = import shabka.external.iohk-nix.path {};
+
   git_dir = ../../../.git;
 
-  pinnedNixpkgsVersion = builtins.fromJSON (builtins.readFile ../../../external/nixpkgs-stable-version.json);
+  # TODO: This is hardcoded! It should instead point to whatever value pkgs.path is
+  pinnedNixpkgsVersion = builtins.fromJSON (builtins.readFile ../../../external/nixpkgs/19.03/version.json);
 
-  label = "nixos_${config.system.nixos.release}-${builtins.substring 0 7 pinnedNixpkgsVersion.rev}-shabka_" + (if lib.pathIsDirectory git_dir then
-    "${builtins.substring 0 7 (lib.commitIdFromGitRepo git_dir)}"
-  else "story");
+  label = "nixos_${config.system.nixos.release}-${builtins.substring 0 7 pinnedNixpkgsVersion.rev}-shabka_${builtins.substring 0 7 (iohk-nix.commitIdFromGitRepo git_dir)}";
 
 in {
   # git is required to compute the label within lib.commitIdFromGitRepo.

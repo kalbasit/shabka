@@ -33,7 +33,7 @@ let
 
     # open a new terminal window with vim session inside of it to edit the jrnl entry
     readonly line_count="$(wc -l "$jrnl_entry" | awk '{print $1}')"
-    ${getBin pkgs.termite}/bin/termite --title jrnl_entry --exec="nvim +$line_count +star -c 'set wrap' -c 'set textwidth=80' -c 'set fo+=t'" "$jrnl_entry"
+    ${getBin pkgs.termite}/bin/termite --title jrnl_entry --exec="nvim +$line_count +star -c 'set wrap' -c 'set textwidth=80' -c 'set fo+=t' $jrnl_entry"
     readonly content="$( grep -v '^#' "$jrnl_entry" )"
 
     ${getBin pkgs.jrnl}/bin/jrnl "$current_profile" "$content"
@@ -316,16 +316,24 @@ in {
     bindsym ${defaultModifier}+${thirdModifier}+w mode "$mode_wm"
 
     # Application launcher
-    set $mode_apps Launch: (a) ARandR, (d) Discord, (i) Irc${optionalString config.mine.keybase.enable ", (k) Keybase"}, (m) Mail, (s) Studio, (t) TaskWarrior, (w) Work IM
-    mode "$mode_apps" {
-      bindsym a exec ${getBin pkgs.arandr}/bin/arandr, mode default
+    set $mode_apps_social Launch: (d) Discord, (i) Irc${optionalString config.mine.keybase.enable ", (k) Keybase"}, (l) Slack
+    mode "$mode_apps_social" {
       bindsym d exec ${getBin pkgs.discord}/bin/Discord, mode default
       bindsym i exec ${getBin pkgs.termite}/bin/termite --title=irc --exec=weechat, mode default
       ${optionalString config.mine.keybase.enable "bindsym k exec ${getBin pkgs.keybase-gui}/bin/keybase-gui, mode default"}
+      bindsym l exec ${getBin pkgs.slack}/bin/slack, mode default
+
+      # back to normal: Enter or Escape
+      bindsym Return mode "$mode_apps"
+      bindsym Escape mode "$mode_apps"
+    }
+
+    set $mode_apps Launch: (a) ARandR, (m) Mail, (s) Social, (o) Obs Studio
+    mode "$mode_apps" {
+      bindsym a exec ${getBin pkgs.arandr}/bin/arandr, mode default
       bindsym m exec astroid, mode default
-      bindsym s exec ${getBin pkgs.obs-studio}/bin/obs, mode default
-      bindsym t exec ${getBin pkgs.ptask}/bin/ptask, mode default
-      bindsym w exec ${getBin pkgs.slack}/bin/slack, mode default
+      bindsym s mode "$mode_apps_social"
+      bindsym o exec ${getBin pkgs.obs-studio}/bin/obs, mode default
 
       # back to normal: Enter or Escape
       bindsym Return mode default

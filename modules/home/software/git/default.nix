@@ -1,14 +1,39 @@
-# TODO(high): the gpg key must be configurable
 { config, pkgs, lib, ... }:
 
 with lib;
 
-{
-  options.mine.git.enable = mkEnableOption "git";
+let
+  shabka = import <shabka> { };
+  cfg = config.mine.git;
+in {
+  options = {
 
-  config = mkIf config.mine.git.enable {
+    mine.git = {
+      enable = mkEnableOption "git";
+
+      userName = mkOption {
+        type = types.str;
+        default = "Wael M. Nasreddine";
+        description = "git user name";
+      };
+
+      userEmail = mkOption {
+        type = types.str;
+        default = "wael.nasreddine@gmail.com";
+        description = "git user email";
+      };
+
+      gpgSigningKey = mkOption {
+        type = types.str;
+        default = "me@yl.codes";
+        description = "git PGP signing key";
+      };
+    };
+  };
+
+  config = mkIf cfg.enable {
     home.packages = with pkgs; [
-      gitAndTools.git-appraise
+      (gitAndTools.git-appraise or shabka.external.nixpkgs.release-unstable.gitAndTools.git-appraise)
       gitAndTools.hub
       gitAndTools.tig
     ];
@@ -16,9 +41,9 @@ with lib;
     programs.git = {
       enable = true;
 
-      userName = "Wael M. Nasreddine";
+      userName = cfg.userName;
 
-      userEmail = "wael.nasreddine@gmail.com";
+      userEmail = cfg.userEmail;
 
       aliases = {
         aa             = "add --all .";
@@ -107,8 +132,8 @@ with lib;
           prompt = true;
         };
 
-        "mergetool \"vimdiff\"" = {
-          cmd = "${pkgs.neovim}/bin/nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'";
+        "mergetool \"vimdiff\"" = optionalAttrs config.mine.neovim.enable {
+          cmd = "nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'";
         };
 
         "protocol \"keybase\"" = {
@@ -268,7 +293,7 @@ with lib;
       ];
 
       signing = {
-        key = "me@yl.codes";
+        key = cfg.gpgSigningKey;
         signByDefault = true;
       };
     };

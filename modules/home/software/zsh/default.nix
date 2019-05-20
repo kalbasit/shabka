@@ -4,6 +4,8 @@ with lib;
 with pkgs;
 
 let
+  shabka = import <shabka> { };
+
   myFunctions = stdenvNoCC.mkDerivation rec {
     name = "zsh-functions-${version}";
     version = "0.0.1";
@@ -17,7 +19,7 @@ let
       rm -f $out/default.nix
 
       substituteInPlace $out/c \
-        --subst-var-by archiver_bin ${getBin unstable.archiver}/bin/arc
+        --subst-var-by archiver_bin ${getBin shabka.external.nixpkgs.release-unstable.archiver}/bin/arc
 
       substituteInPlace $out/gcim \
         --subst-var-by git_bin ${getBin git}/bin/git
@@ -56,9 +58,6 @@ let
         --subst-var-by jq_bin ${getBin jq}/bin/jq \
         --subst-var-by xsel_bin ${getBin xsel}/bin/xsel
 
-      substituteInPlace $out/register_u2f \
-        --subst-var-by pamu2fcfg_bin ${getBin pam_u2f}/bin/pamu2fcfg
-
       substituteInPlace $out/sapg \
         --subst-var-by apg_bin ${getBin apg}/bin/apg
 
@@ -82,7 +81,7 @@ let
         --subst-var-by vim_bin ${getBin vim}/bin/vim
 
       substituteInPlace $out/x \
-        --subst-var-by archiver_bin ${getBin unstable.archiver}/bin/arc
+        --subst-var-by archiver_bin ${getBin shabka.external.nixpkgs.release-unstable.archiver}/bin/arc
 
       substituteInPlace $out/xmlpp \
         --subst-var-by xmllint_bin ${getBin libxml2Python}/bin/xmllint
@@ -99,10 +98,13 @@ let
 
       substituteInPlace $out/umount.enc \
         --subst-var-by cryptsetup_bin ${getBin cryptsetup}/bin/cryptsetup
+
+      substituteInPlace $out/register_u2f \
+        --subst-var-by pamu2fcfg_bin ${getBin pam_u2f}/bin/pamu2fcfg
     ''
 
     + lib.optionalString stdenv.isDarwin ''
-      rm -f $out/mkfs.enc $out/mount.enc $out/umount.enc
+      rm -f $out/mkfs.enc $out/mount.enc $out/umount.enc $out/register_u2f
     '';
   };
 
@@ -119,6 +121,14 @@ in {
     {
       enable = true;
 
+      # If a command is issued that can't be executed as a normal command, and the
+      # command is the name of a directory, perform the cd command to that directory.
+      # This option is only applicable if the option SHIN_STDIN is set, i.e. if
+      # commands are being read from standard input. The option is designed for
+      # interactive use; it is recommended that cd be used explicitly in scripts to
+      # avoid ambiguity.
+      autocd = true;
+
       enableCompletion = true;
       enableAutosuggestions = true;
 
@@ -127,7 +137,7 @@ in {
         e = "\${EDITOR:-nvim}";
         gl = "github_commit_link";
         http = "http --print=HhBb";
-        kube = "kubectl";
+        kc = "kubectl";
         ll = "ls -la";
         pw = "ps aux | grep -v grep | grep -e";
         rot13 = "tr \"[A-Za-z]\" \"[N-ZA-Mn-za-m]\"";
@@ -143,7 +153,7 @@ in {
         # TODO: move this to the swm package
         s = "swm tmux switch-client";
         sb = "swm --story base tmux switch-client";
-        vim_ready = ""; # TODO: run direnv here
+        vim_ready = "sleep 1";
 
         # TODO: move to docker-config, how to tell ZSH to import them?
         remove_created_containers = "docker rm -v \$(docker ps -a -q -f status=created)";
@@ -181,18 +191,20 @@ in {
         size = 1000000000;
       };
 
-      initExtra = builtins.readFile (substituteAll {
+      initExtra = ''
+        # source in the LS_COLORS
+        source "${nur.repos.kalbasit.ls-colors}/ls-colors/bourne-shell.sh"
+      '' + (builtins.readFile (substituteAll {
         src = ./init-extra.zsh;
 
         bat_bin      = "${getBin bat}/bin/bat";
-        exa_bin      = "${getBin exa}/bin/exa";
         fortune_bin  = "${getBin fortune}/bin/fortune";
         fzf_bin      = "${getBin fzf}/bin/fzf-tmux";
         home_path    = "${config.home.homeDirectory}";
         jq_bin       = "${getBin jq}/bin/jq";
         less_bin     = "${getBin less}/bin/less";
         tput_bin     = "${getBin ncurses}/bin/tput";
-      });
+      }));
 
       oh-my-zsh = {
         enable = true;
@@ -201,7 +213,6 @@ in {
           "command-not-found"
           "git"
           "history"
-          "kubectl"
           "sudo"
         ];
       };

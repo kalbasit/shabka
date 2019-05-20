@@ -1,13 +1,10 @@
 { lib }:
 
 let
-  homeManager = import ../external/home-manager.nix {
-    pkgs = (import <nixpkgs> {});
-    inherit (import ../util) assertMsg;
-  };
+  shabka = import <shabka> { };
 in
 
-with import "${homeManager}/modules/lib/dag.nix" { inherit lib; };
+with import "${shabka.external.home-manager.path}/modules/lib/dag.nix" { inherit lib; };
 
 {
   symlink = src: dst: dagEntryAfter ["installPackages"] ''

@@ -67,6 +67,30 @@ resource "aws_route53_record" "yl-codes-txt" {
   ]
 }
 
+resource "aws_route53_record" "yl-codes-a" {
+  zone_id = "${aws_route53_zone.yl-codes.zone_id}"
+  name    = "yl.codes"
+  type    = "A"
+
+  alias {
+    name                   = "${aws_s3_bucket.yl-codes.website_domain}"
+    zone_id                = "${aws_s3_bucket.yl-codes.hosted_zone_id}"
+    evaluate_target_health = false
+  }
+}
+
+resource "aws_route53_record" "www-yl-codes-a" {
+  zone_id = "${aws_route53_zone.yl-codes.zone_id}"
+  name    = "www.yl.codes"
+  type    = "A"
+
+  alias {
+    name                   = "${aws_s3_bucket.www-yl-codes.website_domain}"
+    zone_id                = "${aws_s3_bucket.www-yl-codes.hosted_zone_id}"
+    evaluate_target_health = false
+  }
+}
+
 resource "aws_route53_record" "_keybase-yl-codes-txt" {
   zone_id = "${aws_route53_zone.yl-codes.zone_id}"
   name    = "_keybase.yl.codes"

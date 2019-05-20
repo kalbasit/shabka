@@ -8,5 +8,5 @@ function register_u2f() {
 	# https://github.com/NixOS/nixpkgs/pull/11886 is merged!
 	local u2f_keys="${HOME}/.config/Yubico/u2f_keys"
 	mkdir -p "$( dirname "${u2f_keys}" )"
-	@pamu2fcfg_bin@ >> "${u2f_keys}"
+	(@pamu2fcfg_bin@; echo) >> "${u2f_keys}"
 }

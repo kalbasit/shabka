@@ -1,13 +1,10 @@
 { pkgs, lib }:
 
 let
-  homeManager = import ../external/home-manager.nix {
-    inherit pkgs;
-    inherit (import ./assertMsg.nix { inherit lib; }) assertMsg;
-  };
+  external = import ../../external {};
 
 in {
-  buildHomeManagerConfiguration = conf: (import "${homeManager}/home-manager/home-manager.nix" {
+  buildHomeManagerConfiguration = conf: (import "${external.home-manager.path}/home-manager/home-manager.nix" {
     confPath = conf;
     confAttr = "";
   }).activationPackage;

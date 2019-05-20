@@ -12,7 +12,6 @@ with lib;
     home.file.".config/chromium/profiles/keeptruckin/.keep".text = "";
     home.file.".config/chromium/profiles/nosecurity/.keep".text = "";
     home.file.".config/chromium/profiles/personal/.keep".text = "";
-    home.file.".config/chromium/profiles/publica/.keep".text = "";
     home.file.".config/chromium/profiles/vanya/.keep".text = "";
 
     home.file.".config/chromium/profiles/nosecurity/.cmdline_args".text = ''

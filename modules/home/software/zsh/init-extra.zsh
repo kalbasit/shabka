@@ -9,14 +9,6 @@ if [[ -o interactive ]]; then
 	# inserted or menu completion is performed.
 	setopt alwaystoend
 
-	# If a command is issued that can't be executed as a normal command, and the
-	# command is the name of a directory, perform the cd command to that directory.
-	# This option is only applicable if the option SHIN_STDIN is set, i.e. if
-	# commands are being read from standard input. The option is designed for
-	# interactive use; it is recommended that cd be used explicitly in scripts to
-	# avoid ambiguity.
-	setopt autocd
-
 	# Automatically use menu completion after the second consecutive request for
 	# completion, for example by pressing the tab key repeatedly. This option is
 	# overridden by MENU_COMPLETE.
@@ -317,9 +309,7 @@ export ERROR="${FG_RED_B}"
 
 # Find the option for using colors in ls, depending on the version
 if [[ -o interactive ]]; then
-	if type @exa_bin@ &>/dev/null; then
-		alias ls='@exa_bin@'
-	elif [[ "$OSTYPE" == netbsd* ]]; then
+	if [[ "$OSTYPE" == netbsd* ]]; then
 		# On NetBSD, test if "gls" (GNU ls) is installed (this one supports colors);
 		# otherwise, leave ls as is, because NetBSD's ls doesn't support -G
 		gls --color -d . &>/dev/null && alias ls='gls --color=tty'

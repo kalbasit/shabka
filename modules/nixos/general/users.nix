@@ -3,13 +3,11 @@
 with lib;
 
 let
-  sshKeys = [
-    (builtins.readFile (import ../../../external/kalbasit-keys.nix))
-  ];
+  shabka = import <shabka> { };
 
   makeUser = userName: { uid, isAdmin ? false, home ? "/home/${userName}" }: nameValuePair
-    (userName)
-    ({
+    userName
+    {
       inherit home uid;
 
       group = "mine";
@@ -20,18 +18,18 @@ let
         "users"
         "video"
       ]
-      ++ config.mine.userGroups
+      ++ config.mine.users.groups
       ++ (optionals isAdmin ["wheel"]);
 
       shell = pkgs.zsh;
       hashedPassword = "$6$0bx5eAEsHJRxkD8.$gJ7sdkOOJRf4QCHWLGDUtAmjHV/gJxPQpyCEtHubWocHh9O7pWy10Frkm1Ch8P0/m8UTUg.Oxp.MB3YSQxFXu1";
       isNormalUser = true;
 
-      openssh.authorizedKeys.keys = sshKeys;
-    });
+      openssh.authorizedKeys.keys = singleton shabka.external.kalbasit.keys;
+    };
 
-  makeHM = userName: { uid, isAdmin, home, ... }: nameValuePair
-    (userName)
+  makeHM = userName: { uid, isAdmin, home ? "/home/${userName}", ... }: nameValuePair
+    userName
     (config.mine.home-manager.config {
       inherit userName uid isAdmin home;
       nixosConfig = config;
@@ -44,29 +42,36 @@ let
   };
 
 in {
-  options.mine.users = mkOption {
-    type = types.attrs;
-    default = defaultUsers;
-    defaultText = ''
-      The default users are ${builtins.concatStringsSep " " (builtins.attrNames defaultUsers)}
-    '';
-    description = ''
-      The list of users to create.
-    '';
+  options.mine.users = {
+    enable = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Enable the management of users and groups.
+      '';
+    };
+
+    users = mkOption {
+      type = types.attrs;
+      default = defaultUsers;
+      defaultText = ''
+        The default users are ${builtins.concatStringsSep " " (builtins.attrNames defaultUsers)}
+      '';
+      description = ''
+        The list of users to create.
+      '';
+    };
+
+    groups = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      description = ''
+        The list of groups to add all users to.
+      '';
+    };
   };
 
-  options.mine.userGroups = mkOption {
-    type = types.listOf types.str;
-    default = [];
-    description = ''
-      The list of groups to add all users to.
-    '';
-  };
-
-  config = {
-    # set the initial password of the root user
-    security.initialRootPassword = "$6$0bx5eAEsHJRxkD8.$gJ7sdkOOJRf4QCHWLGDUtAmjHV/gJxPQpyCEtHubWocHh9O7pWy10Frkm1Ch8P0/m8UTUg.Oxp.MB3YSQxFXu1";
-
+  config = mkIf (config.mine.users.enable) {
     users = {
       mutableUsers = false;
 
@@ -76,10 +81,10 @@ in {
       };
 
       users = mergeAttrs
-        { root = { openssh.authorizedKeys.keys = sshKeys; }; }
-        (mapAttrs' makeUser config.mine.users);
+        { root = { openssh.authorizedKeys.keys = singleton shabka.external.kalbasit.keys; }; }
+        (mapAttrs' makeUser config.mine.users.users);
     };
 
-    home-manager.users = mapAttrs' makeHM config.mine.users;
+    home-manager.users = mapAttrs' makeHM config.mine.users.users; # XXX: This should be gated by an option
   };
 }

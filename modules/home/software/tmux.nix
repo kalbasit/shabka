@@ -17,47 +17,26 @@ let
   seoul256Color = ''
     set-option -g status-justify left
     set-option -g status-left-length 16
-    set-option -g status-bg colour237
     set-option -g status-interval 60
-
-    set-option -g pane-active-border-fg colour215
-    set-option -g pane-border-fg colour185
 
     set-option -g status-left '#[bg=colour72] #[bg=colour237] #[bg=colour236] #{prefix_highlight} #[bg=colour235]#[fg=colour185] #h #[bg=colour236] '
     set-option -g status-right '#[bg=colour236] #[bg=colour237]#[fg=colour185] #[bg=colour235] #(date "+%a %b %d %H:%M") #[bg=colour236] #[bg=colour237] #[bg=colour72] '
 
     set-window-option -g window-status-format '#[bg=colour238]#[fg=colour107] #I #[bg=colour239]#[fg=colour110] #[bg=colour240]#W#[bg=colour239]#[fg=colour195]#F#[bg=colour238] '
     set-window-option -g window-status-current-format '#[bg=colour236]#[fg=colour215] #I #[bg=colour235]#[fg=colour167] #[bg=colour234]#W#[bg=colour235]#[fg=colour195]#F#[bg=colour236] '
-  '';
+  ''
+  + (if versionAtLeast (builtins.parseDrvName pkgs.tmux.name).version "2.9" then ''
+      set-option -g status-style bg=colour237
+      set-option -g pane-active-border-style fg=colour215
+      set-option -g pane-border-style fg=colour185
+    '' else ''
+      set-option -g status-bg colour237
+      set-option -g pane-active-border-fg colour215
+      set-option -g pane-border-fg colour185
+
+    '');
 
   gruvBox256Color = ''
-    # default statusbar colors
-    set-option -g status-bg colour237 #bg1
-    set-option -g status-fg colour223 #fg1
-
-    # default window title colors
-    set-window-option -g window-status-bg colour214 #yellow
-    set-window-option -g window-status-fg colour237 #bg1
-
-    set-window-option -g window-status-activity-bg colour237 #bg1
-    set-window-option -g window-status-activity-fg colour248 #fg3
-
-    # active window title colors
-    set-window-option -g window-status-current-bg default
-    set-window-option -g window-status-current-fg colour237 #bg1
-
-    # pane border
-    set-option -g pane-active-border-fg colour250 #fg2
-    set-option -g pane-border-fg colour237 #bg1
-
-    # message infos
-    set-option -g message-bg colour239 #bg2
-    set-option -g message-fg colour223 #fg1
-
-    # writting commands inactive
-    set-option -g message-command-bg colour239 #fg3
-    set-option -g message-command-fg colour223 #bg1
-
     # pane number display
     set-option -g display-panes-active-colour colour250 #fg2
     set-option -g display-panes-colour colour237 #bg1
@@ -69,14 +48,9 @@ let
     set-window-option -g window-status-bell-style fg=colour235,bg=colour167 #bg, red
 
     ## Theme settings mixed with colors (unfortunately, but there is no cleaner way)
-    set-option -g status-attr "none"
     set-option -g status-justify "left"
-    set-option -g status-left-attr "none"
     set-option -g status-left-length "80"
-    set-option -g status-right-attr "none"
     set-option -g status-right-length "80"
-    set-window-option -g window-status-activity-attr "none"
-    set-window-option -g window-status-attr "none"
     set-window-option -g window-status-separator ""
 
     set-option -g status-left "#[fg=colour248, bg=colour241] #S #[fg=colour241, bg=colour237, nobold, noitalics, nounderscore]"
@@ -84,7 +58,64 @@ let
 
     set-window-option -g window-status-current-format "#[fg=colour239, bg=colour248, :nobold, noitalics, nounderscore]#[fg=colour239, bg=colour214] #I #[fg=colour239, bg=colour214, bold] #W #[fg=colour214, bg=colour237, nobold, noitalics, nounderscore]"
     set-window-option -g window-status-format "#[fg=colour237,bg=colour239,noitalics]#[fg=colour223,bg=colour239] #I #[fg=colour223, bg=colour239] #W #[fg=colour239, bg=colour237, noitalics]"
-  '';
+  ''
+  + (if versionAtLeast (builtins.parseDrvName pkgs.tmux.name).version "2.9" then ''
+      # default statusbar colors
+      set-option -g status-style bg=colour237,fg=colour223,none
+      set-option -g status-left-style none
+      set-option -g status-right-style none
+
+      # default window title colors
+      set-window-option -g window-status-style bg=colour214,fg=colour237,none
+
+      set-window-option -g window-status-activity-style bg=colour237,fg=colour248,none
+
+      # active window title colors
+      set-window-option -g window-status-current-style bg=default,fg=colour237
+
+      # pane border
+      set-option -g pane-active-border-style fg=colour250,fg=colour237
+
+      # message infos
+      set-option -g message-style bg=colour239,fg=colour223
+
+      # writting commands inactive
+      set-option -g message-command-style bg=colour239,fg=colour223
+    '' else ''
+      # default statusbar colors
+      set-option -g status-bg colour237 #bg1
+      set-option -g status-fg colour223 #fg1
+
+      # default window title colors
+      set-window-option -g window-status-bg colour214 #yellow
+      set-window-option -g window-status-fg colour237 #bg1
+
+      set-window-option -g window-status-activity-bg colour237 #bg1
+      set-window-option -g window-status-activity-fg colour248 #fg3
+
+      # active window title colors
+      set-window-option -g window-status-current-bg default
+      set-window-option -g window-status-current-fg colour237 #bg1
+
+      # pane border
+      set-option -g pane-active-border-fg colour250 #fg2
+      set-option -g pane-border-fg colour237 #bg1
+
+      # message infos
+      set-option -g message-bg colour239 #bg2
+      set-option -g message-fg colour223 #fg1
+
+      # writting commands inactive
+      set-option -g message-command-bg colour239 #fg3
+      set-option -g message-command-fg colour223 #bg1
+
+      set-option -g status-attr "none"
+      set-option -g status-left-attr "none"
+      set-option -g status-right-attr "none"
+      set-window-option -g window-status-activity-attr "none"
+      set-window-option -g window-status-attr "none"
+    '');
+
 
   tmuxVimAwarness = ''
     # Smart pane switching with awareness of Vim splits.
@@ -131,12 +162,6 @@ let
     bind-key -r -T copy-mode-vi p command-prompt -1 -p "jump to forward" "send -X jump-to-forward \"%%%\""
     bind-key -r -T copy-mode-vi P command-prompt -1 -p "jump to backward" "send -X jump-to-backward \"%%%\""
 
-    # resize panes
-    bind-key M-n resize-pane -L 5
-    bind-key M-e resize-pane -D 5
-    bind-key M-i resize-pane -U 5
-    bind-key M-o resize-pane -R 5
-
     # Change window move behavior
     bind . command-prompt "swap-window -t '%%'"
     bind > command-prompt "move-window -t '%%'"
@@ -149,6 +174,16 @@ let
 
     # The shortcut is set to <t> which overrides the default mapping for clock mode
     bind T clock-mode
+
+    # Bind pane selection and pane resize for Vim Bindings in Colemak!
+    bind n select-pane -L
+    bind e select-pane -D
+    bind i select-pane -U
+    bind o select-pane -R
+    bind -r N resize-pane -L 5
+    bind -r E resize-pane -D 5
+    bind -r I resize-pane -U 5
+    bind -r O resize-pane -R 5
   '';
 
   copyPaste =
@@ -174,6 +209,13 @@ in {
         fzf-tmux-url
       ];
 
+      clock24 = true;
+      customPaneNavigationAndResize = !config.mine.useColemakKeyboardLayout;
+      escapeTime = 0;
+      historyLimit = 10000;
+      keyMode = "vi";
+      shortcut = "t";
+
       extraConfig = ''
         ${defaultTheme}
         ${tmuxVimAwarness}
@@ -183,29 +225,6 @@ in {
         #
 
         set  -g default-terminal "tmux-256color"
-        set  -g base-index      0
-        setw -g pane-base-index 0
-
-        set -g mode-keys   vi
-
-        bind h select-pane -L
-        bind j select-pane -D
-        bind k select-pane -U
-        bind l select-pane -R
-
-        bind -r H resize-pane -L 5
-        bind -r J resize-pane -D 5
-        bind -r K resize-pane -U 5
-        bind -r L resize-pane -R 5
-
-        # rebind main key: C-t
-        unbind C-b
-        set -g prefix C-t
-        bind t send-prefix
-        bind C-t last-window
-
-        # Display the clock in 24 hours format
-        setw -g clock-mode-style  24
 
         # don't allow the terminal to rename windows
         set-window-option -g allow-rename off

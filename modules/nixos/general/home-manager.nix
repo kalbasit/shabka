@@ -3,16 +3,10 @@
 with lib;
 
 let
-  homeManager = import ../../../external/home-manager.nix {
-    pkgs = (import <nixpkgs> {});
-    inherit (import ../../../util) assertMsg;
-  };
+  shabka = import <shabka> { };
 in {
   imports = [
-    (import "${homeManager}/nixos")
-
-    # load the following when running a VM
-    # ("${builtins.fetchTarball https://github.com/rycee/home-manager/archive/nixos-module-user-pkgs.tar.gz}/nixos")
+    (import "${shabka.external.home-manager.path}/nixos")
   ];
 
   options.mine.home-manager.config = mkOption {

@@ -4,13 +4,11 @@
 
   with lib;
 
-  let
-    enableEmail = userName == "yl" && builtins.pathExists /yl/private/network-secrets/shabka/email.nix;
-    enableSSH = builtins.pathExists /yl/private/network-secrets/shabka/ssh.nix;
-  in {
+  {
     imports = [
       ../../modules/home
-    ];
+    ]
+    ++ (optionals (builtins.pathExists ./../../secrets/home) (singleton ./../../secrets/home));
 
     mine.nixosConfig = nixosConfig;
 
@@ -39,6 +37,7 @@
         config = {
           eDP-1 = {
             enable = true;
+            primary = true;
             position = "0x0";
             mode = "1920x1080";
             gamma = "1.0:0.909:0.909";
@@ -98,16 +97,6 @@
           };
         };
       };
-    };
-
-    mine.ssh = mkIf enableSSH {
-      enable = true;
-      privateSSHPath = /yl/private/network-secrets/shabka/ssh.nix;
-    };
-
-    mine.workstation.email = mkIf enableEmail {
-      enable = true;
-      privateEmailPath = /yl/private/network-secrets/shabka/email.nix;
     };
   };
 }

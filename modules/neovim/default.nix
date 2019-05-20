@@ -70,6 +70,7 @@ with pkgs.lib;
             "vim-eunuch"
             "vim-fugitive"
             "vim-markdown"
+            "vim-scala"
             "vim-signify"
             "vim-speeddating"
             "vim-terraform"
