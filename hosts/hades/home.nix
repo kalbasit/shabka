@@ -12,6 +12,12 @@
 
     mine.nixosConfig = nixosConfig;
 
+    home.file.".gnupg/scdaemon.conf".text = ''
+      reader-port Yubico YubiKey FIDO+CCID 01 00
+      disable-ccid
+      card-timeout 5
+    '';
+
     mine.batteryNotifier.enable = true;
     mine.git.enable = true;
     mine.pijul.enable = true;
