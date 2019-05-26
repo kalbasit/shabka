@@ -102,6 +102,7 @@ in {
     imports = [ ../hosts/demeter/configuration.nix ];
     deployment = {
       targetEnv = "ec2";
+
       ec2 = {
         inherit (secrets) accessKeyId ami keyPair region;
 
@@ -120,6 +121,11 @@ in {
           Source = "NixOps";
           Owner = "wael";
         };
+      };
+
+      route53 = {
+        inherit (secrets) accessKeyId hostName;
+        ttl = 300;
       };
     };
   };
