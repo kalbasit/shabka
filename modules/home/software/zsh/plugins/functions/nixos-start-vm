@@ -3,8 +3,9 @@
 #
 
 function nixos-start-vm() {
-  local nix_disk_image="${HOME}/storage/qemu/hades.qcow2"
+  local nix_disk_image="${HOME}/storage/qemu/$(hostname -s).qcow2"
 
+  mkdir -p "$( dirname "${nix_disk_image}" )"
   rm -f "${nix_disk_image}"
 
   QEMU_NET_OPTS="hostfwd=tcp::2222-:22" \
