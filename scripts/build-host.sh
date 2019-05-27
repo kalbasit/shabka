@@ -5,20 +5,7 @@ set -euo pipefail
 readonly shabka_path="$(cd $(dirname "${BASH_SOURCE[0]}")/../ && pwd)"
 readonly current_uname="$(uname -s | tr -d '\n')"
 
-# I don't want to ever make the mistake of pushing while my private files are
-# accessible. This is meant to go away eventually, see #216 for more
-# information
-if [[ -e "${shabka_path}/secrets" ]]; then
-    >&2 echo "ERR: ${shabka_path}/secrets exists. Will not continue!"
-    exit 1
-fi
-
-if [[ -z "${CACHIX_SIGNING_KEY:-}" ]]; then
-    >&2 echo "ERR: Please set the environment variable CACHIX_SIGNING_KEY before calling the script."
-    exit 1
-fi
-
-push_host() {
+build_host() {
     local host="${1}"
     local release
 
@@ -43,18 +30,16 @@ push_host() {
 
     local nix_path="$( "${shabka_path}/lib/bash/nix-path.sh" "${release}" )"
 
-    echo ">>> Building the host ${host}, and pushing to Cachix"
+    echo ">>> Building the host ${host}"
     echo -e "\tNIX_PATH=${nix_path}"
     NIX_PATH="${nix_path}" \
-        nix-build --option builders '' "${shabka_path}/hosts/${host}" -A system | cachix push yl
+        nix-build --option builders '' "${shabka_path}/hosts/${host}" -A system
 }
 
 
-if [[ "${#}" -eq 1 ]]; then
-    push_host "${1}"
-    exit
+if [[ "${#}" -ne 1 ]]; then
+    >&2 echo "ERR: Must give a host to build"
+    exit 1
 fi
 
-for hostPath in "${shabka_path}"/hosts/*; do
-    push_host "$(basename "${hostPath}")"
-done
+build_host "${1}"

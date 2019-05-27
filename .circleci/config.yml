@@ -43,20 +43,7 @@ var_4: &build-host
         source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
       fi
 
-      readonly shabka_path="$( pwd )"
-      readonly host="${CIRCLE_JOB}"
-
-      if [[ -r "${shabka_path}/hosts/${host}/release" ]]; then
-          release="$( cat "${shabka_path}/hosts/${host}/release" )"
-      else
-          # fallback to the default release
-          release="$( tr -d "\n" < "${shabka_path}/.release" )"
-      fi
-
-      export NIX_PATH="$( "${shabka_path}/lib/bash/nix-path.sh" "${release}" )"
-
-      echo ">>> Building the hostname '${host}' using nixpkgs at '${nixpkgs}'. NIX_PATH is set to '${NIX_PATH}'"
-      nix build -f "${shabka_path}/hosts/${host}"
+      ./scripts/build-host.sh "${CIRCLE_JOB}"
 
 var_5: &push-to-cachix
   run:
@@ -67,10 +54,7 @@ var_5: &push-to-cachix
         source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
       fi
 
-      readonly shabka_path="$( pwd )"
-      readonly host="${CIRCLE_JOB}"
-
-      "${shabka_path}/scripts/push-to-cachix.sh" "${host}"
+      ./scripts/push-to-cachix.sh "${CIRCLE_JOB}"
 
 version: 2
 jobs:
