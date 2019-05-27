@@ -1,7 +1,9 @@
 { ... }:
 
 {
-  buildNixDarwinConfiguration = conf: (import <darwin> {
-    configuration = conf;
-  }).system;
+  buildNixDarwinConfiguration =
+    { conf }:
+    import <darwin> {
+      configuration = conf;
+    };
 }

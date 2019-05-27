@@ -1,6 +1,7 @@
 with import ../../util;
 
-{
-  darwin = buildNixDarwinConfiguration ./configuration.nix;
-  # home = buildHomeManagerConfiguration ./home.nix;
+let
+  darwin = buildNixDarwinConfiguration { conf = ./configuration.nix; };
+in {
+  inherit (darwin) system;
 }

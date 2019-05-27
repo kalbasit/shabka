@@ -43,7 +43,7 @@ push_host() {
 
     echo "Pushing the cache for ${host}"
     NIX_PATH="$( "${shabka_path}/lib/bash/nix-path.sh" "${release}" )" \
-        nix-build --option builders '' "${shabka_path}/hosts/${host}" -A nixos | cachix push yl
+        nix-build --option builders '' "${shabka_path}/hosts/${host}" -A system | cachix push yl
 }
 
 
