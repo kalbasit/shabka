@@ -15,13 +15,14 @@ var_2: &install-dependencies
         source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
       fi
 
-      # install git
-      nix-env -f '<nixpkgs>' -iA gitAndTools.git
+      # install git and bash
+      nix-env -f '<nixpkgs>' -i -A gitAndTools.git -A bash
 
       # install cachix from nixpkgs at stable
       readonly shabka_path="$( pwd )"
-      readonly nixpkgs="$( nix-build "${shabka_path}" -A "external.nixpkgs.release-19-03.path" )"
-      nix-env -I nixpkgs="${nixpkgs}" -f '<nixpkgs>' -iA cachix
+      release="$( tr -d "\n" < "${shabka_path}/.release" )"
+      export NIX_PATH="$( "${shabka_path}/lib/bash/nix-path.sh" "${release}" )"
+      nix-env -f '<nixpkgs>' -iA cachix
 
 var_3: &enable-cachix
   run:
@@ -52,13 +53,48 @@ var_4: &instantiate-host
           release="$( tr -d "\n" < "${shabka_path}/.release" )"
       fi
 
-      readonly nixpkgs="$( nix-build "${shabka_path}" -A "external.nixpkgs.release-${release/./-}.path" )"
-      readonly darwin="$( nix-build "${shabka_path}" -A "external.nix-darwin.path" )"
-
-      export NIX_PATH="nixpkgs=${nixpkgs}:darwin=${darwin}:shabka=${shabka_path}"
+      export NIX_PATH="$( "${shabka_path}/lib/bash/nix-path.sh" "${release}" )"
 
       echo ">>> Instantiating the hostname '${host}' using nixpkgs at '${nixpkgs}'. NIX_PATH is set to '${NIX_PATH}'"
       nix-instantiate "${shabka_path}/hosts/${host}"
+
+var_5: &build-host
+  run:
+    name: Building the host
+    working_directory: ~/shabka
+    command: |
+      if [[ -r "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]]; then
+        source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
+      fi
+
+      readonly shabka_path="$( pwd )"
+      readonly host="${CIRCLE_JOB}"
+
+      if [[ -r "${shabka_path}/hosts/${host}/release" ]]; then
+          release="$( cat "${shabka_path}/hosts/${host}/release" )"
+      else
+          # fallback to the default release
+          release="$( tr -d "\n" < "${shabka_path}/.release" )"
+      fi
+
+      export NIX_PATH="$( "${shabka_path}/lib/bash/nix-path.sh" "${release}" )"
+
+      echo ">>> Building the hostname '${host}' using nixpkgs at '${nixpkgs}'. NIX_PATH is set to '${NIX_PATH}'"
+      nix build -f "${shabka_path}/hosts/${host}"
+
+var_6: &push-to-cachix
+  run:
+    name: Push the build to cachix
+    working_directory: ~/shabka
+    command: |
+      if [[ -r "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]]; then
+        source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
+      fi
+
+      readonly shabka_path="$( pwd )"
+      readonly host="${CIRCLE_JOB}"
+
+      "${shabka_path}/scripts/push-to-cachix.sh" "${host}"
 
 version: 2
 jobs:
@@ -91,7 +127,8 @@ jobs:
       - checkout
       - *install-dependencies
       - *enable-cachix
-      - *instantiate-host
+      - *build-host
+      - *push-to-cachix
 
   hades:
     working_directory: ~/shabka
@@ -106,7 +143,8 @@ jobs:
       - checkout
       - *install-dependencies
       - *enable-cachix
-      - *instantiate-host
+      - *build-host
+      - *push-to-cachix
 
   hera:
     working_directory: ~/shabka
@@ -121,7 +159,8 @@ jobs:
       - checkout
       - *install-dependencies
       - *enable-cachix
-      - *instantiate-host
+      - *build-host
+      - *push-to-cachix
 
   poseidon:
     macos:
@@ -152,21 +191,22 @@ jobs:
       - checkout
       - *install-dependencies
       - *enable-cachix
-      - *instantiate-host
+      - *build-host
+      - *push-to-cachix
 
 workflows:
   version: 2
   testing:
     jobs:
       - athena:
-          context: org-global
+          context: nix-global
       - cratos:
-          context: org-global
+          context: nix-global
       - hades:
-          context: org-global
+          context: nix-global
       - hera:
-          context: org-global
+          context: nix-global
       - poseidon:
-          context: org-global
+          context: nix-global
       - zeus:
-          context: org-global
+          context: nix-global
