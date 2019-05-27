@@ -214,6 +214,7 @@ in {
       escapeTime = 0;
       historyLimit = 10000;
       keyMode = "vi";
+      secureSocket = pkgs.stdenv.isLinux;
       shortcut = "t";
 
       extraConfig = ''
