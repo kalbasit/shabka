@@ -82,6 +82,20 @@ var_5: &build-host
       echo ">>> Building the hostname '${host}' using nixpkgs at '${nixpkgs}'. NIX_PATH is set to '${NIX_PATH}'"
       nix build -f "${shabka_path}/hosts/${host}"
 
+var_5: &push-to-cachix
+  run:
+    name: Push the build to cachix
+    working_directory: ~/shabka
+    command: |
+      if [[ -r "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]]; then
+        source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
+      fi
+
+      readonly shabka_path="$( pwd )"
+      readonly host="${CIRCLE_JOB}"
+
+      "${shabka_path}/scripts/push-to-cachix.sh" "${host}"
+
 version: 2
 jobs:
   athena:
@@ -114,6 +128,7 @@ jobs:
       - *install-dependencies
       - *enable-cachix
       - *build-host
+      - *push-to-cachix
 
   hades:
     working_directory: ~/shabka
@@ -129,6 +144,7 @@ jobs:
       - *install-dependencies
       - *enable-cachix
       - *build-host
+      - *push-to-cachix
 
   hera:
     working_directory: ~/shabka
@@ -144,6 +160,7 @@ jobs:
       - *install-dependencies
       - *enable-cachix
       - *build-host
+      - *push-to-cachix
 
   poseidon:
     macos:
@@ -175,20 +192,21 @@ jobs:
       - *install-dependencies
       - *enable-cachix
       - *build-host
+      - *push-to-cachix
 
 workflows:
   version: 2
   testing:
     jobs:
       - athena:
-          context: org-global
+          context: nix-global
       - cratos:
-          context: org-global
+          context: nix-global
       - hades:
-          context: org-global
+          context: nix-global
       - hera:
-          context: org-global
+          context: nix-global
       - poseidon:
-          context: org-global
+          context: nix-global
       - zeus:
-          context: org-global
+          context: nix-global
