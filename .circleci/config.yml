@@ -15,8 +15,8 @@ var_2: &install-dependencies
         source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
       fi
 
-      # install git
-      nix-env -f '<nixpkgs>' -iA gitAndTools.git
+      # install git and bash
+      nix-env -f '<nixpkgs>' -i -A gitAndTools.git -A bash
 
       # install cachix from nixpkgs at stable
       readonly shabka_path="$( pwd )"
