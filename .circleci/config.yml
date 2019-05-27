@@ -57,6 +57,33 @@ var_4: &instantiate-host
 
       export NIX_PATH="nixpkgs=${nixpkgs}:darwin=${darwin}:shabka=${shabka_path}"
 
+      echo ">>> Instantiating the hostname '${host}' using nixpkgs at '${nixpkgs}'. NIX_PATH is set to '${NIX_PATH}'"
+      nix-instantiate "${shabka_path}/hosts/${host}"
+
+var_5: &build-host
+  run:
+    name: Building the host
+    working_directory: ~/shabka
+    command: |
+      if [[ -r "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]]; then
+        source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
+      fi
+
+      readonly shabka_path="$( pwd )"
+      readonly host="${CIRCLE_JOB}"
+
+      if [[ -r "${shabka_path}/hosts/${host}/release" ]]; then
+          release="$( cat "${shabka_path}/hosts/${host}/release" )"
+      else
+          # fallback to the default release
+          release="$( tr -d "\n" < "${shabka_path}/.release" )"
+      fi
+
+      readonly nixpkgs="$( nix-build "${shabka_path}" -A "external.nixpkgs.release-${release/./-}.path" )"
+      readonly darwin="$( nix-build "${shabka_path}" -A "external.nix-darwin.path" )"
+
+      export NIX_PATH="nixpkgs=${nixpkgs}:darwin=${darwin}:shabka=${shabka_path}"
+
       echo ">>> Building the hostname '${host}' using nixpkgs at '${nixpkgs}'. NIX_PATH is set to '${NIX_PATH}'"
       nix build -f "${shabka_path}/hosts/${host}"
 
@@ -91,7 +118,7 @@ jobs:
       - checkout
       - *install-dependencies
       - *enable-cachix
-      - *instantiate-host
+      - *build-host
 
   hades:
     working_directory: ~/shabka
@@ -106,7 +133,7 @@ jobs:
       - checkout
       - *install-dependencies
       - *enable-cachix
-      - *instantiate-host
+      - *build-host
 
   hera:
     working_directory: ~/shabka
@@ -121,7 +148,7 @@ jobs:
       - checkout
       - *install-dependencies
       - *enable-cachix
-      - *instantiate-host
+      - *build-host
 
   poseidon:
     macos:
@@ -152,7 +179,7 @@ jobs:
       - checkout
       - *install-dependencies
       - *enable-cachix
-      - *instantiate-host
+      - *build-host
 
 workflows:
   version: 2
