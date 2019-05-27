@@ -57,8 +57,8 @@ var_4: &instantiate-host
 
       export NIX_PATH="nixpkgs=${nixpkgs}:darwin=${darwin}:shabka=${shabka_path}"
 
-      echo ">>> Instantiating the hostname '${host}' using nixpkgs at '${nixpkgs}'. NIX_PATH is set to '${NIX_PATH}'"
-      nix-instantiate "${shabka_path}/hosts/${host}"
+      echo ">>> Building the hostname '${host}' using nixpkgs at '${nixpkgs}'. NIX_PATH is set to '${NIX_PATH}'"
+      nix build -f "${shabka_path}/hosts/${host}"
 
 version: 2
 jobs:
