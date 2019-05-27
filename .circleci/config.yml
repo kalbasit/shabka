@@ -53,10 +53,7 @@ var_4: &instantiate-host
           release="$( tr -d "\n" < "${shabka_path}/.release" )"
       fi
 
-      readonly nixpkgs="$( nix-build "${shabka_path}" -A "external.nixpkgs.release-${release/./-}.path" )"
-      readonly darwin="$( nix-build "${shabka_path}" -A "external.nix-darwin.path" )"
-
-      export NIX_PATH="nixpkgs=${nixpkgs}:darwin=${darwin}:shabka=${shabka_path}"
+      export NIX_PATH="$( "${shabka_path}/lib/bash/nix-path.sh" "${release}" )"
 
       echo ">>> Instantiating the hostname '${host}' using nixpkgs at '${nixpkgs}'. NIX_PATH is set to '${NIX_PATH}'"
       nix-instantiate "${shabka_path}/hosts/${host}"
@@ -80,10 +77,7 @@ var_5: &build-host
           release="$( tr -d "\n" < "${shabka_path}/.release" )"
       fi
 
-      readonly nixpkgs="$( nix-build "${shabka_path}" -A "external.nixpkgs.release-${release/./-}.path" )"
-      readonly darwin="$( nix-build "${shabka_path}" -A "external.nix-darwin.path" )"
-
-      export NIX_PATH="nixpkgs=${nixpkgs}:darwin=${darwin}:shabka=${shabka_path}"
+      export NIX_PATH="$( "${shabka_path}/lib/bash/nix-path.sh" "${release}" )"
 
       echo ">>> Building the hostname '${host}' using nixpkgs at '${nixpkgs}'. NIX_PATH is set to '${NIX_PATH}'"
       nix build -f "${shabka_path}/hosts/${host}"
