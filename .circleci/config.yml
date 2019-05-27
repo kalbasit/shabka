@@ -82,7 +82,7 @@ var_5: &build-host
       echo ">>> Building the hostname '${host}' using nixpkgs at '${nixpkgs}'. NIX_PATH is set to '${NIX_PATH}'"
       nix build -f "${shabka_path}/hosts/${host}"
 
-var_5: &push-to-cachix
+var_6: &push-to-cachix
   run:
     name: Push the build to cachix
     working_directory: ~/shabka
