@@ -7,7 +7,10 @@ let
     inherit (pinnedVersion) url sha256;
   };
 
-  patches = [];
+  patches = [
+    # https://github.com/NixOS/nixpkgs/pull/62125
+    ./62125-fix-tk-on-darwin.patch
+  ];
 
   patched = mkExternal {
     inherit src patches;
