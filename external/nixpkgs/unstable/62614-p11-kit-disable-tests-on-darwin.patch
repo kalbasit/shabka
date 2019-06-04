@@ -1,0 +1,26 @@
+From 2b040c57ddf9c08bf65d4d888462e45021cdfca4 Mon Sep 17 00:00:00 2001
+From: Matthew Bauer <mjbauer95@gmail.com>
+Date: Mon, 3 Jun 2019 20:21:56 -0400
+Subject: [PATCH] p11-kit: disable tests on darwin
+
+These probably never passed. The test suite was enabled in
+c739b09d85d0dab23a9d6ffaef2ec525c28e7086, but fails on macOS/darwin.
+
+Fixes #62614
+---
+ pkgs/development/libraries/p11-kit/default.nix | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pkgs/development/libraries/p11-kit/default.nix b/pkgs/development/libraries/p11-kit/default.nix
+index 28645c545cd7..0e1be8633468 100644
+--- a/pkgs/development/libraries/p11-kit/default.nix
++++ b/pkgs/development/libraries/p11-kit/default.nix
+@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
+ 
+   enableParallelBuilding = true;
+ 
+-  doCheck = true;
++  doCheck = !stdenv.isDarwin;
+ 
+   installFlags = [ "exampledir=\${out}/etc/pkcs11" ];
+ 
