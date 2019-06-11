@@ -23,21 +23,21 @@ in {
       autoRepeatDelay = 200;
       autoRepeatInterval = 30;
       xkbOptions = concatStringsSep "," [
-        "ctrl:nocaps"
+        "grp:alt_caps_toggle" "caps:swapescape"
       ];
 
       libinput.enable = true;
-      libinput.naturalScrolling = true;
+      libinput.naturalScrolling = false;
 
-      desktopManager.gnome3.enable = true;
-      desktopManager.plasma5.enable = true;
+      #desktopManager.gnome3.enable = true;
+      #desktopManager.plasma5.enable = true;
 
-      # enable the display manager
-      displayManager.lightdm.enable = true;
-      displayManager.lightdm.autoLogin = {
-        enable = true;
-        user = "yl";
-      };
+      ## enable the display manager
+      #displayManager.lightdm.enable = true;
+      #displayManager.lightdm.autoLogin = {
+      #  enable = true;
+      #  user = "yl";
+      #};
     };
   };
 }

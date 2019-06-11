@@ -13,80 +13,44 @@ in {
 
       userName = mkOption {
         type = types.str;
-        default = "Wael M. Nasreddine";
+        default = "Marc 'risson' Schmitt";
         description = "git user name";
       };
 
       userEmail = mkOption {
         type = types.str;
-        default = "wael.nasreddine@gmail.com";
+        default = "marc.schmitt@risson.space";
         description = "git user email";
       };
 
       gpgSigningKey = mkOption {
         type = types.str;
-        default = "me@yl.codes";
+        default = "marc.schmitt@risson.space";
         description = "git PGP signing key";
       };
     };
   };
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs; [
-      (gitAndTools.git-appraise or shabka.external.nixpkgs.release-unstable.gitAndTools.git-appraise)
-      gitAndTools.hub
-      gitAndTools.tig
-    ];
-
     programs.git = {
       enable = true;
+      package = pkgs.gitAndTools.gitFull;
 
       userName = cfg.userName;
 
       userEmail = cfg.userEmail;
 
       aliases = {
-        aa             = "add --all .";
-        aap            = "!git aa -p";
-        amend          = "commit --amend";
-        cb             = "checkout -b";
-        ci             = "commit";
-        co             = "checkout";
-        com            = "checkout master";
-        credit         = "\"!f() { git commit --amend --author \\\"$1 <$2>\\\" -C HEAD; }; f\"";
-        dc             = "diff --cached";
-        di             = "diff";
-        fa             = "fetch --all";
-        famff          = "!git fetch --all && git merge --ff-only origin/master";
-        famm           = "!git fetch --all && git merge origin/master";
-        faro           = "!git fetch --all && git rebase origin/master";
-        generate-patch = "!git-format-patch --patch-with-stat --raw --signoff";
-        l              = "log --graph --pretty=format':%C(yellow)%h %Cgreen%G?%Cblue%d%Creset %s %C(white) %an, %ar%Creset'";
-        lol            = "log --pretty=oneline --abbrev-commit --graph --decorate";
-        ls-ignored     = "ls-files --others -i --exclude-standard";
-        pob            = "\"!f() { git push -u \\\"\${1:-origin}\\\" \\\"$(git symbolic-ref HEAD)\\\"; }; f\"";
-        pobf           = "\"!f() { git push -fu \\\"\${1:-origin}\\\" \\\"$(git symbolic-ref HEAD)\\\"; }; f\"";
-        sp             = "pull --rebase --autostash";
-        st             = "status";
-        unstage        = "reset HEAD --";
-        who            = "shortlog -s -s";
-
-        # list files which have changed since REVIEW_BASE
-        # (REVIEW_BASE defaults to 'master' in my zshrc)
-        files          = "\"!git diff --name-only \$(git merge-base HEAD \\\"\${REVIEW_BASE:-master}\\\")\"";
-
-        # Same as above, but with a diff stat instead of just names
-        # (better for interactive use)
-        stat           = "\"!git diff --stat \$(git merge-base HEAD \\\"\${REVIEW_BASE:-master}\\\")\"";
-
-        # Open all files changed since REVIEW_BASE in Vim tabs
-        # Then, run fugitive's :Gdiff in each tab, and finally
-        review = "\"!nvim -p $(git files) +\\\"tabdo Gdiff \${REVIEW_BASE:-master}\\\"\"";
-
-        # Same as the above, except specify names of files as arguments,
-        # instead of opening all files:
-        # git reviewone foo.js bar.js
-        reviewone = "\"!nvim -p +\\\"tabdo Gdiff \${REVIEW_BASE:-master}\\\"\"";
+        amend = "commit --amend";
+        b         = "branch";
+        ci        = "commit";
+        co        = "checkout";
+        cob       = "checkout -b";
+        com       = "checkout master";
+        coke      = "commit -a -m";
+        cokewogpg = "commit --no-gpg-sign -a -m";
+        logp      = "log --graph --pretty=oneline --all --decorate=full --show-signature";
+        st = "status";
       };
 
       extraConfig = {
@@ -94,67 +58,25 @@ in {
           whitespace = "strip";
         };
 
+        branch = {
+          autosetuprebase = "always";
+        };
+
         color = {
           pager = true;
-          ui    = "auto";
+          ui    = true;
         };
 
         core = {
-          whitespace = "trailing-space,space-before-tab,-indent-with-non-tab,cr-at-eol";
-        };
-
-        diff = {
-          tool = "vimdiff";
-        };
-
-        difftool = {
-          prompt = false;
-        };
-
-        help = {
-          autocorrect = 30;
-        };
-
-        http = {
-          cookiefile = "~/.gitcookies";
-        };
-
-        "http \"https://gopkg.in\"" = {
-          followRedirects = true;
-        };
-
-        merge = {
-          log  = true;
-          tool = "vimdiff";
-        };
-
-        mergetool = {
-          prompt = true;
-        };
-
-        "mergetool \"vimdiff\"" = optionalAttrs config.mine.neovim.enable {
-          cmd = "nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'";
-        };
-
-        "protocol \"keybase\"" = {
-          allow = "always";
+          editor = "vim";
         };
 
         push = {
-          default = "current";
+          default = "simple";
         };
 
-        sendemail = {
-          smtpserver       = "${pkgs.msmtp}/bin/msmtp";
-          smtpserveroption = "--account=personal";
-        };
-
-        status = {
-          submodule = 1;
-        };
-
-        "url \"https://github\"" = {
-          insteadOf = "git://github";
+        pull = {
+          rebase = true;
         };
       };
 
@@ -264,6 +186,7 @@ in {
         ".project/"
         ".redcar/"
         ".settings/"
+        ".ycm_extra_conf.py"
         "/.emacs.desktop"
         "/.emacs.desktop.lock"
         "Session.vim"
@@ -288,14 +211,12 @@ in {
         "!.gitignore"
       ];
 
-      includes = [
-        { path = "~/.gitconfig.secrets"; }
-      ];
-
       signing = {
         key = cfg.gpgSigningKey;
         signByDefault = true;
       };
+
+      lfs.enable = true;
     };
   };
 }

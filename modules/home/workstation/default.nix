@@ -15,11 +15,9 @@ with import ../../../util;
       packages = with pkgs; [
         nur.repos.kalbasit.rbrowser
 
-        remmina
+        rambox
 
-        weechat
-
-        xsel
+        thunderbird
 
         # zoom for meetings
         zoom-us
@@ -61,18 +59,18 @@ with import ../../../util;
       export BROWSER="${pkgs.nur.repos.kalbasit.rbrowser}/bin/rbrowser"
     '';
 
-    mine.workstation = enableMultiple [
-      "alacritty"
-      "bluetooth"
-      "chromium"
-      "dunst"
-      "firefox"
-      "greenclip"
-      "gtk"
-      "locker"
-      "mysql-workbench"
-      "rofi"
-      "termite"
-    ];
+    #mine.workstation = enableMultiple [
+    #  "alacritty"
+    #  "bluetooth"
+    #  "chromium"
+    #  "dunst"
+    #  "firefox"
+    #  "greenclip"
+    #  "gtk"
+    #  "locker"
+    #  "mysql-workbench"
+    #  "rofi"
+    #  "termite"
+    #];
   };
 }

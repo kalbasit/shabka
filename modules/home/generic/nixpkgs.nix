@@ -18,10 +18,6 @@ let
             };
           });
       };
-
-      chromium = {
-        enablePepperFlash = true;
-      };
     }
   '';
 
@@ -38,10 +34,6 @@ in {
               kalbasit = import shabka.external.kalbasit.nur.path { inherit pkgs; };
             };
           });
-      };
-
-      chromium = {
-        enablePepperFlash = true;
       };
     };
 

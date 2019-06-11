@@ -17,6 +17,8 @@ in {
 
     home.file."Desktop/.keep".text = "";
 
+    services.polybar = import ./polybar.lib.nix { inherit config pkgs lib; };
+
     xsession = {
       enable = true;
 

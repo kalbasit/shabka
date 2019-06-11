@@ -46,6 +46,8 @@ in {
       '';
 
       font = "SourceCodePro 9";
+      terminal = "\${pkgs.rxvt_unicode}/bin/urxvt";
+      theme = "Arc"; # TODO: try "Arc Dark" or "Arc-Dark"
     };
   };
 }

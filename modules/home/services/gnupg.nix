@@ -2,17 +2,30 @@
 
 with lib;
 
-{
-  options.mine.gnupg.enable = mkEnableOption "Enable GnuPG";
+let
+  cfg = config.mine.gnupg;
+in {
+  options.mine.gnupg = {
+    enable = mkEnableOption "Enable GnuPG";
+    defaultCacheTtl = mkOption {
+      default = 1800;
+      description = ''
+        Default cache TTL.
+      '';
+    };
+  };
 
-  config = mkIf config.mine.gnupg.enable {
+  config = mkIf cfg.enable {
     services.gpg-agent = {
       enable = true;
 
-      defaultCacheTtl = 68400;
       enableSshSupport = true;
       enableExtraSocket = true;
-      maxCacheTtl = 68400;
+
+      defaultCacheTtl = cfg.defaultCacheTtl;
+      defaultCacheTtlSsh = cfg.defaultCacheTtl / 2;
+      maxCacheTtl = cfg.defaultCacheTtl * 2;
+      maxCacheTtlSsh = cfg.defaultCacheTtl;
     };
   };
 }
