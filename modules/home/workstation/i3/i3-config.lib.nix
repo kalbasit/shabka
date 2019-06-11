@@ -50,11 +50,11 @@ let
     # Workspace 8
     ${pkgs.i3}/bin/i3-msg "workspace ${ws8}"
     ${pkgs.i3}/bin/i3-msg "layout tabbed"
-    ${pkgs.rambox}/bin/rambox
     ${urxvt}/bin/urxvt -T weechat -e mosh risson@irc.risson.space -- /bin/sh -c 'screen -x weechat-risson'
     ${pkgs.yubioath-desktop}/bin/yubiaoth-desktop
     ${pkgs.blueman}/bin/blueman-manager
   '';
+#    ${pkgs.rambox}/bin/rambox
 
 in {
   enable = true;

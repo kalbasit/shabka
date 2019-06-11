@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ lib, ... }:
 
 with lib;
 
@@ -24,7 +24,7 @@ in {
   i18n.defaultLocale = "en_US.UTF-8";
   time.timeZone = "Europe/Paris";
 
-  networking.hostName = "hedgehog";
+  networking.hostName = "hedgehog-test";
 
   mine.hardware.intel_backlight.enable = true;
   mine.printing.enable = true;
@@ -44,8 +44,6 @@ in {
     virtualbox.enable = true;
     xorg.enable = true;
   };
-
-  mine.hardware.machine = "thinkpad-e580";
 
   services.logind.extraConfig = ''
     HandlePowerKey=suspend

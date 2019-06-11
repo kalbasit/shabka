@@ -15,8 +15,6 @@ with import ../../../util;
       packages = with pkgs; [
         nur.repos.kalbasit.rbrowser
 
-        rambox
-
         thunderbird
 
         # zoom for meetings

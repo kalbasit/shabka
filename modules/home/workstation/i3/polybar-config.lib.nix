@@ -47,7 +47,8 @@
 
         modules-left = "i3";
         modules-center = "";
-        modules-right = "spotify pulseaudio info-pingrtt network-traffic network-eth network-wlan info-hackspeed cpu memory backlight battery date-california date-utc popup-calendar xkeyboard";#modules-right = "spotify pulseaudio info-pingrtt network-traffic network-eth network-wlan info-hackspeed updates-arch-combined cpu memory xbacklight battery date-california date-utc xkeyboard";
+#        modules-right = "spotify pulseaudio info-pingrtt network-traffic network-eth network-wlan info-hackspeed cpu memory backlight battery date-california date-utc popup-calendar xkeyboard";#modules-right = "spotify pulseaudio info-pingrtt network-traffic network-eth network-wlan info-hackspeed updates-arch-combined cpu memory xbacklight battery date-california date-utc xkeyboard";
+        modules-right = "pulseaudio network-eth network-wlan cpu memory backlight battery date-california date-utc xkeyboard";
       };
 
       "module/backlight" = {
@@ -208,7 +209,7 @@
         format-connected-underline = "#55aa55";
         format-connected-prefix = "ETH ";
         format-connected-prefix-foreground = "\${colors.foreground-alt}";
-        label-connected = "%local_ip% %local_ip6%";
+        label-connected = "%local_ip%";
 
         format-disconnected = "";
         format-packetloss = "<animation-packetloss> <label-connected>";
@@ -227,7 +228,7 @@
 
         format-connected = "<ramp-signal> <label-connected>";
         format-connected-underline = "#9f78e1";
-        label-connected = "%essid% %local_ip% %local_ip6%";
+        label-connected = "%essid% %local_ip%";
 
         format-disconnected = "";
         format-packetloss = "<animation-packetloss> <label-connected>";
