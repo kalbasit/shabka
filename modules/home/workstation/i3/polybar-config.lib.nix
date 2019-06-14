@@ -17,7 +17,7 @@
       };
 
       "bar/bottom" = {
-        #monitor = "\${env:MONITOR:}";
+        monitor = "\${env:MONITOR:}";
 
         width = "100%";
         height = 21;
@@ -113,7 +113,7 @@
 
       "module/date-utc" = {
         type = "custom/script";
-        exec = "TZ=UTC date +\"%H:%M:%S\"";
+        exec = "TZ=UTC ${pkgs.coreutils}/bin/date +\"%H:%M:%S\"";
         interval = 1;
         format-prefix = "UTC ";
         format-prefix-foreground = "\${colors.foreground-alt}";
@@ -122,7 +122,7 @@
 
       "module/date-california" = {
         type = "custom/script";
-        exec = "TZ=America/Los_Angeles date +\"%a %Y-%m-%d %H:%M:%S\"";
+        exec = "TZ=America/Los_Angeles ${pkgs.coreutils}/bin/date +\"%a %Y-%m-%d %H:%M:%S\"";
         interval = 1;
         format-prefix = "SF ";
         format-prefix-foreground = "\${colors.foreground-alt}";

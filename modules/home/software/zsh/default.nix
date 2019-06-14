@@ -111,12 +111,12 @@ let
 in {
 
   programs.zsh = mkMerge [
-    ({ initExtra = optionalString stdenv.isDarwin ''
+    /*({ initExtra = optionalString stdenv.isDarwin ''
         # source the nix profiles
         if [[ -r "${config.home.homeDirectory}/.nix-profile/etc/profile.d/nix.sh" ]]; then
           source "${config.home.homeDirectory}/.nix-profile/etc/profile.d/nix.sh"
         fi
-      '';})
+      '';})*/
 
     {
       enable = true;
@@ -131,7 +131,7 @@ in {
 
       enableCompletion = true;
       enableAutosuggestions = true;
-
+/*
       shellAliases = {
         cat = "${bat}/bin/bat";
         e = "\${EDITOR:-nvim}";
@@ -304,6 +304,6 @@ in {
           name = "functions";
           src = myFunctions;
         }
-      ];
+      ];*/
   }];
 }

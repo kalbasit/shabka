@@ -35,5 +35,12 @@
       gtk.enable = true;
       locker.enable = true;
     };
+
+    home.keyboard = {
+      layout = "fr,us";
+      variant = "bepo,intl";
+      model = "pc105";
+      options = [ "grp:alt_caps_toggle" "caps:swapescape" ];
+    };
   };
 }

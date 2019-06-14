@@ -27,9 +27,9 @@ in {
   config = mkMerge [
     (mkIf (config.mine.theme == "gruvbox-dark") {
       # Setup the environment correctly with the shell palette
-      programs.zsh.initExtra = ''
+      /*programs.zsh.initExtra = ''
         source ${grovboxSrc}/gruvbox_256palette.sh
-      '';
+      '';*/
 
       mine.workstation.alacritty.extraRC = ''
         # Colors (Gruvbox dark)
