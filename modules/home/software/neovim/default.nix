@@ -40,7 +40,7 @@ in {
 
     keyboardLayout = mkOption {
       type = with types; enum [ "colemak" "qwerty" ];
-      default = (builtins.head config.mine.keyboard);
+      default = (builtins.head config.mine.keyboard.layouts);
       description = ''
         The keyboard layout to use.
       '';

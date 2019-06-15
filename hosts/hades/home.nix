@@ -29,7 +29,7 @@
     mine.taskwarrior.enable = true;
     mine.timewarrior.enable = true;
     mine.tmux.enable = true;
-    mine.keyboard = [ "colemak" ];
+    mine.keyboard.layouts = [ "colemak" ];
     mine.workstation.enable = true;
 
     mine.workstation.autorandr.enable = true;
