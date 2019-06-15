@@ -1,0 +1,5 @@
+{ mkExternal }:
+
+{
+  keys = import ./keys { };
+}

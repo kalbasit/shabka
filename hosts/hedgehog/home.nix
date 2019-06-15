@@ -42,5 +42,12 @@
       model = "pc105";
       options = [ "grp:alt_caps_toggle" "caps:swapescape" ];
     };
+
+    xresources = {
+      properties = {
+        "*foreground" = "#b2b2b2";
+        "*background" = "#020202";
+      };
+    };
   };
 }

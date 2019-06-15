@@ -22,7 +22,7 @@ let
       ++ (optionals isAdmin ["wheel"]);
 
       shell = pkgs.zsh;
-      hashedPassword = "$6$.OP3oBMG7$bEZa1..oDPKKqkPPVpzqZVfH7Xn5WZTsuEOoyunMCBRdFck1GVI57/iqpSbFhbrxzY9MYJAYW.4zvygjY3YvC0";
+      hashedPassword = "$6$2YnxY3Tl$kRj7YZypnB2Od41GgpwYRcn4kCcCE6OksZlKLws0rEi//T/emKWEsUZZ2ZG40eph1bpmjznztav4iKc8scmqc1";
       isNormalUser = true;
 
       openssh.authorizedKeys.keys = singleton shabka.external.kalbasit.keys;

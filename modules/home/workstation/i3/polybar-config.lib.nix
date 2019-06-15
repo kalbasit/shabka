@@ -48,7 +48,7 @@
         modules-left = "i3";
         modules-center = "";
 #        modules-right = "spotify pulseaudio info-pingrtt network-traffic network-eth network-wlan info-hackspeed cpu memory backlight battery date-california date-utc popup-calendar xkeyboard";#modules-right = "spotify pulseaudio info-pingrtt network-traffic network-eth network-wlan info-hackspeed updates-arch-combined cpu memory xbacklight battery date-california date-utc xkeyboard";
-        modules-right = "pulseaudio network-eth network-wlan cpu memory backlight battery date-california date-utc xkeyboard";
+        modules-right = "pulseaudio network-eth network-wlan cpu memory backlight battery date-france date-utc xkeyboard";
       };
 
       "module/backlight" = {
@@ -120,11 +120,11 @@
         format-underline = "#0a6cf5";
       };
 
-      "module/date-california" = {
+      "module/date-france" = {
         type = "custom/script";
-        exec = "TZ=America/Los_Angeles ${pkgs.coreutils}/bin/date +\"%a %Y-%m-%d %H:%M:%S\"";
+        exec = "TZ=Europe/Paris ${pkgs.coreutils}/bin/date +\"%a %Y-%m-%d %H:%M:%S\"";
         interval = 1;
-        format-prefix = "SF ";
+        format-prefix = "FR ";
         format-prefix-foreground = "\${colors.foreground-alt}";
         format-underline = "#0a6cf5";
       };
