@@ -38,7 +38,7 @@ in {
     deployment.targetHost = "zeus.home.nasreddine.com";
   };
 
-  staurn = {
+  saturn = {
     imports = [ ../hosts/saturn/configuration.nix ];
     deployment.targetHost = "saturn.home.nasreddine.com";
   };
