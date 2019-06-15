@@ -43,7 +43,7 @@ with lib;
 
   config = {
     # TODO: This is just colemak, add the equivalent for rest.
-    system.activationScripts.postActivation = mkIf ((builtins.head config.mine.keyboard.layouts) == "colemak") {
+    system.activationScripts.postActivation = mkIf ((builtins.head cfg.layouts) == "colemak") {
       text = ''
         # set the keyboard layout to Colemak
         # https://github.com/hjuutilainen/dotfiles/blob/e8861a756df35cf7ade9fd964eb4f6c07ed5264b/bin/macos-system-defaults.sh#L100

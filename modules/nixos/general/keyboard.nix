@@ -45,11 +45,11 @@ with lib;
 
   config = {
     boot.earlyVconsoleSetup = cfg.enableAtBoot;
-    i18n.consoleKeyMap = let firstLayout = builtins.head cfg.layouts; in
-                         if layouts.firstLayout.variant == ""
-                         then layouts.firstLayout.layout
-                         else layouts.firstLayout.variant;
-    services.xserver.layout = builtins.concatStringsSep "," (map (n: layouts.n.layout) cfg.layouts);
-    services.xserver.xkbVariant = builtins.concatStringsSep "," (map (n: layouts.n.variant) cfg.layouts);
+    i18n.consoleKeyMap = let layout = layouts."${builtins.head cfg.layouts}"; in
+                         if layout.variant == ""
+                         then layout.layout
+                         else layout.variant;
+    services.xserver.layout = builtins.concatStringsSep "," (map (n: layouts."${n}".layout) cfg.layouts);
+    services.xserver.xkbVariant = builtins.concatStringsSep "," (map (n: layouts."${n}".variant) cfg.layouts);
   };
 }
