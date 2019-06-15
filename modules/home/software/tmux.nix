@@ -210,7 +210,7 @@ in {
       ];
 
       clock24 = true;
-      customPaneNavigationAndResize = ! ((builtins.head config.mine.keyboard) == "colemak");
+      customPaneNavigationAndResize = ! ((builtins.head config.mine.keyboard.layouts) == "colemak");
       escapeTime = 0;
       historyLimit = 10000;
       keyMode = "vi";
@@ -265,7 +265,7 @@ in {
 
         ${copyPaste}
       ''
-      + optionalString ((builtins.head config.mine.keyboard) == "colemak") colemakBindings
+      + optionalString ((builtins.head config.mine.keyboard.layouts) == "colemak") colemakBindings
       + optionalString pkgs.stdenv.isLinux ''set  -g default-terminal "tmux-256color"''
       + optionalString pkgs.stdenv.isDarwin ''set  -g default-terminal "xterm-256color"'';
     };
