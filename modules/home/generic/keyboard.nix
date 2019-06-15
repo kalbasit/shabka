@@ -43,6 +43,6 @@ with lib;
 
   config = {
     home.keyboard.layout = builtins.concatStringsSep "," (map (n: layouts."${n}".layout) cfg.layouts);
-    home.keyboard.variant = builtins.concatStringsSep "," (map (n: layouts."${n}".layout) cfg.layouts);
+    home.keyboard.variant = builtins.concatStringsSep "," (map (n: layouts."${n}".variant) cfg.layouts);
   };
 }
