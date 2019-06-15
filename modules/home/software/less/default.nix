@@ -2,8 +2,13 @@
 
 with lib;
 
+# TODO: submit this module upstream to home-manager
+
 let
+  cfg = config.mine.less;
+
   colemakKeybindings = ''
+    #command
     n left-scroll
     e forw-line
     i back-line
@@ -12,17 +17,46 @@ let
     K reverse-search
   '';
 
-  lessKey = ''
-    # NOTE: use --quit-if-one-screen only if --no-init is set. Otherwise less will
-    # print nothing and exits which looks like it's crashing.
-    LESS= --RAW-CONTROL-CHARS --no-init --quit-if-one-screen --ignore-case
-  ''
-  + optionalString ((builtins.head config.mine.keyboard.layouts) == "colemak") colemakKeybindings;
-
 in {
-  options.mine.less.enable = mkEnableOption "less";
+  options.mine.less = {
+    enable = mkEnableOption "less";
 
-  config = mkIf (config.mine.less.enable) {
-    home.file.".less".text = lessKey;
+    quitIfOneScreen = mkOption {
+      type = types.bool;
+      default = true;
+      defaultText = "true";
+      description = "Causes less to automatically exit if the entire file can be displayed on the first screen.";
+    };
+
+    colors = mkOption {
+      type = types.bool;
+      default = true;
+      defaultText = "true";
+      description = "Enable colored output by allowing only ANSI color escape sequences to be written raw";
+    };
+
+    ignoreCase = mkOption {
+      type = types.bool;
+      default = true;
+      defaultText = "true";
+      description = "Search case-insensitive";
+    };
+  };
+
+  config = mkIf (cfg.enable) {
+    home.file.".less".source =
+      let
+        less-key = pkgs.writeText "less-key" (
+          ''
+            #env
+            LESS= ${optionalString cfg.colors ''--RAW-CONTROL-CHARS''} ${optionalString cfg.quitIfOneScreen ''--no-init --quit-if-one-screen''} ${optionalString cfg.ignoreCase ''--ignore-case''}
+          ''
+          + optionalString ((builtins.head config.mine.keyboard.layouts) == "colemak") colemakKeybindings
+        );
+      in pkgs.runCommand "less-config" {
+        preferLocalBuild = true;
+      } ''
+        ${pkgs.less}/bin/lesskey -o $out ${less-key}
+      '';
   };
 }
