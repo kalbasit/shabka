@@ -54,6 +54,11 @@ var_5: &push-to-cachix
         source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
       fi
 
+      if [[ -z "${CACHIX_SIGNING_KEY:-}" ]]; then
+        >&2 echo "CACHIX_SIGNING_KEY is not set, cannot push to cachix"
+        exit 0
+      fi
+
       ./scripts/push-to-cachix.sh "${CIRCLE_JOB}"
 
 version: 2
