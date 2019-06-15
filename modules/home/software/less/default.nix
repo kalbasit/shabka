@@ -17,6 +17,16 @@ let
     K reverse-search
   '';
 
+  bepoKeybindings = ''
+    #command
+    t left-scroll
+    s forw-line
+    r back-line
+    n right-scroll
+    ' repeat-search
+    ? reverse-search
+  '';
+
 in {
   options.mine.less = {
     enable = mkEnableOption "less";
@@ -52,6 +62,7 @@ in {
             LESS= ${optionalString cfg.colors ''--RAW-CONTROL-CHARS''} ${optionalString cfg.quitIfOneScreen ''--no-init --quit-if-one-screen''} ${optionalString cfg.ignoreCase ''--ignore-case''}
           ''
           + optionalString ((builtins.head config.mine.keyboard.layouts) == "colemak") colemakKeybindings
+          + optionalString ((builtins.head config.mine.keyboard.layouts) == "bepo") bepoKeybindings
         );
       in pkgs.runCommand "less-config" {
         preferLocalBuild = true;
