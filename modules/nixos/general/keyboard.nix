@@ -39,7 +39,12 @@ with lib;
         description = "Layouts to set";
       };
 
-      enableAtBoot = mkEnableOption "If true, the first of the layouts will be enabled at boot";
+      enableAtBoot = mkOption {
+        type = types.bool;
+        default = true;
+        defaultText = "true";
+        description = "If true, the first of the layouts will be enabled at boot";
+      };
     };
   };
 
