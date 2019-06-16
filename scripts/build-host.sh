@@ -2,11 +2,11 @@
 
 set -euo pipefail
 
-readonly shabka_path="$(cd $(dirname "${BASH_SOURCE[0]}")/../ && pwd)"
 readonly current_uname="$(uname -s | tr -d '\n')"
+readonly shabka_path="$(cd $(dirname "${BASH_SOURCE[0]}")/../ && pwd)"
 
 build_host() {
-    local host="${1}"
+    local host="${1}"; shift
     local release
 
     if ! [[ -f "${shabka_path}/hosts/${host}/.uname" ]]; then
@@ -33,13 +33,13 @@ build_host() {
     echo ">>> Building the host ${host}"
     echo -e "\tNIX_PATH=${nix_path}"
     NIX_PATH="${nix_path}" \
-        nix-build --option builders '' "${shabka_path}/hosts/${host}" -A system
+        nix-build --option builders '' "${shabka_path}/hosts/${host}" -A system "${@}"
 }
 
 
-if [[ "${#}" -ne 1 ]]; then
+if [[ "${#}" -lt 1 ]]; then
     >&2 echo "ERR: Must give a host to build"
     exit 1
 fi
 
-build_host "${1}"
+build_host "${@}"
