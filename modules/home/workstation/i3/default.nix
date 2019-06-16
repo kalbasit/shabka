@@ -2,8 +2,21 @@
 
 with lib;
 
-{
-  options.mine.workstation.i3.enable = mkEnableOption "workstation.i3";
+let
+  cfg = config.mine.workstation.i3;
+in {
+
+  options.mine.workstation.i3 = {
+    enable = mkEnableOption "workstation.i3";
+
+    bar = mkOption {
+      type = types.enum [ "i3bar" "polybar" ];
+      default = "i3bar";
+      description = ''
+        Select the bar to use with i3
+      '';
+    };
+  };
 
   config = mkIf config.mine.workstation.i3.enable {
     assertions = [
@@ -13,10 +26,10 @@ with lib;
       }
     ];
 
-    services.polybar = import ./polybar.lib.nix { inherit config pkgs lib; };
-
     home.file."Desktop/.keep".text = "";
-    xdg.configFile."i3status/config".source = ./i3status-config;
+
+    services.polybar = mkIf cfg.bar == "polybar" import ./polybar.lib.nix { inherit config pkgs lib; };
+    xdg.configFile."i3status/config".source = mkIf cfg.bar == "i3bar" ./i3status-config;
 
     xsession = {
       enable = true;

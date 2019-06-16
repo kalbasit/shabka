@@ -1,73 +1,29 @@
-{ pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
-{
-  enable = true;
-  config = ./polybar.config;
-  script = ''
-    for m in $(${pkgs.xorg.xrandr}/bin/xrandr --query | grep " connected" | cut -d" " -f1); do
-      MONITOR=$m polybar --reload mainbar-i3 &
-    done
+let
+  launchScript = pkgs.writeScript "polybar-launch.sh" ''
+    # Terminate already running bar instances
+    ${pkgs.procps}/bin/pkill polybar
+
+    # Wait until the processes have been shut down
+    while ${pkgs.procps}/bin/pgrep polybar >/dev/null; do ${pkgs.coreutils}/bin/sleep 1; done
+
+    if type "xrandr"; then
+      for m in $(${pkgs.xorg.xrandr}/bin/xrandr --query | ${pkgs.gnugrep}/bin/grep " connected" | ${pkgs.coreutils}/bin/cut -d" " -f1); do
+        MONITOR=$m polybar --reload bottom &
+      done
+    else
+      polybar --reload bottom &
+    fi
+
+    echo "Bars launched..."
   '';
-  # config = {
-  #
-  #   # https://github.com/jaagr/polybar/wiki/Configuration#global-wm-settings
-  #   "global/wm" = {
-  #     "margin-top" = 0;
-  #     "margin-bottom" = 0;
-  #   };
-  #
-  #   # https://github.com/jaagr/polybar/wiki/Configuration#application-settings
-  #   settings = {
-  #     "throttle-output" = 5;
-  #     "throttle-output-for" = 10;
-  #     "throttle-input-for" = 30;
-  #     "screenchange-reload" = true;
-  #     "compositing-background" = "over";
-  #     "compositing-foreground" = "over";
-  #     "compositing-overline" = "over";
-  #     "compositing-underline" = "over";
-  #     "compositing-border" = "over";
-  #
-  #     # Define fallback values used by all module formats
-  #     "format-foreground" = "#FF0000";
-  #     "format-background" = "#00FF00";
-  #     "format-underline" = "";
-  #     "format-overline" = "";
-  #     "format-spacing" = "";
-  #     "format-padding" = "";
-  #     "format-margin" = "";
-  #     "format-offset" = "";
-  #   };
-  #
-  #   # TODO: move these to the theme folder
-  #   colors = {
-  #     # Nord theme ============
-  #     "background" = "#1D2330";
-  #     "foreground" = "#c0c5ce";
-  #     "alert" = "#bd2c40";
-  #     "volume-min" = "#a3be8c";
-  #     "volume-med" = "#ebcb8b";
-  #     "volume-max" = "#bf616a";
-  #
-  #     # Gotham theme ==========
-  #     # background = #0a0f14
-  #     # foreground = #99d1ce
-  #     # alert = #d26937
-  #     # volume-min = #2aa889
-  #     # volume-med = #edb443
-  #     # volume-max = #c23127
-  #     # =======================
-  #
-  #     # INTRCPTR theme ============
-  #     #background = ${xrdb:color0:#222}
-  #     #background = #aa000000
-  #     #background-alt = #444
-  #     #foreground = ${xrdb:color7:#222}
-  #     #foreground = #fff
-  #     #foreground-alt = #555
-  #     #primary = #ffb52a
-  #     #secondary = #e60053
-  #     #alert = #bd2c40
-  #   };
-  # };
+in {
+  enable = true;
+  package = pkgs.polybar.override {
+    i3Support = true;
+    pulseSupport = true;
+  };
+  config = import ./polybar-config.lib.nix { inherit config pkgs lib; };
+  script = toString launchScript;
 }
