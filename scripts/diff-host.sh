@@ -34,17 +34,11 @@ trap "rm -rf ${wd}" EXIT
 
 cd "${wd}"
 
-(
-    git clone "${shabka_path}" base
-    cd base
-    git checkout "${base_rev}"
-)
+git clone "${shabka_path}" base
+git -C "${wd}/base" checkout "${base_rev}"
 
-(
-    git clone "${shabka_path}" target
-    cd target
-    git checkout "${target_rev}"
-)
+git clone "${shabka_path}" target
+git -C "${wd}/target" checkout "${target_rev}"
 
 "${wd}/base/scripts/build-host.sh" "${host}" --out-link base-result
 "${wd}/target/scripts/build-host.sh" "${host}" --out-link target-result
