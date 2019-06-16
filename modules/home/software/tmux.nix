@@ -225,8 +225,6 @@ in {
         # Settings
         #
 
-        set  -g default-terminal "tmux-256color"
-
         # don't allow the terminal to rename windows
         set-window-option -g allow-rename off
 
@@ -266,7 +264,10 @@ in {
         bind C-o switch-client -n
 
         ${copyPaste}
-      '' + optionalString config.mine.useColemakKeyboardLayout colemakBindings;
+      ''
+      + optionalString config.mine.useColemakKeyboardLayout colemakBindings
+      + optionalString pkgs.stdenv.isLinux ''set  -g default-terminal "tmux-256color"''
+      + optionalString pkgs.stdenv.isDarwin ''set  -g default-terminal "xterm-256color"'';
     };
   };
 }
