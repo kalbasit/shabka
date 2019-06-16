@@ -46,7 +46,15 @@ cd "${wd}"
     git checkout "${target_rev}"
 )
 
-"${shabka_path}/scripts/build-host.sh" --shabka-path "${wd}/base" "${host}" --out-link base-result
-"${shabka_path}/scripts/build-host.sh" --shabka-path "${wd}/target" "${host}" --out-link target-result
+# build the base
+if ! "${wd}/base/scripts/build-host.sh" "${host}" --out-link base-result; then
+    # probably failed because the base version does not support extra
+    # arguments, in this case `--out-link base-result`. Call it using the
+    # script we already have in this branch now.
+    "${shabka_path}/scripts/build-host.sh" --shabka-path "${wd}/base" "${host}" --out-link base-result
+fi
+
+# build the target
+"${wd}/target/scripts/build-host.sh" "${host}" --out-link target-result
 
 nix-diff "$(nix-store -q --deriver base-result)" "$(nix-store -q --deriver target-result)"
