@@ -19,7 +19,7 @@ let
     echo "Bars launched..."
   '';
 in {
-  enable = true;
+  enable = config.mine.workstation.i3.bar == "polybar";
   package = pkgs.polybar.override {
     i3Support = true;
     pulseSupport = true;

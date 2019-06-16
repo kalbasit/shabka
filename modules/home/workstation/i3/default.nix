@@ -28,7 +28,7 @@ in {
 
     home.file."Desktop/.keep".text = "";
 
-    services.polybar = mkIf cfg.bar == "polybar" import ./polybar.lib.nix { inherit config pkgs lib; };
+    services.polybar = import ./polybar.lib.nix { inherit config pkgs lib; };
     xdg.configFile."i3status/config".source = mkIf cfg.bar == "i3bar" ./i3status-config;
 
     xsession = {
