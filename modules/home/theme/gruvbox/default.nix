@@ -103,31 +103,32 @@ in {
           yellow   = "#d79921";
 
           in {
-            bars = [{
-              position = "top";
+            bars = if config.mine.workstation.i3.bar == "i3bar" then
+              [{
+                position = "top";
 
-              colors = {
-                background = bg;
-                statusline = yellow;
-                separator = red;
+                colors = {
+                  background = bg;
+                  statusline = yellow;
+                  separator = red;
 
-                focusedWorkspace = {
-                  border = aqua; background = aqua; text = darkgray;
+                  focusedWorkspace = {
+                    border = aqua; background = aqua; text = darkgray;
+                  };
+
+                  activeWorkspace = {
+                    border = darkgray; background = darkgray; text = yellow;
+                  };
+
+                  inactiveWorkspace = {
+                    border = darkgray; background = darkgray; text = yellow;
+                  };
+
+                  urgentWorkspace = {
+                    border = red; background = red; text = bg;
+                  };
                 };
-
-                activeWorkspace = {
-                  border = darkgray; background = darkgray; text = yellow;
-                };
-
-                inactiveWorkspace = {
-                  border = darkgray; background = darkgray; text = yellow;
-                };
-
-                urgentWorkspace = {
-                  border = red; background = red; text = bg;
-                };
-              };
-            }];
+              }] else [];
 
             colors = {
               background = darkgray;
@@ -150,6 +151,16 @@ in {
             };
           };
         };
+
+      services.polybar.config."colors" = {
+        background = "#282828";
+        background-alt = "#689d68";
+        foreground = "#ebdbb2";
+        foreground-alt = "#ebdbb2";
+        primary = "#689d68";
+        secondary = "#1d2021";
+        alert = "#cc241d";
+      };
 
       programs.rofi.theme = "gruvbox-dark";
 

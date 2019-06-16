@@ -10,10 +10,10 @@ let
 
     if type "xrandr"; then
       for m in $(${pkgs.xorg.xrandr}/bin/xrandr --query | ${pkgs.gnugrep}/bin/grep " connected" | ${pkgs.coreutils}/bin/cut -d" " -f1); do
-        MONITOR=$m polybar --reload bottom &
+        MONITOR=$m polybar --reload top &
       done
     else
-      polybar --reload bottom &
+      polybar --reload top &
     fi
 
     echo "Bars launched..."

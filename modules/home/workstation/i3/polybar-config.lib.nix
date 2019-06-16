@@ -6,12 +6,12 @@
     screenchange-reload = true;
   };
 
-  "bar/bottom" = {
+  "bar/top" = {
     monitor = "\${env:MONITOR:}";
 
     width = "100%";
     height = 21;
-    bottom = true;
+    bottom = false; # TODO(low): gate this with an option
     radius = "0.0";
     fixed-center = false;
     background = "\${colors.background}";
