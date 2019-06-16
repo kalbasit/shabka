@@ -43,8 +43,6 @@ in {
   enable = true;
 
   config = {
-    bars = mkIf config.mine.workstation.i3.bar == "polybar" [];
-
     fonts = [ "pango:SourceCodePro Regular 8" ];
 
     window = {
