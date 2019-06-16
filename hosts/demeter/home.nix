@@ -20,6 +20,6 @@
     mine.taskwarrior.enable = true;
     mine.timewarrior.enable = true;
     mine.tmux.enable = true;
-    mine.useColemakKeyboardLayout = true;
+    mine.keyboard.layouts = [ "colemak" ];
   };
 }

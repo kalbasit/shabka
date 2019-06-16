@@ -10,6 +10,6 @@
   time.timeZone = "America/Los_Angeles";
 
   # mine.gnupg.enable = true;
-  mine.useColemakKeyboardLayout = true;
+  mine.keyboard.layouts = [ "colemak" ];
   mine.fonts.enable = true;
 }

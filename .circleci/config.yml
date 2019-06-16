@@ -54,6 +54,13 @@ var_5: &push-to-cachix
         source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
       fi
 
+      # The CACHIX_SIGNING_KEY is not available for pull requests coming from a
+      # fork for security reasons.
+      if [[ -z "${CACHIX_SIGNING_KEY:-}" ]]; then
+        >&2 echo "CACHIX_SIGNING_KEY is not set, cannot push to cachix"
+        exit 0
+      fi
+
       ./scripts/push-to-cachix.sh "${CIRCLE_JOB}"
 
 version: 2

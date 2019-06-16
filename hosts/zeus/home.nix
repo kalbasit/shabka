@@ -14,6 +14,6 @@
     mine.neovim.enable = true;
     mine.pet.enable = true;
     mine.tmux.enable = true;
-    mine.useColemakKeyboardLayout = true;
+    mine.keyboard.layouts = [ "colemak" ];
   };
 }
