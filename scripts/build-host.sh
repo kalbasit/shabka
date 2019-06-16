@@ -3,6 +3,7 @@
 set -euo pipefail
 
 readonly current_uname="$(uname -s | tr -d '\n')"
+readonly shabka_path="$(cd $(dirname "${BASH_SOURCE[0]}")/../ && pwd)"
 
 build_host() {
     local host="${1}"; shift
@@ -40,13 +41,5 @@ if [[ "${#}" -lt 1 ]]; then
     >&2 echo "ERR: Must give a host to build"
     exit 1
 fi
-
-if [[ "${1}" == "--shabka-path" ]]; then
-    readonly shabka_path="${2}"
-    shift 2
-else
-    readonly shabka_path="$(cd $(dirname "${BASH_SOURCE[0]}")/../ && pwd)"
-fi
-
 
 build_host "${@}"
