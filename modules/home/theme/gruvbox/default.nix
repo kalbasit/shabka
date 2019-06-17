@@ -103,7 +103,7 @@ in {
           yellow   = "#d79921";
 
           in {
-            bars = optional (config.mine.workstation.i3.bar == "i3bar")
+            bars = if (config.mine.workstation.i3.bar == "i3bar") then
               [{
                 position = "top";
 
@@ -128,7 +128,7 @@ in {
                     border = red; background = red; text = bg;
                   };
                 };
-              }];
+              }] else [];
 
             colors = {
               background = darkgray;

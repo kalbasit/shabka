@@ -11,7 +11,7 @@ in {
 
     bar = mkOption {
       type = types.enum [ "i3bar" "polybar" ];
-      default = "i3bar";
+      default = "polybar";
       description = ''
         Select the bar to use with i3
       '';
@@ -25,7 +25,7 @@ in {
         message = "mine.workstation.i3.enable must be false on Darwin!";
       }
       {
-        assertion = cfg.bar == "polybar" && config.xsession.windowManager.i3.config.bars == [];
+        assertion = (cfg.bar == "polybar" && config.xsession.windowManager.i3.config.bars == []) || (cfg.bar == "i3bar" && ((builtins.length config.xsession.windowManager.i3.config.bars) != 0));
         message = "There must be no i3bars if polybar is enabled.";
       }
     ];
