@@ -211,6 +211,8 @@ workflows:
           context: nix-global
       - hades:
           context: nix-global
+      - hedgehog:
+          context: nix-global
       - hera:
           context: nix-global
       - poseidon:
