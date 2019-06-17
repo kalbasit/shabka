@@ -34,6 +34,9 @@ in {
     libvirtd.enable = true;
   };
 
+  mine.keyboard.layouts = [ "bepo" "qwerty_intl" ];
+  mine.keyboard.enableAtBoot = false;
+
   mine.workstation = {
     bluetooth.enable = true;
     fonts.enable = true;

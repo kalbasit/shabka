@@ -17,6 +17,9 @@
       card-timeout 5
     '';
 
+    mine.keyboard.layouts = [ "bepo" "qwerty_intl" ];
+    home.keyboard.options = [ "grp:alt_caps_toggle" "caps:swapescape" ];
+
     mine.batteryNotifier.enable = true;
     mine.git.enable = true;
     mine.gnupg.enable = true;
@@ -34,13 +37,6 @@
       bluetooth.enable = true;
       gtk.enable = true;
       locker.enable = true;
-    };
-
-    home.keyboard = {
-      layout = "fr,us";
-      variant = "bepo,intl";
-      model = "pc105";
-      options = [ "grp:alt_caps_toggle" "caps:swapescape" ];
     };
 
     xresources = {
