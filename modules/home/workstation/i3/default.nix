@@ -11,7 +11,7 @@ in {
 
     bar = mkOption {
       type = types.enum [ "i3bar" "polybar" ];
-      default = "polybar";
+      default = "i3bar";
       description = ''
         Select the bar to use with i3
       '';
