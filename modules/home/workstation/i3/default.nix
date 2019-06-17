@@ -18,11 +18,15 @@ in {
     };
   };
 
-  config = mkIf config.mine.workstation.i3.enable {
+  config = mkIf cfg.enable {
     assertions = [
       {
         assertion = config.mine.nixosConfig != {} && config.mine.darwinConfig == {};
         message = "mine.workstation.i3.enable must be false on Darwin!";
+      }
+      {
+        assertion = cfg.bar == "polybar" && config.xsession.windowManager.i3.config.bars == [];
+        message = "There must be no i3bars if polybar is enabled.";
       }
     ];
 
@@ -48,4 +52,5 @@ in {
       '';
     };
   };
+
 }
