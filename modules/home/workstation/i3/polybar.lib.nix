@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  launchScript = pkgs.writeScript "polybar-launch.sh" ''
+  launchScript = ''
     # Terminate already running bar instances
     ${pkgs.procps}/bin/pkill polybar
 
@@ -25,5 +25,5 @@ in {
     pulseSupport = true;
   };
   config = import ./polybar-config.lib.nix { inherit config pkgs lib; };
-  script = toString launchScript;
+  script = launchScript;
 }
