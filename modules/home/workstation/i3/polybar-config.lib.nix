@@ -42,9 +42,9 @@
 
   "module/battery" = {
     type = "internal/battery";
-    battery = "BAT0";
+    battery = config.mine.workstation.i3.bar.battery.device;
     adapter = "AC";
-    full-at = 98;
+    full-at = config.mine.workstation.i3.bar.battery.fullAt;
     poll-interval = 5;
 
     format-charging-prefix = "⬆️";
@@ -143,7 +143,7 @@
 
   "module/network-wlan" = {
     type = "internal/network";
-    interface = "wlp5s0";
+    interface = config.mine.workstation.i3.bar.wlan;
     interval = 3;
 
     format-connected = "<ramp-signal> <label-connected>";

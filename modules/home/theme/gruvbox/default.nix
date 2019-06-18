@@ -103,7 +103,7 @@ in {
           yellow   = "#d79921";
 
           in {
-            bars = if (config.mine.workstation.i3.bar == "i3bar") then
+            bars = if (config.mine.workstation.i3.bar.engine == "i3bar") then
               [{
                 position = "top";
 
