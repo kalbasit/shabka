@@ -47,8 +47,6 @@ in {
     shabka.external.nixpkgs.release-unstable.corgi
     shabka.external.nixpkgs.release-unstable.vgo2nix
 
-    slack
-
     unzip
 
     nix-zsh-completions
@@ -60,6 +58,8 @@ in {
     jetbrains.idea-community
 
     keybase
+
+    slack
 
     # Games
     _2048-in-terminal
