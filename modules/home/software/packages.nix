@@ -47,11 +47,11 @@ in {
     shabka.external.nixpkgs.release-unstable.corgi
     shabka.external.nixpkgs.release-unstable.vgo2nix
 
+    slack
+
     unzip
 
     nix-zsh-completions
-
-    shabka.external.nixpkgs.release-unstable.slack-cli
   ] ++ (if stdenv.isLinux then [
     #
     # Linux applications
