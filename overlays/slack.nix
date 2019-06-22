@@ -1,5 +1,5 @@
 self: super:
 
 {
-  slack = super.shabka.external.nixpkgs.release-unstable.slack;
+  slack = super.shabka.external.nixpkgs.release-unstable.slack-dark;
 }
