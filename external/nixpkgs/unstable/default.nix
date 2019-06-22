@@ -19,4 +19,4 @@ let
     revision = pinnedVersion.rev;
   };
 in
-  (import patched { config = {}; overlays = []; } // { path = patched; })
+  (import patched { config = { allowUnfree = true; }; overlays = []; } // { path = patched; })

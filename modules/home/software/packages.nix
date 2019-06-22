@@ -50,8 +50,6 @@ in {
     unzip
 
     nix-zsh-completions
-
-    shabka.external.nixpkgs.release-unstable.slack-cli
   ] ++ (if stdenv.isLinux then [
     #
     # Linux applications
@@ -60,6 +58,8 @@ in {
     jetbrains.idea-community
 
     keybase
+
+    slack
 
     # Games
     _2048-in-terminal
