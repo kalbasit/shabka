@@ -65,7 +65,7 @@ in {
 
     xsession = optionalAttrs pkgs.stdenv.isLinux {
       windowManager.i3.config = {
-        bars = if (config.mine.workstation.i3.bar.engine == "i3bar") then
+        bars = optionals (config.mine.workstation.i3.bar.engine == "i3bar")
           [{
             position = "top";
 
@@ -78,7 +78,7 @@ in {
               inactiveWorkspace = { border = "#87af87"; background = "#87af87"; text = "#626262"; };
               urgentWorkspace = { border = "#ff0000"; background = "#ff0000"; text = "#e4e4e4"; };
             };
-          }] else [];
+          }];
 
         colors = {
           background = "#4e4e4e";

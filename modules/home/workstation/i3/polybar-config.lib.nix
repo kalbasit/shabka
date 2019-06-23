@@ -1,6 +1,8 @@
 { config, lib, pkgs, ... }:
 
-{
+let
+cfg = config.mine.workstation.i3.bar;
+in {
   "settings" = {
     pseudo-transparency = true;
     screenchange-reload = true;
@@ -42,9 +44,9 @@
 
   "module/battery" = {
     type = "internal/battery";
-    battery = config.mine.workstation.i3.bar.battery.device;
+    battery = cfg.battery.device;
     adapter = "AC";
-    full-at = config.mine.workstation.i3.bar.battery.fullAt;
+    full-at = cfg.battery.fullAt;
     poll-interval = 5;
 
     format-charging-prefix = "⬆️";
@@ -143,7 +145,7 @@
 
   "module/network-wlan" = {
     type = "internal/network";
-    interface = config.mine.workstation.i3.bar.wlan;
+    interface = cfg.wlan;
     interval = 3;
 
     format-connected = "<ramp-signal> <label-connected>";
