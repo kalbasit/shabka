@@ -18,7 +18,7 @@
       }
     ];
 
-    services.polybar = (mkIf config.mine.workstation.i3.bar.polybar import ./polybar.lib.nix { inherit config pkgs lib; });
-    xdg.configFile."i3status/config" = (mkIf config.mine.workstation.i3.bar.i3bar import ./i3status.lib.nix { inherit config pkgs lib; });
+    services.polybar = (mkIf config.mine.workstation.i3.bar.polybar.enable import ./polybar.lib.nix { inherit config pkgs lib; });
+    xdg.configFile."i3status/config" = (mkIf config.mine.workstation.i3.bar.i3bar.enable import ./i3status.lib.nix { inherit config pkgs lib; });
   };
 }

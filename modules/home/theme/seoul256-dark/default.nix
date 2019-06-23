@@ -65,7 +65,7 @@ in {
 
     xsession = optionalAttrs pkgs.stdenv.isLinux {
       windowManager.i3.config = {
-        bars = optionals config.mine.workstation.i3.bar.i3bar
+        bars = optionals config.mine.workstation.i3.bar.i3bar.enable
           [{
             position = "top";
 

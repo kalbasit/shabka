@@ -103,7 +103,7 @@ in {
           yellow   = "#d79921";
 
           in {
-            bars = optionals config.mine.workstation.i3.bar.i3bar
+            bars = optionals config.mine.workstation.i3.bar.i3bar.enable
               [{
                 position = "top";
 

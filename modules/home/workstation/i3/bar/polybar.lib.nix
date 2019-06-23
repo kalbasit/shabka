@@ -8,7 +8,7 @@ let
     done
   '';
 in {
-  enable = config.mine.workstation.i3.bar.polybar;
+  enable = config.mine.workstation.i3.bar.polybar.enable;
   package = pkgs.polybar.override {
     i3Support = true;
     pulseSupport = true;
