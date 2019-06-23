@@ -103,9 +103,9 @@ in {
           yellow   = "#d79921";
 
           in {
-            bars = optionals (config.shabka.workstation.i3.bar.engine == "i3bar")
+            bars = optionals config.shabka.workstation.i3.bar.i3bar.enable
               [{
-                position = "top";
+                position = config.shabka.workstation.i3.bar.location;
 
                 colors = {
                   background = bg;

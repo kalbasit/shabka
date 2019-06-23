@@ -65,9 +65,9 @@ in {
 
     xsession = optionalAttrs pkgs.stdenv.isLinux {
       windowManager.i3.config = {
-        bars = optionals (config.shabka.workstation.i3.bar.engine == "i3bar")
+        bars = optionals config.shabka.workstation.i3.bar.i3bar.enable
           [{
-            position = "top";
+            position = config.shabka.workstation.i3.bar.i3bar.location;
 
             colors = {
               background = "#626262";
