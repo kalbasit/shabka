@@ -7,10 +7,7 @@ let
     inherit (pinnedVersion) url sha256;
   };
 
-  patches = [
-    # https://github.com/NixOS/nixpkgs/commit/2b040c57ddf9c08bf65d4d888462e45021cdfca4
-    ./62614-p11-kit-disable-tests-on-darwin.patch
-  ];
+  patches = [];
 
   patched = mkExternal {
     inherit src patches;
