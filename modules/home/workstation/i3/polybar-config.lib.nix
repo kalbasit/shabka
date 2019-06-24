@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-cfg = config.mine.workstation.i3.bar;
+  cfg = config.mine.workstation.i3.bar;
 in {
   "settings" = {
     pseudo-transparency = true;
