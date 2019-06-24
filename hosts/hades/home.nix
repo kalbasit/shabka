@@ -32,6 +32,11 @@
     mine.keyboard.layouts = [ "colemak" ];
     mine.workstation.enable = true;
 
+    mine.workstation.i3.bar = {
+      engine = "polybar";
+      wlan = "wlp110s0";
+    };
+
     mine.workstation.autorandr.enable = true;
 
     programs.autorandr.profiles = {

@@ -65,19 +65,20 @@ in {
 
     xsession = optionalAttrs pkgs.stdenv.isLinux {
       windowManager.i3.config = {
-        bars = [{
-          position = "top";
+        bars = optionals (config.mine.workstation.i3.bar.engine == "i3bar")
+          [{
+            position = "top";
 
-          colors = {
-            background = "#626262";
-            statusline = "#00ff00";
-            separator = "#d68787";
-            focusedWorkspace = { border = "#e4e4e4"; background = "#5f865f"; text = "#e4e4e4"; };
-            activeWorkspace = { border = "#e4e4e4"; background = "#ffafaf"; text = "#e4e4e4"; };
-            inactiveWorkspace = { border = "#87af87"; background = "#87af87"; text = "#626262"; };
-            urgentWorkspace = { border = "#ff0000"; background = "#ff0000"; text = "#e4e4e4"; };
-          };
-        }];
+            colors = {
+              background = "#626262";
+              statusline = "#00ff00";
+              separator = "#d68787";
+              focusedWorkspace = { border = "#e4e4e4"; background = "#5f865f"; text = "#e4e4e4"; };
+              activeWorkspace = { border = "#e4e4e4"; background = "#ffafaf"; text = "#e4e4e4"; };
+              inactiveWorkspace = { border = "#87af87"; background = "#87af87"; text = "#626262"; };
+              urgentWorkspace = { border = "#ff0000"; background = "#ff0000"; text = "#e4e4e4"; };
+            };
+          }];
 
         colors = {
           background = "#4e4e4e";
@@ -103,6 +104,16 @@ in {
           };
         };
       };
+    };
+
+    services.polybar.config."colors" = {
+      background = "#5f865f";
+      background-alt = "#87af87";
+      foreground = "#e4e4e4";
+      foreground-alt = "#626262";
+      primary = "#ffafaf";
+      secondary = "#5f676a";
+      alert = "#ff0000";
     };
 
     programs.rofi.theme = "Adapta-Nokto";
