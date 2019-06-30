@@ -7,7 +7,7 @@ let
     inherit (pinnedVersion) url sha256;
   };
 
-  patches = [];
+  patches = [ ./4-update-swm.patch ];
 
   patched = mkExternal {
     inherit src patches;
