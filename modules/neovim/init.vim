@@ -260,6 +260,7 @@ let g:gist_post_private = 1
 "" Golang{{{
 ""
 
+let g:go_def_mode='gopls'
 let g:go_fmt_command = "goimports"  " What to run on save.
 let g:go_highlight_build_constraints = 1
 let g:go_highlight_fields = 1
@@ -267,6 +268,7 @@ let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1
 let g:go_highlight_operators = 1
 let g:go_highlight_types = 1
+let g:go_info_mode='gopls'
 
 " }}}
 "" Gundo{{{
