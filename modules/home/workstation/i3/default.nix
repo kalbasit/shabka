@@ -6,7 +6,7 @@ let
   cfg = config.mine.workstation.i3;
 in {
   imports = [
-    ./bar
+    ./bar/default.nix
   ];
 
   options.mine.workstation.i3.enable = mkEnableOption "workstation.i3";
@@ -16,10 +16,6 @@ in {
       {
         assertion = config.mine.nixosConfig != {} && config.mine.darwinConfig == {};
         message = "mine.workstation.i3.enable must be false on Darwin!";
-      }
-      {
-        assertion = cfg.bar.i3bar.enable != cfg.bar.i3bar.polybar;
-        message = "i3bar and polybar cannot be used at the same time.";
       }
     ];
 
