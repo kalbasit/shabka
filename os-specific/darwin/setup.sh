@@ -81,8 +81,8 @@ if ! defaults read com.github.kalbasit.shabka bootstrap >/dev/null 2>&1; then
 	command -v darwin-rebuild 2>/dev/null || {
 		info "Installing nix-darwin"
 		pushd "${workdir}"
-			readonly nixpkgs="$( nix-build "${shabka_path}/external" -A "nixpkgs.release-unstable.path" )"
-			readonly nix_darwin="$( nix-build "${shabka_path}/external" -A "nix-darwin.path" )"
+			readonly nixpkgs="$( nix-build "${shabka_path}" -A "external.nixpkgs.release-unstable.path" )"
+			readonly nix_darwin="$( nix-build "${shabka_path}" -A "external.nix-darwin.path" )"
 			set +e
 				(yes | nix run -I darwin-config="${hostcf}/configuration.nix" -f "${nix_darwin}" --arg nixpkgs "${nixpkgs}" installer -c darwin-installer)
 				RETVAL=$?
