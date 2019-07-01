@@ -71,7 +71,6 @@ in {
   ] else []);
 
   programs.direnv.enable = true;
-  programs.htop.enable = true;
 
   # install home-manager but only if it's darwin
   programs.home-manager = if stdenv.isDarwin then {
