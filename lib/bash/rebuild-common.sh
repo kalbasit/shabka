@@ -28,8 +28,8 @@ done
 shift $((OPTIND -1))
 
 if [[ -z "${release}" ]]; then
-    if [[ -r "${shabka_path}/hosts/${host}/release" ]]; then
-        release="$( cat "${shabka_path}/hosts/${host}/release" )"
+    if [[ -r "${dotshabka_path}/hosts/${host}/release" ]]; then
+        release="$( cat "${dotshabka_path}/hosts/${host}/release" )"
     else
         # fallback to the default release
         release="$( tr -d "\n" < "${shabka_path}/.release" )"
