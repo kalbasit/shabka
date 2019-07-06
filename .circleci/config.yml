@@ -43,6 +43,8 @@ var_4: &build-host
         source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
       fi
 
+      export DOTSHABKA_PATH="${HOME}/dotshabka"
+
       ./scripts/build-host.sh "${CIRCLE_JOB}"
 
 var_5: &push-to-cachix
@@ -61,11 +63,22 @@ var_5: &push-to-cachix
         exit 0
       fi
 
+      export DOTSHABKA_PATH="${HOME}/dotshabka"
+
       ./scripts/push-to-cachix.sh "${CIRCLE_JOB}"
+
+var_6: &download-kalbasit-dotshabka
+  run:
+    name: Download dotshabka from kalbasit
+    working_directory: ~/
+    command: |
+      if ! git clone https://github.com/kalbasit/dotshabka.git -b "${CIRCLE_BRANCH}"; then
+        git clone https://github.com/kalbasit/dotshabka.git
+      fi
 
 version: 2
 jobs:
-  athena:
+  kalbasit_athena:
     macos:
       xcode: "9.0"
 
@@ -79,10 +92,11 @@ jobs:
       - *install-nix
       - *install-dependencies
       - *enable-cachix
+      - *download-kalbasit-dotshabka
       - *build-host
       - *push-to-cachix
 
-  cratos:
+  kalbasit_cratos:
     working_directory: ~/shabka
 
     environment:
@@ -95,10 +109,11 @@ jobs:
       - checkout
       - *install-dependencies
       - *enable-cachix
+      - *download-kalbasit-dotshabka
       - *build-host
       - *push-to-cachix
 
-  hades:
+  kalbasit_hades:
     working_directory: ~/shabka
 
     environment:
@@ -111,10 +126,11 @@ jobs:
       - checkout
       - *install-dependencies
       - *enable-cachix
+      - *download-kalbasit-dotshabka
       - *build-host
       - *push-to-cachix
 
-  hera:
+  kalbasit_hera:
     working_directory: ~/shabka
 
     environment:
@@ -127,10 +143,11 @@ jobs:
       - checkout
       - *install-dependencies
       - *enable-cachix
+      - *download-kalbasit-dotshabka
       - *build-host
       - *push-to-cachix
 
-  poseidon:
+  kalbasit_poseidon:
     macos:
       xcode: "9.0"
 
@@ -144,10 +161,11 @@ jobs:
       - *install-nix
       - *install-dependencies
       - *enable-cachix
+      - *download-kalbasit-dotshabka
       - *build-host
       - *push-to-cachix
 
-  zeus:
+  kalbasit_zeus:
     working_directory: ~/shabka
 
     environment:
@@ -160,6 +178,7 @@ jobs:
       - checkout
       - *install-dependencies
       - *enable-cachix
+      - *download-kalbasit-dotshabka
       - *build-host
       - *push-to-cachix
 
@@ -167,15 +186,15 @@ workflows:
   version: 2
   testing:
     jobs:
-      - athena:
+      - kalbasit_athena:
           context: nix-global
-      - cratos:
+      - kalbasit_cratos:
           context: nix-global
-      - hades:
+      - kalbasit_hades:
           context: nix-global
-      - hera:
+      - kalbasit_hera:
           context: nix-global
-      - poseidon:
+      - kalbasit_poseidon:
           context: nix-global
-      - zeus:
+      - kalbasit_zeus:
           context: nix-global
