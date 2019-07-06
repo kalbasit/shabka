@@ -2,6 +2,17 @@
 
 set -euo pipefail
 
+# find .shabka
+if [[ "x$(printenv DOTSHABKA_PATH)" == "x" ]]; then
+    >&2 echo "Please define DOTSHABKA_PATH to point to the location of your .shabka"
+    exit 1
+fi
+readonly dotshabka_path="${DOTSHABKA_PATH}"
+if ! [[ -d "${dotshabka_path}" ]]; then
+    >&2 echo "${dotshabka_path} No such directory"
+    exit 1
+fi
+
 readonly current_uname="$(uname -s | tr -d '\n')"
 readonly shabka_path="$(cd $(dirname "${BASH_SOURCE[0]}")/../ && pwd)"
 
@@ -9,15 +20,15 @@ build_host() {
     local host="${1}"; shift
     local release
 
-    if ! [[ -f "${shabka_path}/hosts/${host}/.uname" ]]; then
-        >&2 echo "WARN: The host ${host} does not define its uname via hosts/${host}/.uname and cannot be built!"
+    if ! [[ -f "${dotshabka_path}/hosts/${host}/.uname" ]]; then
+        >&2 echo "WARN: The host ${host} does not define its uname via ${dotshabka_path}/hosts/${host}/.uname and cannot be built!"
         return
     fi
 
-    local host_uname="$(tr -d '\n' < "${shabka_path}/hosts/${host}/.uname" )"
+    local host_uname="$(tr -d '\n' < "${dotshabka_path}/hosts/${host}/.uname" )"
 
-    if [[ -r "${shabka_path}/hosts/${host}/release" ]]; then
-        release="$( cat "${shabka_path}/hosts/${host}/release" )"
+    if [[ -r "${dotshabka_path}/hosts/${host}/release" ]]; then
+        release="$( cat "${dotshabka_path}/hosts/${host}/release" )"
     else
         # fallback to the default release
         release="$( tr -d "\n" < "${shabka_path}/.release" )"
@@ -33,7 +44,7 @@ build_host() {
     echo ">>> Building the host ${host}"
     echo -e "\tNIX_PATH=${nix_path}"
     NIX_PATH="${nix_path}" \
-        nix-build --option builders '' "${shabka_path}/hosts/${host}" -A system "${@}"
+        nix-build --option builders '' "${dotshabka_path}/hosts/${host}" -A system "${@}"
 }
 
 

@@ -43,6 +43,8 @@ var_4: &build-host
         source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
       fi
 
+      export DOTSHABKA_PATH="${HOME}/dotshabka"
+
       ./scripts/build-host.sh "${CIRCLE_JOB}"
 
 var_5: &push-to-cachix
@@ -61,7 +63,21 @@ var_5: &push-to-cachix
         exit 0
       fi
 
+      export DOTSHABKA_PATH="${HOME}/dotshabka"
+
       ./scripts/push-to-cachix.sh "${CIRCLE_JOB}"
+
+var_6: &download-kalbasit-dotshabka
+  run:
+    name: Download dotshabka from kalbasit
+    working_directory: ~/
+    command: |
+      if ! git clone https://github.com/kalbasit/dotshabka.git -b "${CIRCLE_BRANCH}"; then
+        git clone https://github.com/kalbasit/dotshabka.git
+        >&2 echo "Cloned dotshabka from the master branch"
+      else
+        >&2 echo "Cloned dotshabka from the ${CIRCLE_BRANCH} branch"
+      fi
 
 version: 2
 jobs:
@@ -79,6 +95,7 @@ jobs:
       - *install-nix
       - *install-dependencies
       - *enable-cachix
+      - *download-kalbasit-dotshabka
       - *build-host
       - *push-to-cachix
 
@@ -95,6 +112,7 @@ jobs:
       - checkout
       - *install-dependencies
       - *enable-cachix
+      - *download-kalbasit-dotshabka
       - *build-host
       - *push-to-cachix
 
@@ -111,6 +129,7 @@ jobs:
       - checkout
       - *install-dependencies
       - *enable-cachix
+      - *download-kalbasit-dotshabka
       - *build-host
       - *push-to-cachix
 
@@ -127,6 +146,7 @@ jobs:
       - checkout
       - *install-dependencies
       - *enable-cachix
+      - *download-kalbasit-dotshabka
       - *build-host
       - *push-to-cachix
 
@@ -144,6 +164,7 @@ jobs:
       - *install-nix
       - *install-dependencies
       - *enable-cachix
+      - *download-kalbasit-dotshabka
       - *build-host
       - *push-to-cachix
 
@@ -160,6 +181,7 @@ jobs:
       - checkout
       - *install-dependencies
       - *enable-cachix
+      - *download-kalbasit-dotshabka
       - *build-host
       - *push-to-cachix
 

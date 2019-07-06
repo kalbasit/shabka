@@ -2,14 +2,25 @@
 
 set -euo pipefail
 
+# find .shabka
+if [[ "x$(printenv DOTSHABKA_PATH)" == "x" ]]; then
+    >&2 echo "Please define DOTSHABKA_PATH to point to the location of your .shabka"
+    exit 1
+fi
+readonly dotshabka_path="${DOTSHABKA_PATH}"
+if ! [[ -d "${dotshabka_path}" ]]; then
+    >&2 echo "${dotshabka_path} No such directory"
+    exit 1
+fi
+
 readonly shabka_path="$(cd $(dirname "${BASH_SOURCE[0]}")/../ && pwd)"
 readonly current_uname="$(uname -s | tr -d '\n')"
 
 # I don't want to ever make the mistake of pushing while my private files are
 # accessible. This is meant to go away eventually, see #216 for more
 # information
-if [[ -e "${shabka_path}/secrets" ]]; then
-    >&2 echo "ERR: ${shabka_path}/secrets exists. Will not continue!"
+if [[ -e "${dotshabka_path}/secrets" ]]; then
+    >&2 echo "ERR: ${dotshabka_path}/secrets exists. Will not continue!"
     exit 1
 fi
 
@@ -22,15 +33,15 @@ push_host() {
     local host="${1}"
     local release
 
-    if ! [[ -f "${shabka_path}/hosts/${host}/.uname" ]]; then
+    if ! [[ -f "${dotshabka_path}/hosts/${host}/.uname" ]]; then
         >&2 echo "WARN: The host ${host} does not define its uname via hosts/${host}/.uname and cannot be built!"
         return
     fi
 
-    local host_uname="$(tr -d '\n' < "${shabka_path}/hosts/${host}/.uname" )"
+    local host_uname="$(tr -d '\n' < "${dotshabka_path}/hosts/${host}/.uname" )"
 
-    if [[ -r "${shabka_path}/hosts/${host}/release" ]]; then
-        release="$( cat "${shabka_path}/hosts/${host}/release" )"
+    if [[ -r "${dotshabka_path}/hosts/${host}/release" ]]; then
+        release="$( cat "${dotshabka_path}/hosts/${host}/release" )"
     else
         # fallback to the default release
         release="$( tr -d "\n" < "${shabka_path}/.release" )"
@@ -46,7 +57,7 @@ push_host() {
     echo ">>> Building the host ${host}, and pushing to Cachix"
     echo -e "\tNIX_PATH=${nix_path}"
     NIX_PATH="${nix_path}" \
-        nix-build --option builders '' "${shabka_path}/hosts/${host}" -A system | cachix push yl
+        nix-build --option builders '' "${dotshabka_path}/hosts/${host}" -A system | cachix push yl
 }
 
 
@@ -55,6 +66,6 @@ if [[ "${#}" -eq 1 ]]; then
     exit
 fi
 
-for hostPath in "${shabka_path}"/hosts/*; do
+for hostPath in "${dotshabka_path}"/hosts/*; do
     push_host "$(basename "${hostPath}")"
 done

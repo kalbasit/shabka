@@ -2,6 +2,17 @@
 
 set -euo pipefail
 
+# find .shabka
+if [[ "x$(printenv DOTSHABKA_PATH)" == "x" ]]; then
+    >&2 echo "Please define DOTSHABKA_PATH to point to the location of your .shabka"
+    exit 1
+fi
+readonly dotshabka_path="${DOTSHABKA_PATH}"
+if ! [[ -d "${dotshabka_path}" ]]; then
+    >&2 echo "${dotshabka_path} No such directory"
+    exit 1
+fi
+
 readonly shabka_path="$(cd $(dirname "${BASH_SOURCE[0]}")/../ && pwd)"
 
 readonly release="$( tr -d "\n" < "${shabka_path}/.release" )"
