@@ -21,7 +21,7 @@ build_host() {
     local release
 
     if ! [[ -f "${dotshabka_path}/hosts/${host}/.uname" ]]; then
-        >&2 echo "WARN: The host ${host} does not define its uname via hosts/${host}/.uname and cannot be built!"
+        >&2 echo "WARN: The host ${host} does not define its uname via ${dotshabka_path}/hosts/${host}/.uname and cannot be built!"
         return
     fi
 

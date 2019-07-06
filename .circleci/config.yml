@@ -74,6 +74,9 @@ var_6: &download-kalbasit-dotshabka
     command: |
       if ! git clone https://github.com/kalbasit/dotshabka.git -b "${CIRCLE_BRANCH}"; then
         git clone https://github.com/kalbasit/dotshabka.git
+        >&2 echo "Cloned dotshabka from the master branch"
+      else
+        >&2 echo "Cloned dotshabka from the ${CIRCLE_BRANCH} branch"
       fi
 
 version: 2
