@@ -103,33 +103,6 @@ in {
           yellow   = "#d79921";
 
           in {
-            bars = optionals config.mine.workstation.i3.bar.i3bar.enable
-              [{
-                position = "top";
-
-                colors = {
-                  background = bg;
-                  statusline = yellow;
-                  separator = red;
-
-                  focusedWorkspace = {
-                    border = aqua; background = aqua; text = darkgray;
-                  };
-
-                  activeWorkspace = {
-                    border = darkgray; background = darkgray; text = yellow;
-                  };
-
-                  inactiveWorkspace = {
-                    border = darkgray; background = darkgray; text = yellow;
-                  };
-
-                  urgentWorkspace = {
-                    border = red; background = red; text = bg;
-                  };
-                };
-              }];
-
             colors = {
               background = darkgray;
 

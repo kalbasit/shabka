@@ -3,7 +3,7 @@
 with lib;
 
 let
-  cfg = config.mine.workstation.i3;
+  cfg = config.mine.workstation.i3.bar;
 
   timezoneModule = types.submodule {
     options = {
@@ -44,9 +44,7 @@ let
   };
 in {
   options.mine.workstation.i3.bar = {
-    i3bar.enable = mkEnableOption "Enable workstation.i3.bar.i3bar";
-
-    polybar.enable = mkEnableOption "Enable workstation.i3.bar.polybar";
+    enable = mkEnableOption "Enable workstation.i3.bar (it uses polybar)";
 
     location = mkOption {
       type = types.enum [ "top" "bottom" ];
@@ -127,15 +125,10 @@ in {
     };
   };
 
-  config = mkIf config.mine.workstation.i3.enable {
-    #assertions = [
-    #  {
-    #    assertion = cfg.bar.i3bar.enable != cfg.bar.polybar.enable;
-    #    message = "i3bar and polybar cannot be used at the same time.";
-    #  }
-    #];
+  config = mkIf cfg.enable {
+    assertions = [
+    ];
 
     services.polybar = import ./polybar.lib.nix { inherit config pkgs lib; };
-    xdg.configFile."i3status/config" = (mkIf config.mine.workstation.i3.bar.i3bar.enable (import ./i3status.lib.nix { inherit config pkgs lib; }));
   };
 }

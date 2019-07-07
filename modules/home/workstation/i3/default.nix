@@ -6,7 +6,7 @@ let
   cfg = config.mine.workstation.i3;
 in {
   imports = [
-    ./bar/default.nix
+    ./bar.nix
   ];
 
   options.mine.workstation.i3.enable = mkEnableOption "workstation.i3";

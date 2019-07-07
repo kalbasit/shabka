@@ -230,7 +230,7 @@ let
             print(e)
   '';
 in {
-  enable = config.mine.workstation.i3.bar.polybar.enable;
+  enable = cfg.enable;
   package = pkgs.polybar.override {
     i3Support = true;
     pulseSupport = true;
