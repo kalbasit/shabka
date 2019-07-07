@@ -17,6 +17,29 @@ let
         default = "UTC";
         example = "FR";
       };
+      format = mkOption {
+        type = types.str;
+        default = "%H:%M:%S";
+        example = "%a %Y-%m-%d %I:%M%p";
+        description = "GNU's coreutils's date format in which to display the time";
+      };
+    };
+  };
+
+  batteryModule = types.submodule {
+    options = {
+      device = mkOption {
+        default = "BAT0";
+        description = ''
+          Battery to be monitored by the bar engine.
+        '';
+      };
+      fullAt = mkOption {
+        default = 98;
+        description = ''
+          In case the battery never reports 100% charge.
+        '';
+      };
     };
   };
 in {
@@ -25,6 +48,12 @@ in {
 
     polybar.enable = mkEnableOption "Enable workstation.i3.bar.polybar";
 
+    location = mkOption {
+      type = types.enum [ "top" "bottom" ];
+      default = "top";
+      description = "Location of the bar";
+    };
+
     modules = {
 
       backlight.enable = mkEnableOption "Enable backlight bar module";
@@ -32,41 +61,19 @@ in {
       battery = {
         enable = mkEnableOption "Enable battery bar module";
         devices = mkOption {
-          type = types.listOf types.str;
-          default = [ "BAT0̈" ];
-          description = "The battery devices to be monitored by i3bar";
+          type = types.listOf batteryModule;
+          default = [ { device = "BAT0"; fullAt = 98; } ];
+          description = "The battery devices to be monitored.";
         };
       };
 
       cpu.enable = mkEnableOption "Enable CPU bar module";
 
-      date = {
-        enable = mkEnableOption "Enable date bar module";
-        format = mkOption {
-          type = types.str;
-          default = "%Y-%m-%d";
-          example = "%a %Y-%m-%d";
-          description = "GNU's coreutils's date format in which to display the date";
-        };
-        timezone = mkOption {
-          type = types.str;
-          default = "UTC";
-          example = "America/Los_Angeles";
-          description = "The timezone of which the date will be displayed";
-        };
-      };
-
       time = {
         enable = mkEnableOption "Enable time bar module";
-        format = mkOption {
-          type = types.str;
-          default = "%H:%M:%S";
-          example = "%I:%M%p";
-          description = "GNU's coreutils's date format in which to display the time";
-        };
         timezones = mkOption {
           type = types.listOf timezoneModule;
-          default = [ { timezone = "UTC"; prefix = "UTC"; } ];
+          default = [ { timezone = "UTC"; prefix = "UTC"; format = "%H:%M:%S"; } ];
           description = "The timezones to be displayed.";
         };
       };
@@ -77,11 +84,11 @@ in {
           type = types.listOf types.str;
           default = [ "/" ];
           example = [ "/" "/home" ];
-          description = "The mount points of which the free space will be displayed.";
+          description = "The mount points of which the free space will be displayed. Currently, only the first mountpoint will be displayed";
         };
       };
 
-      ram = mkEnableOption "Enable the RAM bar module";
+      ram.enable = mkEnableOption "Enable the RAM bar module";
 
       network = {
         enable = mkEnableOption "Enable the network bar module";
@@ -104,18 +111,31 @@ in {
       spotify.enable = mkEnableOption "Enable the spotify bar module.";
 
       keyboardLayout.enable = mkEnableOption "Display the keyboard layout in the bar";
+
+      temperature = {
+        enable = mkEnableOption "Display the temperature of the thermal zone set";
+        thermalZone = mkOption {
+          type = types.int;
+          default = 0;
+          description = ''
+            The temperature of the set thermal zone will be displayed.
+            You can find the number of the thermal zone by running
+            `for i in /sys/class/thermal/thermal_zone*; do echo "$i: $(<$i/type)"; done`
+          '';
+        };
+      };
     };
   };
 
   config = mkIf config.mine.workstation.i3.enable {
-    assertions = [
-      {
-        assertion = cfg.bar.i3bar.enable != cfg.bar.polybar.enable;
-        message = "i3bar and polybar cannot be used at the same time.";
-      }
-    ];
+    #assertions = [
+    #  {
+    #    assertion = cfg.bar.i3bar.enable != cfg.bar.polybar.enable;
+    #    message = "i3bar and polybar cannot be used at the same time.";
+    #  }
+    #];
 
-    services.polybar = (mkIf config.mine.workstation.i3.bar.polybar.enable import ./polybar.lib.nix { inherit config pkgs lib; });
-    xdg.configFile."i3status/config" = (mkIf config.mine.workstation.i3.bar.i3bar.enable import ./i3status.lib.nix { inherit config pkgs lib; });
+    services.polybar = import ./polybar.lib.nix { inherit config pkgs lib; };
+    xdg.configFile."i3status/config" = (mkIf config.mine.workstation.i3.bar.i3bar.enable (import ./i3status.lib.nix { inherit config pkgs lib; }));
   };
 }
