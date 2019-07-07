@@ -5,10 +5,6 @@ with lib;
 let
   cfg = config.mine.workstation.i3;
 in {
-  imports = [
-    ./bar.nix
-  ];
-
   options.mine.workstation.i3.enable = mkEnableOption "workstation.i3";
 
   config = mkIf cfg.enable {
