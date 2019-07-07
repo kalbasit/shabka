@@ -5,6 +5,8 @@ with lib;
 let
   cfg = config.mine.workstation.i3.bar;
 
+  isEmpty = list: ((builtins.length list) == 0);
+
   timezoneModule = types.submodule {
     options = {
       timezone = mkOption {
@@ -126,9 +128,6 @@ in {
   };
 
   config = mkIf cfg.enable {
-    assertions = [
-    ];
-
     services.polybar = import ./polybar.lib.nix { inherit config pkgs lib; };
   };
 }
