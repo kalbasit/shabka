@@ -46,7 +46,6 @@ let
   };
 in {
   options.mine.workstation.i3.bar = {
-    enable = mkEnableOption "Enable workstation.i3.bar (it uses polybar)";
 
     location = mkOption {
       type = types.enum [ "top" "bottom" ];

@@ -385,7 +385,7 @@ let
     };
   } else {} );
 in {
-  enable = cfg.enable;
+  enable = config.mine.workstation.i3.enable;
   package = pkgs.polybar.override {
     i3Support = true;
     pulseSupport = true;
