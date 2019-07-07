@@ -56,10 +56,20 @@ in {
 
     modules = {
 
-      backlight.enable = mkEnableOption "Enable backlight bar module";
+      backlight = {
+        enable = mkEnableOption "Enable backlight bar module";
+        order = mkOption {
+          default = 80;
+          description = '' Order of the module in the bar (left to right).'';
+        };
+      };
 
       battery = {
         enable = mkEnableOption "Enable battery bar module";
+        order = mkOption {
+          default = 90;
+          description = '' Order of the module in the bar (left to right).'';
+        };
         devices = mkOption {
           type = types.listOf batteryModule;
           default = [ { device = "BAT0"; fullAt = 98; } ];
@@ -67,10 +77,20 @@ in {
         };
       };
 
-      cpu.enable = mkEnableOption "Enable CPU bar module";
+      cpu = {
+        enable = mkEnableOption "Enable CPU bar module";
+        order = mkOption {
+          default = 50;
+          description = '' Order of the module in the bar (left to right).'';
+        };
+      };
 
       time = {
         enable = mkEnableOption "Enable time bar module";
+        order = mkOption {
+          default = 100;
+          description = '' Order of the module in the bar (left to right).'';
+        };
         timezones = mkOption {
           type = types.listOf timezoneModule;
           default = [ { timezone = "UTC"; prefix = "UTC"; format = "%H:%M:%S"; } ];
@@ -80,6 +100,10 @@ in {
 
       filesystems = {
         enable = mkEnableOption "Enable filesystems bar module";
+        order = mkOption {
+          default = 40;
+          description = '' Order of the module in the bar (left to right).'';
+        };
         mountPoints = mkOption {
           type = types.listOf types.str;
           default = [ "/" ];
@@ -88,10 +112,20 @@ in {
         };
       };
 
-      ram.enable = mkEnableOption "Enable the RAM bar module";
+      ram = {
+        enable = mkEnableOption "Enable the RAM bar module";
+        order = mkOption {
+          default = 60;
+          description = '' Order of the module in the bar (left to right).'';
+        };
+      };
 
       network = {
         enable = mkEnableOption "Enable the network bar module";
+        order = mkOption {
+          default = 30;
+          description = '' Order of the module in the bar (left to right).'';
+        };
         eth = mkOption {
           type = types.listOf types.str;
           default = [ ];
@@ -106,14 +140,36 @@ in {
         };
       };
 
-      volume.enable = mkEnableOption "Enable the volume bar module.";
+      volume = {
+        enable = mkEnableOption "Enable the volume bar module.";
+        order = mkOption {
+          default = 20;
+          description = '' Order of the module in the bar (left to right).'';
+        };
+      };
 
-      spotify.enable = mkEnableOption "Enable the spotify bar module.";
+      spotify = {
+        enable = mkEnableOption "Enable the spotify bar module.";
+        order = mkOption {
+          default = 10;
+          description = '' Order of the module in the bar (left to right).'';
+        };
+      };
 
-      keyboardLayout.enable = mkEnableOption "Display the keyboard layout in the bar";
+      keyboardLayout = {
+        enable = mkEnableOption "Display the keyboard layout in the bar";
+        order = mkOption {
+          default = 110;
+          description = '' Order of the module in the bar (left to right).'';
+        };
+      };
 
       temperature = {
         enable = mkEnableOption "Display the temperature of the thermal zone set";
+        order = mkOption {
+          default = 70;
+          description = '' Order of the module in the bar (left to right).'';
+        };
         thermalZone = mkOption {
           type = types.int;
           default = 0;

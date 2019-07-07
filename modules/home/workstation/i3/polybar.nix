@@ -14,27 +14,30 @@ let
   {
     name = "module/battery-${device}";
     value = {
-      type = "internal/battery";
-      battery = device;
-      adapter = "AC";
-      full-at = fullAt;
-      poll-interval = 5;
+      order = cfg.modules.battery.order;
+      config = {
+        type = "internal/battery";
+        battery = device;
+        adapter = "AC";
+        full-at = fullAt;
+        poll-interval = 5;
 
-      format-charging-prefix = "⬆️";
-      format-charging = "<label-charging>";
-      format-charging-underline = "#ffb52a";
-      label-charging = "%percentage%% %time%";
+        format-charging-prefix = "⬆️";
+        format-charging = "<label-charging>";
+        format-charging-underline = "#ffb52a";
+        label-charging = "%percentage%% %time%";
 
-      format-discharging-prefix = "⬇️";
-      format-discharging = "<label-discharging>";
-      format-discharging-underline = "\${self.format-charging-underline}";
-      label-discharging = "\${self.label-charging}";
+        format-discharging-prefix = "⬇️";
+        format-discharging = "<label-discharging>";
+        format-discharging-underline = "\${self.format-charging-underline}";
+        label-discharging = "\${self.label-charging}";
 
-      format-full-prefix = "↔️";
-      format-full = "<label-full>";
-      format-full-prefix-foreground = "\${colors.foreground-alt}";
-      format-full-underline = "\${self.format-charging-underline}";
-      label-full = "%percentage%%";
+        format-full-prefix = "↔️";
+        format-full = "<label-full>";
+        format-full-prefix-foreground = "\${colors.foreground-alt}";
+        format-full-underline = "\${self.format-charging-underline}";
+        label-full = "%percentage%%";
+      };
     };
   };
 
@@ -42,12 +45,15 @@ let
   {
     name = "module/time-${timezone}";
     value = {
-      type = "custom/script";
-      exec = "TZ=${timezone} ${pkgs.coreutils}/bin/date +'${format}'";
-      interval = 1;
-      format-prefix = "${prefix} ";
-      format-prefix-foreground = "\${colors.foreground-alt}";
-      format-underline = "#0a6cf5";
+      order = cfg.modules.time.order;
+      config = {
+        type = "custom/script";
+        exec = "TZ=${timezone} ${pkgs.coreutils}/bin/date +'${format}'";
+        interval = 1;
+        format-prefix = "${prefix} ";
+        format-prefix-foreground = "\${colors.foreground-alt}";
+        format-underline = "#0a6cf5";
+      };
     };
   };
 
@@ -55,23 +61,26 @@ let
   {
     name = "module/network-eth-${interface}";
     value = {
-      type = "internal/network";
-      interface = interface;
-      interval = 3;
+      order = cfg.modules.network.order;
+      config = {
+        type = "internal/network";
+        interface = interface;
+        interval = 3;
 
-      format-connected-underline = "#55aa55";
-      format-connected-prefix = "ETH ";
-      format-connected-prefix-foreground = "\${colors.foreground-alt}";
-      label-connected = "%local_ip%";
+        format-connected-underline = "#55aa55";
+        format-connected-prefix = "ETH ";
+        format-connected-prefix-foreground = "\${colors.foreground-alt}";
+        label-connected = "%local_ip%";
 
-      format-disconnected = "";
-      format-packetloss = "<animation-packetloss> <label-connected>";
+        format-disconnected = "";
+        format-packetloss = "<animation-packetloss> <label-connected>";
 
-      animation-packetloss-0 = "⚠";
-      animation-packetloss-0-foreground = "#ffa64c";
-      animation-packetloss-1 = "📶";
-      animation-packetloss-1-foreground = "#000000";
-      animation-packetloss-framerate = 500;
+        animation-packetloss-0 = "⚠";
+        animation-packetloss-0-foreground = "#ffa64c";
+        animation-packetloss-1 = "📶";
+        animation-packetloss-1-foreground = "#000000";
+        animation-packetloss-framerate = 500;
+      };
     };
   };
 
@@ -79,29 +88,32 @@ let
   {
     name = "module/network-wlan-${interface}";
     value = {
-      type = "internal/network";
-      interface = "wlp5s0";
-      interval = 3;
+      order = cfg.modules.network.order;
+      config = {
+        type = "internal/network";
+        interface = "wlp5s0";
+        interval = 3;
 
-      format-connected = "<ramp-signal> <label-connected>";
-      format-connected-underline = "#9f78e1";
-      label-connected = "%essid% %local_ip%";
+        format-connected = "<ramp-signal> <label-connected>";
+        format-connected-underline = "#9f78e1";
+        label-connected = "%essid% %local_ip%";
 
-      format-disconnected = "";
-      format-packetloss = "<animation-packetloss> <label-connected>";
+        format-disconnected = "";
+        format-packetloss = "<animation-packetloss> <label-connected>";
 
-      ramp-signal-0 = "▁";
-      ramp-signal-1 = "▂";
-      ramp-signal-2 = "▃";
-      ramp-signal-3 = "▅";
-      ramp-signal-4 = "▆";
-      ramp-signal-5 = "█";
-      ramp-signal-foreground = "\${colors.foreground-alt}";
-      animation-packetloss-0 = "⚠";
-      animation-packetloss-0-foreground = "#ffa64c";
-      animation-packetloss-1 = "📶";
-      animation-packetloss-1-foreground = "#000000";
-      animation-packetloss-framerate = 500;
+        ramp-signal-0 = "▁";
+        ramp-signal-1 = "▂";
+        ramp-signal-2 = "▃";
+        ramp-signal-3 = "▅";
+        ramp-signal-4 = "▆";
+        ramp-signal-5 = "█";
+        ramp-signal-foreground = "\${colors.foreground-alt}";
+        animation-packetloss-0 = "⚠";
+        animation-packetloss-0-foreground = "#ffa64c";
+        animation-packetloss-1 = "📶";
+        animation-packetloss-1-foreground = "#000000";
+        animation-packetloss-framerate = 500;
+      };
     };
   };
 
@@ -234,6 +246,8 @@ let
   # Module backlight
   (if cfg.modules.backlight.enable then {
     "module/backlight" = {
+      order = cfg.modules.backlight.order;
+      config = {
         type = "internal/backlight";
 
         card = "intel_backlight";
@@ -258,6 +272,7 @@ let
         ramp-2 = "🌓";
         ramp-3 = "🌒";
         ramp-4 = "🌑";
+      };
     };
   } else {} ) //
 
@@ -269,12 +284,15 @@ let
   # Module CPU
   (if cfg.modules.cpu.enable then {
     "module/cpu" = {
-      type = "internal/cpu";
-      interval = 2;
-      format-prefix = "🖥️";
-      format-prefix-foreground = "\${colors.foreground-alt}";
-      format-underline = "#f90000";
-      label = "%percentage%%";
+      order = cfg.modules.cpu.order;
+      config = {
+        type = "internal/cpu";
+        interval = 2;
+        format-prefix = "🖥️";
+        format-prefix-foreground = "\${colors.foreground-alt}";
+        format-underline = "#f90000";
+        label = "%percentage%%";
+      };
     };
   } else {} ) //
 
@@ -286,26 +304,32 @@ let
   # Module filesystems
   (if cfg.modules.filesystems.enable then {
     "module/filesystem" = {
-      type = "internal/fs";
-      interval = 60;
+      order = cfg.modules.filesystems.order;
+      config = {
+        type = "internal/fs";
+        interval = 60;
 
-      mount-0 = (builtins.head cfg.modules.filesystems.mountPoints); # TODO: support more than one mountpoint. How to iterate over a list and increment a number in nix ?
+        mount-0 = (builtins.head cfg.modules.filesystems.mountPoints); # TODO: support more than one mountpoint. How to iterate over a list and increment a number in nix ?
 
-      label-mounted = "%{F#0a81f5}%mountpoint%%{F-}: %percentage_free%%";
-      label-unmounted = "%mountpoint% unmounted";
-      label-unmounted-foreground = "\${colors.foreground-alt}";
+        label-mounted = "%{F#0a81f5}%mountpoint%%{F-}: %percentage_free%%";
+        label-unmounted = "%mountpoint% unmounted";
+        label-unmounted-foreground = "\${colors.foreground-alt}";
+      };
     };
   } else {} ) //
 
   # Module RAM
   (if cfg.modules.ram.enable then {
     "module/ram" = {
-      type = "internal/memory";
-      interval = 5;
-      format-prefix = "💾";
-      format-prefix-foreground = "\${colors.foreground-alt}";
-      format-underline = "#4bffdc";
-      label = "%percentage_used%%";
+      order = cfg.modules.ram.order;
+      config = {
+        type = "internal/memory";
+        interval = 5;
+        format-prefix = "💾";
+        format-prefix-foreground = "\${colors.foreground-alt}";
+        format-underline = "#4bffdc";
+        label = "%percentage_used%%";
+      };
     };
   } else {} ) //
 
@@ -322,86 +346,98 @@ let
   # Module volume (pulseaudio)
   (if cfg.modules.volume.enable then {
     "module/volume" = {
-      type = "internal/pulseaudio";
+      order = cfg.modules.volume.order;
+      config = {
+        type = "internal/pulseaudio";
 
-      format-volume = "<ramp-volume> <label-volume> <bar-volume>";
-      label-volume = "%percentage%%";
-      label-volume-foreground = "\${root.foreground}";
+        format-volume = "<ramp-volume> <label-volume> <bar-volume>";
+        label-volume = "%percentage%%";
+        label-volume-foreground = "\${root.foreground}";
 
-      label-muted = "🔇 muted";
-      label-muted-foreground = "#666";
+        label-muted = "🔇 muted";
+        label-muted-foreground = "#666";
 
-      bar-volume-width = 10;
-      bar-volume-foreground-0 = "#55aa55";
-      bar-volume-foreground-1 = "#55aa55";
-      bar-volume-foreground-2 = "#55aa55";
-      bar-volume-foreground-3 = "#55aa55";
-      bar-volume-foreground-4 = "#55aa55";
-      bar-volume-foreground-5 = "#f5a70a";
-      bar-volume-foreground-6 = "#ff5555";
-      bar-volume-gradient = true;
-      bar-volume-indicator = "|";
-      bar-volume-indicator-font = 2;
-      bar-volume-fill = "─";
-      bar-volume-fill-font = 2;
-      bar-volume-empty = "─";
-      bar-volume-empty-font = 2;
-      bar-volume-empty-foreground = "\${colors.foreground-alt}";
-      ramp-volume-0 = "🔈";
-      ramp-volume-1 = "🔉";
-      ramp-volume-2 = "🔊";
+        bar-volume-width = 10;
+        bar-volume-foreground-0 = "#55aa55";
+        bar-volume-foreground-1 = "#55aa55";
+        bar-volume-foreground-2 = "#55aa55";
+        bar-volume-foreground-3 = "#55aa55";
+        bar-volume-foreground-4 = "#55aa55";
+        bar-volume-foreground-5 = "#f5a70a";
+        bar-volume-foreground-6 = "#ff5555";
+        bar-volume-gradient = true;
+        bar-volume-indicator = "|";
+        bar-volume-indicator-font = 2;
+        bar-volume-fill = "─";
+        bar-volume-fill-font = 2;
+        bar-volume-empty = "─";
+        bar-volume-empty-font = 2;
+        bar-volume-empty-foreground = "\${colors.foreground-alt}";
+        ramp-volume-0 = "🔈";
+        ramp-volume-1 = "🔉";
+        ramp-volume-2 = "🔊";
+      };
     };
   } else {} ) //
 
   # Module spotify
   (if cfg.modules.spotify.enable then {
     "module/spotify" = {
-      type = "custom/script";
-      interval = 3;
-      format-prefix = "";
-      format = "<label>";
-      exec = "${spotifyScript} -f '{play_pause} {artist} - {song}'";
-      format-underline = "#1db954";
+      order = cfg.modules.spotify.order;
+      config = {
+        type = "custom/script";
+        interval = 3;
+        format-prefix = "";
+        format = "<label>";
+        exec = "${spotifyScript} -f '{play_pause} {artist} - {song}'";
+        format-underline = "#1db954";
+      };
     };
   } else {} ) //
 
   # Module keyboardLayout
   (if cfg.modules.keyboardLayout.enable then {
     "module/keyboardLayout" = {
-      type = "internal/xkeyboard";
-      blacklist-0 = "num lock";
+      order = cfg.modules.keyboardLayout.order;
+      config = {
+        type = "internal/xkeyboard";
+        blacklist-0 = "num lock";
 
-      format-prefix = "";
-      format-prefix-foreground = "\${colors.foreground-alt}";
-      format-prefix-underline = "\${colors.secondary}";
+        format-prefix = "";
+        format-prefix-foreground = "\${colors.foreground-alt}";
+        format-prefix-underline = "\${colors.secondary}";
 
-      label-layout = "%layout%";
-      label-layout-underline = "\${colors.secondary}";
+        label-layout = "%layout%";
+        label-layout-underline = "\${colors.secondary}";
 
-      label-indicator-padding = 1;
-      label-indicator-margin = 1;
-      label-indicator-background = "\${colors.secondary}";
-      label-indicator-underline = "\${colors.secondary}";
+        label-indicator-padding = 1;
+        label-indicator-margin = 1;
+        label-indicator-background = "\${colors.secondary}";
+        label-indicator-underline = "\${colors.secondary}";
       };
+    };
   } else {} ) //
 
   # Module temperature
   (if cfg.modules.temperature.enable then {
     "module/temperature" = {
-      type = "internal/temperature";
-      # $ for i in /sys/class/thermal/thermal_zone*; do echo "$i: $(<$i/type)"; done
-      thermal-zone = cfg.modules.temperature.thermalZone;
-      warn-temperature = 55;
-      interval = 5;
+      order = cfg.modules.temperature.order;
+      config = {
+        type = "internal/temperature";
+        # $ for i in /sys/class/thermal/thermal_zone*; do echo "$i: $(<$i/type)"; done
+        thermal-zone = cfg.modules.temperature.thermalZone;
+        warn-temperature = 55;
+        interval = 5;
 
-      format = "<label>";
-      format-underline = "#f50a4d";
-      format-warn = "<label-warn>";
-      format-warn-underline = "\${self.format-underline}";
+        format = "<label>";
+        format-underline = "#f50a4d";
+        format-warn = "<label-warn>";
+        format-warn-underline = "\${self.format-underline}";
 
-      label = "%temperature-c%";
-      label-warn = "</!\> %temperature-c% </!\>";
-      label-warn-foreground = "\${colors.secondary}";
+        label = "%temperature-c%";
+        label-warn = "</!\> %temperature-c% </!\>";
+        label-warn-foreground = "\${colors.secondary}";
+      };
     };
   } else {} );
 in {
@@ -448,7 +484,7 @@ in {
 
       modules-left = "i3";
       modules-center = "";
-      modules-right = (builtins.concatStringSep " " (builtins.attrNames modulesConfig)); # TODO(very high): find how to order this in the proper order
+      modules-right = (builtins.concatStringSep " " (builtins.attrNames (lib.mkOrder modulesConfig)));
     };
 
     "module/i3" = {
