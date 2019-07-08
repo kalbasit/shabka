@@ -428,7 +428,7 @@ in {
 
       modules-left = "i3";
       modules-center = "";
-      modules-right = (builtins.concatStringsSep " " (builtins.attrNames modulesConfig));
+      modules-right = (builtins.concatStringsSep " " (map (removePrefix "module/") (builtins.attrNames modulesConfig)));
     };
 
     "module/i3" = {
