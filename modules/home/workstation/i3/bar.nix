@@ -3,7 +3,7 @@
 with lib;
 
 let
-  cfg = config.mine.workstation.i3.bar;
+  cfg = config.mine.workstation.i3;
 
   isEmpty = list: ((builtins.length list) == 0);
 
