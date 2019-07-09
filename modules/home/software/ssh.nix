@@ -12,6 +12,7 @@ in {
 
     privateSSHPath = mkOption {
       type = types.path;
+      default = null;
       defaultText = ''
         The path to the private SSH module
       '';
@@ -20,7 +21,7 @@ in {
 
   config = mkIf cfg.enable {
 
-    programs.ssh = if (builtins.pathExists cfg.privateSSHPath) then import cfg.privateSSHPath else {
+    programs.ssh = if (cfg.privateSSHPath != null) then import cfg.privateSSHPath else {
         enable = true;
 
         extraConfig = ''
