@@ -53,7 +53,7 @@ with lib;
     i18n.consoleKeyMap = let layout = layouts."${builtins.head cfg.layouts}"; in
                          if layout.variant == ""
                          then layout.layout
-                         else layout.variant;
+                         else (if layout.variant == "bepo" then "fr-bepo" else layout.variant);
     services.xserver.layout = builtins.concatStringsSep "," (map (n: layouts."${n}".layout) cfg.layouts);
     services.xserver.xkbVariant = builtins.concatStringsSep "," (map (n: layouts."${n}".variant) cfg.layouts);
   };
