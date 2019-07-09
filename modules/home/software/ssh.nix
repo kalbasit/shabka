@@ -11,7 +11,7 @@ in {
     enable = mkEnableOption "SSH configurations";
 
     privateSSHPath = mkOption {
-      type = types.path;
+      type = types.nullOr types.path;
       default = null;
       defaultText = ''
         The path to the private SSH module
