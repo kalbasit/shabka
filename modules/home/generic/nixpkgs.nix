@@ -5,10 +5,8 @@ let
 
   configFile = pkgs.writeText "config.nix" ''
     { pkgs, ... }:
-
     {
       allowUnfree = true;
-
       packageOverrides = pkgs: {
         nur = pkgs.lib.recursiveUpdate
           (import ${shabka.external.nur.path} { inherit pkgs; })
