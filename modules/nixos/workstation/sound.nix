@@ -3,9 +3,9 @@
 with lib;
 
 {
-  options.mine.workstation.sound.enable = mkEnableOption "workstation.sound";
+  options.shabka.workstation.sound.enable = mkEnableOption "workstation.sound";
 
-  config = mkIf config.mine.workstation.sound.enable {
+  config = mkIf config.shabka.workstation.sound.enable {
     sound.enable = true;
 
     hardware = {

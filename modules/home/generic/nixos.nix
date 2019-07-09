@@ -3,7 +3,7 @@
 with lib;
 
 {
-  options.mine.nixosConfig = mkOption {
+  options.shabka.nixosConfig = mkOption {
     type = types.attrs;
     default = {};
     defaultText = ''

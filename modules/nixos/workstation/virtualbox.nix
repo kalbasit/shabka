@@ -3,12 +3,12 @@
 with lib;
 
 {
-  options.mine.workstation.virtualbox.enable = mkEnableOption "Enable VirtualBox";
+  options.shabka.workstation.virtualbox.enable = mkEnableOption "Enable VirtualBox";
 
-  config = mkIf config.mine.workstation.virtualbox.enable {
+  config = mkIf config.shabka.workstation.virtualbox.enable {
     virtualisation.virtualbox.host.enable = true;
     virtualisation.virtualbox.host.enableExtensionPack = true;
 
-    mine.users.groups = ["vboxusers"];
+    shabka.users.groups = ["vboxusers"];
   };
 }

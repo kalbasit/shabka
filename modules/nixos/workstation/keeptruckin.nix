@@ -4,9 +4,9 @@ with lib;
 with import ../../../util;
 
 let
-  cfg = config.mine.workstation.keeptruckin;
+  cfg = config.shabka.workstation.keeptruckin;
 in {
-  options.mine.workstation.keeptruckin = {
+  options.shabka.workstation.keeptruckin = {
     enable = mkEnableOption "Enable KeepTruckin";
   };
 

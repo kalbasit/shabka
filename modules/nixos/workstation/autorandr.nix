@@ -3,9 +3,9 @@
 with lib;
 
 {
-  options.mine.workstation.autorandr.enable = mkEnableOption "workstation.autorandr";
+  options.shabka.workstation.autorandr.enable = mkEnableOption "workstation.autorandr";
 
-  config = mkIf config.mine.workstation.autorandr.enable {
+  config = mkIf config.shabka.workstation.autorandr.enable {
     # This is coupled with /modules/home/workstation/autorandr.nix
     services.autorandr.enable = true;
   };

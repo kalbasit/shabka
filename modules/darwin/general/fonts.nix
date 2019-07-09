@@ -5,9 +5,9 @@ with lib;
 let
   shabka = import <shabka> { };
 in {
-  options.mine.fonts.enable = mkEnableOption "workstation.fonts";
+  options.shabka.fonts.enable = mkEnableOption "workstation.fonts";
 
-  config = mkIf config.mine.fonts.enable {
+  config = mkIf config.shabka.fonts.enable {
     fonts = {
       enableFontDir = true;
       fonts = with pkgs; [

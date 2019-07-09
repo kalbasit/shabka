@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  cfg = config.mine.keyboard;
+  cfg = config.shabka.keyboard;
 
   layouts = {
     azerty = {
@@ -31,7 +31,7 @@ with lib;
 
 {
   options = {
-    mine.keyboard = {
+    shabka.keyboard = {
       layouts = mkOption {
         type = types.listOf (types.enum (attrNames layouts));
         default = [ "qwerty" ];

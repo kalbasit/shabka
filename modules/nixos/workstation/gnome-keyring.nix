@@ -3,9 +3,9 @@
 with lib;
 
 {
-  options.mine.workstation.gnome-keyring.enable = mkEnableOption "workstation.gnome-keyring";
+  options.shabka.workstation.gnome-keyring.enable = mkEnableOption "workstation.gnome-keyring";
 
-  config = mkIf config.mine.workstation.gnome-keyring.enable {
+  config = mkIf config.shabka.workstation.gnome-keyring.enable {
     services.gnome3.gnome-keyring.enable = true;
   };
 }

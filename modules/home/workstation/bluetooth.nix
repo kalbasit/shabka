@@ -3,9 +3,9 @@
 with lib;
 
 {
-  options.mine.workstation.bluetooth.enable = mkEnableOption "workstation.bluetooth";
+  options.shabka.workstation.bluetooth.enable = mkEnableOption "workstation.bluetooth";
 
-  config = mkIf config.mine.workstation.bluetooth.enable {
+  config = mkIf config.shabka.workstation.bluetooth.enable {
     services.blueman-applet.enable = true;
   };
 }

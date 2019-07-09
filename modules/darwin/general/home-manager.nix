@@ -7,7 +7,7 @@ let
 
   makeHM = userName: nameValuePair
     (userName)
-    (config.mine.home-manager.config {
+    (config.shabka.home-manager.config {
       nixosConfig = config;
     });
 in {
@@ -15,7 +15,7 @@ in {
     (import "${shabka.external.home-manager.path}/nix-darwin")
   ];
 
-  options.mine.home-manager.config = mkOption {
+  options.shabka.home-manager.config = mkOption {
     default = { darwinConfig }: {...}: {};
     description = ''
       Function that returns the Home Manager configuration.

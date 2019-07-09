@@ -3,9 +3,9 @@
 with lib;
 
 {
-  options.mine.workstation.power.enable = mkEnableOption "workstation.power";
+  options.shabka.workstation.power.enable = mkEnableOption "workstation.power";
 
-  config = mkIf config.mine.workstation.power.enable {
+  config = mkIf config.shabka.workstation.power.enable {
     powerManagement = {
       enable = true;
     };

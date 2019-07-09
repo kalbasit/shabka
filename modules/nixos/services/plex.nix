@@ -3,9 +3,9 @@
 with lib;
 
 let
-  cfg = config.mine.plex;
+  cfg = config.shabka.plex;
 in {
-  options.mine.plex = {
+  options.shabka.plex = {
     enable = mkEnableOption "Enable Plex service";
     dataDir = mkOption {
       type = types.str;

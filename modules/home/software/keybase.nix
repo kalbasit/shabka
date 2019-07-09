@@ -3,9 +3,9 @@
 with lib;
 
 {
-  options.mine.keybase.enable = mkEnableOption "Enable keybase service";
+  options.shabka.keybase.enable = mkEnableOption "Enable keybase service";
 
-  config = mkIf config.mine.keybase.enable {
+  config = mkIf config.shabka.keybase.enable {
     services.kbfs.enable = true;
     services.keybase.enable = true;
   };

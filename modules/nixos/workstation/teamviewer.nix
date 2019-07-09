@@ -3,9 +3,9 @@
 with lib;
 
 {
-  options.mine.workstation.teamviewer.enable = mkEnableOption "workstation.teamviewer";
+  options.shabka.workstation.teamviewer.enable = mkEnableOption "workstation.teamviewer";
 
-  config = mkIf config.mine.workstation.teamviewer.enable {
+  config = mkIf config.shabka.workstation.teamviewer.enable {
    # enable TeamViewer
    services.teamviewer.enable = true;
   };

@@ -8,7 +8,7 @@ let
     done
   '';
 in {
-  enable = config.mine.workstation.i3.bar.engine == "polybar";
+  enable = config.shabka.workstation.i3.bar.engine == "polybar";
   package = pkgs.polybar.override {
     i3Support = true;
     pulseSupport = true;

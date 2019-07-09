@@ -4,9 +4,9 @@ with lib;
 
 let
 
-  cfg = config.mine.neovim;
+  cfg = config.shabka.neovim;
 
-  keyboardLayout = builtins.head config.mine.keyboard.layouts;
+  keyboardLayout = builtins.head config.shabka.keyboard.layouts;
 
   neovimConfig = import ../../neovim {
     inherit (cfg) extraRC extraKnownPlugins extraPluginDictionaries;
@@ -15,7 +15,7 @@ let
   };
 
 in {
-  options.mine.neovim = {
+  options.shabka.neovim = {
     enable = mkEnableOption "neovim";
 
     extraRC = mkOption {

@@ -5,7 +5,7 @@ with lib;
 # TODO: submit this module upstream to home-manager
 
 let
-  cfg = config.mine.less;
+  cfg = config.shabka.less;
 
   colemakKeybindings = ''
     #command
@@ -28,7 +28,7 @@ let
   '';
 
 in {
-  options.mine.less = {
+  options.shabka.less = {
     enable = mkEnableOption "less";
 
     quitIfOneScreen = mkOption {
@@ -61,8 +61,8 @@ in {
             #env
             LESS= ${optionalString cfg.colors ''--RAW-CONTROL-CHARS''} ${optionalString cfg.quitIfOneScreen ''--no-init --quit-if-one-screen''} ${optionalString cfg.ignoreCase ''--ignore-case''}
           ''
-          + optionalString ((builtins.head config.mine.keyboard.layouts) == "colemak") colemakKeybindings
-          + optionalString ((builtins.head config.mine.keyboard.layouts) == "bepo") bepoKeybindings
+          + optionalString ((builtins.head config.shabka.keyboard.layouts) == "colemak") colemakKeybindings
+          + optionalString ((builtins.head config.shabka.keyboard.layouts) == "bepo") bepoKeybindings
         );
       in pkgs.runCommand "less-config" {
         preferLocalBuild = true;

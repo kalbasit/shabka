@@ -1,5 +1,5 @@
 { config, ... }:
 
 {
-  services.fwupd.enable = config.mine.hardware.machine != "cloud";
+  services.fwupd.enable = config.shabka.hardware.machine != "cloud";
 }

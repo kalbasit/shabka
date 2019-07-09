@@ -3,9 +3,9 @@
 with lib;
 
 {
-  options.mine.workstation.dropbox.enable = mkEnableOption "Enable Dropbox";
+  options.shabka.workstation.dropbox.enable = mkEnableOption "Enable Dropbox";
 
-  config = mkIf config.mine.workstation.dropbox.enable {
+  config = mkIf config.shabka.workstation.dropbox.enable {
     systemd.user.services.dropbox = {
       Unit = {
         Description = "Dropbox";
