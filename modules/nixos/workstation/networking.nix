@@ -3,15 +3,15 @@
 with lib;
 
 {
-  options.mine.workstation.networking.enable = mkEnableOption "workstation.networking";
+  options.shabka.workstation.networking.enable = mkEnableOption "workstation.networking";
 
-  config = mkIf config.mine.workstation.networking.enable {
+  config = mkIf config.shabka.workstation.networking.enable {
     networking.networkmanager = {
       enable = true;
       dns = "dnsmasq";
     };
 
-    mine.users.groups = ["networkmanager"];
+    shabka.users.groups = ["networkmanager"];
   };
 }
 

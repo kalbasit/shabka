@@ -3,7 +3,7 @@
 with lib;
 
 {
-  config = mkIf (config.mine.hardware.machine == "xps-13") {
+  config = mkIf (config.shabka.hardware.machine == "xps-13") {
     boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
     boot.kernelModules = [ "kvm-intel" ];
     boot.extraModulePackages = [ ];

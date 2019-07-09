@@ -2,15 +2,15 @@
 
 with lib;
 
-let cfg = config.mine.virtualisation.libvirtd;
+let cfg = config.shabka.virtualisation.libvirtd;
 
 in {
-  options.mine.virtualisation.libvirtd.enable = mkEnableOption "Enable Docker";
+  options.shabka.virtualisation.libvirtd.enable = mkEnableOption "Enable Docker";
 
   config = mkIf cfg.enable {
     virtualisation.libvirtd.enable = true;
     virtualisation.libvirtd.qemuRunAsRoot = false;
 
-    mine.users.groups = ["libvirtd"];
+    shabka.users.groups = ["libvirtd"];
   };
 }

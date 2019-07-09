@@ -3,7 +3,7 @@
 with lib;
 
 {
-  options.mine.hardware.machine = mkOption {
+  options.shabka.hardware.machine = mkOption {
     description = "The machine name (usually model).";
     type = types.enum [
       "cloud"

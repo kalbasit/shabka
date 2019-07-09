@@ -4,7 +4,7 @@ with lib;
 with import ../../../../../util;
 
 let
-  cfg = config.mine.openvpn.client.expressvpn;
+  cfg = config.shabka.openvpn.client.expressvpn;
 
   remotes = {
     albania = "albania-ca-version-2.expressnetw.com 1195";
@@ -178,7 +178,7 @@ let
   };
 
 in {
-  options.mine.openvpn.client.expressvpn = {
+  options.shabka.openvpn.client.expressvpn = {
     enable = mkEnableOption "Enable ExpressionVPN client configuration";
 
     # TODO(low): options must be camelcase

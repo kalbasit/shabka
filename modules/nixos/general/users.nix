@@ -18,7 +18,7 @@ let
         "users"
         "video"
       ]
-      ++ config.mine.users.groups
+      ++ config.shabka.users.groups
       ++ (optionals isAdmin ["wheel"]);
 
       shell = pkgs.zsh;
@@ -30,7 +30,7 @@ let
 
   makeHM = userName: { uid, isAdmin, home ? "/home/${userName}", ... }: nameValuePair
     userName
-    (config.mine.home-manager.config {
+    (config.shabka.home-manager.config {
       inherit userName uid isAdmin home;
       nixosConfig = config;
     });
@@ -42,7 +42,7 @@ let
   };
 
 in {
-  options.mine.users = {
+  options.shabka.users = {
     enable = mkOption {
       type = types.bool;
       default = true;
@@ -71,7 +71,7 @@ in {
     };
   };
 
-  config = mkIf (config.mine.users.enable) {
+  config = mkIf (config.shabka.users.enable) {
     users = {
       mutableUsers = false;
 
@@ -82,9 +82,9 @@ in {
 
       users = mergeAttrs
         { root = { openssh.authorizedKeys.keys = singleton shabka.external.kalbasit.keys; }; }
-        (mapAttrs' makeUser config.mine.users.users);
+        (mapAttrs' makeUser config.shabka.users.users);
     };
 
-    home-manager.users = mapAttrs' makeHM config.mine.users.users; # XXX: This should be gated by an option
+    home-manager.users = mapAttrs' makeHM config.shabka.users.users; # XXX: This should be gated by an option
   };
 }

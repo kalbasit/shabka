@@ -2,12 +2,12 @@
 
 with lib;
 
-let cfg = config.mine.virtualisation.docker;
+let cfg = config.shabka.virtualisation.docker;
 in {
-  options.mine.virtualisation.docker.enable = mkEnableOption "Enable Docker";
+  options.shabka.virtualisation.docker.enable = mkEnableOption "Enable Docker";
 
   config = mkIf cfg.enable {
     virtualisation.docker.enable = true;
-    mine.users.groups = ["docker"];
+    shabka.users.groups = ["docker"];
   };
 }

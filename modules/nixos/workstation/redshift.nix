@@ -3,9 +3,9 @@
 with lib;
 
 {
-  options.mine.workstation.redshift.enable = mkEnableOption "workstation.redshift";
+  options.shabka.workstation.redshift.enable = mkEnableOption "workstation.redshift";
 
-  config = mkIf config.mine.workstation.redshift.enable {
+  config = mkIf config.shabka.workstation.redshift.enable {
     services.redshift.brightness.day = "1.0";
     services.redshift.brightness.night = "0.6";
     services.redshift.enable = true;
