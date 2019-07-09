@@ -8,8 +8,8 @@ let
 
 in {
   # TODO(medium): offer the light version of this theme.
-  config = mkIf (config.mine.theme == "seoul256") {
-    mine.workstation.alacritty.extraRC = ''
+  config = mkIf (config.shabka.theme == "seoul256") {
+    shabka.workstation.alacritty.extraRC = ''
       # When true, bold text is drawn using the bright variant of colors.
       draw_bold_text_with_bright_colors: true
 
@@ -47,7 +47,7 @@ in {
           white:   '0xe4e4e4'
     '';
 
-    mine.neovim = {
+    shabka.neovim = {
       extraRC = ''
         colorscheme seoul256
         let g:airline_theme='seoul256'
@@ -65,7 +65,7 @@ in {
 
     xsession = optionalAttrs pkgs.stdenv.isLinux {
       windowManager.i3.config = {
-        bars = optionals (config.mine.workstation.i3.bar.engine == "i3bar")
+        bars = optionals (config.shabka.workstation.i3.bar.engine == "i3bar")
           [{
             position = "top";
 

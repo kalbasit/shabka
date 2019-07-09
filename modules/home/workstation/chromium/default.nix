@@ -4,9 +4,9 @@
 with lib;
 
 {
-  options.mine.workstation.chromium.enable = mkEnableOption "workstation.chromium";
+  options.shabka.workstation.chromium.enable = mkEnableOption "workstation.chromium";
 
-  config = mkIf config.mine.workstation.chromium.enable {
+  config = mkIf config.shabka.workstation.chromium.enable {
     home.file.".config/chromium/profiles/anya/.keep".text = "";
     home.file.".config/chromium/profiles/ihab/.keep".text = "";
     home.file.".config/chromium/profiles/keeptruckin/.keep".text = "";

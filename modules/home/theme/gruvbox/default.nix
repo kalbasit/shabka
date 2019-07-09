@@ -25,13 +25,13 @@ let
 in {
   # TODO(medium): offer the light version of the theme
   config = mkMerge [
-    (mkIf (config.mine.theme == "gruvbox-dark") {
+    (mkIf (config.shabka.theme == "gruvbox-dark") {
       # Setup the environment correctly with the shell palette
       programs.zsh.initExtra = ''
         source ${grovboxSrc}/gruvbox_256palette.sh
       '';
 
-      mine.workstation.alacritty.extraRC = ''
+      shabka.workstation.alacritty.extraRC = ''
         # Colors (Gruvbox dark)
         colors:
           # Default colors
@@ -64,7 +64,7 @@ in {
             white:   '0xebdbb2'
       '';
 
-      mine.neovim = {
+      shabka.neovim = {
         extraRC = ''
           set background=dark
           colorscheme gruvbox
@@ -103,7 +103,7 @@ in {
           yellow   = "#d79921";
 
           in {
-            bars = optionals (config.mine.workstation.i3.bar.engine == "i3bar")
+            bars = optionals (config.shabka.workstation.i3.bar.engine == "i3bar")
               [{
                 position = "top";
 
@@ -309,7 +309,7 @@ in {
       '';
     })
 
-    (mkIf (config.mine.theme == "gruvbox-dark" && config.mine.darwinConfig != {}) {
+    (mkIf (config.shabka.theme == "gruvbox-dark" && config.shabka.darwinConfig != {}) {
       home.file = {
         "Library/Application Support/iTerm2/DynamicProfiles/gruvbox-dark-sourcecode-pro.json".source = ./iterm-dynamic-profile.json;
       };

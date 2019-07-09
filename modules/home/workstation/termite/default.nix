@@ -3,9 +3,9 @@
 with lib;
 
 {
-  options.mine.workstation.termite.enable = mkEnableOption "workstation.termite";
+  options.shabka.workstation.termite.enable = mkEnableOption "workstation.termite";
 
-  config = mkIf config.mine.workstation.termite.enable {
+  config = mkIf config.shabka.workstation.termite.enable {
     programs.termite = {
       enable = true;
       font = "SourceCodePro Regular 9";

@@ -61,7 +61,7 @@ in {
         { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "astroid"; }; }
         { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "Ptask"; }; }
         { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "pulse-sms"; }; }
-      ] ++ optionals config.mine.keybase.enable [
+      ] ++ optionals config.shabka.keybase.enable [
         { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "Keybase"; }; }
       ];
     };
@@ -215,7 +215,7 @@ in {
       "${thirdModifier}+m" = "[class=\"astroid\"] scratchpad show";
       "${thirdModifier}+p" = "[class=\"pulse-sms\"] scratchpad show";
       "${thirdModifier}+t" = "[class=\"Ptask\"] scratchpad show";
-    } // (if config.mine.keybase.enable == true then {
+    } // (if config.shabka.keybase.enable == true then {
       "${thirdModifier}+k" = "[class=\"Keybase\"] scratchpad show";
     } else {});
 
@@ -316,11 +316,11 @@ in {
     bindsym ${defaultModifier}+${thirdModifier}+w mode "$mode_wm"
 
     # Application launcher
-    set $mode_apps_social Launch: (d) Discord, (i) Irc${optionalString config.mine.keybase.enable ", (k) Keybase"}, (l) Slack
+    set $mode_apps_social Launch: (d) Discord, (i) Irc${optionalString config.shabka.keybase.enable ", (k) Keybase"}, (l) Slack
     mode "$mode_apps_social" {
       bindsym d exec ${getBin pkgs.discord}/bin/Discord, mode default
       bindsym i exec ${getBin pkgs.termite}/bin/termite --title=irc --exec=weechat, mode default
-      ${optionalString config.mine.keybase.enable "bindsym k exec ${getBin pkgs.keybase-gui}/bin/keybase-gui, mode default"}
+      ${optionalString config.shabka.keybase.enable "bindsym k exec ${getBin pkgs.keybase-gui}/bin/keybase-gui, mode default"}
       bindsym l exec ${getBin pkgs.slack}/bin/slack, mode default
 
       # back to normal: Enter or Escape

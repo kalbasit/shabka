@@ -4,11 +4,11 @@ with lib;
 
 let
   shabka = import <shabka> { };
-  cfg = config.mine.git;
+  cfg = config.shabka.git;
 in {
   options = {
 
-    mine.git = {
+    shabka.git = {
       enable = mkEnableOption "git";
 
       userName = mkOption {
@@ -132,7 +132,7 @@ in {
           prompt = true;
         };
 
-        "mergetool \"vimdiff\"" = optionalAttrs config.mine.neovim.enable {
+        "mergetool \"vimdiff\"" = optionalAttrs config.shabka.neovim.enable {
           cmd = "nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'";
         };
 

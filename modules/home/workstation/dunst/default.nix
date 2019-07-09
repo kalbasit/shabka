@@ -3,9 +3,9 @@
 with lib;
 
 {
-  options.mine.workstation.dunst.enable = mkEnableOption "workstation.dunst";
+  options.shabka.workstation.dunst.enable = mkEnableOption "workstation.dunst";
 
-  config = mkIf config.mine.workstation.dunst.enable {
+  config = mkIf config.shabka.workstation.dunst.enable {
     services.dunst = {
       enable = true;
       settings = {

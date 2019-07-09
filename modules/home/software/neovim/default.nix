@@ -4,7 +4,7 @@ with lib;
 
 let
 
-  cfg = config.mine.neovim;
+  cfg = config.shabka.neovim;
 
   neovimConfig = import ../../../neovim {
     inherit (cfg) extraRC extraKnownPlugins extraPluginDictionaries keyboardLayout;
@@ -12,7 +12,7 @@ let
   };
 
 in {
-  options.mine.neovim = {
+  options.shabka.neovim = {
     enable = mkEnableOption "neovim";
 
     extraRC = mkOption {
@@ -40,7 +40,7 @@ in {
 
     keyboardLayout = mkOption {
       type = with types; enum [ "colemak" "qwerty" ];
-      default = (builtins.head config.mine.keyboard.layouts);
+      default = (builtins.head config.shabka.keyboard.layouts);
       description = ''
         The keyboard layout to use.
       '';

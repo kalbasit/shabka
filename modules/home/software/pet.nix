@@ -3,9 +3,9 @@
 with lib;
 
 {
-  options.mine.pet.enable = mkEnableOption "pet";
+  options.shabka.pet.enable = mkEnableOption "pet";
 
-  config = mkIf config.mine.pet.enable {
+  config = mkIf config.shabka.pet.enable {
     programs.zsh.initExtra = ''
       # setup pet
       function pet_select() {

@@ -4,7 +4,7 @@ with lib;
 with import ../../../util;
 
 let
-  cfg = config.mine.workstation.email;
+  cfg = config.shabka.workstation.email;
 
   private = import cfg.privateEmailPath {
     inherit pkgs;
@@ -45,7 +45,7 @@ let
   extendAccounts = name: value: nameValuePair name (commonEmailAccount // value);
 
 in {
-  options.mine.workstation.email = {
+  options.shabka.workstation.email = {
     enable = mkEnableOption "Enable email accounts";
 
     privateEmailPath = mkOption {

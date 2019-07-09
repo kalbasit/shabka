@@ -4,10 +4,10 @@ with lib;
 
 let
 
-  cfg = config.mine.ssh;
+  cfg = config.shabka.ssh;
 
 in {
-  options.mine.ssh = {
+  options.shabka.ssh = {
     enable = mkEnableOption "SSH configurations";
 
     privateSSHPath = mkOption {

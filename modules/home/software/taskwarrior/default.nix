@@ -3,9 +3,9 @@
 with lib;
 
 {
-  options.mine.taskwarrior.enable = mkEnableOption "taskwarrior";
+  options.shabka.taskwarrior.enable = mkEnableOption "taskwarrior";
 
-  config = mkIf config.mine.taskwarrior.enable {
+  config = mkIf config.shabka.taskwarrior.enable {
     programs.taskwarrior = {
       enable = true;
 

@@ -5,10 +5,10 @@ with lib;
 let
 
   alacrittyConfig = builtins.readFile ./alacritty.yml;
-  cfg = config.mine.workstation.alacritty;
+  cfg = config.shabka.workstation.alacritty;
 
 in {
-  options.mine.workstation.alacritty = {
+  options.shabka.workstation.alacritty = {
     enable = mkEnableOption "workstation.alacritty";
 
     extraRC = mkOption {

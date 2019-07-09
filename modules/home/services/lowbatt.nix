@@ -3,7 +3,7 @@
 with lib;
 
 let
-  cfg = config.mine.batteryNotifier;
+  cfg = config.shabka.batteryNotifier;
 
   script = pkgs.writeTextFile {
     name = "unit-script";
@@ -31,7 +31,7 @@ let
   };
 
 in {
-  options.mine.batteryNotifier = {
+  options.shabka.batteryNotifier = {
     enable = mkOption {
       default = false;
       description = ''

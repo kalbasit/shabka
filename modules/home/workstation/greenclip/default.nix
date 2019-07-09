@@ -3,9 +3,9 @@
 with lib;
 
 {
-  options.mine.workstation.greenclip.enable = mkEnableOption "workstation.greenclip";
+  options.shabka.workstation.greenclip.enable = mkEnableOption "workstation.greenclip";
 
-  config = mkIf config.mine.workstation.greenclip.enable {
+  config = mkIf config.shabka.workstation.greenclip.enable {
     home.file.".config/greenclip.cfg".text = ''
       Config {
        maxHistoryLength = 250,
