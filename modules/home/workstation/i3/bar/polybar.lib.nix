@@ -16,31 +16,25 @@ let
   batteryConstructor = {device, fullAt, ... }:
   {
     name = "module/battery-${device}";
-    value = {
-      order = cfg.modules.battery.order;
-      config = {
-        type = "internal/battery";
-        battery = device;
-        adapter = "AC";
-        full-at = fullAt;
-        poll-interval = 5;
-
-        format-charging-prefix = "⬆️";
-        format-charging = "<label-charging>";
-        format-charging-underline = "#ffb52a";
-        label-charging = "%percentage%% %time%";
-
-        format-discharging-prefix = "⬇️";
-        format-discharging = "<label-discharging>";
-        format-discharging-underline = "\${self.format-charging-underline}";
-        label-discharging = "\${self.label-charging}";
-
-        format-full-prefix = "↔️";
-        format-full = "<label-full>";
-        format-full-prefix-foreground = "\${colors.foreground-alt}";
-        format-full-underline = "\${self.format-charging-underline}";
-        label-full = "%percentage%%";
-      };
+    value = mkOrder cfg.modules.battery.order {
+      type = "internal/battery";
+      battery = device;
+      adapter = "AC";
+      full-at = fullAt;
+      poll-interval = 5;
+      format-charging-prefix = "⬆️";
+      format-charging = "<label-charging>";
+      format-charging-underline = "#ffb52a";
+      label-charging = "%percentage%% %time%";
+      format-discharging-prefix = "⬇️";
+      format-discharging = "<label-discharging>";
+      format-discharging-underline = "\${self.format-charging-underline}";
+      label-discharging = "\${self.label-charging}";
+      format-full-prefix = "↔️";
+      format-full = "<label-full>";
+      format-full-prefix-foreground = "\${colors.foreground-alt}";
+      format-full-underline = "\${self.format-charging-underline}";
+      label-full = "%percentage%%";
     };
   };
 
