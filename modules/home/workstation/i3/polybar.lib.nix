@@ -436,7 +436,7 @@ in {
       format = "<label-state> <label-mode>";
       index-sort = true;
       wrapping-scroll = false;
-      strip-wsnumbers = true;
+      strip-wsnumbers = false;
 
       # Only show workspaces on the same output as the bar
       pin-workspaces = true;
