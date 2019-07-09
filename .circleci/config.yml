@@ -133,22 +133,6 @@ jobs:
       - *build-host
       - *push-to-cachix
 
-  hedgehog:
-    working_directory: ~/shabka
-
-    environment:
-      <<: *global_env
-
-    docker:
-      - image: nixos/nix
-
-    steps:
-      - checkout
-      - *install-dependencies
-      - *enable-cachix
-      - *build-host
-      - *push-to-cachix
-
   hera:
     working_directory: ~/shabka
 
@@ -210,8 +194,6 @@ workflows:
       - cratos:
           context: nix-global
       - hades:
-          context: nix-global
-      - hedgehog:
           context: nix-global
       - hera:
           context: nix-global
