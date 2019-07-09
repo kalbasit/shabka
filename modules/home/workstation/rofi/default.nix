@@ -46,7 +46,6 @@ in {
       '';
 
       font = "SourceCodePro 9";
-      terminal = "\${pkgs.rxvt_unicode}/bin/urxvt";
     };
   };
 }
