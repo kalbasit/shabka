@@ -8,6 +8,8 @@ with lib;
   config = mkIf config.mine.workstation.firefox.enable {
     programs.firefox = {
       enable = true;
+      enableGoogleTalk = true;
+      enableAdobeFlash = true;
     };
 
     home.file.".mozilla/firefox/profiles.ini".text = ''
