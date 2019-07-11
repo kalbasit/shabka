@@ -184,7 +184,13 @@ in {
   };
 
   config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = cfg.bar.i3bar.enable || cfg.bar.polybar.enable;
+        message = "i3bar and polybar cannot be used at the same time.";
+      }
+    ];
     services.polybar = import ./polybar.lib.nix { inherit config pkgs lib; };
-    xdg.configFile."i3status/config" = (mkIf config.shabka.workstation.i3.bar.i3bar.enable (import ./i3status.lib.nix { inherit config pkgs lib; }));
+    xdg.configFile."i3status/config" = (mkIf cfg.bar.i3bar.enable (import ./i3status.lib.nix { inherit config pkgs lib; }));
   };
 }
