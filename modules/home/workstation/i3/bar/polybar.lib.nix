@@ -418,6 +418,9 @@ in {
 
       enable-ipc = true;
 
+      font-0 = "SourceCodePro Regular:size=8";
+      font-1 = "Twitter Color Emoji:size=10";
+
       module-margin-left = 1;
       module-margin-right = 2;
 
