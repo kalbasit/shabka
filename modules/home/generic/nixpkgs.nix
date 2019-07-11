@@ -16,7 +16,7 @@ let
             };
           });
       };
-      
+
       chromium = {
         enablePepperFlash = true;
       };
