@@ -3,7 +3,7 @@
 with lib;
 
 {
-  config = mkIf (config.mine.hardware.machine == "precision-7530") {
+  config = mkIf (config.shabka.hardware.machine == "precision-7530") {
     boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "usbhid" "sd_mod" ];
     boot.kernelModules = [ "kvm-intel" ];
     boot.extraModulePackages = [ ];

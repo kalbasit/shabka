@@ -3,9 +3,9 @@
 with lib;
 
 {
-  options.mine.printing.enable = mkEnableOption "Enable printing";
+  options.shabka.printing.enable = mkEnableOption "Enable printing";
 
-  config = mkIf config.mine.printing.enable {
+  config = mkIf config.shabka.printing.enable {
     services.printing.enable = true;
     services.printing.drivers = with pkgs; [
       epson-escpr

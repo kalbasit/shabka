@@ -4,11 +4,11 @@ with lib;
 
 let
   shabka = import <shabka> { };
-  cfg = config.mine.git;
+  cfg = config.shabka.git;
 in {
   options = {
 
-    mine.git = {
+    shabka.git = {
       enable = mkEnableOption "git";
 
       userName = mkOption {

@@ -5,10 +5,10 @@ with lib;
 with import ../../../util;
 
 {
-  options.mine.workstation.enable = mkEnableOption "Workstation Profile";
+  options.shabka.workstation.enable = mkEnableOption "Workstation Profile";
 
-  config = mkIf config.mine.workstation.enable {
-    mine.workstation = enableMultiple [
+  config = mkIf config.shabka.workstation.enable {
+    shabka.workstation = enableMultiple [
       "bluetooth"
       "fonts"
       "gnome-keyring"

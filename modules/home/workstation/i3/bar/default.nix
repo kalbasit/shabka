@@ -3,7 +3,7 @@
 with lib;
 
 let
-  cfg = config.mine.workstation.i3;
+  cfg = config.shabka.workstation.i3;
 
   timezoneModule = types.submodule {
     options = {
@@ -43,7 +43,7 @@ let
     };
   };
 in {
-  options.mine.workstation.i3.bar = {
+  options.shabka.workstation.i3.bar = {
 
     i3bar.enable = mkEnableOption "Enable workstation.i3.bar.i3bar";
     polybar.enable = mkEnableOption "Enable workstation.i3.bar.polybar";
@@ -185,6 +185,6 @@ in {
 
   config = mkIf cfg.enable {
     services.polybar = import ./polybar.lib.nix { inherit config pkgs lib; };
-    xdg.configFile."i3status/config" = (mkIf config.mine.workstation.i3.bar.i3bar.enable (import ./i3status.lib.nix { inherit config pkgs lib; }));
+    xdg.configFile."i3status/config" = (mkIf config.shabka.workstation.i3.bar.i3bar.enable (import ./i3status.lib.nix { inherit config pkgs lib; }));
   };
 }

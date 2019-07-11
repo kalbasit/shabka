@@ -5,9 +5,9 @@ with lib;
 let
   shabka = import <shabka> { };
 in {
-  options.mine.pijul.enable = mkEnableOption "pijul";
+  options.shabka.pijul.enable = mkEnableOption "pijul";
 
-  config = mkIf config.mine.pijul.enable {
+  config = mkIf config.shabka.pijul.enable {
     home.packages = with pkgs; [
       shabka.external.nixpkgs.release-unstable.pijul
     ];

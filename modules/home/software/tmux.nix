@@ -4,7 +4,7 @@ with lib;
 
 let
 
-  cfg = config.mine.tmux;
+  cfg = config.shabka.tmux;
 
   # TODO(high): Each color theme is defining it's own status format. The format
   # should be unified and nix should interpolate to set the correct format
@@ -197,7 +197,7 @@ let
 
 in {
 
-  options.mine.tmux.enable = mkEnableOption "Tmux";
+  options.shabka.tmux.enable = mkEnableOption "Tmux";
 
   config = mkIf cfg.enable {
     programs.tmux = {
@@ -210,7 +210,7 @@ in {
       ];
 
       clock24 = true;
-      customPaneNavigationAndResize = ! ((builtins.head config.mine.keyboard.layouts) == "colemak");
+      customPaneNavigationAndResize = ! ((builtins.head config.shabka.keyboard.layouts) == "colemak");
       escapeTime = 0;
       historyLimit = 10000;
       keyMode = "vi";
@@ -265,7 +265,7 @@ in {
 
         ${copyPaste}
       ''
-      + optionalString ((builtins.head config.mine.keyboard.layouts) == "colemak") colemakBindings
+      + optionalString ((builtins.head config.shabka.keyboard.layouts) == "colemak") colemakBindings
       + optionalString pkgs.stdenv.isLinux ''set  -g default-terminal "tmux-256color"''
       + optionalString pkgs.stdenv.isDarwin ''set  -g default-terminal "xterm-256color"'';
     };

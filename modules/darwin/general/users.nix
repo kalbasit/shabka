@@ -11,7 +11,7 @@ let
 
   makeHM = userName: { }: nameValuePair
     userName
-    (config.mine.home-manager.config {
+    (config.shabka.home-manager.config {
       darwinConfig = config;
     });
 

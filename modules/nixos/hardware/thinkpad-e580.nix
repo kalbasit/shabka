@@ -3,7 +3,7 @@
 with lib;
 
 {
-  config = mkIf (config.mine.hardware.machine == "thinkpad-e580") {
+  config = mkIf (config.shabka.hardware.machine == "thinkpad-e580") {
     boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "sd_mod" "sdhci_pci" ];
     boot.kernelModules = [ "kvm-intel" ];
     boot.extraModulePackages = [ ];

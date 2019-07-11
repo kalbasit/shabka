@@ -3,7 +3,7 @@
 with lib;
 
 {
-  options.mine.theme = mkOption {
+  options.shabka.theme = mkOption {
     type = types.enum ["seoul256-dark" "gruvbox-dark"];
     default = "gruvbox-dark";
     description = ''

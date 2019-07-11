@@ -3,9 +3,9 @@
 with lib;
 
 let
-  cfg = config.mine.htop;
+  cfg = config.shabka.htop;
 in {
-  options.mine.htop.enable = mkOption {
+  options.shabka.htop.enable = mkOption {
     default = true;
     description = ''Enable htop'';
   };

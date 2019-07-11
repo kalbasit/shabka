@@ -5,7 +5,7 @@ with lib;
 let
   shabka = import <shabka> { };
 in {
-  options.mine.darwinConfig = mkOption {
+  options.shabka.darwinConfig = mkOption {
     type = types.attrs;
     default = {};
     defaultText = ''
@@ -14,7 +14,7 @@ in {
     '';
   };
 
-  config = mkIf (config.mine.darwinConfig != {}) {
+  config = mkIf (config.shabka.darwinConfig != {}) {
     home.file = {
       ".ssh/authorized_keys".text = shabka.external.kalbasit.keys;
     };

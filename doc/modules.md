@@ -5,62 +5,62 @@
 - [Modules](#modules)
   - [NixOS](#nixos)
     - [Options](#options)
-      - [`mine.useColemakKeyboardLayout`](#mineusecolemakkeyboardlayout)
-      - [`mine.home-manager.config`](#minehome-managerconfig)
-      - [`mine.users`](#mineusers)
-      - [`mine.hardware.intel_backlight.enable`](#minehardwareintel_backlightenable)
-      - [`mine.hardware.machine`](#minehardwaremachine)
-      - [`mine.serial_console.enable`](#mineserial_consoleenable)
-      - [`mine.openvpn.client.expressvpn.enable`](#mineopenvpnclientexpressvpnenable)
-      - [`mine.virtualisation.docker`](#minevirtualisationdocker)
-      - [`mine.gnupg.enable`](#minegnupgenable)
-      - [`mine.plex`](#mineplex)
-      - [`mine.plex.enable`](#mineplexenable)
-      - [`mine.plex.dataDir `](#mineplexdatadir-)
-      - [`mine.printing.enable`](#mineprintingenable)
-      - [`mine.tmux.enable`](#minetmuxenable)
-      - [`mine.workstation.enable`](#mineworkstationenable)
-        - [`mine.workstation.fonts.enable`](#mineworkstationfontsenable)
-        - [`mine.workstation.gnome-keyring.enable`](#mineworkstationgnome-keyringenable)
-        - [`mine.workstation.networking.enable`](#mineworkstationnetworkingenable)
-        - [`mine.workstation.power.enable`](#mineworkstationpowerenable)
-        - [`mine.workstation.redshift.enable`](#mineworkstationredshiftenable)
-        - [`mine.workstation.sound.enable`](#mineworkstationsoundenable)
-        - [`mine.workstation.teamviewer.enable`](#mineworkstationteamviewerenable)
-        - [`mine.workstation.virtualbox.enable`](#mineworkstationvirtualboxenable)
-        - [`mine.workstation.xorg.enable`](#mineworkstationxorgenable)
+      - [`shabka.useColemakKeyboardLayout`](#shabkausecolemakkeyboardlayout)
+      - [`shabka.home-manager.config`](#shabkahome-managerconfig)
+      - [`shabka.users`](#shabkausers)
+      - [`shabka.hardware.intel_backlight.enable`](#shabkahardwareintel_backlightenable)
+      - [`shabka.hardware.machine`](#shabkahardwaremachine)
+      - [`shabka.serial_console.enable`](#shabkaserial_consoleenable)
+      - [`shabka.openvpn.client.expressvpn.enable`](#shabkaopenvpnclientexpressvpnenable)
+      - [`shabka.virtualisation.docker`](#shabkavirtualisationdocker)
+      - [`shabka.gnupg.enable`](#shabkagnupgenable)
+      - [`shabka.plex`](#shabkaplex)
+      - [`shabka.plex.enable`](#shabkaplexenable)
+      - [`shabka.plex.dataDir `](#shabkaplexdatadir-)
+      - [`shabka.printing.enable`](#shabkaprintingenable)
+      - [`shabka.tmux.enable`](#shabkatmuxenable)
+      - [`shabka.workstation.enable`](#shabkaworkstationenable)
+        - [`shabka.workstation.fonts.enable`](#shabkaworkstationfontsenable)
+        - [`shabka.workstation.gnome-keyring.enable`](#shabkaworkstationgnome-keyringenable)
+        - [`shabka.workstation.networking.enable`](#shabkaworkstationnetworkingenable)
+        - [`shabka.workstation.power.enable`](#shabkaworkstationpowerenable)
+        - [`shabka.workstation.redshift.enable`](#shabkaworkstationredshiftenable)
+        - [`shabka.workstation.sound.enable`](#shabkaworkstationsoundenable)
+        - [`shabka.workstation.teamviewer.enable`](#shabkaworkstationteamviewerenable)
+        - [`shabka.workstation.virtualbox.enable`](#shabkaworkstationvirtualboxenable)
+        - [`shabka.workstation.xorg.enable`](#shabkaworkstationxorgenable)
   - [Home](#home)
     - [Options](#options-1)
-      - [`mine.useColemakKeyboardLayout`](#mineusecolemakkeyboardlayout-1)
-      - [`mine.nixosConfig`](#minenixosconfig)
-      - [`mine.gnupg.enable`](#minegnupgenable-1)
-      - [`mine.batteryNotifier`](#minebatterynotifier)
-        - [`mine.batteryNotifier.enable`](#minebatterynotifierenable)
-        - [`mine.batteryNotifier.device`](#minebatterynotifierdevice)
-        - [`mine.batteryNotifier.notifyCapacity`](#minebatterynotifiernotifycapacity)
-        - [`mine.batteryNotifier.hibernateCapacity`](#minebatterynotifierhibernatecapacity)
-      - [`mine.git.enable`](#minegitenable)
-      - [`mine.less.enable`](#minelessenable)
-      - [`mine.neovim.enable`](#mineneovimenable)
-      - [`mine.neovim.extraRC`](#mineneovimextrarc)
-      - [`mine.neovim.extraKnownPlugins`](#mineneovimextraknownplugins)
-      - [`mine.neovim.extraPluginDictionaries`](#mineneovimextraplugindictionaries)
-      - [`mine.pet.enable`](#minepetenable)
-      - [`mine.taskwarrior.enable`](#minetaskwarriorenable)
-      - [`mine.timewarrior.enable`](#minetimewarriorenable)
-      - [`mine.theme`](#minetheme)
-      - [`mine.workstation.enable`](#mineworkstationenable-1)
-        - [`mine.workstation.alacritty.enable`](#mineworkstationalacrittyenable)
-        - [`mine.workstation.chromium.enable`](#mineworkstationchromiumenable)
-        - [`mine.workstation.dropbox.enable`](#mineworkstationdropboxenable)
-        - [`mine.workstation.dunst.enable`](#mineworkstationdunstenable)
-        - [`mine.workstation.firefox.enable`](#mineworkstationfirefoxenable)
-        - [`mine.workstation.greenclip.enable`](#mineworkstationgreenclipenable)
-        - [`mine.workstation.locker.enable`](#mineworkstationlockerenable)
-        - [`mine.workstation.mysql-workbench.enable`](#mineworkstationmysql-workbenchenable)
-        - [`mine.workstation.rofi.enable`](#mineworkstationrofienable)
-        - [`mine.workstation.termite.enable`](#mineworkstationtermiteenable)
-      - [`mine.windowManager`](#minewindowmanager)
+      - [`shabka.useColemakKeyboardLayout`](#shabkausecolemakkeyboardlayout-1)
+      - [`shabka.nixosConfig`](#shabkanixosconfig)
+      - [`shabka.gnupg.enable`](#shabkagnupgenable-1)
+      - [`shabka.batteryNotifier`](#shabkabatterynotifier)
+        - [`shabka.batteryNotifier.enable`](#shabkabatterynotifierenable)
+        - [`shabka.batteryNotifier.device`](#shabkabatterynotifierdevice)
+        - [`shabka.batteryNotifier.notifyCapacity`](#shabkabatterynotifiernotifycapacity)
+        - [`shabka.batteryNotifier.hibernateCapacity`](#shabkabatterynotifierhibernatecapacity)
+      - [`shabka.git.enable`](#shabkagitenable)
+      - [`shabka.less.enable`](#shabkalessenable)
+      - [`shabka.neovim.enable`](#shabkaneovimenable)
+      - [`shabka.neovim.extraRC`](#shabkaneovimextrarc)
+      - [`shabka.neovim.extraKnownPlugins`](#shabkaneovimextraknownplugins)
+      - [`shabka.neovim.extraPluginDictionaries`](#shabkaneovimextraplugindictionaries)
+      - [`shabka.pet.enable`](#shabkapetenable)
+      - [`shabka.taskwarrior.enable`](#shabkataskwarriorenable)
+      - [`shabka.timewarrior.enable`](#shabkatimewarriorenable)
+      - [`shabka.theme`](#shabkatheme)
+      - [`shabka.workstation.enable`](#shabkaworkstationenable-1)
+        - [`shabka.workstation.alacritty.enable`](#shabkaworkstationalacrittyenable)
+        - [`shabka.workstation.chromium.enable`](#shabkaworkstationchromiumenable)
+        - [`shabka.workstation.dropbox.enable`](#shabkaworkstationdropboxenable)
+        - [`shabka.workstation.dunst.enable`](#shabkaworkstationdunstenable)
+        - [`shabka.workstation.firefox.enable`](#shabkaworkstationfirefoxenable)
+        - [`shabka.workstation.greenclip.enable`](#shabkaworkstationgreenclipenable)
+        - [`shabka.workstation.locker.enable`](#shabkaworkstationlockerenable)
+        - [`shabka.workstation.mysql-workbench.enable`](#shabkaworkstationmysql-workbenchenable)
+        - [`shabka.workstation.rofi.enable`](#shabkaworkstationrofienable)
+        - [`shabka.workstation.termite.enable`](#shabkaworkstationtermiteenable)
+      - [`shabka.windowManager`](#shabkawindowmanager)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -73,7 +73,7 @@ sensible configuration for the NixOS boxes.
 
 ### Options
 
-#### `mine.useColemakKeyboardLayout`
+#### `shabka.useColemakKeyboardLayout`
 
 - type: boolean
 - default: `false`
@@ -81,7 +81,7 @@ sensible configuration for the NixOS boxes.
 When this option is enabled, the keyboard layout is set to Colemak in
 early console (i.e initrd), the console and the Xorg server.
 
-#### `mine.home-manager.config`
+#### `shabka.home-manager.config`
 
 - type: Function
 - default: `{ name, uid, isAdmin, nixosConfig }: {...}: {}`
@@ -91,15 +91,15 @@ This option is a function that takes `name`, `uid`, `isAdmin` and
 `home-manager.users.<name>` to configure the home directory of the user.
 See the [home module][8] for more information.
 
-#### `mine.users`
+#### `shabka.users`
 
 - type: attrs of user to `{ uid, isAdmin, home }`.
 - default: See [users][9] module.
 
 This option controls the users that get created on the NixOS system.
-They automatically inherit the home manager set in`mine.home-manager.config`.
+They automatically inherit the home manager set in`shabka.home-manager.config`.
 
-#### `mine.hardware.intel_backlight.enable`
+#### `shabka.hardware.intel_backlight.enable`
 
 - type: boolean
 - default: false
@@ -108,7 +108,7 @@ When this option is enabled, The group of the
 /sys/class/backlight/*/brightness files is changed to the group `video`
 so the user can change the brightness without the need of root.
 
-#### `mine.hardware.machine`
+#### `shabka.hardware.machine`
 
 - type: string
 - default: empty string
@@ -116,7 +116,7 @@ so the user can change the brightness without the need of root.
 This option describes the make-model, or role of the machine for
 automatic hardware setup. See the [hardware][10] folder.
 
-#### `mine.serial_console.enable`
+#### `shabka.serial_console.enable`
 
 - type: boolean
 - default: false
@@ -125,7 +125,7 @@ When this option is enabled, the serial console is enabled for the
 kernel and for GRUB. Although, GRUB is not automatically enabled,
 instead you should do so in the host configuration.
 
-#### `mine.openvpn.client.expressvpn.enable`
+#### `shabka.openvpn.client.expressvpn.enable`
 
 - type: boolean
 - default: false
@@ -135,37 +135,37 @@ enable any of them.
 
 TODO(low): define the keys and passwords per host.
 
-#### `mine.virtualisation.docker`
+#### `shabka.virtualisation.docker`
 
 - type: boolean
 - default: false
 
 Enabling this option will install and enable Docker.
 
-#### `mine.gnupg.enable`
+#### `shabka.gnupg.enable`
 
 - type: boolean
 - default: false
 
 Enabling this option will enable the gnupg agent and the browser socket.
 
-#### `mine.plex`
+#### `shabka.plex`
 
-#### `mine.plex.enable`
+#### `shabka.plex.enable`
 
 - type: boolean
 - default: false
 
 Enabling this option will enable the Plex media server.
 
-#### `mine.plex.dataDir `
+#### `shabka.plex.dataDir `
 
 - type: str
 - default: `""`
 
 Set the dataDir of the Plex Media Server
 
-#### `mine.printing.enable`
+#### `shabka.printing.enable`
 
 - type: boolean
 - default: false
@@ -174,14 +174,14 @@ Enable printing
 
 TODO(low): add an option to configure the drivers
 
-#### `mine.tmux.enable`
+#### `shabka.tmux.enable`
 
 - type: boolean
 - default: false
 
 Enable TMux program, pre-configured with my preference.
 
-#### `mine.workstation.enable`
+#### `shabka.workstation.enable`
 
 - type: boolean
 - default: false
@@ -189,7 +189,7 @@ Enable TMux program, pre-configured with my preference.
 This option is a meta for all the following options, enabling it will
 enable them all. Set this to true when setting up a workstation.
 
-##### `mine.workstation.fonts.enable`
+##### `shabka.workstation.fonts.enable`
 
 - type: boolean
 - default: false
@@ -197,35 +197,35 @@ enable them all. Set this to true when setting up a workstation.
 Enable this option to install `powerline-fonts` and enable fontDir and
 ghostscriptFonts.
 
-##### `mine.workstation.gnome-keyring.enable`
+##### `shabka.workstation.gnome-keyring.enable`
 
 - type: boolean
 - default: false
 
 Enable this option to start the Gnome3 keyring.
 
-##### `mine.workstation.networking.enable`
+##### `shabka.workstation.networking.enable`
 
 - type: boolean
 - default: false
 
 Enable this option to start the Network Manager.
 
-##### `mine.workstation.power.enable`
+##### `shabka.workstation.power.enable`
 
 - type: boolean
 - default: false
 
 Enable power management.
 
-##### `mine.workstation.redshift.enable`
+##### `shabka.workstation.redshift.enable`
 
 - type: boolean
 - default: false
 
 Enables the redshift service for tunning out blue colors in the dark.
 
-##### `mine.workstation.sound.enable`
+##### `shabka.workstation.sound.enable`
 
 - type: boolean
 - default: false
@@ -233,7 +233,7 @@ Enables the redshift service for tunning out blue colors in the dark.
 Enables sound via Pule audio and installs pavucontrol in the system
 packages.
 
-##### `mine.workstation.teamviewer.enable`
+##### `shabka.workstation.teamviewer.enable`
 
 - type: boolean
 - default: false
@@ -241,14 +241,14 @@ packages.
 Install the TeamViewer application and installs and enables the
 TeamViewer service.
 
-##### `mine.workstation.virtualbox.enable`
+##### `shabka.workstation.virtualbox.enable`
 
 - type: boolean
 - default: false
 
 Install and enable VirtualBox with extension pack.
 
-##### `mine.workstation.xorg.enable`
+##### `shabka.workstation.xorg.enable`
 
 - type: boolean
 - default: false
@@ -266,7 +266,7 @@ sensible configuration for all my Unix boxes.
 
 ### Options
 
-#### `mine.useColemakKeyboardLayout`
+#### `shabka.useColemakKeyboardLayout`
 
 - type: boolean
 - default: `false`
@@ -274,7 +274,7 @@ sensible configuration for all my Unix boxes.
 When this option is enabled, the keyboard layout is set to Colemak in
 early console (i.e initrd), the console and the Xorg server.
 
-#### `mine.nixosConfig`
+#### `shabka.nixosConfig`
 
 - type: boolean
 - default: `{}`
@@ -282,27 +282,27 @@ early console (i.e initrd), the console and the Xorg server.
 This option is set by the NixOS module for communicating the system
 configuration down to the home-manager configuration.
 
-#### `mine.gnupg.enable`
+#### `shabka.gnupg.enable`
 
 - type: boolean
 - default: false
 
 Enabling this option will enable the gnupg agent and the browser socket.
 
-#### `mine.batteryNotifier`
+#### `shabka.batteryNotifier`
 
 This module provides a systemd service that notifies the user when the
 notifyCapacity is reached and automatically hibernate when the
 hibernateCapacity is reached.
 
-##### `mine.batteryNotifier.enable`
+##### `shabka.batteryNotifier.enable`
 
 - type: boolean
 - default: false
 
 Enable this to enable the batteryNotifier.
 
-##### `mine.batteryNotifier.device`
+##### `shabka.batteryNotifier.device`
 
 - type: str
 - default: "BAT0"
@@ -310,7 +310,7 @@ Enable this to enable the batteryNotifier.
 The device representing the battery in your laptop, it must exist under
 `/sys/class/power_supply/`.
 
-##### `mine.batteryNotifier.notifyCapacity`
+##### `shabka.batteryNotifier.notifyCapacity`
 
 - type: integer
 - default: 10
@@ -318,77 +318,77 @@ The device representing the battery in your laptop, it must exist under
 The percentage of the battery when reached a notification will be sent
 to the user.
 
-##### `mine.batteryNotifier.hibernateCapacity`
+##### `shabka.batteryNotifier.hibernateCapacity`
 
 - type: integer
 - default: 10
 
 The percentage of the battery when reached, the system will hibernate.
 
-#### `mine.git.enable`
+#### `shabka.git.enable`
 
 - type: boolean
 - default: false
 
 Install and configure git.
 
-#### `mine.less.enable`
+#### `shabka.less.enable`
 
 - type: boolean
 - default: false
 
 Install and configure less.
 
-#### `mine.neovim.enable`
+#### `shabka.neovim.enable`
 
 - type: boolean
 - default: false
 
 Install and configure neovim.
 
-#### `mine.neovim.extraRC`
+#### `shabka.neovim.extraRC`
 
 - type: str
 - default: ""
 
 Extra NeoVim configuration.
 
-#### `mine.neovim.extraKnownPlugins`
+#### `shabka.neovim.extraKnownPlugins`
 
 - type: attrs
 - default: {}
 
 Extra NeoVim known plugins
 
-#### `mine.neovim.extraPluginDictionaries`
+#### `shabka.neovim.extraPluginDictionaries`
 
 - type: list
 - default: []
 
 Extra NeoVim plugin dictionary.
 
-#### `mine.pet.enable`
+#### `shabka.pet.enable`
 
 - type: boolean
 - default: false
 
 Install and configure neovim.
 
-#### `mine.taskwarrior.enable`
+#### `shabka.taskwarrior.enable`
 
 - type: boolean
 - default: false
 
 Install and configure taskwarrior.
 
-#### `mine.timewarrior.enable`
+#### `shabka.timewarrior.enable`
 
 - type: boolean
 - default: false
 
 Install and configure timewarrior.
 
-#### `mine.theme`
+#### `shabka.theme`
 
 - type: string
 - default: "seoul256"
@@ -396,7 +396,7 @@ Install and configure timewarrior.
 This options controls the theme of all of the applications supported by
 the theme. Please see the [theme][16] folder
 
-#### `mine.workstation.enable`
+#### `shabka.workstation.enable`
 
 - type: boolean
 - default: false
@@ -404,14 +404,14 @@ the theme. Please see the [theme][16] folder
 This option is a meta for all the following options, enabling it will
 enable them all. Set this to true when setting up a workstation.
 
-##### `mine.workstation.alacritty.enable`
+##### `shabka.workstation.alacritty.enable`
 
 - type: boolean
 - default: false
 
 Install and configure alacritty.
 
-##### `mine.workstation.chromium.enable`
+##### `shabka.workstation.chromium.enable`
 
 - type: boolean
 - default: false
@@ -419,63 +419,63 @@ Install and configure alacritty.
 Install and configure chromium with all my profiles and generate and
 install surfingkeys.
 
-##### `mine.workstation.dropbox.enable`
+##### `shabka.workstation.dropbox.enable`
 
 - type: boolean
 - default: false
 
 Install and configure dropbox.
 
-##### `mine.workstation.dunst.enable`
+##### `shabka.workstation.dunst.enable`
 
 - type: boolean
 - default: false
 
 Install and configure dunst.
 
-##### `mine.workstation.firefox.enable`
+##### `shabka.workstation.firefox.enable`
 
 - type: boolean
 - default: false
 
 Install and configure firefox.
 
-##### `mine.workstation.greenclip.enable`
+##### `shabka.workstation.greenclip.enable`
 
 - type: boolean
 - default: false
 
 Install and configure greenclip.
 
-##### `mine.workstation.locker.enable`
+##### `shabka.workstation.locker.enable`
 
 - type: boolean
 - default: false
 
 Install and configure the screen locker.
 
-##### `mine.workstation.mysql-workbench.enable`
+##### `shabka.workstation.mysql-workbench.enable`
 
 - type: boolean
 - default: false
 
 Install and configure mysql-workbench.
 
-##### `mine.workstation.rofi.enable`
+##### `shabka.workstation.rofi.enable`
 
 - type: boolean
 - default: false
 
 Install and configure rofi.
 
-##### `mine.workstation.termite.enable`
+##### `shabka.workstation.termite.enable`
 
 - type: boolean
 - default: false
 
 Install and configure termite.
 
-#### `mine.windowManager`
+#### `shabka.windowManager`
 
 - type: str
 - default: "i3"

@@ -3,15 +3,15 @@
 with lib;
 
 let
-  cfg = config.mine.workstation.i3;
+  cfg = config.shabka.workstation.i3;
 in {
-  options.mine.workstation.i3.enable = mkEnableOption "workstation.i3";
+  options.shabka.workstation.i3.enable = mkEnableOption "workstation.i3";
 
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = config.mine.nixosConfig != {} && config.mine.darwinConfig == {};
-        message = "mine.workstation.i3.enable must be false on Darwin!";
+        assertion = config.shabka.nixosConfig != {} && config.shabka.darwinConfig == {};
+        message = "shabka.workstation.i3.enable must be false on Darwin!";
       }
     ];
 

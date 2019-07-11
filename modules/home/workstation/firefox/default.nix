@@ -3,9 +3,9 @@
 with lib;
 
 {
-  options.mine.workstation.firefox.enable = mkEnableOption "workstation.firefox";
+  options.shabka.workstation.firefox.enable = mkEnableOption "workstation.firefox";
 
-  config = mkIf config.mine.workstation.firefox.enable {
+  config = mkIf config.shabka.workstation.firefox.enable {
     programs.firefox = {
       enable = true;
       enableGoogleTalk = true;

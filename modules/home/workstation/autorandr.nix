@@ -3,9 +3,9 @@
 with lib;
 
 let
-  cfg = config.mine.workstation.autorandr;
+  cfg = config.shabka.workstation.autorandr;
 in {
-  options.mine.workstation.autorandr = {
+  options.shabka.workstation.autorandr = {
     enable = mkEnableOption "Enable autorandr";
   };
 

@@ -3,9 +3,9 @@
 with lib;
 
 {
-  options.mine.timewarrior.enable = mkEnableOption "timewarrior";
+  options.shabka.timewarrior.enable = mkEnableOption "timewarrior";
 
-  config = mkIf config.mine.timewarrior.enable {
+  config = mkIf config.shabka.timewarrior.enable {
     home.packages = with pkgs; [
       timewarrior
       python # needed by totals.py extension and by on-modify.timewarrior

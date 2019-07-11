@@ -5,9 +5,9 @@ with lib;
 with import ../../../util;
 
 {
-  options.mine.workstation.enable = mkEnableOption "Workstation Profile";
+  options.shabka.workstation.enable = mkEnableOption "Workstation Profile";
 
-  config = mkIf config.mine.workstation.enable {
+  config = mkIf config.shabka.workstation.enable {
     services.flameshot.enable = true;
     services.network-manager-applet.enable = true;
 
@@ -57,7 +57,7 @@ with import ../../../util;
       export BROWSER="${pkgs.nur.repos.kalbasit.rbrowser}/bin/rbrowser"
     '';
 
-    #mine.workstation = enableMultiple [
+    #shabka.workstation = enableMultiple [
     #  "alacritty"
     #  "bluetooth"
     #  "chromium"

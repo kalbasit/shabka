@@ -3,10 +3,10 @@
 with lib;
 
 let
-  cfg = config.mine.workstation.urxvt;
+  cfg = config.shabka.workstation.urxvt;
 in
 {
-  options.mine.workstation.urxvt.enable = mkEnableOption "workstation.urxvt";
+  options.shabka.workstation.urxvt.enable = mkEnableOption "workstation.urxvt";
 
   config = mkIf cfg.enable {
 

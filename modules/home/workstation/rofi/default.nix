@@ -35,9 +35,9 @@ let
     '';
   };
 in {
-  options.mine.workstation.rofi.enable = mkEnableOption "workstation.rofi";
+  options.shabka.workstation.rofi.enable = mkEnableOption "workstation.rofi";
 
-  config = mkIf config.mine.workstation.rofi.enable {
+  config = mkIf config.shabka.workstation.rofi.enable {
     programs.rofi = {
       enable = true;
 

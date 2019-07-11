@@ -4,7 +4,7 @@
 with lib;
 
 let
-  cfg = config.mine.workstation.i3.bar;
+  cfg = config.shabka.workstation.i3.bar;
 
   script = ''
     for m in $(${pkgs.xorg.xrandr}/bin/xrandr --query | ${pkgs.gnugrep}/bin/grep " connected" | ${pkgs.coreutils}/bin/cut -d" " -f1); do

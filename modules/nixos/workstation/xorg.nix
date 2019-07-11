@@ -4,10 +4,10 @@ with lib;
 
 let
 
-  cfg = config.mine.workstation.xorg;
+  cfg = config.shabka.workstation.xorg;
 
 in {
-  options.mine.workstation.xorg.enable = mkEnableOption "Enable the Xorg server";
+  options.shabka.workstation.xorg.enable = mkEnableOption "Enable the Xorg server";
 
   config = mkIf cfg.enable {
     # set the BROWSER to my rbrowser

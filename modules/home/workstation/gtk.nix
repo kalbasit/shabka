@@ -3,9 +3,9 @@
 with lib;
 
 {
-  options.mine.workstation.gtk.enable = mkEnableOption "Enable GTK";
+  options.shabka.workstation.gtk.enable = mkEnableOption "Enable GTK";
 
-  config = mkIf config.mine.workstation.gtk.enable {
+  config = mkIf config.shabka.workstation.gtk.enable {
     gtk = {
       enable = true;
       font = {

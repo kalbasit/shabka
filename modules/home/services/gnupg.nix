@@ -3,9 +3,9 @@
 with lib;
 
 let
-  cfg = config.mine.gnupg;
+  cfg = config.shabka.gnupg;
 in {
-  options.mine.gnupg = {
+  options.shabka.gnupg = {
     enable = mkEnableOption "Enable GnuPG";
     defaultCacheTtl = mkOption {
       default = 1800;
