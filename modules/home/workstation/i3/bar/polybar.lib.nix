@@ -377,7 +377,7 @@ let
         warn-temperature = 55;
         interval = 5;
         format = "<label>";
-        format-underline = "#f50a4d";else {} 
+        format-underline = "#f50a4d";
         format-warn = "<label-warn>";
         format-warn-underline = "\${self.format-underline}";
         label = "%temperature-c%";
