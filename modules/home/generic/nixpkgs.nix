@@ -5,6 +5,7 @@ let
 
   configFile = pkgs.writeText "config.nix" ''
     { pkgs, ... }:
+
     {
       allowUnfree = true;
       packageOverrides = pkgs: {
