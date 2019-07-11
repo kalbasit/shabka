@@ -1,3 +1,4 @@
+# TODO(low): all colors should be managed by themes
 { config, pkgs, lib, ... }:
 
 with lib;
@@ -223,167 +224,168 @@ let
             print(e)
   '';
 
-  modulesConfig =
-  # Module backlight
-  (if cfg.modules.backlight.enable then {
-    "module/backlight" = mkOrder cfg.modules.backlight.order {
-      type = "internal/backlight";
-      card = "intel_backlight";
-      format = "<label> <ramp>";
-      label = "%percentage%";
-      # Only applies if <bar> is used
-      bar-width = 10;
-      bar-indicator = "|";
-      bar-indicator-foreground = "#fff";
-      bar-indicator-font = 2;
-      bar-fill = "─";
-      bar-fill-font = 2;
-      bar-fill-foreground = "#9f78e1";
-      bar-empty = "─";
-      bar-empty-font = 2;
-      bar-empty-foreground = "\${colors.foreground-alt}";
-      # Only applies if <ramp> is used
-      ramp-0 = "🌕";
-      ramp-1 = "🌔";
-      ramp-2 = "🌓";
-      ramp-3 = "🌒";
-      ramp-4 = "🌑";
-    };
-  } else {} ) //
+  modulesConfig = mkMerge [
+    # Module backlight
+    (optionalAttrs cfg.modules.backlight.enable {
+      "module/backlight" = mkOrder cfg.modules.backlight.order {
+        type = "internal/backlight";
+        card = "intel_backlight";
+        format = "<label> <ramp>";
+        label = "%percentage%";
+        # Only applies if <bar> is used
+        bar-width = 10;
+        bar-indicator = "|";
+        bar-indicator-foreground = "#fff";
+        bar-indicator-font = 2;
+        bar-fill = "─";
+        bar-fill-font = 2;
+        bar-fill-foreground = "#9f78e1";
+        bar-empty = "─";
+        bar-empty-font = 2;
+        bar-empty-foreground = "\${colors.foreground-alt}";
+        # Only applies if <ramp> is used
+        ramp-0 = "🌕";
+        ramp-1 = "🌔";
+        ramp-2 = "🌓";
+        ramp-3 = "🌒";
+        ramp-4 = "🌑";
+      };
+    })
 
-  # Module battery
-  (if cfg.modules.battery.enable then (
-    builtins.listToAttrs (map batteryConstructor cfg.modules.battery.devices)
-  ) else {} ) //
+    # Module battery
+    (optionalAttrs cfg.modules.battery.enable
+      (builtins.listToAttrs (map batteryConstructor cfg.modules.battery.devices))
+    )
 
-  # Module CPU
-  (if cfg.modules.cpu.enable then {
-    "module/cpu" = mkOrder cfg.modules.cpu.order {
-      type = "internal/cpu";
-      interval = 2;
-      format-prefix = "🖥️";
-      format-prefix-foreground = "\${colors.foreground-alt}";
-      format-underline = "#f90000";
-      label = "%percentage%%";
-    };
-  } else {} ) //
+    # Module CPU
+    (optionalAttrs cfg.modules.cpu.enable {
+      "module/cpu" = mkOrder cfg.modules.cpu.order {
+        type = "internal/cpu";
+        interval = 2;
+        format-prefix = "🖥️";
+        format-prefix-foreground = "\${colors.foreground-alt}";
+        format-underline = "#f90000";
+        label = "%percentage%%";
+      };
+    })
 
-  # Module time
-  (if cfg.modules.time.enable then (
-    builtins.listToAttrs (map timeConstructor cfg.modules.time.timezones)
-  ) else {} ) //
+    # Module time
+    (optionalAttrs cfg.modules.time.enable
+      (builtins.listToAttrs (map timeConstructor cfg.modules.time.timezones))
+    )
 
-  # Module filesystems
-  (if cfg.modules.filesystems.enable then {
-    "module/filesystem" = mkOrder cfg.modules.filesystems.order{
-      type = "internal/fs";
-      interval = 60;
-      mount-0 = (builtins.head cfg.modules.filesystems.mountPoints); # TODO: support more than one mountpoint. How to iterate over a list and increment a number in nix ?
-      label-mounted = "%{F#0a81f5}%mountpoint%%{F-}: %percentage_free%%";
-      label-unmounted = "%mountpoint% unmounted";
-      label-unmounted-foreground = "\${colors.foreground-alt}";
-    };
-  } else {} ) //
+    # Module filesystems
+    (optionalAttrs cfg.modules.filesystems.enable {
+      "module/filesystem" = mkOrder cfg.modules.filesystems.order {
+        type = "internal/fs";
+        interval = 60;
+        mount-0 = (builtins.head cfg.modules.filesystems.mountPoints); # TODO: support more than one mountpoint. How to iterate over a list and increment a number in nix ?
+        label-mounted = "%{F#0a81f5}%mountpoint%%{F-}: %percentage_free%%";
+        label-unmounted = "%mountpoint% unmounted";
+        label-unmounted-foreground = "\${colors.foreground-alt}";
+      };
+    })
 
-  # Module RAM
-  (if cfg.modules.ram.enable then {
-    "module/ram" = mkOrder cfg.modules.ram.order {
-      type = "internal/memory";
-      interval = 5;
-      format-prefix = "💾";
-      format-prefix-foreground = "\${colors.foreground-alt}";
-      format-underline = "#4bffdc";
-      label = "%percentage_used%%";
-    };
-  } else {} ) //
+    # Module RAM
+    (optionalAttrs cfg.modules.ram.enable {
+      "module/ram" = mkOrder cfg.modules.ram.order {
+        type = "internal/memory";
+        interval = 5;
+        format-prefix = "💾";
+        format-prefix-foreground = "\${colors.foreground-alt}";
+        format-underline = "#4bffdc";
+        label = "%percentage_used%%";
+      };
+    })
 
-  # Network-eth module
-  (if cfg.modules.network.enable then (
-    builtins.listToAttrs (map networkEthConstructor cfg.modules.network.eth)
-  ) else {} ) //
+    # Network-eth module
+    (optionalAttrs cfg.modules.network.enable
+      (builtins.listToAttrs (map networkEthConstructor cfg.modules.network.eth))
+    )
 
-  # Network-wlan module
-  (if cfg.modules.network.enable then (
-    builtins.listToAttrs (map networkWlanConstructor cfg.modules.network.wlan)
-  ) else {} ) //
+    # Network-wlan module
+    (optionalAttrs cfg.modules.network.enable
+      (builtins.listToAttrs (map networkWlanConstructor cfg.modules.network.wlan))
+    )
 
-  # Module volume (pulseaudio)
-  (if cfg.modules.volume.enable then {
-    "module/volume" = mkOrder cfg.modules.volume.order {
-      type = "internal/pulseaudio";
-      format-volume = "<ramp-volume> <label-volume> <bar-volume>";
-      label-volume = "%percentage%%";
-      label-volume-foreground = "\${root.foreground}";
-      label-muted = "🔇 muted";
-      label-muted-foreground = "#666";
-      bar-volume-width = 10;
-      bar-volume-foreground-0 = "#55aa55";
-      bar-volume-foreground-1 = "#55aa55";
-      bar-volume-foreground-2 = "#55aa55";
-      bar-volume-foreground-3 = "#55aa55";
-      bar-volume-foreground-4 = "#55aa55";
-      bar-volume-foreground-5 = "#f5a70a";
-      bar-volume-foreground-6 = "#ff5555";
-      bar-volume-gradient = true;
-      bar-volume-indicator = "|";
-      bar-volume-indicator-font = 2;
-      bar-volume-fill = "─";
-      bar-volume-fill-font = 2;
-      bar-volume-empty = "─";
-      bar-volume-empty-font = 2;
-      bar-volume-empty-foreground = "\${colors.foreground-alt}";
-      ramp-volume-0 = "🔈";
-      ramp-volume-1 = "🔉";
-      ramp-volume-2 = "🔊";
-    };
-  } else {} ) //
+    # Module volume (pulseaudio)
+    (optionalAttrs cfg.modules.volume.enable {
+      "module/volume" = mkOrder cfg.modules.volume.order {
+        type = "internal/pulseaudio";
+        format-volume = "<ramp-volume> <label-volume> <bar-volume>";
+        label-volume = "%percentage%%";
+        label-volume-foreground = "\${root.foreground}";
+        label-muted = "🔇 muted";
+        label-muted-foreground = "#666";
+        bar-volume-width = 10;
+        bar-volume-foreground-0 = "#55aa55";
+        bar-volume-foreground-1 = "#55aa55";
+        bar-volume-foreground-2 = "#55aa55";
+        bar-volume-foreground-3 = "#55aa55";
+        bar-volume-foreground-4 = "#55aa55";
+        bar-volume-foreground-5 = "#f5a70a";
+        bar-volume-foreground-6 = "#ff5555";
+        bar-volume-gradient = true;
+        bar-volume-indicator = "|";
+        bar-volume-indicator-font = 2;
+        bar-volume-fill = "─";
+        bar-volume-fill-font = 2;
+        bar-volume-empty = "─";
+        bar-volume-empty-font = 2;
+        bar-volume-empty-foreground = "\${colors.foreground-alt}";
+        ramp-volume-0 = "🔈";
+        ramp-volume-1 = "🔉";
+        ramp-volume-2 = "🔊";
+      };
+    })
 
-  # Module spotify
-  (if cfg.modules.spotify.enable then {
-    "module/spotify" = mkOrder cfg.modules.spotify.order {
-      type = "custom/script";
-      interval = 3;
-      format-prefix = "";
-      format = "<label>";
-      exec = "${spotifyScript} -f '{play_pause} {artist} - {song}'";
-      format-underline = "#1db954";
-    };
-  } else {} ) //
+    # Module spotify
+    (optionalAttrs cfg.modules.spotify.enable {
+      "module/spotify" = mkOrder cfg.modules.spotify.order {
+        type = "custom/script";
+        interval = 3;
+        format-prefix = "";
+        format = "<label>";
+        exec = "${spotifyScript} -f '{play_pause} {artist} - {song}'";
+        format-underline = "#1db954";
+      };
+    })
 
-  # Module keyboardLayout
-  (if cfg.modules.keyboardLayout.enable then {
-    "module/keyboardLayout" = mkOrder cfg.modules.keyboardLayout.order {
-      type = "internal/xkeyboard";
-      blacklist-0 = "num lock";
-      format-prefix = "";
-      format-prefix-foreground = "\${colors.foreground-alt}";
-      format-prefix-underline = "\${colors.secondary}";
-      label-layout = "%layout%";
-      label-layout-underline = "\${colors.secondary}";
-      label-indicator-padding = 1;
-      label-indicator-margin = 1;
-      label-indicator-background = "\${colors.secondary}";
-      label-indicator-underline = "\${colors.secondary}";
-    };
-  } else {} ) //
+    # Module keyboardLayout
+    (optionalAttrs cfg.modules.keyboardLayout.enable {
+      "module/keyboardLayout" = mkOrder cfg.modules.keyboardLayout.order {
+        type = "internal/xkeyboard";
+        blacklist-0 = "num lock";
+        format-prefix = "";
+        format-prefix-foreground = "\${colors.foreground-alt}";
+        format-prefix-underline = "\${colors.secondary}";
+        label-layout = "%layout%";
+        label-layout-underline = "\${colors.secondary}";
+        label-indicator-padding = 1;
+        label-indicator-margin = 1;
+        label-indicator-background = "\${colors.secondary}";
+        label-indicator-underline = "\${colors.secondary}";
+      };
+    })
 
-  # Module temperature
-  (if cfg.modules.temperature.enable then {
-    "module/temperature" = mkOrder cfg.modules.temperature.order {
-      type = "internal/temperature";
-      # $ for i in /sys/class/thermal/thermal_zone*; do echo "$i: $(<$i/type)"; done
-      thermal-zone = cfg.modules.temperature.thermalZone;
-      warn-temperature = 55;
-      interval = 5;
-      format = "<label>";
-      format-underline = "#f50a4d";
-      format-warn = "<label-warn>";
-      format-warn-underline = "\${self.format-underline}";
-      label = "%temperature-c%";
-      label-warn = "</!\> %temperature-c% </!\>";
-      label-warn-foreground = "\${colors.secondary}";
-    };
-  } else {} );
+    # Module temperature
+    (optionalAttrs cfg.modules.temperature.enable {
+      "module/temperature" = mkOrder cfg.modules.temperature.order {
+        type = "internal/temperature";
+        # $ for i in /sys/class/thermal/thermal_zone*; do echo "$i: $(<$i/type)"; done
+        thermal-zone = cfg.modules.temperature.thermalZone;
+        warn-temperature = 55;
+        interval = 5;
+        format = "<label>";
+        format-underline = "#f50a4d";else {} 
+        format-warn = "<label-warn>";
+        format-warn-underline = "\${self.format-underline}";
+        label = "%temperature-c%";
+        label-warn = "</!\> %temperature-c% </!\>";
+        label-warn-foreground = "\${colors.secondary}";
+      };
+    })
+  ];
 in {
   enable = cfg.polybar.enable;
   package = pkgs.polybar.override {
