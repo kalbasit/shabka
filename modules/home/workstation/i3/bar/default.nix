@@ -186,7 +186,7 @@ in {
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.bar.i3bar.enable || cfg.bar.polybar.enable;
+        assertion = !cfg.bar.i3bar.enable || !cfg.bar.polybar.enable;
         message = "i3bar and polybar cannot be used at the same time.";
       }
     ];
