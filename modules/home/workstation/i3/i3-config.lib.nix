@@ -48,7 +48,6 @@ let
     ${urxvt}/bin/urxvt -T weechat -e mosh risson@irc.risson.space -- /bin/sh -c 'screen -x weechat-risson' &
     ${pkgs.yubioath-desktop}/bin/yubiaoth-desktop &
     ${pkgs.blueman}/bin/blueman-manager &
-    ${pkgs.rambox}/bin/rambox
   '';
 
 in {
