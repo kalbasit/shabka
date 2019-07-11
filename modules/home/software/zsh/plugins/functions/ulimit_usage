@@ -1,0 +1,13 @@
+#
+# vim:ft=zsh:
+#
+
+function() ulimit_usage() {
+	@paste_bin@ <(grep 'open files\|processes\|pending signals' /proc/self/limits | @cut_bin@ -c27-38) \
+				<(i=`whoami` ; @lsof_bin@ -u $i | tail -n +2 | @awk_bin@ {'print $9'} | wc -l;
+						ps --no-headers -U $i -u $i u | wc -l ;
+						ps -u $i -o pid= | xargs printf "/proc/%s/status\n" |
+						xargs grep -s 'SigPnd' |
+						@sed_bin@ 's/.*\t//' | @paste_bin@ -sd+ | @bc_bin@ ; ) |
+		while read a b ; do echo $((${b}00/a))%; done
+}

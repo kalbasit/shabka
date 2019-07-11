@@ -1,0 +1,49 @@
+#
+# vim:ft=zsh:
+#
+
+# vim_clean_swap goes through all of Vim's swap files and:
+# - delete the swap file if it's the same as the original file
+# - opens vim in diff mode between the swap file and the original file
+function vim_clean_swap() {
+	{ # begin an always block
+		local TMPDIR=$(mktemp -d /tmp/vimrecovery.XXXXXXXX)
+		local RECTXT="$TMPDIR/vim.recovery.$USER.txt"
+		local RECFN="$TMPDIR/vim.recovery.$USER.fn"
+		local q=
+		for q in ~/.local/share/nvim/swap/*; do
+			[[ -f $q ]] || continue
+			if [[ `du $q | awk '{print $1}'` -eq 0 ]]; then
+				rm -f $q
+				continue
+			fi
+			rm -f "$RECTXT" "$RECFN"
+			@vim_bin@ -X -r "$q" \
+				-c "w! $RECTXT" \
+				-c "let fn=expand('%')" \
+				-c "new $RECFN" \
+				-c "exec setline( 1, fn )" \
+				-c w\! \
+				-c "qa"
+			if [[ ! -f $RECFN ]]; then
+				echo "nothing to recover from $q"
+				rm -f "$q"
+				continue
+			fi
+			local CRNT="$(cat $RECFN)"
+			if diff --strip-trailing-cr --brief "$CRNT" "$RECTXT"; then
+				echo "removing redundant $q"
+				echo "  for $CRNT"
+				rm -f "$q"
+			else
+				echo "$q contains changes"
+				if /usr/bin/vim -n -d "$CRNT" "$RECTXT"; then
+					rm -i "$q"
+				fi
+			fi
+		done
+	} always {
+		rm -f "$RECTXT" "$RECFN"
+		rmdir "$TMPDIR"
+	}
+}

@@ -1,0 +1,15 @@
+#
+# vim:ft=zsh:
+#
+
+function in_array() {
+	[[ "${#}" -lt "2" ]] && return 1
+	local needle="${1}"
+	shift
+	local haystack=(${@})
+	local i
+	for i in "${haystack[@]}"; do
+		[[ "${needle}" = "${i}" ]] && return 0
+	done
+	return 1
+}

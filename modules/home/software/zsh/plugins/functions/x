@@ -1,0 +1,7 @@
+#
+# vim:ft=zsh:
+#
+
+function x() {
+	@archiver_bin@ unarchive "${@}"
+}

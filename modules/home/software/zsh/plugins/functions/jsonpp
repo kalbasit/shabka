@@ -1,0 +1,23 @@
+#
+# vim:ft=zsh:
+#
+
+function jsonpp() {
+	if [[ "${#}" -eq 0 ]]; then
+		# only colorize the output if STDOUT is a terminal
+		if [[ -t 1 ]]; then
+			@python_bin@ -m json.tool | @pygmentize_bin@ -l javascript
+		else
+			@python_bin@ -m json.tool
+		fi
+	else
+		local input_file="${1}"
+		local output_file="${2}"
+		if [[ -z "${output_file}" ]]; then
+			output_file="`mktemp /tmp/jsonpp.XXXXXXXX`"
+		fi
+
+		@python_bin@ -m json.tool < "${input_file}" > "${output_file}" || return
+		mv "${output_file}" "${input_file}"
+	fi
+}

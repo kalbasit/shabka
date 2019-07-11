@@ -1,0 +1,77 @@
+#
+# vim:ft=zsh:
+#
+
+function mount.enc() {
+	{ # begin an always block
+		function $0_help() {
+			print_info "${log_depth}" "USAGE: mount.enc [options] lo_file"
+			print_info "${log_depth}" "\t -h, --help        - this message"
+			print_info "${log_depth}" "\t     --log-depth   - change the depth of the log Default: ${log_depth}"
+			print_info "${log_depth}" "\t     --lp_id       - The ID of the lastpass entry containing the password"
+			print_info "${log_depth}" "\t     --ro          - Mount as read-only"
+		}
+
+		local lo_file=
+		local lp_id=
+		local mount_options=noatime
+
+		while [[ $# -ge 1 ]]; do
+			case "${1}" in
+				-h|--help)
+					$0_help
+					return 0
+					;;
+				--log-depth)
+					log_depth="${2}"
+					if [[ -z "${log_depth}" ]]; then
+						print_error "${log_depth}" "--log-depth requires an argument"
+						$0_help
+						return 1
+					fi
+					shift 2
+					;;
+				--lp_id)
+					lp_id="${2}"
+					if [[ -z "${lp_id}" ]]; then
+						print_error "${log_depth}" "--lp_id requires an argument"
+						$0_help
+						return 1
+					fi
+					shift 2
+					;;
+				--ro)
+					mount_options="${mount_options},ro"
+					shift
+					;;
+				*)
+					# Make sure we have only one argument left
+					if [[ -n "${2}" ]]; then
+						print_error "${log_depth}" "must only have one argument, the lo_file of the volume"
+						$0_help
+						return 1
+					fi
+					# set the lo_file
+					lo_file="${1}"
+					shift
+			esac
+		done
+
+		# make sure we have a sudo session
+		sudo -v
+		# open the encrypted volume
+		local name="$(basename ${lo_file})"
+		print_info "${log_depth}" "opening the encrypted device ${lo_file} as ${name}"
+		if [[ -n "${lp_id}" ]]; then
+			@lpass_bin@ show --password "${lp_id}" | sudo @cryptsetup_bin@ open --type plain "${lo_file}" "${name}" || return 1
+		else
+			sudo @cryptsetup_bin@ open --type plain "${lo_file}" "${name}" || return 1
+		fi
+		# mount the filesystem
+		print_info "${log_depth}" "mounting the device"
+		sudo mkdir -p "/mnt/${name}"
+		sudo mount -o "${mount_options}" "/dev/mapper/${name}" "/mnt/${name}" || return 1
+	} always {
+		unfunction -m "$0_*"
+	}
+}

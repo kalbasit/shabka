@@ -1,0 +1,18 @@
+#
+# vim:ft=zsh:
+#
+
+function xmlpp() {
+	if [[ "${#}" -eq 0 ]]; then
+		@xmllint_bin@ --format -
+	else
+		local input_file="${1}"
+		local output_file="${2}"
+		if [[ -z "${output_file}" ]]; then
+			output_file="`mktemp /tmp/xmlpp.XXXXXXXX`"
+		fi
+
+		@xmllint_bin@ --format --output "${output_file}" "${input_file}" || return
+		mv "${output_file}" "${input_file}"
+	fi
+}

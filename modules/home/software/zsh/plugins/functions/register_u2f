@@ -1,0 +1,12 @@
+#
+# vim:ft=zsh:
+#
+
+function register_u2f() {
+	# TODO: The location of the u2f_keys should be set to
+	# security.pam.u2f.authfile after the PR
+	# https://github.com/NixOS/nixpkgs/pull/11886 is merged!
+	local u2f_keys="${HOME}/.config/Yubico/u2f_keys"
+	mkdir -p "$( dirname "${u2f_keys}" )"
+	(@pamu2fcfg_bin@; echo) >> "${u2f_keys}"
+}

@@ -1,0 +1,5 @@
+#
+# vim:ft=zsh:
+#
+
+function check_root() { test "$(id -u)" -eq 0 }

@@ -1,0 +1,58 @@
+#
+# vim:ft=zsh:
+#
+
+function umount.enc() {
+	{ # begin an always block
+
+		function $0_help() {
+			print_info "${log_depth}" "USAGE: umount.enc [options] lo_file"
+			print_info "${log_depth}" "\t -h, --help        - this message"
+			print_info "${log_depth}" "\t     --log-depth   - change the depth of the log Default: ${log_depth}"
+		}
+
+		local lo_file=
+		local log_depth=
+
+		while [[ $# -ge 1 ]]; do
+			case "${1}" in
+				-h|--help)
+					$0_help
+					return 0
+					;;
+				--log-depth)
+					log_depth="${2}"
+					if [[ -z "${log_depth}" ]]; then
+						print_error "${log_depth}" "--log-depth requires an argument"
+						$0_help
+						return 1
+					fi
+					shift 2
+					;;
+				*)
+					# Make sure we have only one argument left
+					if [[ -n "${2}" ]]; then
+						print_error "${log_depth}" "must only have one argument, the lo_file of the volume"
+						$0_help
+						return 1
+					fi
+					# set the lo_file
+					lo_file="${1}"
+					shift
+			esac
+		done
+
+		# make sure we have a sudo session
+		sudo -v
+		# find the mount name the encrypted volume
+		local name="$(basename ${lo_file})"
+		# mount the filesystem
+		print_info "${log_depth}" "umounting the device"
+		sudo umount "/mnt/${name}" || return 1
+		# close the cryptsetup
+		print_info "${log_depth}" "closing the encrypted device ${name}"
+		sudo @cryptsetup_bin@ close "${name}" || return 1
+	} always {
+		unfunction -m "$0_*"
+	}
+}

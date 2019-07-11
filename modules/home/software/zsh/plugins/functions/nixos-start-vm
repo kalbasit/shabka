@@ -1,0 +1,14 @@
+#
+# vim:ft=zsh:
+#
+
+function nixos-start-vm() {
+  local nix_disk_image="${HOME}/storage/qemu/$(hostname -s).qcow2"
+
+  mkdir -p "$( dirname "${nix_disk_image}" )"
+  rm -f "${nix_disk_image}"
+
+  QEMU_NET_OPTS="hostfwd=tcp::2222-:22" \
+    NIX_DISK_IMAGE="${nix_disk_image}" \
+    ./result/bin/run-*-vm
+}

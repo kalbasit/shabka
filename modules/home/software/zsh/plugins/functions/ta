@@ -1,0 +1,9 @@
+#
+# vim:ft=zsh:
+#
+
+# Do not hardcode the path of task in here because profiles exports a task
+# function that sets default flags per profile
+function ta() {
+	task add "${@}"
+}

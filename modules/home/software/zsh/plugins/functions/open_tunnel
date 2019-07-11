@@ -1,0 +1,126 @@
+#
+# vim:ft=zsh:
+#
+
+function open_tunnel() {
+	{ # begin an always block
+		function D0_help()
+		{
+			print_info "${log_depth}" "USAGE: open_tunnel [options]"
+			print_info "${log_depth}" "\t -h, --help                - this message"
+			print_info "${log_depth}" "\t -b, --bastion             - the bastion host [Default: ${bastion_host}]"
+			print_info "${log_depth}" "\t -w, --bastion-user        - the username for SSH to the bastion host [Default: ${bastion_username}]"
+			print_info "${log_depth}" "\t -h, --host                - the destination host [Default: ${host}]"
+			print_info "${log_depth}" "\t -o, --port                - the destination port [Default: ${port}]"
+		}
+
+		function D0_find_open_port() {
+			if [[ "$( uname )" = "Darwin" ]]; then
+				while [[ "$( netstat -anp tcp | awk "\$6 == \"LISTEN\" && \$4 ~ \".${tunnel_port}\"" | wc -l)" -gt 0 ]]; do
+					tunnel_port=$(( tunnel_port + 1 ))
+				done
+			elif [[ "$( uname )" = "Linux" ]]; then
+				while [[ "$( netstat -lnt | awk "\$6 == \"LISTEN\" && \$4 ~ \".${tunnel_port}\"" | wc -l)" -gt 0 ]]; do
+					tunnel_port=$(( tunnel_port + 1 ))
+				done
+			else
+				print_error 0 "$( uname ) is not supported"
+				return 1
+			fi
+		}
+
+		function D0_wait_for_tunnel_port() {
+			if [[ "$( uname )" = "Darwin" ]]; then
+				while [[ "$( netstat -anp tcp | awk "\$6 == \"LISTEN\" && \$4 ~ \".${tunnel_port}\"" | wc -l)" -eq 0 ]]; do
+					sleep 0.3
+				done
+			elif [[ "$( uname )" = "Linux" ]]; then
+				while [[ "$( netstat -lnt | awk "\$6 == \"LISTEN\" && \$4 ~ \".${tunnel_port}\"" | wc -l)" -eq 0 ]]; do
+					sleep 0.3
+				done
+			else
+				print_error 0 "$( uname ) is not supported"
+				return 1
+			fi
+		}
+
+		function D0_open_tunnel() {
+			# open the tunnel
+			ssh -f -N -L "${tunnel_port}:${host}:${port}" "${bastion_username}"@"${bastion_host}"
+			# shellcheck disable=SC2009
+			ssh_pid="$( ps aux | grep "[s]sh -f -N -L ${tunnel_port}:${host}:${port} ${bastion_username}@${bastion_host}" | awk '{print $2}' )"
+		}
+
+		function D0_validate_options() {
+			if [[ -z "${tunnel_port}" ]]; then
+				print_error 0 "tunnel_port is not defined, aborting..."
+				D0_help
+				return 1
+			fi
+			if [[ -z "${bastion_host}" ]]; then
+				print_error 0 "bastion_host is not defined, aborting..."
+				D0_help
+				return 1
+			fi
+			if [[ -z "${bastion_username}" ]]; then
+				print_error 0 "bastion_username is not defined, aborting..."
+				D0_help
+				return 1
+			fi
+			if [[ -z "${host}" ]]; then
+				print_error 0 "host is not defined, aborting..."
+				D0_help
+				return 1
+			fi
+			if [[ -z "${port}" ]]; then
+				print_error 0 "port is not defined, aborting..."
+				D0_help
+				return 1
+			fi
+		}
+
+		local log_depth=0
+		local tunnel_port=13300
+		local bastion_host=
+		local bastion_username=
+		local host=
+		local port=3306
+
+		while [[ $# -ge 1 ]]; do
+			case "${1}" in
+				-h|--help)
+					D0_help
+					return 0
+					;;
+				-b|--bastion)
+					bastion_host="${2}"
+					shift 2
+					;;
+				-w|--bastion-user)
+					bastion_username=${2}
+					shift 2
+					;;
+				-h|--host)
+					host=${2}
+					shift 2
+					;;
+				-o|--port)
+					port=${2}
+					shift 2
+					;;
+				*)
+					D0_help
+					return 1
+					;;
+			esac
+		done
+
+		D0_validate_options
+		D0_find_open_port
+		D0_open_tunnel
+		D0_wait_for_tunnel_port
+		print_info 0 "A tunnel was opened on port ${tunnel_port}, kill ${ssh_pid} when done"
+	} always {
+		unfunction -m "$0_*"
+	}
+}

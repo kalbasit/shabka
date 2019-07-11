@@ -1,0 +1,85 @@
+#
+# vim:ft=zsh:
+#
+
+function mkfs.enc() {
+	{ # begin an always block
+		function $0_help() {
+			print_info "${log_depth}" "USAGE: mkfs.enc [options] lo_file"
+			print_info "${log_depth}" "\t -h, --help        - this message"
+			print_info "${log_depth}" "\t     --log-depth   - change the depth of the log Default: ${log_depth}"
+			print_info "${log_depth}" "\t     --bs          - set the bs of the dd command. Default: ${bs}"
+			print_info "${log_depth}" "\t     --count       - set the count of the dd command. Default: ${count}"
+		}
+
+		local bs=1M
+		local count=10
+		local log_depth=0
+		local lo_file=
+
+		while [[ $# -ge 1 ]]; do
+			case "${1}" in
+				-h|--help)
+					$0_help
+					return 0
+					;;
+				--log-depth)
+					log_depth="${2}"
+					if [[ -z "${log_depth}" ]]; then
+						print_error "${log_depth}" "--log-depth requires an argument"
+						$0_help
+						return 1
+					fi
+					shift 2
+					;;
+				--bs)
+					bs="${2}"
+					if [[ -z "${bs}" ]]; then
+						print_error "${log_depth}" "--bs requires an argument"
+						$0_help
+						return 1
+					fi
+					shift 2
+					;;
+				--count)
+					count="${2}"
+					if [[ -z "${count}" ]]; then
+						print_error "${log_depth}" "--count requires an argument"
+						$0_help
+						return 1
+					fi
+					shift 2
+					;;
+				*)
+					# Make sure we have only one argument left
+					if [[ -n "${2}" ]]; then
+						print_error "${log_depth}" "must only have one argument, the lo_file of the volume"
+						$0_help
+						return 1
+					fi
+					# set the lo_file
+					lo_file="${1}"
+					shift
+			esac
+		done
+
+		# make sure we have a sudo session
+		sudo -v
+		# create the file
+		print_info "${log_depth}" "creating the loopback file"
+		sudo dd if=/dev/urandom of="${lo_file}" bs="${bs}" count="${count}" || return 1
+		# open the encrypted volume
+		local name="$(basename ${lo_file})"
+		print_info "${log_depth}" "opening the encrypted device ${lo_file} as ${name}"
+		sudo @cryptsetup_bin@ open --type plain "${lo_file}" "${name}" || return 1
+		# create the filesystem
+		print_info "${log_depth}" "creating a file system"
+		sudo @mkfs_ext2_bin@ "/dev/mapper/${name}" || return 1
+		# mount the filesystem
+		print_info "${log_depth}" "mounting the device"
+		sudo mkdir -p "/mnt/${name}"
+		sudo mount "/dev/mapper/${name}" "/mnt/${name}" || return 1
+	} always {
+		unfunction -m "$0_*"
+	}
+}

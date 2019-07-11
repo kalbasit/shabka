@@ -1,0 +1,39 @@
+#
+# vim:ft=zsh:
+#
+
+function need_root() {
+	if ! check_root; then
+		print_warning 0 "Re-Running the script under root."
+		if have sudo; then
+			if yes 'NOPASS' | sudo -S -l 2> /dev/null | grep -q "NOPASSWD"; then
+				sudo "${0}" ${@}
+			else
+				# We need the user to put a password.
+				print_info 1 "You must enter the password for '${USER}' to open a root session."
+				sudo "${0}" ${@}
+			fi
+		else
+			local PreserveEnvironment=""
+
+			# There is no sudo command, we have to use 'su'.
+			print_info 1 "You must enter the password for 'root' to open a root session."
+
+			# Try to preserve the environment, if possible, on linux
+			# it is possible, but on FreeBSD-like system it is not, unless
+			# the caller has uid 0 (a.k.a root) which isn't the case.
+			#
+			# Enable it by default it on Linux, and disable it in case
+			# it's a FreeBSD and for everything else...
+			if [ "$( uname )" = "Linux" ]; then
+				PreserveEnvironment="-p"
+			fi
+
+			# the actual su command
+			su -l root ${PreserveEnvironment} -c "export HOME=${HOME}; ${0} ${@}"
+		fi
+		exit "${?}"
+	else
+		return 0
+	fi
+}

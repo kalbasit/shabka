@@ -1,0 +1,14 @@
+#
+# vim:ft=zsh:
+#
+
+function gtime() {
+	if [[ "x$(@git_bin@ rev-parse --git-dir 2> /dev/null)" = "x" ]]; then
+		echo "You must be under a git repository to use gcim"
+		return 1
+	fi
+
+	local branch="$(current_branch)"
+
+	@git_bin@ reflog --date=relative --all | grep "refs/heads/${branch}@.*: branch: Created" | sed -e 's:.*{\([^}]*\)}.*:\1:g'
+}

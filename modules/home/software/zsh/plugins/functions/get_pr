@@ -1,0 +1,85 @@
+#
+# vim:ft=zsh:
+#
+
+function get_pr() {
+	{ # begin the always block
+		function $0_help()
+		{
+			print_info "${log_depth}" "USAGE: new_pr [options] <message>"
+			print_info "${log_depth}" "\t -h, --help        - this message"
+			print_info "${log_depth}" "\t     --log-depth   - change the depth of the log Default: ${log_depth}"
+		}
+
+		local log_depth=0
+
+		while [[ $# -ge 1 ]]; do
+			case "${1}" in
+				-h|--help)
+					$0_help
+					return 0
+					;;
+				--log-depth)
+					log_depth="${2}"
+					if [[ -z "${log_depth}" ]]; then
+						print_error "${log_depth}" "--log-depth requires an argument"
+						$0_help
+						return 1
+					fi
+					shift 2
+					;;
+				*)
+					shift
+					;;
+			esac
+		done
+
+		if [[ "x$(@git_bin@ rev-parse --git-dir 2> /dev/null)" = "x" ]]; then
+			print_error 0 "not inside a git repository"
+			return 1
+		fi
+
+		local remote_url="$(@git_bin@ remote get-url origin 2> /dev/null)"; debug "remote_url=${remote_url}"
+		local branch="$(current_branch)"; debug "branch=${branch}"
+		local story="$(echo "${branch}" | grep '^[[:alpha:]][[:alpha:]]*-[[:digit:]][[:digit:]]*$')"; debug "story=${story}"
+
+		local owner="$(git_gopath_formatted_repo_path ${remote_url} | cut -d/ -f2)"
+		local repo="$(git_gopath_formatted_repo_path ${remote_url} | cut -d/ -f3)"
+
+		debug "owner => ${owner}"
+		debug "repo => ${repo}"
+		debug "story => ${story}"
+
+		local body="$( @curl_bin@ -s -X GET "https://api.github.com/repos/${owner}/${repo}/pulls?state=open&head=${owner}:${branch}" \
+			-H "Accept: application/vnd.github.v3+json" \
+			-H "Authorization: token $(cat ${HOME}/.github_token)" )"
+
+		debug "body => '${body}'"
+
+		local urls=( $(echo "${body}" | @jq_bin@ -r '.[] | .html_url') )
+
+		if [[ "$#urls" = "0" ]]; then
+			print_error "${log_depth}" "No PRs were found"
+			return 1
+		fi
+
+		for url in ${urls[@]}; do
+			if ! [[ "${url}" =~ "^https://github.com/${owner}/${repo}/pull/" ]]; then
+				print_error "${log_depth}" "URL '${url}' is not valid, something went wrong. Body following"
+				echo "${body}"
+				return 1
+			fi
+			if [[ "$OSTYPE" = darwin* ]]; then
+				echo "${url}" | pbcopy
+			elif [[ "$OSTYPE" = linux* ]]; then
+				echo "${url}" | @xsel_bin@ --clipboard -i
+			else
+				print_error "${log_depth}" "OS ${OSTYPE} is not supported, nothing copied"
+			fi
+			print_info "${log_depth}" "${url} copied to the clipboard"
+		done
+
+	} always {
+		unfunction -m "$0_*"
+	}
+}

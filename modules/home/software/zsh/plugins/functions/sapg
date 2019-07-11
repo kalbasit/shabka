@@ -1,0 +1,16 @@
+#
+# vim:ft=zsh:
+#
+
+# generate passwords with apg
+function sapg() {
+	if [[ "${1}" == "-h" ]]; then
+		print_error 0 "usage: ${0} <pwlen> <number of passwords>"
+	else
+		if [[ "${1}" -le "2" ]]; then
+			print_error 0 "password too small!"
+			return 1
+		fi
+		@apg_bin@ -x "${1}" -m "${1}" -n "${2}" -t -M NCL
+	fi
+}
