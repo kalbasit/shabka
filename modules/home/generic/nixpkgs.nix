@@ -8,6 +8,7 @@ let
 
     {
       allowUnfree = true;
+
       packageOverrides = pkgs: {
         nur = pkgs.lib.recursiveUpdate
           (import ${shabka.external.nur.path} { inherit pkgs; })
