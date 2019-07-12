@@ -9,14 +9,14 @@ in {
     enable = mkEnableOption "Enable GnuPG";
 
     defaultCacheTtl = mkOption {
-      default = 1800;
+      default = 7200;
       description = ''
         Default cache TTL.
       '';
     };
 
     defaultCacheTtl = mkOption {
-      default = 1800;
+      default = 7200;
       description = ''
         Default SSH cache TTL.
       '';
