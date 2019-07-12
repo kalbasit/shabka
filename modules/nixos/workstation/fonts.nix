@@ -12,9 +12,6 @@ in {
       enableFontDir = true;
       enableGhostscriptFonts = true;
       fonts = with pkgs; [
-        twemoji-color-font
-        hack-font
-
         powerline-fonts
         source-code-pro
         twemoji-color-font
