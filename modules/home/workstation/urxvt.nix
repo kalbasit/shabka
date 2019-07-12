@@ -15,26 +15,25 @@ in
 
   config = mkIf cfg.enable {
 
+    home.packages = with pkgs; [ urxvt_font_size ];
+
     programs.urxvt = {
 
       enable = true;
-      package = pkgs.rxvt_unicode;
+      package = pkgs.rxvt_unicode-with-plugins;
 
       fonts = [ "xft:SourceCodePro:style:Regular:size=9:antialias=true" ];
 
       keybindings = {
-        "M-u" = "perl:url-select:select_next";
-        "M-Escape" = "perl:keyboard-select:activate";
-        "M-s" = "perl:keyboard-select:search";
         "Shift-Control-V" = "eval:paste_clipboard";
         "Shift-Control-C" = "eval:selection_to_clipboard";
         "Control-Up" = "\\033[1;5A";
         "Control-Down" = "\\033[1;5B";
         "Control-Left" = "\\033[1;5D";
         "Control-Right" = "\\033[1;5C";
-        "Control-minus" = "resize-font:smaller";
-        "Control-plus" = "resize-font:bigger";
-        "Control-equal" = "resize-font:reset";
+        #"Control-minus" = "resize-font:smaller";
+        #"Control-plus" = "resize-font:bigger";
+        #"Control-equal" = "resize-font:reset";
       };
 
       scroll = {
@@ -49,7 +48,7 @@ in
       transparent = cfg.transparency;
 
       extraConfig = {
-        perl-ext-common = "default,tabbed,matcher,resize-font,-tabbed";
+        perl-ext-common = "default,resize-font";
       };
     };
   };
