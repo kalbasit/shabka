@@ -29,15 +29,15 @@ in {
       libinput.enable = true;
       libinput.naturalScrolling = false;
 
-      #desktopManager.gnome3.enable = true;
-      #desktopManager.plasma5.enable = true;
+      desktopManager.gnome3.enable = true;
+      desktopManager.plasma5.enable = true;
 
-      ## enable the display manager
-      #displayManager.lightdm.enable = true;
-      #displayManager.lightdm.autoLogin = {
-      #  enable = true;
-      #  user = "yl";
-      #};
+      # enable the display manager
+      displayManager.lightdm.enable = true;
+      displayManager.lightdm.autoLogin = {
+        enable = false;
+        user = "risson";
+      };
     };
   };
 }
