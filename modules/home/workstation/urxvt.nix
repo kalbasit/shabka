@@ -10,6 +10,7 @@ in
     enable = mkEnableOption "workstation.urxvt";
 
     transparency = mkEnableOption "Enable transparency on workstation.urxvt.";
+    scrollOnOutput = mkEnableOption "workstation.urxvt Scroll on output";
   };
 
   config = mkIf cfg.enable {
@@ -41,7 +42,7 @@ in
         keepPosition = true;
         lines = 10000;
         scrollOnKeystroke = true;
-        scrollOnOutput = false;
+        scrollOnOutput = cfg.scrollOnOutput;
       };
 
       shading = if cfg.transparency then 30 else 100;
