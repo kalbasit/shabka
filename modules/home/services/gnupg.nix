@@ -15,7 +15,7 @@ in {
       '';
     };
 
-    defaultCacheTtl = mkOption {
+    defaultCacheTtlSsh = mkOption {
       default = 7200;
       description = ''
         Default SSH cache TTL.
