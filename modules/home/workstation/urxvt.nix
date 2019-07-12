@@ -3,10 +3,14 @@
 with lib;
 
 let
-  cfg = config.mine.workstation.urxvt;
+  cfg = config.shabka.workstation.urxvt;
 in
 {
-  options.mine.workstation.urxvt.enable = mkEnableOption "workstation.urxvt";
+  options.shabka.workstation.urxvt = {
+    enable = mkEnableOption "workstation.urxvt";
+
+    transparency = mkEnableOption "Enable transparency on workstation.urxvt.";
+  };
 
   config = mkIf cfg.enable {
 
@@ -40,8 +44,8 @@ in
         scrollOnOutput = false;
       };
 
-      shading = 30;
-      transparent = true;
+      shading = if cfg.transparency then 30 else 100;
+      transparent = cfg.transparency;
 
       extraConfig = {
         perl-ext-common = "default,tabbed,matcher,resize-font,-tabbed";
