@@ -2,17 +2,38 @@
 
 with lib;
 
-{
-  options.shabka.gnupg.enable = mkEnableOption "Enable GnuPG";
+let
+  cfg = config.shabka.gnupg;
+in {
+  options.shabka.gnupg = {
+    enable = mkEnableOption "Enable GnuPG";
 
-  config = mkIf config.shabka.gnupg.enable {
+    defaultCacheTtl = mkOption {
+      default = 1800;
+      description = ''
+        Default cache TTL.
+      '';
+    };
+
+    defaultCacheTtl = mkOption {
+      default = 1800;
+      description = ''
+        Default SSH cache TTL.
+      '';
+    };
+  };
+
+  config = mkIf cfg.enable {
     services.gpg-agent = {
       enable = true;
 
-      defaultCacheTtl = 68400;
       enableSshSupport = true;
       enableExtraSocket = true;
-      maxCacheTtl = 68400;
+
+      defaultCacheTtl = cfg.defaultCacheTtl;
+      maxCacheTtl = cfg.defaultCacheTtl;
+      defaultCacheTtlSsh = cfg.defaultCacheTtl;
+      maxCacheTtlSsh = cfg.defaultCacheTtl;
     };
   };
 }
