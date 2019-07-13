@@ -5,7 +5,6 @@ tap "homebrew/core"
 cask "alfred"                     # spotlight replacement
 cask "charles"                    # Charles Proxy
 cask "google-chrome"              # my browser of choice
-cask "insomniax"                  # keep the laptop awake
 cask "iterm2"                     # my terminal of choice
 cask "karabiner-elements"         # Change caps_lock to control when used as modifier, escape when used alone
 cask "keybase"                    # Keybase for accessing my encrypted repositories
