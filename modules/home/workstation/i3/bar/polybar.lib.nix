@@ -99,6 +99,7 @@ let
     };
   };
 
+  # TODO: fix this script
   spotifyScript = pkgs.writeScript "polybar-spotify-script.py" ''
     #!${pkgs.python3}
 
@@ -224,10 +225,30 @@ let
             print(e)
   '';
 
-  modulesConfig = mkMerge [
-    # Module backlight
-    (optionalAttrs cfg.modules.backlight.enable {
-      "module/backlight" = mkOrder cfg.modules.backlight.order {
+  modulesConfig =
+    # Battery modules
+    (optionalAttrs cfg.modules.battery.enable
+      (builtins.listToAttrs (map batteryConstructor cfg.modules.battery.devices))
+    ) //
+
+    # Time modules
+    (optionalAttrs cfg.modules.time.enable
+      (builtins.listToAttrs (map timeConstructor cfg.modules.time.timezones))
+    ) //
+
+    # Network-eth module
+    (optionalAttrs cfg.modules.network.enable
+      (builtins.listToAttrs (map networkEthConstructor cfg.modules.network.eth))
+    ) //
+
+    # Network-wlan module
+    (optionalAttrs cfg.modules.network.enable
+      (builtins.listToAttrs (map networkWlanConstructor cfg.modules.network.wlan))
+    ) //
+
+    {
+      # Module backlight
+      "module/backlight" = mkIf cfg.modules.backlight.enable (mkOrder cfg.modules.backlight.order {
         type = "internal/backlight";
         card = "intel_backlight";
         format = "<label> <ramp>";
@@ -249,68 +270,40 @@ let
         ramp-2 = "🌓";
         ramp-3 = "🌒";
         ramp-4 = "🌑";
-      };
-    })
+      });
 
-    # Module battery
-    (optionalAttrs cfg.modules.battery.enable
-      (builtins.listToAttrs (map batteryConstructor cfg.modules.battery.devices))
-    )
-
-    # Module CPU
-    (optionalAttrs cfg.modules.cpu.enable {
-      "module/cpu" = mkOrder cfg.modules.cpu.order {
+      # Module CPU
+      "module/cpu" = mkIf cfg.modules.cpu.enable (mkOrder cfg.modules.cpu.order {
         type = "internal/cpu";
         interval = 2;
         format-prefix = "🖥️";
         format-prefix-foreground = "\${colors.foreground-alt}";
         format-underline = "#f90000";
         label = "%percentage%%";
-      };
-    })
+      });
 
-    # Module time
-    (optionalAttrs cfg.modules.time.enable
-      (builtins.listToAttrs (map timeConstructor cfg.modules.time.timezones))
-    )
-
-    # Module filesystems
-    (optionalAttrs cfg.modules.filesystems.enable {
-      "module/filesystem" = mkOrder cfg.modules.filesystems.order {
+      # Module filesystems
+      "module/filesystem" = mkIf cfg.modules.filesystems.enable (mkOrder cfg.modules.filesystems.order {
         type = "internal/fs";
         interval = 60;
         mount-0 = (builtins.head cfg.modules.filesystems.mountPoints); # TODO: support more than one mountpoint. How to iterate over a list and increment a number in nix ?
         label-mounted = "%{F#0a81f5}%mountpoint%%{F-}: %percentage_free%%";
         label-unmounted = "%mountpoint% unmounted";
         label-unmounted-foreground = "\${colors.foreground-alt}";
-      };
-    })
+      });
 
-    # Module RAM
-    (optionalAttrs cfg.modules.ram.enable {
-      "module/ram" = mkOrder cfg.modules.ram.order {
+      # Module RAM
+      "module/ram" = mkIf cfg.modules.ram.enable (mkOrder cfg.modules.ram.order {
         type = "internal/memory";
         interval = 5;
         format-prefix = "💾";
         format-prefix-foreground = "\${colors.foreground-alt}";
         format-underline = "#4bffdc";
         label = "%percentage_used%%";
-      };
-    })
+      });
 
-    # Network-eth module
-    (optionalAttrs cfg.modules.network.enable
-      (builtins.listToAttrs (map networkEthConstructor cfg.modules.network.eth))
-    )
-
-    # Network-wlan module
-    (optionalAttrs cfg.modules.network.enable
-      (builtins.listToAttrs (map networkWlanConstructor cfg.modules.network.wlan))
-    )
-
-    # Module volume (pulseaudio)
-    (optionalAttrs cfg.modules.volume.enable {
-      "module/volume" = mkOrder cfg.modules.volume.order {
+      # Module volume (pulseaudio)
+      "module/volume" = mkIf cfg.modules.volume.enable (mkOrder cfg.modules.volume.order {
         type = "internal/pulseaudio";
         format-volume = "<ramp-volume> <label-volume> <bar-volume>";
         label-volume = "%percentage%%";
@@ -336,24 +329,20 @@ let
         ramp-volume-0 = "🔈";
         ramp-volume-1 = "🔉";
         ramp-volume-2 = "🔊";
-      };
-    })
+      });
 
-    # Module spotify
-    (optionalAttrs cfg.modules.spotify.enable {
-      "module/spotify" = mkOrder cfg.modules.spotify.order {
+      # Module spotify
+      "module/spotify" = mkIf cfg.modules.spotify.enable (mkOrder cfg.modules.spotify.order {
         type = "custom/script";
         interval = 3;
         format-prefix = "";
         format = "<label>";
         exec = "${spotifyScript} -f '{play_pause} {artist} - {song}'";
         format-underline = "#1db954";
-      };
-    })
+      });
 
-    # Module keyboardLayout
-    (optionalAttrs cfg.modules.keyboardLayout.enable {
-      "module/keyboardLayout" = mkOrder cfg.modules.keyboardLayout.order {
+      # Module keyboardLayout
+      "module/keyboardLayout" = mkIf cfg.modules.keyboardLayout.enable (mkOrder cfg.modules.keyboardLayout.order {
         type = "internal/xkeyboard";
         blacklist-0 = "num lock";
         format-prefix = "";
@@ -365,12 +354,10 @@ let
         label-indicator-margin = 1;
         label-indicator-background = "\${colors.secondary}";
         label-indicator-underline = "\${colors.secondary}";
-      };
-    })
+      });
 
-    # Module temperature
-    (optionalAttrs cfg.modules.temperature.enable {
-      "module/temperature" = mkOrder cfg.modules.temperature.order {
+      # Module temperature
+      "module/temperature" = mkIf cfg.modules.temperature.enable (mkOrder cfg.modules.temperature.order {
         type = "internal/temperature";
         # $ for i in /sys/class/thermal/thermal_zone*; do echo "$i: $(<$i/type)"; done
         thermal-zone = cfg.modules.temperature.thermalZone;
@@ -383,88 +370,7 @@ let
         label = "%temperature-c%";
         label-warn = "</!\> %temperature-c% </!\>";
         label-warn-foreground = "\${colors.secondary}";
-      };
-    })
-  ];
-
-  baseConfig = rec {
-      "settings" = {
-        pseudo-transparency = true;
-        screenchange-reload = true;
-      };
-      "bar/default" = {
-        monitor = "\${env:MONITOR:}";
-
-        width = "100%";
-        height = 21;
-        bottom = cfg.location == "bottom";
-        radius = "0.0";
-        fixed-center = false;
-        background = "\${colors.background}";
-        foreground = "\${colors.foreground}";
-        line-size = 1;
-        line-color = "#f00";
-        padding-left = 0;
-        padding-right = 2;
-
-        enable-ipc = true;
-
-        font-0 = "SourceCodePro Regular:size=8";
-        font-1 = "Twitter Color Emoji:size=10";
-
-        module-margin-left = 1;
-        module-margin-right = 2;
-
-        tray-position = "right";
-        tray-padding = 5;
-        scroll-up = "i3wm-wsnext";
-        scroll-down = "i3wm-wsprev";
-        cursor-click = "pointer";
-        cursor-scroll = "ns-resize";
-
-        modules-left = "i3";
-        modules-center = "";
-        modules-right = (builtins.concatStringsSep " " (map (removePrefix "module/") (builtins.attrNames modulesConfig)));
-      };
-
-      "module/i3" = {
-        type = "internal/i3";
-        format = "<label-state> <label-mode>";
-        index-sort = true;
-        wrapping-scroll = false;
-        strip-wsnumbers = false;
-
-        # Only show workspaces on the same output as the bar
-        pin-workspaces = true;
-
-        label-mode-padding = 2;
-        label-mode-foreground = "#000";
-        label-mode-background = "\${colors.primary}";
-
-        # focused = Active workspace on focused monitor
-        label-focused = "%name%";
-        label-focused-background = "\${colors.background-alt}";
-        label-focused-underline= "\${colors.primary}";
-        label-focused-padding = 2;
-
-        # unfocused = Inactive workspace on any monitor
-        label-unfocused = "%name%";
-        label-unfocused-padding = 1;
-
-        # visible = Active workspace on unfocused monitor
-        label-visible = "%name%";
-        label-visible-background = "\${self.label-focused-background}";
-        label-visible-underline = "\${self.label-focused-underline}";
-        label-visible-padding = "\${self.label-focused-padding}";
-
-        # urgent = Workspace with urgency hint set
-        label-urgent = "%name%";
-        label-urgent-background = "\${colors.alert}";
-        label-urgent-padding = 2;
-
-        # Separator in between workspaces
-        # label-separator = |
-      };
+      });
     };
 in {
   enable = cfg.polybar.enable;
@@ -474,7 +380,7 @@ in {
   };
   inherit script;
 
-  config = rec {
+  config = (modulesConfig // {
     "settings" = {
       pseudo-transparency = true;
       screenchange-reload = true;
@@ -512,7 +418,7 @@ in {
 
       modules-left = "i3";
       modules-center = "";
-      modules-right = (builtins.concatStringsSep " " (map (removePrefix "module/") (builtins.attrNames (removeAttrs config [ "settings" "bar/default" "module/i3" ]))));
+      modules-right = (builtins.concatStringsSep " " (map (removePrefix "module/") (builtins.attrNames modulesConfig)));
     };
 
     "module/i3" = {
@@ -551,7 +457,7 @@ in {
       label-urgent-padding = 2;
 
       # Separator in between workspaces
-      label-separator = "|";
+      # label-separator = "|";
     };
-  } // modulesConfig;
+  });
 }
