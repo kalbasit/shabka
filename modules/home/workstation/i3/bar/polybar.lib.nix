@@ -394,7 +394,7 @@ in {
   };
   inherit script;
 
-  config =
+  config = modulesConfig //
   # Default basic configuration
   {
     "settings" = {
@@ -474,5 +474,5 @@ in {
       # Separator in between workspaces
       # label-separator = |
     };
-  } // modulesConfig;
+  };
 }
