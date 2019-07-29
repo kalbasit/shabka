@@ -394,90 +394,85 @@ in {
   };
   inherit script;
 
-  config = mkMerge [
-    # Default basic configuration
-    {
-      "settings" = {
-        pseudo-transparency = true;
-        screenchange-reload = true;
-      };
-    }
-    {
-      "bar/default" = {
-        monitor = "\${env:MONITOR:}";
+  config =
+  # Default basic configuration
+  {
+    "settings" = {
+      pseudo-transparency = true;
+      screenchange-reload = true;
+    };
+    "bar/default" = {
+      monitor = "\${env:MONITOR:}";
 
-        width = "100%";
-        height = 21;
-        bottom = cfg.location == "bottom";
-        radius = "0.0";
-        fixed-center = false;
-        background = "\${colors.background}";
-        foreground = "\${colors.foreground}";
-        line-size = 1;
-        line-color = "#f00";
-        padding-left = 0;
-        padding-right = 2;
+      width = "100%";
+      height = 21;
+      bottom = cfg.location == "bottom";
+      radius = "0.0";
+      fixed-center = false;
+      background = "\${colors.background}";
+      foreground = "\${colors.foreground}";
+      line-size = 1;
+      line-color = "#f00";
+      padding-left = 0;
+      padding-right = 2;
 
-        enable-ipc = true;
+      enable-ipc = true;
 
-        font-0 = "SourceCodePro Regular:size=8";
-        font-1 = "Twitter Color Emoji:size=10";
+      font-0 = "SourceCodePro Regular:size=8";
+      font-1 = "Twitter Color Emoji:size=10";
 
-        module-margin-left = 1;
-        module-margin-right = 2;
+      module-margin-left = 1;
+      module-margin-right = 2;
 
-        tray-position = "right";
-        tray-padding = 5;
-        scroll-up = "i3wm-wsnext";
-        scroll-down = "i3wm-wsprev";
-        cursor-click = "pointer";
-        cursor-scroll = "ns-resize";
+      tray-position = "right";
+      tray-padding = 5;
+      scroll-up = "i3wm-wsnext";
+      scroll-down = "i3wm-wsprev";
+      cursor-click = "pointer";
+      cursor-scroll = "ns-resize";
 
-        modules-left = "i3";
-        modules-center = "";
-        modules-right = (builtins.concatStringsSep " " (map (removePrefix "module/") (builtins.attrNames modulesConfig)));
-      };
-    }
-    {
-      "module/i3" = {
-        type = "internal/i3";
-        format = "<label-state> <label-mode>";
-        index-sort = true;
-        wrapping-scroll = false;
-        strip-wsnumbers = false;
+      modules-left = "i3";
+      modules-center = "";
+      modules-right = (builtins.concatStringsSep " " (map (removePrefix "module/") (builtins.attrNames modulesConfig)));
+    };
 
-        # Only show workspaces on the same output as the bar
-        pin-workspaces = true;
+    "module/i3" = {
+      type = "internal/i3";
+      format = "<label-state> <label-mode>";
+      index-sort = true;
+      wrapping-scroll = false;
+      strip-wsnumbers = false;
 
-        label-mode-padding = 2;
-        label-mode-foreground = "#000";
-        label-mode-background = "\${colors.primary}";
+      # Only show workspaces on the same output as the bar
+      pin-workspaces = true;
 
-        # focused = Active workspace on focused monitor
-        label-focused = "%name%";
-        label-focused-background = "\${colors.background-alt}";
-        label-focused-underline= "\${colors.primary}";
-        label-focused-padding = 2;
+      label-mode-padding = 2;
+      label-mode-foreground = "#000";
+      label-mode-background = "\${colors.primary}";
 
-        # unfocused = Inactive workspace on any monitor
-        label-unfocused = "%name%";
-        label-unfocused-padding = 1;
+      # focused = Active workspace on focused monitor
+      label-focused = "%name%";
+      label-focused-background = "\${colors.background-alt}";
+      label-focused-underline= "\${colors.primary}";
+      label-focused-padding = 2;
 
-        # visible = Active workspace on unfocused monitor
-        label-visible = "%name%";
-        label-visible-background = "\${self.label-focused-background}";
-        label-visible-underline = "\${self.label-focused-underline}";
-        label-visible-padding = "\${self.label-focused-padding}";
+      # unfocused = Inactive workspace on any monitor
+      label-unfocused = "%name%";
+      label-unfocused-padding = 1;
 
-        # urgent = Workspace with urgency hint set
-        label-urgent = "%name%";
-        label-urgent-background = "\${colors.alert}";
-        label-urgent-padding = 2;
+      # visible = Active workspace on unfocused monitor
+      label-visible = "%name%";
+      label-visible-background = "\${self.label-focused-background}";
+      label-visible-underline = "\${self.label-focused-underline}";
+      label-visible-padding = "\${self.label-focused-padding}";
 
-        # Separator in between workspaces
-        # label-separator = |
-      };
-    }
-    modulesConfig
-  ];
+      # urgent = Workspace with urgency hint set
+      label-urgent = "%name%";
+      label-urgent-background = "\${colors.alert}";
+      label-urgent-padding = 2;
+
+      # Separator in between workspaces
+      # label-separator = |
+    };
+  } // modulesConfig;
 }
