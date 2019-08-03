@@ -9,26 +9,11 @@ let
   script = ''
     set -euo pipefail
 
-    # wait for the socket to become available, a maximum of 10s
-    i=0
-    while true; do
-      if [[ $i -ge 19 ]]; then
-        if ! ${pkgs.i3}/bin/i3-msg -t get_version; then
-          echo "The i3 socket is not available. I waited ten seconds before giving up."
-          exit 1
-        else
-          break
-        fi
-      fi
-
-      if ${pkgs.i3}/bin/i3-msg -t get_version; then
-        break
-      fi
-
-      i=$(( i + 1 ))
-      ${pkgs.coreutils}/bin/sleep 0.5
-    done
-
+    readonly i3Socket=''${XDG_RUNTIME_DIR:-/run/user/$UID}/i3/ipc-socket.*
+    if ! [ -S $i3Socket ]; then
+      echo "The i3 socket is not available at $i3Socket"
+      exit 1
+    fi
 
     for m in $(${pkgs.xorg.xrandr}/bin/xrandr --query | ${pkgs.gnugrep}/bin/grep " connected" | ${pkgs.coreutils}/bin/cut -d" " -f1); do
       echo "Starting polybar on monitor $m"
