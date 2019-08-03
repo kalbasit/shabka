@@ -55,8 +55,9 @@ let
   {
     name = "module/network-eth-${interface}";
     value = mkOrder cfg.modules.network.order {
+      inherit interface;
+
       type = "internal/network";
-      interface = interface;
       interval = 3;
       format-connected-underline = "#55aa55";
       format-connected-prefix = "ETH ";
@@ -76,8 +77,9 @@ let
   {
     name = "module/network-wlan-${interface}";
     value = mkOrder cfg.modules.network.order {
+      inherit interface;
+
       type = "internal/network";
-      interface = "wlp5s0";
       interval = 3;
       format-connected = "<ramp-signal> <label-connected>";
       format-connected-underline = "#9f78e1";
