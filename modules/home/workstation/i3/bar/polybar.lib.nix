@@ -403,7 +403,8 @@ in {
 
       enable-ipc = true;
 
-      font-0 = "SourceCodePro Regular:size=8";
+      # validate the font with `fc-match 'SourceCodePro:style=Regular:size=8'`
+      font-0 = "SourceCodePro:style=Regular:size=8";
       font-1 = "Twitter Color Emoji:size=10";
 
       module-margin-left = 1;
