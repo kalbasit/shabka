@@ -22,7 +22,8 @@ with import ../../../util;
         xsel
 
         # zoom for meetings
-        zoom-us
+        # TODO: it's not building
+        # zoom-us
       ];
 
       activation = {
