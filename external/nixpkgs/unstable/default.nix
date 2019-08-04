@@ -7,7 +7,10 @@ let
     inherit (pinnedVersion) url sha256;
   };
 
-  patches = [];
+  patches = [
+    # https://github.com/NixOS/nixpkgs/issues/65894
+    ./fix-nvim-terraform-plugin.patch
+  ];
 
   patched = mkExternal {
     inherit src patches;
