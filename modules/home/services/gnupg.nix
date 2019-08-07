@@ -32,8 +32,8 @@ in {
 
       defaultCacheTtl = cfg.defaultCacheTtl;
       maxCacheTtl = cfg.defaultCacheTtl;
-      defaultCacheTtlSsh = cfg.defaultCacheTtl;
-      maxCacheTtlSsh = cfg.defaultCacheTtl;
+      defaultCacheTtlSsh = cfg.defaultCacheTtlSsh;
+      maxCacheTtlSsh = cfg.defaultCacheTtlSsh;
     };
   };
 }
