@@ -7,6 +7,14 @@ let
   cfg = config.shabka.workstation.i3.bar;
 
   script = ''
+    set -euo pipefail
+
+    readonly i3Socket=''${XDG_RUNTIME_DIR:-/run/user/$UID}/i3/ipc-socket.*
+    if ! [ -S $i3Socket ]; then
+      echo "The i3 socket is not available at $i3Socket"
+      exit 1
+    fi
+
     for m in $(${pkgs.xorg.xrandr}/bin/xrandr --query | ${pkgs.gnugrep}/bin/grep " connected" | ${pkgs.coreutils}/bin/cut -d" " -f1); do
       echo "Starting polybar on monitor $m"
       MONITOR=$m polybar --reload default &
@@ -55,8 +63,9 @@ let
   {
     name = "module/network-eth-${interface}";
     value = mkOrder cfg.modules.network.order {
+      inherit interface;
+
       type = "internal/network";
-      interface = interface;
       interval = 3;
       format-connected-underline = "#55aa55";
       format-connected-prefix = "ETH ";
@@ -76,8 +85,9 @@ let
   {
     name = "module/network-wlan-${interface}";
     value = mkOrder cfg.modules.network.order {
+      inherit interface;
+
       type = "internal/network";
-      interface = "wlp5s0";
       interval = 3;
       format-connected = "<ramp-signal> <label-connected>";
       format-connected-underline = "#9f78e1";
@@ -99,130 +109,10 @@ let
     };
   };
 
-  # TODO: fix this script
-  spotifyScript = pkgs.writeScript "polybar-spotify-script.py" ''
-    #!${pkgs.python3}
-
-    import sys
-    import dbus
-    import argparse
-
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        '-t',
-        '--trunclen',
-        type=int,
-        metavar='trunclen'
-    )
-    parser.add_argument(
-        '-f',
-        '--format',
-        type=str,
-        metavar='custom format',
-        dest='custom_format'
-    )
-    parser.add_argument(
-        '-p',
-        '--playpause',
-        type=str,
-        metavar='play-pause indicator',
-        dest='play_pause'
-    )
-    parser.add_argument(
-        '--font',
-        type=str,
-        metavar='the index of the font to use for the main label',
-        dest='font'
-    )
-    parser.add_argument(
-        '--playpause-font',
-        type=str,
-        metavar='the index of the font to use to display the playpause indicator',
-        dest='play_pause_font'
-    )
-
-
-    args = parser.parse_args()
-
-    def fix_string(string):
-        # corrects encoding for the python version used
-        if sys.version_info.major == 3:
-            return string
-        else:
-            return string.encode('utf-8')
-
-    # Default parameters
-    output = fix_string(u'{play_pause} {artist}: {song}')
-    trunclen = 25
-    play_pause = fix_string(u'\u25B6,\u23F8') # first character is play, second is paused
-
-    label_with_font = '%{{T{font}}}{label}%{{T-}}'
-    font = args.font
-    play_pause_font = args.play_pause_font
-
-    # parameters can be overwritten by args
-    if args.trunclen is not None:
-        trunclen = args.trunclen
-    if args.custom_format is not None:
-        output = args.custom_format
-    if args.play_pause is not None:
-        play_pause = args.play_pause
-
-    try:
-        session_bus = dbus.SessionBus()
-        spotify_bus = session_bus.get_object(
-            'org.mpris.MediaPlayer2.spotify',
-            '/org/mpris/MediaPlayer2'
-        )
-
-        spotify_properties = dbus.Interface(
-            spotify_bus,
-            'org.freedesktop.DBus.Properties'
-        )
-
-        metadata = spotify_properties.Get('org.mpris.MediaPlayer2.Player', 'Metadata')
-        status = spotify_properties.Get('org.mpris.MediaPlayer2.Player', 'PlaybackStatus')
-
-        # Handle play/pause label
-
-        play_pause = play_pause.split(',')
-
-        if status == 'Playing':
-            play_pause = play_pause[0]
-        elif status == 'Paused':
-            play_pause = play_pause[1]
-        else:
-            play_pause = str()
-
-        if play_pause_font:
-            play_pause = label_with_font.format(font=play_pause_font, label=play_pause)
-
-        # Handle main label
-
-        artist = fix_string(metadata['xesam:artist'][0]) if metadata['xesam:artist'] else ""
-        song = fix_string(metadata['xesam:title']) if metadata['xesam:title'] else ""
-
-        if not artist and not song:
-            print("")
-        else:
-            if len(song) > trunclen:
-                song = song[0:trunclen]
-                song += '...'
-                if ('(' in song) and (')' not in song):
-                    song += ')'
-
-            if font:
-                artist = label_with_font.format(font=font, label=artist)
-                song = label_with_font.format(font=font, label=song)
-
-            print(output.format(artist=artist, song=song, play_pause=play_pause))
-
-    except Exception as e:
-        if isinstance(e, dbus.exceptions.DBusException):
-            print("")
-        else:
-            print(e)
+  spotifyScript = pkgs.runCommand "spotify-script.py" { } ''
+    install -Dm755 ${./polybar-spotify-script.py} $out
+    substitute ${./polybar-spotify-script.py} $out \
+      --subst-var-by python_bin ${pkgs.python3.withPackages(ps: [ ps.dbus-python ])}/bin/python
   '';
 
   modulesConfig =
@@ -246,9 +136,9 @@ let
       (builtins.listToAttrs (map networkWlanConstructor cfg.modules.network.wlan))
     ) //
 
-    {
-      # Module backlight
-      "module/backlight" = mkIf cfg.modules.backlight.enable (mkOrder cfg.modules.backlight.order {
+    # Backlight module
+    (optionalAttrs cfg.modules.backlight.enable {
+      "module/backlight" = mkOrder cfg.modules.backlight.order {
         type = "internal/backlight";
         card = "intel_backlight";
         format = "<label> <ramp>";
@@ -270,40 +160,60 @@ let
         ramp-2 = "🌓";
         ramp-3 = "🌒";
         ramp-4 = "🌑";
-      });
+      };
+    }) //
 
-      # Module CPU
-      "module/cpu" = mkIf cfg.modules.cpu.enable (mkOrder cfg.modules.cpu.order {
+    # Module spotify
+    (optionalAttrs cfg.modules.spotify.enable {
+      "module/spotify" = mkOrder cfg.modules.spotify.order {
+        type = "custom/script";
+        interval = 3;
+        format-prefix = "";
+        format = "<label>";
+        exec = "${spotifyScript} -f '{play_pause} {artist} - {song}'";
+        format-underline = "#1db954";
+      };
+    }) //
+
+    # Module CPU
+    (optionalAttrs cfg.modules.cpu.enable {
+      "module/cpu" = mkOrder cfg.modules.cpu.order {
         type = "internal/cpu";
         interval = 2;
         format-prefix = "🖥️";
         format-prefix-foreground = "\${colors.foreground-alt}";
         format-underline = "#f90000";
         label = "%percentage%%";
-      });
+      };
+    }) //
 
-      # Module filesystems
-      "module/filesystem" = mkIf cfg.modules.filesystems.enable (mkOrder cfg.modules.filesystems.order {
+    # Module filesystems
+    (optionalAttrs cfg.modules.filesystems.enable {
+      "module/filesystem" = mkOrder cfg.modules.filesystems.order {
         type = "internal/fs";
         interval = 60;
         mount-0 = (builtins.head cfg.modules.filesystems.mountPoints); # TODO: support more than one mountpoint. How to iterate over a list and increment a number in nix ?
         label-mounted = "%{F#0a81f5}%mountpoint%%{F-}: %percentage_free%%";
         label-unmounted = "%mountpoint% unmounted";
         label-unmounted-foreground = "\${colors.foreground-alt}";
-      });
+      };
+    }) //
 
-      # Module RAM
-      "module/ram" = mkIf cfg.modules.ram.enable (mkOrder cfg.modules.ram.order {
+    # Module RAM
+    (optionalAttrs cfg.modules.ram.enable {
+      "module/ram" = mkOrder cfg.modules.ram.order {
         type = "internal/memory";
         interval = 5;
         format-prefix = "💾";
         format-prefix-foreground = "\${colors.foreground-alt}";
         format-underline = "#4bffdc";
         label = "%percentage_used%%";
-      });
+      };
+    }) //
 
-      # Module volume (pulseaudio)
-      "module/volume" = mkIf cfg.modules.volume.enable (mkOrder cfg.modules.volume.order {
+    # Module volume (pulseaudio)
+    (optionalAttrs cfg.modules.volume.enable {
+      "module/volume" = mkOrder cfg.modules.volume.order {
         type = "internal/pulseaudio";
         format-volume = "<ramp-volume> <label-volume> <bar-volume>";
         label-volume = "%percentage%%";
@@ -329,20 +239,12 @@ let
         ramp-volume-0 = "🔈";
         ramp-volume-1 = "🔉";
         ramp-volume-2 = "🔊";
-      });
+      };
+    }) //
 
-      # Module spotify
-      "module/spotify" = mkIf cfg.modules.spotify.enable (mkOrder cfg.modules.spotify.order {
-        type = "custom/script";
-        interval = 3;
-        format-prefix = "";
-        format = "<label>";
-        exec = "${spotifyScript} -f '{play_pause} {artist} - {song}'";
-        format-underline = "#1db954";
-      });
-
-      # Module keyboardLayout
-      "module/keyboardLayout" = mkIf cfg.modules.keyboardLayout.enable (mkOrder cfg.modules.keyboardLayout.order {
+    # Module keyboardLayout
+    (optionalAttrs cfg.modules.keyboardLayout.enable {
+      "module/keyboardLayout" = mkOrder cfg.modules.keyboardLayout.order {
         type = "internal/xkeyboard";
         blacklist-0 = "num lock";
         format-prefix = "";
@@ -354,10 +256,12 @@ let
         label-indicator-margin = 1;
         label-indicator-background = "\${colors.secondary}";
         label-indicator-underline = "\${colors.secondary}";
-      });
+      };
+    }) //
 
-      # Module temperature
-      "module/temperature" = mkIf cfg.modules.temperature.enable (mkOrder cfg.modules.temperature.order {
+    # Module temperature
+    (optionalAttrs cfg.modules.temperature.enable {
+      "module/temperature" = mkOrder cfg.modules.temperature.order {
         type = "internal/temperature";
         # $ for i in /sys/class/thermal/thermal_zone*; do echo "$i: $(<$i/type)"; done
         thermal-zone = cfg.modules.temperature.thermalZone;
@@ -370,8 +274,8 @@ let
         label = "%temperature-c%";
         label-warn = "</!\> %temperature-c% </!\>";
         label-warn-foreground = "\${colors.secondary}";
-      });
-    };
+      };
+    });
 in {
   enable = cfg.polybar.enable;
   package = pkgs.polybar.override {
@@ -403,7 +307,8 @@ in {
 
       enable-ipc = true;
 
-      font-0 = "SourceCodePro Regular:size=8";
+      # validate the font with `fc-match 'SourceCodePro:style=Regular:size=8'`
+      font-0 = "SourceCodePro:style=Regular:size=8";
       font-1 = "Twitter Color Emoji:size=10";
 
       module-margin-left = 1;

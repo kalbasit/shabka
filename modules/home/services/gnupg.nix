@@ -7,10 +7,18 @@ let
 in {
   options.shabka.gnupg = {
     enable = mkEnableOption "Enable GnuPG";
+
     defaultCacheTtl = mkOption {
-      default = 1800;
+      default = 7200;
       description = ''
         Default cache TTL.
+      '';
+    };
+
+    defaultCacheTtlSsh = mkOption {
+      default = 7200;
+      description = ''
+        Default SSH cache TTL.
       '';
     };
   };
@@ -23,8 +31,8 @@ in {
       enableExtraSocket = true;
 
       defaultCacheTtl = cfg.defaultCacheTtl;
-      defaultCacheTtlSsh = cfg.defaultCacheTtl / 2;
-      maxCacheTtl = cfg.defaultCacheTtl * 2;
+      maxCacheTtl = cfg.defaultCacheTtl;
+      defaultCacheTtlSsh = cfg.defaultCacheTtl;
       maxCacheTtlSsh = cfg.defaultCacheTtl;
     };
   };

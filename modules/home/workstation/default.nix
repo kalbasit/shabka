@@ -18,7 +18,8 @@ with import ../../../util;
         thunderbird
 
         # zoom for meetings
-        zoom-us
+        # TODO: it's not building
+        # zoom-us
       ];
 
       activation = {
