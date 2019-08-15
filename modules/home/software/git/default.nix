@@ -28,6 +28,8 @@ in {
         default = null;
         description = "git PGP signing key";
       };
+
+      enableLfs = mkEnableOption "Enable git.lfs";
     };
   };
 
@@ -234,6 +236,8 @@ in {
         key = cfg.gpgSigningKey;
         signByDefault = true;
       };
+
+      lfs = cfg.enableLfs;
     };
   };
 }
