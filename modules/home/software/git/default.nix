@@ -12,20 +12,20 @@ in {
       enable = mkEnableOption "git";
 
       userName = mkOption {
-        type = types.str;
-        default = "Wael M. Nasreddine";
+        type = with types; nullOr str;
+        default = null;
         description = "git user name";
       };
 
       userEmail = mkOption {
-        type = types.str;
-        default = "wael.nasreddine@gmail.com";
+        type = with types; nullOr str;
+        default = null;
         description = "git user email";
       };
 
       gpgSigningKey = mkOption {
-        type = types.str;
-        default = "me@yl.codes";
+        type = with types; nullOr str;
+        default = null;
         description = "git PGP signing key";
       };
     };
