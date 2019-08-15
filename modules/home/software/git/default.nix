@@ -98,64 +98,6 @@ in {
           pager = true;
           ui    = "auto";
         };
-
-        core = {
-          whitespace = "trailing-space,space-before-tab,-indent-with-non-tab,cr-at-eol";
-        };
-
-        diff = {
-          tool = "vimdiff";
-        };
-
-        difftool = {
-          prompt = false;
-        };
-
-        help = {
-          autocorrect = 30;
-        };
-
-        http = {
-          cookiefile = "~/.gitcookies";
-        };
-
-        "http \"https://gopkg.in\"" = {
-          followRedirects = true;
-        };
-
-        merge = {
-          log  = true;
-          tool = "vimdiff";
-        };
-
-        mergetool = {
-          prompt = true;
-        };
-
-        "mergetool \"vimdiff\"" = optionalAttrs config.shabka.neovim.enable {
-          cmd = "nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'";
-        };
-
-        "protocol \"keybase\"" = {
-          allow = "always";
-        };
-
-        push = {
-          default = "current";
-        };
-
-        sendemail = {
-          smtpserver       = "${pkgs.msmtp}/bin/msmtp";
-          smtpserveroption = "--account=personal";
-        };
-
-        status = {
-          submodule = 1;
-        };
-
-        "url \"https://github\"" = {
-          insteadOf = "git://github";
-        };
       };
 
       ignores = [
@@ -264,6 +206,7 @@ in {
         ".project/"
         ".redcar/"
         ".settings/"
+        ".ycm_extra_conf.py"
         "/.emacs.desktop"
         "/.emacs.desktop.lock"
         "Session.vim"
@@ -280,7 +223,6 @@ in {
         #################################
         ".svn/"
 
-
         # Invert gitingore (Should be last) #
         #####################################
         "!.keep"
@@ -288,11 +230,7 @@ in {
         "!.gitignore"
       ];
 
-      includes = [
-        { path = "~/.gitconfig.secrets"; }
-      ];
-
-      signing = {
+      signing = mkIf (cfg.gpgSigningKey != null) {
         key = cfg.gpgSigningKey;
         signByDefault = true;
       };
