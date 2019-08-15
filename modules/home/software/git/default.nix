@@ -237,7 +237,7 @@ in {
         signByDefault = true;
       };
 
-      lfs = cfg.enableLfs;
+      lfs.enable = cfg.enableLfs;
     };
   };
 }
