@@ -6,20 +6,11 @@ with lib;
   options.shabka.workstation.gtk.enable = mkEnableOption "Enable GTK";
 
   config = mkIf config.shabka.workstation.gtk.enable {
+    # configure GTK icon theme to fix missing icons issue
+    # https://github.com/NixOS/nixpkgs/issues/32730#issuecomment-368310621
     gtk = {
       enable = true;
-      font = {
-        package = pkgs.hack-font;
-        name = "xft:SourceCodePro:style:Regular:size=9:antialias=true";
-      };
-      iconTheme = {
-        package = pkgs.arc-icon-theme;
-        name = "Arc";
-      };
-      theme = {
-        package = pkgs.arc-theme;
-        name = "Arc-dark";
-      };
+      iconTheme = { package = pkgs.hicolor_icon_theme; name = "hicolor"; };
     };
   };
 }
