@@ -23,11 +23,11 @@ in {
       autoRepeatDelay = 200;
       autoRepeatInterval = 30;
       xkbOptions = concatStringsSep "," [
-        "grp:alt_caps_toggle" "caps:swapescape"
+        "ctrl:nocaps"
       ];
 
       libinput.enable = true;
-      libinput.naturalScrolling = false;
+      libinput.naturalScrolling = true;
 
       desktopManager.gnome3.enable = true;
       desktopManager.plasma5.enable = true;
@@ -35,8 +35,8 @@ in {
       # enable the display manager
       displayManager.lightdm.enable = true;
       displayManager.lightdm.autoLogin = {
-        enable = false;
-        user = "risson";
+        enable = true;
+        user = "yl";
       };
     };
   };
