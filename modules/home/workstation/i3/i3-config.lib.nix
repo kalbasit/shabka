@@ -3,243 +3,381 @@
 with lib;
 
 let
-  defaultModifier = "Mod4"; # <Super>
+  defaultModifier = "Mod4";
   secondModifier = "Shift";
-  thirdModifier = "Mod1"; # <Alt>
-
+  thirdModifier = "Mod1";
   nosid = "--no-startup-id";
-
   locker = "${getBin pkgs.xautolock}/bin/xautolock -locknow && sleep 1";
-  urxvt = pkgs.rxvt_unicode;
 
-  mode_resize = "resize";
-  mode_system = "(l)ock, (e)xit, (s)uspend, h(y)brid sleep, (h)ibernate, (r)eboot, (Shift+s)hutdown"; # TODO: update those shortcuts
+  jrnlEntry = pkgs.writeScript "jrnl-entry.sh" ''
+    #!/usr/bin/env bash
 
-  ws1 = "1:🔥";
-  ws2 = "2";
-  ws3 = "3";
-  ws4 = "4:🦊";
-  ws5 = "5";
-  ws6 = "6";
-  ws7 = "7:✉️";
-  ws8 = "8:🌐";
-  wst = "10:💻";
-
-  autoStart = pkgs.writeScript "i3-autostart.sh" ''
-    #! /usr/bin/env bash
     set -euo pipefail
-    # Wait for the rest to complete
-    ${pkgs.coreutils}/bin/sleep 5
-    # Workspace 1
-    ${pkgs.i3}/bin/i3-msg "workspace ${ws1}"
-    # TODO: try to restore layout using append_layout
-    ${urxvt}/bin/urxvt -T cli_is_love &
-    ${urxvt}/bin/urxvt -T cli_is_life &
-    ${urxvt}/bin/urxvt -T monitor -e ${pkgs.python37Packages.glances}/bin/glances &
-    ${pkgs.coreutils}/bin/sleep 1
-    # Workspace T
-    ${pkgs.i3}/bin/i3-msg "workspace ${wst}"
-    ${pkgs.i3}/bin/i3-msg "layout tabbed"
-    ${urxvt}/bin/urxvt -T duck -e mosh risson@duck.risson.space -- /bin/sh -c 'tmux has-session && exec tmux attach || exec tmux' &
-    ${pkgs.coreutils}/bin/sleep 2
-    # Workspace 8
-    ${pkgs.i3}/bin/i3-msg "workspace ${ws8}"
-    ${pkgs.i3}/bin/i3-msg "layout tabbed"
-    ${urxvt}/bin/urxvt -T weechat -e mosh risson@irc.risson.space -- /bin/sh -c 'screen -x weechat-risson' &
-    ${pkgs.yubioath-desktop}/bin/yubiaoth-desktop &
-    ${pkgs.blueman}/bin/blueman-manager &
+
+    readonly current_workspace="$( ${getBin pkgs.i3}/bin/i3-msg -t get_workspaces | ${getBin pkgs.jq}/bin/jq -r '.[] | if .focused == true then .name else empty end'  )"
+    readonly current_profile="$( echo "$current_workspace" | cut -d\@ -f1  )"
+    readonly current_story="$( echo "$current_workspace" | cut -d\@ -f2  )"
+
+    # create a temporary file for the jrnl entry
+    jrnl_entry="$(mktemp)"
+    trap "rm $jrnl_entry" EXIT
+
+    cat <<EOF > "$jrnl_entry"
+    # All lines starting with a hash sign are treated as comments and not added to the journal entry.
+    # You are adding a journal entry for profile=$current_profile and story=$current_story
+    # computed from the workspace $current_workspace
+
+    @$current_story
+
+    EOF
+
+    # open a new terminal window with vim session inside of it to edit the jrnl entry
+    readonly line_count="$(wc -l "$jrnl_entry" | awk '{print $1}')"
+    ${getBin pkgs.termite}/bin/termite --title jrnl_entry --exec="nvim +$line_count +star -c 'set wrap' -c 'set textwidth=80' -c 'set fo+=t' $jrnl_entry"
+    readonly content="$( grep -v '^#' "$jrnl_entry" )"
+
+    ${getBin pkgs.jrnl}/bin/jrnl "$current_profile" "$content"
   '';
 
 in {
   enable = true;
-  package = pkgs.i3;
 
   config = {
-    modifier = defaultModifier;
-
     fonts = [ "pango:SourceCodePro Regular 8" ];
 
-    bars = []; # We are using Polybar, so no bar should be defined
-
     window = {
-      titlebar = false; # Configure border style <pixel xx>
-      border = 0; # Configure border style <xx 0>
-      hideEdgeBorders = "smart"; # Hide borders
+      commands = [
+        { command = "floating enable"; criteria = { workspace = "^studio$"; }; }
+
+        { command = "floating enable"; criteria = { class = "^Arandr"; }; }
+        { command = "floating enable"; criteria = { class = "^Pavucontrol"; }; }
+        { command = "floating enable"; criteria = { class = "^ROX-Filer$"; }; }
+        { command = "floating enable"; criteria = { class = "^SimpleScreenRecorder$"; }; }
+        { command = "floating enable"; criteria = { class = "^Tor Browser"; }; }
+        { command = "floating enable"; criteria = { class = "^net-filebot-Main$"; }; }
+        { command = "floating enable"; criteria = { title = "^jrnl_entry$"; }; }
+
+        { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "^whats-app-nativefier*"; }; }
+        { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "astroid"; }; }
+        { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "Ptask"; }; }
+        { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "pulse-sms"; }; }
+      ] ++ optionals config.shabka.keybase.enable [
+        { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "Keybase"; }; }
+      ];
     };
 
-    floating = {
-      titlebar = true; # Configure border style <normal xx>
-      border = 2; # Configure border style <xx 2>
-      criteria = [
-        { class = "Pavucontrol"; }
-        { class = "qt5ct"; }
-        { class = "Qtconfig-qt4"; }
-        { class = "Yad"; title = "yad-calendar"; }
-        { title = "alsamixer"; }
-        { title = "File Transfer*"; }
-        { title = "i3_help"; }
-        { title = "Musescore: Play Panel"; }
-      ];
-      modifier = defaultModifier;
-    };
+    floating = { modifier = "${defaultModifier}"; };
 
     focus = {
-      followMouse = true;
-      mouseWarping = true;
-      newWindow = "urgent";
+      # focus should not follow the mouse pointer
+      followMouse = false;
+
+      # on window activation, just set the urgency hint. The default behavior is to
+      # set the urgency hint if the window is not on the active workspace, and to
+      # focus the window on an active workspace. It does surprise me sometimes and I
+      # would like to keep it simple by having to manually switch to the urgent
+      # window.
+      newWindow="urgent";
     };
 
-    workspaceLayout = "default";
-
-    startup = [
-      { command = "${getBin pkgs.thunderbird}/bin/thunderbird"; always = false; notification = false; }
-      { command = "${getBin pkgs.firefox}/bin/firefox"; always = false; notification = false; }
-      { command = "${autoStart}"; always = false; notification = false; }
-    ];
-
-    modes = {
-      "${mode_resize}" = {
-        "c" = "resize shrink width 10 px or 10 ppt";
-        "t" = "resize grow height 10 px or 10 ppt";
-        "s" = "resize shrink height 10 px or 10 ppt";
-        "r" = "resize grow width 10 px or 10 ppt";
-        "Left" = "resize shrink width 10 px or 10 ppt";
-        "Down" = "resize grow height 10 px or 10 ppt";
-        "Up" = "resize shrink height 10 px or 10 ppt";
-        "Right" = "resize grow width 10 px or 10 ppt";
-
-        "Return" = "mode default";
-        "Escape" = "mode default";
-      };
-
-      "${mode_system}" = {
-        "r" = "exec ${nosid} ${locker}, mode default";
-        "u" = "exec ${nosid} ${locker} && systemctl suspend, mode default";
-        "^" = "exec ${nosid} ${locker} && systemctl hybrid-sleep, mode default";
-        "p" = "exit";
-        "c" = "exec ${nosid} ${locker} && systemctl hibernate, mode default";
-        "o" = "exec ${nosid} systemctl reboot";
-        "Shift+U" = "exec ${nosid} systemctl poweroff -i";
-
-        "Return" = "mode default";
-        "Escape" = "mode default";
-      };
+    assigns = {
+      "charles"    = [{ class = "^com-xk72-charles-gui-.*$"; }];
+      "discord"    = [{ class = "^discord$"; }];
+      "slack"      = [{ class = "^Slack$"; }];
+      "studio"     = [{ class = "^obs$"; }];
+      "tor"        = [{ class = "^Tor Browser"; }];
+      "virtualbox" = [{ class = "^VirtualBox"; }];
     };
+
+    modifier  = "Mod4";
 
     keybindings = {
-      # change borders
-      "${defaultModifier}+d" = "border none";
-      "${defaultModifier}+g" = "border normal";
-      # start a terminal
-      "${defaultModifier}+Return" = "exec i3-sensible-terminal";
-      # kill focused window
-      "${defaultModifier}+${secondModifier}+B" = "kill";
-      # start dmenu (a program launcher), which is actually rofi
-      "${defaultModifier}+i" = "exec ${getBin pkgs.rofi}/bin/rofi -show run";
-      # list open windows to switch to
-      "${thirdModifier}+Tab" = "exec ${getBin pkgs.rofi}/bin/rofi -show window";
       # change focus
-      "${defaultModifier}+c" = "focus left";
-      "${defaultModifier}+t" = "focus down";
-      "${defaultModifier}+s" = "focus up";
-      "${defaultModifier}+r" = "focus right";
-      "${defaultModifier}+Left" = "focus left";
-      "${defaultModifier}+Down" = "focus down";
-      "${defaultModifier}+Up" = "focus up";
-      "${defaultModifier}+Right" = "focus right";
+      "${defaultModifier}+n" = "focus left";
+      "${defaultModifier}+e" = "focus down";
+      "${defaultModifier}+i" = "focus up";
+      "${defaultModifier}+o" = "focus right";
+
       # move focused window
-      "${defaultModifier}+${secondModifier}+C" = "move left";
-      "${defaultModifier}+${secondModifier}+T" = "move down";
-      "${defaultModifier}+${secondModifier}+S" = "move up";
-      "${defaultModifier}+${secondModifier}+R" = "move right";
-      "${defaultModifier}+${secondModifier}+Left" = "move left";
-      "${defaultModifier}+${secondModifier}+Down" = "move down";
-      "${defaultModifier}+${secondModifier}+Up" = "move up";
-      "${defaultModifier}+${secondModifier}+Right" = "move right";
-      # workspace back and forth (with/without active container)
-      "${defaultModifier}+k" = "workspace back_and_forth";
-      "${defaultModifier}+${secondModifier}+k" = "move container to workspace back_and_forth; workspace back_and_forth";
-      # split orientation
-      "${defaultModifier}+egrave" = "split h;exec notify-send 'tile horizontally'";
-      "${defaultModifier}+period" = "split v;exec notify-send 'tile vertically'";
-      # enter fullscreen mode for the focused container
-      "${defaultModifier}+e" = "fullscreen toggle";
-      # change container layout (stacked, tabbed, toggle split)
-      "${defaultModifier}+u" = "layout stacking";
-      "${defaultModifier}+eacute" = "layout tabbed";
-      "${defaultModifier}+p" = "layout toggle split";
+      "${defaultModifier}+${secondModifier}+n" = "move left";
+      "${defaultModifier}+${secondModifier}+e" = "move down";
+      "${defaultModifier}+${secondModifier}+i" = "move up";
+      "${defaultModifier}+${secondModifier}+o" = "move right";
+
+      # split in horizontal orientation
+      "${defaultModifier}+h" = "split h";
+
+      # split in vertical orientation
+      "${defaultModifier}+v" = "split v";
+
+      # change focus between output
+      "${defaultModifier}+${thirdModifier}+o" = "focus output right";
+      "${defaultModifier}+${thirdModifier}+n" = "focus output left";
+
+      # move workspaces between monitors
+      "${defaultModifier}+${secondModifier}+${thirdModifier}+o" = "move workspace to output right";
+      "${defaultModifier}+${secondModifier}+${thirdModifier}+n" = "move workspace to output left";
+
+      # toggle sticky
+      "${defaultModifier}+s" = "sticky toggle";
+
       # toggle tiling / floating
-      "${defaultModifier}+${secondModifier}+space" = "floating toggle";
+      "${thirdModifier}+${secondModifier}+space" = "floating toggle";
+
+      # jrnl entry
+      "${thirdModifier}+j" = "exec ${jrnlEntry}";
+
       # change focus between tiling / floating windows
-      "${defaultModifier}+space" = "focus mode_toggle";
+      "${thirdModifier}+space" = "focus mode_toggle";
+
+      # enter fullscreen mode for the focused container
+      "${defaultModifier}+f" = "fullscreen toggle";
+
+      # kill focused window
+      "${defaultModifier}+${secondModifier}+q" = "kill";
+
+      # rbrowser
+      "${defaultModifier}+b" = "exec ${pkgs.nur.repos.kalbasit.rbrowser}/bin/rbrowser";
+
+      # rofi run
+      "${defaultModifier}+r" = "exec ${pkgs.rofi}/bin/rofi -show run";
+
+      # list open windows to switch to
+      "${thirdModifier}+Tab" = "exec ${pkgs.rofi}/bin/rofi -show window";
+
+      # switch between the current and the previously focused one
+      "${defaultModifier}+Tab" = "workspace back_and_forth";
+      "${defaultModifier}+${secondModifier}+Tab" = "move container to workspace back_and_forth";
+
+      # dynamic workspaces
+      "${defaultModifier}+space" = "exec ${pkgs.rofi}/bin/rofi -show i3Workspaces";
+      "${defaultModifier}+${secondModifier}+space" = "exec ${pkgs.rofi}/bin/rofi -show i3MoveContainer";
+      "${defaultModifier}+${thirdModifier}+space" = "exec ${pkgs.rofi}/bin/rofi -show i3RenameWorkspace";
+
+      # change container layout (stacked, tabbed, toggle split)
+      "${defaultModifier}+l" = "layout stacking";
+      "${defaultModifier}+u" = "layout tabbed";
+      "${defaultModifier}+y" = "layout toggle split";
+
       # focus the parent container
       "${defaultModifier}+a" = "focus parent";
-      # switch to workspace
-      "${defaultModifier}+quotedbl" = "workspace ${ws1}";
-      "${defaultModifier}+guillemotleft" = "workspace ${ws2}";
-      "${defaultModifier}+guillemotright" = "workspace ${ws3}";
-      "${defaultModifier}+parenleft" = "workspace ${ws4}";
-      "${defaultModifier}+parenright" = "workspace ${ws5}";
-      "${defaultModifier}+at" = "workspace ${ws6}";
-      "${defaultModifier}+plus" = "workspace ${ws7}";
-      "${defaultModifier}+minus" = "workspace ${ws8}";
-      "${defaultModifier}+equal" = "workspace ${wst}";
-      # move focused container to workspace
-      "${defaultModifier}+Ctrl+quotedbl" = "move container to workspace ${ws1}";
-      "${defaultModifier}+Ctrl+guillemotleft" = "move container to workspace ${ws2}";
-      "${defaultModifier}+Ctrl+guillemotright" = "move container to workspace ${ws3}";
-      "${defaultModifier}+Ctrl+parenleft" = "move container to workspace ${ws4}";
-      "${defaultModifier}+Ctrl+parenright" = "move container to workspace ${ws5}";
-      "${defaultModifier}+Ctrl+at" = "move container to workspace ${ws6}";
-      "${defaultModifier}+Ctrl+plus" = "move container to workspace ${ws7}";
-      "${defaultModifier}+Ctrl+minus" = "move container to workspace ${ws8}";
-      "${defaultModifier}+Ctrl+equal" = "move container to workspace ${wst}";
-      # move to workspace with focused container
-      "${defaultModifier}+${secondModifier}+quotedbl" = "move container to workspace ${ws1}; workspace ${ws1}";
-      "${defaultModifier}+${secondModifier}+guillemotleft" = "move container to workspace ${ws2}; workspace ${ws2}";
-      "${defaultModifier}+${secondModifier}+guillemotright" = "move container to workspace ${ws3}; workspace ${ws3}";
-      "${defaultModifier}+${secondModifier}+parenleft" = "move container to workspace ${ws4}; workspace ${ws4}";
-      "${defaultModifier}+${secondModifier}+parenright" = "move container to workspace ${ws5}; workspace ${ws5}";
-      "${defaultModifier}+${secondModifier}+at" = "move container to workspace ${ws6}; workspace ${ws6}";
-      "${defaultModifier}+${secondModifier}+plus" = "move container to workspace ${ws7}; workspace ${ws7}";
-      "${defaultModifier}+${secondModifier}+minus" = "move container to workspace ${ws8}; workspace ${ws8}";
-      "${defaultModifier}+${secondModifier}+equal" = "move container to workspace ${wst}; workspace ${wst}";
-      # reload the configuration file
-      "${defaultModifier}+${secondModifier}+X" = "reload";
-      # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
-      "${defaultModifier}+${secondModifier}+O" = "restart";
-      # switch to mode resize, to resize window
-      "${defaultModifier}+o" = "mode ${mode_resize}";
-      # exit i3 (logs you out of your X session)
-      "${defaultModifier}+Shift+P" = "exec \"i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'\"";
-      # lock screen
-      "${defaultModifier}+slash" = "exec ${nosid} ${locker}";
-      # switch to mode_system
-      "${defaultModifier}+asterisk" = "mode ${mode_system}";
-      # hide/unhide polybar
-      "${defaultModifier}+q" = "exec ${nosid} polybar-msg cmd toggle";
-      # custom shortcuts for applications
-      "${defaultModifier}+F1" = "exec firefox";
-      "${defaultModifier}+F4" = "exec pcmanfm";
-      # pulseaudio controls
+
+      # focus the child container
+      "${defaultModifier}+d" = "focus child";
+
+      # start a region screenshot
+      "${defaultModifier}+${secondModifier}+4" = "exec ${getBin pkgs.flameshot}/bin/flameshot gui --delay 500 --path ${config.home.homeDirectory}/Desktop";
+
+      # start a screen recorder
+      "${defaultModifier}+${secondModifier}+5" = "exec ${getBin pkgs.simplescreenrecorder}/bin/simplescreenrecorder";
+
+      # focus the urgent window
+      "${defaultModifier}+x" = "[urgent=latest] focus";
+
+      # mark current window / goto mark
+      # https://github.com/tybitsfox/i3msg/blob/master/.i3/config
+      "${defaultModifier}+m" = "exec i3-input -F 'mark %s' -l 1 -P 'Mark: '";
+      "${defaultModifier}+apostrophe" = "exec i3-input -F '[con_mark=\"%s\"] focus' -l 1 -P 'Go to: '";
+
+      # volume support
       "XF86AudioRaiseVolume" = "exec ${nosid} ${getBin pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ false, exec ${nosid} ${getBin pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ +5%";
       "XF86AudioLowerVolume" = "exec ${nosid} ${getBin pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ false, exec ${nosid} ${getBin pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ -5%";
       "XF86AudioMute" = "exec ${nosid} ${getBin pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle";
-      # screenshots
-      "Print" = "exec ${nosid} ${getBin pkgs.flameshot}/bin/flameshot full -c -p \"/home/risson/Pictures/Screenshots\"";
-      "${defaultModifier}+Print" = "exec ${nosid} flameshot gui";
-      # brightness
+
+      # brightness support
       "XF86MonBrightnessUp" = "exec ${nosid} ${getBin pkgs.brightnessctl}/bin/brightnessctl s +5%";
-      "XF86MonBrightnessDown" = "exec ${nosid} ${getBin pkgs.brightnessctl}/bin/brightnessctl s -5%";
+      "XF86MonBrightnessDown" = "exec ${nosid} ${getBin pkgs.brightnessctl}/bin/brightnessctl s 5%-";
       "${secondModifier}+XF86MonBrightnessUp" = "exec ${nosid} ${getBin pkgs.brightnessctl}/bin/brightnessctl s +1%";
-      "${secondModifier}+XF86MonBrightnessDown" = "exec ${nosid} ${getBin pkgs.brightnessctl}/bin/brightnessctl s -1%";
-      # sleep
+      "${secondModifier}+XF86MonBrightnessDown" = "exec ${nosid} ${getBin pkgs.brightnessctl}/bin/brightnessctl s 1%-";
+
+      # sleep support
       "XF86PowerOff" = "exec ${nosid} ${locker} && systemctl suspend";
+
       # clipboard history
-      "${defaultModifier}+${thirdModifier}+x" = "exec ${getBin pkgs.rofi}/bin/rofi -modi \"clipboard:${getBin pkgs.haskellPackages.greenclip}/bin/greenclip print\" -show clipboard";
+      "${defaultModifier}+${thirdModifier}+c" = "exec ${getBin pkgs.rofi}/bin/rofi -modi \"clipboard:${getBin pkgs.haskellPackages.greenclip}/bin/greenclip print\" -show clipboard";
+
+      # Terminals
+      "${defaultModifier}+Return" = "exec ${getBin pkgs.termite}/bin/termite";
+      "${defaultModifier}+${secondModifier}+Return" = "exec ${getBin pkgs.alacritty}/bin/alacritty";
+
+      # Modes
+      "${defaultModifier}+${thirdModifier}+r" = "mode resize";
+      "${defaultModifier}+${thirdModifier}+m" = "mode move";
+
+      # Make the currently focused window a scratchpad
+      "${defaultModifier}+Shift+minus" = "move scratchpad";
+
+      # Show the next scratchpad windows
+      "${defaultModifier}+minus" = "scratchpad show";
+
+      # Short-cuts for windows hidden in the scratchpad.
+      "${thirdModifier}+w" = "[class=\"^whats-app-nativefier*\"] scratchpad show";
+      "${thirdModifier}+m" = "[class=\"astroid\"] scratchpad show";
+      "${thirdModifier}+p" = "[class=\"pulse-sms\"] scratchpad show";
+      "${thirdModifier}+t" = "[class=\"Ptask\"] scratchpad show";
+    } // (if config.shabka.keybase.enable == true then {
+      "${thirdModifier}+k" = "[class=\"Keybase\"] scratchpad show";
+    } else {});
+
+    modes = {
+      resize = {
+        # Micro resizement
+        "Control+n" = "resize shrink width 10 px or 1 ppt";
+        "Control+e" = "resize grow height 10 px or 1 ppt";
+        "Control+i" = "resize shrink height 10 px or 1 ppt";
+        "Control+o" = "resize grow width 10 px or 1 ppt";
+
+        # Normal resizing
+        "n" = "resize shrink width 50 px or 5 ppt";
+        "e" = "resize grow height 50 px or 5 ppt";
+        "i" = "resize shrink height 50 px or 5 ppt";
+        "o" = "resize grow width 50 px or 5 ppt";
+
+        # Macro resizing
+        "${secondModifier}+n" = "resize shrink width 100 px or 10 ppt";
+        "${secondModifier}+e" = "resize grow height 100 px or 10 ppt";
+        "${secondModifier}+i" = "resize shrink height 100 px or 10 ppt";
+        "${secondModifier}+o" = "resize grow width 100 px or 10 ppt";
+
+        # back to normal: Enter or Escape
+        "Return" = "mode default";
+        "Escape" = "mode default";
+      };
+
+      move = {
+        # Micro movement
+        "Control+n" = "move left 10 px";
+        "Control+e" = "move down 10 px";
+        "Control+i" = "move up 10 px";
+        "Control+o" = "move right 10 px";
+
+        # Normal resizing
+        "n" = "move left 50 px";
+        "e" = "move down 50 px";
+        "i" = "move up 50 px";
+        "o" = "move right 50 px";
+
+        # Macro resizing
+        "${secondModifier}+n" = "move left 100 px";
+        "${secondModifier}+e" = "move down 100 px";
+        "${secondModifier}+i" = "move up 100 px";
+        "${secondModifier}+o" = "move right 100 px";
+
+        # back to normal: Enter or Escape
+        "Return" = "mode default";
+        "Escape" = "mode default";
+      };
     };
+
+    startup = [
+      { command = "${getBin pkgs.xlibs.xset}/bin/xset r rate 300 30"; always = false; notification = false; }
+      { command = "${getBin pkgs.xcape}/bin/xcape -e 'Control_L=Escape'"; always = false; notification = false; }
+      { command = "${getBin pkgs.haskellPackages.greenclip}/bin/greenclip daemon"; always = false; notification = false; }
+      { command = "i3-msg \"workspace personal@base; exec ${nosid} ${getBin pkgs.termite}/bin/termite\""; always = false; notification = true; }
+    ];
   };
+
   extraConfig = ''
-    workspace_auto_back_and_forth yes
+    # keep the urgency border of a window for 500ms
+    # TODO: move this to the i3 module via PR
+    force_display_urgency_hint 500 ms
+
+    # This option determines in which mode new containers on workspace level will
+    # start.
+    # TODO: move this to the i3 module via PR
+    workspace_layout tabbed
+
+    #########
+    # Modes #
+    #########
+
+    # Daemon launcher
+    set $mode_daemon Launch: (x) Xcape, (g) Greenclip
+    mode "$mode_daemon" {
+      bindsym x exec ${nosid} ${getBin pkgs.xcape}/bin/xcape -e 'Control_L=Escape', mode default
+      bindsym g exec ${nosid} ${getBin pkgs.haskellPackages.greenclip}/bin/greenclip daemon, mode default
+
+      # back to normal: Enter or Escape
+      bindsym Return mode default
+      bindsym Escape mode default
+    }
+    bindsym ${defaultModifier}+${thirdModifier}+l mode "$mode_daemon"
+
+    # Window Manager mode, this mode allows me to control i3
+    set $mode_wm WM: (r) Reload i3, (e) Restart i3
+    mode "$mode_wm" {
+      bindsym r reload; exec ${nosid} ${getBin pkgs.libnotify}/bin/notify-send 'i3 configuration reloaded', mode default
+      bindsym e restart; exec ${nosid} ${getBin pkgs.libnotify}/bin/notify-send 'i3 restarted', mode default
+
+      # back to normal: Enter or Escape
+      bindsym Return mode default
+      bindsym Escape mode default
+    }
+    bindsym ${defaultModifier}+${thirdModifier}+w mode "$mode_wm"
+
+    # Application launcher
+    set $mode_apps_social Launch: (d) Discord, (i) Irc${optionalString config.shabka.keybase.enable ", (k) Keybase"}, (l) Slack
+    mode "$mode_apps_social" {
+      bindsym d exec ${getBin pkgs.discord}/bin/Discord, mode default
+      bindsym i exec ${getBin pkgs.termite}/bin/termite --title=irc --exec=weechat, mode default
+      ${optionalString config.shabka.keybase.enable "bindsym k exec ${getBin pkgs.keybase-gui}/bin/keybase-gui, mode default"}
+      bindsym l exec ${getBin pkgs.slack}/bin/slack, mode default
+
+      # back to normal: Enter or Escape
+      bindsym Return mode "$mode_apps"
+      bindsym Escape mode "$mode_apps"
+    }
+
+    set $mode_apps Launch: (a) ARandR, (m) Mail, (s) Social, (o) Obs Studio
+    mode "$mode_apps" {
+      bindsym a exec ${getBin pkgs.arandr}/bin/arandr, mode default
+      bindsym m exec astroid, mode default
+      bindsym s mode "$mode_apps_social"
+      bindsym o exec ${getBin pkgs.obs-studio}/bin/obs, mode default
+
+      # back to normal: Enter or Escape
+      bindsym Return mode default
+      bindsym Escape mode default
+    }
+    bindsym ${defaultModifier}+${thirdModifier}+a mode "$mode_apps"
+
+    # Display mode allows output/resolution selection
+    set $mode_display (a) Auto
+    mode "$mode_display" {
+      bindsym a exec ${nosid} ${getBin pkgs.autorandr}/bin/autorandr --change, mode default
+
+      # back to normal: Enter or Escape
+      bindsym Return mode default
+      bindsym Escape mode default
+    }
+    bindsym ${defaultModifier}+${thirdModifier}+d mode "$mode_display"
+
+    ## Management of power
+    set $mode_power System: (l) lock, (o) logout, (s) suspend, (h) hibernate, (r) reboot, (${secondModifier}+s) shutdown
+    mode "$mode_power" {
+      bindsym l exec ${nosid} ${locker}, mode default
+      bindsym o exit
+      bindsym s exec ${nosid} ${locker} && systemctl suspend, mode default
+      bindsym h exec ${nosid} ${locker} && systemctl hibernate, mode default
+      bindsym r exec ${nosid} systemctl reboot
+      bindsym ${secondModifier}+s exec ${nosid} systemctl poweroff -i
+
+      # back to normal: Enter or Escape
+      bindsym Return mode default
+      bindsym Escape mode default
+    }
+    bindsym ${defaultModifier}+${thirdModifier}+p mode "$mode_power"
+
+    # CPU governor selection
+    set $mode_cpugovernor CPU Scaling governor: (p) Performance, (o) Powersave
+    mode "$mode_cpugovernor" {
+      bindsym p exec ${nosid} ${getBin pkgs.gksu}/bin/gksudo -- ${getBin pkgs.linuxPackages.cpupower}/bin/cpupower frequency-set --governor performance, mode default
+      bindsym o exec ${nosid} ${getBin pkgs.gksu}/bin/gksudo -- ${getBin pkgs.linuxPackages.cpupower}/bin/cpupower frequency-set --governor powersave, mode default
+
+      # back to normal: Enter or Escape
+      bindsym Return mode default
+      bindsym Escape mode default
+    }
+    bindsym ${defaultModifier}+${thirdModifier}+g mode "$mode_cpugovernor"
   '';
 }
