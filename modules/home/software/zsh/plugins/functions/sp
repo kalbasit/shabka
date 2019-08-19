@@ -96,7 +96,13 @@ function sp() {
 		export ACTIVE_PROFILE="${requested_profile}"
 		# set the GOPATH
 		if [[ -z "${GOPATH}" ]] && [[ -n "${ACTIVE_STORY}" ]]; then
-			local go_path="${CODE_PATH}/${ACTIVE_PROFILE%%.*}/${ACTIVE_STORY}"
+			local active_profile="${ACTIVE_PROFILE%%.*}"
+			local go_path
+			if [[ "${ACTIVE_STORY}" == "base" ]]; then
+				go_path="${CODE_PATH}/${active_profile}/${ACTIVE_STORY}"
+			else
+				go_path="${CODE_PATH}/${active_profile}/stories/${ACTIVE_STORY}"
+			fi
 			debug "go_path=${go_path}"
 			if [[ ! -d "${go_path}" ]]; then
 				mkdir -p "${go_path}/src"
