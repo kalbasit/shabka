@@ -189,15 +189,9 @@ workflows:
   version: 2
   testing:
     jobs:
-      - athena:
-          context: nix-global
-      - cratos:
-          context: nix-global
-      - hades:
-          context: nix-global
-      - hera:
-          context: nix-global
-      - poseidon:
-          context: nix-global
-      - zeus:
-          context: nix-global
+      - athena
+      - cratos
+      - hades
+      - hera
+      - poseidon
+      - zeus
