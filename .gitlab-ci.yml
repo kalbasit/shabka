@@ -1,0 +1,77 @@
+var_0: &global_env
+  CACHIX_CACHE: yl
+
+var_1: &install-nix |
+  curl https://nixos.org/nix/install | sh
+
+var_2: &install-dependencies |
+  if [[ -r "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]]; then
+    source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
+  fi
+
+  # install git and bash
+  nix-env -f '<nixpkgs>' -i -A gitAndTools.git -A bash
+
+  # install cachix from nixpkgs at stable
+  readonly shabka_path="$( pwd )"
+  release="$( tr -d "\n" < "${shabka_path}/.release" )"
+  export NIX_PATH="$( "${shabka_path}/lib/bash/nix-path.sh" "${release}" )"
+  nix-env -f '<nixpkgs>' -iA cachix
+
+var_3: &enable-cachix |
+  if [[ -r "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]]; then
+    source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
+  fi
+
+  cachix use "${CACHIX_CACHE}"
+
+var_4: &build-host |
+  if [[ -r "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]]; then
+    source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
+  fi
+
+  export DOTSHABKA_PATH="${HOME}/dotshabka"
+
+  ./scripts/build-host.sh "${CIRCLE_JOB}"
+
+var_5: &push-to-cachix |
+  if [[ -r "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]]; then
+    source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
+  fi
+
+  # The CACHIX_SIGNING_KEY is not available for pull requests coming from a
+  # fork for security reasons.
+  if [[ -z "${CACHIX_SIGNING_KEY:-}" ]]; then
+    >&2 echo "CACHIX_SIGNING_KEY is not set, cannot push to cachix"
+    exit 0
+  fi
+
+  export DOTSHABKA_PATH="${HOME}/dotshabka"
+
+  ./scripts/push-to-cachix.sh "${CIRCLE_JOB}"
+
+var_6: &download-kalbasit-dotshabka |
+  if ! git clone https://github.com/kalbasit/dotshabka.git -b "${CIRCLE_BRANCH}"; then
+    git clone https://github.com/kalbasit/dotshabka.git
+    >&2 echo "Cloned dotshabka from the master branch"
+  else
+    >&2 echo "Cloned dotshabka from the ${CIRCLE_BRANCH} branch"
+  fi
+
+stages:
+  - testing
+
+before_script:
+  - *install-dependencies
+  - *enable-cachix
+  - *download-kalbasit-dotshabka
+
+after_script:
+  - *push-to-cachix
+
+cratos:
+  # TODO: environment
+  stage: testing
+  image: nixos/nix
+  script:
+    - *build-host
