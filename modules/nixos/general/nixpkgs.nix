@@ -18,5 +18,5 @@ in {
     };
   };
 
-  nixpkgs.overlays = import ../../../overlays;
+  nixpkgs.overlays = import <shabka/overlays>;
 }

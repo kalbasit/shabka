@@ -2,7 +2,7 @@
 
 with lib;
 
-with import ../../../util;
+with import <shabka/util>;
 
 let
   mimeList =
