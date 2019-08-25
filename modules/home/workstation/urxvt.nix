@@ -15,8 +15,6 @@ in
 
   config = mkIf cfg.enable {
 
-    home.packages = with pkgs; [ urxvt_font_size ];
-
     programs.urxvt = {
 
       enable = true;
@@ -31,9 +29,6 @@ in
         "Control-Down" = "\\033[1;5B";
         "Control-Left" = "\\033[1;5D";
         "Control-Right" = "\\033[1;5C";
-        #"Control-minus" = "resize-font:smaller";
-        #"Control-plus" = "resize-font:bigger";
-        #"Control-equal" = "resize-font:reset";
       };
 
       scroll = {
@@ -48,7 +43,7 @@ in
       transparent = cfg.transparency;
 
       extraConfig = {
-        perl-ext-common = "default,resize-font";
+        perl-ext-common = "default";
       };
     };
   };

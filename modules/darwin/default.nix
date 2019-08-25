@@ -1,4 +1,4 @@
-with import ../../util;
+with import <shabka/util>;
 
 {
   imports = recImport ./.;
