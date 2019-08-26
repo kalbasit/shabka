@@ -1,0 +1,459 @@
+From 2ba339127efc5a56e87e04ebbb07c35f6af8d53b Mon Sep 17 00:00:00 2001
+From: Marc 'risson' Schmitt <marc.schmitt@risson.space>
+Date: Mon, 26 Aug 2019 12:24:42 +0200
+Subject: [PATCH] temp
+
+
+diff --git a/nixos/modules/config/timezone.nix b/nixos/modules/config/locale.nix
+similarity index 62%
+rename from nixos/modules/config/timezone.nix
+rename to nixos/modules/config/locale.nix
+index b15948f6e2e..26ba06730cf 100644
+--- a/nixos/modules/config/timezone.nix
++++ b/nixos/modules/config/locale.nix
+@@ -9,6 +9,8 @@ let
+   timezone = types.nullOr (types.addCheck types.str nospace)
+     // { description = "null or string without spaces"; };
+ 
++  lcfg = config.location;
++
+ in
+ 
+ {
+@@ -24,7 +26,6 @@ in
+           The time zone used when displaying times and dates. See <link
+           xlink:href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones"/>
+           for a comprehensive list of possible values for this setting.
+-
+           If null, the timezone will default to UTC and can be set imperatively
+           using timedatectl.
+         '';
+@@ -37,12 +38,45 @@ in
+       };
+ 
+     };
++
++    location = {
++
++      latitude = mkOption {
++        type = types.float;
++        description = ''
++          Your current latitude, between
++          <literal>-90.0</literal> and <literal>90.0</literal>. Must be provided
++          along with longitude.
++        '';
++      };
++
++      longitude = mkOption {
++        type = types.float;
++        description = ''
++          Your current longitude, between
++          between <literal>-180.0</literal> and <literal>180.0</literal>. Must be
++          provided along with latitude.
++        '';
++      };
++
++      provider = mkOption {
++        type = types.enum [ "manual" "geoclue2" ];
++        default = "manual";
++        description = ''
++          The location provider to use for determining your location. If set to
++          <literal>manual</literal> you must also provide latitude/longitude.
++        '';
++      };
++
++    };
+   };
+ 
+   config = {
+ 
+     environment.sessionVariables.TZDIR = "/etc/zoneinfo";
+ 
++    services.geoclue2.enable = mkIf (lcfg.provider == "geoclue2") true;
++
+     # This way services are restarted when tzdata changes.
+     systemd.globalEnvironment.TZDIR = tzdir;
+ 
+diff --git a/nixos/modules/module-list.nix b/nixos/modules/module-list.nix
+index c4e88255ea0..8960f853137 100644
+--- a/nixos/modules/module-list.nix
++++ b/nixos/modules/module-list.nix
+@@ -19,6 +19,7 @@
+   ./config/iproute2.nix
+   ./config/krb5/default.nix
+   ./config/ldap.nix
++  ./config/locale.nix
+   ./config/networking.nix
+   ./config/no-x-libs.nix
+   ./config/nsswitch.nix
+@@ -30,7 +31,6 @@
+   ./config/system-environment.nix
+   ./config/system-path.nix
+   ./config/terminfo.nix
+-  ./config/timezone.nix
+   ./config/unix-odbc-drivers.nix
+   ./config/users-groups.nix
+   ./config/vpnc.nix
+diff --git a/nixos/modules/rename.nix b/nixos/modules/rename.nix
+index 18649e57e9d..5cb2368226e 100644
+--- a/nixos/modules/rename.nix
++++ b/nixos/modules/rename.nix
+@@ -295,6 +295,20 @@ with lib;
+     (mkRenamedOptionModule [ "hardware" "ckb" "enable" ] [ "hardware" "ckb-next" "enable" ])
+     (mkRenamedOptionModule [ "hardware" "ckb" "package" ] [ "hardware" "ckb-next" "package" ])
+ 
++    # Redshift
++    (mkChangedOptionModule [ "services" "redshift" "latitude" ] [ "location" "latitude" ]
++      (config:
++        let value = getAttrFromPath [ "services" "redshift" "latitude" ] config;
++        in if value == null then
++          throw "services.redshift.latitude is set to null, you can remove this"
++          else builtins.fromJSON value))
++    (mkChangedOptionModule [ "services" "redshift" "longitude" ] [ "location" "longitude" ]
++      (config:
++        let value = getAttrFromPath [ "services" "redshift" "longitude" ] config;
++        in if value == null then
++          throw "services.redshift.longitude is set to null, you can remove this"
++          else builtins.fromJSON value))
++
+   ] ++ (flip map [ "blackboxExporter" "collectdExporter" "fritzboxExporter"
+                    "jsonExporter" "minioExporter" "nginxExporter" "nodeExporter"
+                    "snmpExporter" "unifiExporter" "varnishExporter" ]
+diff --git a/nixos/modules/services/desktops/geoclue2.nix b/nixos/modules/services/desktops/geoclue2.nix
+index 840aa5294ed..040fe157d52 100644
+--- a/nixos/modules/services/desktops/geoclue2.nix
++++ b/nixos/modules/services/desktops/geoclue2.nix
+@@ -7,6 +7,56 @@ with lib;
+ let
+   # the demo agent isn't built by default, but we need it here
+   package = pkgs.geoclue2.override { withDemoAgent = config.services.geoclue2.enableDemoAgent; };
++
++  cfg = config.services.geoclue2;
++
++  defaultWhitelist = [ "gnome-shell" "io.elementary.desktop.agent-geoclue2" ];
++
++  appConfigModule = types.submodule ({ name, ... }: {
++    options = {
++      desktopID = mkOption {
++        type = types.str;
++        description = "Desktop ID of the application.";
++      };
++
++      isAllowed = mkOption {
++        type = types.bool;
++        default = null;
++        description = ''
++          Whether the application will be allowed access to location information.
++        '';
++      };
++
++      isSystem = mkOption {
++        type = types.bool;
++        default = null;
++        description = ''
++          Whether the application is a system component or not.
++        '';
++      };
++
++      users = mkOption {
++        type = types.listOf types.str;
++        default = [];
++        description = ''
++          List of UIDs of all users for which this application is allowed location
++          info access, Defaults to an empty string to allow it for all users.
++        '';
++      };
++    };
++
++    config.desktopID = mkDefault name;
++  });
++
++  appConfigToINICompatible = _: { desktopID, isAllowed, isSystem, users, ... }: {
++    name = desktopID;
++    value = {
++      allowed = isAllowed;
++      system = isSystem;
++      users = concatStringsSep ";" users;
++    };
++  };
++
+ in
+ {
+ 
+@@ -35,23 +85,130 @@ in
+         '';
+       };
+ 
++      enableNmea = mkOption {
++        type = types.bool;
++        default = true;
++        description = ''
++          Whether to fetch location from NMEA sources on local network.
++        '';
++      };
++
++      enable3G = mkOption {
++        type = types.bool;
++        default = true;
++        description = ''
++          Whether to enable 3G source.
++        '';
++      };
++
++      enableCDMA = mkOption {
++        type = types.bool;
++        default = true;
++        description = ''
++          Whether to enable CDMA source.
++        '';
++      };
++
++      enableModemGPS = mkOption {
++        type = types.bool;
++        default = true;
++        description = ''
++          Whether to enable Modem-GPS source.
++        '';
++      };
++
++      enableWifi = mkOption {
++        type = types.bool;
++        default = true;
++        description = ''
++          Whether to enable WiFi source.
++        '';
++      };
++
++      geoProviderUrl = mkOption {
++        type = types.str;
++        default = "https://location.services.mozilla.com/v1/geolocate?key=geoclue";
++        example = "https://www.googleapis.com/geolocation/v1/geolocate?key=YOUR_KEY";
++        description = ''
++          The url to the wifi GeoLocation Service.
++        '';
++      };
++
++      submitData = mkOption {
++        type = types.bool;
++        default = false;
++        description = ''
++          Whether to submit data to a GeoLocation Service.
++        '';
++      };
++
++      submissionUrl = mkOption {
++        type = types.str;
++        default = "https://location.services.mozilla.com/v1/submit?key=geoclue";
++        description = ''
++          The url to submit data to a GeoLocation Service.
++        '';
++      };
++
++      submissionNick = mkOption {
++        type = types.str;
++        default = "geoclue";
++        description = ''
++          A nickname to submit network data with.
++          Must be 2-32 characters long.
++        '';
++      };
++
++      appConfig = mkOption {
++        type = types.loaOf appConfigModule;
++        default = {};
++        example = literalExample ''
++          "com.github.app" = {
++            isAllowed = true;
++            isSystem = true;
++            users = [ "300" ];
++          };
++        '';
++        description = ''
++          Specify extra settings per application.
++        '';
++      };
++
+     };
+ 
+   };
+ 
+ 
+   ###### implementation
+-  config = mkIf config.services.geoclue2.enable {
++  config = mkIf cfg.enable {
+ 
+     environment.systemPackages = [ package ];
+ 
+     services.dbus.packages = [ package ];
+ 
+     systemd.packages = [ package ];
+-  
++
++    users.users.geoclue = {
++      isSystemUser = true;
++      home = "/var/lib/geoclue";
++      group = "geoclue";
++      description = "Geoinformation service";
++    };
++
++    users.groups.geoclue = {};
++
++    systemd.tmpfiles.rules = [
++      "d /var/lib/geoclue 0755 geoclue geoclue"
++    ];
++
++    # restart geoclue service when the configuration changes
++    systemd.services."geoclue".restartTriggers = [
++      config.environment.etc."geoclue/geoclue.conf".source
++    ];
++
+     # this needs to run as a user service, since it's associated with the
+     # user who is making the requests
+-    systemd.user.services = mkIf config.services.geoclue2.enableDemoAgent { 
++    systemd.user.services = mkIf cfg.enableDemoAgent {
+       "geoclue-agent" = {
+         description = "Geoclue agent";
+         script = "${package}/libexec/geoclue-2.0/demos/agent";
+@@ -62,7 +219,41 @@ in
+       };
+     };
+ 
+-    environment.etc."geoclue/geoclue.conf".source = "${package}/etc/geoclue/geoclue.conf";
+-  };
++    services.geoclue2.appConfig."epiphany" = {
++      isAllowed = true;
++      isSystem = false;
++    };
+ 
++    services.geoclue2.appConfig."firefox" = {
++      isAllowed = true;
++      isSystem = false;
++    };
++
++    environment.etc."geoclue/geoclue.conf".text =
++      generators.toINI {} ({
++        agent = {
++          whitelist = concatStringsSep ";"
++            (optional cfg.enableDemoAgent "geoclue-demo-agent" ++ defaultWhitelist);
++        };
++        network-nmea = {
++          enable = cfg.enableNmea;
++        };
++        "3g" = {
++          enable = cfg.enable3G;
++        };
++        cdma = {
++          enable = cfg.enableCDMA;
++        };
++        modem-gps = {
++          enable = cfg.enableModemGPS;
++        };
++        wifi = {
++          enable = cfg.enableWifi;
++          url = cfg.geoProviderUrl;
++          submit-data = boolToString cfg.submitData;
++          submission-url = cfg.submissionUrl;
++          submission-nick = cfg.submissionNick;
++        };
++      } // mapAttrs' appConfigToINICompatible cfg.appConfig);
++  };
+ }
+diff --git a/nixos/modules/services/x11/redshift.nix b/nixos/modules/services/x11/redshift.nix
+index b7dd7debcb6..55f8f75021b 100644
+--- a/nixos/modules/services/x11/redshift.nix
++++ b/nixos/modules/services/x11/redshift.nix
+@@ -5,6 +5,7 @@ with lib;
+ let
+ 
+   cfg = config.services.redshift;
++  lcfg = config.location;
+ 
+ in {
+ 
+@@ -18,35 +19,6 @@ in {
+       '';
+     };
+ 
+-    latitude = mkOption {
+-      type = types.nullOr types.str;
+-      default = null;
+-      description = ''
+-        Your current latitude, between
+-        <literal>-90.0</literal> and <literal>90.0</literal>. Must be provided
+-        along with longitude.
+-      '';
+-    };
+-
+-    longitude = mkOption {
+-      type = types.nullOr types.str;
+-      default = null;
+-      description = ''
+-        Your current longitude, between
+-        between <literal>-180.0</literal> and <literal>180.0</literal>. Must be
+-        provided along with latitude.
+-      '';
+-    };
+-
+-    provider = mkOption {
+-      type = types.enum [ "manual" "geoclue2" ];
+-      default = "manual";
+-      description = ''
+-        The location provider to use for determining your location. If set to
+-        <literal>manual</literal> you must also provide latitude/longitude.
+-      '';
+-    };
+-
+     temperature = {
+       day = mkOption {
+         type = types.int;
+@@ -106,27 +78,19 @@ in {
+   };
+ 
+   config = mkIf cfg.enable {
+-    assertions = [ 
+-      {
+-        assertion = 
+-          if cfg.provider == "manual"
+-          then (cfg.latitude != null && cfg.longitude != null) 
+-          else (cfg.latitude == null && cfg.longitude == null);
+-        message = "Latitude and longitude must be provided together, and with provider set to null.";
+-      }
+-    ];
+-
+     # needed so that .desktop files are installed, which geoclue cares about
+     environment.systemPackages = [ cfg.package ];
+ 
+-    services.geoclue2.enable = mkIf (cfg.provider == "geoclue2") true;
++    services.geoclue2.appConfig."redshift" = {
++      isAllowed = true;
++      isSystem = true;
++    };
+ 
+-    systemd.user.services.redshift = 
++    systemd.user.services.redshift =
+     let
+-      providerString = 
+-        if cfg.provider == "manual"
+-        then "${cfg.latitude}:${cfg.longitude}"
+-        else cfg.provider;
++      providerString = if lcfg.provider == "manual"
++        then "${toString lcfg.latitude}:${toString lcfg.longitude}"
++        else lcfg.provider;
+     in
+     {
+       description = "Redshift colour temperature adjuster";
+diff --git a/pkgs/development/libraries/geoclue/default.nix b/pkgs/development/libraries/geoclue/default.nix
+index 5e83ba71c1b..6d3a11675cf 100644
+--- a/pkgs/development/libraries/geoclue/default.nix
++++ b/pkgs/development/libraries/geoclue/default.nix
+@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
+     "-Ddemo-agent=${if withDemoAgent then "true" else "false"}"
+     "--sysconfdir=/etc"
+     "-Dsysconfdir_install=${placeholder "out"}/etc"
++    "-Ddbus-srv-user=geoclue"
+   ] ++ optionals stdenv.isDarwin [
+     "-D3g-source=false"
+     "-Dcdma-source=false"
+-- 
+2.19.2
+
