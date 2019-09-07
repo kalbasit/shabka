@@ -52,8 +52,10 @@ in {
         amend          = "commit --amend";
         cb             = "checkout -b";
         ci             = "commit";
+        ciam           = "commit -a -m";
+        cim            = "commit -m";
         co             = "checkout";
-        cob            = ̈"checkout -b";
+        cob            = "checkout -b";
         com            = "checkout master";
         credit         = "\"!f() { git commit --amend --author \\\"$1 <$2>\\\" -C HEAD; }; f\"";
         dc             = "diff --cached";
