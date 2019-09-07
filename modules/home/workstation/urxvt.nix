@@ -15,6 +15,8 @@ in
 
   config = mkIf cfg.enable {
 
+    home.packages = with pkgs; [ urxvt_font_size ];
+
     programs.urxvt = {
 
       enable = true;
@@ -25,6 +27,14 @@ in
       keybindings = {
         "Shift-Control-V" = "eval:paste_clipboard";
         "Shift-Control-C" = "eval:selection_to_clipboard";
+        "Control-plus" = "font-size:increase";
+        "Control-minus" = "font-size:decrease";
+        "Control-equal" = "font-size:reset";
+        "Control-slash" = "font-size:show";
+        "Shift-Control-plus" = "font-size:incglobal";
+        "Shift-Control-minus" = "font-size:decglobal";
+        "M-Shift-Control-plus" = "font-size:incsave";
+        "M-Shift-Control-minus" = "font-size:decsave";
         "Control-Up" = "\\033[1;5A";
         "Control-Down" = "\\033[1;5B";
         "Control-Left" = "\\033[1;5D";
@@ -43,7 +53,7 @@ in
       transparent = cfg.transparency;
 
       extraConfig = {
-        perl-ext-common = "default";
+        perl-ext-common = "default,font-size";
       };
     };
   };
