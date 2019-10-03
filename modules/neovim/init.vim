@@ -2,7 +2,7 @@
 ""
 
 " set the mapleader
-let mapleader = ","
+let mapleader = " "
 
 " the height of the command line, giving it a high number can prevent the "Hit
 " ENTER to continue" but will shorten the editor.
@@ -47,11 +47,12 @@ if v:version >= 703
 endif
 
 " Whitespace
-set noexpandtab  " use tabs
+set expandtab    " don't use tabs
 set list         " Show invisible characters
 set nowrap       " don't wrap lines
-set shiftwidth=2 " Number of spaces to use for each step of (auto)indent.
-set tabstop=2    " Number of spaces that a <Tab> in the file counts for.
+set shiftwidth=4 " Number of spaces to use for each step of (auto)indent.
+set softtabstop=8    " Number of spaces that a <Tab> in the file counts for.
+autocmd Filetype make setlocal noexpandtab " don't expand in makefiles
 
 " Remember things between sessions
 "
@@ -98,8 +99,8 @@ set wildignore+=*/build/*
 ""
 
 set listchars=""                  " Reset the listchars
-set listchars=tab:\ \             " a tab should display as "  "
-set listchars+=trail:.            " show trailing spaces as dots
+set listchars=tab:»·              " a tab should display as "»·"
+set listchars+=trail:·            " show trailing spaces as dots
 set listchars+=extends:>          " The character to show in the last column when wrap is
 " off and the line continues beyond the right of the screen
 set listchars+=precedes:<         " The character to show in the last column when wrap is
