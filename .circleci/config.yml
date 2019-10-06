@@ -79,6 +79,18 @@ var_6: &download-kalbasit-dotshabka
         >&2 echo "Cloned dotshabka from the ${CIRCLE_BRANCH} branch"
       fi
 
+var_6: &download-risson-dotshabka
+  run:
+    name: Download dotshabka from kalbasit
+    working_directory: ~/
+    command: |
+      if ! git clone https://github.com/rissson/dotshabka.git -b "${CIRCLE_BRANCH}"; then
+        git clone https://github.com/rissson/dotshabka.git
+        >&2 echo "Cloned dotshabka from the master branch"
+      else
+        >&2 echo "Cloned dotshabka from the ${CIRCLE_BRANCH} branch"
+      fi
+
 version: 2
 jobs:
   athena:
@@ -182,6 +194,41 @@ jobs:
       - *install-dependencies
       - *enable-cachix
       - *download-kalbasit-dotshabka
+      - *build-host
+      - *push-to-cachix
+
+  hedgehog:
+    working_directory: ~/shabka
+
+    environment:
+      <<: *global_env
+
+    docker:
+      - image: nixos/nix
+
+    steps:
+      - checkout
+      - *install-dependencies
+      - *enable-cachix
+      - *download-risson-dotshabka
+      - *build-host
+      - *push-to-cachix
+
+  duck:
+    working_directory: ~/shabka
+
+    environment:
+      <<: *global_env
+
+    docker:
+      - image: nixos/nix
+
+    steps:
+      - checkout
+      - *install-dependencies
+      - *enable-cachix
+      - *download-risson-dotshabka
+      - run: mkdir -p /srv/certs && touch /srv/certs/default.key /srv/certs/default.pem
       - *build-host
       - *push-to-cachix
 
