@@ -22,7 +22,7 @@ let
       ++ (optionals isAdmin ["wheel"]);
 
       shell = pkgs.zsh;
-      hashedPassword = "$6$2YnxY3Tl$kRj7YZypnB2Od41GgpwYRcn4kCcCE6OksZlKLws0rEi//T/emKWEsUZZ2ZG40eph1bpmjznztav4iKc8scmqc1";
+      hashedPassword = "$6$0bx5eAEsHJRxkD8.$gJ7sdkOOJRf4QCHWLGDUtAmjHV/gJxPQpyCEtHubWocHh9O7pWy10Frkm1Ch8P0/m8UTUg.Oxp.MB3YSQxFXu1";
       isNormalUser = true;
 
       openssh.authorizedKeys.keys = singleton shabka.external.kalbasit.keys;
@@ -36,7 +36,9 @@ let
     });
 
   defaultUsers = {
-    risson = { uid = 2000; isAdmin = true; home = "/home/risson"; };
+    yl              = { uid = 2000; isAdmin = true;  home = "/yl"; };
+    yl_opensource   = { uid = 2002; isAdmin = false; home = "/yl/opensource"; };
+    yl_presentation = { uid = 2003; isAdmin = false; home = "/yl/presentation"; };
   };
 
 in {
