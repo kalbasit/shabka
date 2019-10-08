@@ -91,7 +91,7 @@ supported options.
 
 | [![twitter/ylcodes](https://avatars0.githubusercontent.com/u/87115?v=3&s=128)](http://twitter.com/ylcodes "Follow @ylcodes on Twitter") | [![risson](https://assets.gitlab-static.net/uploads/-/system/user/avatar/568664/avatar.png?width=23)](https://risson.space "Browse risson's website") |
 |-----------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------|
-| [Wael Nasreddine](https://github.com/kalbasit)                                                                                          | [Marc 'risson' Schmitt](https://gitlab/risson)                                                                                           |
+| [Wael Nasreddine](https://github.com/kalbasit)                                                                                          | [Marc 'risson' Schmitt](https://gitlab.com/risson)                                                                                           |
 
 # Credit
 
