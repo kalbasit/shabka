@@ -7,7 +7,10 @@ let
     inherit (pinnedVersion) url sha256;
   };
 
-  patches = [];
+  patches = [
+    # https://github.com/rycee/home-manager/pull/865
+    ./865-use-vte-ng-from-termite.patch
+  ];
 
   patched = mkExternal {
     inherit src patches;

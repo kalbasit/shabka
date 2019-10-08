@@ -7,7 +7,10 @@ let
     inherit (pinnedVersion) url sha256;
   };
 
-  patches = [ ];
+  patches = [
+    # https://github.com/NixOS/nixpkgs/pull/70776
+    ./70776-expose-vte-ng-on-termite.patch
+  ];
 
   patched = mkExternal {
     inherit src patches;

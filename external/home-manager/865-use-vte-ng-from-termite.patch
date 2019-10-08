@@ -1,0 +1,22 @@
+From 63d0d6e02b9457d7a6fe534ed2224ba57f468aea Mon Sep 17 00:00:00 2001
+From: "Wael M. Nasreddine" <wael.nasreddine@gmail.com>
+Date: Tue, 8 Oct 2019 12:12:34 -0700
+Subject: [PATCH] termite: use vte-ng at pkgs.termite.vte-ng
+
+---
+ modules/programs/termite.nix | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/modules/programs/termite.nix b/modules/programs/termite.nix
+index 6eab39ed..a5b1cebe 100644
+--- a/modules/programs/termite.nix
++++ b/modules/programs/termite.nix
+@@ -9,7 +9,7 @@ let
+   vteInitStr = ''
+     # See https://github.com/thestinger/termite#id1
+     if [[ $TERM == xterm-termite ]]; then
+-      . ${pkgs.gnome3.vte-ng}/etc/profile.d/vte.sh
++      . ${pkgs.termite.vte-ng}/etc/profile.d/vte.sh
+     fi
+   '';
+ 

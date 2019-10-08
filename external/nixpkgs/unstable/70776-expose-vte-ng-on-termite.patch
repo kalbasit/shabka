@@ -1,0 +1,22 @@
+From 48e561712defc942a69604f6f339559606e872c6 Mon Sep 17 00:00:00 2001
+From: "Wael M. Nasreddine" <wael.nasreddine@gmail.com>
+Date: Tue, 8 Oct 2019 12:07:11 -0700
+Subject: [PATCH] termite: passthru vte-ng
+
+---
+ pkgs/applications/misc/termite/default.nix | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/pkgs/applications/misc/termite/default.nix b/pkgs/applications/misc/termite/default.nix
+index 992c1f7e223d..2a610edde034 100644
+--- a/pkgs/applications/misc/termite/default.nix
++++ b/pkgs/applications/misc/termite/default.nix
+@@ -64,6 +64,8 @@ in stdenv.mkDerivation rec {
+ 
+   outputs = [ "out" "terminfo" ];
+ 
++  passthru = { inherit vte-ng; };
++
+   postInstall = ''
+     mkdir -p $terminfo/share
+     mv $out/share/terminfo $terminfo/share/terminfo
