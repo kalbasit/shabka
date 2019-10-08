@@ -5,7 +5,7 @@ with lib;
 let
   shabka = import <shabka> { };
 
-  makeUser = userName: { uid, isAdmin ? false, home ? "/home/${userName}", hashedPassword ? "" }: nameValuePair
+  makeUser = userName: { uid, isAdmin ? false, home ? "/home/${userName}", hashedPassword ? "", sshKeys ? [] }: nameValuePair
     userName
     {
       inherit home uid hashedPassword;
@@ -24,7 +24,7 @@ let
       shell = pkgs.zsh;
       isNormalUser = true;
 
-      openssh.authorizedKeys.keys = singleton shabka.external.kalbasit.keys;
+      openssh.authorizedKeys.keys = sshKeys;
     };
 
   makeHM = userName: { uid, isAdmin, home ? "/home/${userName}", ... }: nameValuePair
@@ -73,9 +73,7 @@ in {
         mine = { gid = 2000; };
       };
 
-      users = mergeAttrs
-        { root = { openssh.authorizedKeys.keys = singleton shabka.external.kalbasit.keys; }; }
-        (mapAttrs' makeUser config.shabka.users.users);
+      users = mapAttrs' makeUser config.shabka.users.users;
     };
 
     home-manager.users = mapAttrs' makeHM config.shabka.users.users; # XXX: This should be gated by an option
