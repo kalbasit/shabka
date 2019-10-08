@@ -35,12 +35,6 @@ let
       nixosConfig = config;
     });
 
-  defaultUsers = {
-    yl              = { uid = 2000; isAdmin = true;  home = "/yl"; };
-    yl_opensource   = { uid = 2002; isAdmin = false; home = "/yl/opensource"; };
-    yl_presentation = { uid = 2003; isAdmin = false; home = "/yl/presentation"; };
-  };
-
 in {
   options.shabka.users = {
     enable = mkOption {
@@ -53,7 +47,7 @@ in {
 
     users = mkOption {
       type = types.attrs;
-      default = defaultUsers;
+      default = {};
       defaultText = ''
         The default users are ${builtins.concatStringsSep " " (builtins.attrNames defaultUsers)}
       '';
