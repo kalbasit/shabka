@@ -5,10 +5,10 @@ with lib;
 let
   shabka = import <shabka> { };
 
-  makeUser = userName: { uid, isAdmin ? false, home ? "/home/${userName}" }: nameValuePair
+  makeUser = userName: { uid, isAdmin ? false, home ? "/home/${userName}", hashedPassword ? "" }: nameValuePair
     userName
     {
-      inherit home uid;
+      inherit home uid hashedPassword;
 
       group = "mine";
       extraGroups = [
@@ -22,7 +22,6 @@ let
       ++ (optionals isAdmin ["wheel"]);
 
       shell = pkgs.zsh;
-      hashedPassword = "$6$0bx5eAEsHJRxkD8.$gJ7sdkOOJRf4QCHWLGDUtAmjHV/gJxPQpyCEtHubWocHh9O7pWy10Frkm1Ch8P0/m8UTUg.Oxp.MB3YSQxFXu1";
       isNormalUser = true;
 
       openssh.authorizedKeys.keys = singleton shabka.external.kalbasit.keys;
