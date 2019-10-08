@@ -9,8 +9,6 @@ in {
     amazon-ecr-credential-helper
     docker-credential-gcr
 
-    bat
-
     browsh
 
     gist
@@ -70,6 +68,7 @@ in {
 
   ] else []);
 
+  programs.bat.enable = true;
   programs.direnv.enable = true;
 
   # install home-manager but only if it's darwin
