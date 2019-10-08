@@ -73,7 +73,7 @@ with pkgs.lib;
             "vim-scala"
             "vim-signify"
             "vim-speeddating"
-            #"vim-terraform"
+            "vim-terraform"
             "vimtex"
             "vissort-vim"
             "zoomwintab-vim"
