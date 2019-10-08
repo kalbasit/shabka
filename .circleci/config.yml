@@ -79,7 +79,7 @@ var_6: &download-kalbasit-dotshabka
         >&2 echo "Cloned dotshabka from the ${CIRCLE_BRANCH} branch"
       fi
 
-var_6: &download-risson-dotshabka
+var_7: &download-risson-dotshabka
   run:
     name: Download dotshabka from kalbasit
     working_directory: ~/
