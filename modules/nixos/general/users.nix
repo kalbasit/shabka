@@ -5,10 +5,10 @@ with lib;
 let
   shabka = import <shabka> { };
 
-  makeUser = userName: { uid, isAdmin ? false, home ? "/home/${userName}" }: nameValuePair
+  makeUser = userName: { uid, isAdmin ? false, home ? "/home/${userName}", hashedPassword ? "", sshKeys ? [] }: nameValuePair
     userName
     {
-      inherit home uid;
+      inherit home uid hashedPassword;
 
       group = "mine";
       extraGroups = [
@@ -22,10 +22,9 @@ let
       ++ (optionals isAdmin ["wheel"]);
 
       shell = pkgs.zsh;
-      hashedPassword = "$6$0bx5eAEsHJRxkD8.$gJ7sdkOOJRf4QCHWLGDUtAmjHV/gJxPQpyCEtHubWocHh9O7pWy10Frkm1Ch8P0/m8UTUg.Oxp.MB3YSQxFXu1";
       isNormalUser = true;
 
-      openssh.authorizedKeys.keys = singleton shabka.external.kalbasit.keys;
+      openssh.authorizedKeys.keys = sshKeys;
     };
 
   makeHM = userName: { uid, isAdmin, home ? "/home/${userName}", ... }: nameValuePair
@@ -74,9 +73,7 @@ in {
         mine = { gid = 2000; };
       };
 
-      users = mergeAttrs
-        { root = { openssh.authorizedKeys.keys = singleton shabka.external.kalbasit.keys; }; }
-        (mapAttrs' makeUser config.shabka.users.users);
+      users = mapAttrs' makeUser config.shabka.users.users;
     };
 
     home-manager.users = mapAttrs' makeHM config.shabka.users.users; # XXX: This should be gated by an option
