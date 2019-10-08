@@ -7,6 +7,7 @@ with lib;
     description = "The machine name (usually model).";
     type = types.enum [
       "cloud"
+      "hetzner_cloud"
       "precision-7530"
       "thinkpad-e580"
       "xps-13"
