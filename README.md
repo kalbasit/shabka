@@ -89,9 +89,9 @@ supported options.
 
 # Author
 
-| [![twitter/ylcodes](https://avatars0.githubusercontent.com/u/87115?v=3&s=128)](http://twitter.com/ylcodes "Follow @ylcodes on Twitter") |
-|---|
-| [Wael Nasreddine](https://github.com/kalbasit) |
+| [![twitter/ylcodes](https://avatars0.githubusercontent.com/u/87115?v=3&s=128)](http://twitter.com/ylcodes "Follow @ylcodes on Twitter") | [![risson](https://gitlab.com/uploads/-/system/user/avatar/568664/avatar.png?width=400)](https://risson.space "Browse risson's website") |
+|-----------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------|
+| [Wael Nasreddine](https://github.com/kalbasit)                                                                                          | [Marc 'risson' Schmitt](https://gitlab/risson)                                                                                           |
 
 # Credit
 
