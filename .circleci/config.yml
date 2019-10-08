@@ -81,7 +81,7 @@ var_6: &download-kalbasit-dotshabka
 
 var_7: &download-risson-dotshabka
   run:
-    name: Download dotshabka from kalbasit
+    name: Download dotshabka from risson
     working_directory: ~/
     command: |
       if ! git clone https://github.com/rissson/dotshabka.git -b "${CIRCLE_BRANCH}"; then
@@ -247,4 +247,8 @@ workflows:
       - poseidon:
           context: nix-global
       - zeus:
+          context: nix-global
+      - hedgehog:
+          context: nix-global
+      - duck:
           context: nix-global
