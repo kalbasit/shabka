@@ -20,21 +20,14 @@ with lib;
       Name=personal
       IsRelative=1
       Path=profiles/personal
-      Default=1
-
-      [Profile1]
-      Name=profiles/epita
-      IsRelative=1
-      Path=epita
 
       [Profile2]
-      Name=lamacorp
+      Name=keeptruckin
       IsRelative=1
-      Path=profiles/lamacorp
+      Path=profiles/keeptruckin
     '';
 
-    home.file.".mozilla/firefox/profiles/epita/.keep".text = "";
-    home.file.".mozilla/firefox/profiles/lamacorp/.keep".text = "";
     home.file.".mozilla/firefox/profiles/personal/.keep".text = "";
+    home.file.".mozilla/firefox/profiles/keeptruckin/.keep".text = "";
   };
 }

@@ -49,7 +49,11 @@ in {
       packages = with pkgs; [
         nur.repos.kalbasit.rbrowser
 
-        thunderbird
+        remmina
+
+        weechat
+
+        xsel
 
         # zoom for meetings
         # TODO: it's not building
@@ -73,18 +77,18 @@ in {
       export BROWSER="${pkgs.nur.repos.kalbasit.rbrowser}/bin/rbrowser"
     '';
 
-    #shabka.workstation = enableMultiple [
-    #  "alacritty"
-    #  "bluetooth"
-    #  "chromium"
-    #  "dunst"
-    #  "firefox"
-    #  "greenclip"
-    #  "gtk"
-    #  "locker"
-    #  "mysql-workbench"
-    #  "rofi"
-    #  "termite"
-    #];
+    shabka.workstation = enableMultiple [
+      "alacritty"
+      "bluetooth"
+      "chromium"
+      "dunst"
+      "firefox"
+      "greenclip"
+      "gtk"
+      "locker"
+      "mysql-workbench"
+      "rofi"
+      "termite"
+    ];
   };
 }
