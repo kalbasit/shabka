@@ -11,5 +11,6 @@ with lib;
       lockCmd = "${pkgs.i3lock-color}/bin/i3lock-color --clock --color=606060";
       inactiveInterval = 15;
     };
+    home.packages = with pkgs; [ caffeine-ng ];
   };
 }
