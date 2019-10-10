@@ -21,6 +21,8 @@ in {
         noto-fonts-emoji
         noto-fonts-cjk
 
+        nerdfonts
+
         symbola
 
         # helvetica
