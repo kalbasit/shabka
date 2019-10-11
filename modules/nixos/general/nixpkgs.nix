@@ -13,6 +13,7 @@ in {
         ({
           repos = {
             kalbasit = import shabka.external.kalbasit.nur.path { inherit pkgs; };
+            risson = import shabka.external.risson.nur.path { inherit pkgs; };
           };
         });
     };

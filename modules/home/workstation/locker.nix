@@ -24,8 +24,7 @@ with lib;
       };
 
       Service = {
-        #Environment="PATH=${pkgs.xautolock}/bin:$PATH";
-        ExecStart = "PATH=${pkgs.xautolock}/bin:$PATH ${pkgs.caffeine-ng}/bin/caffeine";
+        ExecStart = "${pkgs.nur.repos.risson.caffeine-ng}/bin/caffeine";
       };
     };
   };
