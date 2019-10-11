@@ -1,9 +1,7 @@
 { stdenvNoCC }:
 
 let
-  mkExternal =
-    { name, revision, src, patches }:
-
+  mkExternal = { name, revision, src, patches }:
     stdenvNoCC.mkDerivation {
       inherit src patches;
       name = "${name}-${revision}";
@@ -19,8 +17,9 @@ let
 
       fixupPhase = ":";
     };
-
 in {
+  inherit mkExternal;
+  
   home-manager = import ./home-manager { inherit mkExternal; };
   iohk-nix = import ./iohk-nix { inherit mkExternal; };
   kalbasit = import ./kalbasit { inherit mkExternal; };

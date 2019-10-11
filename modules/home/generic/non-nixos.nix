@@ -15,10 +15,6 @@ in {
   };
 
   config = mkIf (config.shabka.darwinConfig != {}) {
-    home.file = {
-      ".ssh/authorized_keys".text = shabka.external.kalbasit.keys;
-    };
-
     fonts.fontconfig.enableProfileFonts = true;
 
     # XXX: Having dconf enabled (which is default) breaks switching on Darwin
