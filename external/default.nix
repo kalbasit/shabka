@@ -27,4 +27,5 @@ in {
   nixos-hardware = import ./nixos-hardware { inherit mkExternal; };
   nixpkgs = import ./nixpkgs { inherit mkExternal; };
   nur = import ./nur { inherit mkExternal; };
+  risson = import ./risson { inherit mkExternal; };
 }

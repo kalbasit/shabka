@@ -11,5 +11,21 @@ with lib;
       lockCmd = "${pkgs.i3lock-color}/bin/i3lock-color --clock --color=606060";
       inactiveInterval = 15;
     };
+
+    systemd.user.services.caffeine-ng = {
+      Unit = {
+        Description = "Caffeine-ng, a locker inhibitor";
+        After = [ "graphical-session-pre.target" ];
+        PartOf = [ "graphical-session.target" ];
+      };
+
+      Install = {
+        WantedBy = [ "graphical-session.target" ];
+      };
+
+      Service = {
+        ExecStart = "${pkgs.nur.repos.risson.caffeine-ng}/bin/caffeine";
+      };
+    };
   };
 }
