@@ -2,7 +2,7 @@
 feature: shabka-usage-design
 start-date: 2019-10-14
 author: Marc 'risson' Schmitt
-co-authors: Wael 'kalbasit' Nasreddine
+co-authors:
 related-issues: https://github.com/kalbasit/shabka/projects/10 https://github.com/kalbasit/shabka/issues/263 https://github.com/kalbasit/shabka/issues/246 https://github.com/kalbasit/shabka/issues/55 https://github.com/kalbasit/shabka/issues/281
 ---
 
@@ -18,9 +18,9 @@ The tools and ways to configure at the disposition of the user would be those:
   `./scripts` ;
 * a `dotshabka` like directory for the user's personal preferences settings and
   default values for `shabka` options, or overriding stuff we define in
-  `shabka`. We will refer to this as `.shabka` ;
+  `shabka`. We will refer to this as `dotshabka-user` ;
 * a `dotshabka` like directory for the user's hosts. We will refer to this as
-  `.hosts`.
+  `.shabka`.
 
 # Motivation
 [motivation]: #motivation
@@ -41,11 +41,6 @@ inside an existing workflow of managing NixOS and home-manager configurations.
 
 # Detailed design
 [design]: #detailed-design
-
-This is the bulk of the RFC. Explain the design in enough detail for somebody
-familiar with the ecosystem to understand, and implement.  This should get
-into specifics and corner-cases, and include examples of how the feature is
-used.
 
 We'll discuss the three aspects previously introduced in [Summary](#summary).
 
@@ -68,13 +63,13 @@ shabka rebuild [-h host] [-r release] {nixos-rebuild arguments and options}
 ```
 
 By default the `host` argument is the current hostname, the `release` argument
-is the host's release (defined in `.hosts/hosts/{host}/.release`) if
+is the host's release (defined in `.shabka/hosts/{host}/.release`) if
 defined, or `shabka`'s default, defined in `shabka/.release`.
 
 This command takes care of setting all environment variables and options to
 ensure a smooth `nixos-rebuild` depending on what is defined in `shabka`,
-`.hosts` and `.shabka`. The default locations of `.hosts` and `.shabka` are
-defined in their respective section of this document.
+`.shabka` and `dotshabka-user`. The default locations of `.shabka` and
+`dotshabka-user` are defined in their respective section of this document.
 
 ### `shabka build`
 
@@ -92,9 +87,9 @@ defined, or `shabka`'s default, defined in `shabka/.release`.
 > being ran on, e.g. a `Darwin` host cannot be built on a `Linux` host.
 
 This command takes care of setting all environment variables and options to
-ensure a smooth `nix-build` depending on what is defined in `shabka`, `.hosts`
-and `.shabka`. The default locations of `.hosts` and `.shabka` are defined in
-their respective section of this document.
+ensure a smooth `nix-build` depending on what is defined in `shabka`, `.shabka`
+and `dotshabka-user`. The default locations of `.shabka` and `dotshabka-user`
+are defined in their respective section of this document.
 
 ### `shabka diff`
 
@@ -106,8 +101,9 @@ shabka diff <host> <base-rev> [target-rev]
 
 By default the `target-rev` argument is HEAD.
 
-/!\ This section needs improvement given the fact that we now have 3
-repositories to deal with. This implies a lot of arguments and some designing
+/!\ This section needs improvement given the fact that we now have 2
+repositories to deal with (`shabka` and `.shabka`, as `dotshabka-user` is
+defined in `.shabka`). This implies a lot of arguments and some designing
 around this command must be done.
 
 ### `shabka push-to-cachix`
@@ -118,10 +114,10 @@ This will do what `scripts/push-to-cachix.sh` currently does. Its usage is:
 shabka push-to-cachix <cache-name> [host1] [host2] [host3] [...]
 ```
 
-If no host is given, this command will push every host in `.hosts/hosts`. This
-command requires `CACHIX_SIGNING_KEY` to be set.
+If no host is given, this command will push every host in `.shabka/hosts`. This
+command requires the environment variable `CACHIX_SIGNING_KEY` to be set.
 
-## `.shabka` for a user configuration
+## `dotshabka-user` for a user configuration
 
 This directory will be used to define a user's personal configuration.
 
@@ -131,17 +127,21 @@ configuration. In this `home.nix`, the user can then define its personal
 configuration, using the `home` module in `shabka`, overriding it, or directly
 using `home-manager` configuration options.
 
-This `home.nix` will later be imported inside a host's configuration, when
+There must also be a `default.nix` inside this directory, which imports
+`home.nix` and can then be imported by a `.shabka` repository to be used as a
+user's configuration.
+
+This `default.nix` will later be imported inside a host's configuration, when
 defining `shabka.users.users`, by assigning one function per user. This allows
 for the user of the same host to have different configurations. Also, it makes
-it easy for a user's configuration to be imported in several `.hosts`, and even
+it easy for a user's configuration to be imported in several `.shabka`, and even
 be used outside of the `shabka` use case.
 
-## `.hosts` for hosts configuration
+## `.shabka` for hosts configuration
 
-By default, `shabka` will look for this directory in `~/.config/hosts` and
-`~/.hosts`, in this order. This should be configurable in some way. Here is the
-expected structure of the directory:
+By default, `shabka` will look for this directory in `$HOME/.config/shabka` and
+`$HOME/.shabka`, in this order. This should be configurable in some way. Here
+is the expected structure of the directory:
 
 * `external/`: Nix expressions for fetching externals such as a personal NUR,
   or a list of your SSH keys.
@@ -151,7 +151,7 @@ expected structure of the directory:
 Inside a host's directory, `shabka` will expect the following things:
 
 * `.uname`: either containing `Darwin` or `Linux`
-* `default.nix`
+* `default.nix`: used to import the host's configuration
 * `configuration.nix`: The actual host's configuration, where you can use NixOS
   configuration options, and the `nixos` module of `shabka`.
 
@@ -161,23 +161,26 @@ inside a `.release` file, such as `unstable` or `19.09`.
 # Drawbacks
 [drawbacks]: #drawbacks
 
-Why should we *not* do this?
+This organization can complicate things for someone discovering `shabka`.
+However, having appropriate documentation can ease the first use of `shabka`.
+
+Also, this can complicate the development of `shabka` for us. Having several
+repositories might mean that we have to find a way to inform users about changes
+upstream. The way `home-manager` does it is with a news system.
 
 # Alternatives
 [alternatives]: #alternatives
 
-What other designs have been considered? What is the impact of not doing this?
+No alternative has yet been considered.
 
 # Unresolved questions
 [unresolved]: #unresolved-questions
 
-What parts of the design are still TBD or unknowns?
+The way the `shabka diff` command will work is still a WIP. Making it easy for
+the user to use might not be trivial.
 
 # Future work
 [future]: #future-work
 
 * Rollbacks
-* non-nixos systems with nix installed
-
-What future work, if any, would be implied or impacted by this feature
-without being directly part of the work?
+* Non-nixos systems with nix installed
