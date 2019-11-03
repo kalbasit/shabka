@@ -8,6 +8,7 @@ with lib;
     type = types.enum [
       "cloud"
       "hetzner_cloud"
+      "hetzner-sb"
       "precision-7530"
       "thinkpad-e580"
       "xps-13"
