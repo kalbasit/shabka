@@ -52,6 +52,12 @@ let
       substituteInPlace $out/jspp \
         --subst-var-by js-beautify_bin ${getBin python36Packages.jsbeautifier}/bin/js-beautify
 
+      substituteInPlace $out/kcc \
+        --subst-var-by kubectl ${getBin kubectl}/bin/kubectl
+
+      substituteInPlace $out/kcn \
+        --subst-var-by kubectl ${getBin kubectl}/bin/kubectl
+
       substituteInPlace $out/new_pr \
         --subst-var-by curl_bin ${getBin curl}/bin/curl \
         --subst-var-by git_bin ${getBin git}/bin/git \

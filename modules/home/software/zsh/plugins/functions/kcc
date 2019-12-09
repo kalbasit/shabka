@@ -1,0 +1,11 @@
+#
+# vim:ft=zsh:
+#
+
+function kcc() {
+  if [[ "${#}" -ne 1 ]]; then
+    echo "USAGE: kcn <context>"
+    return 1
+  fi
+  @kubectl@ config use-context "${1}"
+}

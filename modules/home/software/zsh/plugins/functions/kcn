@@ -1,0 +1,11 @@
+#
+# vim:ft=zsh:
+#
+
+function kcn() {
+  if [[ "${#}" -ne 1 ]]; then
+    echo "USAGE: kcn <namespace>"
+    return 1
+  fi
+  @kubectl@ config set-context "$(@kubectl@ config current-context)" --namespace="${1}"
+}
