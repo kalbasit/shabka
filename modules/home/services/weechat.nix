@@ -7,6 +7,13 @@ let
 in {
   options.shabka.weechat = {
     enable = mkEnableOption "Enable Weechat Service";
+
+    sessionName = mkOption {
+      default = "weechat";
+      example = "irc";
+      type = types.str;
+      description = "The name of the tmux session weechat is ran in.";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -20,8 +27,8 @@ in {
         Type = "forking";
         RemainAfterExit = "yes";
         Restart = "on-failure";
-        ExecStart = "${pkgs.tmux}/bin/tmux new-session -s weechat -d ${pkgs.weechat}/bin/weechat";
-        ExecStop = "${pkgs.tmux}/bin/tmux kill-session -t weechat";
+        ExecStart = "/bin/sh -c '" + (optionalString config.programs.tmux.secureSocket "TMUX_TMPDIR=${config.home.sessionVariables.TMUX_TMPDIR} ") + "${pkgs.tmux}/bin/tmux new-session -s ${cfg.sessionName} -d ${pkgs.weechat}/bin/weechat'";
+        ExecStop = "/bin/sh -c '" + (optionalString config.programs.tmux.secureSocket "TMUX_TMPDIR=${config.home.sessionVariables.TMUX_TMPDIR} ") + "${pkgs.tmux}/bin/tmux kill-session -t ${cfg.sessionName}'";
       };
 
       Install = {
