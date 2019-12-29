@@ -1,0 +1,24 @@
+From db2a12a74f6d8fdcdf69846eb3b56a8169ccc1d1 Mon Sep 17 00:00:00 2001
+From: Marc 'risson' Schmitt <marc.schmitt@risson.space>
+Date: Sat, 28 Dec 2019 21:01:53 +0100
+Subject: [PATCH] swm: fix mod256Hash
+
+---
+ pkgs/swm/default.nix | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pkgs/swm/default.nix b/pkgs/swm/default.nix
+index b08e51f..8b7a1cb 100644
+--- a/pkgs/swm/default.nix
++++ b/pkgs/swm/default.nix
+@@ -11,7 +11,7 @@ buildGoModule rec {
+     sha256 = "1x5i53y25mmnl8g3zq4bygv9lfcpc5fp49k0na1l35damvs2wi75";
+   };
+
+-  modSha256 = "0s63vms3yc5ppn6b48dkgxi40k5q2snhy79381zwgn2k7sr8h5vi";
++  modSha256 = "1prn811pbl7fdxxyz98vkf2l4ph2dlv0cbrfygzlz2sbflkq148s";
+
+   meta = with stdenv.lib; {
+     homepage = "https://github.com/kalbasit/swm";
+--
+2.23.0

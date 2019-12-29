@@ -7,7 +7,9 @@ let
     inherit (pinnedVersion) url sha256;
   };
 
-  patches = [];
+  patches = [
+    ./0001-swm-fix-mod256Hash.patch
+  ];
 
   patched = mkExternal {
     inherit src patches;

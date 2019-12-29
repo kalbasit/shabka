@@ -7,7 +7,10 @@ let
     inherit (pinnedVersion) url sha256;
   };
 
-  patches = [];
+  patches = [
+    # See https://github.com/NixOS/nixpkgs/pull/76622
+    ./0001-flashplayer-32.0.0.293-32.0.0.303.patch
+  ];
 
   patched = mkExternal {
     inherit src patches;
