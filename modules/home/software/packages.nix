@@ -74,6 +74,6 @@ in {
   # install home-manager but only if it's darwin
   programs.home-manager = if stdenv.isDarwin then {
     enable = true;
-    path = builtins.toString shabka.external.home-manager.path;
+    path = builtins.toString shabka.external.home-manager.release-unstable.path;
   } else {};
 }

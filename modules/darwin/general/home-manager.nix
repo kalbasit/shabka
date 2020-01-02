@@ -12,7 +12,7 @@ let
     });
 in {
   imports = [
-    (import "${shabka.external.home-manager.path}/nix-darwin")
+    (import "${shabka.external.home-manager.release-unstable.path}/nix-darwin")
   ];
 
   options.shabka.home-manager.config = mkOption {

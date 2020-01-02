@@ -6,7 +6,7 @@ let
   shabka = import <shabka> { };
 in {
   imports = [
-    (import "${shabka.external.home-manager.path}/nixos")
+    (import "${shabka.external.home-manager.release-unstable.path}/nixos")
   ];
 
   options.shabka.home-manager.config = mkOption {

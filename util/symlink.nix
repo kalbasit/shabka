@@ -4,7 +4,7 @@ let
   shabka = import <shabka> { };
 in
 
-with import "${shabka.external.home-manager.path}/modules/lib/dag.nix" { inherit lib; };
+with import "${shabka.external.home-manager.release-unstable.path}/modules/lib/dag.nix" { inherit lib; };
 
 {
   symlink = src: dst: dagEntryAfter ["installPackages"] ''

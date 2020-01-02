@@ -19,7 +19,7 @@ let
     };
 in {
   inherit mkExternal;
-  
+
   home-manager = import ./home-manager { inherit mkExternal; };
   iohk-nix = import ./iohk-nix { inherit mkExternal; };
   kalbasit = import ./kalbasit { inherit mkExternal; };
