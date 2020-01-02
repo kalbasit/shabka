@@ -7,7 +7,9 @@ let
     inherit (pinnedVersion) url sha256;
   };
 
-  patches = [];
+  patches = [
+    ../unstable/fix-nvim-terraform-plugin.patch
+  ];
 
   patched = mkExternal {
     inherit src patches;
