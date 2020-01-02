@@ -1,24 +1,13 @@
-var_0: &setup_env_kalbasit
-  run:
-    name: Setup environment variables for kalbasit's hosts
-    command: |
-      echo "export CACHIX_CACHE=yl" >> $BASH_ENV
-      echo "export CACHIX_SIGNING_KEY=\"${CACHIX_SIGNING_KEY}\"" >> $BASH_ENV
+var_0: &global_env
+  CACHIX_CACHE: yl
 
-var_1: &setup_env_risson
-  run:
-    name: Setup environment variables for risson's hosts
-    command: |
-      echo "export CACHIX_CACHE=risson" >> $BASH_ENV
-      echo "export CACHIX_SIGNING_KEY=\"${RISSON_CACHIX_SIGNING_KEY}\"" >> $BASH_ENV
-
-var_2: &install-nix
+var_1: &install-nix
   run:
     name: Install Nix
     command: |
       curl https://nixos.org/nix/install | sh
 
-var_3: &install-dependencies
+var_2: &install-dependencies
   run:
     name: Install dependencies
     command: |
@@ -35,7 +24,7 @@ var_3: &install-dependencies
       export NIX_PATH="$( "${shabka_path}/lib/bash/nix-path.sh" "${release}" )"
       nix-env -f '<nixpkgs>' -iA cachix
 
-var_4: &enable-cachix
+var_3: &enable-cachix
   run:
     name: Enable cachix
     command: |
@@ -45,7 +34,7 @@ var_4: &enable-cachix
 
       cachix use "${CACHIX_CACHE}"
 
-var_5: &build-host
+var_4: &build-host
   run:
     name: Building the host
     working_directory: ~/shabka
@@ -58,7 +47,7 @@ var_5: &build-host
 
       ./scripts/build-host.sh "${CIRCLE_JOB}"
 
-var_6: &push-to-cachix
+var_5: &push-to-cachix
   run:
     name: Push the build to cachix
     working_directory: ~/shabka
@@ -76,9 +65,9 @@ var_6: &push-to-cachix
 
       export DOTSHABKA_PATH="${HOME}/dotshabka"
 
-      ./scripts/push-to-cachix.sh "${CACHIX_CACHE}" "${CIRCLE_JOB}"
+      ./scripts/push-to-cachix.sh "${CIRCLE_JOB}"
 
-var_7: &download-kalbasit-dotshabka
+var_6: &download-kalbasit-dotshabka
   run:
     name: Download dotshabka from kalbasit
     working_directory: ~/
@@ -98,13 +87,11 @@ jobs:
 
     working_directory: ~/shabka
 
-    shell: /bin/sh -leo pipefail
     environment:
-      BASH_ENV: /etc/profile
+      <<: *global_env
 
     steps:
       - checkout
-      - *setup_env_kalbasit
       - *install-nix
       - *install-dependencies
       - *enable-cachix
@@ -115,16 +102,14 @@ jobs:
   cratos:
     working_directory: ~/shabka
 
-    shell: /bin/sh -leo pipefail
     environment:
-      BASH_ENV: /etc/profile
+      <<: *global_env
 
     docker:
       - image: nixos/nix
 
     steps:
       - checkout
-      - *setup_env_kalbasit
       - *install-dependencies
       - *enable-cachix
       - *download-kalbasit-dotshabka
@@ -134,16 +119,14 @@ jobs:
   hades:
     working_directory: ~/shabka
 
-    shell: /bin/sh -leo pipefail
     environment:
-      BASH_ENV: /etc/profile
+      <<: *global_env
 
     docker:
       - image: nixos/nix
 
     steps:
       - checkout
-      - *setup_env_kalbasit
       - *install-dependencies
       - *enable-cachix
       - *download-kalbasit-dotshabka
@@ -153,16 +136,14 @@ jobs:
   hera:
     working_directory: ~/shabka
 
-    shell: /bin/sh -leo pipefail
     environment:
-      BASH_ENV: /etc/profile
+      <<: *global_env
 
     docker:
       - image: nixos/nix
 
     steps:
       - checkout
-      - *setup_env_kalbasit
       - *install-dependencies
       - *enable-cachix
       - *download-kalbasit-dotshabka
@@ -175,13 +156,11 @@ jobs:
 
     working_directory: ~/shabka
 
-    shell: /bin/sh -leo pipefail
     environment:
-      BASH_ENV: /etc/profile
+      <<: *global_env
 
     steps:
       - checkout
-      - *setup_env_kalbasit
       - *install-nix
       - *install-dependencies
       - *enable-cachix
@@ -192,16 +171,14 @@ jobs:
   zeus:
     working_directory: ~/shabka
 
-    shell: /bin/sh -leo pipefail
     environment:
-      BASH_ENV: /etc/profile
+      <<: *global_env
 
     docker:
       - image: nixos/nix
 
     steps:
       - checkout
-      - *setup_env_kalbasit
       - *install-dependencies
       - *enable-cachix
       - *download-kalbasit-dotshabka
