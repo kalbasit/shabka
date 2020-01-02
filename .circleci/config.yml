@@ -1,8 +1,16 @@
-var_0: &global_env_kalbasit
-  CACHIX_CACHE: yl
+var_0: &setup_env_kalbasit
+  run:
+    name: Setup environment variables for kalbasit's hosts
+    command: |
+      echo "export CACHIX_CACHE=yl" >> $BASH_ENV
+      echo "export CACHIX_SIGNING_KEY=\"${CACHIX_SIGNING_KEY}\"" >> $BASH_ENV
 
-var_1: &global_env_risson
-  CACHIX_CACHE: risson
+var_1: &setup_env_risson
+  run:
+    name: Setup environment variables for risson's hosts
+    command: |
+      echo "export CACHIX_CACHE=risson" >> $BASH_ENV
+      echo "export CACHIX_SIGNING_KEY=\"${RISSON_CACHIX_SIGNING_KEY}\"" >> $BASH_ENV
 
 var_2: &install-nix
   run:
@@ -50,7 +58,7 @@ var_5: &build-host
 
       ./scripts/build-host.sh "${CIRCLE_JOB}"
 
-var_6: &push-to-cachix-yl
+var_6: &push-to-cachix
   run:
     name: Push the build to cachix
     working_directory: ~/shabka
@@ -59,10 +67,10 @@ var_6: &push-to-cachix-yl
         source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
       fi
 
-      # The YL_CACHIX_SIGNING_KEY is not available for pull requests coming from a
+      # The CACHIX_SIGNING_KEY is not available for pull requests coming from a
       # fork for security reasons.
-      if [[ -z "${YL_CACHIX_SIGNING_KEY:-}" ]]; then
-        >&2 echo "YL_CACHIX_SIGNING_KEY is not set, cannot push to cachix"
+      if [[ -z "${CACHIX_SIGNING_KEY:-}" ]]; then
+        >&2 echo "CACHIX_SIGNING_KEY is not set, cannot push to cachix"
         exit 0
       fi
 
@@ -70,27 +78,7 @@ var_6: &push-to-cachix-yl
 
       ./scripts/push-to-cachix.sh "${CACHIX_CACHE}" "${CIRCLE_JOB}"
 
-var_7: &push-to-cachix-risson
-  run:
-    name: Push the build to cachix
-    working_directory: ~/shabka
-    command: |
-      if [[ -r "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]]; then
-        source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
-      fi
-
-      # The RISSON_CACHIX_SIGNING_KEY is not available for pull requests coming from a
-      # fork for security reasons.
-      if [[ -z "${RISSON_CACHIX_SIGNING_KEY:-}" ]]; then
-        >&2 echo "RISSON_CACHIX_SIGNING_KEY is not set, cannot push to cachix"
-        exit 0
-      fi
-
-      export DOTSHABKA_PATH="${HOME}/dotshabka"
-
-      ./scripts/push-to-cachix.sh "${CACHIX_CACHE}" "${CIRCLE_JOB}"
-
-var_8: &download-kalbasit-dotshabka
+var_7: &download-kalbasit-dotshabka
   run:
     name: Download dotshabka from kalbasit
     working_directory: ~/
@@ -110,68 +98,76 @@ jobs:
 
     working_directory: ~/shabka
 
+    shell: /bin/sh -leo pipefail
     environment:
-      <<: *global_env_kalbasit
+      BASH_ENV: /etc/profile
 
     steps:
       - checkout
+      - *setup_env_kalbasit
       - *install-nix
       - *install-dependencies
       - *enable-cachix
       - *download-kalbasit-dotshabka
       - *build-host
-      - *push-to-cachix-yl
+      - *push-to-cachix
 
   cratos:
     working_directory: ~/shabka
 
+    shell: /bin/sh -leo pipefail
     environment:
-      <<: *global_env_kalbasit
+      BASH_ENV: /etc/profile
 
     docker:
       - image: nixos/nix
 
     steps:
       - checkout
+      - *setup_env_kalbasit
       - *install-dependencies
       - *enable-cachix
       - *download-kalbasit-dotshabka
       - *build-host
-      - *push-to-cachix-yl
+      - *push-to-cachix
 
   hades:
     working_directory: ~/shabka
 
+    shell: /bin/sh -leo pipefail
     environment:
-      <<: *global_env_kalbasit
+      BASH_ENV: /etc/profile
 
     docker:
       - image: nixos/nix
 
     steps:
       - checkout
+      - *setup_env_kalbasit
       - *install-dependencies
       - *enable-cachix
       - *download-kalbasit-dotshabka
       - *build-host
-      - *push-to-cachix-yl
+      - *push-to-cachix
 
   hera:
     working_directory: ~/shabka
 
+    shell: /bin/sh -leo pipefail
     environment:
-      <<: *global_env_kalbasit
+      BASH_ENV: /etc/profile
 
     docker:
       - image: nixos/nix
 
     steps:
       - checkout
+      - *setup_env_kalbasit
       - *install-dependencies
       - *enable-cachix
       - *download-kalbasit-dotshabka
       - *build-host
-      - *push-to-cachix-yl
+      - *push-to-cachix
 
   poseidon:
     macos:
@@ -179,34 +175,38 @@ jobs:
 
     working_directory: ~/shabka
 
+    shell: /bin/sh -leo pipefail
     environment:
-      <<: *global_env_kalbasit
+      BASH_ENV: /etc/profile
 
     steps:
       - checkout
+      - *setup_env_kalbasit
       - *install-nix
       - *install-dependencies
       - *enable-cachix
       - *download-kalbasit-dotshabka
       - *build-host
-      - *push-to-cachix-yl
+      - *push-to-cachix
 
   zeus:
     working_directory: ~/shabka
 
+    shell: /bin/sh -leo pipefail
     environment:
-      <<: *global_env_kalbasit
+      BASH_ENV: /etc/profile
 
     docker:
       - image: nixos/nix
 
     steps:
       - checkout
+      - *setup_env_kalbasit
       - *install-dependencies
       - *enable-cachix
       - *download-kalbasit-dotshabka
       - *build-host
-      - *push-to-cachix-yl
+      - *push-to-cachix
 
 workflows:
   version: 2
