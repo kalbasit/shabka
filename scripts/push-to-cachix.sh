@@ -57,6 +57,7 @@ push_host() {
     echo ">>> Building the host ${host}, and pushing to Cachix"
     echo -e "\tNIX_PATH=${nix_path}"
     NIX_PATH="${nix_path}" \
+    RELEASE="release-${release/./-}" \
         nix-build --option builders '' "${dotshabka_path}/hosts/${host}" -A system | cachix push yl
 }
 
