@@ -1,0 +1,55 @@
+From 4c08af6e8016b22d594a72d04d2d4c96e0e37c85 Mon Sep 17 00:00:00 2001
+From: "Wael M. Nasreddine" <wael.nasreddine@gmail.com>
+Date: Thu, 2 Jan 2020 14:04:52 -0800
+Subject: [PATCH] vim-plugins: hashivim/vim-terraform: fix the filetypedetect
+ autocmd
+
+---
+ pkgs/misc/vim-plugins/overrides.nix           |  3 +++
+ .../vim-plugins/vim-terraform-fix-event.patch | 23 +++++++++++++++++++
+ 2 files changed, 26 insertions(+)
+ create mode 100644 pkgs/misc/vim-plugins/vim-terraform-fix-event.patch
+
+diff --git a/pkgs/misc/vim-plugins/overrides.nix b/pkgs/misc/vim-plugins/overrides.nix
+index a885dc163a18..f3b9dfbc9740 100644
+--- a/pkgs/misc/vim-plugins/overrides.nix
++++ b/pkgs/misc/vim-plugins/overrides.nix
+@@ -402,6 +402,9 @@ self: super: {
+     dependencies = with super; [ vim-addon-mw-utils tlib_vim ];
+   });
+ 
++  vim-terraform = super.vim-terraform.overrideAttrs(oa: {
++    patches = (oa.patches or []) ++ lib.singleton ./vim-terraform-fix-event.patch;
++  });
+ 
+   vim-wakatime = super.vim-wakatime.overrideAttrs(old: {
+     buildInputs = [ python ];
+diff --git a/pkgs/misc/vim-plugins/vim-terraform-fix-event.patch b/pkgs/misc/vim-plugins/vim-terraform-fix-event.patch
+new file mode 100644
+index 000000000000..b36c4992c13f
+--- /dev/null
++++ b/pkgs/misc/vim-plugins/vim-terraform-fix-event.patch
+@@ -0,0 +1,23 @@
++From cad4661952ad7983ece6d6486f0f68d437037015 Mon Sep 17 00:00:00 2001
++From: "Wael M. Nasreddine" <wael.nasreddine@gmail.com>
++Date: Thu, 2 Jan 2020 13:31:13 -0800
++Subject: [PATCH] Put the autocmd filetypedetect in an augroup
++
++---
++ ftdetect/terraform.vim | 5 ++++-
++ 1 file changed, 4 insertions(+), 1 deletion(-)
++
++diff --git a/ftdetect/terraform.vim b/ftdetect/terraform.vim
++index 5919422..24bc731 100644
++--- a/ftdetect/terraform.vim
+++++ b/ftdetect/terraform.vim
++@@ -1,5 +1,8 @@
++ " By default, Vim associates .tf files with TinyFugue - tell it not to.
++-autocmd! filetypedetect BufRead,BufNewFile *.tf
+++augroup filetypedetect
+++  au BufRead,BufNewFile *.tf set filetype=terraform
+++augroup END
+++
++ autocmd BufRead,BufNewFile *.tf set filetype=terraform
++ autocmd BufRead,BufNewFile *.tfvars set filetype=terraform
++ autocmd BufRead,BufNewFile *.tfstate set filetype=json
