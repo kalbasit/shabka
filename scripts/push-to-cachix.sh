@@ -2,9 +2,15 @@
 
 set -euo pipefail
 
+# check that cachix CLI tool is installed
+if ! command -v cachix >/dev/null 2>&1; then
+    >&2 echo "ERR: Cachix CLI tool is required to push to Cachix!"
+    exit 1
+fi
+
 # find .shabka
 if [[ "x$(printenv DOTSHABKA_PATH)" == "x" ]]; then
-    >&2 echo "Please define DOTSHABKA_PATH to point to the location of your .shabka"
+    >&2 echo "ERR: Please define DOTSHABKA_PATH to point to the location of your .shabka"
     exit 1
 fi
 readonly dotshabka_path="${DOTSHABKA_PATH}"
