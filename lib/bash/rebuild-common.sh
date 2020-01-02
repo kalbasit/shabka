@@ -36,4 +36,5 @@ if [[ -z "${release}" ]]; then
     fi
 fi
 
+export RELEASE="release-${release/./-}"
 export NIX_PATH="$( "${shabka_path}/lib/bash/nix-path.sh" "${release}" )"

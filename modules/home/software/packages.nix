@@ -4,6 +4,7 @@ with pkgs;
 
 let
   shabka = import <shabka> { };
+  release = builtins.getEnv "RELEASE";
 in {
   home.packages = [
     amazon-ecr-credential-helper
@@ -74,6 +75,6 @@ in {
   # install home-manager but only if it's darwin
   programs.home-manager = if stdenv.isDarwin then {
     enable = true;
-    path = builtins.toString shabka.external.home-manager.release-unstable.path;
+    path = builtins.toString shabka.external.home-manager."${release}".path;
   } else {};
 }

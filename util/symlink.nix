@@ -2,9 +2,10 @@
 
 let
   shabka = import <shabka> { };
+  release = builtins.getEnv "RELEASE";
 in
 
-with import "${shabka.external.home-manager.release-unstable.path}/modules/lib/dag.nix" { inherit lib; };
+with import "${shabka.external.home-manager."${release}".path}/modules/lib/dag.nix" { inherit lib; };
 
 {
   symlink = src: dst: dagEntryAfter ["installPackages"] ''

@@ -4,6 +4,7 @@ with lib;
 
 let
   shabka = import <shabka> { };
+  release = builtins.getEnv "RELEASE";
 
   makeHM = userName: nameValuePair
     (userName)
@@ -12,7 +13,7 @@ let
     });
 in {
   imports = [
-    (import "${shabka.external.home-manager.release-unstable.path}/nix-darwin")
+    (import "${shabka.external.home-manager."${release}".path}/nix-darwin")
   ];
 
   options.shabka.home-manager.config = mkOption {
