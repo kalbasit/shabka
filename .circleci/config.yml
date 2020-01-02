@@ -1,13 +1,16 @@
-var_0: &global_env
+var_0: &global_env_kalbasit
   CACHIX_CACHE: yl
 
-var_1: &install-nix
+var_1: &global_env_risson
+  CACHIX_CACHE: risson
+
+var_2: &install-nix
   run:
     name: Install Nix
     command: |
       curl https://nixos.org/nix/install | sh
 
-var_2: &install-dependencies
+var_3: &install-dependencies
   run:
     name: Install dependencies
     command: |
@@ -24,7 +27,7 @@ var_2: &install-dependencies
       export NIX_PATH="$( "${shabka_path}/lib/bash/nix-path.sh" "${release}" )"
       nix-env -f '<nixpkgs>' -iA cachix
 
-var_3: &enable-cachix
+var_4: &enable-cachix
   run:
     name: Enable cachix
     command: |
@@ -34,7 +37,7 @@ var_3: &enable-cachix
 
       cachix use "${CACHIX_CACHE}"
 
-var_4: &build-host
+var_5: &build-host
   run:
     name: Building the host
     working_directory: ~/shabka
@@ -47,7 +50,7 @@ var_4: &build-host
 
       ./scripts/build-host.sh "${CIRCLE_JOB}"
 
-var_5: &push-to-cachix
+var_6: &push-to-cachix-yl
   run:
     name: Push the build to cachix
     working_directory: ~/shabka
@@ -56,18 +59,38 @@ var_5: &push-to-cachix
         source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
       fi
 
-      # The CACHIX_SIGNING_KEY is not available for pull requests coming from a
+      # The YL_CACHIX_SIGNING_KEY is not available for pull requests coming from a
       # fork for security reasons.
-      if [[ -z "${CACHIX_SIGNING_KEY:-}" ]]; then
-        >&2 echo "CACHIX_SIGNING_KEY is not set, cannot push to cachix"
+      if [[ -z "${YL_CACHIX_SIGNING_KEY:-}" ]]; then
+        >&2 echo "YL_CACHIX_SIGNING_KEY is not set, cannot push to cachix"
         exit 0
       fi
 
       export DOTSHABKA_PATH="${HOME}/dotshabka"
 
-      ./scripts/push-to-cachix.sh "${CIRCLE_JOB}"
+      ./scripts/push-to-cachix.sh "${CACHIX_CACHE}" "${CIRCLE_JOB}"
 
-var_6: &download-kalbasit-dotshabka
+var_7: &push-to-cachix-risson
+  run:
+    name: Push the build to cachix
+    working_directory: ~/shabka
+    command: |
+      if [[ -r "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]]; then
+        source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
+      fi
+
+      # The RISSON_CACHIX_SIGNING_KEY is not available for pull requests coming from a
+      # fork for security reasons.
+      if [[ -z "${RISSON_CACHIX_SIGNING_KEY:-}" ]]; then
+        >&2 echo "RISSON_CACHIX_SIGNING_KEY is not set, cannot push to cachix"
+        exit 0
+      fi
+
+      export DOTSHABKA_PATH="${HOME}/dotshabka"
+
+      ./scripts/push-to-cachix.sh "${CACHIX_CACHE}" "${CIRCLE_JOB}"
+
+var_8: &download-kalbasit-dotshabka
   run:
     name: Download dotshabka from kalbasit
     working_directory: ~/
@@ -88,7 +111,7 @@ jobs:
     working_directory: ~/shabka
 
     environment:
-      <<: *global_env
+      <<: *global_env_kalbasit
 
     steps:
       - checkout
@@ -97,13 +120,13 @@ jobs:
       - *enable-cachix
       - *download-kalbasit-dotshabka
       - *build-host
-      - *push-to-cachix
+      - *push-to-cachix-yl
 
   cratos:
     working_directory: ~/shabka
 
     environment:
-      <<: *global_env
+      <<: *global_env_kalbasit
 
     docker:
       - image: nixos/nix
@@ -114,13 +137,13 @@ jobs:
       - *enable-cachix
       - *download-kalbasit-dotshabka
       - *build-host
-      - *push-to-cachix
+      - *push-to-cachix-yl
 
   hades:
     working_directory: ~/shabka
 
     environment:
-      <<: *global_env
+      <<: *global_env_kalbasit
 
     docker:
       - image: nixos/nix
@@ -131,13 +154,13 @@ jobs:
       - *enable-cachix
       - *download-kalbasit-dotshabka
       - *build-host
-      - *push-to-cachix
+      - *push-to-cachix-yl
 
   hera:
     working_directory: ~/shabka
 
     environment:
-      <<: *global_env
+      <<: *global_env_kalbasit
 
     docker:
       - image: nixos/nix
@@ -148,7 +171,7 @@ jobs:
       - *enable-cachix
       - *download-kalbasit-dotshabka
       - *build-host
-      - *push-to-cachix
+      - *push-to-cachix-yl
 
   poseidon:
     macos:
@@ -157,7 +180,7 @@ jobs:
     working_directory: ~/shabka
 
     environment:
-      <<: *global_env
+      <<: *global_env_kalbasit
 
     steps:
       - checkout
@@ -166,13 +189,13 @@ jobs:
       - *enable-cachix
       - *download-kalbasit-dotshabka
       - *build-host
-      - *push-to-cachix
+      - *push-to-cachix-yl
 
   zeus:
     working_directory: ~/shabka
 
     environment:
-      <<: *global_env
+      <<: *global_env_kalbasit
 
     docker:
       - image: nixos/nix
@@ -183,7 +206,7 @@ jobs:
       - *enable-cachix
       - *download-kalbasit-dotshabka
       - *build-host
-      - *push-to-cachix
+      - *push-to-cachix-yl
 
 workflows:
   version: 2

@@ -35,6 +35,11 @@ if [[ -z "${CACHIX_SIGNING_KEY:-}" ]]; then
     exit 1
 fi
 
+usage () {
+    >&2 echo "Usage: ${0} binary-cache-name [HOST]"
+    exit 2
+}
+
 push_host() {
     local host="${1}"
     local release
@@ -64,9 +69,16 @@ push_host() {
     echo -e "\tNIX_PATH=${nix_path}"
     NIX_PATH="${nix_path}" \
     RELEASE="release-${release/./-}" \
-        nix-build --option builders '' "${dotshabka_path}/hosts/${host}" -A system | cachix push yl
+        nix-build --option builders '' "${dotshabka_path}/hosts/${host}" -A system | cachix push "${binary_cache_name}"
 }
 
+if [[ "${#}" -lt 1 ]]; then
+    >&2 echo "ERR: No cachix binary cache specified"
+    usage
+fi
+
+readonly binary_cache_name="${1}"
+shift 1
 
 if [[ "${#}" -eq 1 ]]; then
     push_host "${1}"
