@@ -3,7 +3,13 @@ feature: shabka-usage-design
 start-date: 2019-10-14
 author: Marc 'risson' Schmitt
 co-authors:
-related-issues: https://github.com/kalbasit/shabka/projects/10 https://github.com/kalbasit/shabka/issues/263 https://github.com/kalbasit/shabka/issues/246 https://github.com/kalbasit/shabka/issues/55 https://github.com/kalbasit/shabka/issues/281
+  - Wael 'kalbasit' Nasreddine
+related-issues:
+  - https://github.com/kalbasit/shabka/projects/10
+  - https://github.com/kalbasit/shabka/issues/263
+  - https://github.com/kalbasit/shabka/issues/246
+  - https://github.com/kalbasit/shabka/issues/55
+  - https://github.com/kalbasit/shabka/issues/281
 ---
 
 # Summary
@@ -16,11 +22,9 @@ The tools and ways to configure at the disposition of the user would be those:
 * the command `shabka`, installed like `home-manager` which basically does the
   stuff the user wants to do on a regular basis that we currently have in
   `./scripts` ;
-* a `dotshabka` like directory for the user's personal preferences settings and
-  default values for `shabka` options, or overriding stuff we define in
-  `shabka`. We will refer to this as `dotshabka-user` ;
-* a `dotshabka` like directory for the user's hosts. We will refer to this as
-  `.shabka`.
+* a `dotshabka` like directory for the user's hosts and personal preferences
+  settings and default values for `shabka` options, or overriding stuff we
+  define in `shabka`. We will refer to this as `dotshabka`.
 
 # Motivation
 [motivation]: #motivation
@@ -34,11 +38,13 @@ The planned use cases are very simple for now, and can be described as this:
 * Usage on a NixOS system, with root access.
   - Management of several hosts' configuration
   - Management of several users per-host.
-  - Management of several users' configuration per-host.
+  - Management of a single users's configuration hosts-wide.
+  - Management of a single users' configuration per-host.
 * Usage on a Darwin system, with root access.
   - Management of several hosts' configuration
   - Management of several users per-host.
-  - Management of several users' configuration per-host.
+  - Management of a single users's configuration hosts-wide.
+  - Management of a single users' configuration per-host.
 
 The expected outcome is a tool well-documented, easy to use, that can fit easily
 inside an existing workflow of managing NixOS and home-manager configurations.
@@ -124,46 +130,36 @@ shabka push-to-cachix <cache-name> [host1] [host2] [host3] [...]
 If no host is given, this command will push every host in `.shabka/hosts`. This
 command requires the environment variable `CACHIX_SIGNING_KEY` to be set.
 
-## `dotshabka-user` for a user configuration
+## `dotshabka` for a user's hosts and personal configuration
 
-This directory will be used to define a user's personal configuration.
+This directory will be used to define a user's:
 
-This directory must have a `home.nix` that defines a
-function for the user as its now done in the `home.nix` inside a host's
-configuration. In this `home.nix`, the user can then define their personal
-configuration, using the `home` module in `shabka`, overriding it, or directly
-using `home-manager` configuration options.
-
-There must also be a `default.nix` inside this directory, which imports
-`home.nix` and can then be imported by a `.shabka` repository to be used as a
-user's configuration.
-
-This `default.nix` will later be imported inside a host's configuration, when
-defining `shabka.users.users`, by assigning one function per user. This allows
-for the user of the same host to have different configurations. Also, it makes
-it easy for a user's configuration to be imported in several `.shabka`, and even
-be used outside of the `shabka` use case.
-
-## `.shabka` for hosts configuration
+* hosts ;
+* personal configuration hosts-wide ;
+* personal configuration per-host.
 
 By default, `shabka` will look for this directory in `$HOME/.config/shabka` and
 `$HOME/.shabka`, in this order. This should be configurable in some way. Here
 is the expected structure of the directory:
 
-* `external/`: Nix expressions for fetching externals such as a personal NUR,
-  or a list of your SSH keys.
+* `external/` (optional): Nix expressions for fetching externals such as a
+  personal NUR, or a list of your SSH keys.
 * `hosts/`: top-level expressions specific to individual hosts. The name of the
   host's folder must match its hostname.
 
 Inside a host's directory, `shabka` will expect the following things:
 
-* `.uname`: either containing `Darwin` or `Linux`
 * `default.nix`: used to import the host's configuration
 * `configuration.nix`: The actual host's configuration, where you can use NixOS
   configuration options, and the `nixos` module of `shabka`.
-
-In addition, you can also define the release of `nixpkgs` you want to use
-inside a `.release` file, such as `unstable` or `19.09`.
+* `home.nix` (optional, imported from `configuration.nix`) : defines a
+  function for the user as its now done in the `home.nix` inside a host's
+  configuration. In this `home.nix`, the user can then define their personal
+  configuration, using the `home` module in `shabka`, overriding it, or directly
+  using `home-manager` configuration options.
+* `uname`: either containing `Darwin` or `Linux`
+* `release` (optional, defaults to `shabka/release`): defines the release of
+  `nixpkgs` you want to use, such as `unstable` or `19.09`.
 
 # Drawbacks
 [drawbacks]: #drawbacks
@@ -186,8 +182,10 @@ No alternative has yet been considered.
 The way the `shabka diff` command will work is still a WIP. Making it easy for
 the user to use might not be trivial.
 
+Multi-user usage.
+
 # Future work
 [future]: #future-work
 
 * Rollbacks
-* Non-nixos systems with nix installed
+* Non-NixOS systems with nix installed
