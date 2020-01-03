@@ -123,7 +123,7 @@ This directory will be used to define a user's personal configuration.
 
 This directory must have a `home.nix` that defines a
 function for the user as its now done in the `home.nix` inside a host's
-configuration. In this `home.nix`, the user can then define its personal
+configuration. In this `home.nix`, the user can then define their personal
 configuration, using the `home` module in `shabka`, overriding it, or directly
 using `home-manager` configuration options.
 
