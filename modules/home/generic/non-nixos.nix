@@ -15,7 +15,7 @@ in {
   };
 
   config = mkIf (config.shabka.darwinConfig != {}) {
-    fonts.fontconfig.enableProfileFonts = true;
+    fonts.fontconfig.enable = true;
 
     # XXX: Having dconf enabled (which is default) breaks switching on Darwin
     #
