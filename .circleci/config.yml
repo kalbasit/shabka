@@ -1,4 +1,5 @@
 var_0: &global_env
+  PLACEHOLDER: for_future_use
 
 var_1: &install-nix
   run:
@@ -67,7 +68,7 @@ var_5: &push-to-cachix
 
       export DOTSHABKA_PATH="${HOME}/dotshabka"
 
-      ./scripts/push-to-cachix.sh "${CIRCLE_JOB}"
+      ./scripts/push-to-cachix.sh "${CACHIX_CACHE}" "${CIRCLE_JOB}"
 
 var_6: &download-kalbasit-dotshabka
   run:
