@@ -47,7 +47,7 @@ We'll discuss the three aspects previously introduced in [Summary](#summary).
 ## `shabka` CLI
 
 The `shabka` CLI will be used by the user to do what they can currently do using
-the tools is the `scripts/` directory. This will allow him to do everything he
+the tools in the `scripts/` directory. This will allow them to do everything they
 could do using the `nixos-rebuild` command, plus building a host, checking what
 changed in his host's generation between two git refs, and maybe even pushing
 his hosts' configurations to Cachix.
