@@ -1,5 +1,5 @@
 var_0: &global_env
-  CACHIX_CACHE: yl
+  PLACEHOLDER: for_future_use
 
 var_1: &install-nix
   run:
@@ -56,16 +56,19 @@ var_5: &push-to-cachix
         source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
       fi
 
-      # The CACHIX_SIGNING_KEY is not available for pull requests coming from a
-      # fork for security reasons.
+      # Cachix is not available for pull requests coming from a fork for security reasons.
       if [[ -z "${CACHIX_SIGNING_KEY:-}" ]]; then
         >&2 echo "CACHIX_SIGNING_KEY is not set, cannot push to cachix"
+        exit 0
+      fi
+      if [[ -z "${CACHIX_CACHE:-}" ]]; then
+        >&2 echo "CACHIX_CACHE is not set, cannot push to cachix"
         exit 0
       fi
 
       export DOTSHABKA_PATH="${HOME}/dotshabka"
 
-      ./scripts/push-to-cachix.sh "${CIRCLE_JOB}"
+      ./scripts/push-to-cachix.sh "${CACHIX_CACHE}" "${CIRCLE_JOB}"
 
 var_6: &download-kalbasit-dotshabka
   run:
@@ -190,14 +193,14 @@ workflows:
   testing:
     jobs:
       - athena:
-          context: nix-global
+          context: shabka-yl
       - cratos:
-          context: nix-global
+          context: shabka-yl
       - hades:
-          context: nix-global
+          context: shabka-yl
       - hera:
-          context: nix-global
+          context: shabka-yl
       - poseidon:
-          context: nix-global
+          context: shabka-yl
       - zeus:
-          context: nix-global
+          context: shabka-yl

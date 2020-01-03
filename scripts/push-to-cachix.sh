@@ -2,9 +2,15 @@
 
 set -euo pipefail
 
+# check that cachix CLI tool is installed
+if ! command -v cachix >/dev/null 2>&1; then
+    >&2 echo "ERR: Cachix CLI tool is required to push to Cachix!"
+    exit 1
+fi
+
 # find .shabka
 if [[ "x$(printenv DOTSHABKA_PATH)" == "x" ]]; then
-    >&2 echo "Please define DOTSHABKA_PATH to point to the location of your .shabka"
+    >&2 echo "ERR: Please define DOTSHABKA_PATH to point to the location of your .shabka"
     exit 1
 fi
 readonly dotshabka_path="${DOTSHABKA_PATH}"
@@ -28,6 +34,11 @@ if [[ -z "${CACHIX_SIGNING_KEY:-}" ]]; then
     >&2 echo "ERR: Please set the environment variable CACHIX_SIGNING_KEY before calling the script."
     exit 1
 fi
+
+usage () {
+    >&2 echo "Usage: ${0} binary-cache-name [HOST]"
+    exit 2
+}
 
 push_host() {
     local host="${1}"
@@ -58,9 +69,16 @@ push_host() {
     echo -e "\tNIX_PATH=${nix_path}"
     NIX_PATH="${nix_path}" \
     RELEASE="release-${release/./-}" \
-        nix-build --option builders '' "${dotshabka_path}/hosts/${host}" -A system | cachix push yl
+        nix-build --option builders '' "${dotshabka_path}/hosts/${host}" -A system | cachix push "${binary_cache_name}"
 }
 
+if [[ "${#}" -lt 1 ]]; then
+    >&2 echo "ERR: No cachix binary cache specified"
+    usage
+fi
+
+readonly binary_cache_name="${1}"
+shift 1
 
 if [[ "${#}" -eq 1 ]]; then
     push_host "${1}"
