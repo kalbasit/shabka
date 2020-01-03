@@ -32,12 +32,18 @@ allow the user to quickly get a hang on the tool.
 The planned use cases are very simple for now, and can be described as this:
 
 * Usage on a NixOS system, with root access.
-* Management of several hosts' configuration
-* Management of several users per-host.
-* Management of several users' configuration per-host.
+  - Management of several hosts' configuration
+  - Management of several users per-host.
+  - Management of several users' configuration per-host.
+* Usage on a Darwin system, with root access.
+  - Management of several hosts' configuration
+  - Management of several users per-host.
+  - Management of several users' configuration per-host.
 
 The expected outcome is a tool well-documented, easy to use, that can fit easily
 inside an existing workflow of managing NixOS and home-manager configurations.
+The existing configurations would of course need to be tweaked to fit shabka's
+workflow.
 
 # Detailed design
 [design]: #detailed-design
@@ -101,10 +107,11 @@ shabka diff <host> <base-rev> [target-rev]
 
 By default the `target-rev` argument is HEAD.
 
-/!\ This section needs improvement given the fact that we now have 2
-repositories to deal with (`shabka` and `.shabka`, as `dotshabka-user` is
-defined in `.shabka`). This implies a lot of arguments and some designing
-around this command must be done.
+> This section needs improvement given the fact that we now have 2
+> repositories to deal with (`shabka` and `.shabka`, as `dotshabka-user` is
+> defined in `.shabka`). This implies a lot of arguments and some designing
+> around this command must be done. A future RFC will cover the use cases of
+> this command and its design.
 
 ### `shabka push-to-cachix`
 
