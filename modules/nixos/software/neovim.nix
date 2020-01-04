@@ -44,14 +44,10 @@ in {
 
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
+      # TODO: direnv plugin must refer to its own direnv binary by full path
       direnv
 
-      (wrapNeovim neovim.unwrapped {
-        inherit (neovimConfig)
-        extraPython3Packages withPython3
-        extraPythonPackages withPython
-        withNodeJs withRuby viAlias vimAlias configure;
-      })
+      (wrapNeovim neovim.unwrapped neovimConfig)
     ];
   };
 }
