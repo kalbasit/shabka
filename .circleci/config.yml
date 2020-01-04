@@ -21,8 +21,10 @@ var_2: &install-dependencies
       # install cachix from nixpkgs at stable
       readonly shabka_path="$( pwd )"
       release="$( tr -d "\n" < "${shabka_path}/.release" )"
-      export NIX_PATH="$( "${shabka_path}/lib/bash/nix-path.sh" "${release}" )"
+      NIX_PATH="$( "${shabka_path}/lib/bash/nix-path.sh" "${release}" )"
       nix-env -f '<nixpkgs>' -iA cachix
+      unset release
+      unset NIX_PATH
 
 var_3: &enable-cachix
   run:

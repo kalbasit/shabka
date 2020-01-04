@@ -2,12 +2,18 @@
 
 set -euo pipefail
 
-echoErr() {
-  >&2 echo "$@"
+echoErr() { >&2 echo "ERR: ${*}" ; }
+echoWarn() { >&2 echo "WARN: ${*}" ; }
+echoInfo() { >&2 echo "INFO: ${*}" ; }
+echoSuccess() { >&2 echo "SUCCESS: ${*}" ; }
+containsElement() {
+  declare -r to_find="${1}"; shift
+  for element in "${@}"; do [[ "${element}" == "${to_find}" ]] && return 0; done
+  return 1
 }
 
 echoUsage() {
-  echo "TODO"
+  >&2 echo "TODO"
 }
 
 setShabkaPath() {
@@ -76,6 +82,7 @@ setNixPath() {
     declare -r darwin="$( nix-build --no-out-link "${shabka_path}" -A "external.nix-darwin.path" )"
     export NIX_PATH="darwin=${darwin}:${NIX_PATH}"
   fi
+  echoInfo "NIX_PATH=${NIX_PATH}"
 }
 
 setNixosConfigPath() {
@@ -86,18 +93,33 @@ setNixosConfigPath() {
   fi
 }
 
-doSwitch() {
+executeRebuild() {
+  declare -r command="${1}"
+  declare -r args="${@}"
+
+
   setRelease
   setUname
   setNixPath
-  setNixosConfigPath
 
-  echo "NIX_PATH=${NIX_PATH}"
+  case "${uname}" in
+    "NixOS")
+      setNixosConfigPath
+      declare -g -r rebuild_command="nixos-rebuild"
+      ;;
+    # For future use
+    "Darwin")
+      declare -g -r rebuild_command="darwin-rebuild"
+      ;;
+    "Linux")
+      ;;
+  esac
+
   set -x
-  nixos-rebuild -I "nixos-config=${nixos_config}" switch "${@}"
+  "${rebuild_command}" -I "nixos-config=${nixos_config}" "${command}" "${args}"
 }
 
-main () {
+main() {
   if [[ "$#" -eq 0 ]]; then
     echoUsage
     exit 1
@@ -133,21 +155,37 @@ main () {
   declare -g -r host="${host}"
   declare -g release="${release}"
 
-  declare -r command="$1"
+  declare -r command="${1}"
   shift 1
+  declare -r args="${@}"
 
-  case "$command" in
-    switch)
-      doSwitch "${@}"
-    ;;
-    help)
-      >&2 echoUsage
-      exit 1
-      ;;
-    *)
-      echoErr "Unkown command: $command"
-      exit 1
-  esac
+  declare -g -r nixos_rebuild_commands=(
+    "switch"
+    "boot"
+    "test"
+    "build"
+    "dry-build"
+    "dry-activate"
+  )
+
+  declare -g -r darwin_rebuild_commands=(
+    "switch"
+    "activate"
+    "build"
+    "check"
+  )
+
+  if [[ "${command}" == "help" ]]; then
+    echoUsage
+    exit 1
+  elif containsElement "${command}" nixos_rebuild_commands && \
+    containsElement "${command}" darwin_rebuild_commands; then
+    executeRebuild "${command}" "${args}"
+  else
+    echoErr "Unkown command: $command"
+    echoUsage
+    exit 1
+  fi
 }
 
 [[ "$0" == "$BASH_SOURCE" ]] && main "$@"
