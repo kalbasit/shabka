@@ -85,7 +85,43 @@ cratos:
     name: "cachix-kalbasit"
     url: "https://yl.cachix.org"
 
+hades:
+  <<: *linux-host-template
+  variables:
+    <<: *global-variables
+    DOTSHABKA_REPO: "https://github.com/kalbasit/dotshabka.git"
+  environment:
+    name: "cachix-kalbasit"
+    url: "https://yl.cachix.org"
+
+hera:
+  <<: *linux-host-template
+  variables:
+    <<: *global-variables
+    DOTSHABKA_REPO: "https://github.com/kalbasit/dotshabka.git"
+  environment:
+    name: "cachix-kalbasit"
+    url: "https://yl.cachix.org"
+
+zeus:
+  <<: *linux-host-template
+  variables:
+    <<: *global-variables
+    DOTSHABKA_REPO: "https://github.com/kalbasit/dotshabka.git"
+  environment:
+    name: "cachix-kalbasit"
+    url: "https://yl.cachix.org"
+
 duck:
+  <<: *linux-host-template
+  variables:
+    <<: *global-variables
+    DOTSHABKA_REPO: "https://gitlab.com/lama-corp/infra/dotshabka.git"
+  environment:
+    name: "cachix-risson"
+    url: "https://risson.cachix.org"
+
+hedgehog:
   <<: *linux-host-template
   variables:
     <<: *global-variables
