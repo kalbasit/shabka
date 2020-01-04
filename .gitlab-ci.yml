@@ -32,8 +32,8 @@ stages:
   cachix use "${CACHIX_CACHE}"
 
 .download-dotshabka: &download-dotshabka |
-  if ! git clone "${DOTSHABKA_REPO}" -b "${CI_COMMIT_BRANCH}"; then
-    git clone "${DOTSHABKA_REPO}"
+  if ! git clone "${DOTSHABKA_REPO}" -b "${CI_COMMIT_BRANCH}" ${HOME}/dotshabka; then
+    git clone "${DOTSHABKA_REPO}" ${HOME}/dotshabka
     >&2 echo "Cloned dotshabka from the master branch"
   else
     >&2 echo "Cloned dotshabka from the ${CI_COMMIT_BRANCH} branch"
@@ -82,7 +82,8 @@ cratos:
     <<: *global-variables
     DOTSHABKA_REPO: "https://github.com/kalbasit/dotshabka.git"
   environment:
-    name: "shabka-kalbasit"
+    name: "cachix-kalbasit"
+    url: "https://yl.cachix.org"
 
 duck:
   <<: *linux-host-template
@@ -90,4 +91,5 @@ duck:
     <<: *global-variables
     DOTSHABKA_REPO: "https://gitlab.com/lama-corp/infra/dotshabka.git"
   environment:
-    name: "shabka-risson"
+    name: "cachix-risson"
+    url: "https://risson.cachix.org"
