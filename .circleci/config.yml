@@ -21,10 +21,9 @@ var_2: &install-dependencies
       # install cachix from nixpkgs at stable
       readonly shabka_path="$( pwd )"
       release="$( tr -d "\n" < "${shabka_path}/.release" )"
-      NIX_PATH="$( "${shabka_path}/lib/bash/nix-path.sh" "${release}" )"
+      source "${shabka_path}/bin/shabka"
+      setNixPath
       nix-env -f '<nixpkgs>' -iA cachix
-      unset release
-      unset NIX_PATH
 
 var_3: &enable-cachix
   run:
@@ -47,7 +46,7 @@ var_4: &build-host
 
       export DOTSHABKA_PATH="${HOME}/dotshabka"
 
-      ./scripts/build-host.sh "${CIRCLE_JOB}"
+      ./bin/shabka -h "${CIRCLE_JOB}" build
 
 var_5: &push-to-cachix
   run:
@@ -70,7 +69,7 @@ var_5: &push-to-cachix
 
       export DOTSHABKA_PATH="${HOME}/dotshabka"
 
-      ./scripts/push-to-cachix.sh "${CACHIX_CACHE}" "${CIRCLE_JOB}"
+      ./bin/shabka push-to-cachix "${CACHIX_CACHE}" "${CIRCLE_JOB}"
 
 var_6: &download-kalbasit-dotshabka
   run:

@@ -78,7 +78,7 @@ setNixPath() {
   declare -r nixpkgs="$( nix-build --no-out-link "${shabka_path}" -A "external.nixpkgs.release-${release/./-}.path" )"
   export NIX_PATH="nixpkgs=${nixpkgs}:shabka=${shabka_path}"
 
-  if [[ "${uname}" == "Darwin" ]]; then
+  if [[ -z "${uname}" ]] || [[ "${uname}" == "Darwin" ]]; then
     declare -r darwin="$( nix-build --no-out-link "${shabka_path}" -A "external.nix-darwin.path" )"
     export NIX_PATH="darwin=${darwin}:${NIX_PATH}"
   fi
