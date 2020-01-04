@@ -59,49 +59,53 @@ We'll discuss the three aspects previously introduced in [Summary](#summary).
 ## `shabka` CLI
 
 The `shabka` CLI will be used by the user to do what they can currently do using
-the tools in the `scripts/` directory. This will allow them to do everything they
-could do using the `nixos-rebuild` command, plus building a host, checking what
-changed in their host's generation between two git refs, and maybe even pushing
-their hosts' configurations to Cachix.
+the tools in the `scripts/` directory. This will allow them to do everything
+they could do using the `nixos-rebuild` command, plus building a host, checking
+what changed in their host's generation between two git refs, and maybe even
+pushing their hosts' configurations to Cachix.
 
 Here is what the CLI usage might look like:
 
-### `shabka rebuild`
+### On NixOS hosts: `shabka {switch | boot | test | build | dry-build | dry-activate}`
 
-This will do what `scripts/nixos-rebuild.sh` currently does. Its usage is:
+This will do what `scripts/nixos-rebuild.sh`, or `script/build-host.sh` for
+`build shabka`, currently does. Its usage is:
 
 ```sh
-shabka rebuild [-h host] [-r release] {nixos-rebuild arguments and options}
+shabka {switch | boot | test | build | dry-build | dry-activate} [-h host] [-r release] [nixos-rebuild arguments and options]
 ```
 
 By default the `host` argument is the current hostname, the `release` argument
-is the host's release (defined in `.shabka/hosts/{host}/.release`) if
-defined, or `shabka`'s default, defined in `shabka/.release`.
-
-This command takes care of setting all environment variables and options to
-ensure a smooth `nixos-rebuild` depending on what is defined in `shabka`,
-`.shabka` and `dotshabka-user`. The default locations of `.shabka` and
-`dotshabka-user` are defined in their respective section of this document.
-
-### `shabka build`
-
-This will do what `scripts/build-host.sh` currently does. Its usage is:
-
-```sh
-shabka build [-r release] [host]
-```
-
-By default the `host` argument is the current hostname, the `release` argument
-is the host's release (defined in `.hosts/hosts/{host}/.release`) if
-defined, or `shabka`'s default, defined in `shabka/.release`.
+is the host's release (defined in `dotshabka/hosts/{host}/release`) if
+defined, or `shabka`'s default, defined in `shabka/release`.
 
 > This command cannot build a host with a different kernel than the host it is
 > being ran on, e.g. a `Darwin` host cannot be built on a `Linux` host.
 
 This command takes care of setting all environment variables and options to
-ensure a smooth `nix-build` depending on what is defined in `shabka`, `.shabka`
-and `dotshabka-user`. The default locations of `.shabka` and `dotshabka-user`
-are defined in their respective section of this document.
+ensure a smooth `nixos-rebuild` depending on what is defined in `shabka`, and
+`dotshabka`. The default location of `dotshabka` are defined in their
+respective section of this document.
+
+### On Darwin hosts: `shabka {switch | activate | build | check}`
+
+This will do what `scripts/darwin-rebuild.sh` currently does. Its usage is:
+
+```sh
+shabka {switch | activate | build | check} [-h host] [-r release] [darwin-rebuild arguments and options]
+```
+
+By default the `host` argument is the current hostname, the `release` argument
+is the host's release (defined in `dotshabka/hosts/{host}/release`) if
+defined, or `shabka`'s default, defined in `shabka/release`.
+
+> This command cannot build a host with a different kernel than the host it is
+> being ran on, e.g. a `Darwin` host cannot be built on a `Linux` host.
+
+This command takes care of setting all environment variables and options to
+ensure a smooth `darwin-rebuild` depending on what is defined in `shabka`, and
+`dotshabka`. The default location of `dotshabka` are defined in their
+respective section of this document.
 
 ### `shabka diff`
 
@@ -127,8 +131,8 @@ This will do what `scripts/push-to-cachix.sh` currently does. Its usage is:
 shabka push-to-cachix <cache-name> [host1] [host2] [host3] [...]
 ```
 
-If no host is given, this command will push every host in `.shabka/hosts`. This
-command requires the environment variable `CACHIX_SIGNING_KEY` to be set.
+If no host is given, this command will push every host in `dotshabka/hosts`.
+This command requires the environment variable `CACHIX_SIGNING_KEY` to be set.
 
 ## `dotshabka` for a user's hosts and personal configuration
 
