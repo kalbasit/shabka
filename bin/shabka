@@ -1,0 +1,153 @@
+#! /usr/bin/env bash
+
+set -euo pipefail
+
+echoErr() {
+  >&2 echo "$@"
+}
+
+echoUsage() {
+  echo "TODO"
+}
+
+setShabkaPath() {
+  # TODO: always get the shabka path from a default location/channel
+  declare -g -r shabka_path="$(cd $(dirname "${BASH_SOURCE[0]}")/../ && pwd)"
+}
+
+setDotshabkaPath() {
+  # TODO: change this to be the default path of .shabka
+  if [[ "x$(printenv DOTSHABKA_PATH)" == "x" ]]; then
+    echoErr "Please define DOTSHABKA_PATH to point to the location of your \
+             .shabka"
+    exit 1
+  fi
+
+  declare -g -r dotshabka_path="${DOTSHABKA_PATH}"
+
+  if ! [[ -d "${dotshabka_path}" ]]; then
+    echoErr "DOTSHABKA_PATH: ${dotshabka_path}: No such directory"
+    exit 1
+  fi
+}
+
+setRelease() {
+  if [[ -z "${release}" ]]; then
+    if [[ -r "${dotshabka_path}/hosts/${host}/release" ]]; then
+      declare -g -r release="$( cat "${dotshabka_path}/hosts/${host}/release" )"
+    else
+      # fallback to the default release
+      declare -g -r release="$( tr -d "\n" < "${shabka_path}/release" )"
+    fi
+  else
+    declare -g -r release="${release}"
+  fi
+
+  export RELEASE="release-${release/./-}"
+}
+
+setUname() {
+  if [[ -r "${dotshabka_path}/hosts/${host}/uname" ]]; then
+    declare -g -r uname="$( cat "${dotshabka_path}/hosts/${host}/uname" )"
+  else
+    echoErr "Required file does not exist: ${dotshabka_path}/hosts/${host}/uname"
+    exit 1
+  fi
+
+  case "${uname}" in
+    "Darwin"|"NixOS")
+      ;;
+    "Linux")
+      echoErr "Linux non-NixOS hosts not supported yet."
+      exit 1
+      ;;
+    *)
+      echoErr "Invalid value ${uname} at ${dotshabka_path}/hosts/${host}/uname"
+      exit 1
+      ;;
+  esac
+}
+
+setNixPath() {
+  declare -r nixpkgs="$( nix-build --no-out-link "${shabka_path}" -A "external.nixpkgs.release-${release/./-}.path" )"
+  export NIX_PATH="nixpkgs=${nixpkgs}:shabka=${shabka_path}"
+
+  if [[ "${uname}" == "Darwin" ]]; then
+    declare -r darwin="$( nix-build --no-out-link "${shabka_path}" -A "external.nix-darwin.path" )"
+    export NIX_PATH="darwin=${darwin}:${NIX_PATH}"
+  fi
+}
+
+setNixosConfigPath() {
+  declare -g -r nixos_config="${dotshabka_path}/hosts/${host}/configuration.nix"
+  if ! [[ -r "${nixos_config}" ]]; then
+    echoErr "Configuration for nixos_config ${nixos_config} does not exist."
+    exit 1
+  fi
+}
+
+doSwitch() {
+  setRelease
+  setUname
+  setNixPath
+  setNixosConfigPath
+
+  echo "NIX_PATH=${NIX_PATH}"
+  set -x
+  nixos-rebuild -I "nixos-config=${nixos_config}" switch "${@}"
+}
+
+main () {
+  if [[ "$#" -eq 0 ]]; then
+    echoUsage
+    exit 1
+  fi
+
+  setShabkaPath
+  setDotshabkaPath
+
+  host="$( hostname -s )"
+  release=""
+
+  while getopts ":h:r:" opt; do
+      case "${opt}" in
+        h)
+          host="${OPTARG}"
+          ;;
+        r)
+          release="${OPTARG}"
+          ;;
+        :)
+          echoErr "Invalid option: $OPTARG requires an argument"
+          echoUsage
+          exit 1
+          ;;
+        \?)
+          # end of possible arguments, rest are for the command
+          break
+          ;;
+      esac
+  done
+  shift $((OPTIND -1))
+
+  declare -g -r host="${host}"
+  declare -g release="${release}"
+
+  declare -r command="$1"
+  shift 1
+
+  case "$command" in
+    switch)
+      doSwitch "${@}"
+    ;;
+    help)
+      >&2 echoUsage
+      exit 1
+      ;;
+    *)
+      echoErr "Unkown command: $command"
+      exit 1
+  esac
+}
+
+main "$@"
