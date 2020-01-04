@@ -1,0 +1,93 @@
+default:
+  image: nixos/nix
+
+stages:
+  - build
+
+global-variables: &global-variables
+  PLACEHOLDER: "for future use"
+
+install-nix: &install-nix |
+  curl https://nixos.org/nix/install | sh
+
+install-dependencies: &install-dependencies |
+   if [[ -r "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]]; then
+     source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
+   fi
+
+   # install git and bash
+   nix-env -f '<nixpkgs>' -i -A gitAndTools.git -A bash
+
+   # install cachix from nixpkgs at stable
+   readonly shabka_path="$( pwd )"
+   release="$( tr -d "\n" < "${shabka_path}/.release" )"
+   export NIX_PATH="$( "${shabka_path}/lib/bash/nix-path.sh" "${release}" )"
+   nix-env -f '<nixpkgs>' -iA cachix
+
+enable-cachix: &enable-cachix |
+  if [[ -r "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]]; then
+    source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
+  fi
+
+  cachix use "${CACHIX_CACHE}"
+
+build-host: &build-host |
+  if [[ -r "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]]; then
+    source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
+  fi
+
+  export DOTSHABKA_PATH="${HOME}/dotshabka"
+
+  ./scripts/build-host.sh "${CI_JOB_NAME}"
+
+push-to-cachix: &push-to-cachix |
+  if [[ -r "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]]; then
+    source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
+  fi
+
+  # Cachix is not available for pull requests coming from a fork for security reasons.
+  if [[ -z "${CACHIX_SIGNING_KEY:-}" ]]; then
+    >&2 echo "CACHIX_SIGNING_KEY is not set, cannot push to cachix"
+    exit 0
+  fi
+  if [[ -z "${CACHIX_CACHE:-}" ]]; then
+    >&2 echo "CACHIX_CACHE is not set, cannot push to cachix"
+    exit 0
+  fi
+
+  export DOTSHABKA_PATH="${HOME}/dotshabka"
+
+  ./scripts/push-to-cachix.sh "${CACHIX_CACHE}" "${CI_JOB_NAME}"
+
+download-dotshabka: &download-dotshabka |
+  if ! git clone "${DOTSHABKA_REPO}" -b "${CI_COMMIT_BRANCH}"; then
+    git clone "${DOTSHABKA_REPO}"
+    >&2 echo "Cloned dotshabka from the master branch"
+  else
+    >&2 echo "Cloned dotshabka from the ${CI_COMMIT_BRANCH} branch"
+  fi
+
+.linux-host-template: &linux-host-template
+  stage: build
+  script:
+    - *install-dependencies
+    - *enable-cachix
+    - *download-dotshabka
+    - *build-host
+    - *push-to-cachix
+
+cratos:
+  <<: *linux-host-template
+  variables:
+    <<: *global-variables
+    DOTSHABKA_REPO: "https://github.com/kalbasit/dotshabka.git"
+  environment:
+    name: "shabka-kalbasit"
+
+duck:
+  <<: *linux-host-template
+  variables:
+    <<: *global-variables
+    DOTSHABKA_REPO: "https://gitlab.com/lama-corp/infra/dotshabka.git"
+  environment:
+    name: "shabka-risson"
