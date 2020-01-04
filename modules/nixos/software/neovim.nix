@@ -44,9 +44,6 @@ in {
 
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      # TODO: direnv plugin must refer to its own direnv binary by full path
-      direnv
-
       (wrapNeovim neovim.unwrapped neovimConfig)
     ];
   };
