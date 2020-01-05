@@ -29,15 +29,16 @@ var_3: &install-cachix
 
       # install cachix from nixpkgs at stable
       readonly shabka_path="$( pwd )"
-      release="$( tr -d "\n" < "${shabka_path}/release" )"
+      readonly release="$( tr -d "\n" < "${shabka_path}/release" )"
+
       source "${shabka_path}/bin/shabka"
-      setNixPath
+      export NIX_PATH="$( getNixPath "${release}" '' )"
+
       nix-env -f '<nixpkgs>' -iA cachix
 
 var_4: &enable-cachix
   run:
     name: Enable cachix
-    shell: /usr/bin/env bash -euxo pipefail
     command: |
       if [[ -r "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]]; then
         source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
@@ -49,7 +50,6 @@ var_5: &download-kalbasit-dotshabka
   run:
     name: Download dotshabka from kalbasit
     working_directory: ~/
-    shell: /usr/bin/env bash -euxo pipefail
     command: |
       if ! git clone https://github.com/kalbasit/dotshabka.git -b "${CIRCLE_BRANCH}" "${HOME}/.shabka"; then
         git clone https://github.com/kalbasit/dotshabka.git "${HOME}/.shabka"
@@ -62,7 +62,6 @@ var_6: &download-risson-dotshabka
   run:
     name: Download dotshabka from risson
     working_directory: ~/
-    shell: /usr/bin/env bash -euxo pipefail
     command: |
       if ! git clone https://github.com/rissson/dotshabka.git -b "${CIRCLE_BRANCH}" "${HOME}/.shabka"; then
         git clone https://github.com/rissson/dotshabka.git "${HOME}/.shabka"
@@ -75,7 +74,6 @@ var_7: &build-host
   run:
     name: Building the host
     working_directory: ~/shabka
-    shell: /usr/bin/env bash -euxo pipefail
     command: |
       if [[ -r "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]]; then
         source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
@@ -89,7 +87,6 @@ var_8: &push-to-cachix
   run:
     name: Push the build to cachix
     working_directory: ~/shabka
-    shell: /usr/bin/env bash -euxo pipefail
     command: |
       if [[ -r "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]]; then
         source "${HOME}/.nix-profile/etc/profile.d/nix.sh"

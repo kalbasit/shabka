@@ -17,120 +17,176 @@ echoUsage() {
 }
 
 setShabkaPath() {
+  desc="TODO"
+
   # TODO: always get the shabka path from a default location/channel
   declare -g -r shabka_path="$(cd $(dirname "${BASH_SOURCE[0]}")/../ && pwd)"
 }
 
 setDotshabkaPath() {
+  desc="TODO"
+
   # TODO: change this to be the default path of .shabka
   if [[ "x$(printenv DOTSHABKA_PATH)" == "x" ]]; then
-    echoErr "Please define DOTSHABKA_PATH to point to the location of your \
-             .shabka"
+    echoErr "Please define DOTSHABKA_PATH to point to the location of your .shabka."
     exit 1
   fi
 
   declare -g -r dotshabka_path="${DOTSHABKA_PATH}"
 
   if ! [[ -d "${dotshabka_path}" ]]; then
-    echoErr "DOTSHABKA_PATH: ${dotshabka_path}: No such directory"
+    echoErr "DOTSHABKA_PATH: ${dotshabka_path}: No such directory."
     exit 1
   fi
 }
 
-setRelease() {
-  if [[ -z "${release:-}" ]]; then
-    if [[ -r "${dotshabka_path}/hosts/${host}/release" ]]; then
-      declare -g -r release="$( cat "${dotshabka_path}/hosts/${host}/release" )"
-    else
-      # fallback to the default release
-      declare -g -r release="$( tr -d "\n" < "${shabka_path}/release" )"
-    fi
+getHostRelease() {
+  desc="Get the release of a host, defaults to shabka's release.
+        Usage: getHostRelease <host>
+        Requires shabka_path and dotshabka_path to be set."
+
+  declare -r host="${1}"
+  shift 1
+
+  if [[ -r "${dotshabka_path}/hosts/${host}/release" ]]; then
+    declare -r host_release="$( cat "${dotshabka_path}/hosts/${host}/release" )"
   else
-    declare -g -r release="${release}"
+    # fallback to shabka's default release
+    declare -r host_release="$( tr -d "\n" < "${shabka_path}/release" )"
   fi
 
-  export RELEASE="release-${release/./-}"
+  echo "${host_release}"
+
+  #export RELEASE="release-${release/./-}"
 }
 
-setUname() {
+getHostUname() {
+  desc="Get the uname of a host.
+        Usage: getHostUname <host>
+        Requires dotshabka_path to be set."
+
+  declare -r host="${1}"
+  shift 1
+
   if [[ -r "${dotshabka_path}/hosts/${host}/uname" ]]; then
-    declare -g -r uname="$( cat "${dotshabka_path}/hosts/${host}/uname" )"
+    declare -g -r host_uname="$( cat "${dotshabka_path}/hosts/${host}/uname" )"
   else
     echoErr "Required file does not exist: ${dotshabka_path}/hosts/${host}/uname"
     exit 1
   fi
 
-  case "${uname}" in
+  case "${host_uname}" in
     "Darwin"|"NixOS")
+      echo "${host_uname}"
       ;;
     "Linux")
       echoErr "Linux non-NixOS hosts not supported yet."
       exit 1
       ;;
     *)
-      echoErr "Invalid value ${uname} at ${dotshabka_path}/hosts/${host}/uname"
+      echoErr "Invalid value ${host_uname} at
+               ${dotshabka_path}/hosts/${host}/uname"
       exit 1
       ;;
   esac
 }
 
-setNixPath() {
-  declare -r nixpkgs="$( nix-build --no-out-link "${shabka_path}" -A "external.nixpkgs.release-${release/./-}.path" )"
-  export NIX_PATH="nixpkgs=${nixpkgs}:shabka=${shabka_path}"
+getNixPath() {
+  desc="Compute the NIX_PATH from release and uname.
+        Usage: getNixPath <release> <uname>
+        Requires shabka_path to be set."
+
+  declare -r release="${1}"
+  declare -r uname="${2}"
+  shift 2
+
+  declare -r nixpkgs="$( nix-build --no-out-link "${shabka_path}" \
+                         -A "external.nixpkgs.release-${release/./-}.path" )"
+  declare nix_path="nixpkgs=${nixpkgs}:shabka=${shabka_path}"
 
   if [[ -z "${uname:-}" ]] || [[ "${uname}" == "Darwin" ]]; then
-    declare -r darwin="$( nix-build --no-out-link "${shabka_path}" -A "external.nix-darwin.path" )"
-    export NIX_PATH="darwin=${darwin}:${NIX_PATH}"
+    declare -r nix_darwin="$( nix-build --no-out-link "${shabka_path}" \
+                              -A "external.nix-darwin.path" )"
+    declare nix_path="darwin=${nix_darwin}:${NIX_PATH}"
   fi
-  echoInfo "NIX_PATH=${NIX_PATH}"
+
+  echo "${nix_path}"
 }
 
-setNixosConfigPath() {
-  declare -g -r nixos_config="${dotshabka_path}/hosts/${host}/configuration.nix"
-  if ! [[ -r "${nixos_config}" ]]; then
-    echoErr "Configuration for nixos_config ${nixos_config} does not exist."
+getConfigPath() {
+  desc="Get the configuration.nix path for a host.
+        Usage: getConfigPath <host>
+        Requires dotshabka_path to be set."
+
+  declare -r host="${1}"
+  shift 1
+
+  declare -r config_path="${dotshabka_path}/hosts/${host}/configuration.nix"
+  if ! [[ -r "${config_path}" ]]; then
+    echoErr "Configuration ${config_path} does not exist."
     exit 1
   fi
+
+  echo "${config_path}"
 }
 
-setDarwinConfigPath() {
-  declare -g -r darwin_config="${dotshabka_path}/hosts/${host}/configuration.nix"
-  if ! [[ -r "${darwin_config}" ]]; then
-    echoErr "Configuration for darwin_config ${darwin_config} does not exist."
-    exit 1
+executeBuild() {
+  desc="Build a host.
+        Usage: executeBuild <host> <release> [nix-build arguments and options]
+        Requires shabka_path and dotshabka_path to be set."
+
+  declare -r host="${1}"
+  declare release="${2}"
+  shift 2
+
+  if [[ -z "${release:-}" ]]; then
+    declare -r release="$( getHostRelease "${host}" )"
+  else
+    declare -r release="${release}"
   fi
+  export RELEASE="release-${release/./-}"
+
+  declare -r uname="$( getHostUname "${host}" )"
+
+  export NIX_PATH="$( getNixPath "${release}" "${uname}" )"
+
+  nix-build --option builders '' "${dotshabka_path}/hosts/${host}" -A system "${@}"
 }
 
 executeRebuild() {
-  declare -r command="${1}"
-  shift 1
+  desc="Rebuild a host.
+        Usage: executeRebuild <command> <host> <release> [nixos-build arguments and options]
+        Requires shabka_path and dotshabka_path to be set."
 
-  setRelease
-  setUname
-  setNixPath
+  declare -r cmd="${1}"
+  declare -r host="${2}"
+  declare -r release="${3}"
+  shift 3
+
+  if [[ -z "${release:-}" ]]; then
+    declare -r release="$( getHostRelease "${host}" )"
+  else
+    declare -r release="${release}"
+  fi
+  export RELEASE="release-${release/./-}"
+
+  declare -r uname="$( getHostUname "${host}" )"
+
+  export NIX_PATH="$( getNixPath "${release}" "${uname}" )"
 
   case "${uname}" in
     "NixOS")
       setNixosConfigPath
-      set -x
-      nixos-rebuild -I "nixos-config=${nixos_config}" "${command}" "${@}"
-      set +x
+      nixos-rebuild -I "nixos-config=$( getConfigPath "${host}" )" "${command}" "${@}"
       ;;
-    # For future use
     "Darwin")
       setDarwinConfigPath
-      set -x
-      darwin-rebuild -I "darwin-config=${darwin_config}" "${command}" "${@}"
-      set +x
+      darwin-rebuild -I "darwin-config=$( getConfigPath "${host}" )" "${command}" "${@}"
       ;;
+    # For future use
     "Linux")
       ;;
   esac
-}
-
-executePushToCachix() {
-  declare -r cache_name="${1}"
-  shift 1
 }
 
 main() {
@@ -139,19 +195,16 @@ main() {
     exit 1
   fi
 
-  setShabkaPath
-  setDotshabkaPath
-
-  host="$( hostname -s )"
-  release=""
+  declare host="$( hostname -s )"
+  declare release=
 
   while getopts ":h:r:" opt; do
       case "${opt}" in
         h)
-          host="${OPTARG}"
+          declare host="${OPTARG}"
           ;;
         r)
-          release="${OPTARG}"
+          declare release="${OPTARG}"
           ;;
         :)
           echoErr "Invalid option: $OPTARG requires an argument"
@@ -166,26 +219,30 @@ main() {
   done
   shift $((OPTIND -1))
 
-  declare -g -r host="${host}"
-  declare -g release="${release}"
+  declare -r host="${host}"
+  declare -r release="${release}"
 
   declare -r command="${1}"
   shift 1
+
+  setShabkaPath
+  setDotshabkaPath
 
   case "${command}" in
     help)
       echoUsage
       exit 0
       ;;
-    switch|boot|test|build|dry-build|dry-activate|activate|check)
-      executeRebuild "${command}" "${@}"
-      exit 0
+    build)
+      executeBuild "${host}" "${release}" "${@}"
+    ;;
+    switch|boot|test|dry-build|dry-activate|activate|check)
+      executeRebuild "${command}" "${host}" "${release}" "${@}"
       ;;
-    push-to-cachix)
-      # Command is the cache name here, the rest are hosts
-      executePushToCachix "${command}" "${@}"
-      exit 0
-      ;;
+#    push-to-cachix)
+#      # Command is the cache name here, the rest are hosts
+#      executePushToCachix "${command}" "${@}"
+#      ;;
     *)
       echoErr "Unkown command: $command"
       echoUsage
