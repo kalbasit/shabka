@@ -1,13 +1,13 @@
 #! /usr/bin/env bash
 
-set -euxo pipefail
+set -euo pipefail
 
 echoErr() { >&2 echo "ERR: ${*}" ; }
 echoWarn() { >&2 echo "WARN: ${*}" ; }
 echoInfo() { >&2 echo "INFO: ${*}" ; }
 echoSuccess() { >&2 echo "SUCCESS: ${*}" ; }
 containsElement() {
-  declare -r to_find="${1}"; shift
+  declare -r to_find="${1}"; shift 1
   for element in "${@}"; do [[ "${element}" == "${to_find}" ]] && return 0; done
   return 1
 }
@@ -38,7 +38,7 @@ setDotshabkaPath() {
 }
 
 setRelease() {
-  if [[ -z "${release}" ]]; then
+  if [[ -z "${release:-}" ]]; then
     if [[ -r "${dotshabka_path}/hosts/${host}/release" ]]; then
       declare -g -r release="$( cat "${dotshabka_path}/hosts/${host}/release" )"
     else
@@ -78,7 +78,7 @@ setNixPath() {
   declare -r nixpkgs="$( nix-build --no-out-link "${shabka_path}" -A "external.nixpkgs.release-${release/./-}.path" )"
   export NIX_PATH="nixpkgs=${nixpkgs}:shabka=${shabka_path}"
 
-  if [[ -z "${uname}" ]] || [[ "${uname}" == "Darwin" ]]; then
+  if [[ -z "${uname:-}" ]] || [[ "${uname}" == "Darwin" ]]; then
     declare -r darwin="$( nix-build --no-out-link "${shabka_path}" -A "external.nix-darwin.path" )"
     export NIX_PATH="darwin=${darwin}:${NIX_PATH}"
   fi
@@ -95,8 +95,7 @@ setNixosConfigPath() {
 
 executeRebuild() {
   declare -r command="${1}"
-  declare -r args="${@}"
-
+  shift 1
 
   setRelease
   setUname
@@ -116,7 +115,12 @@ executeRebuild() {
   esac
 
   set -x
-  "${rebuild_command}" -I "nixos-config=${nixos_config}" "${command}" "${args}"
+  "${rebuild_command}" -I "nixos-config=${nixos_config}" "${command}" "${@}"
+}
+
+executePushToCachix() {
+  declare -r cache_name="${1}"
+  shift 1
 }
 
 main() {
@@ -157,35 +161,27 @@ main() {
 
   declare -r command="${1}"
   shift 1
-  declare -r args="${@}"
 
-  declare -g -r nixos_rebuild_commands=(
-    "switch"
-    "boot"
-    "test"
-    "build"
-    "dry-build"
-    "dry-activate"
-  )
-
-  declare -g -r darwin_rebuild_commands=(
-    "switch"
-    "activate"
-    "build"
-    "check"
-  )
-
-  if [[ "${command}" == "help" ]]; then
-    echoUsage
-    exit 1
-  elif containsElement "${command}" nixos_rebuild_commands && \
-    containsElement "${command}" darwin_rebuild_commands; then
-    executeRebuild "${command}" "${args}"
-  else
-    echoErr "Unkown command: $command"
-    echoUsage
-    exit 1
-  fi
+  case "${command}" in
+    help)
+      echoUsage
+      exit 0
+      ;;
+    switch|boot|test|build|dry-build|dry-activate|activate|check)
+      executeRebuild "${command}" "${@}"
+      exit 0
+      ;;
+    push-to-cachix)
+      # Command is the cache name here, the rest are hosts
+      executePushToCachix "${command}" "${@}"
+      exit 0
+      ;;
+    *)
+      echoErr "Unkown command: $command"
+      echoUsage
+      exit 1
+      ;;
+  esac
 }
 
-[[ "$0" == "$BASH_SOURCE" ]] && main "$@"
+[[ "$0" == "$BASH_SOURCE" ]] && main "$@" || true
