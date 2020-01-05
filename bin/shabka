@@ -2,10 +2,10 @@
 
 set -euo pipefail
 
-echoErr() { >&2 echo "ERR: ${*}" ; }
-echoWarn() { >&2 echo "WARN: ${*}" ; }
-echoInfo() { >&2 echo "INFO: ${*}" ; }
-echoSuccess() { >&2 echo "SUCCESS: ${*}" ; }
+echoErr() { >&2 echo -e "\e[1;31m[ERR] ${*}\e[0m" ; }
+echoWarn() { >&2 echo -e "\e[1;33m[WARN] ${*}\e[0m" ; }
+echoInfo() { >&2 echo -e "\e[1;34m[INFO] ${*}\e[0m" ; }
+echoSuccess() { >&2 echo -e "\e[1;32m[SUCCESS] ${*}\e[0m" ; }
 containsElement() {
   declare -r to_find="${1}"; shift 1
   for element in "${@}"; do [[ "${element}" == "${to_find}" ]] && return 0; done
@@ -13,22 +13,24 @@ containsElement() {
 }
 
 echoUsage() {
-  >&2 echo "TODO"
+  >&2 echo "Usage: TODO"
 }
 
 setShabkaPath() {
-  desc="TODO"
+  desc="Set the global readonly shabka_path variable to point to the path where
+        shabka is stored."
 
   # TODO: always get the shabka path from a default location/channel
   declare -g -r shabka_path="$(cd $(dirname "${BASH_SOURCE[0]}")/../ && pwd)"
 }
 
 setDotshabkaPath() {
-  desc="TODO"
+  desc="Set the global readonly dotshabka_path variable to point to the path
+        where dotshabka is stored."
 
   # TODO: change this to be the default path of .shabka
-  if [[ "x$(printenv DOTSHABKA_PATH)" == "x" ]]; then
-    echoErr "Please define DOTSHABKA_PATH to point to the location of your .shabka."
+  if [[ -z "${DOTSHABKA_PATH:-}" ]]; then
+    echoErr "DOTSHABKA_PATH variable is required."
     exit 1
   fi
 
@@ -56,8 +58,6 @@ getHostRelease() {
   fi
 
   echo "${host_release}"
-
-  #export RELEASE="release-${release/./-}"
 }
 
 getHostUname() {
@@ -130,9 +130,9 @@ getConfigPath() {
   echo "${config_path}"
 }
 
-executeBuild() {
+buildHost() {
   desc="Build a host.
-        Usage: executeBuild <host> <release> [nix-build arguments and options]
+        Usage: buildHost <host> <release> [nix-build arguments and options]
         Requires shabka_path and dotshabka_path to be set."
 
   declare -r host="${1}"
@@ -144,23 +144,23 @@ executeBuild() {
   else
     declare -r release="${release}"
   fi
-  export RELEASE="release-${release/./-}"
 
   declare -r uname="$( getHostUname "${host}" )"
 
   export NIX_PATH="$( getNixPath "${release}" "${uname}" )"
 
-  nix-build --option builders '' "${dotshabka_path}/hosts/${host}" -A system "${@}"
+  echoInfo "nix-build --option builders '' \"${dotshabka_path}/hosts/${host}\" -A system \"${@}\""
+  RELEASE="release-${release/./-}" nix-build --option builders '' "${dotshabka_path}/hosts/${host}" -A system "${@}"
 }
 
-executeRebuild() {
+rebuildHost() {
   desc="Rebuild a host.
-        Usage: executeRebuild <command> <host> <release> [nixos-build arguments and options]
+        Usage: rebuildHost <command> <host> <release> [nixos-build arguments and options]
         Requires shabka_path and dotshabka_path to be set."
 
   declare -r cmd="${1}"
   declare -r host="${2}"
-  declare -r release="${3}"
+  declare release="${3}"
   shift 3
 
   if [[ -z "${release:-}" ]]; then
@@ -168,7 +168,6 @@ executeRebuild() {
   else
     declare -r release="${release}"
   fi
-  export RELEASE="release-${release/./-}"
 
   declare -r uname="$( getHostUname "${host}" )"
 
@@ -177,16 +176,85 @@ executeRebuild() {
   case "${uname}" in
     "NixOS")
       setNixosConfigPath
-      nixos-rebuild -I "nixos-config=$( getConfigPath "${host}" )" "${command}" "${@}"
+      RELEASE="release-${release/./-}" nixos-rebuild -I "nixos-config=$( getConfigPath "${host}" )" "${command}" "${@}"
       ;;
     "Darwin")
       setDarwinConfigPath
-      darwin-rebuild -I "darwin-config=$( getConfigPath "${host}" )" "${command}" "${@}"
+      RELEASE="release-${release/./-}" darwin-rebuild -I "darwin-config=$( getConfigPath "${host}" )" "${command}" "${@}"
       ;;
     # For future use
     "Linux")
       ;;
   esac
+}
+
+pushHostToCachix() {
+  desc="Push host to Cachix binary cache.
+        Usage: pushHostToCachix <binary-cache-name> <release> <host>
+        Requires shabka_path, dotshabka_path and CACHIX_SIGNING_KEY to be set."
+
+  declare -r binary_cache_name="${1}"
+  declare release="${2}"
+  declare -r host="${3}"
+  shift 3
+
+  declare -r current_uname="$(uname -s | tr -d '\n')"
+  declare -r uname="$( getHostUname "${host}" )"
+
+  echoInfo "current_uname: ${current_uname}"
+  echoInfo "uname: ${uname}"
+
+  if [[ "${current_uname}" == "Linux" ]] && [[ "${uname}" == "Darwin" ]]; then
+    echoWarn "The host ${host} of type ${uname} cannot be built on ${current_uname}"
+    return
+  elif [[ "${current_uname}" == "Darwin" ]] && ([[ "${uname}" == "Nixos" ]] || [[ "${uname}" == "Linux" ]]); then
+    echoWarn "The host ${host} of type ${uname} cannot be built on ${current_uname}"
+    return
+  fi
+
+  buildHost "${host}" "${release}" | cachix push "${binary_cache_name}"
+}
+
+pushToCachix() {
+  desc="Push host(s) to Cachix binary cache.
+        Usage: pushToCachix <binary-cache-name> <release> [host1] [host2] [...]
+        Requires shabka_path, dotshabka_path and CACHIX_SIGNING_KEY to be set."
+
+  declare -r binary_cache_name="${1}"
+  declare -r release="${2}"
+  shift 2
+
+  # check that cachix CLI tool is installed
+  if ! command -v cachix >/dev/null 2>&1; then
+    echoErr "Cachix CLI tool is required to push to Cachix!"
+    exit 1
+  fi
+
+  # I don't want to ever make the mistake of pushing while my private files are
+  # accessible. This is meant to go away eventually, see #216 for more
+  # information
+  if [[ -e "${dotshabka_path}/secrets" ]]; then
+    echoErr "${dotshabka_path}/secrets exists. Will not continue!"
+    exit 1
+  fi
+
+  if [[ -z "${CACHIX_SIGNING_KEY:-}" ]]; then
+    echoErr "Please set the environment variable CACHIX_SIGNING_KEY before calling the script."
+    exit 1
+  fi
+
+  if [[ "${#}" -ne 0 ]]; then
+    while [[ "${#}" -ne 0 ]]; do
+      declare host="${1}"
+      shift
+      pushHostToCachix "${binary_cache_name}" "${release}" "${host}"
+    done
+    return
+  fi
+
+  for hostPath in "${dotshabka_path}"/hosts/*; do
+    pushHostToCachix "${binary_cache_name}" "${release}" "$( basename "${hostPath}" )"
+  done
 }
 
 main() {
@@ -222,6 +290,12 @@ main() {
   declare -r host="${host}"
   declare -r release="${release}"
 
+  if [[ "${#}" -eq 0 ]]; then
+    echoErr "No command specified"
+    echoUsage
+    exit 1
+  fi
+
   declare -r command="${1}"
   shift 1
 
@@ -229,22 +303,29 @@ main() {
   setDotshabkaPath
 
   case "${command}" in
-    help)
+    "help")
       echoUsage
       exit 0
       ;;
-    build)
-      executeBuild "${host}" "${release}" "${@}"
+    "build")
+      buildHost "${host}" "${release}" "${@}"
     ;;
-    switch|boot|test|dry-build|dry-activate|activate|check)
-      executeRebuild "${command}" "${host}" "${release}" "${@}"
+    "switch"|"boot"|"test"|"dry-build"|"dry-activate"|"activate"|"check")
+      rebuildHost "${command}" "${host}" "${release}" "${@}"
       ;;
-#    push-to-cachix)
-#      # Command is the cache name here, the rest are hosts
-#      executePushToCachix "${command}" "${@}"
-#      ;;
+    "push-to-cachix")
+      if [[ "${#}" -eq 0 ]]; then
+        echoErr "Cachix binary cache name missing."
+        echoUsage
+        exit 1
+      fi
+      declare -r binary_cache_name="${1}"
+      shift 1
+
+      pushToCachix "${binary_cache_name}" "${release}" "${@}"
+      ;;
     *)
-      echoErr "Unkown command: $command"
+      echoErr "Unkown command: ${command}"
       echoUsage
       exit 1
       ;;
