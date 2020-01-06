@@ -15,6 +15,7 @@ cask "virtualbox"                 # VirtualBox for VM
 cask "virtualbox-extension-pack"  # VirtualBox extensions
 cask "vlc"                        # VideoLan video player
 cask "whatsapp"                   # WhatsApp application
+cask 'viscosity'
 
 # TODO: Whatever does not install via nix, install it via Brew. Below, is the contents of my old Brewfile.
 #
@@ -91,7 +92,6 @@ cask "whatsapp"                   # WhatsApp application
 # cask 'tunnelblick'
 # cask 'vagrant'
 # cask 'viber'
-# cask 'viscosity'
 # cask 'vyprvpn'
 # cask 'wkhtmltopdf' # Required for transmuter
 # cask 'yubico-authenticator'
