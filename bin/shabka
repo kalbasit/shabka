@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-declare __VERBOSE=0
+declare __VERBOSE="${__VERBOSE:0}"
 
 echoErr() { >&2 echo -e "\e[1;31m[ERR] ${*}\e[0m" ; }
 echoWarn() { >&2 echo -e "\e[1;33m[WARN] ${*}\e[0m" ; }
