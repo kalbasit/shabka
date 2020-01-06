@@ -26,11 +26,6 @@ echoDebug3() {
   >&2 echo -e "\e[1;35m[DEBUG3] ${*}\e[0m"
 }
 echoSuccess() { >&2 echo -e "\e[1;32m[SUCCESS] ${*}\e[0m" ; }
-containsElement() {
-  declare -r to_find="${1}"; shift 1
-  for element in "${@}"; do [[ "${element}" == "${to_find}" ]] && return 0; done
-  return 1
-}
 
 echoUsage() {
   >&2 echo "Usage: TODO"
