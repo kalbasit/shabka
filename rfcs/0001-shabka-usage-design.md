@@ -72,7 +72,7 @@ This will do what `scripts/nixos-rebuild.sh`, or `script/build-host.sh` for
 `build shabka`, currently does. Its usage is:
 
 ```sh
-shabka {switch | boot | test | build | dry-build | dry-activate} [-h host] [-r release] [nixos-rebuild arguments and options]
+shabka [-h host] [-r release] {switch | boot | test | build | dry-build | dry-activate} [nixos-rebuild arguments and options]
 ```
 
 By default the `host` argument is the current hostname, the `release` argument
@@ -92,7 +92,7 @@ respective section of this document.
 This will do what `scripts/darwin-rebuild.sh` currently does. Its usage is:
 
 ```sh
-shabka {switch | activate | build | check} [-h host] [-r release] [darwin-rebuild arguments and options]
+shabka [-h host] [-r release] {switch | activate | build | check} [darwin-rebuild arguments and options]
 ```
 
 By default the `host` argument is the current hostname, the `release` argument
