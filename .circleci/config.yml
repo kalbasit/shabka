@@ -21,6 +21,7 @@ var_2: &install-dependencies
 var_3: &install-cachix
   run:
     name: Install Cachix
+    shell: /usr/bin/env bash --login -eo pipefail
     command: |
       if [[ -r "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]]; then
         source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
