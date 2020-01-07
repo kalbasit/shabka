@@ -152,13 +152,15 @@ getNixPath() {
   declare -r uname="${2}"
   shift 2
 
-  declare -r nixpkgs="$( nix-build --no-out-link "${shabka_path}" \
+  declare -r nixpkgs="$( set -e;
+                         nix-build --no-out-link "${shabka_path}" \
                          -A "external.nixpkgs.release-${release/./-}.path" )"
   declare nix_path="nixpkgs=${nixpkgs}:shabka=${shabka_path}"
   echoDebug2 "nix_path set with nixpkgs and shabka to '${nix_path}'"
 
   if [[ -z "${uname:-}" ]] || [[ "${uname}" == "Darwin" ]]; then
-    declare -r nix_darwin="$( nix-build --no-out-link "${shabka_path}" \
+    declare -r nix_darwin="$( set -e; \
+                              nix-build --no-out-link "${shabka_path}" \
                               -A "external.nix-darwin.path" )"
     declare nix_path="darwin=${nix_darwin}:${nix_path}"
     echoDebug2 "Added nix_darwin to nix_path: '${nix_path}'"
@@ -199,17 +201,21 @@ buildHost() {
 
   if [[ -z "${release:-}" ]]; then
     echoDebug2 "Release not set, setting it from the host's."
-    declare -r release="$( getHostRelease "${host}" )"
+    declare -r release="$( set -e; getHostRelease "${host}" )"
   else
     echoDebug2 "Using provided release."
     declare -r release="${release}"
   fi
 
-  declare -r uname="$( getHostUname "${host}" )"
+  declare -r uname="$( set -e; getHostUname "${host}" )"
 
-  export NIX_PATH="$( getNixPath "${release}" "${uname}" )"
+  export NIX_PATH="$( set -e; getNixPath "${release}" "${uname}" )"
 
-  (set -x; RELEASE="release-${release/./-}" nix-build --option builders '' "${dotshabka_path}/hosts/${host}" -A system "${@}")
+  (set -ex; \
+   RELEASE="release-${release/./-}" \
+      nix-build --option builders '' "${dotshabka_path}/hosts/${host}" \
+      -A system "${@}"\
+  )
 
   echoSuccess "Finished building host ${host}."
 }
@@ -228,22 +234,30 @@ rebuildHost() {
 
   if [[ -z "${release:-}" ]]; then
     echoDebug2 "Release not set, setting it from the host's."
-    declare -r release="$( getHostRelease "${host}" )"
+    declare -r release="$( set -e; getHostRelease "${host}" )"
   else
     echoDebug2 "Using provided release."
     declare -r release="${release}"
   fi
 
-  declare -r uname="$( getHostUname "${host}" )"
+  declare -r uname="$( set -e; getHostUname "${host}" )"
 
-  export NIX_PATH="$( getNixPath "${release}" "${uname}" )"
+  export NIX_PATH="$( set -e; getNixPath "${release}" "${uname}" )"
+
+  declare -r configPath="$( set -e; getConfigPath "${host}" )"
 
   case "${uname}" in
     "NixOS")
-      (set -x; RELEASE="release-${release/./-}" nixos-rebuild -I "nixos-config=$( getConfigPath "${host}" )" "${command}" "${@}")
+      (set -ex; \
+       RELEASE="release-${release/./-}" \
+        nixos-rebuild -I "nixos-config=${configPath}" "${command}" "${@}" \
+      )
       ;;
     "Darwin")
-      (set -x; RELEASE="release-${release/./-}" darwin-rebuild -I "darwin-config=$( getConfigPath "${host}" )" "${command}" "${@}")
+      (set -ex; \
+       RELEASE="release-${release/./-}" \
+        darwin-rebuild -I "darwin-config=${configPath}" "${command}" "${@}" \
+      )
       ;;
     # For future use
     "Linux")
@@ -265,8 +279,8 @@ pushHostToCachix() {
 
   echoInfo "Pushing host ${host} to Cachix ${binary_cache_name}"
 
-  declare -r current_uname="$(uname -s | tr -d '\n')"
-  declare -r uname="$( getHostUname "${host}" )"
+  declare -r current_uname="$( uname -s | tr -d '\n' )"
+  declare -r uname="$( set -e; getHostUname "${host}" )"
 
   if [[ "${current_uname}" == "Linux" ]] && [[ "${uname}" == "Darwin" ]]; then
     echoWarn "The host ${host} of type ${uname} cannot be built on ${current_uname}"
