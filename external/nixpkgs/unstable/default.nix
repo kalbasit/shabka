@@ -7,12 +7,7 @@ let
     inherit (pinnedVersion) url sha256;
   };
 
-  patches = [
-    ./fix-nvim-terraform-plugin.patch
-
-    # https://github.com/NixOS/nixpkgs/pull/76926
-    ./76926-vim-direnv-hardcode-direnv-path.patch
-  ];
+  patches = [];
 
   patched = mkExternal {
     inherit src patches;
