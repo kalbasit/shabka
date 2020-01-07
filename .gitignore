@@ -1,6 +1,5 @@
 *.qcow2
 .direnv/
-.pijul/
 result
 result-bin
 secrets
