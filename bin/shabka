@@ -28,7 +28,37 @@ echoDebug3() {
 echoSuccess() { >&2 echo -e "\e[1;32m[SUCCESS] ${*}\e[0m" ; }
 
 echoUsage() {
-  >&2 echo "Usage: TODO"
+  >&2 echo "Usage: shabka [OPTION]... [COMMAND]... [ARGUMENTS]"
+  >&2 echo ""
+
+  declare -r current_uname="$(uname -s | tr -d '\n')"
+  if [[ current_uname == "Darwin" ]]; then
+    >&2 echo "Commands switch, boot, test, dry-build and dry-activate"
+    >&2 echo -e -n "\tshabka [-h host] [-r release] "
+    >&2 echo -e -n "{ switch | boot | test | dry-build | dry-activate } "
+    >&2 echo -e -n "[nixos-rebuild arguments and options]\n\n"
+  else
+    >&2 echo "Commands switch, activate and check"
+    >&2 echo -e -n "\tshabka [-h host] [-r release] "
+    >&2 echo -e -n "{ switch | activate | check } "
+    >&2 echo -e -n "[darwin-rebuild arguments and options]\n\n"
+  fi
+
+  >&2 echo "Command build"
+  >&2 echo -e -n "\tshabka [-h host] [-r release] build "
+  >&2 echo -e -n "[nix-build arguments and options]\n\n"
+
+  >&2 echo "Command push-to-cachix"
+  >&2 echo -e -n "\tshabka push-to-cachix <cache-name> [host1] [host2] [...]\n"
+  >&2 echo -e -n "If no host is specified, it defaults to all hosts defined in "
+  >&2 echo -e -n "your .shabka folder.\n\n"
+
+  >&2 echo -e -n "By default the host is your current hostname. The release is "
+  >&2 echo -e -n "the one defined in the host, if defined, else shabka's "
+  >&2 echo -e -n "default release.\n"
+  >&2 echo -e -n "For more informations about the switch, boot, test, "
+  >&2 echo -e -n "dry-build, dry-activate, activate and check commands, see "
+  >&2 echo -e -n "nixos-rebuild(8) and darwin-rebuild(8).\n"
 }
 
 setShabkaPath() {
