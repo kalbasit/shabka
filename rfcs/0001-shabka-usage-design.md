@@ -161,7 +161,7 @@ Inside a host's directory, `shabka` will expect the following things:
   configuration. In this `home.nix`, the user can then define their personal
   configuration, using the `home` module in `shabka`, overriding it, or directly
   using `home-manager` configuration options.
-* `uname`: either containing `Darwin` or `NixOS` (`Linux` is for non-NixOS
+* `distrib`: either containing `Darwin` or `NixOS` (`Linux` is for non-NixOS
   hosts and a later release)
 * `release` (optional, defaults to `shabka/release`): defines the release of
   `nixpkgs` you want to use, such as `unstable` or `19.09`.

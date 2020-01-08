@@ -112,44 +112,44 @@ getHostRelease() {
   echoDebug1 "host_release=${host_release}"
 }
 
-getHostUname() {
-  desc="Get the uname of a host.
-        Usage: getHostUname <host>
+getHostDistrib() {
+  desc="Get the distribution of a host.
+        Usage: getHostDistrib <host>
         Requires dotshabka_path to be set."
 
   local -r host="${1}"
   shift 1
 
-  if [[ -r "${dotshabka_path}/hosts/${host}/uname" ]]; then
-    local -r host_uname="$( cat "${dotshabka_path}/hosts/${host}/uname" )"
+  if [[ -r "${dotshabka_path}/hosts/${host}/distrib" ]]; then
+    local -r host_distrib="$( cat "${dotshabka_path}/hosts/${host}/distrib" )"
   else
-    echoErr "Required file does not exist: ${dotshabka_path}/hosts/${host}/uname"
+    echoErr "Required file does not exist: ${dotshabka_path}/hosts/${host}/distrib"
     exit 1
   fi
-  echoDebug1 "host_uname=${host_uname}"
+  echoDebug1 "host_distrib=${host_distrib}"
 
-  case "${host_uname}" in
+  case "${host_distrib}" in
     "Darwin"|"NixOS")
-      echo "${host_uname}"
+      echo "${host_distrib}"
       ;;
     "Linux")
       echoErr "Linux non-NixOS hosts not supported yet."
       exit 1
       ;;
     *)
-      echoErr "Invalid value ${host_uname} at ${dotshabka_path}/hosts/${host}/uname"
+      echoErr "Invalid value ${host_distrib} at ${dotshabka_path}/hosts/${host}/distrib"
       exit 1
       ;;
   esac
 }
 
 getNixPath() {
-  desc="Compute the NIX_PATH from release and uname.
-        Usage: getNixPath <release> <uname>
+  desc="Compute the NIX_PATH from release and distribution.
+        Usage: getNixPath <release> <distrib>
         Requires shabka_path to be set."
 
   local -r nixpkgs_release="${1}"
-  local -r host_uname="${2}"
+  local -r host_distrib="${2}"
   shift 2
 
   local -r nixpkgs="$( set -e;
@@ -158,7 +158,7 @@ getNixPath() {
   local nix_path="nixpkgs=${nixpkgs}:shabka=${shabka_path}"
   echoDebug2 "nix_path set with nixpkgs and shabka to '${nix_path}'"
 
-  if [[ -z "${uname:-}" ]] || [[ "${uname}" == "Darwin" ]]; then
+  if [[ -z "${host_distrib:-}" ]] || [[ "${host_distrib}" == "Darwin" ]]; then
     local -r nix_darwin="$( set -e; \
                             nix-build --no-out-link "${shabka_path}" \
                             -A "external.nix-darwin.path" )"
@@ -196,11 +196,11 @@ buildHost() {
   local -r host="${1}"
   local release="${2}"
   shift 2
-  local uname
+  local distrib
 
   echoInfo "Building host ${host}"
 
-  uname="$( getHostUname "${host}" )" || exit "${?}"
+  distrib="$( getHostDistrib "${host}" )" || exit "${?}"
 
   if [[ -z "${release:-}" ]]; then
     echoDebug2 "Release not set, setting it from the host's."
@@ -210,7 +210,7 @@ buildHost() {
     release="${release}"
   fi
 
-  export NIX_PATH="$( getNixPath "${release}" "${uname}" )" || exit "${?}"
+  export NIX_PATH="$( getNixPath "${release}" "${distrib}" )" || exit "${?}"
 
   (set -x; \
    RELEASE="release-${release/./-}" \
@@ -230,12 +230,12 @@ rebuildHost() {
   local -r host="${2}"
   local release="${3}"
   shift 3
-  local uname
+  local distrib
   local configPath
 
   echoInfo "Executing rebuild ${cmd} on host ${host}"
 
-  uname="$( getHostUname "${host}" )" || exit "${?}"
+  distrib="$( getHostDistrib "${host}" )" || exit "${?}"
 
   if [[ -z "${release:-}" ]]; then
     echoDebug2 "Release not set, setting it from the host's."
@@ -245,11 +245,11 @@ rebuildHost() {
     release="${release}"
   fi
 
-  export NIX_PATH="$( getNixPath "${release}" "${uname}" )" || exit "${?}"
+  export NIX_PATH="$( getNixPath "${release}" "${distrib}" )" || exit "${?}"
 
   configPath="$( getConfigPath "${host}" )" || exit "${?}"
 
-  case "${uname}" in
+  case "${distrib}" in
     "NixOS")
       (set -x; \
        RELEASE="release-${release/./-}" \
@@ -279,18 +279,18 @@ pushHostToCachix() {
   local release="${2}"
   local -r host="${3}"
   shift 3
-  local uname
+  local distrib
 
   echoInfo "Pushing host ${host} to Cachix ${binary_cache_name}"
 
   local -r current_uname="$( uname -s | tr -d '\n' )"
-  uname="$( getHostUname "${host}" )" || exit "${?}"
+  distrib="$( getHostDistrib "${host}" )" || exit "${?}"
 
-  if [[ "${current_uname}" == "Linux" ]] && [[ "${uname}" == "Darwin" ]]; then
-    echoWarn "The host ${host} of type ${uname} cannot be built on ${current_uname}"
+  if [[ "${current_uname}" == "Linux" ]] && [[ "${distrib}" == "Darwin" ]]; then
+    echoWarn "The host ${host} of type ${distrib} cannot be built on ${current_uname}"
     return
-  elif [[ "${current_uname}" == "Darwin" ]] && ([[ "${uname}" == "Nixos" ]] || [[ "${uname}" == "Linux" ]]); then
-    echoWarn "The host ${host} of type ${uname} cannot be built on ${current_uname}"
+  elif [[ "${current_uname}" == "Darwin" ]] && ([[ "${distrib}" == "Nixos" ]] || [[ "${distrib}" == "Linux" ]]); then
+    echoWarn "The host ${host} of type ${distrib} cannot be built on ${current_uname}"
     return
   fi
 
