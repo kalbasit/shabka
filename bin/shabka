@@ -96,15 +96,15 @@ getHostRelease() {
         Usage: getHostRelease <host>
         Requires shabka_path and dotshabka_path to be set."
 
-  declare -r host="${1}"
+  local -r host="${1}"
   shift 1
 
   if [[ -r "${dotshabka_path}/hosts/${host}/release" ]]; then
-    declare -r host_release="$( cat "${dotshabka_path}/hosts/${host}/release" )"
+    local -r host_release="$( cat "${dotshabka_path}/hosts/${host}/release" )"
     echoDebug2 "Setting host_release from ${dotshabka_path}/hosts/${host}/release"
   else
     # fallback to shabka's default release
-    declare -r host_release="$( tr -d "\n" < "${shabka_path}/release" )"
+    local -r host_release="$( tr -d "\n" < "${shabka_path}/release" )"
     echoDebug2 "Setting host_release from shabka's default release"
   fi
 
@@ -117,11 +117,11 @@ getHostUname() {
         Usage: getHostUname <host>
         Requires dotshabka_path to be set."
 
-  declare -r host="${1}"
+  local -r host="${1}"
   shift 1
 
   if [[ -r "${dotshabka_path}/hosts/${host}/uname" ]]; then
-    declare -g -r host_uname="$( cat "${dotshabka_path}/hosts/${host}/uname" )"
+    local -r host_uname="$( cat "${dotshabka_path}/hosts/${host}/uname" )"
   else
     echoErr "Required file does not exist: ${dotshabka_path}/hosts/${host}/uname"
     exit 1
@@ -148,21 +148,21 @@ getNixPath() {
         Usage: getNixPath <release> <uname>
         Requires shabka_path to be set."
 
-  declare -r release="${1}"
-  declare -r uname="${2}"
+  local -r nixpkgs_release="${1}"
+  local -r host_uname="${2}"
   shift 2
 
-  declare -r nixpkgs="$( set -e;
-                         nix-build --no-out-link "${shabka_path}" \
-                         -A "external.nixpkgs.release-${release/./-}.path" )"
-  declare nix_path="nixpkgs=${nixpkgs}:shabka=${shabka_path}"
+  local -r nixpkgs="$( set -e;
+                       nix-build --no-out-link "${shabka_path}" \
+                       -A "external.nixpkgs.release-${release/./-}.path" )"
+  local nix_path="nixpkgs=${nixpkgs}:shabka=${shabka_path}"
   echoDebug2 "nix_path set with nixpkgs and shabka to '${nix_path}'"
 
   if [[ -z "${uname:-}" ]] || [[ "${uname}" == "Darwin" ]]; then
-    declare -r nix_darwin="$( set -e; \
-                              nix-build --no-out-link "${shabka_path}" \
-                              -A "external.nix-darwin.path" )"
-    declare nix_path="darwin=${nix_darwin}:${nix_path}"
+    local -r nix_darwin="$( set -e; \
+                            nix-build --no-out-link "${shabka_path}" \
+                            -A "external.nix-darwin.path" )"
+    local nix_path="darwin=${nix_darwin}:${nix_path}"
     echoDebug2 "Added nix_darwin to nix_path: '${nix_path}'"
   fi
 
@@ -175,10 +175,10 @@ getConfigPath() {
         Usage: getConfigPath <host>
         Requires dotshabka_path to be set."
 
-  declare -r host="${1}"
+  local -r host="${1}"
   shift 1
 
-  declare -r config_path="${dotshabka_path}/hosts/${host}/configuration.nix"
+  local -r config_path="${dotshabka_path}/hosts/${host}/configuration.nix"
   if ! [[ -r "${config_path}" ]]; then
     echoErr "Configuration ${config_path} does not exist."
     exit 1
@@ -193,29 +193,30 @@ buildHost() {
         Usage: buildHost <host> <release> [nix-build arguments and options]
         Requires shabka_path and dotshabka_path to be set."
 
-  declare -r host="${1}"
-  declare release="${2}"
+  local -r host="${1}"
+  local release="${2}"
   shift 2
+  local uname
 
   echoInfo "Building host ${host}"
 
+  uname="$( getHostUname "${host}" )" || exit "${?}"
+
   if [[ -z "${release:-}" ]]; then
     echoDebug2 "Release not set, setting it from the host's."
-    declare -r release="$( set -e; getHostRelease "${host}" )"
+    release="$( getHostRelease "${host}" )" || exit "${?}"
   else
     echoDebug2 "Using provided release."
-    declare -r release="${release}"
+    release="${release}"
   fi
 
-  declare -r uname="$( set -e; getHostUname "${host}" )"
+  export NIX_PATH="$( getNixPath "${release}" "${uname}" )" || exit "${?}"
 
-  export NIX_PATH="$( set -e; getNixPath "${release}" "${uname}" )"
-
-  (set -ex; \
+  (set -x; \
    RELEASE="release-${release/./-}" \
       nix-build --option builders '' "${dotshabka_path}/hosts/${host}" \
       -A system "${@}"\
-  )
+  ) || exit "${?}"
 
   echoSuccess "Finished building host ${host}."
 }
@@ -225,39 +226,41 @@ rebuildHost() {
         Usage: rebuildHost <command> <host> <release> [nixos-build arguments and options]
         Requires shabka_path and dotshabka_path to be set."
 
-  declare -r cmd="${1}"
-  declare -r host="${2}"
-  declare release="${3}"
+  local -r cmd="${1}"
+  local -r host="${2}"
+  local release="${3}"
   shift 3
+  local uname
+  local configPath
 
   echoInfo "Executing rebuild ${cmd} on host ${host}"
 
+  uname="$( getHostUname "${host}" )" || exit "${?}"
+
   if [[ -z "${release:-}" ]]; then
     echoDebug2 "Release not set, setting it from the host's."
-    declare -r release="$( set -e; getHostRelease "${host}" )"
+    release="$( getHostRelease "${host}" )" || exit "${?}"
   else
     echoDebug2 "Using provided release."
-    declare -r release="${release}"
+    release="${release}"
   fi
 
-  declare -r uname="$( set -e; getHostUname "${host}" )"
+  export NIX_PATH="$( getNixPath "${release}" "${uname}" )" || exit "${?}"
 
-  export NIX_PATH="$( set -e; getNixPath "${release}" "${uname}" )"
-
-  declare -r configPath="$( set -e; getConfigPath "${host}" )"
+  configPath="$( getConfigPath "${host}" )" || exit "${?}"
 
   case "${uname}" in
     "NixOS")
-      (set -ex; \
+      (set -x; \
        RELEASE="release-${release/./-}" \
         nixos-rebuild -I "nixos-config=${configPath}" "${command}" "${@}" \
-      )
+      ) || exit "${?}"
       ;;
     "Darwin")
-      (set -ex; \
+      (set -x; \
        RELEASE="release-${release/./-}" \
         darwin-rebuild -I "darwin-config=${configPath}" "${command}" "${@}" \
-      )
+      ) || exit "${?}"
       ;;
     # For future use
     "Linux")
@@ -272,15 +275,16 @@ pushHostToCachix() {
         Usage: pushHostToCachix <binary-cache-name> <release> <host>
         Requires shabka_path, dotshabka_path and CACHIX_SIGNING_KEY to be set."
 
-  declare -r binary_cache_name="${1}"
-  declare release="${2}"
-  declare -r host="${3}"
+  local -r binary_cache_name="${1}"
+  local release="${2}"
+  local -r host="${3}"
   shift 3
+  local uname
 
   echoInfo "Pushing host ${host} to Cachix ${binary_cache_name}"
 
-  declare -r current_uname="$( uname -s | tr -d '\n' )"
-  declare -r uname="$( set -e; getHostUname "${host}" )"
+  local -r current_uname="$( uname -s | tr -d '\n' )"
+  uname="$( getHostUname "${host}" )" || exit "${?}"
 
   if [[ "${current_uname}" == "Linux" ]] && [[ "${uname}" == "Darwin" ]]; then
     echoWarn "The host ${host} of type ${uname} cannot be built on ${current_uname}"
@@ -299,8 +303,8 @@ pushToCachix() {
         Usage: pushToCachix <binary-cache-name> <release> [host1] [host2] [...]
         Requires shabka_path, dotshabka_path and CACHIX_SIGNING_KEY to be set."
 
-  declare -r binary_cache_name="${1}"
-  declare -r release="${2}"
+  local -r binary_cache_name="${1}"
+  local -r release="${2}"
   shift 2
 
   echoInfo "Pushing hosts ${@} to Cachix ${binary_cache_name}"
@@ -326,7 +330,7 @@ pushToCachix() {
 
   if [[ "${#}" -ne 0 ]]; then
     while [[ "${#}" -ne 0 ]]; do
-      declare host="${1}"
+      local host="${1}"
       shift
       pushHostToCachix "${binary_cache_name}" "${release}" "${host}"
     done
@@ -335,8 +339,8 @@ pushToCachix() {
   fi
 
   echoInfo "No hosts specified, pushing all hosts."
-  for hostPath in "${dotshabka_path}"/hosts/*; do
-    pushHostToCachix "${binary_cache_name}" "${release}" "$( basename "${hostPath}" )"
+  for host_path in "${dotshabka_path}"/hosts/*; do
+    pushHostToCachix "${binary_cache_name}" "${release}" "$( basename "${host_path}" )"
   done
   echoSuccess "Finished pushing all hosts to Cachix ${binary_cache_name}"
 }
@@ -347,19 +351,19 @@ main() {
     exit 1
   fi
 
-  declare host="$( hostname -s )"
-  declare release=
+  local host="$( hostname -s )"
+  local release=
 
   while getopts ":h:r:v" opt; do
       case "${opt}" in
         h)
-          declare host="${OPTARG}"
+          local host="${OPTARG}"
           ;;
         r)
-          declare release="${OPTARG}"
+          local release="${OPTARG}"
           ;;
         v)
-          declare -g __VERBOSE="$(( ${__VERBOSE} + 1 ))"
+          __VERBOSE="$(( ${__VERBOSE} + 1 ))"
           ;;
         :)
           echoErr "Invalid option: -$OPTARG requires an argument"
@@ -374,8 +378,8 @@ main() {
   done
   shift $((OPTIND -1))
 
-  declare -r host="${host}"
-  declare -r release="${release}"
+  local -r host="${host}"
+  local -r release="${release}"
 
   if [[ "${#}" -eq 0 ]]; then
     echoErr "No command specified"
@@ -406,7 +410,7 @@ main() {
         echoUsage
         exit 1
       fi
-      declare -r binary_cache_name="${1}"
+      local -r binary_cache_name="${1}"
       shift 1
 
       pushToCachix "${binary_cache_name}" "${release}" "${@}"
