@@ -32,7 +32,8 @@ var_3: &install-cachix
       release="$( tr -d "\n" < "${shabka_path}/release" )"
 
       source "${shabka_path}/bin/shabka"
-      export NIX_PATH="$( getNixPath "${release}" '' )"
+      nix_path="$( getNixPath "${release}" '' )" || exit "${?}"
+      export NIX_PATH="${nix_path}"
 
       nix-env -f '<nixpkgs>' -iA cachix
 
