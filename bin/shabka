@@ -33,15 +33,15 @@ echoUsage() {
 
   declare -r current_uname="$(uname -s | tr -d '\n')"
   if [[ current_uname == "Darwin" ]]; then
-    >&2 echo "Commands switch, boot, test, dry-build and dry-activate"
-    >&2 echo -e -n "\tshabka [-h host] [-r release] "
-    >&2 echo -e -n "{ switch | boot | test | dry-build | dry-activate } "
-    >&2 echo -e -n "[nixos-rebuild arguments and options]\n\n"
-  else
     >&2 echo "Commands switch, activate and check"
     >&2 echo -e -n "\tshabka [-h host] [-r release] "
     >&2 echo -e -n "{ switch | activate | check } "
     >&2 echo -e -n "[darwin-rebuild arguments and options]\n\n"
+  else
+    >&2 echo "Commands switch, boot, test, dry-build and dry-activate"
+    >&2 echo -e -n "\tshabka [-h host] [-r release] "
+    >&2 echo -e -n "{ switch | boot | test | dry-build | dry-activate } "
+    >&2 echo -e -n "[nixos-rebuild arguments and options]\n\n"
   fi
 
   >&2 echo "Command build"
