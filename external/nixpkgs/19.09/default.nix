@@ -9,6 +9,7 @@ let
 
   patches = [
     ./0001-tmux-extraTmuxConf-to-extraConfig
+    ./0002-tmux-plugins
   ];
 
   patched = mkExternal {

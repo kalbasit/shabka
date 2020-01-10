@@ -22,7 +22,7 @@ in {
     };
 
     keyboardLayout = mkOption {
-      type = with types; enum [ "colemak" "qwerty" ];
+      type = with types; enum [ "colemak" "qwerty" "qwerty_intl" "bepo" "azerty" ];
       default = (builtins.head config.shabka.keyboard.layouts);
       description = ''
         The keyboard layout to use.

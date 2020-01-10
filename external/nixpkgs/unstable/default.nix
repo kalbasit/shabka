@@ -8,7 +8,8 @@ let
   };
 
   patches = [
-    ../0001-tmux-extraTmuxConf-to-extraConfig
+    ../19.09/0001-tmux-extraTmuxConf-to-extraConfig
+    ../19.09/0002-tmux-plugins
   ];
 
   patched = mkExternal {
