@@ -1,0 +1,21 @@
+diff --git a/nixos/modules/programs/tmux.nix b/nixos/modules/programs/tmux.nix
+index c39908751d2..1e8cf776551 100644
+--- a/nixos/modules/programs/tmux.nix
++++ b/nixos/modules/programs/tmux.nix
+@@ -130,6 +130,16 @@ in {
+         description = "Automatically spawn a session if trying to attach and none are running.";
+       };
+ 
++      plugins = mkOption {
++        default = [ ];
++        type = types.listOf types.package;
++        description = ''
++          List of tmux plugins to be included at the end of your tmux
++          configuration. The sensible plugin, however, is defaulted to
++          run at the top of your configuration.
++        '';
++      };
++
+       reverseSplit = mkOption {
+         default = false;
+         type = types.bool;
