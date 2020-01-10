@@ -142,5 +142,26 @@ in {
     };
 
     programs.taskwarrior.colorTheme = "solarized-dark-256";
+
+    programs.tmux.extraConfig = ''
+      set-option -g status-justify left
+      set-option -g status-left-length 16
+      set-option -g status-interval 60
+
+      set-option -g status-left '#[bg=colour72] #[bg=colour237] #[bg=colour236] #{prefix_highlight} #[bg=colour235]#[fg=colour185] #h #[bg=colour236] '
+      set-option -g status-right '#[bg=colour236] #[bg=colour237]#[fg=colour185] #[bg=colour235] #(date "+%a %b %d %H:%M") #[bg=colour236] #[bg=colour237] #[bg=colour72] '
+
+      set-window-option -g window-status-format '#[bg=colour238]#[fg=colour107] #I #[bg=colour239]#[fg=colour110] #[bg=colour240]#W#[bg=colour239]#[fg=colour195]#F#[bg=colour238] '
+      set-window-option -g window-status-current-format '#[bg=colour236]#[fg=colour215] #I #[bg=colour235]#[fg=colour167] #[bg=colour234]#W#[bg=colour235]#[fg=colour195]#F#[bg=colour236] '
+    ''
+    + (if versionAtLeast (builtins.parseDrvName pkgs.tmux.name).version "2.9" then ''
+      set-option -g status-style bg=colour237
+      set-option -g pane-active-border-style fg=colour215
+      set-option -g pane-border-style fg=colour185
+    '' else ''
+      set-option -g status-bg colour237
+      set-option -g pane-active-border-fg colour215
+      set-option -g pane-border-fg colour185
+    '');
   };
 }
