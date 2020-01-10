@@ -5,8 +5,11 @@ with lib;
 let
   cfg = config.shabka.tmux;
 
+  keyboardLayout = builtins.head config.shabka.keyboard.layouts;
+
   tmuxConfig = import <shabka/modules/tmux> {
-    inherit (cfg) extraRC keyboardLayout;
+    inherit (cfg) extraRC;
+    inherit keyboardLayout;
     inherit pkgs;
   };
 in {
@@ -18,14 +21,6 @@ in {
       default = "";
       description = ''
         Extra Tmux configuration.
-      '';
-    };
-
-    keyboardLayout = mkOption {
-      type = with types; enum [ "colemak" "qwerty" ];
-      default = (builtins.head config.shabka.keyboard.layouts);
-      description = ''
-        The keyboard layout to use.
       '';
     };
   };
