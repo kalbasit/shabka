@@ -98,7 +98,7 @@ in {
   secureSocket = pkgs.stdenv.isLinux;
   shortcut = "t";
 
-  extraTmuxConf = ''
+  extraConfig = ''
     ${tmuxVimAwarness}
 
     #
