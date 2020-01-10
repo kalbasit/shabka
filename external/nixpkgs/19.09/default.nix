@@ -7,7 +7,9 @@ let
     inherit (pinnedVersion) url sha256;
   };
 
-  patches = [];
+  patches = [
+    ./0001-tmux-extraTmuxConf-to-extraConfig
+  ];
 
   patched = mkExternal {
     inherit src patches;
