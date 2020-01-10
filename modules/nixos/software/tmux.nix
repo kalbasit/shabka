@@ -13,6 +13,16 @@ let
     inherit pkgs;
   };
 in {
+  options.programs.tmux.plugins = mkOption {
+    default = [ ];
+    type = with types; listOf package;
+    description = ''
+      List of tmux plugins to be included at the end of your tmux
+      configuration. The sensible plugin, however, is defaulted to
+      run at the top of your configuration.
+    '';
+  };
+
   options.shabka.tmux = {
     enable = mkEnableOption "Tmux";
 

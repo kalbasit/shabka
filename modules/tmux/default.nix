@@ -147,5 +147,8 @@ in {
   ''
   + optionalString (keyboardLayout == "colemak") colemakBindings
   + optionalString pkgs.stdenv.isLinux ''set  -g default-terminal "tmux-256color"''
-  + optionalString pkgs.stdenv.isDarwin ''set  -g default-terminal "xterm-256color"'';
+  + optionalString pkgs.stdenv.isDarwin ''set  -g default-terminal "xterm-256color"''
+  + ''
+    ${extraRC}
+  '';
 }
