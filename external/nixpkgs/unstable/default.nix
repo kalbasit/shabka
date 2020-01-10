@@ -8,8 +8,8 @@ let
   };
 
   patches = [
+    # https://github.com/NixOS/nixpkgs/pull/77423
     ../19.09/0001-tmux-extraTmuxConf-to-extraConfig
-    ../19.09/0002-tmux-plugins
   ];
 
   patched = mkExternal {
