@@ -5,7 +5,7 @@ with lib;
 let cfg = config.shabka.virtualisation.libvirtd;
 
 in {
-  options.shabka.virtualisation.libvirtd.enable = mkEnableOption "Enable Docker";
+  options.shabka.virtualisation.libvirtd.enable = mkEnableOption "Enable libvirtd";
 
   config = mkIf cfg.enable {
     virtualisation.libvirtd.enable = true;
