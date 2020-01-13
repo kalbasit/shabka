@@ -333,26 +333,26 @@ in {
       ''
       + (if versionAtLeast (builtins.parseDrvName pkgs.tmux.name).version "2.9" then ''
         # default statusbar colors
-          set-option -g status-style bg=colour237,fg=colour223,none
-          set-option -g status-left-style none
-          set-option -g status-right-style none
+        set-option -g status-style bg=colour237,fg=colour223,none
+        set-option -g status-left-style none
+        set-option -g status-right-style none
 
         # default window title colors
-          set-window-option -g window-status-style bg=colour214,fg=colour237,none
+        set-window-option -g window-status-style bg=colour214,fg=colour237,none
 
-          set-window-option -g window-status-activity-style bg=colour237,fg=colour248,none
+        set-window-option -g window-status-activity-style bg=colour237,fg=colour248,none
 
         # active window title colors
-          set-window-option -g window-status-current-style bg=default,fg=colour237
+        set-window-option -g window-status-current-style bg=default,fg=colour237
 
         # pane border
-          set-option -g pane-active-border-style fg=colour250,fg=colour237
+        set-option -g pane-active-border-style fg=colour250,fg=colour237
 
         # message infos
-          set-option -g message-style bg=colour239,fg=colour223
+        set-option -g message-style bg=colour239,fg=colour223
 
         # writting commands inactive
-          set-option -g message-command-style bg=colour239,fg=colour223
+        set-option -g message-command-style bg=colour239,fg=colour223
       '' else ''
         # default statusbar colors
         set-option -g status-bg colour237 #bg1

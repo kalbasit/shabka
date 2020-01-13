@@ -6,14 +6,14 @@ let
   cfg = config.shabka.tmux;
 
   tmuxConfig = import <shabka/modules/tmux> {
-    inherit (cfg) extraRC keyboardLayout;
+    inherit (cfg) extraConfig keyboardLayout;
     inherit pkgs;
   };
 in {
   options.shabka.tmux = {
     enable = mkEnableOption "Tmux";
 
-    extraRC = mkOption {
+    extraConfig = mkOption {
       type = types.str;
       default = "";
       description = ''
