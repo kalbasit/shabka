@@ -11,6 +11,8 @@ with lib;
         supportedMachines = enum [
           "cloud"
           "hetzner_cloud"
+          "hetzner_sb36"
+          "hetzner_sb53"
           "hetzner-sb"
           "precision-7530"
           "thinkpad-e580"
