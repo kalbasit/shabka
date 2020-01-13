@@ -18,13 +18,26 @@ var_2: &install-dependencies
       # install git and bash
       nix-env -f '<nixpkgs>' -i -A gitAndTools.git -A bash
 
+var_3: &install-cachix
+  run:
+    name: Install Cachix
+    shell: /usr/bin/env bash -euxo pipefail
+    command: |
+      if [[ -r "${HOME}/.nix-profile/etc/profile.d/nix.sh" ]]; then
+        source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
+      fi
+
       # install cachix from nixpkgs at stable
       readonly shabka_path="$( pwd )"
-      release="$( tr -d "\n" < "${shabka_path}/.release" )"
-      export NIX_PATH="$( "${shabka_path}/lib/bash/nix-path.sh" "${release}" )"
+      release="$( tr -d "\n" < "${shabka_path}/release" )"
+
+      source "${shabka_path}/bin/shabka"
+      nix_path="$( getNixPath "${release}" '' )" || exit "${?}"
+      export NIX_PATH="${nix_path}"
+
       nix-env -f '<nixpkgs>' -iA cachix
 
-var_3: &enable-cachix
+var_4: &enable-cachix
   run:
     name: Enable cachix
     command: |
@@ -34,7 +47,19 @@ var_3: &enable-cachix
 
       cachix use "${CACHIX_CACHE}"
 
-var_4: &build-host
+var_5: &download-dotshabka
+  run:
+    name: Download dotshabka from kalbasit
+    working_directory: ~/
+    command: |
+      if ! git clone "${DOTSHABKA_REPOSITORY}" -b "${CIRCLE_BRANCH}" "${HOME}/.shabka"; then
+        git clone "̈${DOTSHABKA_REPOSITORY}" "${HOME}/.shabka"
+        >&2 echo "Cloned dotshabka from the master branch"
+      else
+        >&2 echo "Cloned dotshabka from the ${CIRCLE_BRANCH} branch"
+      fi
+
+var_6: &build-host
   run:
     name: Building the host
     working_directory: ~/shabka
@@ -43,11 +68,11 @@ var_4: &build-host
         source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
       fi
 
-      export DOTSHABKA_PATH="${HOME}/dotshabka"
+      export DOTSHABKA_PATH="${HOME}/.shabka"
 
-      ./scripts/build-host.sh "${CIRCLE_JOB}"
+      ./bin/shabka -h "${CIRCLE_JOB}" build
 
-var_5: &push-to-cachix
+var_7: &push-to-cachix
   run:
     name: Push the build to cachix
     working_directory: ~/shabka
@@ -66,33 +91,9 @@ var_5: &push-to-cachix
         exit 0
       fi
 
-      export DOTSHABKA_PATH="${HOME}/dotshabka"
+      export DOTSHABKA_PATH="${HOME}/.shabka"
 
-      ./scripts/push-to-cachix.sh "${CACHIX_CACHE}" "${CIRCLE_JOB}"
-
-var_6: &download-kalbasit-dotshabka
-  run:
-    name: Download dotshabka from kalbasit
-    working_directory: ~/
-    command: |
-      if ! git clone https://github.com/kalbasit/dotshabka.git -b "${CIRCLE_BRANCH}"; then
-        git clone https://github.com/kalbasit/dotshabka.git
-        >&2 echo "Cloned dotshabka from the master branch"
-      else
-        >&2 echo "Cloned dotshabka from the ${CIRCLE_BRANCH} branch"
-      fi
-
-var_7: &download-risson-dotshabka
-  run:
-    name: Download dotshabka from risson
-    working_directory: ~/
-    command: |
-      if ! git clone https://github.com/rissson/dotshabka.git -b "${CIRCLE_BRANCH}"; then
-        git clone https://github.com/rissson/dotshabka.git
-        >&2 echo "Cloned dotshabka from the master branch"
-      else
-        >&2 echo "Cloned dotshabka from the ${CIRCLE_BRANCH} branch"
-      fi
+      ./bin/shabka push-to-cachix "${CACHIX_CACHE}" "${CIRCLE_JOB}"
 
 version: 2
 jobs:
@@ -109,8 +110,9 @@ jobs:
       - checkout
       - *install-nix
       - *install-dependencies
+      - *install-cachix
       - *enable-cachix
-      - *download-kalbasit-dotshabka
+      - *download-dotshabka
       - *build-host
       - *push-to-cachix
 
@@ -126,8 +128,9 @@ jobs:
     steps:
       - checkout
       - *install-dependencies
+      - *install-cachix
       - *enable-cachix
-      - *download-kalbasit-dotshabka
+      - *download-dotshabka
       - *build-host
       - *push-to-cachix
 
@@ -143,8 +146,9 @@ jobs:
     steps:
       - checkout
       - *install-dependencies
+      - *install-cachix
       - *enable-cachix
-      - *download-kalbasit-dotshabka
+      - *download-dotshabka
       - *build-host
       - *push-to-cachix
 
@@ -160,8 +164,9 @@ jobs:
     steps:
       - checkout
       - *install-dependencies
+      - *install-cachix
       - *enable-cachix
-      - *download-kalbasit-dotshabka
+      - *download-dotshabka
       - *build-host
       - *push-to-cachix
 
@@ -178,8 +183,9 @@ jobs:
       - checkout
       - *install-nix
       - *install-dependencies
+      - *install-cachix
       - *enable-cachix
-      - *download-kalbasit-dotshabka
+      - *download-dotshabka
       - *build-host
       - *push-to-cachix
 
@@ -195,8 +201,9 @@ jobs:
     steps:
       - checkout
       - *install-dependencies
+      - *install-cachix
       - *enable-cachix
-      - *download-kalbasit-dotshabka
+      - *download-dotshabka
       - *build-host
       - *push-to-cachix
 
@@ -212,8 +219,9 @@ jobs:
     steps:
       - checkout
       - *install-dependencies
+      - *install-cachix
       - *enable-cachix
-      - *download-risson-dotshabka
+      - *download-dotshabka
       - *build-host
       - *push-to-cachix
 
@@ -229,8 +237,9 @@ jobs:
     steps:
       - checkout
       - *install-dependencies
+      - *install-cachix
       - *enable-cachix
-      - *download-risson-dotshabka
+      - *download-dotshabka
       - *build-host
       - *push-to-cachix
 
