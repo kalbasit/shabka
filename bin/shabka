@@ -214,8 +214,7 @@ buildHost() {
 
   (set -x; \
    RELEASE="release-${release/./-}" \
-      nix-build --option builders '' "${dotshabka_path}/hosts/${host}" \
-      -A system "${@}"\
+      nix-build "${dotshabka_path}/hosts/${host}" -A system "${@}"\
   ) || exit "${?}"
 
   echoSuccess "Finished building host ${host}."
