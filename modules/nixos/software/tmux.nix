@@ -8,7 +8,7 @@ let
   keyboardLayout = builtins.head config.shabka.keyboard.layouts;
 
   tmuxConfig = import <shabka/modules/tmux> {
-    inherit (cfg) extraRC;
+    inherit (cfg) extraConfig;
     inherit keyboardLayout;
     inherit pkgs;
   };
@@ -26,7 +26,7 @@ in {
   options.shabka.tmux = {
     enable = mkEnableOption "Tmux";
 
-    extraRC = mkOption {
+    extraConfig = mkOption {
       type = types.str;
       default = "";
       description = ''
