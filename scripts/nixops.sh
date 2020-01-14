@@ -15,8 +15,10 @@ fi
 
 readonly shabka_path="$(cd $(dirname "${BASH_SOURCE[0]}")/../ && pwd)"
 
-readonly release="$( tr -d "\n" < "${shabka_path}/.release" )"
-source "${shabka_path}/lib/bash/rebuild-common.sh"
+source "${shabka_path}/bin/shabka"
+readonly release="$( getHostRelease '' )"
+export RELEASE="release-${release/./-}"
+export NIX_PATH="$( getNixPath "${release}" "" )" || exit "${?}"
 
 readonly network_secrets="${HOME}/private/network-secrets"
 readonly state_location="shabka/deployments.nixops"
