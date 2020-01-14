@@ -49,11 +49,11 @@ var_4: &enable-cachix
 
 var_5: &download-dotshabka
   run:
-    name: Download dotshabka from kalbasit
+    name: Download dotshabka
     working_directory: ~/
     command: |
       if ! git clone "${DOTSHABKA_REPOSITORY}" -b "${CIRCLE_BRANCH}" "${HOME}/.shabka"; then
-        git clone "̈${DOTSHABKA_REPOSITORY}" "${HOME}/.shabka"
+        git clone "${DOTSHABKA_REPOSITORY}" "${HOME}/.shabka"
         >&2 echo "Cloned dotshabka from the master branch"
       else
         >&2 echo "Cloned dotshabka from the ${CIRCLE_BRANCH} branch"
