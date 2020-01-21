@@ -50,7 +50,7 @@ echoUsage() {
 
   >&2 echo "Command push-to-cachix"
   >&2 echo -e -n "\tshabka push-to-cachix <cache-name> [host1] [host2] [...]\n"
-  >&2 echo -e -n "If no host is specified, it defaults to all hosts defined in "
+  >&2 echo -e -n "\tIf no host is specified, it defaults to all hosts defined in "
   >&2 echo -e -n "your .shabka folder.\n\n"
 
   >&2 echo -e -n "By default the host is your current hostname. The release is "
