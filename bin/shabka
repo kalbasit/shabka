@@ -32,7 +32,7 @@ echoUsage() {
   >&2 echo ""
 
   declare -r current_uname="$(uname -s | tr -d '\n')"
-  if [[ current_uname == "Darwin" ]]; then
+  if [[ "${current_uname}" == "Darwin" ]]; then
     >&2 echo "Commands switch, activate and check"
     >&2 echo -e -n "\tshabka [-h host] [-r release] "
     >&2 echo -e -n "{ switch | activate | check } "
