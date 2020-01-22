@@ -225,7 +225,7 @@ jobs:
       - *build-host
       - *push-to-cachix
 
-  hedgehog:
+  goat:
     working_directory: ~/shabka
 
     environment:
@@ -236,6 +236,25 @@ jobs:
 
     steps:
       - checkout
+      - *install-dependencies
+      - *install-cachix
+      - *enable-cachix
+      - *download-dotshabka
+      - *build-host
+      - *push-to-cachix
+
+  hedgehog:
+    working_directory: ~/shabka
+
+    environment:
+      <<: *global_env
+
+    docker:
+      - image: archlinux/base
+
+    steps:
+      - checkout
+      - *install-nix
       - *install-dependencies
       - *install-cachix
       - *enable-cachix
@@ -260,6 +279,8 @@ workflows:
       - zeus:
           context: shabka-yl
       - duck:
+          context: shabka-risson
+      - goat:
           context: shabka-risson
       - hedgehog:
           context: shabka-risson
