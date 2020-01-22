@@ -189,7 +189,10 @@ in {
         # use 'fc -il 1' for "yyyy-mm-dd"
         # use 'fc -fl 1' for mm/dd/yyyy
         history = "fc -il 1";
-      };
+      } // (optionalAttrs stdenv.isDarwin {
+        # TODO: swm should parse a configuration file in order to ignore these
+        swm = ''swm --ignore-pattern ".Spotlight-V100|.Trashes|.fseventsd"'';
+      });
 
       history = {
         expireDuplicatesFirst = true;

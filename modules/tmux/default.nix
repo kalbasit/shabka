@@ -133,9 +133,6 @@ in {
     # Do not update the environment, keep everything from what it was started with
     set -g update-environment ""
 
-    # fuzzy client selection
-    bind s split-window -p 20 -v ${pkgs.nur.repos.kalbasit.swm}/bin/swm tmux switch-client --kill-pane
-
     # Last active window
     bind C-t last-window
     bind C-r switch-client -l
@@ -146,9 +143,17 @@ in {
     ${copyPaste}
   ''
   + optionalString (keyboardLayout == "colemak") colemakBindings
-  + optionalString pkgs.stdenv.isLinux ''set  -g default-terminal "tmux-256color"''
-  + optionalString pkgs.stdenv.isDarwin ''set  -g default-terminal "xterm-256color"''
-  + ''
+  + optionalString pkgs.stdenv.isLinux ''
+    set  -g default-terminal "tmux-256color"
+
+    # fuzzy client selection
+    bind s split-window -p 20 -v ${pkgs.nur.repos.kalbasit.swm}/bin/swm tmux switch-client --kill-pane
+  '' + optionalString pkgs.stdenv.isDarwin ''
+    set  -g default-terminal "xterm-256color"
+
+    # fuzzy client selection
+    bind s split-window -p 20 -v ${pkgs.nur.repos.kalbasit.swm}/bin/swm --ignore-pattern ".Spotlight-V100|.Trashes|.fseventsd" tmux switch-client --kill-pane
+  '' + ''
     ${extraConfig}
   '';
 }
