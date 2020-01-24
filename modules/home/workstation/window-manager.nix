@@ -15,5 +15,5 @@ with lib;
     '';
   };
 
-  config.shabka.workstation.i3.enable = if config.shabka.nixosConfig != {} && config.shabka.windowManager == "i3" then true else false;
+  #config.shabka.workstation.i3.enable = if config.shabka.nixosConfig != {} && config.shabka.windowManager == "i3" then true else false;
 }

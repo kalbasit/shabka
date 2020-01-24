@@ -8,12 +8,6 @@ in {
   options.shabka.workstation.i3.enable = mkEnableOption "workstation.i3";
 
   config = mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = config.shabka.nixosConfig != {} && config.shabka.darwinConfig == {};
-        message = "shabka.workstation.i3.enable must be false on Darwin!";
-      }
-    ];
 
     home.file."Desktop/.keep".text = "";
 
