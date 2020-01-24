@@ -17,12 +17,15 @@ in {
     ];
 
     binaryCaches = [
-      "https://cache.nixos.org/"
-      "https://yl.cachix.org"
+      "http://cache.nixos.org"
+      "http://yl.cachix.org"
+      "http://risson.cachix.org"
     ];
 
     binaryCachePublicKeys = [
+      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
       "yl.cachix.org-1:Abr5VClgHbNd2oszU+ivr+ujB0Jt2swLo2ddoeSMkm0="
+      "risson.cachix.org-1:x5ge8Xn+YFlaEqQr3oHhMXxHPYSXbG2k2XFtGqGemwg="
     ];
   };
 
