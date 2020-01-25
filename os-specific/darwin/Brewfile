@@ -5,17 +5,17 @@ tap "homebrew/core"
 cask "alfred"                     # spotlight replacement
 cask "charles"                    # Charles Proxy
 cask "google-chrome"              # my browser of choice
+cask "hammerspoon"                # Change caps_lock to control when used as modifier, escape when used alone
 cask "iterm2"                     # my terminal of choice
-cask "karabiner-elements"         # Change caps_lock to control when used as modifier, escape when used alone
 cask "keybase"                    # Keybase for accessing my encrypted repositories
 cask "sequel-pro"                 # MySQL frontend supporting connections through a tunnel
 cask "slack"                      # Team communication
 cask "teamviewer"                 # TeamViewer for remote login
 cask "virtualbox"                 # VirtualBox for VM
 cask "virtualbox-extension-pack"  # VirtualBox extensions
+cask "viscosity"                  # VPN Application
 cask "vlc"                        # VideoLan video player
 cask "whatsapp"                   # WhatsApp application
-cask 'viscosity'
 
 # TODO: Whatever does not install via nix, install it via Brew. Below, is the contents of my old Brewfile.
 #
