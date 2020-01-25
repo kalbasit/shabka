@@ -7,7 +7,9 @@ let
     inherit (pinnedVersion) url sha256;
   };
 
-  patches = [];
+  patches = [
+    ./183-copy-fonts-instead-of-hardlink.patch
+  ];
 
   patched = mkExternal {
     inherit src patches;
