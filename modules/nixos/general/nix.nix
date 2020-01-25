@@ -29,9 +29,9 @@ in {
     };
 
     binaryCaches = [
-      "https://cache.nixos.org/"
-      "https://yl.cachix.org"
-      "https://risson.cachix.org"
+      "http://cache.nixos.org"
+      "http://yl.cachix.org"
+      "http://risson.cachix.org"
     ];
 
     binaryCachePublicKeys = [
