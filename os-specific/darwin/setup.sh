@@ -142,7 +142,7 @@ if ! command -v darwin-rebuild && [[ -r /etc/static/bashrc ]]; then
 fi
 
 # Finally, switch the generation
-while ! "${shabka_path}/scripts/darwin-rebuild.sh" -h "${hostname}" switch; do
+while ! "${shabka_path}/bin/shabka" -h "${hostname}" switch; do
 	error "It looks like Darwin Rebuild has failed, retry [y/n]"
 
 	read -r answer
