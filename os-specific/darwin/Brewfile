@@ -4,6 +4,7 @@ tap "homebrew/core"
 
 cask "alfred"                     # spotlight replacement
 cask "charles"                    # Charles Proxy
+cask "goland"                     # Goland -- Go IDE
 cask "google-chrome"              # my browser of choice
 cask "hammerspoon"                # Change caps_lock to control when used as modifier, escape when used alone
 cask "iterm2"                     # my terminal of choice
