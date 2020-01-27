@@ -411,6 +411,116 @@ in {
         key = "x";
       };
     };
+
+    floating = mkOption {
+      type = with types; listOf str;
+      default = [];
+    };
+
+    floating-is-blacklist = mkOption {
+      type = types.bool;
+      default = true;
+    };
+
+    float-small-windows = mkOption {
+      type = types.bool;
+      default = true;
+    };
+
+    mouse-follows-focus = mkOption {
+      type = types.bool;
+      default = false;
+    };
+
+    focus-follows-mouse = mkOption {
+      type = types.bool;
+      default = false;
+    };
+
+    enables-layout-hud = mkOption {
+      type = types.bool;
+      default = true;
+    };
+
+    enables-layout-hud-on-space-change = mkOption {
+      type = types.bool;
+      default = true;
+    };
+
+    window-margin-size = mkOption {
+      type = types.ints.unsigned;
+      default = 0;
+    };
+
+    window-resize-step = mkOption {
+      type = types.ints.unsigned;
+      default = 5;
+    };
+
+    window-margins = mkOption {
+      type = types.bool;
+      default = false;
+    };
+
+    window-minimum-height = mkOption {
+      type = types.ints.unsigned;
+      default = 0;
+    };
+
+    window-minimum-width = mkOption {
+      type = types.ints.unsigned;
+      default = 0;
+    };
+
+    ignore-menu-bar = mkOption {
+      type = types.bool;
+      default = false;
+    };
+
+    use-canary-build = mkOption {
+      type = types.bool;
+      default = false;
+    };
+
+    new-windows-to-main = mkOption {
+      type = types.bool;
+      default = false;
+    };
+
+    follow-space-thrown-windows = mkOption {
+      type = types.bool;
+      default = true;
+    };
+
+    send-crash-reports = mkOption {
+      type = types.bool;
+      default = false;
+    };
+
+    screen-padding-top = mkOption {
+      type = types.ints.unsigned;
+      default = 0;
+    };
+
+    screen-padding-bottom = mkOption {
+      type = types.ints.unsigned;
+      default = 0;
+    };
+
+    screen-padding-left = mkOption {
+      type = types.ints.unsigned;
+      default = 0;
+    };
+
+    screen-padding-right = mkOption {
+      type = types.ints.unsigned;
+      default = 0;
+    };
+
+    debug-layout-info = mkOption {
+      type = types.bool;
+      default = false;
+    };
   };
 
   config = mkIf cfg.enable {
