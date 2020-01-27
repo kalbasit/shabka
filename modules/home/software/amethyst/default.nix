@@ -17,6 +17,8 @@ let
   };
 
 in {
+  imports = [ ./colemak.nix ];
+
   options.shabka.amethyst = {
     enable = mkEnableOption "Automatic tiling window manager for macOS à la xmonad";
 
@@ -50,6 +52,14 @@ in {
     screens = mkOption {
       type = types.ints.unsigned;
       default = 4;
+    };
+
+    keyboardLayout = mkOption {
+      type = with types; enum [ "colemak" "qwerty" ];
+      default = (builtins.head config.shabka.keyboard.layouts);
+      description = ''
+        The keyboard layout to use.
+      '';
     };
 
     cycle-layout = mkOption {
