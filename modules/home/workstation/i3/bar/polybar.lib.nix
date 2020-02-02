@@ -17,7 +17,7 @@ let
 
     for m in $(${pkgs.xorg.xrandr}/bin/xrandr --query | ${pkgs.gnugrep}/bin/grep " connected" | ${pkgs.coreutils}/bin/cut -d" " -f1); do
       echo "Starting polybar on monitor $m"
-      MONITOR=$m polybar --reload default &
+      MONITOR=$m polybar -q --log=error --reload default &
     done
   '';
 
