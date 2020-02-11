@@ -50,9 +50,13 @@ function gcim() {
 		local story="$(echo "${branch}" | grep '^[[:alpha:]][[:alpha:]]*-[[:digit:]][[:digit:]]*$')"
 
 		if [[ "x${story}" != "x" ]]; then
-			@git_bin@ commit -m "${message} (${story})"
+			story=" (${story})"
+		fi
+
+		if [[ "${SSH_AUTH_SOCK:-}" != "${HOME}/.gnupg/S.gpg-agent.ssh" ]]; then
+			@git_bin@ commit --no-sign -m "${message} (${story})"
 		else
-			@git_bin@ commit -m "${message}"
+			@git_bin@ commit -m "${message} (${story})"
 		fi
 	} always {
 		unfunction -m "$0_*"
