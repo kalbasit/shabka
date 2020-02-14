@@ -7,10 +7,7 @@ let
     inherit (pinnedVersion) url sha256;
   };
 
-  patches = [
-    # https://github.com/NixOS/nixpkgs/pull/77423
-    ../19.09/0001-tmux-extraTmuxConf-to-extraConfig
-  ];
+  patches = [ ];
 
   patched = mkExternal {
     inherit src patches;
