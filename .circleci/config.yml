@@ -232,10 +232,11 @@ jobs:
       <<: *global_env
 
     docker:
-      - image: nixos/nix
+      - image: archlinux/base
 
     steps:
       - checkout
+      - *install-nix
       - *install-dependencies
       - *install-cachix
       - *enable-cachix
@@ -250,11 +251,10 @@ jobs:
       <<: *global_env
 
     docker:
-      - image: archlinux/base
+      - image: nixos/nix
 
     steps:
       - checkout
-      - *install-nix
       - *install-dependencies
       - *install-cachix
       - *enable-cachix
