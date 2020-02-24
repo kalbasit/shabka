@@ -129,12 +129,8 @@ getHostDistrib() {
   echoDebug1 "host_distrib=${host_distrib}"
 
   case "${host_distrib}" in
-    "Darwin"|"NixOS")
+    "Darwin"|"NixOS"|"Linux")
       echo "${host_distrib}"
-      ;;
-    "Linux")
-      echoErr "Linux non-NixOS hosts not supported yet."
-      exit 1
       ;;
     *)
       echoErr "Invalid value ${host_distrib} at ${dotshabka_path}/hosts/${host}/distrib"
@@ -164,6 +160,13 @@ getNixPath() {
                             -A "external.nix-darwin.path" )"
     local nix_path="darwin=${nix_darwin}:${nix_path}"
     echoDebug2 "Added nix_darwin to nix_path: '${nix_path}'"
+  fi
+  if [[ -z "${host_distrib:-}" ]] || [[ "${host_distrib}" == "Linux" ]]; then
+    local -r home_manager="$( set -e; \
+                              nix-build --no-out-link "${shabka_path}" -A \
+                              "external.home-manager.release-${release/./-}.path" )"
+    local nix_path="home-manager=${home_manager}:${nix_path}"
+    echoDebug2 "Added home-manager to nix_path: '${nix_path}'"
   fi
 
   echo "${nix_path}"
@@ -213,9 +216,9 @@ buildHost() {
   export NIX_PATH="$( getNixPath "${release}" "${distrib}" )" || exit "${?}"
 
   (set -x; \
-   RELEASE="release-${release/./-}" \
-      nix-build "${dotshabka_path}/hosts/${host}" -A system "${@}"\
-  ) || exit "${?}"
+    RELEASE="release-${release/./-}" \
+    nix-build "${dotshabka_path}/hosts/${host}" -A system "${@}"\
+    ) || exit "${?}"
 
   echoSuccess "Finished building host ${host}."
 }
@@ -251,18 +254,23 @@ rebuildHost() {
   case "${distrib}" in
     "NixOS")
       (set -x; \
-       RELEASE="release-${release/./-}" \
-        nixos-rebuild -I "nixos-config=${configPath}" "${command}" "${@}" \
-      ) || exit "${?}"
+        RELEASE="release-${release/./-}" \
+        nixos-rebuild -I "nixos-config=${configPath}" "${cmd}" "${@}" \
+        ) || exit "${?}"
       ;;
     "Darwin")
       (set -x; \
-       RELEASE="release-${release/./-}" \
-        darwin-rebuild -I "darwin-config=${configPath}" "${command}" "${@}" \
-      ) || exit "${?}"
+        RELEASE="release-${release/./-}" \
+        darwin-rebuild -I "darwin-config=${configPath}" "${cmd}" "${@}" \
+        ) || exit "${?}"
       ;;
     # For future use
     "Linux")
+    (set -x; \
+      RELEASE="release-${release/./-}" \
+      nix-shell -p home-manager --run \
+      "home-manager -f ${configPath} ${cmd} ${@}" \
+      ) || exit "${?}"
       ;;
   esac
 
@@ -333,7 +341,7 @@ pushToCachix() {
       shift
       pushHostToCachix "${binary_cache_name}" "${release}" "${host}"
     done
-    echoSucces "Finished pushing hosts '${@}' to Cachix ${binary_cache_name}"
+    echoSuccess "Finished pushing hosts '${@}' to Cachix ${binary_cache_name}"
     return
   fi
 
@@ -386,7 +394,7 @@ main() {
     exit 1
   fi
 
-  declare -r command="${1}"
+  local -r command="${1}"
   shift 1
 
   setShabkaPath
