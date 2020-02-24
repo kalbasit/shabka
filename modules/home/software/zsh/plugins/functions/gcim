@@ -54,9 +54,9 @@ function gcim() {
 		fi
 
 		if [[ "${SSH_AUTH_SOCK:-}" != "${HOME}/.gnupg/S.gpg-agent.ssh" ]]; then
-			@git_bin@ commit --no-sign -m "${message} (${story})"
+			@git_bin@ commit --no-sign -m "${message}${story}"
 		else
-			@git_bin@ commit -m "${message} (${story})"
+			@git_bin@ commit -m "${message}${story}"
 		fi
 	} always {
 		unfunction -m "$0_*"
