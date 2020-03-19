@@ -13,15 +13,12 @@ in {
       enableGhostscriptFonts = true;
       fonts = with pkgs; [
         powerline-fonts
-        source-code-pro
         twemoji-color-font
 
         noto-fonts
         noto-fonts-extra
         noto-fonts-emoji
         noto-fonts-cjk
-
-        nerdfonts
 
         symbola
 
