@@ -10,6 +10,7 @@ let
   patches = [
     # https://github.com/NixOS/nixpkgs/pull/77423
     ./0001-tmux-extraTmuxConf-to-extraConfig
+    ./0002-flashplayer-404
   ];
 
   patched = mkExternal {
