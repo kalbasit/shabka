@@ -234,6 +234,10 @@ rebuildHost() {
 
   echoInfo "Executing rebuild ${cmd} on host ${host}"
 
+  if [[ ! -e "${dotshabka_path}/secrets" ]]; then
+    echoWarn "${dotshabka_path}/secrets does not exist."
+  fi
+
   distrib="$( getHostDistrib "${host}" )" || exit "${?}"
 
   if [[ -z "${release:-}" ]]; then
@@ -333,7 +337,7 @@ pushToCachix() {
       shift
       pushHostToCachix "${binary_cache_name}" "${release}" "${host}"
     done
-    echoSucces "Finished pushing hosts '${@}' to Cachix ${binary_cache_name}"
+    echoSuccess "Finished pushing hosts '${@}' to Cachix ${binary_cache_name}"
     return
   fi
 
