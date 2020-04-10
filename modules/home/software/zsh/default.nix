@@ -67,11 +67,6 @@ let
       substituteInPlace $out/sapg \
         --subst-var-by apg_bin ${getBin apg}/bin/apg
 
-      substituteInPlace $out/tmycli \
-        --subst-var-by mycli_bin ${getBin mycli}/bin/mycli \
-        --subst-var-by netstat_bin ${getBin nettools}/bin/netstat \
-        --subst-var-by ssh_bin ${getBin openssh}/bin/ssh
-
       substituteInPlace $out/ulimit_usage \
         --subst-var-by paste_bin ${getBin coreutils}/bin/paste \
         --subst-var-by cut_bin ${getBin coreutils}/bin/cut \
