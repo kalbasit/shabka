@@ -7,7 +7,7 @@ let
     inherit (pinnedVersion) url sha256;
   };
 
-  patches = [ ];
+  patches = [ ./darwin-fix-nix.patch ];
 
   patched = mkExternal {
     inherit src patches;
