@@ -2,7 +2,11 @@
 
 with lib;
 
-{
+let
+  caffeine-ng = pkgs.caffeine-ng.overrideDerivation (oldAttrs: {
+    propagatedBuildInputs = with pkgs; [ procps xautolock xorg.xset ];
+  });
+in {
   options.shabka.workstation.locker.enable = mkEnableOption "Enable screen auto-locker";
 
   config = mkIf config.shabka.workstation.locker.enable {
@@ -24,7 +28,7 @@ with lib;
       };
 
       Service = {
-        ExecStart = "${pkgs.nur.repos.risson.caffeine-ng}/bin/caffeine";
+        ExecStart = "${caffeine-ng}/bin/caffeine";
       };
     };
   };
