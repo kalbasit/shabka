@@ -146,7 +146,7 @@ getHostDistrib() {
 getNixPath() {
   desc="Compute the NIX_PATH from release and distribution.
         Usage: getNixPath <release> <distrib>
-        Requires shabka_path to be set."
+        Requires shabka_path and dotshabka_path to be set."
 
   local -r nixpkgs_release="${1}"
   local -r host_distrib="${2}"
@@ -155,7 +155,7 @@ getNixPath() {
   local -r nixpkgs="$( set -e;
                        nix-build --no-out-link "${shabka_path}" \
                        -A "external.nixpkgs.release-${release/./-}.path" )"
-  local nix_path="nixpkgs=${nixpkgs}:shabka=${shabka_path}"
+  local nix_path="nixpkgs=${nixpkgs}:shabka=${shabka_path}:dotshabka=${dotshabka_path}"
   echoDebug2 "nix_path set with nixpkgs and shabka to '${nix_path}'"
 
   if [[ -z "${host_distrib:-}" ]] || [[ "${host_distrib}" == "Darwin" ]]; then

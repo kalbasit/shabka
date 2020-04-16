@@ -29,6 +29,7 @@ var_3: &install-cachix
 
       # install cachix from nixpkgs at stable
       readonly shabka_path="$( pwd )"
+      readonly dotshabka_path="placeholder"
       release="$( tr -d "\n" < "${shabka_path}/release" )"
 
       source "${shabka_path}/bin/shabka"
