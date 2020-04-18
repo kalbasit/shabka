@@ -24,6 +24,6 @@ with lib;
 
     shabka.serial_console.enable = true;
 
-    i18n.consoleFont = "Lat2-Terminus16";
+    console.font = "Lat2-Terminus16";
   };
 }

@@ -49,11 +49,11 @@ with lib;
   };
 
   config = {
-    boot.earlyVconsoleSetup = cfg.enableAtBoot;
-    i18n.consoleKeyMap = let layout = layouts."${builtins.head cfg.layouts}"; in
-                         if layout.variant == ""
-                         then layout.layout
-                         else (if layout.variant == "bepo" then "fr-bepo" else layout.variant);
+    console.earlySetup = cfg.enableAtBoot;
+    console.keyMap = let layout = layouts."${builtins.head cfg.layouts}"; in
+                     if layout.variant == ""
+                     then layout.layout
+                     else (if layout.variant == "bepo" then "fr-bepo" else layout.variant);
     services.xserver.layout = builtins.concatStringsSep "," (map (n: layouts."${n}".layout) cfg.layouts);
     services.xserver.xkbVariant = builtins.concatStringsSep "," (map (n: layouts."${n}".variant) cfg.layouts);
   };
