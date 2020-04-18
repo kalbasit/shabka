@@ -8,7 +8,7 @@ with lib;
 
 {
   options.shabka.windowManager = mkOption rec {
-    type = types.enum ["i3" "plasma5" "gnome3"];
+    type = types.enum [ "i3" ];
     default = "i3";
     description = ''
       The window manager to use. Currently supported window managers are ${concatStringsSep ", " type}.
