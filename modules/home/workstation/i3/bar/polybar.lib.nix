@@ -307,9 +307,9 @@ in {
 
       enable-ipc = true;
 
-      # validate the font with `fc-match 'SourceCodePro:style=Regular:size=8'`
-      font-0 = "SourceCodePro:style=Regular:size=8";
-      font-1 = "NotoEmoji Nerd Font Mono:style=Book:size=8";
+      # validate the font with `fc-match '<full-font-string-here>'`
+      font-0 = "Source Code Pro for Powerline:style=Regular:size=9:antialias=true";
+      font-1 = "xft:Twitter Color Emoji:style=Regular:size=8";
 
       module-margin-left = 1;
       module-margin-right = 2;

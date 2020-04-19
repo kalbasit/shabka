@@ -12,7 +12,7 @@ let
   patched = mkExternal {
     inherit src patches;
 
-    name = "home-manager-release-19-09";
+    name = "home-manager-release-20-03";
     revision = pinnedVersion.rev;
   };
 in {

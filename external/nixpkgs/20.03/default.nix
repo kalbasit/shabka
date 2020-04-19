@@ -8,15 +8,18 @@ let
   };
 
   patches = [
-    # https://github.com/NixOS/nixpkgs/pull/77423
-    ./0001-tmux-extraTmuxConf-to-extraConfig
-    ./0002-flashplayer-404
+    ./0000-flashplayer-404.patch
+    # https://github.com/NixOS/nixpkgs/pull/85373
+    ./0001-flashplayer-404.patch
+    # https://github.com/NixOS/nixpkgs/pull/82693
+    ./0002-virtualbox.patch
+    ./0003-virtualbox.patch
   ];
 
   patched = mkExternal {
     inherit src patches;
 
-    name = "nixpkgs-release-19-09";
+    name = "nixpkgs-release-20-03";
     revision = pinnedVersion.rev;
   };
 in

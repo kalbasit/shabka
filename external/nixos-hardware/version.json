@@ -1,5 +1,5 @@
 {
-  "url": "https://github.com/NixOS/nixos-hardware/archive/edb7199b5c4f1db34a7253d4cabf6cf690521a92.tar.gz",
-  "sha256": "00r28jglx47wd2gd1bcs8m44z7a6hs5d8j48f0xjvc6s512359bm",
-  "rev": "edb7199b5c4f1db34a7253d4cabf6cf690521a92"
+  "url": "https://github.com/NixOS/nixos-hardware/archive/e58c64a03c931bfddbcae238d54ac63a67b6fa35.tar.gz",
+  "sha256": "12awmbr1dhmn8xpz90bj0mxyjf218vspvi6mg7021q0m02k1s50s",
+  "rev": "e58c64a03c931bfddbcae238d54ac63a67b6fa35"
 }

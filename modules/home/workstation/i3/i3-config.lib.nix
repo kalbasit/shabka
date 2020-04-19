@@ -43,7 +43,7 @@ in {
   enable = true;
 
   config = {
-    fonts = [ "pango:SourceCodePro Regular 8" ];
+    fonts = [ "pango:Source Code Pro for Powerline 8" ];
 
     window = {
       commands = [

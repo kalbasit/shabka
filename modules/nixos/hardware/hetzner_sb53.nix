@@ -13,6 +13,6 @@ with lib;
 
     boot.kernelPackages = pkgs.linuxPackages_latest;
 
-    i18n.consoleFont = "Lat2-Terminus16";
+    console.font = "Lat2-Terminus16";
   };
 }

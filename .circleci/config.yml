@@ -244,6 +244,24 @@ jobs:
       - *build-host
       - *push-to-cachix
 
+  nas:
+    working_directory: ~/shabka
+
+    environment:
+      <<: *global_env
+
+    docker:
+      - image: nixos/nix
+
+    steps:
+      - checkout
+      - *install-dependencies
+      - *install-cachix
+      - *enable-cachix
+      - *download-dotshabka
+      - *build-host
+      - *push-to-cachix
+
 workflows:
   version: 2
   testing:
@@ -263,4 +281,6 @@ workflows:
       - duck:
           context: shabka-risson
       - hedgehog:
+          context: shabka-risson
+      - nas:
           context: shabka-risson
