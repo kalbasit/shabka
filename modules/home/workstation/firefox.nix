@@ -8,7 +8,6 @@ with lib;
   config = mkIf config.shabka.workstation.firefox.enable {
     programs.firefox = {
       enable = true;
-      enableGoogleTalk = true;
       enableAdobeFlash = true;
     };
 
