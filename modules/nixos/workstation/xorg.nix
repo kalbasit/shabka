@@ -29,8 +29,7 @@ in {
       libinput.enable = true;
       libinput.naturalScrolling = true;
 
-      desktopManager.gnome3.enable = true;
-      desktopManager.plasma5.enable = true;
+      displayManager.defaultSession = "none+i3";
 
       # enable the display manager
       displayManager.lightdm.enable = true;
@@ -38,6 +37,8 @@ in {
         enable = true;
         user = "yl";
       };
+
+      windowManager.i3.enable = true;
     };
   };
 }
