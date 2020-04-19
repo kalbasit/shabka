@@ -88,6 +88,10 @@ in {
       };
 
       ignores = [
+        # Direnv #
+        ##########
+        ".direnv/"
+
         # Compiled source #
         ###################
         "*.[568vq]"
