@@ -45,7 +45,7 @@ in {
         rofi.modi: window,run,ssh,drun,i3Workspaces:${i3Support}/bin/i3-switch-workspaces,i3RenameWorkspace:${i3Support}/bin/i3-rename-workspace,i3MoveContainer:${i3Support}/bin/i3-move-container
       '';
 
-      font = "SourceCodePro 9";
+      font = "Source Code Pro for Powerline 9";
     };
   };
 }
