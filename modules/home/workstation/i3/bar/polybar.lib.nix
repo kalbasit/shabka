@@ -307,7 +307,7 @@ in {
 
       enable-ipc = true;
 
-      # validate the font with `fc-match 'SourceCodePro:style=Regular:size=8'`
+      # validate the font with `fc-match '<full-font-string-here>'`
       font-0 = "Source Code Pro for Powerline:style=Regular:size=9:antialias=true";
       font-1 = "xft:Twitter Color Emoji:style=Regular:size=8";
 
