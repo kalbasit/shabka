@@ -1,0 +1,69 @@
+diff --git a/pkgs/development/python-modules/pyside/apiextractor.nix b/pkgs/development/python-modules/pyside/apiextractor.nix
+index d9168f291c0..452320e1d71 100644
+--- a/pkgs/development/python-modules/pyside/apiextractor.nix
++++ b/pkgs/development/python-modules/pyside/apiextractor.nix
+@@ -18,7 +18,7 @@ in stdenv.mkDerivation {
+   meta = {
+     description = "Eases the development of bindings of Qt-based libraries for high level languages by automating most of the process";
+     license = stdenv.lib.licenses.gpl2;
+-    homepage = http://www.pyside.org/docs/apiextractor/;
++    homepage = "http://www.pyside.org/docs/apiextractor/";
+     maintainers = [ ];
+     platforms = stdenv.lib.platforms.all;
+   };
+diff --git a/pkgs/development/python-modules/pyside/default.nix b/pkgs/development/python-modules/pyside/default.nix
+index 6189c8649d9..8eae5034a4f 100644
+--- a/pkgs/development/python-modules/pyside/default.nix
++++ b/pkgs/development/python-modules/pyside/default.nix
+@@ -22,7 +22,6 @@ buildPythonPackage rec {
+   meta = {
+     description = "LGPL-licensed Python bindings for the Qt cross-platform application and UI framework";
+     license = lib.licenses.lgpl21;
+-    homepage = http://www.pyside.org;
+-    broken = true;
++    homepage = "http://www.pyside.org";
+   };
+ }
+diff --git a/pkgs/development/python-modules/pyside/generatorrunner.nix b/pkgs/development/python-modules/pyside/generatorrunner.nix
+index feeeda812f9..7cb132c1ad7 100644
+--- a/pkgs/development/python-modules/pyside/generatorrunner.nix
++++ b/pkgs/development/python-modules/pyside/generatorrunner.nix
+@@ -20,7 +20,7 @@ in stdenv.mkDerivation {
+   meta = {
+     description = "Eases the development of binding generators for C++ and Qt-based libraries by providing a framework to help automating most of the process";
+     license = stdenv.lib.licenses.gpl2;
+-    homepage = http://www.pyside.org/docs/generatorrunner/;
++    homepage = "http://www.pyside.org/docs/generatorrunner/";
+     maintainers = [ ];
+     platforms = stdenv.lib.platforms.all;
+   };
+diff --git a/pkgs/development/python-modules/pyside/shiboken.nix b/pkgs/development/python-modules/pyside/shiboken.nix
+index 6fe56558d39..c5561525db5 100644
+--- a/pkgs/development/python-modules/pyside/shiboken.nix
++++ b/pkgs/development/python-modules/pyside/shiboken.nix
+@@ -32,9 +32,8 @@ buildPythonPackage rec {
+   meta = {
+     description = "Plugin (front-end) for pyside-generatorrunner, that generates bindings for C++ libraries using CPython source code";
+     license = lib.licenses.gpl2;
+-    homepage = http://www.pyside.org/docs/shiboken/;
++    homepage = "http://www.pyside.org/docs/shiboken/";
+     maintainers = [ ];
+     platforms = lib.platforms.all;
+-    broken = true;
+   };
+ }
+diff --git a/pkgs/development/python-modules/pyside/tools.nix b/pkgs/development/python-modules/pyside/tools.nix
+index d20ae77ddc8..9698c09f347 100644
+--- a/pkgs/development/python-modules/pyside/tools.nix
++++ b/pkgs/development/python-modules/pyside/tools.nix
+@@ -21,9 +21,8 @@ buildPythonPackage rec {
+   meta = with lib; {
+     description = "Development tools (pyside-uic/rcc/lupdate) for PySide, the LGPL-licensed Python bindings for the Qt framework";
+     license = licenses.gpl2;
+-    homepage = https://wiki.qt.io/PySide;
++    homepage = "https://wiki.qt.io/PySide";
+     maintainers = [ ];
+     platforms = platforms.all;
+-    broken = true;
+   };
+ }
