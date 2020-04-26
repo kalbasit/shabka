@@ -7,7 +7,9 @@ let
     inherit (pinnedVersion) url sha256;
   };
 
-  patches = [];
+  patches = [
+    ./0001-pyside-as-non-broken.patch
+  ];
 
   patched = mkExternal {
     inherit src patches;
