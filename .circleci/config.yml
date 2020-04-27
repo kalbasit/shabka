@@ -53,8 +53,8 @@ var_5: &download-dotshabka
     name: Download dotshabka
     working_directory: ~/
     command: |
-      if ! git clone "${DOTSHABKA_REPOSITORY}" -b "${CIRCLE_BRANCH}" "${HOME}/.shabka"; then
-        git clone "${DOTSHABKA_REPOSITORY}" "${HOME}/.shabka"
+      if ! git clone "${DOTSHABKA_REPOSITORY}" -b "${CIRCLE_BRANCH}" "${HOME}/dotshabka"; then
+        git clone "${DOTSHABKA_REPOSITORY}" "${HOME}/dotshabka"
         >&2 echo "Cloned dotshabka from the master branch"
       else
         >&2 echo "Cloned dotshabka from the ${CIRCLE_BRANCH} branch"
@@ -69,7 +69,7 @@ var_6: &build-host
         source "${HOME}/.nix-profile/etc/profile.d/nix.sh"
       fi
 
-      export DOTSHABKA_PATH="${HOME}/.shabka"
+      export DOTSHABKA_PATH="${HOME}/dotshabka"
 
       ./bin/shabka -h "${CIRCLE_JOB}" build
 
@@ -92,7 +92,7 @@ var_7: &push-to-cachix
         exit 0
       fi
 
-      export DOTSHABKA_PATH="${HOME}/.shabka"
+      export DOTSHABKA_PATH="${HOME}/dotshabka"
 
       ./bin/shabka push-to-cachix "${CACHIX_CACHE}" "${CIRCLE_JOB}"
 
