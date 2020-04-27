@@ -7,7 +7,10 @@ let
     inherit (pinnedVersion) url sha256;
   };
 
-  patches = [ ./darwin-fix-nix.patch ];
+  patches = [
+    ./darwin-fix-nix.patch
+    ./0002-poetry2nix.patch
+  ];
 
   patched = mkExternal {
     inherit src patches;
