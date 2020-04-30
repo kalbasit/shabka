@@ -80,7 +80,6 @@ in {
     shabka.workstation = enableMultiple [
       "alacritty"
       "bluetooth"
-      "chromium"
       "dunst"
       "firefox"
       "greenclip"
