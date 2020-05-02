@@ -442,7 +442,7 @@ main() {
     "build")
       buildHost "${host}" "${release}" "${@}"
     ;;
-    "switch"|"boot"|"test"|"dry-build"|"dry-activate"|"activate"|"check")
+    "switch"|"boot"|"test"|"dry-build"|"dry-activate"|"activate"|"check"|"build-vm")
       rebuildHost "${command}" "${host}" "${release}" "${@}"
       ;;
     "push-to-cachix")
