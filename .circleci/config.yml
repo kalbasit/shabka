@@ -278,8 +278,6 @@ workflows:
           context: shabka-yl
       - zeus:
           context: shabka-yl
-      - duck:
-          context: shabka-risson
       - hedgehog:
           context: shabka-risson
       - nas:
