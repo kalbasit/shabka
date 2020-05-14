@@ -39,6 +39,9 @@ in {
               # Move the Slack workspace to the internal screen
               ${getBin pkgs.i3}/bin/i3-msg "workspace slack; move workspace to output eDP-1"
 
+              # Move the TV workspace to the internal screen
+              ${getBin pkgs.i3}/bin/i3-msg "workspace tv; move workspace to output DP-3"
+
               # Go to my personal workspace
               ${getBin pkgs.i3}/bin/i3-msg "workspace personal@base"
             '';
