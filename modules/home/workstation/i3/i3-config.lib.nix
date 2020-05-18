@@ -111,12 +111,16 @@ in {
       "${defaultModifier}+v" = "split v";
 
       # change focus between output
-      "${defaultModifier}+${thirdModifier}+o" = "focus output right";
       "${defaultModifier}+${thirdModifier}+n" = "focus output left";
+      "${defaultModifier}+${thirdModifier}+e" = "focus output down";
+      "${defaultModifier}+${thirdModifier}+i" = "focus output up";
+      "${defaultModifier}+${thirdModifier}+o" = "focus output right";
 
       # move workspaces between monitors
-      "${defaultModifier}+${secondModifier}+${thirdModifier}+o" = "move workspace to output right";
       "${defaultModifier}+${secondModifier}+${thirdModifier}+n" = "move workspace to output left";
+      "${defaultModifier}+${secondModifier}+${thirdModifier}+e" = "move workspace to output down";
+      "${defaultModifier}+${secondModifier}+${thirdModifier}+i" = "move workspace to output up";
+      "${defaultModifier}+${secondModifier}+${thirdModifier}+o" = "move workspace to output right";
 
       # toggle sticky
       "${defaultModifier}+s" = "sticky toggle";
