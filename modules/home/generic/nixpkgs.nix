@@ -19,10 +19,6 @@ let
             };
           });
       };
-
-      chromium = {
-        enablePepperFlash = true;
-      };
     }
   '';
 
@@ -40,10 +36,6 @@ in {
               risson = import shabka.external.risson.nur.path { inherit pkgs; };
             };
           });
-      };
-
-      chromium = {
-        enablePepperFlash = true;
       };
     };
 

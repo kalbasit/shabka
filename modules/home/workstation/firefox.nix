@@ -8,7 +8,6 @@ with lib;
   config = mkIf config.shabka.workstation.firefox.enable {
     programs.firefox = {
       enable = true;
-      enableAdobeFlash = true;
     };
 
     home.file.".mozilla/firefox/profiles.ini".text = ''
