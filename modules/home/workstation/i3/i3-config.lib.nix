@@ -210,7 +210,7 @@ in {
       "${defaultModifier}+${thirdModifier}+m" = "mode move";
 
       # Make the currently focused window a scratchpad
-      "${defaultModifier}+Shift+minus" = "move scratchpad";
+      "${defaultModifier}+${secondModifier}+minus" = "move scratchpad";
 
       # Show the next scratchpad windows
       "${defaultModifier}+minus" = "scratchpad show";
