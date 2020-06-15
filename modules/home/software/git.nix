@@ -57,7 +57,7 @@ in {
         co             = "checkout";
         cob            = "checkout -b";
         com            = "checkout master";
-        credit         = "\"!f() { git commit --amend --author \\\"$1 <$2>\\\" -C HEAD; }; f\"";
+        credit         = ''!f() { git commit --amend --author "$1 <$2>" -C HEAD; }; f'';
         dc             = "diff --cached";
         di             = "diff";
         fa             = "fetch --all";
@@ -68,8 +68,8 @@ in {
         l              = "log --graph --pretty=format':%C(yellow)%h %Cgreen%G?%Cblue%d%Creset %s %C(white) %an, %ar%Creset'";
         lol            = "log --pretty=oneline --abbrev-commit --graph --decorate --all";
         ls-ignored     = "ls-files --others -i --exclude-standard";
-        pob            = "\"!f() { git push -u \\\"\${1:-origin}\\\" \\\"$(git symbolic-ref HEAD)\\\"; }; f\"";
-        pobf           = "\"!f() { git push -fu \\\"\${1:-origin}\\\" \\\"$(git symbolic-ref HEAD)\\\"; }; f\"";
+        pob            = ''!f() { git push --set-upstream "''${1:-origin}" "$(git symbolic-ref HEAD)"; }; f'';
+        pobf           = ''!f() { git push --set-upstream --force "''${1:-origin}" "$(git symbolic-ref HEAD)"; }; f'';
         sp             = "pull --rebase --autostash";
         st             = "status";
         unstage        = "reset HEAD --";
