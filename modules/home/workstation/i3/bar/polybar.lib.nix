@@ -211,6 +211,36 @@ let
       };
     }) //
 
+    # Module microphone (pulseaudio)
+    (optionalAttrs cfg.modules.microphone.enable {
+      "module/microphone" = mkOrder cfg.modules.microphone.order (let
+        micScript = with pkgs; writeScript "mic-status.sh" ''
+          #!${runtimeShell}
+          set -eEuo pipefail
+
+          readonly default_source="$(${pulseaudio}/bin/pactl info | ${gawk}/bin/awk '/Default Source/ {print $3}')"
+          readonly is_muted="$(${pulseaudio}/bin/pactl list | ${gnugrep}/bin/grep -E  "Name: $default_source$|Mute:" | ${gnugrep}/bin/grep "Name:" -A1 | ${gawk}/bin/awk '/Mute:/ {print $2}')"
+          readonly volume="$(${pulseaudio}/bin/pactl list | ${gnugrep}/bin/grep -E "Name: $default_source$|Volume" | ${gnugrep}/bin/grep "Name:" -A1 | ${coreutils}/bin/tail -1 | ${coreutils}/bin/cut -d% -f1 | ${coreutils}/bin/cut -d/ -f2 | ${coreutils}/bin/tr -d " ")"
+
+          if [[ "$is_muted" == "yes" ]]; then
+            echo "🔇 muted"
+          elif [[ "$volume" -lt 33 ]]; then
+            echo "🔈 $volume"
+          elif [[ "$volume" -ge 33 ]] && [[ "$volume" -lt 66 ]]; then
+            echo "🔉 $volume"
+          elif [[ "$volume" -ge 66 ]]; then
+            echo "🔊 $volume"
+          fi
+        '';
+      in {
+        type = "custom/script";
+        interval = 3;
+        exec = "${micScript}";
+        format = "<label>";
+        format-underline = "#1db954";
+      });
+    }) //
+
     # Module volume (pulseaudio)
     (optionalAttrs cfg.modules.volume.enable {
       "module/volume" = mkOrder cfg.modules.volume.order {

@@ -120,6 +120,7 @@ in {
         };
       };
 
+
       network = {
         enable = mkEnableOption "Enable the network bar module";
         order = mkOption {
@@ -137,6 +138,14 @@ in {
           default = [ ];
           example = [ "wlp5s0" ];
           description = "The wireless network interfaces of which the status will be displayed.";
+        };
+      };
+
+      microphone = {
+        enable = mkEnableOption "Enable the microphone bar module.";
+        order = mkOption {
+          default = 20;
+          description = '' Order of the module in the bar (left to right).'';
         };
       };
 
