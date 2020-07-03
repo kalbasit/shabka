@@ -41,7 +41,7 @@ let
 
   shabka = import <shabka> { };
 
-  inherit (shabka.external.nixpkgs.release-unstable) tiny;
+  inherit (shabka.external.nixpkgs.release-unstable) tiny tuijam;
 
 in {
   enable = true;
@@ -320,9 +320,7 @@ in {
         bindsym s exec astroid, mode default
         bindsym o exec ${getBin pkgs.obs-studio}/bin/obs, mode default
 
-        # back to normal: Enter or Escape
-        bindsym Return mode default
-        bindsym Escape mode default
+        bindsym Escape mode "$launcher"
       }
 
       set $daemon_mode Daemons: (g)reenclip, (x)cape
@@ -330,9 +328,7 @@ in {
         bindsym g exec ${nosid} ${getBin pkgs.haskellPackages.greenclip}/bin/greenclip daemon, mode default
         bindsym x exec ${nosid} ${getBin pkgs.xcape}/bin/xcape -e 'Control_L=Escape', mode default
 
-        # back to normal: Enter or Escape
-        bindsym Return mode default
-        bindsym Escape mode default
+        bindsym Escape mode "$launcher"
       }
 
       set $settings_mode Settings: (d)isplay, (w)indow manager
@@ -341,9 +337,7 @@ in {
         bindsym d mode "$display_mode"
         bindsym w mode "$wm_mode"
 
-        # back to normal: Enter or Escape
-        bindsym Return mode default
-        bindsym Escape mode default
+        bindsym Escape mode "$launcher"
       }
 
         # CPU governor selection
@@ -352,18 +346,14 @@ in {
           bindsym p exec ${nosid} ${getBin pkgs.gksu}/bin/gksudo -- ${getBin pkgs.linuxPackages.cpupower}/bin/cpupower frequency-set --governor performance, mode default
           bindsym o exec ${nosid} ${getBin pkgs.gksu}/bin/gksudo -- ${getBin pkgs.linuxPackages.cpupower}/bin/cpupower frequency-set --governor powersave, mode default
 
-          # back to normal: Enter or Escape
-          bindsym Return mode default
-          bindsym Escape mode default
+          bindsym Escape mode "$settings_mode"
         }
 
         set $display_mode (A)utoRandr --change
         mode "$display_mode" {
           bindsym a exec ${nosid} ${getBin pkgs.autorandr}/bin/autorandr --change, mode default
 
-          # back to normal: Enter or Escape
-          bindsym Return mode default
-          bindsym Escape mode default
+          bindsym Escape mode "$settings_mode"
         }
 
         set $wm_mode WM: (r)eload i3, R(e)start i3
@@ -371,9 +361,7 @@ in {
           bindsym r reload; exec ${nosid} ${getBin pkgs.libnotify}/bin/notify-send 'i3 configuration reloaded', mode default
           bindsym e restart; exec ${nosid} ${getBin pkgs.libnotify}/bin/notify-send 'i3 restarted', mode default
 
-          # back to normal: Enter or Escape
-          bindsym Return mode default
-          bindsym Escape mode default
+          bindsym Escape mode "$settings_mode"
         }
 
       set $power_mode System: (l)ock, L(o)gout, (s)uspend, (h)ibernate, (r)eboot, (${secondModifier}+s)hutdown
@@ -385,9 +373,7 @@ in {
         bindsym r exec ${nosid} systemctl reboot
         bindsym ${secondModifier}+s exec ${nosid} systemctl poweroff -i
 
-        # back to normal: Enter or Escape
-        bindsym Return mode default
-        bindsym Escape mode default
+        bindsym Escape mode "$launcher"
       }
 
       set $social_mode Social: (d)iscord, (i)rc${optionalString config.shabka.keybase.enable ", (k)eybase"}, S(l)ack, (m)usic
@@ -398,9 +384,7 @@ in {
         bindsym l exec ${getBin pkgs.slack}/bin/slack, mode default
         bindsym m exec ${getBin pkgs.termite}/bin/termite --title=music --exec=${getBin tuijam}/bin/tuijam, mode default
 
-        # back to normal: Enter or Escape
-        bindsym Return mode "$mode_apps"
-        bindsym Escape mode "$mode_apps"
+        bindsym Escape mode "$launcher"
       }
   '';
 }
