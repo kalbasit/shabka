@@ -8,7 +8,6 @@ let
   };
 
   patches = [
-    ./darwin-fix-nix.patch
     ./86626-pure-vim-go.patch
   ];
 
