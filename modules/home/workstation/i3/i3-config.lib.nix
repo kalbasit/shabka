@@ -65,6 +65,7 @@ in {
         { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "astroid"; }; }
         { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "Ptask"; }; }
         { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "pulse-sms"; }; }
+        { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "tuijan"; }; }
       ] ++ optionals config.shabka.keybase.enable [
         { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "Keybase"; }; }
       ];
@@ -314,11 +315,12 @@ in {
     }
     bindsym ${defaultModifier}+${thirdModifier}+l mode "$launcher"
 
-      set $app_mode Applications: (a)randr, A(s)troid, (o)bs
+      set $app_mode Applications: (a)randr, A(s)troid, (o)bs, (t)uijam
       mode "$app_mode" {
         bindsym a exec ${getBin pkgs.arandr}/bin/arandr, mode default
         bindsym s exec astroid, mode default
         bindsym o exec ${getBin pkgs.obs-studio}/bin/obs, mode default
+        bindsym t exec ${getBin pkgs.termite}/bin/termite --class=tuijam --title=tuijam --exec=${getBin tuijam}/bin/tuijam, mode default
 
         bindsym Escape mode "$launcher"
       }
@@ -376,13 +378,12 @@ in {
         bindsym Escape mode "$launcher"
       }
 
-      set $social_mode Social: (d)iscord, (i)rc${optionalString config.shabka.keybase.enable ", (k)eybase"}, S(l)ack, (m)usic
+      set $social_mode Social: (d)iscord, (i)rc${optionalString config.shabka.keybase.enable ", (k)eybase"}, S(l)ack
       mode "$social_mode" {
         bindsym d exec ${getBin pkgs.discord}/bin/Discord, mode default
         bindsym i exec ${getBin pkgs.termite}/bin/termite --title=irc --exec=${getBin tiny}/bin/tiny, mode default
         ${optionalString config.shabka.keybase.enable "bindsym k exec ${getBin pkgs.keybase-gui}/bin/keybase-gui, mode default"}
         bindsym l exec ${getBin pkgs.slack}/bin/slack, mode default
-        bindsym m exec ${getBin pkgs.termite}/bin/termite --title=music --exec=${getBin tuijam}/bin/tuijam, mode default
 
         bindsym Escape mode "$launcher"
       }
