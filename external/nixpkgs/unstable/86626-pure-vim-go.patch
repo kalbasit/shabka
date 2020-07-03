@@ -1,4 +1,4 @@
-From 499c01f6ff910601c05b1270c989d5a80b39a0ce Mon Sep 17 00:00:00 2001
+From 42b246bbc58966abc7518f64fb34e95ec6522730 Mon Sep 17 00:00:00 2001
 From: "Wael M. Nasreddine" <wael.nasreddine@gmail.com>
 Date: Sat, 2 May 2020 21:34:09 -0700
 Subject: [PATCH] vimPlugins.vim-go: set g:go_bin_path to work with pure
@@ -10,24 +10,16 @@ Subject: [PATCH] vimPlugins.vim-go: set g:go_bin_path to work with pure
   starting a job. I've filed a pull request upstream to fix this:
   https://github.com/fatih/vim-go/pull/2876
 ---
- pkgs/misc/vim-plugins/overrides.nix           |   6 +-
+ pkgs/misc/vim-plugins/overrides.nix           |   4 +-
  .../vim-plugins/patches/vim-go/pure.patch     | 114 ++++++++++++++++++
- 2 files changed, 119 insertions(+), 1 deletion(-)
+ 2 files changed, 117 insertions(+), 1 deletion(-)
  create mode 100644 pkgs/misc/vim-plugins/patches/vim-go/pure.patch
 
 diff --git a/pkgs/misc/vim-plugins/overrides.nix b/pkgs/misc/vim-plugins/overrides.nix
-index 4d5b532216d2..759d276f327e 100644
+index b2ff6c79f5aa..def70c3eb2b4 100644
 --- a/pkgs/misc/vim-plugins/overrides.nix
 +++ b/pkgs/misc/vim-plugins/overrides.nix
-@@ -24,6 +24,7 @@
- , gomodifytags, gotags, gotools, go-motion
- , gnused, reftools, gogetdoc, golangci-lint
- , impl, iferr, gocode, gocode-gomod, go-tools
-+, gopls
- 
- # direnv-vim dependencies
- , direnv
-@@ -549,15 +550,17 @@ self: super: {
+@@ -589,14 +589,15 @@ self: super: {
        asmfmt
        delve
        errcheck
@@ -42,11 +34,9 @@ index 4d5b532216d2..759d276f327e 100644
        golangci-lint
 +      golint
        gomodifytags
-+      gopls
+       gopls
        gotags
-       gotools
-       iferr
-@@ -565,6 +568,7 @@ self: super: {
+@@ -606,6 +607,7 @@ self: super: {
        reftools
      ];
      in {
