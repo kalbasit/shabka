@@ -61,11 +61,7 @@ in {
         { command = "floating enable"; criteria = { class = "^net-filebot-Main$"; }; }
         { command = "floating enable"; criteria = { title = "^jrnl_entry$"; }; }
 
-        { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "^whats-app-nativefier*"; }; }
-        { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "astroid"; }; }
-        { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "Ptask"; }; }
-        { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "pulse-sms"; }; }
-        { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "tuijan"; }; }
+        { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "tuijam"; }; }
       ] ++ optionals config.shabka.keybase.enable [
         { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "Keybase"; }; }
       ];
@@ -221,10 +217,7 @@ in {
       "${defaultModifier}+minus" = "scratchpad show";
 
       # Short-cuts for windows hidden in the scratchpad.
-      "${thirdModifier}+w" = "[class=\"^whats-app-nativefier*\"] scratchpad show";
-      "${thirdModifier}+m" = "[class=\"astroid\"] scratchpad show";
-      "${thirdModifier}+p" = "[class=\"pulse-sms\"] scratchpad show";
-      "${thirdModifier}+t" = "[class=\"Ptask\"] scratchpad show";
+      "${thirdModifier}+t" = "[class=\"tuijam\"] scratchpad show";
     } // (if config.shabka.keybase.enable == true then {
       "${thirdModifier}+k" = "[class=\"Keybase\"] scratchpad show";
     } else {});
