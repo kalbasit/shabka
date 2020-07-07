@@ -61,7 +61,8 @@ in {
         { command = "floating enable"; criteria = { class = "^net-filebot-Main$"; }; }
         { command = "floating enable"; criteria = { title = "^jrnl_entry$"; }; }
 
-        { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "tuijam"; }; }
+        { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "music"; }; }
+        { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "irc"; }; }
       ] ++ optionals config.shabka.keybase.enable [
         { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "Keybase"; }; }
       ];
@@ -214,10 +215,11 @@ in {
       "${defaultModifier}+${secondModifier}+minus" = "move scratchpad";
 
       # Show the next scratchpad windows
-      "${defaultModifier}+minus" = "scratchpad show";
+      "${thirdModifier}+minus" = "scratchpad show";
 
       # Short-cuts for windows hidden in the scratchpad.
-      "${thirdModifier}+t" = "[class=\"tuijam\"] scratchpad show";
+      "${thirdModifier}+i" = "[class=\"irc\"] scratchpad show";
+      "${thirdModifier}+m" = "[class=\"music\"] scratchpad show";
     } // (if config.shabka.keybase.enable == true then {
       "${thirdModifier}+k" = "[class=\"Keybase\"] scratchpad show";
     } else {});
@@ -294,7 +296,7 @@ in {
     # Modes #
     #########
 
-    set $launcher Launch: (a)pps, (d)aemons, s(e)ttings, (s)ocial
+    set $launcher Launch: (a)pps, (d)aemons, s(e)ttings, (p)ower, (s)ocial
     mode "$launcher" {
       bindsym a mode "$app_mode"
       bindsym d mode "$daemon_mode"
@@ -313,7 +315,7 @@ in {
         bindsym a exec ${getBin pkgs.arandr}/bin/arandr, mode default
         bindsym s exec astroid, mode default
         bindsym o exec ${getBin pkgs.obs-studio}/bin/obs, mode default
-        bindsym t exec ${getBin pkgs.termite}/bin/termite --class=tuijam --title=tuijam --exec=${getBin tuijam}/bin/tuijam, mode default
+        bindsym t exec ${getBin pkgs.termite}/bin/termite --class=music --title=tuijam --exec=${getBin tuijam}/bin/tuijam, mode default
 
         bindsym Escape mode "$launcher"
       }
@@ -326,7 +328,7 @@ in {
         bindsym Escape mode "$launcher"
       }
 
-      set $settings_mode Settings: (d)isplay, (w)indow manager
+      set $settings_mode Settings: (c)pu, (d)isplay, (w)indow manager
       mode "$settings_mode" {
         bindsym c mode "$cpu_mode"
         bindsym d mode "$display_mode"
@@ -374,7 +376,7 @@ in {
       set $social_mode Social: (d)iscord, (i)rc${optionalString config.shabka.keybase.enable ", (k)eybase"}, S(l)ack
       mode "$social_mode" {
         bindsym d exec ${getBin pkgs.discord}/bin/Discord, mode default
-        bindsym i exec ${getBin pkgs.termite}/bin/termite --title=irc --exec=${getBin tiny}/bin/tiny, mode default
+        bindsym i exec ${getBin pkgs.termite}/bin/termite --class=irc --title=irc --exec=${getBin tiny}/bin/tiny, mode default
         ${optionalString config.shabka.keybase.enable "bindsym k exec ${getBin pkgs.keybase-gui}/bin/keybase-gui, mode default"}
         bindsym l exec ${getBin pkgs.slack}/bin/slack, mode default
 
