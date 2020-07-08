@@ -1,0 +1,94 @@
+From b08e7a81e986c44ae5fcb570dc27cf2b852ec5f7 Mon Sep 17 00:00:00 2001
+From: Wael Nasreddine <wael.nasreddine@gmail.com>
+Date: Tue, 7 Jul 2020 15:28:01 -0700
+Subject: [PATCH] mellowplayer: init at 3.6.4
+
+---
+ .../audio/mellowplayer/default.nix            | 64 +++++++++++++++++++
+ pkgs/top-level/all-packages.nix               |  2 +
+ 2 files changed, 66 insertions(+)
+ create mode 100644 pkgs/applications/audio/mellowplayer/default.nix
+
+diff --git a/pkgs/applications/audio/mellowplayer/default.nix b/pkgs/applications/audio/mellowplayer/default.nix
+new file mode 100644
+index 0000000000000..49dc2c3a7c292
+--- /dev/null
++++ b/pkgs/applications/audio/mellowplayer/default.nix
+@@ -0,0 +1,64 @@
++{ cmake
++, fetchFromGitLab
++, lib
++, libnotify
++, pkgconfig
++, qt5
++}:
++
++qt5.mkDerivation rec {
++  pname = "MellowPlayer";
++  version = "3.6.4";
++
++  src = fetchFromGitLab {
++    owner = "ColinDuquesnoy";
++    repo = "MellowPlayer";
++    rev = version;
++    sha256 = "1ss7s3kal4vzhz7ld0yy2kvp1rk2w3i6fya0z3xd7nff9p31gqvw";
++  };
++
++  nativeBuildInputs = [ cmake pkgconfig ];
++
++  buildInputs = [ libnotify ]
++    ++ (with qt5; [
++      qtbase
++      qtdeclarative
++      qtgraphicaleffects
++      qtquickcontrols2
++      qttools
++      qtwebengine
++    ]);
++
++
++  doCheck = true;
++
++  cmakeFlags = [ "-DBUILD_TESTS=ON" ];
++
++  preCheck = ''
++    # Running the tests requires a location at the home directory for logging.
++    export HOME="$NIX_BUILD_TOP/home"
++    mkdir -p "$HOME/.local/share/MellowPlayer.Tests/MellowPlayer.Tests/Logs"
++
++    # Without this, the tests fail because they cannot create the QT Window
++    export QT_QPA_PLATFORM=offscreen
++  ''
++  # TODO: The tests are failing because it can't locate QT plugins. Is there a better way to do this?
++  + (builtins.concatStringsSep "\n" (builtins.map
++    (pkg:
++      (lib.optionalString (pkg ? qtPluginPrefix) ''
++        export QT_PLUGIN_PATH="${pkg}/${pkg.qtPluginPrefix}"''${QT_PLUGIN_PATH:+':'}$QT_PLUGIN_PATH
++      '')
++      + (lib.optionalString (pkg ? qtQmlPrefix) ''
++        export QML2_IMPORT_PATH="${pkg}/${pkg.qtQmlPrefix}"''${QML2_IMPORT_PATH:+':'}$QML2_IMPORT_PATH
++      '')
++    ) buildInputs));
++
++  meta = with lib; {
++    inherit (qt5.qtbase.meta) platforms;
++
++    description = "Cloud music integration for your desktop.";
++    homepage = "https://gitlab.com/ColinDuquesnoy/MellowPlayer";
++    license = licenses.gpl2;
++    maintainers = with maintainers; [ kalbasit ];
++  };
++}
+diff --git a/pkgs/top-level/all-packages.nix b/pkgs/top-level/all-packages.nix
+index 8ede249d1c373..49ebd220538d4 100644
+--- a/pkgs/top-level/all-packages.nix
++++ b/pkgs/top-level/all-packages.nix
+@@ -2547,6 +2547,8 @@ in
+ 
+   clementineUnfree = clementine.unfree;
+ 
++  mellowplayer = qt5.callPackage ../applications/audio/mellowplayer { };
++
+   ciopfs = callPackage ../tools/filesystems/ciopfs { };
+ 
+   circleci-cli = callPackage ../development/tools/misc/circleci-cli { };

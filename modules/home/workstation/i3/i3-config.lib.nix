@@ -61,7 +61,7 @@ in {
         { command = "floating enable"; criteria = { class = "^net-filebot-Main$"; }; }
         { command = "floating enable"; criteria = { title = "^jrnl_entry$"; }; }
 
-        { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "music"; }; }
+        { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "MellowPlayer"; }; }
         { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "irc"; }; }
       ] ++ optionals config.shabka.keybase.enable [
         { command = "sticky enable, floating enable, move scratchpad"; criteria = { class = "Keybase"; }; }
@@ -218,8 +218,8 @@ in {
       "${thirdModifier}+minus" = "scratchpad show";
 
       # Short-cuts for windows hidden in the scratchpad.
-      "${thirdModifier}+i" = "[class=\"irc\"] scratchpad show";
-      "${thirdModifier}+m" = "[class=\"music\"] scratchpad show";
+      "${thirdModifier}+c" = "[class=\"irc\"] scratchpad show";
+      "${thirdModifier}+m" = "[class=\"MellowPlayer\"] scratchpad show";
     } // (if config.shabka.keybase.enable == true then {
       "${thirdModifier}+k" = "[class=\"Keybase\"] scratchpad show";
     } else {});
@@ -310,12 +310,12 @@ in {
     }
     bindsym ${defaultModifier}+${thirdModifier}+l mode "$launcher"
 
-      set $app_mode Applications: (a)randr, A(s)troid, (o)bs, (t)uijam
+      set $app_mode Applications: (a)randr, A(s)troid, (o)bs, (m)elloPlayer
       mode "$app_mode" {
         bindsym a exec ${getBin pkgs.arandr}/bin/arandr, mode default
         bindsym s exec astroid, mode default
         bindsym o exec ${getBin pkgs.obs-studio}/bin/obs, mode default
-        bindsym t exec ${getBin pkgs.termite}/bin/termite --class=music --title=tuijam --exec=${getBin tuijam}/bin/tuijam, mode default
+        bindsym m exec ${getBin pkgs.mellowplayer}/bin/MellowPlayer, mode default
 
         bindsym Escape mode "$launcher"
       }
