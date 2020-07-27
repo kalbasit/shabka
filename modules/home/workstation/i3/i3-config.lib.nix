@@ -296,13 +296,12 @@ in {
     # Modes #
     #########
 
-    set $launcher Launch: (a)pps, (d)aemons, s(e)ttings, (p)ower, (s)ocial
+    set $launcher Launch: (a)pps, (d)aemons, (p)ower, (s)ettings
     mode "$launcher" {
       bindsym a mode "$app_mode"
       bindsym d mode "$daemon_mode"
-      bindsym e mode "$settings_mode"
       bindsym p mode "$power_mode"
-      bindsym s mode "$social_mode"
+      bindsym s mode "$settings_mode"
 
       # back to normal: Enter or Escape
       bindsym Return mode default
@@ -310,15 +309,25 @@ in {
     }
     bindsym ${defaultModifier}+${thirdModifier}+l mode "$launcher"
 
-      set $app_mode Applications: (a)randr, A(s)troid, (o)bs, (m)elloPlayer
+      set $app_mode Applications: (a)stroid, (o)bs, (m)elloPlayer, (s)ocial
       mode "$app_mode" {
-        bindsym a exec ${getBin pkgs.arandr}/bin/arandr, mode default
-        bindsym s exec astroid, mode default
+        bindsym a exec astroid, mode default
         bindsym o exec ${getBin pkgs.obs-studio}/bin/obs, mode default
         bindsym m exec ${getBin pkgs.mellowplayer}/bin/MellowPlayer, mode default
+        bindsym s mode "$social_mode"
 
         bindsym Escape mode "$launcher"
       }
+
+        set $social_mode Social: (d)iscord, (i)rc${optionalString config.shabka.keybase.enable ", (k)eybase"}, S(l)ack
+        mode "$social_mode" {
+          bindsym d exec ${getBin pkgs.discord}/bin/Discord, mode default
+          bindsym i exec ${getBin pkgs.termite}/bin/termite --class=irc --title=irc --exec=${getBin tiny}/bin/tiny, mode default
+          ${optionalString config.shabka.keybase.enable "bindsym k exec ${getBin pkgs.keybase-gui}/bin/keybase-gui, mode default"}
+          bindsym l exec ${getBin pkgs.slack}/bin/slack, mode default
+
+          bindsym Escape mode "$launcher"
+        }
 
       set $daemon_mode Daemons: (g)reenclip, (x)cape
       mode "$daemon_mode" {
@@ -369,16 +378,6 @@ in {
         bindsym h exec ${nosid} ${locker} && systemctl hibernate, mode default
         bindsym r exec ${nosid} systemctl reboot
         bindsym ${secondModifier}+s exec ${nosid} systemctl poweroff -i
-
-        bindsym Escape mode "$launcher"
-      }
-
-      set $social_mode Social: (d)iscord, (i)rc${optionalString config.shabka.keybase.enable ", (k)eybase"}, S(l)ack
-      mode "$social_mode" {
-        bindsym d exec ${getBin pkgs.discord}/bin/Discord, mode default
-        bindsym i exec ${getBin pkgs.termite}/bin/termite --class=irc --title=irc --exec=${getBin tiny}/bin/tiny, mode default
-        ${optionalString config.shabka.keybase.enable "bindsym k exec ${getBin pkgs.keybase-gui}/bin/keybase-gui, mode default"}
-        bindsym l exec ${getBin pkgs.slack}/bin/slack, mode default
 
         bindsym Escape mode "$launcher"
       }
