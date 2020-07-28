@@ -54,6 +54,18 @@ in {
       description = "Location of the bar";
     };
 
+    dpi = mkOption {
+      type = with types; nullOr ints.positive;
+      default = null;
+      description = "The DPI of the bar";
+    };
+
+    height = mkOption {
+      type = types.ints.positive;
+      default = 21;
+      description = "The height of the bar";
+    };
+
     modules = {
 
       backlight = {

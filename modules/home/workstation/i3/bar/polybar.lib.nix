@@ -320,11 +320,11 @@ in {
       screenchange-reload = true;
     };
 
-    "bar/default" = {
-      monitor = "\${env:MONITOR:}";
+    "bar/default" = ({
+      inherit (cfg) height;
 
+      monitor = "\${env:MONITOR:}";
       width = "100%";
-      height = 21;
       bottom = cfg.location == "bottom";
       radius = "0.0";
       fixed-center = false;
@@ -354,7 +354,7 @@ in {
       modules-left = "i3";
       modules-center = "";
       modules-right = (builtins.concatStringsSep " " (map (removePrefix "module/") (builtins.attrNames modulesConfig)));
-    };
+    } // optionalAttrs (cfg.dpi != null) { inherit (cfg) dpi; });
 
     "module/i3" = {
       type = "internal/i3";
