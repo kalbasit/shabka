@@ -34,16 +34,28 @@ let
       chmod 755 $out/bin/*
     '';
   };
-in {
-  options.shabka.workstation.rofi.enable = mkEnableOption "workstation.rofi";
 
-  config = mkIf config.shabka.workstation.rofi.enable {
+  cfg = config.shabka.workstation.rofi;
+in {
+  options.shabka.workstation.rofi = {
+    enable = mkEnableOption "workstation.rofi";
+
+    dpi = mkOption {
+      type = with types; nullOr ints.positive;
+      default = null;
+      description = "The DPI of the rofi.";
+    };
+  };
+
+  config = mkIf cfg.enable {
     programs.rofi = {
       enable = true;
 
-      extraConfig = ''
+      extraConfig = (''
         rofi.modi: window,run,ssh,drun,i3Workspaces:${i3Support}/bin/i3-switch-workspaces,i3RenameWorkspace:${i3Support}/bin/i3-rename-workspace,i3MoveContainer:${i3Support}/bin/i3-move-container
-      '';
+      '') + (optionalString (cfg.dpi != null) ''
+        rofi.dpi: ${builtins.toString cfg.dpi}
+      '');
 
       font = "Source Code Pro for Powerline 9";
     };
