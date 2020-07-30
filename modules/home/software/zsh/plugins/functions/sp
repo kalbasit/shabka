@@ -45,7 +45,7 @@ function sp() {
 					;;
 				-l|--list)
 					for pf in "${profiles[@]}"; do
-						if [[ "x${pf}" = "x${ACTIVE_PROFILE}" ]]; then
+						if [[ "x${pf}" = "x${ZSH_PROFILE}" ]]; then
 							echo -e "$(for i in $(seq 1 ${log_depth}); do echo -ne " "; done)${FG_GREEN}*${FG_CLEAR} ${pf}"
 						else
 							echo -e "$(for i in $(seq 1 ${log_depth}); do echo -ne " "; done)  ${pf}"
@@ -54,15 +54,15 @@ function sp() {
 					return
 					;;
 				-k|--kill)
-					if [[ -n "${ACTIVE_PROFILE}" ]]; then
+					if [[ -n "${ZSH_PROFILE}" ]]; then
 						# shellcheck disable=SC1090
-						source "${HOME}/.zsh/profiles/${ACTIVE_PROFILE}.zsh"
-						if [[ -n "${GOPATH}" ]] && [[ -z "${ACTIVE_STORY}" ]]; then
+						source "${HOME}/.zsh/profiles/${ZSH_PROFILE}.zsh"
+						if [[ -n "${GOPATH}" ]] && [[ -z "${SWM_STORY_NAME}" ]]; then
 							pathunmunge PATH "${GOPATH}/bin"
 							unset GOPATH
 						fi
 						pdeactivate
-						unset ACTIVE_PROFILE
+						unset ZSH_PROFILE
 					fi
 					return
 					;;
@@ -86,22 +86,22 @@ function sp() {
 		fi
 
 		# unload the current profile
-		if [[ -n "${ACTIVE_PROFILE}" ]] && [[ "${ACTIVE_PROFILE}" != "${requested_profile}" ]]; then
+		if [[ -n "${ZSH_PROFILE}" ]] && [[ "${ZSH_PROFILE}" != "${requested_profile}" ]]; then
 			sp --kill
 		fi
 		# source the profile
 		# shellcheck disable=SC1090
 		source "${HOME}/.zsh/profiles/${requested_profile}.zsh"
 		# let the terminal know which profile is loaded
-		export ACTIVE_PROFILE="${requested_profile}"
+		export ZSH_PROFILE="${requested_profile}"
 		# set the GOPATH
-		if [[ -z "${GOPATH}" ]] && [[ -n "${ACTIVE_STORY}" ]]; then
-			local active_profile="${ACTIVE_PROFILE%%.*}"
+		if [[ -z "${GOPATH}" ]] && [[ -n "${SWM_STORY_NAME}" ]]; then
+			local active_profile="${ZSH_PROFILE%%.*}"
 			local go_path
-			if [[ "${ACTIVE_STORY}" == "base" ]]; then
-				go_path="${CODE_PATH}/${active_profile}/${ACTIVE_STORY}"
+			if [[ "${SWM_STORY_NAME}" == "base" ]]; then
+				go_path="${CODE_PATH}/${active_profile}/${SWM_STORY_NAME}"
 			else
-				go_path="${CODE_PATH}/${active_profile}/stories/${ACTIVE_STORY}"
+				go_path="${CODE_PATH}/${active_profile}/stories/${SWM_STORY_NAME}"
 			fi
 			debug "go_path=${go_path}"
 			if [[ ! -d "${go_path}" ]]; then

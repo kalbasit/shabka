@@ -175,7 +175,7 @@ POWERLEVEL9K_SHORTEN_STRATEGY="truncate_from_right"
 # define custom segments
 POWERLEVEL9K_CUSTOM_IN_NIX_SHELL="echo \$IN_NIX_SHELL"
 POWERLEVEL9K_CUSTOM_PROMPT_CHAR="echo λ"
-POWERLEVEL9K_CUSTOM_PROFILE_STORY="echo $'\u270D' \$ACTIVE_PROFILE@\$ACTIVE_STORY"
+POWERLEVEL9K_CUSTOM_PROFILE_STORY="echo $'\u270D' \$ZSH_PROFILE@\$SWM_STORY_NAME"
 POWERLEVEL9K_CUSTOM_NIX_SHELL_PACKAGES="if [[ -n \$NIX_SHELL_PACKAGES ]]; then echo \"(\$NIX_SHELL_PACKAGES)\"; fi"
 
 # TODO: setup the colors to be better visible
@@ -703,13 +703,13 @@ fi
 # TODO: create a Derivation for the profile support. Make it optional and have
 # ZSH work with or without it.
 
-if [[ -z "${ACTIVE_PROFILE}" || -z "${ACTIVE_STORY}" ]]; then
+if [[ -z "${ZSH_PROFILE}" || -z "${SWM_STORY_NAME}" ]]; then
 	if [[ -n "${DISPLAY}" ]] && have i3-msg; then
 		active_workspace="$(i3-msg -t get_workspaces 2>/dev/null | @jq_bin@ -r '.[] | if .focused == true then .name else empty end')"
 
 		if [[ "${active_workspace}" =~ '.*@.*' ]]; then
-			[[ -z "${ACTIVE_PROFILE}" ]] && export ACTIVE_PROFILE="$(echo "${active_workspace}" | cut -d@ -f1)"
-			[[ -z "${ACTIVE_STORY}" ]] && export ACTIVE_STORY="$(echo "${active_workspace}" | cut -d@ -f2)"
+			[[ -z "${ZSH_PROFILE}" ]] && export ZSH_PROFILE="$(echo "${active_workspace}" | cut -d@ -f1)"
+			[[ -z "${SWM_STORY_NAME}" ]] && export SWM_STORY_NAME="$(echo "${active_workspace}" | cut -d@ -f2)"
 		fi
 
 		unset active_workspace
@@ -717,8 +717,8 @@ if [[ -z "${ACTIVE_PROFILE}" || -z "${ACTIVE_STORY}" ]]; then
 fi
 
 # load the active profile only if one is available
-if [[ -n "${ACTIVE_PROFILE}" ]] && [[ -r "@home_path@/.zsh/profiles/${ACTIVE_PROFILE}.zsh" ]]; then
-	sp "${ACTIVE_PROFILE}"
+if [[ -n "${ZSH_PROFILE}" ]] && [[ -r "@home_path@/.zsh/profiles/${ZSH_PROFILE}.zsh" ]]; then
+	sp "${ZSH_PROFILE}"
 fi
 
 #####################################################################

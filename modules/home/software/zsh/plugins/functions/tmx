@@ -71,8 +71,8 @@ function tmx() {
 					# start the new tmux session
 					env --unset=TMUX tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" new-session -d -s "${sess}"
 
-					# add the ACTIVE_PROFILE to the environment of the session
-					tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" set-environment -t "${sess}" ACTIVE_PROFILE "${profile}"
+					# add the ZSH_PROFILE to the environment of the session
+					tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" set-environment -t "${sess}" ZSH_PROFILE "${profile}"
 
 					# add the GOPATH to the environment of the session
 					tmux -f "${TMUXDOTDIR:-$HOME}/.tmux.conf" -L "${tmux_socket_name}" set-environment -t "${sess}" GOPATH "${HOME}/code/${profile}/base"

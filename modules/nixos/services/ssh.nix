@@ -18,8 +18,8 @@ let
     (map
       (user: if (hasPrefix "yl" user) then ''
         Match User ${user}
-          AcceptEnv ACTIVE_PROFILE
-          AcceptEnv ACTIVE_STORY
+          AcceptEnv ZSH_PROFILE
+          AcceptEnv SWM_STORY_NAME
       '' else "")
       myUsers);
 
