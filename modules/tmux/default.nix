@@ -130,8 +130,8 @@ in {
     # No Mouse!
     set -g mouse off
 
-    # Do not update the environment, keep everything from what it was started with
-    set -g update-environment ""
+    # Do not update the environment, keep everything from what it was started with except for my ZSH_PROFILE
+    set -g update-environment "ZSH_PROFILE"
 
     # Last active window
     bind C-t last-window
