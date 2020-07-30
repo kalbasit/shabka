@@ -712,6 +712,10 @@ if [[ -z "${ZSH_PROFILE}" || -z "${SWM_STORY_NAME}" ]]; then
 			[[ -z "${SWM_STORY_NAME}" ]] && export SWM_STORY_NAME="$(echo "${active_workspace}" | cut -d@ -f2)"
 		fi
 
+		if [[ -z "${ZSH_PROFILE}" ]] && [[ -r "@home_path@/.zsh/profiles/${active_workspace}.zsh" ]]; then
+			 export ZSH_PROFILE="${active_workspace}"
+		fi
+
 		unset active_workspace
 	fi
 fi
