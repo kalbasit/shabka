@@ -24,27 +24,6 @@ let
       substituteInPlace $out/gcim \
         --subst-var-by git_bin ${getBin git}/bin/git
 
-      substituteInPlace $out/gorder \
-        --subst-var-by git_bin ${getBin git}/bin/git \
-        --subst-var-by sed_bin ${getBin gnused}/bin/sed
-
-      substituteInPlace $out/gtime \
-        --subst-var-by git_bin ${getBin git}/bin/git \
-        --subst-var-by sed_bin ${getBin gnused}/bin/sed
-
-      substituteInPlace $out/get_pr \
-        --subst-var-by curl_bin ${getBin curl}/bin/curl \
-        --subst-var-by git_bin ${getBin git}/bin/git \
-        --subst-var-by jq_bin ${getBin jq}/bin/jq \
-        --subst-var-by xsel_bin ${getBin xsel}/bin/xsel
-
-      substituteInPlace $out/git_require_clean_work_tree \
-        --subst-var-by git_bin ${getBin git}/bin/git
-
-      substituteInPlace $out/git_gopath_formatted_repo_path \
-        --subst-var-by git_bin ${getBin git}/bin/git \
-        --subst-var-by perl_bin ${getBin perl}/bin/perl
-
       substituteInPlace $out/jsonpp \
         --subst-var-by python_bin ${getBin python37Full}/bin/python \
         --subst-var-by pygmentize_bin ${getBin python36Packages.pygments}/bin/pygmentize
@@ -58,12 +37,6 @@ let
       substituteInPlace $out/kcn \
         --subst-var-by kubectl ${getBin kubectl}/bin/kubectl
 
-      substituteInPlace $out/new_pr \
-        --subst-var-by curl_bin ${getBin curl}/bin/curl \
-        --subst-var-by git_bin ${getBin git}/bin/git \
-        --subst-var-by jq_bin ${getBin jq}/bin/jq \
-        --subst-var-by xsel_bin ${getBin xsel}/bin/xsel
-
       substituteInPlace $out/sapg \
         --subst-var-by apg_bin ${getBin apg}/bin/apg
 
@@ -74,9 +47,6 @@ let
         --subst-var-by lsof_bin ${getBin lsof}/bin/lsof \
         --subst-var-by sed_bin ${getBin gnused}/bin/sed \
         --subst-var-by bc_bin ${getBin bc}/bin/bc
-
-      substituteInPlace $out/pr \
-        --subst-var-by git_bin ${getBin git}/bin/git
 
       substituteInPlace $out/vim_clean_swap \
         --subst-var-by vim_bin ${getBin vim}/bin/vim
