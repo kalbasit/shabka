@@ -192,9 +192,6 @@ fi
 # export the code path
 export CODE_PATH="@home_path@/code"
 
-# Activate Go module support globally.
-export GO111MODULE="on"
-
 if [[ "$OSTYPE" = linux* ]]; then
 	# GPG_TTY is needed for gpg with pinentry-curses
 	export GPG_TTY="$(tty)"
