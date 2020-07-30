@@ -2,7 +2,7 @@
 #
 #  vim:ft=sh:
 #
-#  Copyright (c) 2010-2018 Wael Nasreddine <wael.nasreddine@gmail.com>
+#  Copyright (c) 2010-2020 Wael Nasreddine <wael.nasreddine@gmail.com>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -28,17 +28,23 @@ containsElement () {
 }
 
 function listWorkspaces() {
-	local result current_workspace current_profile current_story dir elem
+    local result current_workspace current_profile current_story dir elem file elem
 
 	# print out the list of currently active workspaces
 	result=( $(@i3-msg_bin@ -t get_workspaces | @jq_bin@ -r '.[] | if .focused == false then .name else empty end') )
 
-	# print out the list of available stories, but only if we are on the base story
+    # compute the current profile and the current story
 	current_workspace="$( @i3-msg_bin@ -t get_workspaces | @jq_bin@ -r '.[] | if .focused == true then .name else empty end' )"
-	current_profile="$( echo "${current_workspace}" | cut -d\@ -f1 )"
-	current_story="$( echo "${current_workspace}" | cut -d\@ -f2 )"
-	if [[ "${current_story}" == "base" ]]; then
-		for dir in $(find "${HOME}/code/${current_profile}/stories" -mindepth 1 -maxdepth 1); do
+    if echo "${current_workspace}" | grep -q '@'; then
+        current_profile="$( echo "${current_workspace}" | cut -d\@ -f1 )"
+        current_story="$( echo "${current_workspace}" | cut -d\@ -f2 )"
+    else
+        current_profile="${current_workspace}"
+    fi
+
+	# print out the list of available stories, but only if there's no active story
+	if [[ -z "${current_story:-}" ]]; then
+		for dir in $(find "${HOME}/code/stories/${current_profile}" -mindepth 1 -maxdepth 1); do
 			if [[ -d "${dir}" ]]; then
 				elem="${current_profile}@$(basename "${dir}")"
 				if ! containsElement "${elem}" "${result[@]}"; then
@@ -49,14 +55,12 @@ function listWorkspaces() {
 	fi
 
 	# print out the list of available profiles
-	for dir in $(find "${HOME}/code/" -mindepth 1 -maxdepth 1); do
-		if [[ -d "${dir}" ]] && [[ -d "${dir}/base" ]]; then
-			elem="$(basename "${dir}")@base"
-			if ! containsElement "${elem}" "${result[@]}"; then
-				result=("${result[@]}" "${elem}")
-			fi
-		fi
-	done
+    for file in $(find "${HOME}/.zsh/profiles" -iregex '.*/[a-z]*\.zsh' | sort); do
+        elem="$(basename "${file}" .zsh)"
+        if ! containsElement "${elem}" "${result[@]}"; then
+            result=("${result[@]}" "${elem}")
+        fi
+    done
 
 	for elem in "${result[@]}"; do
 		echo "${elem}"

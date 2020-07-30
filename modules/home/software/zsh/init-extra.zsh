@@ -175,7 +175,7 @@ POWERLEVEL9K_SHORTEN_STRATEGY="truncate_from_right"
 # define custom segments
 POWERLEVEL9K_CUSTOM_IN_NIX_SHELL="echo \$IN_NIX_SHELL"
 POWERLEVEL9K_CUSTOM_PROMPT_CHAR="echo λ"
-POWERLEVEL9K_CUSTOM_PROFILE_STORY="if [[ -n \"\$SWM_STORY_NAME\" ]]; then echo $'\u270D' \$ZSH_PROFILE@\$SWM_STORY_NAME; else echo $'\u270D' \$ZSH_PROFILE; fi"
+POWERLEVEL9K_CUSTOM_PROFILE_STORY="if [[ -n \"\$SWM_STORY_NAME\" ]]; then echo $'\u270D' \${SWM_STORY_NAME/\//@}; else echo $'\u270D' \$ZSH_PROFILE; fi"
 POWERLEVEL9K_CUSTOM_NIX_SHELL_PACKAGES="if [[ -n \$NIX_SHELL_PACKAGES ]]; then echo \"(\$NIX_SHELL_PACKAGES)\"; fi"
 
 # TODO: setup the colors to be better visible
@@ -708,7 +708,7 @@ if [[ -z "${ZSH_PROFILE}" || -z "${SWM_STORY_NAME}" ]]; then
 
 		if [[ "${active_workspace}" =~ '.*@.*' ]]; then
 			[[ -z "${ZSH_PROFILE}" ]] && export ZSH_PROFILE="$(echo "${active_workspace}" | cut -d@ -f1)"
-			[[ -z "${SWM_STORY_NAME}" ]] && export SWM_STORY_NAME="$(echo "${active_workspace}" | cut -d@ -f2)"
+			[[ -z "${SWM_STORY_NAME}" ]] && export SWM_STORY_NAME="$(echo "${active_workspace}" | tr @ /)"
 		fi
 
 		if [[ -z "${ZSH_PROFILE}" ]] && [[ -r "@home_path@/.zsh/profiles/${active_workspace}.zsh" ]]; then
