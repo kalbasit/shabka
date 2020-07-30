@@ -217,7 +217,9 @@ fi
 # use nvim as VMAIL editor
 export VMAIL_VIM=nvim
 
-# Set the GLOBAL_GOPATH
+# Set the system and the global GOPATH
+export GOPATH="${XDG_CACHE_HOME:-${HOME}/.cache}/go/path"
+export GOCACHE="${XDG_CACHE_HOME:-${HOME}/.cache}/go/cache"
 export SYSTEM_GOPATH="@home_path@/.filesystem"
 pathprepend PATH "${SYSTEM_GOPATH}/bin"
 

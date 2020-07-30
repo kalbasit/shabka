@@ -57,10 +57,6 @@ function sp() {
 					if [[ -n "${ZSH_PROFILE}" ]]; then
 						# shellcheck disable=SC1090
 						source "${HOME}/.zsh/profiles/${ZSH_PROFILE}.zsh"
-						if [[ -n "${GOPATH}" ]] && [[ -z "${SWM_STORY_NAME}" ]]; then
-							pathunmunge PATH "${GOPATH}/bin"
-							unset GOPATH
-						fi
 						pdeactivate
 						unset ZSH_PROFILE
 					fi
@@ -94,23 +90,6 @@ function sp() {
 		source "${HOME}/.zsh/profiles/${requested_profile}.zsh"
 		# let the terminal know which profile is loaded
 		export ZSH_PROFILE="${requested_profile}"
-		# set the GOPATH
-		if [[ -z "${GOPATH}" ]] && [[ -n "${SWM_STORY_NAME}" ]]; then
-			local active_profile="${ZSH_PROFILE%%.*}"
-			local go_path
-			if [[ "${SWM_STORY_NAME}" == "base" ]]; then
-				go_path="${CODE_PATH}/${active_profile}/${SWM_STORY_NAME}"
-			else
-				go_path="${CODE_PATH}/${active_profile}/stories/${SWM_STORY_NAME}"
-			fi
-			debug "go_path=${go_path}"
-			if [[ ! -d "${go_path}" ]]; then
-				mkdir -p "${go_path}/src"
-				mkdir -p "${go_path}/bin"
-			fi
-			export GOPATH="${go_path}"
-			pathappend PATH "${GOPATH}/bin"
-		fi
 		# activate the profile
 		pactivate
 	} always {
