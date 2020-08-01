@@ -319,12 +319,13 @@ in {
         bindsym Escape mode "$launcher"
       }
 
-        set $social_mode Social: (d)iscord, (i)rc${optionalString config.shabka.keybase.enable ", (k)eybase"}, S(l)ack
+        set $social_mode Social: (d)iscord, (i)rc${optionalString config.shabka.keybase.enable ", (k)eybase"}, S(l)ack, (s)ignal
         mode "$social_mode" {
           bindsym d exec ${getBin pkgs.discord}/bin/Discord, mode default
           bindsym i exec ${getBin pkgs.termite}/bin/termite --class=irc --title=irc --exec=${getBin tiny}/bin/tiny, mode default
           ${optionalString config.shabka.keybase.enable "bindsym k exec ${getBin pkgs.keybase-gui}/bin/keybase-gui, mode default"}
           bindsym l exec ${getBin pkgs.slack}/bin/slack, mode default
+          bindsym s exec ${getBin pkgs.signal-desktop}/bin/signal-desktop, mode default
 
           bindsym Escape mode "$launcher"
         }
