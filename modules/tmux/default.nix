@@ -147,12 +147,12 @@ in {
     set  -g default-terminal "tmux-256color"
 
     # fuzzy client selection
-    bind s split-window -p 20 -v ${pkgs.nur.repos.kalbasit.swm}/bin/swm tmux switch-client --kill-pane
+    bind s split-window -p 20 -v ${pkgs.swm}/bin/swm tmux switch-client --kill-pane
   '' + optionalString pkgs.stdenv.isDarwin ''
     set  -g default-terminal "xterm-256color"
 
     # fuzzy client selection
-    bind s split-window -p 20 -v ${pkgs.nur.repos.kalbasit.swm}/bin/swm --ignore-pattern ".Spotlight-V100|.Trashes|.fseventsd" tmux switch-client --kill-pane
+    bind s split-window -p 20 -v ${pkgs.swm}/bin/swm --ignore-pattern ".Spotlight-V100|.Trashes|.fseventsd" tmux switch-client --kill-pane
   '' + ''
     ${extraConfig}
   '';

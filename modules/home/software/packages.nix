@@ -41,7 +41,7 @@ in {
     # curses-based file manager
     lf
 
-    nur.repos.kalbasit.swm
+    swm
 
     shabka.external.nixpkgs.release-unstable.corgi
     shabka.external.nixpkgs.release-unstable.vgo2nix
