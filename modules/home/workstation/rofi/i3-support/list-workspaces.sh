@@ -44,13 +44,11 @@ function listWorkspaces() {
 
 	# print out the list of available stories, but only if there's no active story
 	if [[ -z "${current_story:-}" ]]; then
-		for dir in $(find "${HOME}/code/stories/${current_profile}" -mindepth 1 -maxdepth 1); do
-			if [[ -d "${dir}" ]]; then
-				elem="${current_profile}@$(basename "${dir}")"
-				if ! containsElement "${elem}" "${result[@]}"; then
-					result=("${result[@]}" "${elem}")
-				fi
-			fi
+        for story in $(swm story list --name-only | grep "^${current_profile}/" | cut -d/ -f2-); do
+            elem="${current_profile}@${story}"
+            if ! containsElement "${elem}" "${result[@]}"; then
+                result+=("${elem}")
+            fi
 		done
 	fi
 
