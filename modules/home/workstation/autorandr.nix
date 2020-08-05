@@ -43,7 +43,7 @@ in {
               ${getBin pkgs.i3}/bin/i3-msg "workspace tv; move workspace to output DP-3"
 
               # Go to my personal workspace
-              ${getBin pkgs.i3}/bin/i3-msg "workspace personal@base"
+              ${getBin pkgs.i3}/bin/i3-msg "workspace personal"
             '';
           }
 
