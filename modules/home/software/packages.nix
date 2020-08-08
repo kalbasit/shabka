@@ -18,8 +18,6 @@ in {
 
     go
 
-    gotop
-
     jq
 
     jrnl
@@ -53,6 +51,9 @@ in {
     #
     # Linux applications
     #
+
+    # XXX: Failing to compile on Darwin
+    gotop
 
     jetbrains.idea-community
 
