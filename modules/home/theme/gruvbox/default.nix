@@ -346,7 +346,8 @@ in {
         set-window-option -g window-status-current-style bg=default,fg=colour237
 
         # pane border
-        set-option -g pane-active-border-style fg=colour250,fg=colour237
+        set-option -g pane-active-border-style bg=colour250,fg=colour237
+        set-option -g pane-border-style bg=colour237,fg=colour250
 
         # message infos
         set-option -g message-style bg=colour239,fg=colour223
