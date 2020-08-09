@@ -39,5 +39,7 @@ in {
   # git is required to compute the label within lib.commitIdFromGitRepo.
   environment.systemPackages = [ pkgs.git ];
 
-  # system.nixos.label = label;
+  system.nixos = lib.optionalAttrs (config.nix.package != pkgs.nixFlakes) {
+    inherit label;
+  };
 }
