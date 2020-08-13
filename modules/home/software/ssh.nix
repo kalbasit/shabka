@@ -3,9 +3,7 @@
 with lib;
 
 let
-
   cfg = config.shabka.ssh;
-
 in {
   imports = [
     (mkRemovedOptionModule ["shaka" "ssh" "privateSSHPath"] "Set programs.ssh directly")
@@ -17,9 +15,9 @@ in {
 
   config = mkIf cfg.enable {
     programs.ssh = {
-      enable = true;
+      enable = mkDefault true;
 
-      extraConfig = ''
+      extraConfig = mkDefault ''
         KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
         PubkeyAuthentication yes
         HostKeyAlgorithms ssh-ed25519-cert-v01@openssh.com,ssh-rsa-cert-v01@openssh.com,ssh-ed25519,ssh-rsa
