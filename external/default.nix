@@ -20,6 +20,7 @@ let
 in {
   inherit mkExternal;
 
+  edolstra = import ./edolstra { inherit mkExternal; };
   hammerspoon = import ./hammerspoon { inherit mkExternal; };
   home-manager = import ./home-manager { inherit mkExternal; };
   iohk-nix = import ./iohk-nix { inherit mkExternal; };
