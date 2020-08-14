@@ -1,0 +1,27 @@
+From 11fceef0d47d11cacecc699ad10934404636b4e6 Mon Sep 17 00:00:00 2001
+From: "Wael M. Nasreddine" <wael.nasreddine@gmail.com>
+Date: Thu, 13 Aug 2020 18:49:42 -0700
+Subject: [PATCH] brave: 1.11.97 -> 1.12.112
+
+---
+ pkgs/applications/networking/browsers/brave/default.nix | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/pkgs/applications/networking/browsers/brave/default.nix b/pkgs/applications/networking/browsers/brave/default.nix
+index 5a8171a40a4eb..ceceffb8da084 100644
+--- a/pkgs/applications/networking/browsers/brave/default.nix
++++ b/pkgs/applications/networking/browsers/brave/default.nix
+@@ -86,11 +86,11 @@ in
+ 
+ stdenv.mkDerivation rec {
+   pname = "brave";
+-  version = "1.11.97";
++  version = "1.12.112";
+ 
+   src = fetchurl {
+     url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
+-    sha256 = "1wmjwk98fvzy5slyqpzpnn1mx663q3pvcyr3fzcinf6v971vz3q2";
++    sha256 = "0nvxmz1wrr6cfyhbnrfjsy9szbjmvjl6080pgkp25xa8rcql5gmb";
+   };
+ 
+   dontConfigure = true;
