@@ -54,11 +54,11 @@ with lib;
 
   config = {
     system.activationScripts.postActivation = mkIf ((builtins.head cfg.layouts) == "qwerty") {
-      text = setLayout 12825 "Colemak";
+      text = setLayout 1 "US";
     };
 
     system.activationScripts.postActivation = mkIf ((builtins.head cfg.layouts) == "colemak") {
-      text = setLayout 1 "US";
+      text = setLayout 12825 "Colemak";
     };
   };
 }
