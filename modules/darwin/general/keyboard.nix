@@ -25,6 +25,17 @@ let
       variant = "intl";
     };
   };
+
+  # Logic copied from
+  # https://github.com/hjuutilainen/dotfiles/blob/e8861a756df35cf7ade9fd964eb4f6c07ed5264b/bin/macos-system-defaults.sh#L100
+  setLayout = id: name: ''
+    sudo defaults write /Library/Preferences/com.apple.HIToolbox AppleCurrentKeyboardLayoutInputSourceID com.apple.keylayout.${name}
+    sudo defaults write /Library/Preferences/com.apple.HIToolbox AppleDefaultAsciiInputSource -dict InputSourceKind "Keyboard Layout" "KeyboardLayout ID" -int ${builtins.toString id} "KeyboardLayout Name" ${name}
+    sudo defaults delete /Library/Preferences/com.apple.HIToolbox AppleEnabledInputSources
+    sudo defaults write /Library/Preferences/com.apple.HIToolbox AppleEnabledInputSources -array '{ InputSourceKind = "Keyboard Layout"; "KeyboardLayout ID" = ${builtins.toString id}; "KeyboardLayout Name" = ${name}; }'
+    sudo defaults write /Library/Preferences/com.apple.HIToolbox AppleInputSourceHistory -array '{ InputSourceKind = "Keyboard Layout"; "KeyboardLayout ID" = ${builtins.toString id}; "KeyboardLayout Name" = ${name}; }'
+    sudo defaults write /Library/Preferences/com.apple.HIToolbox AppleSelectedInputSources -array '{ InputSourceKind = "Keyboard Layout"; "KeyboardLayout ID" = ${builtins.toString id}; "KeyboardLayout Name" = ${name}; }'
+  '';
 in
 
 with lib;
@@ -42,18 +53,12 @@ with lib;
   };
 
   config = {
-    # TODO: This is just colemak, add the equivalent for rest.
+    system.activationScripts.postActivation = mkIf ((builtins.head cfg.layouts) == "qwerty") {
+      text = setLayout 12825 "Colemak";
+    };
+
     system.activationScripts.postActivation = mkIf ((builtins.head cfg.layouts) == "colemak") {
-      text = ''
-        # set the keyboard layout to Colemak
-        # https://github.com/hjuutilainen/dotfiles/blob/e8861a756df35cf7ade9fd964eb4f6c07ed5264b/bin/macos-system-defaults.sh#L100
-        sudo defaults write /Library/Preferences/com.apple.HIToolbox AppleCurrentKeyboardLayoutInputSourceID com.apple.keylayout.Colemak
-        sudo defaults write /Library/Preferences/com.apple.HIToolbox AppleDefaultAsciiInputSource -dict InputSourceKind "Keyboard Layout" "KeyboardLayout ID" -int 12825 "KeyboardLayout Name" Colemak
-        sudo defaults delete /Library/Preferences/com.apple.HIToolbox AppleEnabledInputSources
-        sudo defaults write /Library/Preferences/com.apple.HIToolbox AppleEnabledInputSources -array '{ InputSourceKind = "Keyboard Layout"; "KeyboardLayout ID" = 12825; "KeyboardLayout Name" = Colemak; }'
-        sudo defaults write /Library/Preferences/com.apple.HIToolbox AppleInputSourceHistory -array '{ InputSourceKind = "Keyboard Layout"; "KeyboardLayout ID" = 12825; "KeyboardLayout Name" = Colemak; }'
-        sudo defaults write /Library/Preferences/com.apple.HIToolbox AppleSelectedInputSources -array '{ InputSourceKind = "Keyboard Layout"; "KeyboardLayout ID" = 12825; "KeyboardLayout Name" = Colemak; }'
-      '';
+      text = setLayout 1 "US";
     };
   };
 }
