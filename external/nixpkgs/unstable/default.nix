@@ -9,7 +9,6 @@ let
 
   patches = [
     ./86626-pure-vim-go.patch
-    ./95387-update-brave.patch
   ];
 
   patched = mkExternal {
