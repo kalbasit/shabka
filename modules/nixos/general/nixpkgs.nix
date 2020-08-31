@@ -5,19 +5,7 @@ with lib;
 let
   shabka = import <shabka> { };
 in {
-  nixpkgs.config = {
-    allowUnfree = true;
-    packageOverrides = pkgs: {
-      nur = recursiveUpdate
-        (import shabka.external.nur.path { inherit pkgs; })
-        ({
-          repos = {
-            kalbasit = import shabka.external.kalbasit.nur.path { inherit pkgs; };
-            risson = import shabka.external.risson.nur.path { inherit pkgs; };
-          };
-        });
-    };
-  };
+  nixpkgs.config = { allowUnfree = true; };
 
   nixpkgs.overlays = import <shabka/overlays>;
 }
