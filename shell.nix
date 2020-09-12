@@ -1,13 +1,20 @@
-{ pkgs ? import <nixpkgs> {} }:
+{ pkgs ? import <nixpkgs> { } }:
 
-with pkgs;
-
-mkShell {
-  buildInputs = [
-    gnumake
+pkgs.mkShell {
+  name = "shabka";
+  buildInputs = with pkgs; [
+    git
+    nixFlakes
   ];
 
-  # Export the location of the SSL CA bundle
-  SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-  NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  shellHook = ''
+    PATH=${
+      pkgs.writeShellScriptBin "nix" ''
+        ${pkgs.nixFlakes}/bin/nix --option experimental-features "nix-command flakes ca-references" "$@"
+      ''
+    }/bin:$PATH
+  '';
+
+  SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+  NIX_SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
 }

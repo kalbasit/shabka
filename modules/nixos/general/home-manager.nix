@@ -2,14 +2,7 @@
 
 with lib;
 
-let
-  shabka = import <shabka> { };
-  release = builtins.getEnv "RELEASE";
-in {
-  imports = [
-    (import "${shabka.external.home-manager."${release}".path}/nixos")
-  ];
-
+{
   options.shabka.home-manager.config = mkOption {
     default = { name, uid, isAdmin, nixosConfig }: {...}: {};
     description = ''

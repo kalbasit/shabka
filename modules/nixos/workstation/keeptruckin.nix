@@ -1,7 +1,6 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-with import <shabka/util>;
 
 let
   cfg = config.shabka.workstation.keeptruckin;

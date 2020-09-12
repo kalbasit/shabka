@@ -8,7 +8,7 @@ let
 
   keyboardLayout = builtins.head config.shabka.keyboard.layouts;
 
-  neovimConfig = import <shabka/modules/neovim> {
+  neovimConfig = import ../../neovim {
     inherit (cfg) extraRC extraKnownPlugins extraPluginDictionaries;
     inherit pkgs;
     inherit keyboardLayout;

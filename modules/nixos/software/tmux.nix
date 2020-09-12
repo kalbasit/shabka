@@ -7,7 +7,7 @@ let
 
   keyboardLayout = builtins.head config.shabka.keyboard.layouts;
 
-  tmuxConfig = import <shabka/modules/tmux> {
+  tmuxConfig = import ../../tmux {
     inherit (cfg) extraConfig;
     inherit keyboardLayout;
     inherit pkgs;

@@ -1,0 +1,47 @@
+{
+  imports = [
+    ./home/generic/keyboard.nix
+    ./home/generic/nixos.nix
+    ./home/generic/nixpkgs.nix
+    ./home/generic/non-nixos.nix
+    ./home/services/gnupg.nix
+    ./home/services/lowbatt.nix
+    ./home/services/weechat.nix
+    ./home/software/fzf.nix
+    ./home/software/git.nix
+    ./home/software/hammerspoon/default.nix
+    ./home/software/htop.nix
+    ./home/software/keybase.nix
+    ./home/software/less.nix
+    ./home/software/neovim.nix
+    ./home/software/nodejs.nix
+    ./home/software/packages.nix
+    ./home/software/pet.nix
+    ./home/software/ssh.nix
+    ./home/software/syncthing.nix
+    ./home/software/taskwarrior.nix
+    ./home/software/tmux.nix
+    ./home/software/zsh/default.nix
+    ./home/theme/default.nix
+    ./home/theme/gruvbox/default.nix
+    ./home/theme/seoul256-dark/default.nix
+    ./home/workstation/alacritty/default.nix
+    ./home/workstation/autorandr.nix
+    ./home/workstation/bluetooth.nix
+    ./home/workstation/default.nix
+    ./home/workstation/dropbox.nix
+    ./home/workstation/dunst.nix
+    ./home/workstation/email.nix
+    ./home/workstation/firefox.nix
+    ./home/workstation/greenclip.nix
+    ./home/workstation/gtk.nix
+    ./home/workstation/i3/bar/default.nix
+    ./home/workstation/i3/default.nix
+    ./home/workstation/locker.nix
+    ./home/workstation/mysql-workbench.nix
+    ./home/workstation/rofi/default.nix
+    ./home/workstation/termite.nix
+    ./home/workstation/urxvt.nix
+    ./home/workstation/window-manager.nix
+  ];
+}

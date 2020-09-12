@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.shabka.tmux;
 
-  tmuxConfig = import <shabka/modules/tmux> {
+  tmuxConfig = import ../../tmux {
     inherit (cfg) extraConfig keyboardLayout;
     inherit pkgs;
   };

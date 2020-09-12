@@ -6,7 +6,7 @@ let
 
   cfg = config.shabka.neovim;
 
-  neovimConfig = import <shabka/modules/neovim> {
+  neovimConfig = import ../../neovim {
     inherit (cfg) extraRC extraKnownPlugins extraPluginDictionaries keyboardLayout;
     inherit pkgs;
   };

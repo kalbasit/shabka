@@ -2,8 +2,6 @@
 
 with lib;
 
-with import <shabka/util>;
-
 let
   mimeList =
     let
@@ -77,7 +75,7 @@ in {
       export BROWSER="${pkgs.nur.repos.kalbasit.rbrowser}/bin/rbrowser"
     '';
 
-    shabka.workstation = enableMultiple [
+    /*shabka.workstation = enableMultiple [
       "alacritty"
       "bluetooth"
       "dunst"
@@ -88,6 +86,6 @@ in {
       "mysql-workbench"
       "rofi"
       "termite"
-    ];
+    ];*/
   };
 }
