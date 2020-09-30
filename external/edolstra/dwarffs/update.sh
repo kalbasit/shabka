@@ -1,5 +1,8 @@
 #! /usr/bin/env bash
 
+echo "$0 is disabled because the latest does not work"
+exit 0
+
 set -euo pipefail
 
 readonly here="$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)"
