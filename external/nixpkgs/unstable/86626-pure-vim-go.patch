@@ -1,25 +1,17 @@
-From 42b246bbc58966abc7518f64fb34e95ec6522730 Mon Sep 17 00:00:00 2001
-From: "Wael M. Nasreddine" <wael.nasreddine@gmail.com>
-Date: Sat, 2 May 2020 21:34:09 -0700
-Subject: [PATCH] vimPlugins.vim-go: set g:go_bin_path to work with pure
- nix-shell
-
-- It requires gopls, but it's missing because it's no longer provided by gotools.
-- It was relying on PATH to find the Go compiler. I've made an update to
-  the plugin so it relies on g:go_bin_path when calling system() or when
-  starting a job. I've filed a pull request upstream to fix this:
-  https://github.com/fatih/vim-go/pull/2876
----
- pkgs/misc/vim-plugins/overrides.nix           |   4 +-
- .../vim-plugins/patches/vim-go/pure.patch     | 114 ++++++++++++++++++
- 2 files changed, 117 insertions(+), 1 deletion(-)
- create mode 100644 pkgs/misc/vim-plugins/patches/vim-go/pure.patch
-
 diff --git a/pkgs/misc/vim-plugins/overrides.nix b/pkgs/misc/vim-plugins/overrides.nix
-index b2ff6c79f5aa..def70c3eb2b4 100644
+index 18515293655..3c6a507e573 100644
 --- a/pkgs/misc/vim-plugins/overrides.nix
 +++ b/pkgs/misc/vim-plugins/overrides.nix
-@@ -589,14 +589,15 @@ self: super: {
+@@ -18,7 +18,7 @@
+ , khard
+ 
+ # vim-go dependencies
+-, asmfmt, delve, errcheck, godef, golint
++, go, asmfmt, delve, errcheck, godef, golint
+ , gomodifytags, gotags, gotools, go-motion
+ , gnused, reftools, gogetdoc, golangci-lint
+ , impl, iferr, gocode, gocode-gomod, go-tools
+@@ -410,14 +410,15 @@ self: super: {
        asmfmt
        delve
        errcheck
@@ -36,7 +28,7 @@ index b2ff6c79f5aa..def70c3eb2b4 100644
        gomodifytags
        gopls
        gotags
-@@ -606,6 +607,7 @@ self: super: {
+@@ -427,6 +428,7 @@ self: super: {
        reftools
      ];
      in {
@@ -46,7 +38,7 @@ index b2ff6c79f5aa..def70c3eb2b4 100644
          -Ee 's@"go_bin_path", ""@"go_bin_path", "${binPath}"@g' \
 diff --git a/pkgs/misc/vim-plugins/patches/vim-go/pure.patch b/pkgs/misc/vim-plugins/patches/vim-go/pure.patch
 new file mode 100644
-index 000000000000..7646645cdaf6
+index 00000000000..7646645cdaf
 --- /dev/null
 +++ b/pkgs/misc/vim-plugins/patches/vim-go/pure.patch
 @@ -0,0 +1,114 @@
