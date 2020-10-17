@@ -20,7 +20,7 @@ readonly release="$( getHostRelease '' )"
 export RELEASE="release-${release/./-}"
 export NIX_PATH="$( getNixPath "${release}" "" )" || exit "${?}"
 
-readonly network_secrets="${HOME}/private/network-secrets"
+readonly network_secrets="$CODE_PATH/repositories/keybase/private/ylcodes/network-secrets"
 readonly state_location="shabka/deployments.nixops"
 
 # make sure that there are no changes in the index
