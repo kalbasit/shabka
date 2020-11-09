@@ -100,7 +100,7 @@ version: 2
 jobs:
   athena:
     macos:
-      xcode: "9.0"
+      xcode: "9.4.1"
 
     working_directory: ~/shabka
 
@@ -173,7 +173,7 @@ jobs:
 
   poseidon:
     macos:
-      xcode: "9.0"
+      xcode: "9.4.1"
 
     working_directory: ~/shabka
 
