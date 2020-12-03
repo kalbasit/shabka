@@ -9,7 +9,6 @@ let
 
   patches = [
     ./0001-pyside-as-non-broken.patch
-    ./92653-init-mellowplayer-3-6-4.patch
   ];
 
   patched = mkExternal {
